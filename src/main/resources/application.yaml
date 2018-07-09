@@ -1,0 +1,7 @@
+server:
+  port: 8081
+  context-path: /haolifa
+
+spring:
+  profiles:
+    active: test
