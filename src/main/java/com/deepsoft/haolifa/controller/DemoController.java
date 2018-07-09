@@ -17,11 +17,12 @@ import java.util.List;
 @Api("demo信息管理")
 @RestController
 public class DemoController {
-    @ApiOperation("获取列表")
 
+    @ApiOperation("获取列表")
     @GetMapping("list")
     public List userList() {
         List<String> userList = new ArrayList<>();
+        userList.add("abc");
         return userList;
     }
 }

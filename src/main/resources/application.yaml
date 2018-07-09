@@ -1,7 +1,32 @@
 server:
   port: 8081
-  context-path: /haolifa
+  servlet:
+    application-display-name: /haolifa
 
 spring:
   profiles:
     active: test
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.80.220:5506/bari?useUnicode=true&characterEncoding=utf8
+    username: mysql
+    password: 123456
+    hikari:
+      connection-timeout: 30
+      maximum-pool-size: 15
+      idle-timeout: 30000
+      auto-commit: true
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+  redis:
+    database: 0
+    url: http://localhost
+    password: 123456
+    port: 6379
+    timeout: 10000
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*/**Mapper.xml
+  type-aliases-package: com.deepsoft.haolifa.model.*
+
