@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
-@MapperScan({"com.deepsoft.haolifa.dao.repository"})
-public class HaolifaApplication {
+@MapperScan({"com.deepsoft.haolifa.dao.repository.*"})
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HaolifaApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 }

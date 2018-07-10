@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,6 +30,8 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public int add(SysUser sysUser) {
+        sysUser.setCtime(new Date());
+        sysUser.setUtime(new Date());
         return sysUserMapper.insertSelective(sysUser);
     }
 

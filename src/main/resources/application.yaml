@@ -1,7 +1,7 @@
 server:
   port: 8081
   servlet:
-    application-display-name: /haolifa
+    content-path: /haolifa
 
 spring:
   profiles:
@@ -25,7 +25,8 @@ spring:
     timeout: 10000
 
 
+
 mybatis:
-  mapper-locations: classpath:mapper/*/**Mapper.xml
-  type-aliases-package: com.deepsoft.haolifa.model.*
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  type-aliases-package: com.deepsoft.haolifa.model.domain.*
 
