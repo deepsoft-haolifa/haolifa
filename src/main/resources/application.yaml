@@ -8,21 +8,20 @@ spring:
     active: test
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.80.220:5506/bari?useUnicode=true&characterEncoding=utf8
-    username: mysql
-    password: 123456
-    hikari:
-      connection-timeout: 30
-      maximum-pool-size: 15
-      idle-timeout: 30000
-      auto-commit: true
-      max-lifetime: 1800000
-      connection-test-query: SELECT 1
+    url: jdbc:mysql://localhost:3306/haolifa?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    connection-timeout: 30
+    maximum-pool-size: 15
+    idle-timeout: 30000
+    auto-commit: true
+    max-lifetime: 1800000
+    connection-test-query: SELECT 1
   redis:
     database: 0
-    url: http://localhost
-    password: 123456
+    host: 172.16.50.113
     port: 6379
+    password: 123456
     timeout: 10000
 
 
