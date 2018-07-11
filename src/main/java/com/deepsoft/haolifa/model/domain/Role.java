@@ -2,26 +2,23 @@ package com.deepsoft.haolifa.model.domain;
 
 import java.util.Date;
 
-public class SysUser {
+public class Role {
     private Long id;
 
-    private String username;
-
-    private String password;
+    private String name;
 
     private Date ctime;
 
     private Date utime;
 
-    public SysUser(Long id, String username, String password, Date ctime, Date utime) {
+    public Role(Long id, String name, Date ctime, Date utime) {
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.name = name;
         this.ctime = ctime;
         this.utime = utime;
     }
 
-    public SysUser() {
+    public Role() {
         super();
     }
 
@@ -33,20 +30,12 @@ public class SysUser {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public Date getCtime() {

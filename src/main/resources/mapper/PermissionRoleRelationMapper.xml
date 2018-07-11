@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.SysUserMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SysUser">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PermissionRoleRelationMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PermissionRoleRelation">
     <constructor>
       <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="role_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="permission_id" javaType="java.lang.Long" jdbcType="BIGINT" />
       <arg column="ctime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="utime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
     </constructor>
@@ -69,16 +69,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, ctime, utime
+    id, role_id, permission_id, ctime, utime
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.SysUserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.PermissionRoleRelationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from sys_user
+    from sys_permission_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,33 +89,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from sys_user
+    from sys_permission_role
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from sys_user
+    delete from sys_permission_role
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.SysUserExample">
-    delete from sys_user
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PermissionRoleRelationExample">
+    delete from sys_permission_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.deepsoft.haolifa.model.domain.SysUser" useGeneratedKeys="true">
-    insert into sys_user (username, password, ctime, 
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.deepsoft.haolifa.model.domain.PermissionRoleRelation" useGeneratedKeys="true">
+    insert into sys_permission_role (role_id, permission_id, ctime, 
       utime)
-    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, 
+    values (#{roleId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT}, #{ctime,jdbcType=TIMESTAMP}, 
       #{utime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.deepsoft.haolifa.model.domain.SysUser" useGeneratedKeys="true">
-    insert into sys_user
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.deepsoft.haolifa.model.domain.PermissionRoleRelation" useGeneratedKeys="true">
+    insert into sys_permission_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        username,
+      <if test="roleId != null">
+        role_id,
       </if>
-      <if test="password != null">
-        password,
+      <if test="permissionId != null">
+        permission_id,
       </if>
       <if test="ctime != null">
         ctime,
@@ -125,11 +125,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
+      <if test="permissionId != null">
+        #{permissionId,jdbcType=BIGINT},
       </if>
       <if test="ctime != null">
         #{ctime,jdbcType=TIMESTAMP},
@@ -139,23 +139,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.SysUserExample" resultType="java.lang.Long">
-    select count(*) from sys_user
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PermissionRoleRelationExample" resultType="java.lang.Long">
+    select count(*) from sys_permission_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update sys_user
+    update sys_permission_role
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.username != null">
-        username = #{record.username,jdbcType=VARCHAR},
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=BIGINT},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=VARCHAR},
+      <if test="record.permissionId != null">
+        permission_id = #{record.permissionId,jdbcType=BIGINT},
       </if>
       <if test="record.ctime != null">
         ctime = #{record.ctime,jdbcType=TIMESTAMP},
@@ -169,24 +169,24 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update sys_user
+    update sys_permission_role
     set id = #{record.id,jdbcType=BIGINT},
-      username = #{record.username,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
+      role_id = #{record.roleId,jdbcType=BIGINT},
+      permission_id = #{record.permissionId,jdbcType=BIGINT},
       ctime = #{record.ctime,jdbcType=TIMESTAMP},
       utime = #{record.utime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
-    update sys_user
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PermissionRoleRelation">
+    update sys_permission_role
     <set>
-      <if test="username != null">
-        username = #{username,jdbcType=VARCHAR},
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=BIGINT},
       </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
+      <if test="permissionId != null">
+        permission_id = #{permissionId,jdbcType=BIGINT},
       </if>
       <if test="ctime != null">
         ctime = #{ctime,jdbcType=TIMESTAMP},
@@ -197,10 +197,10 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
-    update sys_user
-    set username = #{username,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PermissionRoleRelation">
+    update sys_permission_role
+    set role_id = #{roleId,jdbcType=BIGINT},
+      permission_id = #{permissionId,jdbcType=BIGINT},
       ctime = #{ctime,jdbcType=TIMESTAMP},
       utime = #{utime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

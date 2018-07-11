@@ -1,17 +1,50 @@
-
+DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `login_name` varchar(64) NOT NULL COMMENT '账号',
-  `password` varchar(64) NOT NULL COMMENT '经md5加密的密码',
-  `user_name` varchar(64) NOT NULL COMMENT '用户名',
-  `gender` tinyint(4) NOT NULL DEFAULT '0' COMMENT '性别（0：未知；1：男；2：女）',
-  `email` varchar(64) NOT NULL DEFAULT '' COMMENT 'email',
-  `phone` varchar(16) NOT NULL DEFAULT '' COMMENT '电话',
-  `ctime` timestamp NOT NULL DEFAULT '2000-00-00 00:00:00' COMMENT '创建时间',
-  `utime` timestamp NOT NULL DEFAULT '2000-00-00 00:00:00' COMMENT '修改时间',
-  `create_user_id` int(10) unsigned NOT NULL COMMENT '创建人id',
-  `modify_user_id` int(10) unsigned NOT NULL COMMENT '修改人id（创建时，默认为create_user_id）',
-  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'user是否被删除，0：未删除；1：删除；删除的user不会出现在后台页面',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_login_name` (`login_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统用户表';
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(200) NOT NULL COMMENT '账号',
+  `password` varchar(200) NOT NULL COMMENT '密码',
+  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `utime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE InnoDB DEFAULT CHARSET utf8 COMMENT '用户表';
+
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL COMMENT '角色名',
+  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `utime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE InnoDB DEFAULT CHARSET utf8 COMMENT '角色表';
+
+DROP TABLE IF EXISTS `sys_permission`;
+CREATE TABLE `sys_permission` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL COMMENT '权限名',
+  `description` varchar(200) NOT NULL DEFAULT '' COMMENT '权限描述',
+  `url` varchar(200) NOT NULL COMMENT '权限对应的链接',
+  `pid` bigint(20) NOT NULL DEFAULT 0 COMMENT '父权限id',
+  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `utime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE InnoDB DEFAULT CHARSET utf8 COMMENT '权限表';
+
+DROP TABLE IF EXISTS `sys_role_user`;
+CREATE TABLE `sys_role_user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `sys_user_id` bigint(20) unsigned NOT NULL COMMENT '用户id',
+  `sys_role_id` bigint(20) unsigned NOT NULL COMMENT '角色id',
+  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `utime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE InnoDB DEFAULT CHARSET utf8 COMMENT '角色用户中间表';
+
+DROP TABLE IF EXISTS `sys_permission_role`;
+CREATE TABLE `sys_permission_role` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) unsigned NOT NULL COMMENT '角色id',
+  `permission_id` bigint(20) unsigned NOT NULL COMMENT '权限id',
+  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `utime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE InnoDB DEFAULT CHARSET utf8 COMMENT '权限角色中间表';

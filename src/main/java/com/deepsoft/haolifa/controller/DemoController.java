@@ -46,11 +46,11 @@ public class DemoController {
         return ResultBean.success(update);
     }
 
-    @ApiOperation("根据登录名获取用户信息")
+/*    @ApiOperation("根据登录名获取用户信息")
     @GetMapping("/user-info")
     public ResultBean userInfo(String loginName) {
         SysUser sysUser = demoService.sysUserInfo(loginName);
         return ResultBean.success(sysUser);
-    }
+    }*/
 
 }
