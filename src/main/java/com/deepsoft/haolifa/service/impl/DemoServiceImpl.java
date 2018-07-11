@@ -2,7 +2,6 @@ package com.deepsoft.haolifa.service.impl;
 
 
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
-import com.deepsoft.haolifa.dao.repository.extend.SysUserExtendMapper;
 import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.domain.SysUserExample;
 import com.deepsoft.haolifa.service.DemoService;
@@ -19,8 +18,8 @@ public class DemoServiceImpl implements DemoService {
 
     @Resource
     private SysUserMapper sysUserMapper;
-    @Resource
-    private SysUserExtendMapper sysUserExtendMapper;
+//    @Resource
+//    private SysUserExtendMapper sysUserExtendMapper;
 
     @Override
     public List<SysUser> list() {
@@ -40,8 +39,8 @@ public class DemoServiceImpl implements DemoService {
         return sysUserMapper.updateByPrimaryKey(sysUser);
     }
 
-    @Override
-    public SysUser sysUserInfo(String loginName) {
-        return sysUserExtendMapper.selectByLoginName(loginName);
-    }
+//    @Override
+//    public SysUser sysUserInfo(String loginName) {
+//        return sysUserExtendMapper.selectByLoginName(loginName);
+//    }
 }

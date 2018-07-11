@@ -15,6 +15,6 @@ public interface DemoService {
 
     int update(SysUser sysUser);
 
-    SysUser sysUserInfo(String loginName);
+    //SysUser sysUserInfo(String loginName);
 
 }

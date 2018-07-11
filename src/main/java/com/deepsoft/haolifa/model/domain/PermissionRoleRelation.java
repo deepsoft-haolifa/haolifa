@@ -2,26 +2,26 @@ package com.deepsoft.haolifa.model.domain;
 
 import java.util.Date;
 
-public class SysUser {
+public class PermissionRoleRelation {
     private Long id;
 
-    private String username;
+    private Long roleId;
 
-    private String password;
+    private Long permissionId;
 
     private Date ctime;
 
     private Date utime;
 
-    public SysUser(Long id, String username, String password, Date ctime, Date utime) {
+    public PermissionRoleRelation(Long id, Long roleId, Long permissionId, Date ctime, Date utime) {
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.roleId = roleId;
+        this.permissionId = permissionId;
         this.ctime = ctime;
         this.utime = utime;
     }
 
-    public SysUser() {
+    public PermissionRoleRelation() {
         super();
     }
 
@@ -33,20 +33,20 @@ public class SysUser {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
-    public String getPassword() {
-        return password;
+    public Long getPermissionId() {
+        return permissionId;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setPermissionId(Long permissionId) {
+        this.permissionId = permissionId;
     }
 
     public Date getCtime() {
