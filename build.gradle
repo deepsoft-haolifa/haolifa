@@ -49,7 +49,8 @@ dependencies {
     compile('org.apache.httpcomponents:httpclient:4.3.5')
     compile('org.apache.commons:commons-collections4:4.1')
 
-
+    ///// fastjson //////
+    compile('com.alibaba:fastjson:1.2.34')
 }
 
 //mybatis generator plugin ------ start
