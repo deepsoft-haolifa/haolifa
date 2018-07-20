@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.config;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,29 +25,3 @@ public class GlobalErrorHandler {
     }
 }
 
-class BaseException extends RuntimeException {
-    private String code;
-
-    public BaseException(CommonEnum.ResponseEnum responseEnum) {
-        super(responseEnum.msg);
-        this.code = responseEnum.code;
-    }
-
-    public BaseException(String code, String message) {
-        super(message);
-        this.code = code;
-    }
-
-    public BaseException(String message) {
-        super(message);
-        this.code = CommonEnum.ResponseEnum.FAIL.code;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-}

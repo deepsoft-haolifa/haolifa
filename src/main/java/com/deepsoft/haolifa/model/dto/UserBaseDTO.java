@@ -6,7 +6,7 @@ import lombok.Data;
  * @description: 用户信息页面实体
  **/
 @Data
-public class UserBaseDto {
+public class UserBaseDTO {
     private String nickName;
 }
 

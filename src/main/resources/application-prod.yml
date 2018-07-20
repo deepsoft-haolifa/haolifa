@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/haolifa?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 15
+      idle-timeout: 30000
+      auto-commit: true
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+  redis:
+    database: 0
+    host: 172.16.50.111
+    port: 6379
+    password: 123456
+    timeout: 10000ms
+

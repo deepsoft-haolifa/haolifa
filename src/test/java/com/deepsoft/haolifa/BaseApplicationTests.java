@@ -12,7 +12,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @WebAppConfiguration
 public class BaseApplicationTests {
 
-
     private Long startTimeMillis = 0l;
 
     @Before

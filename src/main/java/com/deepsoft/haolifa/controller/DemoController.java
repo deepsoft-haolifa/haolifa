@@ -12,10 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @className: DemoController
  * @description: demo 示例
- * @author: hedong@ibeesaas.com
- * @date: 2018-07-09 21:02
  **/
 @Api("demo信息管理")
 @RestController
