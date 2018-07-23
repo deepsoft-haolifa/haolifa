@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.StockMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Stock">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="stock_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="store_room_rack_id" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="store_room_rack_position_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="material_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="safe_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="safety_factor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_time, update_time, create_user, update_user, stock_id, store_room_rack_id, 
+    store_room_rack_position_no, product_no, material_id, material_graph_no, quantity, 
+    safe_quantity, safety_factor, price, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StockExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stock
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from stock
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from stock
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.StockExample">
+    delete from stock
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Stock">
+    insert into stock (id, create_time, update_time, 
+      create_user, update_user, stock_id, 
+      store_room_rack_id, store_room_rack_position_no, 
+      product_no, material_id, material_graph_no, 
+      quantity, safe_quantity, safety_factor, 
+      price, remark)
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{stockId,jdbcType=CHAR}, 
+      #{storeRoomRackId,jdbcType=CHAR}, #{storeRoomRackPositionNo,jdbcType=VARCHAR}, 
+      #{productNo,jdbcType=CHAR}, #{materialId,jdbcType=INTEGER}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{quantity,jdbcType=INTEGER}, #{safeQuantity,jdbcType=INTEGER}, #{safetyFactor,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Stock">
+    insert into stock
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="stockId != null">
+        stock_id,
+      </if>
+      <if test="storeRoomRackId != null">
+        store_room_rack_id,
+      </if>
+      <if test="storeRoomRackPositionNo != null">
+        store_room_rack_position_no,
+      </if>
+      <if test="productNo != null">
+        product_no,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="materialGraphNo != null">
+        material_graph_no,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="safeQuantity != null">
+        safe_quantity,
+      </if>
+      <if test="safetyFactor != null">
+        safety_factor,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="stockId != null">
+        #{stockId,jdbcType=CHAR},
+      </if>
+      <if test="storeRoomRackId != null">
+        #{storeRoomRackId,jdbcType=CHAR},
+      </if>
+      <if test="storeRoomRackPositionNo != null">
+        #{storeRoomRackPositionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=INTEGER},
+      </if>
+      <if test="materialGraphNo != null">
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="safeQuantity != null">
+        #{safeQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="safetyFactor != null">
+        #{safetyFactor,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.StockExample" resultType="java.lang.Long">
+    select count(*) from stock
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update stock
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.stockId != null">
+        stock_id = #{record.stockId,jdbcType=CHAR},
+      </if>
+      <if test="record.storeRoomRackId != null">
+        store_room_rack_id = #{record.storeRoomRackId,jdbcType=CHAR},
+      </if>
+      <if test="record.storeRoomRackPositionNo != null">
+        store_room_rack_position_no = #{record.storeRoomRackPositionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productNo != null">
+        product_no = #{record.productNo,jdbcType=CHAR},
+      </if>
+      <if test="record.materialId != null">
+        material_id = #{record.materialId,jdbcType=INTEGER},
+      </if>
+      <if test="record.materialGraphNo != null">
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null">
+        quantity = #{record.quantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.safeQuantity != null">
+        safe_quantity = #{record.safeQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.safetyFactor != null">
+        safety_factor = #{record.safetyFactor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update stock
+    set id = #{record.id,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=INTEGER},
+      update_user = #{record.updateUser,jdbcType=INTEGER},
+      stock_id = #{record.stockId,jdbcType=CHAR},
+      store_room_rack_id = #{record.storeRoomRackId,jdbcType=CHAR},
+      store_room_rack_position_no = #{record.storeRoomRackPositionNo,jdbcType=VARCHAR},
+      product_no = #{record.productNo,jdbcType=CHAR},
+      material_id = #{record.materialId,jdbcType=INTEGER},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      safe_quantity = #{record.safeQuantity,jdbcType=INTEGER},
+      safety_factor = #{record.safetyFactor,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Stock">
+    update stock
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="stockId != null">
+        stock_id = #{stockId,jdbcType=CHAR},
+      </if>
+      <if test="storeRoomRackId != null">
+        store_room_rack_id = #{storeRoomRackId,jdbcType=CHAR},
+      </if>
+      <if test="storeRoomRackPositionNo != null">
+        store_room_rack_position_no = #{storeRoomRackPositionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=INTEGER},
+      </if>
+      <if test="materialGraphNo != null">
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="safeQuantity != null">
+        safe_quantity = #{safeQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="safetyFactor != null">
+        safety_factor = #{safetyFactor,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Stock">
+    update stock
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      stock_id = #{stockId,jdbcType=CHAR},
+      store_room_rack_id = #{storeRoomRackId,jdbcType=CHAR},
+      store_room_rack_position_no = #{storeRoomRackPositionNo,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=CHAR},
+      material_id = #{materialId,jdbcType=INTEGER},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      safe_quantity = #{safeQuantity,jdbcType=INTEGER},
+      safety_factor = #{safetyFactor,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

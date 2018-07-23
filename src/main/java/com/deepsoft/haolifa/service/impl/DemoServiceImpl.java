@@ -29,8 +29,8 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public int add(SysUser sysUser) {
-        sysUser.setCtime(new Date());
-        sysUser.setUtime(new Date());
+        sysUser.setCreateTime(new Date());
+        sysUser.setUpdateTime(new Date());
         return sysUserMapper.insertSelective(sysUser);
     }
 

@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.UnqualifiedProInfoMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.UnqualifiedProInfo">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_num" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="testing_unit" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="testing_process" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="testing_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="testing_person" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="technical_requirements" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="testing_result" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="inspector" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="inspecte_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="reason" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="responsible_department" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="department_leader" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="responsible_analyze_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="technical_department_opinion" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, order_num, testing_unit, testing_process, product_id, testing_number, unqualified_number, 
+    testing_person, technical_requirements, testing_result, inspector, inspecte_date, 
+    reason, responsible_department, department_leader, responsible_analyze_date, technical_department_opinion, 
+    create_time, update_time, is_delete, create_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.UnqualifiedProInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from unqualified_pro_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from unqualified_pro_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from unqualified_pro_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.UnqualifiedProInfoExample">
+    delete from unqualified_pro_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.UnqualifiedProInfo">
+    insert into unqualified_pro_info (id, order_num, testing_unit, 
+      testing_process, product_id, testing_number, 
+      unqualified_number, testing_person, technical_requirements, 
+      testing_result, inspector, inspecte_date, 
+      reason, responsible_department, department_leader, 
+      responsible_analyze_date, technical_department_opinion, 
+      create_time, update_time, is_delete, 
+      create_user_id)
+    values (#{id,jdbcType=INTEGER}, #{orderNum,jdbcType=VARCHAR}, #{testingUnit,jdbcType=VARCHAR}, 
+      #{testingProcess,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{testingNumber,jdbcType=INTEGER}, 
+      #{unqualifiedNumber,jdbcType=INTEGER}, #{testingPerson,jdbcType=VARCHAR}, #{technicalRequirements,jdbcType=VARCHAR}, 
+      #{testingResult,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, #{inspecteDate,jdbcType=TIMESTAMP}, 
+      #{reason,jdbcType=VARCHAR}, #{responsibleDepartment,jdbcType=VARCHAR}, #{departmentLeader,jdbcType=VARCHAR}, 
+      #{responsibleAnalyzeDate,jdbcType=TIMESTAMP}, #{technicalDepartmentOpinion,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
+      #{createUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.UnqualifiedProInfo">
+    insert into unqualified_pro_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="testingUnit != null">
+        testing_unit,
+      </if>
+      <if test="testingProcess != null">
+        testing_process,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="testingNumber != null">
+        testing_number,
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number,
+      </if>
+      <if test="testingPerson != null">
+        testing_person,
+      </if>
+      <if test="technicalRequirements != null">
+        technical_requirements,
+      </if>
+      <if test="testingResult != null">
+        testing_result,
+      </if>
+      <if test="inspector != null">
+        inspector,
+      </if>
+      <if test="inspecteDate != null">
+        inspecte_date,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="responsibleDepartment != null">
+        responsible_department,
+      </if>
+      <if test="departmentLeader != null">
+        department_leader,
+      </if>
+      <if test="responsibleAnalyzeDate != null">
+        responsible_analyze_date,
+      </if>
+      <if test="technicalDepartmentOpinion != null">
+        technical_department_opinion,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="testingUnit != null">
+        #{testingUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="testingProcess != null">
+        #{testingProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="testingNumber != null">
+        #{testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="testingPerson != null">
+        #{testingPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalRequirements != null">
+        #{technicalRequirements,jdbcType=VARCHAR},
+      </if>
+      <if test="testingResult != null">
+        #{testingResult,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null">
+        #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="inspecteDate != null">
+        #{inspecteDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibleDepartment != null">
+        #{responsibleDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLeader != null">
+        #{departmentLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibleAnalyzeDate != null">
+        #{responsibleAnalyzeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicalDepartmentOpinion != null">
+        #{technicalDepartmentOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.UnqualifiedProInfoExample" resultType="java.lang.Long">
+    select count(*) from unqualified_pro_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update unqualified_pro_info
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNum != null">
+        order_num = #{record.orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testingUnit != null">
+        testing_unit = #{record.testingUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testingProcess != null">
+        testing_process = #{record.testingProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=BIGINT},
+      </if>
+      <if test="record.testingNumber != null">
+        testing_number = #{record.testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unqualifiedNumber != null">
+        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.testingPerson != null">
+        testing_person = #{record.testingPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.technicalRequirements != null">
+        technical_requirements = #{record.technicalRequirements,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testingResult != null">
+        testing_result = #{record.testingResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inspector != null">
+        inspector = #{record.inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inspecteDate != null">
+        inspecte_date = #{record.inspecteDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.reason != null">
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.responsibleDepartment != null">
+        responsible_department = #{record.responsibleDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentLeader != null">
+        department_leader = #{record.departmentLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="record.responsibleAnalyzeDate != null">
+        responsible_analyze_date = #{record.responsibleAnalyzeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.technicalDepartmentOpinion != null">
+        technical_department_opinion = #{record.technicalDepartmentOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update unqualified_pro_info
+    set id = #{record.id,jdbcType=INTEGER},
+      order_num = #{record.orderNum,jdbcType=VARCHAR},
+      testing_unit = #{record.testingUnit,jdbcType=VARCHAR},
+      testing_process = #{record.testingProcess,jdbcType=VARCHAR},
+      product_id = #{record.productId,jdbcType=BIGINT},
+      testing_number = #{record.testingNumber,jdbcType=INTEGER},
+      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      testing_person = #{record.testingPerson,jdbcType=VARCHAR},
+      technical_requirements = #{record.technicalRequirements,jdbcType=VARCHAR},
+      testing_result = #{record.testingResult,jdbcType=VARCHAR},
+      inspector = #{record.inspector,jdbcType=VARCHAR},
+      inspecte_date = #{record.inspecteDate,jdbcType=TIMESTAMP},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      responsible_department = #{record.responsibleDepartment,jdbcType=VARCHAR},
+      department_leader = #{record.departmentLeader,jdbcType=VARCHAR},
+      responsible_analyze_date = #{record.responsibleAnalyzeDate,jdbcType=TIMESTAMP},
+      technical_department_opinion = #{record.technicalDepartmentOpinion,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.UnqualifiedProInfo">
+    update unqualified_pro_info
+    <set>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="testingUnit != null">
+        testing_unit = #{testingUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="testingProcess != null">
+        testing_process = #{testingProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="testingNumber != null">
+        testing_number = #{testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="testingPerson != null">
+        testing_person = #{testingPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalRequirements != null">
+        technical_requirements = #{technicalRequirements,jdbcType=VARCHAR},
+      </if>
+      <if test="testingResult != null">
+        testing_result = #{testingResult,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null">
+        inspector = #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="inspecteDate != null">
+        inspecte_date = #{inspecteDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibleDepartment != null">
+        responsible_department = #{responsibleDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentLeader != null">
+        department_leader = #{departmentLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibleAnalyzeDate != null">
+        responsible_analyze_date = #{responsibleAnalyzeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="technicalDepartmentOpinion != null">
+        technical_department_opinion = #{technicalDepartmentOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.UnqualifiedProInfo">
+    update unqualified_pro_info
+    set order_num = #{orderNum,jdbcType=VARCHAR},
+      testing_unit = #{testingUnit,jdbcType=VARCHAR},
+      testing_process = #{testingProcess,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=BIGINT},
+      testing_number = #{testingNumber,jdbcType=INTEGER},
+      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      testing_person = #{testingPerson,jdbcType=VARCHAR},
+      technical_requirements = #{technicalRequirements,jdbcType=VARCHAR},
+      testing_result = #{testingResult,jdbcType=VARCHAR},
+      inspector = #{inspector,jdbcType=VARCHAR},
+      inspecte_date = #{inspecteDate,jdbcType=TIMESTAMP},
+      reason = #{reason,jdbcType=VARCHAR},
+      responsible_department = #{responsibleDepartment,jdbcType=VARCHAR},
+      department_leader = #{departmentLeader,jdbcType=VARCHAR},
+      responsible_analyze_date = #{responsibleAnalyzeDate,jdbcType=TIMESTAMP},
+      technical_department_opinion = #{technicalDepartmentOpinion,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      create_user_id = #{createUserId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

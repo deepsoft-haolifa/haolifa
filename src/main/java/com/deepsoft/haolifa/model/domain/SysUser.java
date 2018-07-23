@@ -3,34 +3,72 @@ package com.deepsoft.haolifa.model.domain;
 import java.util.Date;
 
 public class SysUser {
-    private Long id;
+    private Integer id;
+
+    private String userId;
 
     private String username;
 
     private String password;
 
-    private Date ctime;
+    private String realName;
 
-    private Date utime;
+    private String userNo;
 
-    public SysUser(Long id, String username, String password, Date ctime, Date utime) {
+    private Byte sex;
+
+    private String nativePlace;
+
+    private String phone;
+
+    private String idCard;
+
+    private String photoUrl;
+
+    private Byte isDelete;
+
+    private Date entryTime;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    public SysUser(Integer id, String userId, String username, String password, String realName, String userNo, Byte sex, String nativePlace, String phone, String idCard, String photoUrl, Byte isDelete, Date entryTime, Date createTime, Date updateTime) {
         this.id = id;
+        this.userId = userId;
         this.username = username;
         this.password = password;
-        this.ctime = ctime;
-        this.utime = utime;
+        this.realName = realName;
+        this.userNo = userNo;
+        this.sex = sex;
+        this.nativePlace = nativePlace;
+        this.phone = phone;
+        this.idCard = idCard;
+        this.photoUrl = photoUrl;
+        this.isDelete = isDelete;
+        this.entryTime = entryTime;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
 
     public SysUser() {
         super();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getUsername() {
@@ -49,19 +87,91 @@ public class SysUser {
         this.password = password == null ? null : password.trim();
     }
 
-    public Date getCtime() {
-        return ctime;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
     }
 
-    public Date getUtime() {
-        return utime;
+    public String getUserNo() {
+        return userNo;
     }
 
-    public void setUtime(Date utime) {
-        this.utime = utime;
+    public void setUserNo(String userNo) {
+        this.userNo = userNo == null ? null : userNo.trim();
+    }
+
+    public Byte getSex() {
+        return sex;
+    }
+
+    public void setSex(Byte sex) {
+        this.sex = sex;
+    }
+
+    public String getNativePlace() {
+        return nativePlace;
+    }
+
+    public void setNativePlace(String nativePlace) {
+        this.nativePlace = nativePlace == null ? null : nativePlace.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard == null ? null : idCard.trim();
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl == null ? null : photoUrl.trim();
+    }
+
+    public Byte getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public Date getEntryTime() {
+        return entryTime;
+    }
+
+    public void setEntryTime(Date entryTime) {
+        this.entryTime = entryTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }
