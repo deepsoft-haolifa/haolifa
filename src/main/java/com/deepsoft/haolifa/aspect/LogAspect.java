@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.aspect;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.deepsoft.haolifa.model.dto.AspectLogDTO;
@@ -70,15 +71,15 @@ public class LogAspect implements ThrowsAdvice {
     }
 
     public void writeApiLog(String methodType, Map requestMap, Object resultObj, Date start) {
-        AspectLogDTO.AspectLogDTOBuilder aspectLogDTOBuilder = AspectLogDTO
+        AspectLogDTO aspectLogDTO = AspectLogDTO
                 .builder()
                 .startTime(start)
                 .endTime(new Date())
                 .projectName("haolifa")
                 .request(requestMap)
                 .response(resultObj)
-                .methodType(methodType);
-        String result = JSONObject.toJSONString(aspectLogDTOBuilder, SerializerFeature.PrettyFormat);
+                .methodType(methodType).build();
+        String result = JSON.toJSONString(aspectLogDTO, SerializerFeature.PrettyFormat);
         log.info(result);
     }
 

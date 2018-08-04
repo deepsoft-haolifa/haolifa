@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.utils;
+package com.deepsoft.haolifa.util;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.HttpStatus;
@@ -41,9 +41,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class HttpClientUtil {
+public class HttpClientUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 	private final static String charset = "UTF-8";
 
 	public static String doGet(String url, Map<String, String> param, Map<String, String> headers) {

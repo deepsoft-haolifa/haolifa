@@ -80,6 +80,8 @@ public class Order {
 
     private String warrantyPeriod;
 
+    private String packagingspecification;
+
     private String transportType;
 
     private String deliveryTime;
@@ -90,7 +92,7 @@ public class Order {
 
     private String freight;
 
-    public Order(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
+    public Order(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingspecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -129,6 +131,7 @@ public class Order {
         this.signBoard = signBoard;
         this.acceptanceCriteria = acceptanceCriteria;
         this.warrantyPeriod = warrantyPeriod;
+        this.packagingspecification = packagingspecification;
         this.transportType = transportType;
         this.deliveryTime = deliveryTime;
         this.receiptInfo = receiptInfo;
@@ -442,6 +445,14 @@ public class Order {
 
     public void setWarrantyPeriod(String warrantyPeriod) {
         this.warrantyPeriod = warrantyPeriod == null ? null : warrantyPeriod.trim();
+    }
+
+    public String getPackagingspecification() {
+        return packagingspecification;
+    }
+
+    public void setPackagingspecification(String packagingspecification) {
+        this.packagingspecification = packagingspecification == null ? null : packagingspecification.trim();
     }
 
     public String getTransportType() {

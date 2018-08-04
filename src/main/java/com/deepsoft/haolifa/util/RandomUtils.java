@@ -1,9 +1,11 @@
-package com.deepsoft.haolifa.utils;
+package com.deepsoft.haolifa.util;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.UUID;
 
-public class RandomUtil {
+public class RandomUtils {
     /**
      * 获取固定长度的随机字符串
      *
@@ -41,5 +43,20 @@ public class RandomUtil {
     public static String uuidStr() {
         UUID randomUUID = UUID.randomUUID();
         return randomUUID.toString().replace("-", "");
+    }
+
+    /**
+     * 生成唯一的订单号（时间随机数）
+     *
+     * @return
+     */
+    public static String orderNoStr() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String format = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        return format+sixRandomNum();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(orderNoStr());
     }
 }
