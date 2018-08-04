@@ -9,6 +9,817 @@
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="order_status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="demand_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="demand_agent_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="demand_telphone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="demand_fax" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="demand_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supply_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supply_agent_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supply_telphone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supply_fax" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supply_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="contract_number" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="contract_sign_date" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="lable" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_color" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="discount_total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="material_description" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="purchase_feedback_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="production_feedback_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="special_require" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cargo_information" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sign_board" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="acceptance_criteria" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="warranty_period" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="transport_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="delivery_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receipt_info" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="payment_method" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="freight" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_time, update_time, create_user, update_user, order_no, order_status, demand_name, 
+    demand_agent_name, demand_telphone, demand_fax, demand_address, supply_name, supply_agent_name, 
+    supply_telphone, supply_fax, supply_address, contract_number, contract_sign_date, 
+    product_no, product_name, product_model, lable, specifications, product_color, product_number, 
+    price, total_price, discount_total_price, material_description, product_remark, purchase_feedback_time, 
+    production_feedback_time, special_require, cargo_information, sign_board, acceptance_criteria, 
+    warranty_period, transport_type, delivery_time, receipt_info, payment_method, freight
+  </sql>
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderExample">
+    delete from order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Order">
+    insert into order (id, create_time, update_time, 
+      create_user, update_user, order_no, 
+      order_status, demand_name, demand_agent_name, 
+      demand_telphone, demand_fax, demand_address, 
+      supply_name, supply_agent_name, supply_telphone, 
+      supply_fax, supply_address, contract_number, 
+      contract_sign_date, product_no, product_name, 
+      product_model, lable, specifications, 
+      product_color, product_number, price, 
+      total_price, discount_total_price, material_description, 
+      product_remark, purchase_feedback_time, production_feedback_time, 
+      special_require, cargo_information, sign_board, 
+      acceptance_criteria, warranty_period, transport_type, 
+      delivery_time, receipt_info, payment_method, 
+      freight)
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=CHAR}, 
+      #{orderStatus,jdbcType=TINYINT}, #{demandName,jdbcType=VARCHAR}, #{demandAgentName,jdbcType=VARCHAR}, 
+      #{demandTelphone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR}, #{demandAddress,jdbcType=VARCHAR}, 
+      #{supplyName,jdbcType=VARCHAR}, #{supplyAgentName,jdbcType=VARCHAR}, #{supplyTelphone,jdbcType=VARCHAR}, 
+      #{supplyFax,jdbcType=VARCHAR}, #{supplyAddress,jdbcType=VARCHAR}, #{contractNumber,jdbcType=VARCHAR}, 
+      #{contractSignDate,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{productModel,jdbcType=VARCHAR}, #{lable,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
+      #{productColor,jdbcType=VARCHAR}, #{productNumber,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
+      #{totalPrice,jdbcType=DECIMAL}, #{discountTotalPrice,jdbcType=DECIMAL}, #{materialDescription,jdbcType=VARCHAR}, 
+      #{productRemark,jdbcType=VARCHAR}, #{purchaseFeedbackTime,jdbcType=VARCHAR}, #{productionFeedbackTime,jdbcType=VARCHAR}, 
+      #{specialRequire,jdbcType=VARCHAR}, #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, 
+      #{acceptanceCriteria,jdbcType=VARCHAR}, #{warrantyPeriod,jdbcType=VARCHAR}, #{transportType,jdbcType=VARCHAR}, 
+      #{deliveryTime,jdbcType=VARCHAR}, #{receiptInfo,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=VARCHAR}, 
+      #{freight,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Order">
+    insert into order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="demandName != null">
+        demand_name,
+      </if>
+      <if test="demandAgentName != null">
+        demand_agent_name,
+      </if>
+      <if test="demandTelphone != null">
+        demand_telphone,
+      </if>
+      <if test="demandFax != null">
+        demand_fax,
+      </if>
+      <if test="demandAddress != null">
+        demand_address,
+      </if>
+      <if test="supplyName != null">
+        supply_name,
+      </if>
+      <if test="supplyAgentName != null">
+        supply_agent_name,
+      </if>
+      <if test="supplyTelphone != null">
+        supply_telphone,
+      </if>
+      <if test="supplyFax != null">
+        supply_fax,
+      </if>
+      <if test="supplyAddress != null">
+        supply_address,
+      </if>
+      <if test="contractNumber != null">
+        contract_number,
+      </if>
+      <if test="contractSignDate != null">
+        contract_sign_date,
+      </if>
+      <if test="productNo != null">
+        product_no,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="productModel != null">
+        product_model,
+      </if>
+      <if test="lable != null">
+        lable,
+      </if>
+      <if test="specifications != null">
+        specifications,
+      </if>
+      <if test="productColor != null">
+        product_color,
+      </if>
+      <if test="productNumber != null">
+        product_number,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="discountTotalPrice != null">
+        discount_total_price,
+      </if>
+      <if test="materialDescription != null">
+        material_description,
+      </if>
+      <if test="productRemark != null">
+        product_remark,
+      </if>
+      <if test="purchaseFeedbackTime != null">
+        purchase_feedback_time,
+      </if>
+      <if test="productionFeedbackTime != null">
+        production_feedback_time,
+      </if>
+      <if test="specialRequire != null">
+        special_require,
+      </if>
+      <if test="cargoInformation != null">
+        cargo_information,
+      </if>
+      <if test="signBoard != null">
+        sign_board,
+      </if>
+      <if test="acceptanceCriteria != null">
+        acceptance_criteria,
+      </if>
+      <if test="warrantyPeriod != null">
+        warranty_period,
+      </if>
+      <if test="transportType != null">
+        transport_type,
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time,
+      </if>
+      <if test="receiptInfo != null">
+        receipt_info,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
+      </if>
+      <if test="freight != null">
+        freight,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="demandName != null">
+        #{demandName,jdbcType=VARCHAR},
+      </if>
+      <if test="demandAgentName != null">
+        #{demandAgentName,jdbcType=VARCHAR},
+      </if>
+      <if test="demandTelphone != null">
+        #{demandTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="demandFax != null">
+        #{demandFax,jdbcType=VARCHAR},
+      </if>
+      <if test="demandAddress != null">
+        #{demandAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyAgentName != null">
+        #{supplyAgentName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyTelphone != null">
+        #{supplyTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyFax != null">
+        #{supplyFax,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyAddress != null">
+        #{supplyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNumber != null">
+        #{contractNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contractSignDate != null">
+        #{contractSignDate,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productModel != null">
+        #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="lable != null">
+        #{lable,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null">
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="productColor != null">
+        #{productColor,jdbcType=VARCHAR},
+      </if>
+      <if test="productNumber != null">
+        #{productNumber,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discountTotalPrice != null">
+        #{discountTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materialDescription != null">
+        #{materialDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="productRemark != null">
+        #{productRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseFeedbackTime != null">
+        #{purchaseFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="productionFeedbackTime != null">
+        #{productionFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="specialRequire != null">
+        #{specialRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="cargoInformation != null">
+        #{cargoInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="signBoard != null">
+        #{signBoard,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceCriteria != null">
+        #{acceptanceCriteria,jdbcType=VARCHAR},
+      </if>
+      <if test="warrantyPeriod != null">
+        #{warrantyPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null">
+        #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        #{deliveryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptInfo != null">
+        #{receiptInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null">
+        #{freight,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderExample" resultType="java.lang.Long">
+    select count(*) from order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update order
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null">
+        order_no = #{record.orderNo,jdbcType=CHAR},
+      </if>
+      <if test="record.orderStatus != null">
+        order_status = #{record.orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.demandName != null">
+        demand_name = #{record.demandName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demandAgentName != null">
+        demand_agent_name = #{record.demandAgentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demandTelphone != null">
+        demand_telphone = #{record.demandTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demandFax != null">
+        demand_fax = #{record.demandFax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demandAddress != null">
+        demand_address = #{record.demandAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyName != null">
+        supply_name = #{record.supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyAgentName != null">
+        supply_agent_name = #{record.supplyAgentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyTelphone != null">
+        supply_telphone = #{record.supplyTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyFax != null">
+        supply_fax = #{record.supplyFax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyAddress != null">
+        supply_address = #{record.supplyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractNumber != null">
+        contract_number = #{record.contractNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractSignDate != null">
+        contract_sign_date = #{record.contractSignDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productNo != null">
+        product_no = #{record.productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productModel != null">
+        product_model = #{record.productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lable != null">
+        lable = #{record.lable,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null">
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productColor != null">
+        product_color = #{record.productColor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productNumber != null">
+        product_number = #{record.productNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalPrice != null">
+        total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.discountTotalPrice != null">
+        discount_total_price = #{record.discountTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.materialDescription != null">
+        material_description = #{record.materialDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productRemark != null">
+        product_remark = #{record.productRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseFeedbackTime != null">
+        purchase_feedback_time = #{record.purchaseFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionFeedbackTime != null">
+        production_feedback_time = #{record.productionFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specialRequire != null">
+        special_require = #{record.specialRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cargoInformation != null">
+        cargo_information = #{record.cargoInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signBoard != null">
+        sign_board = #{record.signBoard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acceptanceCriteria != null">
+        acceptance_criteria = #{record.acceptanceCriteria,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warrantyPeriod != null">
+        warranty_period = #{record.warrantyPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportType != null">
+        transport_type = #{record.transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryTime != null">
+        delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiptInfo != null">
+        receipt_info = #{record.receiptInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentMethod != null">
+        payment_method = #{record.paymentMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.freight != null">
+        freight = #{record.freight,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update order
+    set id = #{record.id,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=INTEGER},
+      update_user = #{record.updateUser,jdbcType=INTEGER},
+      order_no = #{record.orderNo,jdbcType=CHAR},
+      order_status = #{record.orderStatus,jdbcType=TINYINT},
+      demand_name = #{record.demandName,jdbcType=VARCHAR},
+      demand_agent_name = #{record.demandAgentName,jdbcType=VARCHAR},
+      demand_telphone = #{record.demandTelphone,jdbcType=VARCHAR},
+      demand_fax = #{record.demandFax,jdbcType=VARCHAR},
+      demand_address = #{record.demandAddress,jdbcType=VARCHAR},
+      supply_name = #{record.supplyName,jdbcType=VARCHAR},
+      supply_agent_name = #{record.supplyAgentName,jdbcType=VARCHAR},
+      supply_telphone = #{record.supplyTelphone,jdbcType=VARCHAR},
+      supply_fax = #{record.supplyFax,jdbcType=VARCHAR},
+      supply_address = #{record.supplyAddress,jdbcType=VARCHAR},
+      contract_number = #{record.contractNumber,jdbcType=VARCHAR},
+      contract_sign_date = #{record.contractSignDate,jdbcType=VARCHAR},
+      product_no = #{record.productNo,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      lable = #{record.lable,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      product_color = #{record.productColor,jdbcType=VARCHAR},
+      product_number = #{record.productNumber,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      discount_total_price = #{record.discountTotalPrice,jdbcType=DECIMAL},
+      material_description = #{record.materialDescription,jdbcType=VARCHAR},
+      product_remark = #{record.productRemark,jdbcType=VARCHAR},
+      purchase_feedback_time = #{record.purchaseFeedbackTime,jdbcType=VARCHAR},
+      production_feedback_time = #{record.productionFeedbackTime,jdbcType=VARCHAR},
+      special_require = #{record.specialRequire,jdbcType=VARCHAR},
+      cargo_information = #{record.cargoInformation,jdbcType=VARCHAR},
+      sign_board = #{record.signBoard,jdbcType=VARCHAR},
+      acceptance_criteria = #{record.acceptanceCriteria,jdbcType=VARCHAR},
+      warranty_period = #{record.warrantyPeriod,jdbcType=VARCHAR},
+      transport_type = #{record.transportType,jdbcType=VARCHAR},
+      delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
+      receipt_info = #{record.receiptInfo,jdbcType=VARCHAR},
+      payment_method = #{record.paymentMethod,jdbcType=VARCHAR},
+      freight = #{record.freight,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Order">
+    update order
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="demandName != null">
+        demand_name = #{demandName,jdbcType=VARCHAR},
+      </if>
+      <if test="demandAgentName != null">
+        demand_agent_name = #{demandAgentName,jdbcType=VARCHAR},
+      </if>
+      <if test="demandTelphone != null">
+        demand_telphone = #{demandTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="demandFax != null">
+        demand_fax = #{demandFax,jdbcType=VARCHAR},
+      </if>
+      <if test="demandAddress != null">
+        demand_address = #{demandAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        supply_name = #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyAgentName != null">
+        supply_agent_name = #{supplyAgentName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyTelphone != null">
+        supply_telphone = #{supplyTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyFax != null">
+        supply_fax = #{supplyFax,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyAddress != null">
+        supply_address = #{supplyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNumber != null">
+        contract_number = #{contractNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contractSignDate != null">
+        contract_sign_date = #{contractSignDate,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productModel != null">
+        product_model = #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="lable != null">
+        lable = #{lable,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null">
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="productColor != null">
+        product_color = #{productColor,jdbcType=VARCHAR},
+      </if>
+      <if test="productNumber != null">
+        product_number = #{productNumber,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="discountTotalPrice != null">
+        discount_total_price = #{discountTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materialDescription != null">
+        material_description = #{materialDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="productRemark != null">
+        product_remark = #{productRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseFeedbackTime != null">
+        purchase_feedback_time = #{purchaseFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="productionFeedbackTime != null">
+        production_feedback_time = #{productionFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="specialRequire != null">
+        special_require = #{specialRequire,jdbcType=VARCHAR},
+      </if>
+      <if test="cargoInformation != null">
+        cargo_information = #{cargoInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="signBoard != null">
+        sign_board = #{signBoard,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceCriteria != null">
+        acceptance_criteria = #{acceptanceCriteria,jdbcType=VARCHAR},
+      </if>
+      <if test="warrantyPeriod != null">
+        warranty_period = #{warrantyPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null">
+        transport_type = #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptInfo != null">
+        receipt_info = #{receiptInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="freight != null">
+        freight = #{freight,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Order">
+    update order
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=CHAR},
+      order_status = #{orderStatus,jdbcType=TINYINT},
+      demand_name = #{demandName,jdbcType=VARCHAR},
+      demand_agent_name = #{demandAgentName,jdbcType=VARCHAR},
+      demand_telphone = #{demandTelphone,jdbcType=VARCHAR},
+      demand_fax = #{demandFax,jdbcType=VARCHAR},
+      demand_address = #{demandAddress,jdbcType=VARCHAR},
+      supply_name = #{supplyName,jdbcType=VARCHAR},
+      supply_agent_name = #{supplyAgentName,jdbcType=VARCHAR},
+      supply_telphone = #{supplyTelphone,jdbcType=VARCHAR},
+      supply_fax = #{supplyFax,jdbcType=VARCHAR},
+      supply_address = #{supplyAddress,jdbcType=VARCHAR},
+      contract_number = #{contractNumber,jdbcType=VARCHAR},
+      contract_sign_date = #{contractSignDate,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      lable = #{lable,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      product_color = #{productColor,jdbcType=VARCHAR},
+      product_number = #{productNumber,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      discount_total_price = #{discountTotalPrice,jdbcType=DECIMAL},
+      material_description = #{materialDescription,jdbcType=VARCHAR},
+      product_remark = #{productRemark,jdbcType=VARCHAR},
+      purchase_feedback_time = #{purchaseFeedbackTime,jdbcType=VARCHAR},
+      production_feedback_time = #{productionFeedbackTime,jdbcType=VARCHAR},
+      special_require = #{specialRequire,jdbcType=VARCHAR},
+      cargo_information = #{cargoInformation,jdbcType=VARCHAR},
+      sign_board = #{signBoard,jdbcType=VARCHAR},
+      acceptance_criteria = #{acceptanceCriteria,jdbcType=VARCHAR},
+      warranty_period = #{warrantyPeriod,jdbcType=VARCHAR},
+      transport_type = #{transportType,jdbcType=VARCHAR},
+      delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      receipt_info = #{receiptInfo,jdbcType=VARCHAR},
+      payment_method = #{paymentMethod,jdbcType=VARCHAR},
+      freight = #{freight,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Order">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="product_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="order_status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="product_name" javaType="java.lang.String" jdbcType="VARCHAR" />

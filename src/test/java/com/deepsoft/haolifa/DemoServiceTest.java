@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa;
 
+import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.service.DemoService;
 import org.junit.Test;
 
