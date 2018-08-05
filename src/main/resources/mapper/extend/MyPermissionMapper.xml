@@ -17,16 +17,16 @@
   <select id="findByAdminUserId" parameterType="long" resultMap="BaseResultMap">
     select
     p.id,
-    p.name,
+    p.perm_name,
     p.description,
     p.url,
     p.pid,
-    r.name as role
-    from Sys_User u
-    LEFT JOIN sys_role_user sru on u.id= sru.Sys_User_id
-    LEFT JOIN Sys_Role r on sru.Sys_Role_id=r.id
-    LEFT JOIN Sys_permission_role spr on spr.role_id=r.id
-    LEFT JOIN Sys_permission p on p.id =spr.permission_id
+    r.role_name as role
+    from sys_user u
+    LEFT JOIN sys_role_user sru on u.id= sru.sys_user_id
+    LEFT JOIN sys_role r on sru.sys_role_id=r.id
+    LEFT JOIN sys_permission_role spr on spr.role_id=r.id
+    LEFT JOIN sys_permission p on p.id =spr.permission_id
     where u.id=#{userId}
   </select>
 

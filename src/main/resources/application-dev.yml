@@ -16,4 +16,5 @@ spring:
     port: 6379
     password: haolifa6379
     timeout: 10000ms
-
+  session:
+    store-type: redis
