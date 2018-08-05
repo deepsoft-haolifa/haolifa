@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.FlowStepMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.FlowStep">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.FlowStepConfigMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.FlowStepConfig">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="next_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="pre_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="goto_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="step_order" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="approval_field_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="english_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -75,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, flow_id, step_id, next_step_id, 
-    pre_step_id, goto_step_id, step_order
+    id, create_time, update_time, create_user, update_user, step_id, approval_field_name, 
+    english_name, type
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowStepExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowStepConfigExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from flow_step
+    from flow_step_config
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,31 +93,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from flow_step
+    from flow_step_config
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from flow_step
+    delete from flow_step_config
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowStepExample">
-    delete from flow_step
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowStepConfigExample">
+    delete from flow_step_config
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.FlowStep">
-    insert into flow_step (id, create_time, update_time, 
-      create_user, update_user, flow_id, 
-      step_id, next_step_id, pre_step_id, 
-      goto_step_id, step_order)
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.FlowStepConfig">
+    insert into flow_step_config (id, create_time, update_time, 
+      create_user, update_user, step_id, 
+      approval_field_name, english_name, type
+      )
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, 
-      #{stepId,jdbcType=INTEGER}, #{nextStepId,jdbcType=INTEGER}, #{preStepId,jdbcType=INTEGER}, 
-      #{gotoStepId,jdbcType=INTEGER}, #{stepOrder,jdbcType=INTEGER})
+      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{stepId,jdbcType=INTEGER}, 
+      #{approvalFieldName,jdbcType=VARCHAR}, #{englishName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowStep">
-    insert into flow_step
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowStepConfig">
+    insert into flow_step_config
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -136,23 +134,17 @@
       <if test="updateUser != null">
         update_user,
       </if>
-      <if test="flowId != null">
-        flow_id,
-      </if>
       <if test="stepId != null">
         step_id,
       </if>
-      <if test="nextStepId != null">
-        next_step_id,
+      <if test="approvalFieldName != null">
+        approval_field_name,
       </if>
-      <if test="preStepId != null">
-        pre_step_id,
+      <if test="englishName != null">
+        english_name,
       </if>
-      <if test="gotoStepId != null">
-        goto_step_id,
-      </if>
-      <if test="stepOrder != null">
-        step_order,
+      <if test="type != null">
+        type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -171,34 +163,28 @@
       <if test="updateUser != null">
         #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="flowId != null">
-        #{flowId,jdbcType=INTEGER},
-      </if>
       <if test="stepId != null">
         #{stepId,jdbcType=INTEGER},
       </if>
-      <if test="nextStepId != null">
-        #{nextStepId,jdbcType=INTEGER},
+      <if test="approvalFieldName != null">
+        #{approvalFieldName,jdbcType=VARCHAR},
       </if>
-      <if test="preStepId != null">
-        #{preStepId,jdbcType=INTEGER},
+      <if test="englishName != null">
+        #{englishName,jdbcType=VARCHAR},
       </if>
-      <if test="gotoStepId != null">
-        #{gotoStepId,jdbcType=INTEGER},
-      </if>
-      <if test="stepOrder != null">
-        #{stepOrder,jdbcType=INTEGER},
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowStepExample" resultType="java.lang.Long">
-    select count(*) from flow_step
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowStepConfigExample" resultType="java.lang.Long">
+    select count(*) from flow_step_config
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update flow_step
+    update flow_step_config
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -215,23 +201,17 @@
       <if test="record.updateUser != null">
         update_user = #{record.updateUser,jdbcType=INTEGER},
       </if>
-      <if test="record.flowId != null">
-        flow_id = #{record.flowId,jdbcType=INTEGER},
-      </if>
       <if test="record.stepId != null">
         step_id = #{record.stepId,jdbcType=INTEGER},
       </if>
-      <if test="record.nextStepId != null">
-        next_step_id = #{record.nextStepId,jdbcType=INTEGER},
+      <if test="record.approvalFieldName != null">
+        approval_field_name = #{record.approvalFieldName,jdbcType=VARCHAR},
       </if>
-      <if test="record.preStepId != null">
-        pre_step_id = #{record.preStepId,jdbcType=INTEGER},
+      <if test="record.englishName != null">
+        english_name = #{record.englishName,jdbcType=VARCHAR},
       </if>
-      <if test="record.gotoStepId != null">
-        goto_step_id = #{record.gotoStepId,jdbcType=INTEGER},
-      </if>
-      <if test="record.stepOrder != null">
-        step_order = #{record.stepOrder,jdbcType=INTEGER},
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -239,24 +219,22 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update flow_step
+    update flow_step_config
     set id = #{record.id,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
-      flow_id = #{record.flowId,jdbcType=INTEGER},
       step_id = #{record.stepId,jdbcType=INTEGER},
-      next_step_id = #{record.nextStepId,jdbcType=INTEGER},
-      pre_step_id = #{record.preStepId,jdbcType=INTEGER},
-      goto_step_id = #{record.gotoStepId,jdbcType=INTEGER},
-      step_order = #{record.stepOrder,jdbcType=INTEGER}
+      approval_field_name = #{record.approvalFieldName,jdbcType=VARCHAR},
+      english_name = #{record.englishName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.FlowStep">
-    update flow_step
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.FlowStepConfig">
+    update flow_step_config
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -270,39 +248,31 @@
       <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="flowId != null">
-        flow_id = #{flowId,jdbcType=INTEGER},
-      </if>
       <if test="stepId != null">
         step_id = #{stepId,jdbcType=INTEGER},
       </if>
-      <if test="nextStepId != null">
-        next_step_id = #{nextStepId,jdbcType=INTEGER},
+      <if test="approvalFieldName != null">
+        approval_field_name = #{approvalFieldName,jdbcType=VARCHAR},
       </if>
-      <if test="preStepId != null">
-        pre_step_id = #{preStepId,jdbcType=INTEGER},
+      <if test="englishName != null">
+        english_name = #{englishName,jdbcType=VARCHAR},
       </if>
-      <if test="gotoStepId != null">
-        goto_step_id = #{gotoStepId,jdbcType=INTEGER},
-      </if>
-      <if test="stepOrder != null">
-        step_order = #{stepOrder,jdbcType=INTEGER},
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.FlowStep">
-    update flow_step
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.FlowStepConfig">
+    update flow_step_config
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},
-      flow_id = #{flowId,jdbcType=INTEGER},
       step_id = #{stepId,jdbcType=INTEGER},
-      next_step_id = #{nextStepId,jdbcType=INTEGER},
-      pre_step_id = #{preStepId,jdbcType=INTEGER},
-      goto_step_id = #{gotoStepId,jdbcType=INTEGER},
-      step_order = #{stepOrder,jdbcType=INTEGER}
+      approval_field_name = #{approvalFieldName,jdbcType=VARCHAR},
+      english_name = #{englishName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

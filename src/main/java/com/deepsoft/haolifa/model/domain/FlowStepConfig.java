@@ -2,7 +2,7 @@ package com.deepsoft.haolifa.model.domain;
 
 import java.util.Date;
 
-public class FlowStep {
+public class FlowStepConfig {
     private Integer id;
 
     private Date createTime;
@@ -13,33 +13,27 @@ public class FlowStep {
 
     private Integer updateUser;
 
-    private Integer flowId;
-
     private Integer stepId;
 
-    private Integer nextStepId;
+    private String approvalFieldName;
 
-    private Integer preStepId;
+    private String englishName;
 
-    private Integer gotoStepId;
+    private String type;
 
-    private Integer stepOrder;
-
-    public FlowStep(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer flowId, Integer stepId, Integer nextStepId, Integer preStepId, Integer gotoStepId, Integer stepOrder) {
+    public FlowStepConfig(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer stepId, String approvalFieldName, String englishName, String type) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
-        this.flowId = flowId;
         this.stepId = stepId;
-        this.nextStepId = nextStepId;
-        this.preStepId = preStepId;
-        this.gotoStepId = gotoStepId;
-        this.stepOrder = stepOrder;
+        this.approvalFieldName = approvalFieldName;
+        this.englishName = englishName;
+        this.type = type;
     }
 
-    public FlowStep() {
+    public FlowStepConfig() {
         super();
     }
 
@@ -83,14 +77,6 @@ public class FlowStep {
         this.updateUser = updateUser;
     }
 
-    public Integer getFlowId() {
-        return flowId;
-    }
-
-    public void setFlowId(Integer flowId) {
-        this.flowId = flowId;
-    }
-
     public Integer getStepId() {
         return stepId;
     }
@@ -99,35 +85,27 @@ public class FlowStep {
         this.stepId = stepId;
     }
 
-    public Integer getNextStepId() {
-        return nextStepId;
+    public String getApprovalFieldName() {
+        return approvalFieldName;
     }
 
-    public void setNextStepId(Integer nextStepId) {
-        this.nextStepId = nextStepId;
+    public void setApprovalFieldName(String approvalFieldName) {
+        this.approvalFieldName = approvalFieldName == null ? null : approvalFieldName.trim();
     }
 
-    public Integer getPreStepId() {
-        return preStepId;
+    public String getEnglishName() {
+        return englishName;
     }
 
-    public void setPreStepId(Integer preStepId) {
-        this.preStepId = preStepId;
+    public void setEnglishName(String englishName) {
+        this.englishName = englishName == null ? null : englishName.trim();
     }
 
-    public Integer getGotoStepId() {
-        return gotoStepId;
+    public String getType() {
+        return type;
     }
 
-    public void setGotoStepId(Integer gotoStepId) {
-        this.gotoStepId = gotoStepId;
-    }
-
-    public Integer getStepOrder() {
-        return stepOrder;
-    }
-
-    public void setStepOrder(Integer stepOrder) {
-        this.stepOrder = stepOrder;
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 }

@@ -89,7 +89,9 @@
 
         <!--<table tableName="step" domainObjectName="Step"></table>-->
 
-        <!--<table tableName="flow_step" domainObjectName="FlowStep"></table>-->
+        <table tableName="flow_step" domainObjectName="FlowStep"></table>
+
+        <table tableName="flow_step_config" domainObjectName="FlowStepConfig"></table>
 
         <!--<table tableName="flow_history" domainObjectName="FlowHistory"></table>-->
 
@@ -109,7 +111,7 @@
 
         <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
 
-        <table tableName="order_product" domainObjectName="OrderProduct"></table>
+        <!--<table tableName="order_product" domainObjectName="OrderProduct"></table>-->
 
         <!--<table tableName="order_material" domainObjectName="OrderMaterial"></table>-->
 

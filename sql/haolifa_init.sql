@@ -31,14 +31,28 @@
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `create_user` int(11) NOT NULL COMMENT '创建用户',
     `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `flow_id` int(11) NOT NULL DEFAULT 0 COMMENT '流程id',
-	  `fork_flow` int(11) NOT NULL DEFAULT 0 COMMENT '分叉流程',
-	  `fork_condition` varchar(64) NOT NULL DEFAULT '' COMMENT '分叉流程条件',
-	  `step_id` int(11) NOT NULL  DEFAULT 0 COMMENT '步骤id',
-	  `order_step` int(11) DEFAULT NULL COMMENT '序号',
+	  `flow_id` int(11) NOT NULL DEFAULT '0' COMMENT '流程id',
+    `step_id` int(11) NOT NULL DEFAULT '0' COMMENT '步骤id',
+    `next_step_id` int(11) DEFAULT NULL COMMENT '下一步stepId',
+    `pre_step_id` int(11) DEFAULT NULL COMMENT '暂时不用',
+    `goto_step_id` int(11) DEFAULT NULL COMMENT 'false跳转节点暂时不用',
+    `step_order` int(11) DEFAULT NULL COMMENT '序号',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程步骤关联表（一个流程关联多个步骤）';
 
+  DROP TABLE IF EXISTS `flow_step_config`;
+  CREATE TABLE `flow_step_config` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_user` int(11) NOT NULL COMMENT '创建用户',
+    `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
+    `step_id` int(11) NOT NULL DEFAULT '0' COMMENT '步骤id',
+    `approval_field_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '节点审批字段中文名称',
+    `english_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '节点审批字段英文名称',
+    `type` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '字段类型,如string,int等',
+    PRIMARY KEY (`id`)
+  ) ENGINE = INNODB COMMENT '流程节点配置表';
 
  	DROP TABLE IF EXISTS `flow_history`;
 	CREATE TABLE `flow_history` (

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FlowStepExample {
+public class FlowStepConfigExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public FlowStepExample() {
+    public FlowStepConfigExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -405,66 +405,6 @@ public class FlowStepExample {
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdIsNull() {
-            addCriterion("flow_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdIsNotNull() {
-            addCriterion("flow_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdEqualTo(Integer value) {
-            addCriterion("flow_id =", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotEqualTo(Integer value) {
-            addCriterion("flow_id <>", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdGreaterThan(Integer value) {
-            addCriterion("flow_id >", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("flow_id >=", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdLessThan(Integer value) {
-            addCriterion("flow_id <", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdLessThanOrEqualTo(Integer value) {
-            addCriterion("flow_id <=", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdIn(List<Integer> values) {
-            addCriterion("flow_id in", values, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotIn(List<Integer> values) {
-            addCriterion("flow_id not in", values, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdBetween(Integer value1, Integer value2) {
-            addCriterion("flow_id between", value1, value2, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("flow_id not between", value1, value2, "flowId");
-            return (Criteria) this;
-        }
-
         public Criteria andStepIdIsNull() {
             addCriterion("step_id is null");
             return (Criteria) this;
@@ -525,243 +465,213 @@ public class FlowStepExample {
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdIsNull() {
-            addCriterion("next_step_id is null");
+        public Criteria andApprovalFieldNameIsNull() {
+            addCriterion("approval_field_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdIsNotNull() {
-            addCriterion("next_step_id is not null");
+        public Criteria andApprovalFieldNameIsNotNull() {
+            addCriterion("approval_field_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdEqualTo(Integer value) {
-            addCriterion("next_step_id =", value, "nextStepId");
+        public Criteria andApprovalFieldNameEqualTo(String value) {
+            addCriterion("approval_field_name =", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdNotEqualTo(Integer value) {
-            addCriterion("next_step_id <>", value, "nextStepId");
+        public Criteria andApprovalFieldNameNotEqualTo(String value) {
+            addCriterion("approval_field_name <>", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdGreaterThan(Integer value) {
-            addCriterion("next_step_id >", value, "nextStepId");
+        public Criteria andApprovalFieldNameGreaterThan(String value) {
+            addCriterion("approval_field_name >", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("next_step_id >=", value, "nextStepId");
+        public Criteria andApprovalFieldNameGreaterThanOrEqualTo(String value) {
+            addCriterion("approval_field_name >=", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdLessThan(Integer value) {
-            addCriterion("next_step_id <", value, "nextStepId");
+        public Criteria andApprovalFieldNameLessThan(String value) {
+            addCriterion("approval_field_name <", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdLessThanOrEqualTo(Integer value) {
-            addCriterion("next_step_id <=", value, "nextStepId");
+        public Criteria andApprovalFieldNameLessThanOrEqualTo(String value) {
+            addCriterion("approval_field_name <=", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdIn(List<Integer> values) {
-            addCriterion("next_step_id in", values, "nextStepId");
+        public Criteria andApprovalFieldNameLike(String value) {
+            addCriterion("approval_field_name like", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdNotIn(List<Integer> values) {
-            addCriterion("next_step_id not in", values, "nextStepId");
+        public Criteria andApprovalFieldNameNotLike(String value) {
+            addCriterion("approval_field_name not like", value, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdBetween(Integer value1, Integer value2) {
-            addCriterion("next_step_id between", value1, value2, "nextStepId");
+        public Criteria andApprovalFieldNameIn(List<String> values) {
+            addCriterion("approval_field_name in", values, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andNextStepIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("next_step_id not between", value1, value2, "nextStepId");
+        public Criteria andApprovalFieldNameNotIn(List<String> values) {
+            addCriterion("approval_field_name not in", values, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdIsNull() {
-            addCriterion("pre_step_id is null");
+        public Criteria andApprovalFieldNameBetween(String value1, String value2) {
+            addCriterion("approval_field_name between", value1, value2, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdIsNotNull() {
-            addCriterion("pre_step_id is not null");
+        public Criteria andApprovalFieldNameNotBetween(String value1, String value2) {
+            addCriterion("approval_field_name not between", value1, value2, "approvalFieldName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdEqualTo(Integer value) {
-            addCriterion("pre_step_id =", value, "preStepId");
+        public Criteria andEnglishNameIsNull() {
+            addCriterion("english_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdNotEqualTo(Integer value) {
-            addCriterion("pre_step_id <>", value, "preStepId");
+        public Criteria andEnglishNameIsNotNull() {
+            addCriterion("english_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdGreaterThan(Integer value) {
-            addCriterion("pre_step_id >", value, "preStepId");
+        public Criteria andEnglishNameEqualTo(String value) {
+            addCriterion("english_name =", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("pre_step_id >=", value, "preStepId");
+        public Criteria andEnglishNameNotEqualTo(String value) {
+            addCriterion("english_name <>", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdLessThan(Integer value) {
-            addCriterion("pre_step_id <", value, "preStepId");
+        public Criteria andEnglishNameGreaterThan(String value) {
+            addCriterion("english_name >", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdLessThanOrEqualTo(Integer value) {
-            addCriterion("pre_step_id <=", value, "preStepId");
+        public Criteria andEnglishNameGreaterThanOrEqualTo(String value) {
+            addCriterion("english_name >=", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdIn(List<Integer> values) {
-            addCriterion("pre_step_id in", values, "preStepId");
+        public Criteria andEnglishNameLessThan(String value) {
+            addCriterion("english_name <", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdNotIn(List<Integer> values) {
-            addCriterion("pre_step_id not in", values, "preStepId");
+        public Criteria andEnglishNameLessThanOrEqualTo(String value) {
+            addCriterion("english_name <=", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdBetween(Integer value1, Integer value2) {
-            addCriterion("pre_step_id between", value1, value2, "preStepId");
+        public Criteria andEnglishNameLike(String value) {
+            addCriterion("english_name like", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andPreStepIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("pre_step_id not between", value1, value2, "preStepId");
+        public Criteria andEnglishNameNotLike(String value) {
+            addCriterion("english_name not like", value, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdIsNull() {
-            addCriterion("goto_step_id is null");
+        public Criteria andEnglishNameIn(List<String> values) {
+            addCriterion("english_name in", values, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdIsNotNull() {
-            addCriterion("goto_step_id is not null");
+        public Criteria andEnglishNameNotIn(List<String> values) {
+            addCriterion("english_name not in", values, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdEqualTo(Integer value) {
-            addCriterion("goto_step_id =", value, "gotoStepId");
+        public Criteria andEnglishNameBetween(String value1, String value2) {
+            addCriterion("english_name between", value1, value2, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdNotEqualTo(Integer value) {
-            addCriterion("goto_step_id <>", value, "gotoStepId");
+        public Criteria andEnglishNameNotBetween(String value1, String value2) {
+            addCriterion("english_name not between", value1, value2, "englishName");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdGreaterThan(Integer value) {
-            addCriterion("goto_step_id >", value, "gotoStepId");
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("goto_step_id >=", value, "gotoStepId");
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdLessThan(Integer value) {
-            addCriterion("goto_step_id <", value, "gotoStepId");
+        public Criteria andTypeEqualTo(String value) {
+            addCriterion("type =", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdLessThanOrEqualTo(Integer value) {
-            addCriterion("goto_step_id <=", value, "gotoStepId");
+        public Criteria andTypeNotEqualTo(String value) {
+            addCriterion("type <>", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdIn(List<Integer> values) {
-            addCriterion("goto_step_id in", values, "gotoStepId");
+        public Criteria andTypeGreaterThan(String value) {
+            addCriterion("type >", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdNotIn(List<Integer> values) {
-            addCriterion("goto_step_id not in", values, "gotoStepId");
+        public Criteria andTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("type >=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdBetween(Integer value1, Integer value2) {
-            addCriterion("goto_step_id between", value1, value2, "gotoStepId");
+        public Criteria andTypeLessThan(String value) {
+            addCriterion("type <", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andGotoStepIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("goto_step_id not between", value1, value2, "gotoStepId");
+        public Criteria andTypeLessThanOrEqualTo(String value) {
+            addCriterion("type <=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderIsNull() {
-            addCriterion("step_order is null");
+        public Criteria andTypeLike(String value) {
+            addCriterion("type like", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderIsNotNull() {
-            addCriterion("step_order is not null");
+        public Criteria andTypeNotLike(String value) {
+            addCriterion("type not like", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderEqualTo(Integer value) {
-            addCriterion("step_order =", value, "stepOrder");
+        public Criteria andTypeIn(List<String> values) {
+            addCriterion("type in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderNotEqualTo(Integer value) {
-            addCriterion("step_order <>", value, "stepOrder");
+        public Criteria andTypeNotIn(List<String> values) {
+            addCriterion("type not in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderGreaterThan(Integer value) {
-            addCriterion("step_order >", value, "stepOrder");
+        public Criteria andTypeBetween(String value1, String value2) {
+            addCriterion("type between", value1, value2, "type");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderGreaterThanOrEqualTo(Integer value) {
-            addCriterion("step_order >=", value, "stepOrder");
-            return (Criteria) this;
-        }
-
-        public Criteria andStepOrderLessThan(Integer value) {
-            addCriterion("step_order <", value, "stepOrder");
-            return (Criteria) this;
-        }
-
-        public Criteria andStepOrderLessThanOrEqualTo(Integer value) {
-            addCriterion("step_order <=", value, "stepOrder");
-            return (Criteria) this;
-        }
-
-        public Criteria andStepOrderIn(List<Integer> values) {
-            addCriterion("step_order in", values, "stepOrder");
-            return (Criteria) this;
-        }
-
-        public Criteria andStepOrderNotIn(List<Integer> values) {
-            addCriterion("step_order not in", values, "stepOrder");
-            return (Criteria) this;
-        }
-
-        public Criteria andStepOrderBetween(Integer value1, Integer value2) {
-            addCriterion("step_order between", value1, value2, "stepOrder");
-            return (Criteria) this;
-        }
-
-        public Criteria andStepOrderNotBetween(Integer value1, Integer value2) {
-            addCriterion("step_order not between", value1, value2, "stepOrder");
+        public Criteria andTypeNotBetween(String value1, String value2) {
+            addCriterion("type not between", value1, value2, "type");
             return (Criteria) this;
         }
     }
