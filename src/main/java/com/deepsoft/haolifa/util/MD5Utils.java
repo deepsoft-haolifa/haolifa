@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.utils;
+package com.deepsoft.haolifa.util;
 
 
 
@@ -11,7 +11,7 @@ import java.util.Random;
  * MD5工具类，加盐
  *
  */
-public class MD5Util {
+public class MD5Utils {
 
     /**
      * 普通MD5
@@ -56,7 +56,7 @@ public class MD5Util {
      */
     public static String getSaltMd5(String input) {
         Random r = new Random();
-        String salt = RandomUtil.randomStr(16);
+        String salt = RandomUtils.randomStr(16);
         System.out.println("salt:" + salt);
         String md5Final = MD5(input + salt);
         System.out.println("加盐后的MD5加密:" + MD5(input + salt));

@@ -1,6 +1,6 @@
 package com.deepsoft.haolifa.task;
 
-import com.deepsoft.haolifa.utils.DistributedLocker;
+import com.deepsoft.haolifa.util.DistributedLocker;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

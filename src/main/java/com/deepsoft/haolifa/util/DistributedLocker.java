@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.utils;
+package com.deepsoft.haolifa.util;
 
 
 import org.slf4j.Logger;
