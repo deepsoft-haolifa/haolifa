@@ -1,19 +1,20 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.OrderMapper;
-import com.deepsoft.haolifa.model.domain.Order;
-import com.deepsoft.haolifa.model.domain.OrderExample;
+import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.service.OrderService;
+import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.util.Base64Utils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -25,17 +26,18 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Service
 @Slf4j
-public class OrderServiceImpl implements OrderService {
+public class OrderProductServiceImpl implements OrderProductService {
     @Autowired
-    private OrderMapper orderMapper;
+    private OrderProductMapper orderProductMapper;
 
     @Override
-    public ResultBean uploadOrderExcel(String base64Source) {
-        Order order = new Order();
+    public ResultBean uploadOrderProductExcel(String base64Source) {
+        OrderProduct orderProduct = new OrderProduct();
         if (StringUtils.isBlank(base64Source)) {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
@@ -43,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
              HSSFWorkbook sheets = new HSSFWorkbook(inputStream);) {
             HSSFSheet sheet = sheets.getSheetAt(0);
-            log.info("upload order excel row num:{}", sheet.getLastRowNum());
+            log.info("upload orderProduct excel row num:{}", sheet.getLastRowNum());
             for (int i = 1; i < sheet.getLastRowNum() + 1; i++) {
                 String cellValue = "";
                 HSSFRow row = sheet.getRow(i);
@@ -72,112 +74,112 @@ public class OrderServiceImpl implements OrderService {
                 }
                 switch (i) {
                     case 1:
-                        order.setDemandName(cellValue);
+                        orderProduct.setDemandName(cellValue);
                         break;
                     case 2:
-                        order.setDemandAgentName(cellValue);
+                        orderProduct.setDemandAgentName(cellValue);
                         break;
                     case 3:
-                        order.setDemandTelphone(cellValue);
+                        orderProduct.setDemandTelphone(cellValue);
                         break;
                     case 4:
-                        order.setDemandFax(cellValue);
+                        orderProduct.setDemandFax(cellValue);
                         break;
                     case 5:
-                        order.setDemandAddress(cellValue);
+                        orderProduct.setDemandAddress(cellValue);
                         break;
                     case 6:
-                        order.setSupplyName(cellValue);
+                        orderProduct.setSupplyName(cellValue);
                         break;
                     case 7:
-                        order.setSupplyAgentName(cellValue);
+                        orderProduct.setSupplyAgentName(cellValue);
                         break;
                     case 8:
-                        order.setSupplyTelphone(cellValue);
+                        orderProduct.setSupplyTelphone(cellValue);
                         break;
                     case 9:
-                        order.setSupplyFax(cellValue);
+                        orderProduct.setSupplyFax(cellValue);
                         break;
                     case 10:
-                        order.setSupplyAddress(cellValue);
+                        orderProduct.setSupplyAddress(cellValue);
                         break;
                     case 11:
-                        order.setContractNumber(cellValue);
+                        orderProduct.setContractNumber(cellValue);
                         break;
                     case 12:
-                        order.setContractSignDate(cellValue);
+                        orderProduct.setContractSignDate(cellValue);
                         break;
                     case 13:
-                        order.setProductNo(cellValue);
+                        orderProduct.setProductNo(cellValue);
                         break;
                     case 14:
-                        order.setProductName(cellValue);
+                        orderProduct.setProductName(cellValue);
                         break;
                     case 15:
-                        order.setLable(cellValue);
+                        orderProduct.setLable(cellValue);
                         break;
                     case 16:
-                        order.setSpecifications(cellValue);
+                        orderProduct.setSpecifications(cellValue);
                         break;
                     case 17:
-                        order.setProductColor(cellValue);
+                        orderProduct.setProductColor(cellValue);
                         break;
                     case 18:
-                        order.setProductNumber(Integer.valueOf(cellValue));
+                        orderProduct.setProductNumber(Integer.valueOf(cellValue));
                         break;
                     case 19:
-                        order.setPrice(new BigDecimal(cellValue));
+                        orderProduct.setPrice(new BigDecimal(cellValue));
                         break;
                     case 20:
-                        order.setTotalPrice(new BigDecimal(cellValue));
+                        orderProduct.setTotalPrice(new BigDecimal(cellValue));
                         break;
                     case 21:
-                        order.setDiscountTotalPrice(new BigDecimal(cellValue));
+                        orderProduct.setDiscountTotalPrice(new BigDecimal(cellValue));
                         break;
                     case 22:
-                        order.setMaterialDescription(cellValue);
+                        orderProduct.setMaterialDescription(cellValue);
                         break;
                     case 23:
-                        order.setProductRemark(cellValue);
+                        orderProduct.setProductRemark(cellValue);
                         break;
                     case 24:
-                        order.setPurchaseFeedbackTime(cellValue);
+                        orderProduct.setPurchaseFeedbackTime(cellValue);
                         break;
                     case 25:
-                        order.setProductionFeedbackTime(cellValue);
+                        orderProduct.setProductionFeedbackTime(cellValue);
                         break;
                     case 26:
-                        order.setSpecialRequire(cellValue);
+                        orderProduct.setSpecialRequire(cellValue);
                         break;
                     case 27:
-                        order.setCargoInformation(cellValue);
+                        orderProduct.setCargoInformation(cellValue);
                         break;
                     case 28:
-                        order.setSignBoard(cellValue);
+                        orderProduct.setSignBoard(cellValue);
                         break;
                     case 29:
-                        order.setAcceptanceCriteria(cellValue);
+                        orderProduct.setAcceptanceCriteria(cellValue);
                         break;
                     case 30:
-                        order.setWarrantyPeriod(cellValue);
+                        orderProduct.setWarrantyPeriod(cellValue);
                         break;
                     case 31:
-                        order.setPackagingspecification(cellValue);
+                        orderProduct.setPackagingspecification(cellValue);
                         break;
                     case 32:
-                        order.setTransportType(cellValue);
+                        orderProduct.setTransportType(cellValue);
                         break;
                     case 33:
-                        order.setDeliveryTime(cellValue);
+                        orderProduct.setDeliveryTime(cellValue);
                         break;
                     case 34:
-                        order.setReceiptInfo(cellValue);
+                        orderProduct.setReceiptInfo(cellValue);
                         break;
                     case 35:
-                        order.setPaymentMethod(cellValue);
+                        orderProduct.setPaymentMethod(cellValue);
                         break;
                     case 36:
-                        order.setFreight(cellValue);
+                        orderProduct.setFreight(cellValue);
                         break;
                     default:
                         break;
@@ -186,43 +188,56 @@ public class OrderServiceImpl implements OrderService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        log.info("upload order excel end|order:{}", order.toString());
-        return ResultBean.success(order);
+        log.info("upload orderProduct excel end|orderProduct:{}", JSONObject.toJSONString(orderProduct));
+        return ResultBean.success(orderProduct);
     }
 
 
     @Override
-    public ResultBean saveOrderInfo(Order order) {
-        String orderNo = RandomUtils.orderNoStr();
-        log.info("save order info start|orderNo:{},model:{}", orderNo, order.toString());
-        order.setOrderNo(orderNo);
+    public ResultBean saveOrderProductInfo(OrderProduct orderProduct) {
+        String orderProductNo = RandomUtils.orderNoStr();
+        log.info("save orderProduct info start|orderProductNo:{},model:{}", orderProductNo, JSONObject.toJSONString(orderProduct));
+        orderProduct.setOrderNo(orderProductNo);
         // todo 换成当前登录人Id
-        order.setCreateUser(1);
-        order.setOrderStatus(CommonEnum.OrderStatus.CREATE.code);
-        int insert = orderMapper.insertSelective(order);
-        log.info("save order info end|orderNo:{},result:{}", orderNo, insert);
+        orderProduct.setCreateUser(1);
+        orderProduct.setOrderStatus(CommonEnum.OrderStatus.CREATE.code);
+        int insert = orderProductMapper.insertSelective(orderProduct);
+        log.info("save orderProduct info end|orderProductNo:{},result:{}", orderProductNo, insert);
         return ResultBean.success(insert);
     }
 
     @Override
-    public int updateOrderStatus(String orderNo, byte status) {
-        log.info("update order status start|orderNo:{},status:{}", orderNo, status);
-        Order record = new Order();
+    public int updateOrderProductStatus(String orderProductNo, byte status) {
+        log.info("update orderProduct status start|orderProductNo:{},status:{}", orderProductNo, status);
+        OrderProduct record = new OrderProduct();
         record.setOrderStatus(status);
-        OrderExample example = new OrderExample();
-        example.or().andOrderNoEqualTo(orderNo);
-        int update = orderMapper.updateByExampleSelective(record, example);
-        log.info("update order status end|orderNo:{},status:{},result:{}", orderNo, status, update);
+        OrderProductExample example = new OrderProductExample();
+        example.or().andProductNoEqualTo(orderProductNo);
+        int update = orderProductMapper.updateByExampleSelective(record, example);
+        log.info("update orderProduct status end|orderProductNo:{},status:{},result:{}", orderProductNo, status, update);
         return 0;
     }
 
     @Override
-    public Order getOrderInfo(String orderNo) {
+    public OrderProduct getOrderProductInfo(String orderProductNo) {
+        OrderProductExample example = new OrderProductExample();
+        example.or().andProductNoEqualTo(orderProductNo);
+        List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
+        if (orderProducts.size() > 0) {
+            return orderProducts.get(0);
+        }
         return null;
     }
 
     @Override
-    public Page<Order> pageOrder(Page page) {
-        return null;
+    public Page<OrderProduct> pageOrderProduct(Page page) {
+        OrderProductExample example = new OrderProductExample();
+        int pageNum = 0;
+        int pageSize = 0;
+        Page<OrderProduct> orderProducts = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPage(() ->
+                        orderProductMapper.selectByExample(example)
+                );
+        return orderProducts;
     }
 }

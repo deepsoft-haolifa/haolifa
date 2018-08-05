@@ -3,7 +3,7 @@ package com.deepsoft.haolifa.model.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Order {
+public class OrderProduct {
     private Integer id;
 
     private Date createTime;
@@ -92,7 +92,7 @@ public class Order {
 
     private String freight;
 
-    public Order(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingspecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingspecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -139,7 +139,7 @@ public class Order {
         this.freight = freight;
     }
 
-    public Order() {
+    public OrderProduct() {
         super();
     }
 

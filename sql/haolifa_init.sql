@@ -190,8 +190,8 @@
 
 
 
-	DROP TABLE IF EXISTS `order`;
-	CREATE TABLE `order` (
+	DROP TABLE IF EXISTS `order_product`;
+	CREATE TABLE `order_product` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -238,7 +238,7 @@
 	  `freight` varchar(32) NOT NULL DEFAULT '' COMMENT '运费承担',
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY `uk_order_no` (`order_no`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表(商务销售发起订单流程的时候插入)';
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品订单表(商务销售发起订单流程的时候插入)';
 
 
 

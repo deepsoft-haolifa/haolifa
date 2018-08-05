@@ -1,6 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
-import com.deepsoft.haolifa.model.domain.Order;
+import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ public class OrderController {
 
     @GetMapping("/get")
     public ResultBean getOrder() {
-        Order order = new Order();
+        OrderProduct order = new OrderProduct();
         order.setDemandName("你好");
         order.setPrice(new BigDecimal("2.13"));
         order.setCreateTime(new Date());
