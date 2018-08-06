@@ -123,7 +123,7 @@
 
         <!--<table tableName="stock" domainObjectName="Stock"></table>-->
 
-        <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->
+        <table tableName="store_room" domainObjectName="StoreRoom"></table>
 
         <!--<table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>-->
 

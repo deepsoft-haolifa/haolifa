@@ -15,26 +15,26 @@ public class StoreRoom {
 
     private String name;
 
-    private Byte number;
-
-    private String rackNo;
+    private String roomNo;
 
     private Byte type;
+
+    private Byte status;
 
     private String address;
 
     private String remark;
 
-    public StoreRoom(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String name, Byte number, String rackNo, Byte type, String address, String remark) {
+    public StoreRoom(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String name, String roomNo, Byte type, Byte status, String address, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.name = name;
-        this.number = number;
-        this.rackNo = rackNo;
+        this.roomNo = roomNo;
         this.type = type;
+        this.status = status;
         this.address = address;
         this.remark = remark;
     }
@@ -91,20 +91,12 @@ public class StoreRoom {
         this.name = name == null ? null : name.trim();
     }
 
-    public Byte getNumber() {
-        return number;
+    public String getRoomNo() {
+        return roomNo;
     }
 
-    public void setNumber(Byte number) {
-        this.number = number;
-    }
-
-    public String getRackNo() {
-        return rackNo;
-    }
-
-    public void setRackNo(String rackNo) {
-        this.rackNo = rackNo == null ? null : rackNo.trim();
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo == null ? null : roomNo.trim();
     }
 
     public Byte getType() {
@@ -113,6 +105,14 @@ public class StoreRoom {
 
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public String getAddress() {

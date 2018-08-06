@@ -475,133 +475,73 @@ public class StoreRoomExample {
             return (Criteria) this;
         }
 
-        public Criteria andNumberIsNull() {
-            addCriterion("number is null");
+        public Criteria andRoomNoIsNull() {
+            addCriterion("room_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andNumberIsNotNull() {
-            addCriterion("number is not null");
+        public Criteria andRoomNoIsNotNull() {
+            addCriterion("room_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andNumberEqualTo(Byte value) {
-            addCriterion("number =", value, "number");
+        public Criteria andRoomNoEqualTo(String value) {
+            addCriterion("room_no =", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberNotEqualTo(Byte value) {
-            addCriterion("number <>", value, "number");
+        public Criteria andRoomNoNotEqualTo(String value) {
+            addCriterion("room_no <>", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberGreaterThan(Byte value) {
-            addCriterion("number >", value, "number");
+        public Criteria andRoomNoGreaterThan(String value) {
+            addCriterion("room_no >", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberGreaterThanOrEqualTo(Byte value) {
-            addCriterion("number >=", value, "number");
+        public Criteria andRoomNoGreaterThanOrEqualTo(String value) {
+            addCriterion("room_no >=", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberLessThan(Byte value) {
-            addCriterion("number <", value, "number");
+        public Criteria andRoomNoLessThan(String value) {
+            addCriterion("room_no <", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberLessThanOrEqualTo(Byte value) {
-            addCriterion("number <=", value, "number");
+        public Criteria andRoomNoLessThanOrEqualTo(String value) {
+            addCriterion("room_no <=", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberIn(List<Byte> values) {
-            addCriterion("number in", values, "number");
+        public Criteria andRoomNoLike(String value) {
+            addCriterion("room_no like", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberNotIn(List<Byte> values) {
-            addCriterion("number not in", values, "number");
+        public Criteria andRoomNoNotLike(String value) {
+            addCriterion("room_no not like", value, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberBetween(Byte value1, Byte value2) {
-            addCriterion("number between", value1, value2, "number");
+        public Criteria andRoomNoIn(List<String> values) {
+            addCriterion("room_no in", values, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andNumberNotBetween(Byte value1, Byte value2) {
-            addCriterion("number not between", value1, value2, "number");
+        public Criteria andRoomNoNotIn(List<String> values) {
+            addCriterion("room_no not in", values, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andRackNoIsNull() {
-            addCriterion("rack_no is null");
+        public Criteria andRoomNoBetween(String value1, String value2) {
+            addCriterion("room_no between", value1, value2, "roomNo");
             return (Criteria) this;
         }
 
-        public Criteria andRackNoIsNotNull() {
-            addCriterion("rack_no is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoEqualTo(String value) {
-            addCriterion("rack_no =", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoNotEqualTo(String value) {
-            addCriterion("rack_no <>", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoGreaterThan(String value) {
-            addCriterion("rack_no >", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoGreaterThanOrEqualTo(String value) {
-            addCriterion("rack_no >=", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoLessThan(String value) {
-            addCriterion("rack_no <", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoLessThanOrEqualTo(String value) {
-            addCriterion("rack_no <=", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoLike(String value) {
-            addCriterion("rack_no like", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoNotLike(String value) {
-            addCriterion("rack_no not like", value, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoIn(List<String> values) {
-            addCriterion("rack_no in", values, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoNotIn(List<String> values) {
-            addCriterion("rack_no not in", values, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoBetween(String value1, String value2) {
-            addCriterion("rack_no between", value1, value2, "rackNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRackNoNotBetween(String value1, String value2) {
-            addCriterion("rack_no not between", value1, value2, "rackNo");
+        public Criteria andRoomNoNotBetween(String value1, String value2) {
+            addCriterion("room_no not between", value1, value2, "roomNo");
             return (Criteria) this;
         }
 
@@ -662,6 +602,66 @@ public class StoreRoomExample {
 
         public Criteria andTypeNotBetween(Byte value1, Byte value2) {
             addCriterion("type not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Byte value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Byte value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Byte value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Byte value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Byte> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Byte> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
 

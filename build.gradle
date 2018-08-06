@@ -16,10 +16,15 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.bmuschko.tomcat-base'
+apply plugin: 'com.bmuschko.tomcat'
+apply plugin: 'org.hidetake.ssh'
+apply plugin: "war"
 
 group = 'com.deepsoft'
-version = '0.0.1-SNAPSHOT'
+//version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
 
 repositories {
     mavenLocal()
@@ -35,6 +40,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.session:spring-session-data-redis')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-tomcat')
     compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2')
     runtime('mysql:mysql-connector-java')
     runtime('org.springframework.boot:spring-boot-devtools')
@@ -82,3 +88,65 @@ mybatisGenerator {
     verbose = true
     configFile = 'src/main/resources/tools/generatorConfig.xml'
 }
+
+//mybatis generator plugin ------ end
+
+//tomcat deploy plugin ------ start
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.3'
+        classpath 'org.hidetake:gradle-ssh-plugin:2.9.0'
+    }
+}
+
+ssh.settings {
+    knownHosts = allowAnyHosts
+}
+remotes {
+    deployServer {
+        host = '47.105.36.56'
+        user = 'root'
+        password = 'Haolifa123456'
+    }
+}
+
+task tomcatDeploy {
+    group "web application"
+    doLast {
+        ssh.run {
+            session(remotes.deployServer) {
+                println 'stop tomcat...'
+                executeScript '''#!/bin/sh
+								cd /data/web/tomcat8080/bin
+								./shutdown.sh
+							'''
+                println 'delete tomcat war'
+                executeScript '''#!/bin/sh
+								cd /data/web/tomcat8080/webapps
+								rm -rf *
+							'''
+                println 'copy tomcat war...'
+                put from: buildDir.toString() + '/libs/haolifa.war', into: '/data/web/tomcat8080/webapps'
+                println 'start tomcat...'
+                executeScript '''#!/bin/sh
+								cd /data/web/tomcat8080/bin
+								./startup.sh
+							'''
+            }
+        }
+    }
+}
+
+tomcat {
+    httpPort = 8080
+    httpsPort = 8443
+    ajpPort = 8009
+    enableSSL = false
+    contextPath = '/haolifa'
+}
+//tomcat deploy plugin ------ end

@@ -9,9 +9,9 @@
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="number" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="rack_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="room_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, name, number, rack_no, type, 
+    id, create_time, update_time, create_user, update_user, name, room_no, type, status, 
     address, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StoreRoomExample" resultMap="BaseResultMap">
@@ -111,11 +111,11 @@
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.StoreRoom">
     insert into store_room (id, create_time, update_time, 
       create_user, update_user, name, 
-      number, rack_no, type, 
+      room_no, type, status, 
       address, remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
-      #{number,jdbcType=TINYINT}, #{rackNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{roomNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{address,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.StoreRoom">
@@ -139,14 +139,14 @@
       <if test="name != null">
         name,
       </if>
-      <if test="number != null">
-        number,
-      </if>
-      <if test="rackNo != null">
-        rack_no,
+      <if test="roomNo != null">
+        room_no,
       </if>
       <if test="type != null">
         type,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="address != null">
         address,
@@ -174,14 +174,14 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="number != null">
-        #{number,jdbcType=TINYINT},
-      </if>
-      <if test="rackNo != null">
-        #{rackNo,jdbcType=VARCHAR},
+      <if test="roomNo != null">
+        #{roomNo,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
@@ -218,14 +218,14 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.number != null">
-        number = #{record.number,jdbcType=TINYINT},
-      </if>
-      <if test="record.rackNo != null">
-        rack_no = #{record.rackNo,jdbcType=VARCHAR},
+      <if test="record.roomNo != null">
+        room_no = #{record.roomNo,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
       </if>
       <if test="record.address != null">
         address = #{record.address,jdbcType=VARCHAR},
@@ -246,9 +246,9 @@
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      number = #{record.number,jdbcType=TINYINT},
-      rack_no = #{record.rackNo,jdbcType=VARCHAR},
+      room_no = #{record.roomNo,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
+      status = #{record.status,jdbcType=TINYINT},
       address = #{record.address,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -273,14 +273,14 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="number != null">
-        number = #{number,jdbcType=TINYINT},
-      </if>
-      <if test="rackNo != null">
-        rack_no = #{rackNo,jdbcType=VARCHAR},
+      <if test="roomNo != null">
+        room_no = #{roomNo,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
       </if>
       <if test="address != null">
         address = #{address,jdbcType=VARCHAR},
@@ -298,9 +298,9 @@
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
-      number = #{number,jdbcType=TINYINT},
-      rack_no = #{rackNo,jdbcType=VARCHAR},
+      room_no = #{roomNo,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
       address = #{address,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
