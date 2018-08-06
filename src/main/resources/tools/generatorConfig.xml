@@ -89,9 +89,9 @@
 
         <!--<table tableName="step" domainObjectName="Step"></table>-->
 
-        <table tableName="flow_step" domainObjectName="FlowStep"></table>
+        <!--<table tableName="flow_step" domainObjectName="FlowStep"></table>-->
 
-        <table tableName="flow_step_config" domainObjectName="FlowStepConfig"></table>
+        <!--<table tableName="flow_step_config" domainObjectName="FlowStepConfig"></table>-->
 
         <!--<table tableName="flow_history" domainObjectName="FlowHistory"></table>-->
 
@@ -131,33 +131,37 @@
 
         <!--<table tableName="order_review" domainObjectName="OrderReview"></table>-->
 
-        <!--<table tableName="apply_buy_info" domainObjectName="ApplyBuyInfo"></table>-->
+        <!--<table tableName="apply_buy" domainObjectName="ApplyBuy"></table>-->
 
-        <!--<table tableName="entrust_info" domainObjectName="EntrustInfo"></table>-->
+        <!--<table tableName="product_purchase_record" domainObjectName="ProductPurchaseRecord"></table>-->
 
-        <!--<table tableName="finance_info" domainObjectName="FinanceInfo"></table>-->
+        <!--<table tableName="purchase_plan" domainObjectName="PurchasePlan"></table>-->
 
-        <!--<table tableName="inspect_info" domainObjectName="InspectInfo"></table>-->
+        <!--<table tableName="entrust" domainObjectName="Entrust"></table>-->
 
-        <!--<table tableName="inspect_result_info" domainObjectName="InspectResultInfo"></table>-->
+        <!--<table tableName="finance" domainObjectName="Finance"></table>-->
 
-        <!--<table tableName="purchase_order_info" domainObjectName="PurchaseOrderInfo"></table>-->
+        <!--<table tableName="inspect" domainObjectName="Inspect"></table>-->
 
-        <!--<table tableName="purchase_order_item_info" domainObjectName="PurchaseOrderItemInfo"></table>-->
+        <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult"></table>-->
 
-        <!--<table tableName="supplier_equipment_info" domainObjectName="SupplierEquipmentInfo"></table>-->
+        <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder"></table>-->
 
-        <!--<table tableName="supplier_evaluation_info" domainObjectName="SupplierEvaluationInfo"></table>-->
+        <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 
-        <!--<table tableName="supplier_info" domainObjectName="SupplierInfo"></table>-->
+        <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->
 
-        <!--<table tableName="supplier_product_info" domainObjectName="SupplierProductInfo"></table>-->
+        <!--<table tableName="supplier" domainObjectName="Supplier"></table>-->
 
-        <!--<table tableName="unqualified_pro_info" domainObjectName="UnqualifiedProInfo"></table>-->
+        <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
 
-        <!--<table tableName="equipment_info" domainObjectName="EquipmentInfo"></table>-->
+        <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult"></table>-->
 
-        <!--<table tableName="equipment_maintain_record_info" domainObjectName="EquipmentMaintainRecordInfo"></table>-->
+        <!--<table tableName="equipment" domainObjectName="Equipment"></table>-->
+
+        <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
+
+        <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
 
         <!-- 选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素
             tableName（必要）：要生成对象的表名；
