@@ -439,176 +439,242 @@
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='订单审批表';
 	
 	
-	
-DROP TABLE IF EXISTS `apply_buy_info`;
-CREATE TABLE `apply_buy_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `flow_id` int(11) NOT NULL COMMENT '流程id',
-  `product_order_no` varchar(20)  NOT NULL DEFAULT '' COMMENT '生产订单编号，多个用逗号隔开',
-  `material_graph_no` varchar(30)  NOT NULL COMMENT '原料图号',
-  `number` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '请购数量',
-  `unit` varchar(10)  NOT NULL DEFAULT '' COMMENT '单位（个）',
-  `valuation` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '采购估价',
-  `state` tinyint(4) NOT NULL COMMENT '状态： 0 待处理 1 已处理 2 撤销',
-  `remark` varchar(255)  NOT NULL COMMENT '备注',
-  `purpose` varchar(255)  NOT NULL DEFAULT '' COMMENT '用途',
-  `is_delete` tinyint(4) NOT NULL COMMENT '是否删除 0  未删除 1 已删除',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '申请时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '更新时间',
-  `create_user_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '请购单表单-库管对缺少原料进行采购申请。';
-
--- ----------------------------
--- Table structure for entrust_info
--- ----------------------------
-DROP TABLE IF EXISTS `entrust_info`;
-CREATE TABLE `entrust_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `purchase_order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '采购编号',
-  `entrust_no` varchar(20) NOT NULL DEFAULT '' COMMENT '委托合同编号',
-  `material_graph_no` varchar(50) NOT NULL DEFAULT '' COMMENT '产品图号',
-  `number` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '委托数量',
-  `state` tinyint(4) NOT NULL COMMENT '状态：0 待处理 1 处理中 2 已完成',
-  `entrust_person` varchar(255) NOT NULL DEFAULT '' COMMENT '委托人',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除：0 未删除 1 已删除',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '更新日期',
-  `create_user_id` int(11) UNSIGNED NOT NULL COMMENT '创建者id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '委托加工信息表';
-
--- ----------------------------
--- Table structure for finance_info
--- ----------------------------
-DROP TABLE IF EXISTS `finance_info`;
-CREATE TABLE `finance_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+	DROP TABLE IF EXISTS `finance`;
+CREATE TABLE `finance` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '订单合同编号',
-  `type` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '类型：0  订单合同编号 1 采购编号',
-  `total_amount` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '总金额',
-  `state` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态： 0 未收款 1 未打款 2 退款中 3 待收款 4 处理完成',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除：0  未删除 1 已删除',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '更新时间',
-  `create_user_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id',
+  `type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '类型：0  订单合同编号 1 采购编号',
+  `total_amount` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '总金额',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态： 0 未收款 1 未打款 2 打款中 3 收款中 4 处理完成',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0  未删除 1 已删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB  COMMENT = '财务管理表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-财务管理表';
 
--- ----------------------------
--- Table structure for inspect_info
--- ----------------------------
-DROP TABLE IF EXISTS `inspect_info`;
-CREATE TABLE `inspect_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '采购编号',
+DROP TABLE IF EXISTS `purchase_plan`;
+CREATE TABLE `purchase_plan` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `purchase_plan_no` varchar(64) NOT NULL DEFAULT '' COMMENT '采购计划号',
+  `product_order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '生产订单号',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
+  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '数量',
+  `expected_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '期望到货时间',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '流程表单-采购计划表';
+
+DROP TABLE IF EXISTS `apply_buy`;
+CREATE TABLE `apply_buy` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `flow_id` int(11) NOT NULL COMMENT '流程id',
+  `apply_no` varchar(64) NOT NULL COMMENT '请购单号',
+  `material_graph_no` varchar(30) NOT NULL COMMENT '原料图号',
+  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '请购数量',
+  `unit` varchar(10) NOT NULL DEFAULT '' COMMENT '单位（个）',
+  `valuation` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '采购估价',
+  `remark` varchar(255) NOT NULL COMMENT '备注',
+  `purpose` varchar(255) NOT NULL DEFAULT '' COMMENT '用途',
+  `is_delete` tinyint(4) NOT NULL COMMENT '是否删除 0  未删除 1 已删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程关联表单-请购单';
+
+DROP TABLE IF EXISTS `product_purchase_record`;
+CREATE TABLE `product_purchase_record` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `purchase_plan_no` varchar(64) NOT NULL DEFAULT '' COMMENT '采购计划单号',
+  `product_order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '生产订单号',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
+  `apply_buy_no` varchar(64) NOT NULL DEFAULT '' COMMENT '请购单号',
+  `purchase_order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '采购单号',
+  `stock_status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '入库状态（以采购单号为准）：0 未入库 1 部分入库 2 全部入库',
+  `purchase_order_status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '采购单状态（预留字段）0 采购中 2 采购完成',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-采购计划，采购单，生产订单，物料关联表';
+
+DROP TABLE IF EXISTS `purchase_order`;
+CREATE TABLE `purchase_order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
+  `purchase_order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '订单编号',
+  `supplier_no` varchar(255) NOT NULL DEFAULT '' COMMENT '供应商编号',
+  `supplier_name` varchar(255) NOT NULL DEFAULT '' COMMENT '提供方',
+  `demander` varchar(255) NOT NULL DEFAULT '' COMMENT '需方',
+  `supplier_linkman` varchar(30) NOT NULL DEFAULT '' COMMENT '供方联系人',
+  `demander_linkman` varchar(30) NOT NULL DEFAULT '' COMMENT '需方联系人',
+  `supplier_addr` varchar(100) NOT NULL DEFAULT '' COMMENT '供方地址',
+  `demander_addr` varchar(100) NOT NULL DEFAULT '' COMMENT '需方地址',
+  `suppiler_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '供方联系人电话',
+  `demander_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '需方联系人电话',
+  `delivery_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '交货日期',
+  `operator_user_name` varchar(30) NOT NULL DEFAULT '0' COMMENT '订单经办人',
+  `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '经办日期',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
+  `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单信息表';
+
+
+DROP TABLE IF EXISTS `purchase_order_item`;
+CREATE TABLE `purchase_order_item` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '采购单单项id',
+  `purchase_order_no` varchar(20) NOT NULL COMMENT '采购单编号',
+  `product_name` varchar(20) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
+  `specification` varchar(50) NOT NULL DEFAULT '' COMMENT '规格',
+  `material` varchar(20) NOT NULL DEFAULT '' COMMENT '材质',
+  `unit` varchar(20) NOT NULL DEFAULT '' COMMENT '单位',
+  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '数量',
+  `unit_weight` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '单重',
+  `unit_price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '单价',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单单项表';
+
+
+DROP TABLE IF EXISTS `inspect`;
+CREATE TABLE `inspect` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '编号',
   `type` tinyint(4) NOT NULL COMMENT '送检订单类型：0 采购单 1 机加委托订单号 2 生产订单号',
-  `state` tinyint(4) UNSIGNED NOT NULL COMMENT '送检单状态：0 待处理 1 处理中 2 处理完成',
-  `inspect_no` varchar(20)NOT NULL DEFAULT '' COMMENT '送检单编号',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '更新日期',
-  `create_user_id` int(11) UNSIGNED NOT NULL COMMENT '创建者',
+  `status` tinyint(4) unsigned NOT NULL COMMENT '送检单状态：0 待处理 1 处理中 2 处理完成',
+  `inspect_no` varchar(20) NOT NULL DEFAULT '' COMMENT '送检单编号，type:0 1 1对多物料 type2 1对1成品',
+  `material_graph_no` varchar(64) NOT NULL COMMENT '物料图号：type为2时，不填。',
+  `product_model` varchar(64) NOT NULL COMMENT '产品型号：type为0，1时，不填。',
+  `number` int(11) NOT NULL COMMENT '送检数量',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
+  `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '送检单信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程表单-送检单信息表';
 
--- ----------------------------
--- Table structure for inspect_result_info
--- ----------------------------
-DROP TABLE IF EXISTS `inspect_result_info`;
-CREATE TABLE `inspect_result_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+
+DROP TABLE IF EXISTS `material_inspect_result`;
+CREATE TABLE `material_inspect_result` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `flow_id` int(11) NOT NULL COMMENT '流程id',
   `purchase_order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '采购单编号',
   `inspect_no` varchar(20) NOT NULL DEFAULT '' COMMENT '送检单编号',
   `material_graph_no` varchar(20) NOT NULL DEFAULT '' COMMENT '原料图号',
   `material_name` varchar(20) NOT NULL DEFAULT '' COMMENT '原料名称',
-  `inspect_number` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '送检数量',
-  `unqualified_number` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '不合格数量',
-  `handling_result` varchar(4) NOT NULL DEFAULT '' COMMENT '处理结果： 退货（报废） 让步接受 返工（机加委托）json格式字符串（集中处理结果可能都有）',
-  `state` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态： 0 待处理 1 处理中 2 处理完成',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除：0 未删除 1 已删除',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '更新时间',
-  `create_user_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '送检反馈信息表';
-
--- ----------------------------
--- Table structure for purchase_order_info
--- ----------------------------
-DROP TABLE IF EXISTS `purchase_order_info`;
-CREATE TABLE `purchase_order_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `flow_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '流程id',
-  `apply_no` varchar(100) NOT NULL COMMENT '请购单编号，多个用逗号隔开',
-  `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '订单编号',
-  `order_state` tinyint(255) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单状态',
-  `supplier` varchar(255) NOT NULL DEFAULT '' COMMENT '提供方',
-  `demander` varchar(255) NOT NULL DEFAULT '' COMMENT '需方',
-  `supplier_linkman` varchar(30) NOT NULL DEFAULT '' COMMENT '供方联系人',
-  `demander_linkman` varchar(30) NOT NULL DEFAULT '' COMMENT '需方联系人',
-  `supplier_addr` varchar(100)  NOT NULL DEFAULT '' COMMENT '供方地址',
-  `demander_addr` varchar(100) NOT NULL DEFAULT '' COMMENT '需方地址',
-  `suppiler_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '供方联系人电话',
-  `demander_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '需方联系人电话',
-  `delivery_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '交货日期',
-  `operator_user_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单经办人id',
-  `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '经办日期',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '更新日期',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除 0 未删除 1 已删除',
-  `create_user_id` int(11) UNSIGNED NOT NULL COMMENT '创建者id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '采购订单信息表';
-
--- ----------------------------
--- Table structure for purchase_order_item_info
--- ----------------------------
-DROP TABLE IF EXISTS `purchase_order_item_info`;
-CREATE TABLE `purchase_order_item_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '采购单单项id',
-  `order_no` varchar(20) NOT NULL COMMENT '采购单编号',
-  `product_id` bigint(20) NOT NULL COMMENT '产品id',
-  `product_name` varchar(20) NOT NULL DEFAULT '' COMMENT '产品名称',
-  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '产品图号',
-  `specification` varchar(50) NOT NULL DEFAULT '' COMMENT '规格',
-  `material` varchar(20) NOT NULL DEFAULT '' COMMENT '材质',
-  `unit` varchar(20) NOT NULL DEFAULT '' COMMENT '单位',
-  `number` int(11) NOT NULL DEFAULT 0 COMMENT '数量',
-  `unit_weight` int(11) NOT NULL DEFAULT 0 COMMENT '单重',
-  `unit_price` int(11) NOT NULL DEFAULT 0 COMMENT '单价',
-  `remark` varchar(255) NOT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '采购订单单项表';
-
--- ----------------------------
--- Table structure for supplier_equipment_info
--- ----------------------------
-DROP TABLE IF EXISTS `supplier_equipment_info`;
-CREATE TABLE `supplier_equipment_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '名称',
-  `number` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '数量',
-  `type` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '类型 0  制造设备 1 检测设备',
-  `specification` varchar(255) NOT NULL DEFAULT '' COMMENT '型号规格',
-  `supplier_no` varchar(30) NOT NULL DEFAULT '' COMMENT '生产厂商编号',
-  `product_factory` varchar(255) NOT NULL DEFAULT '' COMMENT '生产厂商',
-  `serviced_years` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '已服役年限',
+  `inspect_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '送检数量',
+  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数量',
+  `handling_result` varchar(4) NOT NULL DEFAULT '' COMMENT '处理结果： 退货（报废） 让步接受 返工（机加委托）json格式字符串（几种处理结果可能都有）',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0 未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL COMMENT '是否删除 0 未删除 1 已删除',
+  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程/业务表单-送检反馈信息表';
+
+
+DROP TABLE IF EXISTS `pro_inspect_result`;
+CREATE TABLE `pro_inspect_result` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '生产订单编号',
+  `product_model` varchar(64) NOT NULL COMMENT '产品型号',
+  `testing_unit` varchar(255) NOT NULL DEFAULT '' COMMENT '检测单位',
+  `testing_process` varchar(255) NOT NULL DEFAULT '' COMMENT '检测工序',
+  `testing_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
+  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数',
+  `testing_person` varchar(255) NOT NULL DEFAULT '' COMMENT '操作人',
+  `technical_requirements` varchar(255) NOT NULL DEFAULT '' COMMENT '技术要求',
+  `testing_result` varchar(255) NOT NULL DEFAULT '' COMMENT '检测结果',
+  `inspector` varchar(255) NOT NULL DEFAULT '' COMMENT '检验员',
+  `inspecte_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '检验日期',
+  `reason` varchar(255) NOT NULL DEFAULT '' COMMENT '不合格原因',
+  `responsible_department` varchar(20) NOT NULL DEFAULT '' COMMENT '责任单位',
+  `department_leader` varchar(30) NOT NULL DEFAULT '' COMMENT '责任认定部门负责人',
+  `responsible_analyze_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '责任认定日期',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0 未删除 1 已删除',
+  `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程/业务表单-产品质检不合格通知表';
+
+
+DROP TABLE IF EXISTS `entrust`;
+CREATE TABLE `entrust` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `purchase_order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '采购编号',
+  `entrust_no` varchar(20) NOT NULL DEFAULT '' COMMENT '委托合同编号',
+  `material_graph_no` varchar(50) NOT NULL DEFAULT '' COMMENT '产品图号',
+  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '委托数量',
+  `status` tinyint(4) NOT NULL COMMENT '状态：0 待处理 1 处理中 2 已完成',
+  `entrust_person` varchar(255) NOT NULL DEFAULT '' COMMENT '委托人',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0 未删除 1 已删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
+  `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-委托加工信息表';
+
+
+DROP TABLE IF EXISTS `supplier`;
+CREATE TABLE `supplier` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `suppiler_no` varchar(11) NOT NULL DEFAULT '' COMMENT '供应商编号',
+  `suppiler_name` varchar(100) NOT NULL DEFAULT '' COMMENT '企业名称',
+  `website` varchar(255) NOT NULL DEFAULT '' COMMENT '网址',
+  `nature` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '企业性质：0 国有 1 三资 2集体 3 联营 4 私营',
+  `phone` varchar(11) NOT NULL DEFAULT '' COMMENT '电话',
+  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '地址',
+  `postcode` varchar(255) NOT NULL DEFAULT '' COMMENT '邮编',
+  `fax` varchar(255) NOT NULL DEFAULT '' COMMENT '传真',
+  `legal_person` varchar(255) NOT NULL DEFAULT '' COMMENT '法人',
+  `legal_person_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '法人联系电话',
+  `total_factory_area` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '工厂总面积',
+  `total_archit_area` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '建筑总面积',
+  `work_type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '班次类型：0 正常 1 两班倒 2 三班倒',
+  `staff_info` varchar(255) NOT NULL DEFAULT '' COMMENT '员工信息，各类岗位人员总数，json格式',
+  `credentials_info` varchar(255) NOT NULL DEFAULT '' COMMENT '证书信息，各类证书有无情况 json格式',
+  `financial_info` varchar(255) NOT NULL DEFAULT '' COMMENT '财务状况：营业额，近三年应收情况。json格式',
+  `main_organ` varchar(255) NOT NULL DEFAULT '' COMMENT '主要机构信息：部门，负责人，联系方式。json格式',
+  `quality_assurance_info` varchar(255) NOT NULL DEFAULT '' COMMENT '质量保证体系信息：json格式',
+  `process_route` varchar(255) NOT NULL DEFAULT '' COMMENT '工艺路线',
+  `suppiler_preparer` varchar(20) NOT NULL DEFAULT '' COMMENT '供应商填表人',
+  `responsible_person` varchar(20) NOT NULL DEFAULT '' COMMENT '负责人',
+  `evaluation` varchar(1024) NOT NULL DEFAULT '' COMMENT '供应商评价：富文本编辑',
+  `is_qualified` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否合格；0 待评定 1 合格 2 不合格',
+  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '表单创建者id',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商信息表';
+
+
+DROP TABLE IF EXISTS `supplier_product`;
+CREATE TABLE `supplier_product` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `suppiler_no` varchar(20) NOT NULL DEFAULT '' COMMENT '供应商编号',
+  `material_type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '原料的类型：0 供应商供货原料  1 供应商有但不供货的原料',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '原料图号',
+  `material_name` varchar(50) NOT NULL DEFAULT '' COMMENT '原料名称',
+  `annual_production` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '年产量',
+  `main_customer` varchar(255) NOT NULL DEFAULT '' COMMENT '主要客户，多个逗号分隔',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `create_user_id` int(11) NOT NULL COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '供应商设备清单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-供应商供应的产品信息表';
 
--- ----------------------------
--- Table structure for supplier_evaluation_info
--- ----------------------------
-DROP TABLE IF EXISTS `supplier_evaluation_info`;
-CREATE TABLE `supplier_evaluation_info` (
+DROP TABLE IF EXISTS `supplier_evaluation_record`;
+CREATE TABLE `supplier_evaluation_record` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `supplier_num` varchar(20) NOT NULL DEFAULT '' COMMENT '供应商编号',
-  `qc_way` varchar(20) NOT NULL DEFAULT '' COMMENT '质量控制方式：进货检验 0；  进货外观验证 1；  本公司到供方现场验证 2；\r\n顾客到供方现场验证 3；  顾客到本公司现场验证 4',
+  `qc_way` varchar(20) NOT NULL DEFAULT '' COMMENT '质量控制方式：进货检验 0；  进货外观验证 1；  本公司到供方现场验证 2；顾客到供方现场验证 3；  顾客到本公司现场验证 4',
   `year` varchar(20) NOT NULL DEFAULT '' COMMENT '年度（例如：2017）',
   `quality_score` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '质量得分',
   `quality_person` varchar(255) NOT NULL DEFAULT '' COMMENT '质量评分人',
@@ -632,112 +698,38 @@ CREATE TABLE `supplier_evaluation_info` (
   `is_delete` tinyint(4) unsigned NOT NULL COMMENT '是否删除',
   `create_data` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB COMMENT='供应商年度评价信息表';
-
--- ----------------------------
--- Table structure for supplier_info
--- ----------------------------
-DROP TABLE IF EXISTS `supplier_info`;
-CREATE TABLE `supplier_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `suppiler_no` varchar(11) NOT NULL DEFAULT '' COMMENT '供应商编号',
-  `suppiler_name` varchar(100) NOT NULL DEFAULT '' COMMENT '企业名称',
-  `website` varchar(255) NOT NULL DEFAULT '' COMMENT '网址',
-  `nature` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '企业性质：0 国有 1 三资 2集体 3 联营 4 私营',
-  `phone` varchar(11) NOT NULL DEFAULT '' COMMENT '电话',
-  `address` varchar(255)  NOT NULL DEFAULT '' COMMENT '地址',
-  `postcode` varchar(255)  NOT NULL DEFAULT '' COMMENT '邮编',
-  `fax` varchar(255)  NOT NULL DEFAULT '' COMMENT '传真',
-  `legal_person` varchar(255) NOT NULL DEFAULT '' COMMENT '法人',
-  `legal_person_phone` varchar(11)  NOT NULL DEFAULT '' COMMENT '法人联系电话',
-  `total_factory_area` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '工厂总面积',
-  `total_archit_area` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '建筑总面积',
-  `work_type` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '班次类型：0 正常 1 两班倒 2 三班倒',
-  `staff_info` varchar(255) NOT NULL DEFAULT '' COMMENT '员工信息，各类岗位人员总数，json格式',
-  `credentials_info` varchar(255) NOT NULL DEFAULT '' COMMENT '证书信息，各类证书有无情况 json格式',
-  `financial_info` varchar(255) NOT NULL DEFAULT '' COMMENT '财务状况：营业额，近三年应收情况。json格式',
-  `main_organ` varchar(255) NOT NULL DEFAULT '' COMMENT '主要机构信息：部门，负责人，联系方式。json格式',
-  `quality_assurance_info` varchar(255) NOT NULL DEFAULT '' COMMENT '质量保证体系信息：json格式',
-  `process_route` varchar(255) NOT NULL DEFAULT '' COMMENT '工艺路线',
-  `suppiler_preparer` varchar(20) NOT NULL DEFAULT '' COMMENT '供应商填表人',
-  `responsible_person` varchar(20)  NOT NULL DEFAULT '' COMMENT '负责人',
-  `create_user_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '表单创建者id',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '更新日期',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建日期',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '供应商信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商年度评价信息表';
 
--- ----------------------------
--- Table structure for supplier_product_info
--- ----------------------------
-DROP TABLE IF EXISTS `supplier_product_info`;
-CREATE TABLE `supplier_product_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `suppiler_no` varchar(20) NOT NULL DEFAULT '' COMMENT '供应商编号',
-  `material_graph_no` varchar(64) NOT NULL COMMENT '原料图号',
-  `material_name` varchar(50) NOT NULL DEFAULT '' COMMENT '原料名称',
-  `annual_production` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '年产量',
-  `main_customer` varchar(255) NOT NULL DEFAULT '' COMMENT '主要客户，多个逗号分隔',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除 0 未删除 1 已删除',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
+DROP TABLE IF EXISTS `equipment`;
+CREATE TABLE `equipment` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `equipment_no` varchar(20) NOT NULL DEFAULT '' COMMENT '设备编号 ',
+  `equipment_status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '设备状态（针对本企业设备而言）：0 正常 1 损坏待处理 2 处理中 3 处理完成',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '名称',
+  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '数量',
+  `type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '类型 0  制造设备 1 检测设备',
+  `specification` varchar(255) NOT NULL DEFAULT '' COMMENT '型号规格',
+  `supplier_no` varchar(30) NOT NULL DEFAULT '' COMMENT '供应商编号：如果编号为0，则为本企业设备，不为空未对应企业编号的设备',
+  `product_factory` varchar(255) NOT NULL DEFAULT '' COMMENT '生产厂商',
+  `serviced_years` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '已服役年限',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_delete` tinyint(4) unsigned NOT NULL COMMENT '是否删除 0 未删除 1 已删除',
   `create_user_id` int(11) NOT NULL COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB  COMMENT = '供应商供应的产品信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-供应商设备清单表（本企业设备清单和供应商设备清单使用同一张表单）';
 
--- ----------------------------
--- Table structure for unqualified_pro_info
--- ----------------------------
-DROP TABLE IF EXISTS `unqualified_pro_info`;
-CREATE TABLE `unqualified_pro_info`  (
-  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `order_num` varchar(20) NOT NULL DEFAULT '' COMMENT '生产订单编号',
-  `testing_unit` varchar(255) NOT NULL DEFAULT '' COMMENT '检测单位',
-  `testing_process` varchar(255) NOT NULL DEFAULT '' COMMENT '检测工序',
-  `product_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '产品id',
-  `testing_number` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '检测数量',
-  `unqualified_number` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '不合格数',
-  `testing_person` varchar(255) NOT NULL DEFAULT '' COMMENT '操作人',
-  `technical_requirements` varchar(255) NOT NULL DEFAULT '' COMMENT '技术要求',
-  `testing_result` varchar(255) NOT NULL DEFAULT '' COMMENT '检测结果',
-  `inspector` varchar(255) NOT NULL DEFAULT '' COMMENT '检验员',
-  `inspecte_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '检验日期',
-  `reason` varchar(255) NOT NULL DEFAULT '' COMMENT '不合格原因',
-  `responsible_department` varchar(20) NOT NULL DEFAULT '' COMMENT '责任单位',
-  `department_leader` varchar(30) NOT NULL DEFAULT '' COMMENT '责任认定部门签字',
-  `responsible_analyze_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '责任认定日期',
-  `technical_department_opinion` varchar(255) NOT NULL DEFAULT '' COMMENT '技术部意见',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
-  `is_delete` tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除：0 未删除 1 已删除',
-  `create_user_id` int(11) NOT NULL COMMENT '创建者id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB COMMENT = '产品质检不合格通知表';
-
-DROP TABLE IF EXISTS `equipment_info`;
-CREATE TABLE `equipment_info` (
+DROP TABLE IF EXISTS `equipment_maintain_record`;
+CREATE TABLE `equipment_maintain_record` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `equipment_name` varchar(30) NOT NULL DEFAULT '' COMMENT '设备名称',
-  `equipment _no` varchar(30) NOT NULL DEFAULT '' COMMENT '设备编号',
-  `equipment_number` int(11) NOT NULL DEFAULT '0' COMMENT '设备数量',
-  `state` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '设备状态：0 正常 1 维修中',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
-  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0 未删除 1 已删除',
-  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB COMMENT='企业设备信息表';
-
-DROP TABLE IF EXISTS `equipment_maintain_record_info`;
-CREATE TABLE `equipment_maintain_record_info` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `maintain_reason` varchar(255) NOT NULL COMMENT '维修原因',
   `equipment_no` varchar(20) NOT NULL DEFAULT '' COMMENT '设备号',
   `maintain_user_id` int(11) NOT NULL DEFAULT '0' COMMENT '维修者id',
+  `remark` varchar(200) NOT NULL COMMENT '备注',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB COMMENT='设备维修记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-设备维修记录';
