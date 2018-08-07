@@ -727,7 +727,7 @@ CREATE TABLE `equipment_maintain_record` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `maintain_reason` varchar(255) NOT NULL COMMENT '维修原因',
   `equipment_no` varchar(20) NOT NULL DEFAULT '' COMMENT '设备号',
-  `maintain_user_id` int(11) NOT NULL DEFAULT '0' COMMENT '维修者id',
+  `maintainer` varchar(20) NOT NULL DEFAULT '' COMMENT '维修者',
   `remark` varchar(200) NOT NULL COMMENT '备注',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',

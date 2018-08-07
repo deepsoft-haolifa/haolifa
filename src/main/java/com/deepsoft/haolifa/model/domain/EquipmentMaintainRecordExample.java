@@ -305,63 +305,73 @@ public class EquipmentMaintainRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdIsNull() {
-            addCriterion("maintain_user_id is null");
+        public Criteria andMaintainerIsNull() {
+            addCriterion("maintainer is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdIsNotNull() {
-            addCriterion("maintain_user_id is not null");
+        public Criteria andMaintainerIsNotNull() {
+            addCriterion("maintainer is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdEqualTo(Integer value) {
-            addCriterion("maintain_user_id =", value, "maintainUserId");
+        public Criteria andMaintainerEqualTo(String value) {
+            addCriterion("maintainer =", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdNotEqualTo(Integer value) {
-            addCriterion("maintain_user_id <>", value, "maintainUserId");
+        public Criteria andMaintainerNotEqualTo(String value) {
+            addCriterion("maintainer <>", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdGreaterThan(Integer value) {
-            addCriterion("maintain_user_id >", value, "maintainUserId");
+        public Criteria andMaintainerGreaterThan(String value) {
+            addCriterion("maintainer >", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("maintain_user_id >=", value, "maintainUserId");
+        public Criteria andMaintainerGreaterThanOrEqualTo(String value) {
+            addCriterion("maintainer >=", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdLessThan(Integer value) {
-            addCriterion("maintain_user_id <", value, "maintainUserId");
+        public Criteria andMaintainerLessThan(String value) {
+            addCriterion("maintainer <", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdLessThanOrEqualTo(Integer value) {
-            addCriterion("maintain_user_id <=", value, "maintainUserId");
+        public Criteria andMaintainerLessThanOrEqualTo(String value) {
+            addCriterion("maintainer <=", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdIn(List<Integer> values) {
-            addCriterion("maintain_user_id in", values, "maintainUserId");
+        public Criteria andMaintainerLike(String value) {
+            addCriterion("maintainer like", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdNotIn(List<Integer> values) {
-            addCriterion("maintain_user_id not in", values, "maintainUserId");
+        public Criteria andMaintainerNotLike(String value) {
+            addCriterion("maintainer not like", value, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdBetween(Integer value1, Integer value2) {
-            addCriterion("maintain_user_id between", value1, value2, "maintainUserId");
+        public Criteria andMaintainerIn(List<String> values) {
+            addCriterion("maintainer in", values, "maintainer");
             return (Criteria) this;
         }
 
-        public Criteria andMaintainUserIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("maintain_user_id not between", value1, value2, "maintainUserId");
+        public Criteria andMaintainerNotIn(List<String> values) {
+            addCriterion("maintainer not in", values, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerBetween(String value1, String value2) {
+            addCriterion("maintainer between", value1, value2, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotBetween(String value1, String value2) {
+            addCriterion("maintainer not between", value1, value2, "maintainer");
             return (Criteria) this;
         }
 
