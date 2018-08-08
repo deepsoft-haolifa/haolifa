@@ -6,7 +6,7 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="maintain_reason" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="equipment_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="maintain_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="maintainer" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, maintain_reason, equipment_no, maintain_user_id, remark, create_time, update_time, 
+    id, maintain_reason, equipment_no, maintainer, remark, create_time, update_time, 
     is_delete, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.EquipmentMaintainRecordExample" resultMap="BaseResultMap">
@@ -108,11 +108,11 @@
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.EquipmentMaintainRecord">
     insert into equipment_maintain_record (id, maintain_reason, equipment_no, 
-      maintain_user_id, remark, create_time, 
+      maintainer, remark, create_time, 
       update_time, is_delete, create_user_id
       )
     values (#{id,jdbcType=INTEGER}, #{maintainReason,jdbcType=VARCHAR}, #{equipmentNo,jdbcType=VARCHAR}, 
-      #{maintainUserId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{maintainer,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}
       )
   </insert>
@@ -128,8 +128,8 @@
       <if test="equipmentNo != null">
         equipment_no,
       </if>
-      <if test="maintainUserId != null">
-        maintain_user_id,
+      <if test="maintainer != null">
+        maintainer,
       </if>
       <if test="remark != null">
         remark,
@@ -157,8 +157,8 @@
       <if test="equipmentNo != null">
         #{equipmentNo,jdbcType=VARCHAR},
       </if>
-      <if test="maintainUserId != null">
-        #{maintainUserId,jdbcType=INTEGER},
+      <if test="maintainer != null">
+        #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -195,8 +195,8 @@
       <if test="record.equipmentNo != null">
         equipment_no = #{record.equipmentNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.maintainUserId != null">
-        maintain_user_id = #{record.maintainUserId,jdbcType=INTEGER},
+      <if test="record.maintainer != null">
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -223,7 +223,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       maintain_reason = #{record.maintainReason,jdbcType=VARCHAR},
       equipment_no = #{record.equipmentNo,jdbcType=VARCHAR},
-      maintain_user_id = #{record.maintainUserId,jdbcType=INTEGER},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -242,8 +242,8 @@
       <if test="equipmentNo != null">
         equipment_no = #{equipmentNo,jdbcType=VARCHAR},
       </if>
-      <if test="maintainUserId != null">
-        maintain_user_id = #{maintainUserId,jdbcType=INTEGER},
+      <if test="maintainer != null">
+        maintainer = #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -267,7 +267,7 @@
     update equipment_maintain_record
     set maintain_reason = #{maintainReason,jdbcType=VARCHAR},
       equipment_no = #{equipmentNo,jdbcType=VARCHAR},
-      maintain_user_id = #{maintainUserId,jdbcType=INTEGER},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

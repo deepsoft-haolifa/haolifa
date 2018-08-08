@@ -9,7 +9,7 @@ public class EquipmentMaintainRecord {
 
     private String equipmentNo;
 
-    private Integer maintainUserId;
+    private String maintainer;
 
     private String remark;
 
@@ -21,11 +21,11 @@ public class EquipmentMaintainRecord {
 
     private Integer createUserId;
 
-    public EquipmentMaintainRecord(Integer id, String maintainReason, String equipmentNo, Integer maintainUserId, String remark, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
+    public EquipmentMaintainRecord(Integer id, String maintainReason, String equipmentNo, String maintainer, String remark, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
         this.id = id;
         this.maintainReason = maintainReason;
         this.equipmentNo = equipmentNo;
-        this.maintainUserId = maintainUserId;
+        this.maintainer = maintainer;
         this.remark = remark;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -61,12 +61,12 @@ public class EquipmentMaintainRecord {
         this.equipmentNo = equipmentNo == null ? null : equipmentNo.trim();
     }
 
-    public Integer getMaintainUserId() {
-        return maintainUserId;
+    public String getMaintainer() {
+        return maintainer;
     }
 
-    public void setMaintainUserId(Integer maintainUserId) {
-        this.maintainUserId = maintainUserId;
+    public void setMaintainer(String maintainer) {
+        this.maintainer = maintainer == null ? null : maintainer.trim();
     }
 
     public String getRemark() {

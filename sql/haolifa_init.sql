@@ -358,12 +358,13 @@
 	  `create_user` int(11) NOT NULL COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `name` varchar(36) NOT NULL DEFAULT '' COMMENT '库房名称',
-	  `number` tinyint(4) NOT NULL DEFAULT 0 COMMENT '库房编号',
-	  `rack_no` varchar(32) NOT NULL DEFAULT '' COMMENT '货号（如：1号成品库 1101 1102 1103  1201 1202 1301 1302），通过这个就能确定是哪个库，哪个货架，哪个货位',
+	  `room_no` tinyint(4) NOT NULL DEFAULT 0 COMMENT '库房编号',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1.原料库；2：成品库；3.既有原料，又有成品;',
+	  `status` tinyInt(4) NOT NULL DEFAULT 0 COMMENT '状态',
 	  `address` varchar(36) NOT NULL DEFAULT '' COMMENT '库房地址',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
-	  PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_room_no` (`room_no`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='库房配置表';
 
 
@@ -402,6 +403,7 @@
 	  `amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '出库，入库金额',
 	  `store_room_rack_id` int(11) NOT NULL DEFAULT 0 COMMENT '库房货架业务ID，从哪个货架出库，或者入库哪个货架',
 	  `product_department` varchar(36) NOT NULL DEFAULT '' COMMENT '生产部门',
+	  `supplier` varchar(36) NOT NULL DEFAULT '' COMMENT '供应商',
      `status` tinyint(4) NOT NULL  DEFAULT 0 COMMENT'1：申请入库；2：入库完成',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)
@@ -725,7 +727,7 @@ CREATE TABLE `equipment_maintain_record` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `maintain_reason` varchar(255) NOT NULL COMMENT '维修原因',
   `equipment_no` varchar(20) NOT NULL DEFAULT '' COMMENT '设备号',
-  `maintain_user_id` int(11) NOT NULL DEFAULT '0' COMMENT '维修者id',
+  `maintainer` varchar(20) NOT NULL DEFAULT '' COMMENT '维修者',
   `remark` varchar(200) NOT NULL COMMENT '备注',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',

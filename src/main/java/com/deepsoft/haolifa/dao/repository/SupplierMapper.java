@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.Supplier;
 import com.deepsoft.haolifa.model.domain.SupplierExample;
 import java.util.List;
+
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
 public interface SupplierMapper {
@@ -27,4 +29,9 @@ public interface SupplierMapper {
     int updateByPrimaryKeySelective(Supplier record);
 
     int updateByPrimaryKey(Supplier record);
+
+    /**
+     * 获取列表
+     */
+    Page<Supplier> selectListByExample(Supplier supplier);
 }
