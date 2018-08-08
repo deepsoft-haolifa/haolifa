@@ -20,7 +20,7 @@ public class GlobalErrorHandler {
             BaseException e2 = (BaseException) e;
             return new ResultBean(e2.getCode(), e2.getMessage(), null);
         } else {
-            return new ResultBean(CommonEnum.ResponseEnum.SYSTEM_ERROR);
+            return new ResultBean(CommonEnum.ResponseEnum.SYSTEM_ERROR.code, e.getMessage(),null);
         }
     }
 }

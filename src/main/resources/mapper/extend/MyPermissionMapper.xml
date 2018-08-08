@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.config.CustomGrantedAuthority">
-    <id column="id" jdbcType="BIGINT" property="id"/>
-    <result column="name" jdbcType="VARCHAR" property="name"/>
-    <result column="description" jdbcType="VARCHAR" property="description"/>
-    <result column="url" jdbcType="VARCHAR" property="url"/>
-    <result column="pid" jdbcType="BIGINT" property="pid"/>
-    <result column="role" jdbcType="VARCHAR" property="role"/>
-  </resultMap>
 
-  <select id="findAll" resultMap="BaseResultMap">
-    SELECT * from Sys_permission ;
-  </select>
 
-  <select id="findByAdminUserId" parameterType="long" resultMap="BaseResultMap">
+  <select id="findRolesByUserId" parameterType="long" resultType="com.deepsoft.haolifa.model.domain.SysRole">
     select
-    p.id,
-    p.perm_name,
-    p.description,
-    p.url,
-    p.pid,
-    r.role_name as role
+    r.role_name as roleName
     from sys_user u
     LEFT JOIN sys_role_user sru on u.id= sru.sys_user_id
     LEFT JOIN sys_role r on sru.sys_role_id=r.id
-    LEFT JOIN sys_permission_role spr on spr.role_id=r.id
-    LEFT JOIN sys_permission p on p.id =spr.permission_id
     where u.id=#{userId}
+  </select>
+  
+  <select id="findPermissiosByRoles" parameterType="map" resultType="int">
+    SELECT
+      count(1)
+    FROM sys_role sr
+    LEFT JOIN sys_permission_role srp ON sr.id = srp.role_id
+    LEFT JOIN sys_permission sp ON srp.permission_id = sp.id
+    WHERE sr.role_name IN
+    <foreach collection="roles" item="role" open="(" close=")" separator=",">
+      #{role}
+    </foreach>
+    AND sp.url = #{url} AND sp.perm_name = #{permName};
   </select>
 
 </mapper>

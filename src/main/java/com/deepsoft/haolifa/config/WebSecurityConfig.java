@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()
-                .authorizeRequests().anyRequest().permitAll()//.authenticated()  //暂时全部放开
+                .authorizeRequests().anyRequest().authenticated()  //暂时全部放开
                 .and()
                 .formLogin().successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)

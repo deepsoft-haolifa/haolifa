@@ -1,6 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ import java.util.List;
 public class UserController {
 
     @RequestMapping("/")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasPermission('/','r')")
     public List<GrantedAuthority> index() {
         return new ArrayList<>(SecurityContextHolder
                 .getContext().getAuthentication().getAuthorities());
