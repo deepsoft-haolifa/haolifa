@@ -1,6 +1,9 @@
 package com.deepsoft.haolifa.config;
 
+import com.deepsoft.haolifa.model.dto.CustomUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
@@ -20,6 +23,7 @@ import java.io.PrintWriter;
  * @desc 登陆成功后的处理器
  **/
 @Component
+@Slf4j
 public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private RequestCache requestCache = new HttpSessionRequestCache();
@@ -43,6 +47,7 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         clearAuthenticationAttributes(request);
+        log.info("customeUser:{}",(CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
     public void setRequestCache(RequestCache requestCache) {

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +20,8 @@ public class UserController {
 
     @RequestMapping("/")
     @PreAuthorize("hasPermission('/','r')")
-    public List<GrantedAuthority> index() {
-        return new ArrayList<>(SecurityContextHolder
-                .getContext().getAuthentication().getAuthorities());
+    public CustomUser index() {
+        return (CustomUser)SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
     }
 }
