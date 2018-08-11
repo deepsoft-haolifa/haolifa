@@ -4,9 +4,7 @@ package com.deepsoft.haolifa.controller;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierPorductDTO;
 import com.deepsoft.haolifa.service.SupplierProductService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,11 +41,14 @@ public class SupplierProductController {
     }
 
     @ApiOperation("查询产品列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "产品类型：0 供货原料 1 其他原料", name = "materialType", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(value = "产品名称", name = "materialName", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "页码", name = "currentPage", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(value = "展示数量", name = "pageSize", dataType = "int", paramType = "query")
+    })
     @PostMapping("list")
-    public ResultBean getList(@ApiParam(required = true, value = "页码", defaultValue = "1") @RequestParam Integer currentPage,
-                              @ApiParam(required = true, value = "显示数量", defaultValue = "10") @RequestParam Integer pageSize,
-                              @ApiParam(required = true, value = "产品类型：0 供货原料 1 其他原料",allowableValues = "0,1") Integer materialType,
-                              @ApiParam(value = "产品名称") String materialName) {
+    public ResultBean getList(@RequestParam Integer currentPage, @RequestParam Integer pageSize, Integer materialType, String materialName) {
         return supplierProductService.getList(currentPage, pageSize, materialType, materialName);
     }
 

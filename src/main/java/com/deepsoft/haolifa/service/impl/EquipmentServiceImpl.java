@@ -43,7 +43,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public ResultBean update(Equipment model) {
-        int update = equipmentMapper.updateByPrimaryKey(model);
+        int update = equipmentMapper.updateByPrimaryKeySelective(model);
         return ResultBean.success(update);
     }
 

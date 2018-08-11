@@ -43,7 +43,7 @@ public class SupplierProductServiceImpl implements SupplierProductService {
     public ResultBean update(SupplierPorductDTO model) {
         SupplierProduct supplierProduct = new SupplierProduct();
         BeanUtils.copyProperties(model, supplierProduct);
-        int update = supplierProductMapper.updateByPrimaryKey(supplierProduct);
+        int update = supplierProductMapper.updateByPrimaryKeySelective(supplierProduct);
         return ResultBean.success(update);
     }
 
