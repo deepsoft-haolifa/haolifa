@@ -1,7 +1,11 @@
 package com.deepsoft.haolifa.config;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.model.dto.CustomUser;
+import com.deepsoft.haolifa.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -16,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * @author zhaozhihong
@@ -25,6 +31,9 @@ import java.io.PrintWriter;
 @Component
 @Slf4j
 public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
+    @Autowired
+    private SysUserService userService;
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 
@@ -47,7 +56,14 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         clearAuthenticationAttributes(request);
-        log.info("customeUser:{}",(CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        CustomUser customUser = userService.selectLoginUser();
+        log.info("customeUser:{}, time:",customUser, new Date());
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter writer = response.getWriter();
+        writer.write(JSONObject.toJSONString(customUser.getPermissions().stream()
+                .filter(p -> p.getPermName().equals("r")).collect(Collectors.toList())));
+        writer.flush();
+        writer.close();
     }
 
     public void setRequestCache(RequestCache requestCache) {

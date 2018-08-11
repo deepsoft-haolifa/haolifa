@@ -15,6 +15,4 @@ public class SupplierProductController {
     @Autowired
     SupplierProductService supplierProductService;
 
-
-
 }
