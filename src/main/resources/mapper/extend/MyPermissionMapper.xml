@@ -16,7 +16,8 @@
     SELECT
       DISTINCT
       perm_name AS permName,
-      url
+      url,
+      sp.description
     FROM sys_role sr
     LEFT JOIN sys_permission_role srp ON sr.id = srp.role_id
     LEFT JOIN sys_permission sp ON srp.permission_id = sp.id

@@ -16,6 +16,8 @@ public class CustomPermission implements Serializable {
 
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
+    private String description;
+
     private String permName;
 
     private String url;

@@ -21,6 +21,6 @@ public class PermissionServiceImpl implements PermissionService {
     public boolean authorized(List<GrantedAuthority> roles, String url, String permission) {
         Set<CustomPermission> permissiosByRoles = myPermissionMapper.findPermissiosByRoles(
                 roles.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-        return permissiosByRoles.contains(new CustomPermission(permission, url));
+        return permissiosByRoles.stream().anyMatch(p -> p.getPermName().equals(permission) && p.getUrl().equals(url));
     }
 }
