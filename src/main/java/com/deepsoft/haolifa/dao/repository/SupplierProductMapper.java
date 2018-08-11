@@ -1,8 +1,11 @@
 package com.deepsoft.haolifa.dao.repository;
 
+import com.deepsoft.haolifa.model.domain.Equipment;
 import com.deepsoft.haolifa.model.domain.SupplierProduct;
 import com.deepsoft.haolifa.model.domain.SupplierProductExample;
 import java.util.List;
+
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
 public interface SupplierProductMapper {
@@ -27,4 +30,6 @@ public interface SupplierProductMapper {
     int updateByPrimaryKeySelective(SupplierProduct record);
 
     int updateByPrimaryKey(SupplierProduct record);
+
+    Page<SupplierProduct> selectListByPage(@Param("materialType") Integer materialType,@Param("materialName") String materialName);
 }

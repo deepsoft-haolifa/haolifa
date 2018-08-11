@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.Finance;
 import com.deepsoft.haolifa.model.domain.FinanceExample;
 import java.util.List;
+
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
 public interface FinanceMapper {
@@ -27,4 +29,6 @@ public interface FinanceMapper {
     int updateByPrimaryKeySelective(Finance record);
 
     int updateByPrimaryKey(Finance record);
+
+    Page<Finance> selectListByPage(String orderNo);
 }
