@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @create 2018-07-11 15:33
  * @desc
  **/
-@Api("用户信息")
+@Api(tags = {"人事管理"})
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -33,7 +33,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/")
+    @PostMapping("")
     @ApiOperation("添加用户")
     public ResultBean user(UserBaseDTO userBase){
         return ResultBean.success(userService.insertSysUser(userBase));
