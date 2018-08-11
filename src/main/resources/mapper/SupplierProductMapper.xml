@@ -305,4 +305,18 @@
       create_user_id = #{createUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectListByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    supplier_product
+    where
+    is_delete = 0
+    and
+    material_type = #{materialType}
+    <if test="materialName != null and materialName != ''">
+      and material_name like concat('%',#{materialName},'%')
+    </if>
+  </select>
 </mapper>

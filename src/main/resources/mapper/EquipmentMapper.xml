@@ -352,4 +352,20 @@
       create_user_id = #{createUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectListByPage" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    equipment
+    where
+    is_delete = 0
+    <if test="name != null and name != ''">
+      AND `name` like CONCAT('%',#{name},'%')
+    </if>
+    <if test="equipmentNo != null and equipmentNo != ''">
+      and equipment_no like CONCAT('%',#{equipmentNo},'%')
+    </if>
+    order by update__time desc
+  </select>
 </mapper>

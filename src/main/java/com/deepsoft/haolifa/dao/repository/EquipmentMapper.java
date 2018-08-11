@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.Equipment;
 import com.deepsoft.haolifa.model.domain.EquipmentExample;
 import java.util.List;
+
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
 public interface EquipmentMapper {
@@ -27,4 +29,6 @@ public interface EquipmentMapper {
     int updateByPrimaryKeySelective(Equipment record);
 
     int updateByPrimaryKey(Equipment record);
+
+    Page<Equipment> selectListByPage(@Param("name") String name, @Param("equipmentNo") String equipmentNo);
 }
