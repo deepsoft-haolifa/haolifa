@@ -21,7 +21,9 @@ public class StoreRoomRack {
 
     private String remark;
 
-    public StoreRoomRack(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer storeRoomId, String rackNo, Byte status, String remark) {
+    private Byte isDelete;
+
+    public StoreRoomRack(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer storeRoomId, String rackNo, Byte status, String remark, Byte isDelete) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -31,6 +33,7 @@ public class StoreRoomRack {
         this.rackNo = rackNo;
         this.status = status;
         this.remark = remark;
+        this.isDelete = isDelete;
     }
 
     public StoreRoomRack() {
@@ -107,5 +110,13 @@ public class StoreRoomRack {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Byte getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 }

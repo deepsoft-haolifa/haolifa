@@ -15,18 +15,18 @@ public class MaterialClassify {
 
     private String classifyName;
 
-    private Byte status;
+    private Byte isDelete;
 
     private String remark;
 
-    public MaterialClassify(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String classifyName, Byte status, String remark) {
+    public MaterialClassify(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String classifyName, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.classifyName = classifyName;
-        this.status = status;
+        this.isDelete = isDelete;
         this.remark = remark;
     }
 
@@ -82,12 +82,12 @@ public class MaterialClassify {
         this.classifyName = classifyName == null ? null : classifyName.trim();
     }
 
-    public Byte getStatus() {
-        return status;
+    public Byte getIsDelete() {
+        return isDelete;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getRemark() {

@@ -23,9 +23,11 @@ public class Product {
 
     private Byte status;
 
+    private Byte isDelete;
+
     private String remark;
 
-    public Product(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String name, String fitComponent, String specifications, Byte status, String remark) {
+    public Product(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String name, String fitComponent, String specifications, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -36,6 +38,7 @@ public class Product {
         this.fitComponent = fitComponent;
         this.specifications = specifications;
         this.status = status;
+        this.isDelete = isDelete;
         this.remark = remark;
     }
 
@@ -121,6 +124,14 @@ public class Product {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Byte getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getRemark() {

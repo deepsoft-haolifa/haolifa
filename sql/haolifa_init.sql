@@ -181,6 +181,7 @@
 	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '规格',
 	  `model` varchar(64) NOT NULL DEFAULT '' COMMENT '型号',
 	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '原料状态',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY `uk_graph_no` (`graph_no`)
@@ -196,7 +197,7 @@
 	  `create_user` int(11) NOT NULL COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `classify_name` varchar(64) NOT NULL COMMENT '分类名称（如：阀体，阀座等）',
-	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '分类状态（0启用，1弃用）',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='原料分类表';
@@ -308,6 +309,7 @@
 	  `fit_component` varchar(64) NOT NULL DEFAULT '' COMMENT '适配组件',
 	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '成品规格（如：DN65，DN80）',
 	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '产品状态',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品表';
@@ -344,6 +346,7 @@
 	  `safe_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '安全库存量（上浮10%提醒）',
 	  `safety_factor` varchar(16) NOT NULL DEFAULT '' COMMENT '存库安全系数',
 	  `price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '单价',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='库房库存表（包括原料库存，产品库存）';
@@ -360,6 +363,7 @@
 	  `name` varchar(36) NOT NULL DEFAULT '' COMMENT '库房名称',
 	  `room_no` tinyint(4) NOT NULL DEFAULT 0 COMMENT '库房编号',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1.原料库；2：成品库；3.既有原料，又有成品;',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `status` tinyInt(4) NOT NULL DEFAULT 0 COMMENT '状态',
 	  `address` varchar(36) NOT NULL DEFAULT '' COMMENT '库房地址',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
@@ -379,6 +383,7 @@
 	  `store_room_id` int(11) NOT NULL DEFAULT 0 COMMENT '库房ID',
 	  `rack_no` varchar(32) NOT NULL DEFAULT '' COMMENT '货号（如：1号成品库 1101 1102 1103  1201 1202 1301 1302），通过这个就能确定是哪个库，哪个货架，哪个货位',
 	  `status` tinyInt(4) NOT NULL DEFAULT 0 COMMENT '状态',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='库房货架关联配置表';

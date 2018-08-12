@@ -27,7 +27,8 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public CustomUser selectLoginUser() {
-        return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return null;
+//        return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 

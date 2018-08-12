@@ -22,7 +22,10 @@ public class CommonEnum {
         //系统异常
         SYSTEM_ERROR("0003", "网络请求错误，请稍后再试"),
         //用户登陆错误
-        LOGIN_ERROR("1001", "登陆错误"),;
+        LOGIN_ERROR("1001", "登陆错误"),
+
+        // 库房货位已经存在
+        STORE_ROOM_RACK_EXISTS("2001", "货位已经存在");
 
         public final String code;
 
@@ -58,6 +61,7 @@ public class CommonEnum {
         }
 
     }
+
     /**
      * 订单状态
      */

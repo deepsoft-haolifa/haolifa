@@ -14,6 +14,7 @@
       <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -76,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, name, room_no, type, status, 
-    address, remark
+    address, remark, is_delete
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StoreRoomExample" resultMap="BaseResultMap">
     select
@@ -112,11 +113,13 @@
     insert into store_room (id, create_time, update_time, 
       create_user, update_user, name, 
       room_no, type, status, 
-      address, remark)
+      address, remark, is_delete
+      )
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{roomNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{address,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+      #{address,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.StoreRoom">
     insert into store_room
@@ -154,6 +157,9 @@
       <if test="remark != null">
         remark,
       </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -188,6 +194,9 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -233,6 +242,9 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -250,7 +262,8 @@
       type = #{record.type,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
       address = #{record.address,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=VARCHAR}
+      remark = #{record.remark,jdbcType=VARCHAR},
+      is_delete = #{record.isDelete,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -288,6 +301,9 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -302,7 +318,8 @@
       type = #{type,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
       address = #{address,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

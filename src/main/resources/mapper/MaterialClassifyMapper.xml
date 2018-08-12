@@ -9,7 +9,7 @@
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="classify_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
@@ -72,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, classify_name, status, remark
+    id, create_time, update_time, create_user, update_user, classify_name, is_delete, 
+    remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialClassifyExample" resultMap="BaseResultMap">
     select
@@ -107,10 +108,10 @@
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.MaterialClassify">
     insert into material_classify (id, create_time, update_time, 
       create_user, update_user, classify_name, 
-      status, remark)
+      is_delete, remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{classifyName,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
+      #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.MaterialClassify">
     insert into material_classify
@@ -133,8 +134,8 @@
       <if test="classifyName != null">
         classify_name,
       </if>
-      <if test="status != null">
-        status,
+      <if test="isDelete != null">
+        is_delete,
       </if>
       <if test="remark != null">
         remark,
@@ -159,8 +160,8 @@
       <if test="classifyName != null">
         #{classifyName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -194,8 +195,8 @@
       <if test="record.classifyName != null">
         classify_name = #{record.classifyName,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -213,7 +214,7 @@
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
       classify_name = #{record.classifyName,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=TINYINT},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,8 +238,8 @@
       <if test="classifyName != null">
         classify_name = #{classifyName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -253,7 +254,7 @@
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},
       classify_name = #{classifyName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
+      is_delete = #{isDelete,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

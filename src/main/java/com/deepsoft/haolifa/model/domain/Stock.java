@@ -34,9 +34,11 @@ public class Stock {
 
     private BigDecimal price;
 
+    private Byte isDelete;
+
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, String storeRoomRackId, String storeRoomRackPositionNo, String productNo, Integer materialId, String materialGraphNo, Integer quantity, Integer safeQuantity, String safetyFactor, BigDecimal price, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, String storeRoomRackId, String storeRoomRackPositionNo, String productNo, Integer materialId, String materialGraphNo, Integer quantity, Integer safeQuantity, String safetyFactor, BigDecimal price, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -52,6 +54,7 @@ public class Stock {
         this.safeQuantity = safeQuantity;
         this.safetyFactor = safetyFactor;
         this.price = price;
+        this.isDelete = isDelete;
         this.remark = remark;
     }
 
@@ -177,6 +180,14 @@ public class Stock {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Byte getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getRemark() {

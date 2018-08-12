@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.domain.StoreRoomExample;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.StoreRoomRequestDTO;
 import com.deepsoft.haolifa.service.StoreRoomService;
+import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -17,12 +18,16 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+import static com.deepsoft.haolifa.constant.CommonEnum.Consts.NO;
+
 @Service
 @Slf4j
 public class StoreRoomServiceImpl implements StoreRoomService {
 
     @Autowired
     private StoreRoomMapper storeRoomMapper;
+    @Autowired
+    private SysUserService sysUserService;
 
     @Override
     public ResultBean saveInfo(StoreRoomRequestDTO model) {
@@ -32,8 +37,7 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         }
         StoreRoom storeRoom = new StoreRoom();
         BeanUtils.copyProperties(model, storeRoom);
-        storeRoom.setStatus(CommonEnum.Consts.YES.code);
-        storeRoom.setCreateUser(1);
+        storeRoom.setCreateUser(sysUserService.selectLoginUser().getId());
         int insert = storeRoomMapper.insertSelective(storeRoom);
         return ResultBean.success(insert);
     }
@@ -47,6 +51,7 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         StoreRoom storeRoom = new StoreRoom();
         BeanUtils.copyProperties(model, storeRoom);
         storeRoom.setUpdateTime(new Date());
+        storeRoom.setUpdateUser(sysUserService.selectLoginUser().getId());
 
         StoreRoomExample example = new StoreRoomExample();
         example.or().andIdEqualTo(model.getId());
@@ -55,14 +60,25 @@ public class StoreRoomServiceImpl implements StoreRoomService {
     }
 
     @Override
-    public ResultBean getInfo(int id) {
+    public ResultBean delete(int id) {
+        StoreRoom record = new StoreRoom() {{
+            setId(id);
+            setIsDelete(CommonEnum.Consts.YES.code);
+        }};
+        int update = storeRoomMapper.updateByPrimaryKeySelective(record);
+        return ResultBean.success(update);
+    }
+
+    @Override
+    public StoreRoom getInfo(int id) {
         log.info("StoreRoomServiceImpl getInfo start|id={}", id);
         if (id == 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+            return null;
         }
         StoreRoom storeRoom = storeRoomMapper.selectByPrimaryKey(id);
-        return ResultBean.success(storeRoom);
+        return storeRoom;
     }
+
 
     @Override
     public ResultBean listInfo(int type) {
@@ -71,6 +87,7 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         if (type > 0) {
             criteria.andIdEqualTo(type);
         }
+        criteria.andIsDeleteEqualTo(NO.code);
         List<StoreRoom> storeRooms = storeRoomMapper.selectByExample(example);
         return ResultBean.success(storeRooms);
     }

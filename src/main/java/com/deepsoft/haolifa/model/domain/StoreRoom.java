@@ -25,7 +25,9 @@ public class StoreRoom {
 
     private String remark;
 
-    public StoreRoom(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String name, String roomNo, Byte type, Byte status, String address, String remark) {
+    private Byte isDelete;
+
+    public StoreRoom(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String name, String roomNo, Byte type, Byte status, String address, String remark, Byte isDelete) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -37,6 +39,7 @@ public class StoreRoom {
         this.status = status;
         this.address = address;
         this.remark = remark;
+        this.isDelete = isDelete;
     }
 
     public StoreRoom() {
@@ -129,5 +132,13 @@ public class StoreRoom {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Byte getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 }

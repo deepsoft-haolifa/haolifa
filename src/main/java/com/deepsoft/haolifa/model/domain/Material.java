@@ -34,9 +34,11 @@ public class Material {
 
     private Byte status;
 
+    private Byte isDelete;
+
     private String remark;
 
-    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, Byte status, String remark) {
+    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -52,6 +54,7 @@ public class Material {
         this.specifications = specifications;
         this.model = model;
         this.status = status;
+        this.isDelete = isDelete;
         this.remark = remark;
     }
 
@@ -177,6 +180,14 @@ public class Material {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Byte getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getRemark() {

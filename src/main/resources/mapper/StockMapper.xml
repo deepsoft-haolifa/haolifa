@@ -18,6 +18,7 @@
       <arg column="safe_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="safety_factor" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
@@ -82,7 +83,7 @@
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, stock_id, store_room_rack_id, 
     store_room_rack_position_no, product_no, material_id, material_graph_no, quantity, 
-    safe_quantity, safety_factor, price, remark
+    safe_quantity, safety_factor, price, is_delete, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StockExample" resultMap="BaseResultMap">
     select
@@ -120,13 +121,15 @@
       store_room_rack_id, store_room_rack_position_no, 
       product_no, material_id, material_graph_no, 
       quantity, safe_quantity, safety_factor, 
-      price, remark)
+      price, is_delete, remark
+      )
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{stockId,jdbcType=CHAR}, 
       #{storeRoomRackId,jdbcType=CHAR}, #{storeRoomRackPositionNo,jdbcType=VARCHAR}, 
       #{productNo,jdbcType=CHAR}, #{materialId,jdbcType=INTEGER}, #{materialGraphNo,jdbcType=VARCHAR}, 
       #{quantity,jdbcType=INTEGER}, #{safeQuantity,jdbcType=INTEGER}, #{safetyFactor,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
+      #{price,jdbcType=DECIMAL}, #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Stock">
     insert into stock
@@ -175,6 +178,9 @@
       </if>
       <if test="price != null">
         price,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
       </if>
       <if test="remark != null">
         remark,
@@ -225,6 +231,9 @@
       </if>
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -285,6 +294,9 @@
       <if test="record.price != null">
         price = #{record.price,jdbcType=DECIMAL},
       </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -310,6 +322,7 @@
       safe_quantity = #{record.safeQuantity,jdbcType=INTEGER},
       safety_factor = #{record.safetyFactor,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=DECIMAL},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -360,6 +373,9 @@
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
       </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -382,6 +398,7 @@
       safe_quantity = #{safeQuantity,jdbcType=INTEGER},
       safety_factor = #{safetyFactor,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
+      is_delete = #{isDelete,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
