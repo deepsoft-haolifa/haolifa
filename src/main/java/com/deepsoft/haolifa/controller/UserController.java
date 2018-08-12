@@ -7,10 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhaozhihong
@@ -26,10 +23,16 @@ public class UserController {
     private SysUserService userService;
 
     @GetMapping("/auth")
-    @ApiOperation("获取权限列表")
-    @PreAuthorize("hasPermission('/auth','r')")
+    @ApiOperation("获取当前用户权限列表")
     public ResultBean index() {
         return ResultBean.success(userService.selectLoginUser());
+    }
+
+
+    @GetMapping("/{id}")
+    @ApiOperation("获取单个用户")
+    public ResultBean getUser(@PathVariable("id") Integer id){
+        return ResultBean.success(userService.getSysUser(id));
     }
 
 
@@ -37,6 +40,19 @@ public class UserController {
     @ApiOperation("添加用户")
     public ResultBean user(UserBaseDTO userBase){
         return ResultBean.success(userService.insertSysUser(userBase));
+    }
+
+
+    @PutMapping("")
+    @ApiOperation("修改用户")
+    public ResultBean updateUser(UserBaseDTO userBase){
+        return ResultBean.success(userService.updateSysUser(userBase));
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除用户")
+    public ResultBean deleteUser(@PathVariable("id") Integer id){
+        return ResultBean.success(deleteUser(id));
     }
 
 }

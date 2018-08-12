@@ -18,3 +18,6 @@ spring:
     timeout: 10000ms
   session:
     store-type: redis
+logging:
+  level:
+    com.deepsoft.haolifa.dao: debug

@@ -4,6 +4,8 @@ import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 
+import java.util.List;
+
 public interface SysUserService {
 
     /**
@@ -25,5 +27,25 @@ public interface SysUserService {
      * @return
      */
     int insertSysUser(UserBaseDTO user);
+
+    /**
+     * 获取用户列表
+     * @return
+     */
+    List<SysUser> getUserList(Integer pageNum, Integer pageSize);
+
+    /**
+     * 修改用户
+     * @param user
+     * @return
+     */
+    int updateSysUser(UserBaseDTO user);
+
+    /**
+     * 删除用户
+     * @param id
+     * @return
+     */
+    int deleteSysUser(Integer id);
 
 }

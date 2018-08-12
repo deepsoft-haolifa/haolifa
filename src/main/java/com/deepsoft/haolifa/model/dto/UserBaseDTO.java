@@ -10,6 +10,8 @@ import java.util.Date;
 @Data
 public class UserBaseDTO {
 
+    private Integer id;
+
     private String username;
 
     private String password;

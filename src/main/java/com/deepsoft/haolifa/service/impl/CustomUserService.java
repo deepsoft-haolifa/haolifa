@@ -53,7 +53,7 @@ public class CustomUserService implements UserDetailsService { //自定义UserDe
               GrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName());
               grantedAuthorities.add(authority);
             }
-            Set<CustomPermission> permissios = myPermissionMapper.findPermissiosByRoles(roles.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
+            List<CustomPermission> permissios = myPermissionMapper.findPermissiosByRoles(roles.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
             return new CustomUser(user.getId(), user.getUsername(), user.getPassword(), grantedAuthorities, permissios);
         } else {
             throw new UsernameNotFoundException("admin: " + username + " do not exist!");

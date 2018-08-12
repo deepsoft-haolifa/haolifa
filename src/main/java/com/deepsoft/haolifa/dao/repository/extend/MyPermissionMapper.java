@@ -17,6 +17,6 @@ public interface MyPermissionMapper {
 
     Set<SysRole> findRolesByUserId(long userId);
 
-    Set<CustomPermission> findPermissiosByRoles(@Param("roles") List<String> roles);
+    List<CustomPermission> findPermissiosByRoles(@Param("roles") List<String> roles);
 
 }

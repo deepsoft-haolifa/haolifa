@@ -15,9 +15,11 @@
   <select id="findPermissiosByRoles" parameterType="list" resultType="com.deepsoft.haolifa.model.dto.CustomPermission">
     SELECT
       DISTINCT
+      sp.id,
+      sp.pid,
+      sp.description,
       perm_name AS permName,
-      url,
-      sp.description
+      url
     FROM sys_role sr
     LEFT JOIN sys_permission_role srp ON sr.id = srp.role_id
     LEFT JOIN sys_permission sp ON srp.permission_id = sp.id
@@ -25,6 +27,7 @@
     <foreach collection="roles" item="role" open="(" close=")" separator=",">
       #{role}
     </foreach>
+    ORDER BY sp.id
   </select>
 
 </mapper>

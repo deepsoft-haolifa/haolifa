@@ -9,6 +9,7 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public class CustomUser extends User {
@@ -16,11 +17,11 @@ public class CustomUser extends User {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     private final Integer id;
-    private final Set<CustomPermission> permissions;
+    private final List<CustomPermission> permissions;
 
     public CustomUser(Integer id, String username, String password,
                       Collection<? extends GrantedAuthority> authorities,
-                       Set<CustomPermission> permissions) {
+                       List<CustomPermission> permissions) {
         super(username, password, authorities);
         this.id = id;
         this.permissions = permissions;
@@ -30,7 +31,7 @@ public class CustomUser extends User {
         return id;
     }
 
-    public Set<CustomPermission> getPermissions() {
+    public List<CustomPermission> getPermissions() {
         return permissions;
     }
 

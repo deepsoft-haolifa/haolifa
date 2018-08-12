@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.model.dto.CustomUser;
+import com.deepsoft.haolifa.service.PermissionService;
 import com.deepsoft.haolifa.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,22 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Autowired
     private SysUserService userService;
+    @Autowired
+    private PermissionService permissionService;
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws ServletException, IOException {
+
+        CustomUser customUser = userService.selectLoginUser();
+        log.info("customeUser:{}, time:",customUser, new Date());
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter writer = response.getWriter();
+        writer.write(JSONObject.toJSONString(permissionService.getMenu()));
+        writer.flush();
+        writer.close();
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
@@ -56,14 +67,7 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         clearAuthenticationAttributes(request);
-        CustomUser customUser = userService.selectLoginUser();
-        log.info("customeUser:{}, time:",customUser, new Date());
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
-        writer.write(JSONObject.toJSONString(customUser.getPermissions().stream()
-                .filter(p -> p.getPermName().equals("r")).collect(Collectors.toList())));
-        writer.flush();
-        writer.close();
+
     }
 
     public void setRequestCache(RequestCache requestCache) {
