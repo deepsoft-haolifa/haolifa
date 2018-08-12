@@ -1,8 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StoreRoomRackRequestDTO;
-import com.deepsoft.haolifa.model.dto.StoreRoomRequestDTO;
+import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.StoreRoomRackService;
 import com.deepsoft.haolifa.service.StoreRoomService;
 import io.swagger.annotations.*;
@@ -18,6 +17,8 @@ public class StoreRoomController {
     private StoreRoomService storeRoomService;
     @Autowired
     private StoreRoomRackService storeRoomRackService;
+    @Autowired
+    private ProductService productService;
 
     @ApiOperation("新增库房信息")
     @PostMapping("/save")
@@ -33,7 +34,7 @@ public class StoreRoomController {
 
     @ApiOperation("删除库房信息")
     @ApiImplicitParam(name = "id", value = "库房id", dataType = "int", paramType = "path", required = true)
-    @PostMapping("/delete")
+    @GetMapping("/delete/{id}")
     public ResultBean delete(@PathVariable int id) {
         return storeRoomService.delete(id);
     }
@@ -67,7 +68,7 @@ public class StoreRoomController {
     }
 
     @ApiOperation("删除库房货位信息")
-    @PostMapping("/deleteRack")
+    @GetMapping("/deleteRack/{id}")
     @ApiImplicitParam(name = "id", value = "库房货位id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteRack(@PathVariable int id) {
         return storeRoomRackService.delete(id);
@@ -80,8 +81,38 @@ public class StoreRoomController {
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query")
     })
     @GetMapping("/pageRackInfo")
-    public ResultBean updateRack(@RequestParam Integer currentPage, @RequestParam Integer pageSize, Integer roomId) {
+    public ResultBean pageRackInfo(@RequestParam Integer currentPage, @RequestParam Integer pageSize, Integer roomId) {
         return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomId);
     }
+
+    @ApiOperation("新增成品信息")
+    @PostMapping("/product/save")
+    public ResultBean saveProduct(@RequestBody ProductRequestDTO model) {
+        return productService.saveInfo(model);
+    }
+
+    @ApiOperation("更新成品信息")
+    @PostMapping("/product/update")
+    public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
+        return productService.updateInfo(model);
+    }
+
+    @ApiOperation("删除成品信息")
+    @GetMapping("/product/delete/{id}")
+    @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
+    public ResultBean deleteProduct(@PathVariable int id) {
+        return productService.delete(id);
+    }
+
+    @ApiOperation("获取成品分页列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query")
+    })
+    @PostMapping("/product/pageInfo")
+    public ResultBean pageInfoProduct(@RequestParam Integer currentPage, @RequestParam Integer pageSize, @RequestBody ProductConditionDTO productConditionDTO) {
+        return productService.pageInfo(currentPage, pageSize, productConditionDTO);
+    }
+
 
 }
