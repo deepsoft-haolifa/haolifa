@@ -17,8 +17,7 @@ public class StoreRoomController {
     private StoreRoomService storeRoomService;
     @Autowired
     private StoreRoomRackService storeRoomRackService;
-    @Autowired
-    private ProductService productService;
+
 
     @ApiOperation("新增库房信息")
     @PostMapping("/save")
@@ -55,6 +54,11 @@ public class StoreRoomController {
     }
 
 
+
+
+
+
+
     @ApiOperation("新增库房库位信息")
     @PostMapping("/saveRack")
     public ResultBean saveRack(@RequestBody StoreRoomRackRequestDTO model) {
@@ -85,34 +89,11 @@ public class StoreRoomController {
         return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomId);
     }
 
-    @ApiOperation("新增成品信息")
-    @PostMapping("/product/save")
-    public ResultBean saveProduct(@RequestBody ProductRequestDTO model) {
-        return productService.saveInfo(model);
-    }
 
-    @ApiOperation("更新成品信息")
-    @PostMapping("/product/update")
-    public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
-        return productService.updateInfo(model);
-    }
 
-    @ApiOperation("删除成品信息")
-    @GetMapping("/product/delete/{id}")
-    @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
-    public ResultBean deleteProduct(@PathVariable int id) {
-        return productService.delete(id);
-    }
 
-    @ApiOperation("获取成品分页列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query")
-    })
-    @PostMapping("/product/pageInfo")
-    public ResultBean pageInfoProduct(@RequestParam Integer currentPage, @RequestParam Integer pageSize, @RequestBody ProductConditionDTO productConditionDTO) {
-        return productService.pageInfo(currentPage, pageSize, productConditionDTO);
-    }
+
+
 
 
 }

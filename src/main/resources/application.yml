@@ -11,3 +11,9 @@ mybatis:
   mapper-locations: classpath:mapper/**/*Mapper.xml
   type-aliases-package: com.deepsoft.haolifa.model.domain.*
 
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
