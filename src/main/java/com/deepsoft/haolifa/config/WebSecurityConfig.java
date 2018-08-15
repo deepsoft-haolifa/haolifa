@@ -29,7 +29,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()
-                .authorizeRequests().anyRequest().permitAll()  //暂时全部放开
+                .authorizeRequests()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
