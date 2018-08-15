@@ -27,4 +27,10 @@ public interface ProductPurchaseRecordMapper {
     int updateByPrimaryKeySelective(ProductPurchaseRecord record);
 
     int updateByPrimaryKey(ProductPurchaseRecord record);
+
+    /**
+     * 批量插入采购记录
+     * @param productPurchaseRecordList
+     */
+    void insertProductPurchaseRecordBatch(List<ProductPurchaseRecord> productPurchaseRecordList);
 }

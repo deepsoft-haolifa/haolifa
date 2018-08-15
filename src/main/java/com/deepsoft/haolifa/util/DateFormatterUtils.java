@@ -1,0 +1,37 @@
+package com.deepsoft.haolifa.util;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+public class DateFormatterUtils {
+
+    public static final String ONE_FORMATTERPATTERN = "yyyy-MM-dd HH:mm:ss";
+
+    public static final String TWO_FORMATTERPATTERN = "yyyy-MM-dd";
+    public static final String THREE_FORMATTERPATTERN = "yyyy MM dd HH:mm:ss";
+
+    public static LocalDateTime getLocalDateTime(Date date) {
+        if (date == null)
+            return LocalDateTime.now();
+        return date.toInstant().atOffset(ZoneOffset.UTC).toLocalDateTime();
+    }
+
+    public static DateTimeFormatter getDateTimeFormatter(String formatter) {
+        return DateTimeFormatter.ofPattern(formatter);
+    }
+
+    public static String formatterDateString(String formatter,Date date) {
+        return getDateTimeFormatter(formatter).format(getLocalDateTime(date));
+    }
+
+    public static Date parseDateString(String formatter, String dateString) {
+        return Date.from(LocalDateTime.parse(dateString, getDateTimeFormatter(formatter)).toInstant(ZoneOffset.UTC));
+    }
+
+    public static void main(String[] args) {
+        System.out.println("yyyy-MM-dd HH:mm:ss:"+formatterDateString(THREE_FORMATTERPATTERN,null));
+        System.out.println("yyyy-MM-dd HH:mm:ss:"+parseDateString(ONE_FORMATTERPATTERN,"2018-08-15 21:55:32"));
+    }
+}

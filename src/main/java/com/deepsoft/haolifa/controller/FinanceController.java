@@ -1,7 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
-import com.deepsoft.haolifa.model.FinanceDTO;
+import com.deepsoft.haolifa.model.dto.FinanceDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.FinanceService;
 import io.swagger.annotations.*;

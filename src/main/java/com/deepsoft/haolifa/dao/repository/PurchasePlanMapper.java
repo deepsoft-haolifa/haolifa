@@ -27,4 +27,16 @@ public interface PurchasePlanMapper {
     int updateByPrimaryKeySelective(PurchasePlan record);
 
     int updateByPrimaryKey(PurchasePlan record);
+
+    /**
+     * 批量插入采购计划清单
+     * @param purchasePlanList
+     */
+    void insertPurchasePlanBatch(List<PurchasePlan> purchasePlanList);
+
+    /**
+     * 订单号分组查询
+     * @param productOrderNo
+     */
+    void selectWithGroupBy(String productOrderNo);
 }

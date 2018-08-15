@@ -25,7 +25,9 @@ public class CommonEnum {
         LOGIN_ERROR("1001", "登陆错误"),
 
         // 库房货位已经存在
-        STORE_ROOM_RACK_EXISTS("2001", "货位已经存在");
+        STORE_ROOM_RACK_EXISTS("2001", "货位已经存在"),
+
+        SYSTEM_EXCEPTION("3001","系统异常");
 
         public final String code;
 

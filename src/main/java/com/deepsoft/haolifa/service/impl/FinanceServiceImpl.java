@@ -1,8 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.dao.repository.FinanceMapper;
-import com.deepsoft.haolifa.model.FinanceDTO;
-import com.deepsoft.haolifa.model.domain.Equipment;
+import com.deepsoft.haolifa.model.dto.FinanceDTO;
 import com.deepsoft.haolifa.model.domain.Finance;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.FinanceService;
