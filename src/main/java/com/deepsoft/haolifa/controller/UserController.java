@@ -35,6 +35,13 @@ public class UserController {
         return ResultBean.success(userService.getSysUser(id));
     }
 
+    @GetMapping("/all")
+    @ApiOperation("获取所有用户")
+    public ResultBean getUser(@RequestParam(name = "pageNum", defaultValue = "1")Integer pageNum,
+                              @RequestParam(name = "pageSize", defaultValue = "10")Integer pageSize){
+        return ResultBean.success(userService.getUserList(pageNum, pageSize));
+    }
+
 
     @PostMapping("")
     @ApiOperation("添加用户")
