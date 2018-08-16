@@ -258,4 +258,51 @@
       purchase_order_status = #{purchaseOrderStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <insert id="batchInsertProductPurchaseRecord" parameterType="List">
+    <foreach collection="list" item="item">
+      insert into product_purchase_record
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="item.purchasePlanNo != null">
+          purchase_plan_no,
+        </if>
+        <if test="item.productOrderNo != null">
+          product_order_no,
+        </if>
+        <if test="item.materialGraphNo != null">
+          material_graph_no,
+        </if>
+        <if test="item.applyBuyNo != null">
+          apply_buy_no,
+        </if>
+        <if test="item.purchaseOrderNo != null">
+          purchase_order_no,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="item.purchasePlanNo != null">
+          #{purchasePlanNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.productOrderNo != null">
+          #{productOrderNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.materialGraphNo != null">
+          #{materialGraphNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.applyBuyNo != null">
+          #{applyBuyNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.purchaseOrderNo != null">
+          #{purchaseOrderNo,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+
+  <update id="batchUpdateApplyBuyNo" parameterType="List">
+    <foreach collection="list" item="item" separator=";">
+      update product_purchase_record set apply_buy_no = #{item.applyBuyNo}
+      where is_delete = 0 and purchase_plan_no = #{item.purchasePlanNo} and material_graph_no = #{item.materialGraphNo}
+    </foreach>
+  </update>
 </mapper>

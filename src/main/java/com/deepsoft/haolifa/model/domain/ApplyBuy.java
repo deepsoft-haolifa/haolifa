@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ApplyBuy {
@@ -15,7 +16,7 @@ public class ApplyBuy {
 
     private String unit;
 
-    private Integer valuation;
+    private BigDecimal valuation;
 
     private String remark;
 
@@ -27,9 +28,9 @@ public class ApplyBuy {
 
     private Date updateTime;
 
-    private Long createUserId;
+    private Integer createUserId;
 
-    public ApplyBuy(Integer id, Integer flowId, String applyNo, String materialGraphNo, Integer number, String unit, Integer valuation, String remark, String purpose, Byte isDelete, Date createTime, Date updateTime, Long createUserId) {
+    public ApplyBuy(Integer id, Integer flowId, String applyNo, String materialGraphNo, Integer number, String unit, BigDecimal valuation, String remark, String purpose, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.flowId = flowId;
         this.applyNo = applyNo;
@@ -97,11 +98,11 @@ public class ApplyBuy {
         this.unit = unit == null ? null : unit.trim();
     }
 
-    public Integer getValuation() {
+    public BigDecimal getValuation() {
         return valuation;
     }
 
-    public void setValuation(Integer valuation) {
+    public void setValuation(BigDecimal valuation) {
         this.valuation = valuation;
     }
 
@@ -145,11 +146,11 @@ public class ApplyBuy {
         this.updateTime = updateTime;
     }
 
-    public Long getCreateUserId() {
+    public Integer getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Long createUserId) {
+    public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
     }
 }

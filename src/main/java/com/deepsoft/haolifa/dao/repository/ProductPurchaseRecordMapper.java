@@ -32,5 +32,11 @@ public interface ProductPurchaseRecordMapper {
      * 批量插入采购记录
      * @param productPurchaseRecordList
      */
-    void insertProductPurchaseRecordBatch(List<ProductPurchaseRecord> productPurchaseRecordList);
+    void batchInsertProductPurchaseRecord(List<ProductPurchaseRecord> productPurchaseRecordList);
+
+    /**
+     * 批量设置请购单单号
+     * @param productPurchaseRecordList
+     */
+    void batchUpdateApplyBuyNo(List<ProductPurchaseRecord> productPurchaseRecordList);
 }

@@ -6,6 +6,8 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.PurchasePlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,5 +61,17 @@ public class PurchasePlanController {
         return purchasePlanService.getInfo(purchasePlanNo);
     }
 
+    // TODO 涉及流程初始化
+    @ApiOperation("发起审批")
+    @GetMapping("initiateApproval/{purchasePlanNo}")
+    public ResultBean initiateApproval(@PathVariable("purchasePlanNo") String purchasePlanNo){
+        return null;
+    }
+
+    @ApiOperation("撤销审批")
+    @GetMapping("cancelApproval/{purchasePlanNo}")
+    public ResultBean cancelApproval(@PathVariable("purchasePlanNo") String purchasePlanNo){
+        return null;
+    }
 
 }
