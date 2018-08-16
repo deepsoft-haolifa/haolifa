@@ -29,6 +29,15 @@ public class UserController {
     }
 
 
+    @GetMapping("")
+    @ApiOperation("获取用户列表")
+    public ResultBean users(@RequestParam(name = "pageNum", defaultValue = "0")
+                            Integer pageNum,
+                            @RequestParam(name = "pageSize", defaultValue = "10")
+                            Integer pageSize){
+        return ResultBean.success(userService.getUserList(pageNum, pageSize));
+    }
+
     @GetMapping("/{id}")
     @ApiOperation("获取单个用户")
     public ResultBean getUser(@PathVariable("id") Integer id){

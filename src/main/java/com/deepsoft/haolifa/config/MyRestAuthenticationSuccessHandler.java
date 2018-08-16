@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.model.dto.CustomUser;
+import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.PermissionService;
 import com.deepsoft.haolifa.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("customeUser:{}, time:",customUser, new Date());
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();
-        writer.write(JSONObject.toJSONString(permissionService.getMenu()));
+        writer.write(JSONObject.toJSONString(ResultBean.success(permissionService.getMenu())));
         writer.flush();
         writer.close();
 

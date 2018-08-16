@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @desc customer user
  **/
 @Service
-public class CustomUserService implements UserDetailsService { //自定义UserDetailsService 接口
+public class CustomUserServiceImpl implements UserDetailsService { //自定义UserDetailsService 接口
 
 
     @Autowired

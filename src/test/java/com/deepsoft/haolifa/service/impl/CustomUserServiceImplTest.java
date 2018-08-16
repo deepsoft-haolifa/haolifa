@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.Assert.*;
 
 
-public class CustomUserServiceTest extends BaseApplicationTests {
+public class CustomUserServiceImplTest extends BaseApplicationTests {
 
     @Autowired
     PasswordEncoder passwordEncoder;

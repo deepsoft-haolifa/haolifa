@@ -27,10 +27,13 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysUserMapper userMapper;
+    @Autowired
+    private CustomUserServiceImpl customUserService;
 
     @Override
     public CustomUser selectLoginUser() {
-        return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return (CustomUser) customUserService.loadUserByUsername("admin");
     }
 
 

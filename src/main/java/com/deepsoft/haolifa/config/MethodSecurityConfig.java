@@ -1,6 +1,6 @@
 package com.deepsoft.haolifa.config;
 
-import com.deepsoft.haolifa.service.impl.CustomUserService;
+import com.deepsoft.haolifa.service.impl.CustomUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
     @Autowired
-    private CustomUserService customUserService;
+    private CustomUserServiceImpl customUserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
