@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.domain.SysUserExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.UUIDGenerator;
@@ -13,11 +14,9 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PARAM_ERROR;
 
@@ -54,13 +53,13 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public com.deepsoft.haolifa.model.dto.Page<SysUser> getUserList(Integer pageNum, Integer pageSize) {
+    public PageDTO<SysUser> getUserList(Integer pageNum, Integer pageSize) {
         Page<SysUser> users = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPage(() -> userMapper.selectByExample(new SysUserExample()));
-        com.deepsoft.haolifa.model.dto.Page<SysUser> page = new com.deepsoft.haolifa.model.dto.Page<>();
-        BeanUtils.copyProperties(users, page);
-        page.setList(users);
-        return page;
+        PageDTO<SysUser> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(users, pageDTO);
+        pageDTO.setList(users);
+        return pageDTO;
     }
 
 

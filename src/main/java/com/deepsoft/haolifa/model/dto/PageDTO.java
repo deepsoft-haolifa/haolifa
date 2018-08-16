@@ -10,7 +10,7 @@ import java.util.List;
  * @desc 分页返回对象
  **/
 @Data
-public class Page<E> {
+public class PageDTO<E> {
 
     /**
      * 页码，从1开始
