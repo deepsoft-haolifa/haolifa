@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.BeanUtils;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -87,8 +88,12 @@ public class ProductServiceImpl implements ProductService {
         if (StringUtils.isNotBlank(productConditionDTO.getProductNo())) {
             criteria.andProductNoLike(productConditionDTO.getProductNo());
         }
-        PageInfo<StoreRoomRackRequestDTO> page = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> productMapper.selectByExample(example));
+        Page<Product> page = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPage(() -> productMapper.selectByExample(example));
+
+        PageDTO<Product> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(page, pageDTO);
+        pageDTO.setList(page);
         return ResultBean.success(page);
     }
 }

@@ -90,6 +90,10 @@ public class MaterialServiceImpl implements MaterialService {
         MaterialClassifyExample example = new MaterialClassifyExample();
         Page<StoreRoomRackRequestDTO> page = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPage(() -> materialClassifyMapper.selectByExample(example));
+
+        PageDTO<StoreRoomRackRequestDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(page, pageDTO);
+        pageDTO.setList(page);
         return ResultBean.success(page);
     }
 }

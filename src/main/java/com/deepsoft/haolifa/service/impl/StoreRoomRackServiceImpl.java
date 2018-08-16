@@ -6,12 +6,14 @@ import com.deepsoft.haolifa.model.domain.StoreRoom;
 import com.deepsoft.haolifa.model.domain.StoreRoomRack;
 import com.deepsoft.haolifa.model.domain.StoreRoomRackExample;
 import com.deepsoft.haolifa.model.dto.CustomUser;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.StoreRoomRackRequestDTO;
 import com.deepsoft.haolifa.service.StoreRoomRackService;
 import com.deepsoft.haolifa.service.StoreRoomService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.BeanUtils;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -92,8 +94,11 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
         pageSize = pageSize == null ? 20 : pageSize;
         StoreRoomRackExample example = new StoreRoomRackExample();
         example.or().andStoreRoomIdEqualTo(roomId).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        PageInfo<StoreRoomRackRequestDTO> page = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> storeRoomRackMapper.selectByExample(example));
+        Page<StoreRoomRackRequestDTO> page = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPage(() -> storeRoomRackMapper.selectByExample(example));
+        PageDTO<StoreRoomRackRequestDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(page, pageDTO);
+        pageDTO.setList(page);
         return ResultBean.success(page);
     }
 
