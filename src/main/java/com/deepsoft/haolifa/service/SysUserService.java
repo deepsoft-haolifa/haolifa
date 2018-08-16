@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service;
 import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
+import com.github.pagehelper.Page;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface SysUserService {
      * 获取用户列表
      * @return
      */
-    List<SysUser> getUserList(Integer pageNum, Integer pageSize);
+    com.deepsoft.haolifa.model.dto.Page<SysUser> getUserList(Integer pageNum, Integer pageSize);
 
     /**
      * 修改用户

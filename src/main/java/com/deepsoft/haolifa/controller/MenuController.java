@@ -22,7 +22,7 @@ public class MenuController {
     private PermissionService permissionService;
 
 
-    @GetMapping("/auth/menu")
+    @GetMapping("")
     public List<PermissionNode> getMenu(){
         return permissionService.getMenu();
     }

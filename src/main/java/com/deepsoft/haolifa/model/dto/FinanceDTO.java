@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model;
+package com.deepsoft.haolifa.model.dto;
 
 
 import io.swagger.annotations.ApiModel;
