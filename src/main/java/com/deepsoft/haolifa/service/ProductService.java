@@ -44,10 +44,11 @@ public interface ProductService {
 
     /**
      * 获取成品分页列表
-     * @param pageNum 页码
-     * @param pageNum 页数
-     * @param productConditionDTO 查询条件
+     * @param currentPage 页码
+     * @param pageSize 页数
+     * @param nameLike 名字查询条件
+     * @param productNoLike 产品编号查询条件
      * @return
      */
-    ResultBean pageInfo(Integer pageNum, Integer pageSize, ProductConditionDTO productConditionDTO);
+    ResultBean pageInfo(Integer currentPage, Integer pageSize, String nameLike,String productNoLike);
 }

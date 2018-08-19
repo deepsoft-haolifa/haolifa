@@ -2,7 +2,10 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.StoreRoom;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.StoreRoomConditionDTO;
 import com.deepsoft.haolifa.model.dto.StoreRoomRequestDTO;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface StoreRoomService {
 
@@ -45,4 +48,15 @@ public interface StoreRoomService {
      * @return
      */
     ResultBean listInfo(int type);
+
+
+    /**
+     * 获取库房分页列表
+     * @param currentPage
+     * @param pageSize
+     * @param nameLike 名称模糊查询
+     * @param type 类型查询
+     * @return
+     */
+    ResultBean pageInfo(Integer currentPage, Integer pageSize, String nameLike, Byte type);
 }

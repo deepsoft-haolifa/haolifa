@@ -12,11 +12,11 @@ import com.deepsoft.haolifa.model.dto.StoreRoomRackRequestDTO;
 import com.deepsoft.haolifa.service.StoreRoomRackService;
 import com.deepsoft.haolifa.service.StoreRoomService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.util.BeanUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -89,17 +89,22 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
     }
 
     @Override
-    public ResultBean pageRackInfo(Integer pageNum, Integer pageSize, Integer roomId) {
-        pageNum = pageNum == null ? 1 : pageNum;
+    public ResultBean pageRackInfo(Integer currentPage, Integer pageSize, Integer roomId) {
+        currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
         StoreRoomRackExample example = new StoreRoomRackExample();
-        example.or().andStoreRoomIdEqualTo(roomId).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        Page<StoreRoomRackRequestDTO> page = PageHelper.startPage(pageNum, pageSize)
+        StoreRoomRackExample.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("create_time desc");
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        if (null != roomId && roomId > 0) {
+            criteria.andStoreRoomIdEqualTo(roomId);
+        }
+        Page<StoreRoomRack> storeRoomRacks = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> storeRoomRackMapper.selectByExample(example));
-        PageDTO<StoreRoomRackRequestDTO> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(page, pageDTO);
-        pageDTO.setList(page);
-        return ResultBean.success(page);
+        PageDTO<StoreRoomRack> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(storeRoomRacks, pageDTO);
+        pageDTO.setList(storeRoomRacks);
+        return ResultBean.success(pageDTO);
     }
 
     /**
