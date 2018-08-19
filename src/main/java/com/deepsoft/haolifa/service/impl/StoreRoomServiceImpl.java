@@ -5,13 +5,14 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.StoreRoomMapper;
 import com.deepsoft.haolifa.model.domain.StoreRoom;
 import com.deepsoft.haolifa.model.domain.StoreRoomExample;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StoreRoomRequestDTO;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.StoreRoomService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.util.BeanUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,5 +91,28 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         criteria.andIsDeleteEqualTo(NO.code);
         List<StoreRoom> storeRooms = storeRoomMapper.selectByExample(example);
         return ResultBean.success(storeRooms);
+    }
+
+    @Override
+    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String nameLike, Byte type) {
+        currentPage = currentPage == null ? 1 : currentPage;
+        pageSize = pageSize == null ? 20 : pageSize;
+        StoreRoomExample example = new StoreRoomExample();
+        StoreRoomExample.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("create_time desc");
+
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        if (StringUtils.isNotBlank(nameLike)) {
+            criteria.andNameLike("%" + nameLike + "%");
+        }
+        if (type != null && type > 0) {
+            criteria.andTypeEqualTo(type);
+        }
+        Page<StoreRoom> storeRooms = PageHelper.startPage(currentPage, pageSize)
+                .doSelectPage(() -> storeRoomMapper.selectByExample(example));
+        PageDTO<StoreRoom> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(storeRooms, pageDTO);
+        pageDTO.setList(storeRooms);
+        return ResultBean.success(pageDTO);
     }
 }

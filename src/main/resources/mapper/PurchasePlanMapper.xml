@@ -290,4 +290,25 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <insert id="insertPurchasePlanBatch" parameterType="List">
+    <foreach collection="list" item="item">
+      insert into purchase_plan(purchase_plan_no,product_order_no,material_graph_no,`number`,expected_time,create_user_id)
+      value (#{item.purchasePlanNo},#{item.productOrderNo},#{item.materialGraphNo},#{item.number},#{item.expectedTime},#{item.createUserId});
+    </foreach>
+  </insert>
+
+  <select id="selectWithGroupBy" parameterType="String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    purchase_plan
+    where
+    is_delete = 0
+    <if test="productOrderNo!= null and productOrderNo != ''">
+      and product_order_no like CONCAT('%',#{productOrderNo},'%')
+    </if>
+    group by product_order_no
+    order by update_time desc
+  </select>
 </mapper>

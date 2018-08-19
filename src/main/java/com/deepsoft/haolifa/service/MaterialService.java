@@ -47,9 +47,10 @@ public interface MaterialService {
     /**
      * 获取原料分页列表
      *
-     * @param pageNum 页码
-     * @param pageNum 页数
+     * @param currentPage 页码
+     * @param pageSize 页数
+     * @param classifyNameLike 分类名称
      * @return
      */
-    ResultBean pageInfoClassify(Integer pageNum, Integer pageSize);
+    ResultBean pageInfoClassify(Integer currentPage, Integer pageSize,String classifyNameLike);
 }

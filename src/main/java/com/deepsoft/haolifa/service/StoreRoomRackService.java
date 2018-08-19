@@ -35,6 +35,6 @@ public interface StoreRoomRackService {
      *
      * @return
      */
-    ResultBean pageRackInfo(Integer pageNum, Integer pageSize, Integer roomId);
+    ResultBean pageRackInfo(Integer currentPage, Integer pageSize, Integer roomId);
 
 }

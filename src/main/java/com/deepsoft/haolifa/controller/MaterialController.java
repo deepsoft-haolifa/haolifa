@@ -25,7 +25,7 @@ public class MaterialController {
     }
 
     @ApiOperation("删除原料类别")
-    @GetMapping("/deleteClassify/{id}")
+    @DeleteMapping("/deleteClassify/{id}")
     @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteRack(@PathVariable int id) {
         return materialService.deleteClassify(id);
@@ -41,13 +41,15 @@ public class MaterialController {
     @ApiOperation("获取原料类别分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query")
+            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(value = "分类名称", name = "classifyNameLike", dataType = "string", paramType = "query")
     })
-    @GetMapping("/pageRackInfo")
-    public ResultBean pageRackInfo(@RequestParam Integer currentPage, @RequestParam Integer pageSize) {
-        return materialService.pageInfoClassify(currentPage, pageSize);
+    @GetMapping("/pageClassify")
+    public ResultBean pageClassify(@RequestParam(defaultValue = "1") Integer currentPage,
+                                   @RequestParam(defaultValue = "20") Integer pageSize,
+                                   @RequestParam(required = false) String classifyNameLike) {
+        return materialService.pageInfoClassify(currentPage, pageSize, classifyNameLike);
     }
-
 
 
 }

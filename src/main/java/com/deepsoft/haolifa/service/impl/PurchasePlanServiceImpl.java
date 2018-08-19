@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.ProductPurchaseRecordMapper;
 import com.deepsoft.haolifa.dao.repository.PurchasePlanMapper;
 import com.deepsoft.haolifa.model.domain.ProductPurchaseRecord;
+import com.deepsoft.haolifa.model.domain.ProductPurchaseRecordExample;
 import com.deepsoft.haolifa.model.domain.PurchasePlan;
 import com.deepsoft.haolifa.model.domain.PurchasePlanExample;
 import com.deepsoft.haolifa.model.dto.CustomUser;
@@ -64,27 +65,42 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
             productPurchaseRecordList.add(productPurchaseRecord);
         }
         purchasePlanMapper.insertPurchasePlanBatch(purchasePlanList);
-        productPurchaseRecordMapper.insertProductPurchaseRecordBatch(productPurchaseRecordList);
+        productPurchaseRecordMapper.batchInsertProductPurchaseRecord(productPurchaseRecordList);
         return ResultBean.success(purchaseNo);
     }
 
     @Override
     public ResultBean delete(String purchasePlanNo) {
+        if(StringUtils.isAnyEmpty(purchasePlanNo)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        // 删除 采购计划元数据
         PurchasePlanExample purchasePlanExample = new PurchasePlanExample();
         purchasePlanExample.or().andPurchasePlanNoEqualTo(purchasePlanNo);
         PurchasePlan purchasePlan = new PurchasePlan();
         purchasePlan.setIsDelete(CommonEnum.Consts.YES.code);
         int delete = purchasePlanMapper.updateByExampleSelective(purchasePlan, purchasePlanExample);
+        // 删除采购记录表记录
+        ProductPurchaseRecordExample productPurchaseRecordExample = new ProductPurchaseRecordExample();
+        productPurchaseRecordExample.or().andPurchasePlanNoEqualTo(purchasePlanNo);
+        productPurchaseRecordMapper.deleteByExample(productPurchaseRecordExample);
         return ResultBean.success(delete);
     }
 
     @Override
     public ResultBean deleteItem(String purchasePlanNo, String materialGraphNo) {
+        if(StringUtils.isAnyEmpty(purchasePlanNo,materialGraphNo)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         PurchasePlanExample purchasePlanExample = new PurchasePlanExample();
         purchasePlanExample.or().andPurchasePlanNoEqualTo(purchasePlanNo).andMaterialGraphNoEqualTo(materialGraphNo);
         PurchasePlan purchasePlan = new PurchasePlan();
         purchasePlan.setIsDelete(CommonEnum.Consts.YES.code);
         int delete = purchasePlanMapper.updateByExampleSelective(purchasePlan, purchasePlanExample);
+        // 删除采购记录表记录
+        ProductPurchaseRecordExample productPurchaseRecordExample = new ProductPurchaseRecordExample();
+        productPurchaseRecordExample.or().andPurchasePlanNoEqualTo(purchasePlanNo).andMaterialGraphNoEqualTo(materialGraphNo);
+        productPurchaseRecordMapper.deleteByExample(productPurchaseRecordExample);
         return ResultBean.success(delete);
     }
 
@@ -116,7 +132,6 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
     }
 
     /**
-     * sql重写
      *
      * @param currentPage
      * @param pageSize

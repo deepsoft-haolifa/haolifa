@@ -27,4 +27,10 @@ public interface ApplyBuyMapper {
     int updateByPrimaryKeySelective(ApplyBuy record);
 
     int updateByPrimaryKey(ApplyBuy record);
+
+    /**
+     * 批量插入请购单记录
+     * @param applyBuyList
+     */
+    void batchInsertApplyBuy(List<ApplyBuy> applyBuyList);
 }

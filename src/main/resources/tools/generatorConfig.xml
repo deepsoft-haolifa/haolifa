@@ -107,9 +107,9 @@
 
         <!--<table tableName="sys_user" domainObjectName="SysUser"></table>-->
 
-        <table tableName="material" domainObjectName="Material"></table>
+        <!--<table tableName="material" domainObjectName="Material"></table>-->
 
-        <table tableName="material_classify" domainObjectName="MaterialClassify"></table>
+        <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
 
         <!--<table tableName="order_product" domainObjectName="OrderProduct"></table>-->
 
@@ -117,15 +117,15 @@
 
         <!--<table tableName="material_receive_record" domainObjectName="MaterialReceiveRecord"></table>-->
 
-        <table tableName="product" domainObjectName="Product"></table>
+        <!--<table tableName="product" domainObjectName="Product"></table>-->
 
         <!--<table tableName="product_material" domainObjectName="ProductMaterial"></table>-->
 
-        <table tableName="stock" domainObjectName="Stock"></table>
+        <!--<table tableName="stock" domainObjectName="Stock"></table>-->
 
-        <table tableName="store_room" domainObjectName="StoreRoom"></table>
+        <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->
 
-        <table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>
+        <!--<table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>-->
 
         <!--<table tableName="store_room_record" domainObjectName="StoreRoomRecord"></table>-->
 
@@ -159,7 +159,7 @@
 
         <!--<table tableName="equipment" domainObjectName="Equipment"></table>-->
 
-        <table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>
+        <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
 
         <!-- 选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素
             tableName（必要）：要生成对象的表名；

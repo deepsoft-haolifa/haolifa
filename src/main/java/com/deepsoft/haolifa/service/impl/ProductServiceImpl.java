@@ -4,16 +4,14 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.ProductMapper;
 import com.deepsoft.haolifa.model.domain.Product;
 import com.deepsoft.haolifa.model.domain.ProductExample;
-import com.deepsoft.haolifa.model.domain.StoreRoomRackExample;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.util.BeanUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,26 +72,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResultBean pageInfo(Integer pageNum, Integer pageSize, ProductConditionDTO productConditionDTO) {
-        pageNum = pageNum == null ? 1 : pageNum;
+    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String nameLike, String productNoLike) {
+        currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
         ProductExample example = new ProductExample();
         ProductExample.Criteria criteria = example.createCriteria();
-        if (productConditionDTO.getIsDelete() > -1) {
-            criteria.andIsDeleteEqualTo(productConditionDTO.getIsDelete());
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        if (StringUtils.isNotBlank(nameLike)) {
+            criteria.andNameLike("%" + nameLike + "%");
         }
-        if (StringUtils.isNotBlank(productConditionDTO.getName())) {
-            criteria.andNameLike(productConditionDTO.getName());
+        if (StringUtils.isNotBlank(productNoLike)) {
+            criteria.andProductNoLike("%" + productNoLike + "%");
         }
-        if (StringUtils.isNotBlank(productConditionDTO.getProductNo())) {
-            criteria.andProductNoLike(productConditionDTO.getProductNo());
-        }
-        Page<Product> page = PageHelper.startPage(pageNum, pageSize)
+        Page<Product> products = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> productMapper.selectByExample(example));
 
         PageDTO<Product> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(page, pageDTO);
-        pageDTO.setList(page);
-        return ResultBean.success(page);
+        BeanUtils.copyProperties(products, pageDTO);
+        pageDTO.setList(products);
+        return ResultBean.success(pageDTO);
     }
 }
