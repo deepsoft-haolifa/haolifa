@@ -96,14 +96,14 @@ public class LogAspect implements ThrowsAdvice {
         String requestURI = request.getRequestURI();
         requestMap.put("uri", requestURI);
         //将请求头置入
-        HashMap<Object, Object> requestHeader = new HashMap<>();
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            String headerValue = request.getHeader(headerName);
-            requestHeader.put(headerName, headerValue);
-        }
-        requestMap.put("requestHeader", requestHeader);
+//        HashMap<Object, Object> requestHeader = new HashMap<>();
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        while (headerNames.hasMoreElements()) {
+//            String headerName = headerNames.nextElement();
+//            String headerValue = request.getHeader(headerName);
+//            requestHeader.put(headerName, headerValue);
+//        }
+//        requestMap.put("requestHeader", requestHeader);
 
         //将请求地址变量置入
         HashMap<Object, Object> pathVariable = new HashMap<>();

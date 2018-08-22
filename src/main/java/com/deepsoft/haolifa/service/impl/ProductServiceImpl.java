@@ -84,6 +84,7 @@ public class ProductServiceImpl implements ProductService {
         if (StringUtils.isNotBlank(productNoLike)) {
             criteria.andProductNoLike("%" + productNoLike + "%");
         }
+        example.setOrderByClause("create_time desc");
         Page<Product> products = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> productMapper.selectByExample(example));
 
