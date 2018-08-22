@@ -2,12 +2,12 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialClassifyMapper;
+import com.deepsoft.haolifa.dao.repository.MaterialMapper;
+import com.deepsoft.haolifa.model.domain.Material;
 import com.deepsoft.haolifa.model.domain.MaterialClassify;
 import com.deepsoft.haolifa.model.domain.MaterialClassifyExample;
-import com.deepsoft.haolifa.model.dto.CustomUser;
-import com.deepsoft.haolifa.model.dto.MaterialClassifyRequestDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.domain.MaterialExample;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -27,6 +27,10 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Autowired
     private MaterialClassifyMapper materialClassifyMapper;
+
+    @Autowired
+    private MaterialMapper materialMapper;
+
     @Autowired
     private SysUserService sysUserService;
 
@@ -91,12 +95,92 @@ public class MaterialServiceImpl implements MaterialService {
         if (StringUtils.isNotBlank(classifyNameLike)) {
             criteria.andClassifyNameLike("%" + classifyNameLike + "%");
         }
+        example.setOrderByClause("create_time desc");
         Page<MaterialClassify> materialClassifies = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> materialClassifyMapper.selectByExample(example));
 
         PageDTO<MaterialClassify> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materialClassifies, pageDTO);
         pageDTO.setList(materialClassifies);
+        return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean save(MaterialRequestDTO model) {
+        CustomUser customUser = sysUserService.selectLoginUser();
+        int createUser = customUser != null ? customUser.getId() : 1;
+        Material record = new Material();
+        BeanUtils.copyProperties(model, record);
+        record.setCreateUser(createUser);
+        int insert = materialMapper.insertSelective(record);
+        return ResultBean.success(insert);
+    }
+
+    @Override
+    public ResultBean update(MaterialRequestDTO model) {
+        Material record = new Material();
+        CustomUser customUser = sysUserService.selectLoginUser();
+        int updateUser = customUser != null ? customUser.getId() : 1;
+        record.setUpdateUser(updateUser);
+        record.setUpdateTime(new Date());
+        BeanUtils.copyProperties(model, record);
+        int update = materialMapper.updateByPrimaryKeySelective(record);
+        return ResultBean.success(update);
+    }
+
+    @Override
+    public ResultBean delete(int id) {
+        if (id == 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        Material record = new Material() {{
+            setId(id);
+            setIsDelete(CommonEnum.Consts.YES.code);
+        }};
+        int update = materialMapper.updateByPrimaryKeySelective(record);
+        return ResultBean.success(update);
+    }
+
+    @Override
+    public Material getInfoByGraphNo(String graphNo) {
+        MaterialExample example = new MaterialExample();
+        example.or().andGraphNoEqualTo(graphNo);
+        List<Material> materials = materialMapper.selectByExample(example);
+        if (materials.size() > 0) {
+            return materials.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public Material getInfoById(int id) {
+        return materialMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike) {
+        currentPage = currentPage == null ? 1 : currentPage;
+        pageSize = pageSize == null ? 20 : pageSize;
+
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(classifyNameLike)) {
+            criteria.andMaterialClassifyNameLike("%" + classifyNameLike + "%");
+        }
+        if (StringUtils.isNotBlank(nameLike)) {
+            criteria.andNameLike("%" + nameLike + "%");
+        }
+        if (StringUtils.isNotBlank(graphNoLike)) {
+            criteria.andGraphNoLike("%" + graphNoLike + "%");
+        }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        example.setOrderByClause("create_time desc");
+        Page<Material> materials = PageHelper.startPage(currentPage, pageSize)
+                .doSelectPage(() -> materialMapper.selectByExample(example));
+
+        PageDTO<Material> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(materials, pageDTO);
+        pageDTO.setList(materials);
         return ResultBean.success(pageDTO);
     }
 

@@ -5,10 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 原料分类请求实体
+ * 零件分类请求实体
  */
 @Data
-@ApiModel(value = "原料分类配置对象", description = "新增，更新原料分类")
+@ApiModel(value = "零件分类配置对象", description = "新增，更新零件分类")
 public class MaterialClassifyRequestDTO {
 
 //    @ApiModelProperty(value = "主键Id", name = "Id", required = true)

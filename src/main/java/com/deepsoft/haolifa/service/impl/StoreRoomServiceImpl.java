@@ -97,10 +97,10 @@ public class StoreRoomServiceImpl implements StoreRoomService {
     public ResultBean pageInfo(Integer currentPage, Integer pageSize, String nameLike, Byte type) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
+
         StoreRoomExample example = new StoreRoomExample();
         StoreRoomExample.Criteria criteria = example.createCriteria();
         example.setOrderByClause("create_time desc");
-
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         if (StringUtils.isNotBlank(nameLike)) {
             criteria.andNameLike("%" + nameLike + "%");
@@ -110,6 +110,7 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         }
         Page<StoreRoom> storeRooms = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> storeRoomMapper.selectByExample(example));
+
         PageDTO<StoreRoom> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(storeRooms, pageDTO);
         pageDTO.setList(storeRooms);
