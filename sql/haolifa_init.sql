@@ -478,18 +478,18 @@ CREATE TABLE `purchase_plan` (
 DROP TABLE IF EXISTS `apply_buy`;
 CREATE TABLE `apply_buy` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `flow_id` int(11) NOT NULL COMMENT '流程id',
-  `apply_no` varchar(64) NOT NULL COMMENT '请购单号',
-  `material_graph_no` varchar(30) NOT NULL COMMENT '原料图号',
+  `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
+  `apply_no` varchar(64) NOT NULL DEFAULT '' COMMENT '请购单号',
+  `material_graph_no` varchar(30) NOT NULL DEFAULT '' COMMENT '原料图号',
   `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '请购数量',
   `unit` varchar(10) NOT NULL DEFAULT '' COMMENT '单位（个）',
-  `valuation` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '采购估价',
-  `remark` varchar(255) NOT NULL COMMENT '备注',
+  `valuation` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '采购估价',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `purpose` varchar(255) NOT NULL DEFAULT '' COMMENT '用途',
-  `is_delete` tinyint(4) NOT NULL COMMENT '是否删除 0  未删除 1 已删除',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0  未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_user_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
+  `create_user_id` int(20) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程关联表单-请购单';
 
@@ -541,8 +541,8 @@ CREATE TABLE `purchase_order_item` (
   `material` varchar(20) NOT NULL DEFAULT '' COMMENT '材质',
   `unit` varchar(20) NOT NULL DEFAULT '' COMMENT '单位',
   `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '数量',
-  `unit_weight` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '单重',
-  `unit_price` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '单价',
+  `unit_weight` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '单重',
+  `unit_price` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '单价',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单单项表';
@@ -552,15 +552,15 @@ DROP TABLE IF EXISTS `inspect`;
 CREATE TABLE `inspect` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '编号',
-  `type` tinyint(4) NOT NULL COMMENT '送检订单类型：0 采购单 1 机加委托订单号 2 生产订单号',
-  `status` tinyint(4) unsigned NOT NULL COMMENT '送检单状态：0 待处理 1 处理中 2 处理完成',
+  `type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '送检订单类型：0 采购单 1 机加委托订单号 2 生产订单号',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '送检单状态：0 未送检  1 待处理 2处理中 3处理完成',
   `inspect_no` varchar(20) NOT NULL DEFAULT '' COMMENT '送检单编号，type:0 1 1对多物料 type2 1对1成品',
-  `material_graph_no` varchar(64) NOT NULL COMMENT '物料图号：type为2时，不填。',
-  `product_model` varchar(64) NOT NULL COMMENT '产品型号：type为0，1时，不填。',
-  `number` int(11) NOT NULL COMMENT '送检数量',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号：type为2时，不填。',
+  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '产品型号：type为0，1时，不填。',
+  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '送检数量',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
-  `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者',
+  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程表单-送检单信息表';
 
@@ -569,7 +569,6 @@ DROP TABLE IF EXISTS `material_inspect_result`;
 CREATE TABLE `material_inspect_result` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `flow_id` int(11) NOT NULL COMMENT '流程id',
-  `purchase_order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '采购单编号',
   `inspect_no` varchar(20) NOT NULL DEFAULT '' COMMENT '送检单编号',
   `material_graph_no` varchar(20) NOT NULL DEFAULT '' COMMENT '原料图号',
   `material_name` varchar(20) NOT NULL DEFAULT '' COMMENT '原料名称',
@@ -587,6 +586,7 @@ CREATE TABLE `material_inspect_result` (
 DROP TABLE IF EXISTS `pro_inspect_result`;
 CREATE TABLE `pro_inspect_result` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `inspect_no` varchar(20) NOT NULL DEFAULT '' COMMENT '送检单号',
   `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '生产订单编号',
   `product_model` varchar(64) NOT NULL COMMENT '产品型号',
   `testing_unit` varchar(255) NOT NULL DEFAULT '' COMMENT '检测单位',

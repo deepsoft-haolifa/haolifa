@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
+
 public class PurchaseOrderItem {
     private Integer id;
 
@@ -17,13 +19,13 @@ public class PurchaseOrderItem {
 
     private Integer number;
 
-    private Integer unitWeight;
+    private BigDecimal unitWeight;
 
-    private Integer unitPrice;
+    private BigDecimal unitPrice;
 
     private String remark;
 
-    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String productName, String materialGraphNo, String specification, String material, String unit, Integer number, Integer unitWeight, Integer unitPrice, String remark) {
+    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String productName, String materialGraphNo, String specification, String material, String unit, Integer number, BigDecimal unitWeight, BigDecimal unitPrice, String remark) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
         this.productName = productName;
@@ -105,19 +107,19 @@ public class PurchaseOrderItem {
         this.number = number;
     }
 
-    public Integer getUnitWeight() {
+    public BigDecimal getUnitWeight() {
         return unitWeight;
     }
 
-    public void setUnitWeight(Integer unitWeight) {
+    public void setUnitWeight(BigDecimal unitWeight) {
         this.unitWeight = unitWeight;
     }
 
-    public Integer getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Integer unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
 

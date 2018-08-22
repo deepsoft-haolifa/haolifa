@@ -11,8 +11,8 @@
       <arg column="material" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="unit" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="unit_weight" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="unit_price" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="unit_weight" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="unit_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
@@ -115,8 +115,8 @@
       unit_price, remark)
     values (#{id,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
       #{materialGraphNo,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
-      #{unit,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{unitWeight,jdbcType=INTEGER}, 
-      #{unitPrice,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+      #{unit,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{unitWeight,jdbcType=DECIMAL}, 
+      #{unitPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItem">
     insert into purchase_order_item
@@ -181,10 +181,10 @@
         #{number,jdbcType=INTEGER},
       </if>
       <if test="unitWeight != null">
-        #{unitWeight,jdbcType=INTEGER},
+        #{unitWeight,jdbcType=DECIMAL},
       </if>
       <if test="unitPrice != null">
-        #{unitPrice,jdbcType=INTEGER},
+        #{unitPrice,jdbcType=DECIMAL},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -225,10 +225,10 @@
         number = #{record.number,jdbcType=INTEGER},
       </if>
       <if test="record.unitWeight != null">
-        unit_weight = #{record.unitWeight,jdbcType=INTEGER},
+        unit_weight = #{record.unitWeight,jdbcType=DECIMAL},
       </if>
       <if test="record.unitPrice != null">
-        unit_price = #{record.unitPrice,jdbcType=INTEGER},
+        unit_price = #{record.unitPrice,jdbcType=DECIMAL},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -248,8 +248,8 @@
       material = #{record.material,jdbcType=VARCHAR},
       unit = #{record.unit,jdbcType=VARCHAR},
       number = #{record.number,jdbcType=INTEGER},
-      unit_weight = #{record.unitWeight,jdbcType=INTEGER},
-      unit_price = #{record.unitPrice,jdbcType=INTEGER},
+      unit_weight = #{record.unitWeight,jdbcType=DECIMAL},
+      unit_price = #{record.unitPrice,jdbcType=DECIMAL},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -280,10 +280,10 @@
         number = #{number,jdbcType=INTEGER},
       </if>
       <if test="unitWeight != null">
-        unit_weight = #{unitWeight,jdbcType=INTEGER},
+        unit_weight = #{unitWeight,jdbcType=DECIMAL},
       </if>
       <if test="unitPrice != null">
-        unit_price = #{unitPrice,jdbcType=INTEGER},
+        unit_price = #{unitPrice,jdbcType=DECIMAL},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -300,9 +300,85 @@
       material = #{material,jdbcType=VARCHAR},
       unit = #{unit,jdbcType=VARCHAR},
       number = #{number,jdbcType=INTEGER},
-      unit_weight = #{unitWeight,jdbcType=INTEGER},
-      unit_price = #{unitPrice,jdbcType=INTEGER},
+      unit_weight = #{unitWeight,jdbcType=DECIMAL},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <insert id="batchInsertPurchaseOrderItem" parameterType="List">
+    <foreach collection="list" item="item" separator=";">
+    insert into purchase_order_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="item.id != null">
+        id,
+      </if>
+      <if test="item.purchaseOrderNo != null">
+        purchase_order_no,
+      </if>
+      <if test="item.productName != null">
+        product_name,
+      </if>
+      <if test="item.materialGraphNo != null">
+        material_graph_no,
+      </if>
+      <if test="item.specification != null">
+        specification,
+      </if>
+      <if test="item.material != null">
+        material,
+      </if>
+      <if test="item.unit != null">
+        unit,
+      </if>
+      <if test="item.number != null">
+        number,
+      </if>
+      <if test="item.unitWeight != null">
+        unit_weight,
+      </if>
+      <if test="item.unitPrice != null">
+        unit_price,
+      </if>
+      <if test="item.remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="item.id != null">
+        #{item.id,jdbcType=INTEGER},
+      </if>
+      <if test="item.purchaseOrderNo != null">
+        #{item.purchaseOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="item.productName != null">
+        #{item.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="item.materialGraphNo != null">
+        #{item.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="item.specification != null">
+        #{item.specification,jdbcType=VARCHAR},
+      </if>
+      <if test="item.material != null">
+        #{item.material,jdbcType=VARCHAR},
+      </if>
+      <if test="item.unit != null">
+        #{item.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="item.number != null">
+        #{item.number,jdbcType=INTEGER},
+      </if>
+      <if test="item.unitWeight != null">
+        #{item.unitWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="item.unitPrice != null">
+        #{item.unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="item.remark != null">
+        #{item.remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    </foreach>
+  </insert>
 </mapper>

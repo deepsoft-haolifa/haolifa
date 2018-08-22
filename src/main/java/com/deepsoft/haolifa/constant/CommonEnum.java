@@ -30,7 +30,11 @@ public class CommonEnum {
         STORE_ROOM_RACK_EXISTS("2001", "货位已经存在"),
 
         // 采购计划、请购单、采购单模块错误码开头3***
-        PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0");
+        PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0"),
+
+        PURCHASE_NO_NOT_EXIST("3001","采购单不存在"),
+
+        RESOURCE_NOT_EXIST("3404","资源不存在");
 
         public final String code;
 

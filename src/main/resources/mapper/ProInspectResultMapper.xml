@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.ProInspectResult">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="inspect_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="testing_unit" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -84,10 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_no, product_model, testing_unit, testing_process, testing_number, unqualified_number, 
-    testing_person, technical_requirements, testing_result, inspector, inspecte_time, 
-    reason, responsible_department, department_leader, responsible_analyze_time, create_time, 
-    update_time, is_delete, create_user_id
+    id, inspect_no, order_no, product_model, testing_unit, testing_process, testing_number, 
+    unqualified_number, testing_person, technical_requirements, testing_result, inspector, 
+    inspecte_time, reason, responsible_department, department_leader, responsible_analyze_time, 
+    create_time, update_time, is_delete, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResultExample" resultMap="BaseResultMap">
     select
@@ -120,28 +121,31 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
-    insert into pro_inspect_result (id, order_no, product_model, 
-      testing_unit, testing_process, testing_number, 
-      unqualified_number, testing_person, technical_requirements, 
-      testing_result, inspector, inspecte_time, 
-      reason, responsible_department, department_leader, 
-      responsible_analyze_time, create_time, 
-      update_time, is_delete, create_user_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
-      #{testingUnit,jdbcType=VARCHAR}, #{testingProcess,jdbcType=VARCHAR}, #{testingNumber,jdbcType=INTEGER}, 
-      #{unqualifiedNumber,jdbcType=INTEGER}, #{testingPerson,jdbcType=VARCHAR}, #{technicalRequirements,jdbcType=VARCHAR}, 
-      #{testingResult,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, #{inspecteTime,jdbcType=TIMESTAMP}, 
-      #{reason,jdbcType=VARCHAR}, #{responsibleDepartment,jdbcType=VARCHAR}, #{departmentLeader,jdbcType=VARCHAR}, 
-      #{responsibleAnalyzeTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}
-      )
+    insert into pro_inspect_result (id, inspect_no, order_no, 
+      product_model, testing_unit, testing_process, 
+      testing_number, unqualified_number, testing_person, 
+      technical_requirements, testing_result, inspector, 
+      inspecte_time, reason, responsible_department, 
+      department_leader, responsible_analyze_time, 
+      create_time, update_time, is_delete, 
+      create_user_id)
+    values (#{id,jdbcType=INTEGER}, #{inspectNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{productModel,jdbcType=VARCHAR}, #{testingUnit,jdbcType=VARCHAR}, #{testingProcess,jdbcType=VARCHAR}, 
+      #{testingNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{testingPerson,jdbcType=VARCHAR}, 
+      #{technicalRequirements,jdbcType=VARCHAR}, #{testingResult,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, 
+      #{inspecteTime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, #{responsibleDepartment,jdbcType=VARCHAR}, 
+      #{departmentLeader,jdbcType=VARCHAR}, #{responsibleAnalyzeTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
+      #{createUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
     insert into pro_inspect_result
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="inspectNo != null">
+        inspect_no,
       </if>
       <if test="orderNo != null">
         order_no,
@@ -204,6 +208,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
+      </if>
+      <if test="inspectNo != null">
+        #{inspectNo,jdbcType=VARCHAR},
       </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
@@ -276,6 +283,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.inspectNo != null">
+        inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
@@ -341,6 +351,7 @@
   <update id="updateByExample" parameterType="map">
     update pro_inspect_result
     set id = #{record.id,jdbcType=INTEGER},
+      inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
       product_model = #{record.productModel,jdbcType=VARCHAR},
       testing_unit = #{record.testingUnit,jdbcType=VARCHAR},
@@ -367,6 +378,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
     update pro_inspect_result
     <set>
+      <if test="inspectNo != null">
+        inspect_no = #{inspectNo,jdbcType=VARCHAR},
+      </if>
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
@@ -429,7 +443,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
     update pro_inspect_result
-    set order_no = #{orderNo,jdbcType=VARCHAR},
+    set inspect_no = #{inspectNo,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
       product_model = #{productModel,jdbcType=VARCHAR},
       testing_unit = #{testingUnit,jdbcType=VARCHAR},
       testing_process = #{testingProcess,jdbcType=VARCHAR},

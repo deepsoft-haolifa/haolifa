@@ -5,6 +5,8 @@ import java.util.Date;
 public class ProInspectResult {
     private Integer id;
 
+    private String inspectNo;
+
     private String orderNo;
 
     private String productModel;
@@ -43,8 +45,9 @@ public class ProInspectResult {
 
     private Integer createUserId;
 
-    public ProInspectResult(Integer id, String orderNo, String productModel, String testingUnit, String testingProcess, Integer testingNumber, Integer unqualifiedNumber, String testingPerson, String technicalRequirements, String testingResult, String inspector, Date inspecteTime, String reason, String responsibleDepartment, String departmentLeader, Date responsibleAnalyzeTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
+    public ProInspectResult(Integer id, String inspectNo, String orderNo, String productModel, String testingUnit, String testingProcess, Integer testingNumber, Integer unqualifiedNumber, String testingPerson, String technicalRequirements, String testingResult, String inspector, Date inspecteTime, String reason, String responsibleDepartment, String departmentLeader, Date responsibleAnalyzeTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
         this.id = id;
+        this.inspectNo = inspectNo;
         this.orderNo = orderNo;
         this.productModel = productModel;
         this.testingUnit = testingUnit;
@@ -76,6 +79,14 @@ public class ProInspectResult {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getInspectNo() {
+        return inspectNo;
+    }
+
+    public void setInspectNo(String inspectNo) {
+        this.inspectNo = inspectNo == null ? null : inspectNo.trim();
     }
 
     public String getOrderNo() {
