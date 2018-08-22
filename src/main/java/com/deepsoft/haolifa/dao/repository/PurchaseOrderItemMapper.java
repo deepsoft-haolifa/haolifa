@@ -27,4 +27,10 @@ public interface PurchaseOrderItemMapper {
     int updateByPrimaryKeySelective(PurchaseOrderItem record);
 
     int updateByPrimaryKey(PurchaseOrderItem record);
+
+    /**
+     * 批量插入
+     * @param purchaseOrderItemList
+     */
+    void batchInsertPurchaseOrderItem(List<PurchaseOrderItem> purchaseOrderItemList);
 }

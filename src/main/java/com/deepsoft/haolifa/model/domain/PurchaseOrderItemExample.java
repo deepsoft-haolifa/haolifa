@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -654,52 +655,52 @@ public class PurchaseOrderItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightEqualTo(Integer value) {
+        public Criteria andUnitWeightEqualTo(BigDecimal value) {
             addCriterion("unit_weight =", value, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightNotEqualTo(Integer value) {
+        public Criteria andUnitWeightNotEqualTo(BigDecimal value) {
             addCriterion("unit_weight <>", value, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightGreaterThan(Integer value) {
+        public Criteria andUnitWeightGreaterThan(BigDecimal value) {
             addCriterion("unit_weight >", value, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightGreaterThanOrEqualTo(Integer value) {
+        public Criteria andUnitWeightGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("unit_weight >=", value, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightLessThan(Integer value) {
+        public Criteria andUnitWeightLessThan(BigDecimal value) {
             addCriterion("unit_weight <", value, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightLessThanOrEqualTo(Integer value) {
+        public Criteria andUnitWeightLessThanOrEqualTo(BigDecimal value) {
             addCriterion("unit_weight <=", value, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightIn(List<Integer> values) {
+        public Criteria andUnitWeightIn(List<BigDecimal> values) {
             addCriterion("unit_weight in", values, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightNotIn(List<Integer> values) {
+        public Criteria andUnitWeightNotIn(List<BigDecimal> values) {
             addCriterion("unit_weight not in", values, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightBetween(Integer value1, Integer value2) {
+        public Criteria andUnitWeightBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("unit_weight between", value1, value2, "unitWeight");
             return (Criteria) this;
         }
 
-        public Criteria andUnitWeightNotBetween(Integer value1, Integer value2) {
+        public Criteria andUnitWeightNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("unit_weight not between", value1, value2, "unitWeight");
             return (Criteria) this;
         }
@@ -714,52 +715,52 @@ public class PurchaseOrderItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceEqualTo(Integer value) {
+        public Criteria andUnitPriceEqualTo(BigDecimal value) {
             addCriterion("unit_price =", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceNotEqualTo(Integer value) {
+        public Criteria andUnitPriceNotEqualTo(BigDecimal value) {
             addCriterion("unit_price <>", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceGreaterThan(Integer value) {
+        public Criteria andUnitPriceGreaterThan(BigDecimal value) {
             addCriterion("unit_price >", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceGreaterThanOrEqualTo(Integer value) {
+        public Criteria andUnitPriceGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("unit_price >=", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceLessThan(Integer value) {
+        public Criteria andUnitPriceLessThan(BigDecimal value) {
             addCriterion("unit_price <", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceLessThanOrEqualTo(Integer value) {
+        public Criteria andUnitPriceLessThanOrEqualTo(BigDecimal value) {
             addCriterion("unit_price <=", value, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceIn(List<Integer> values) {
+        public Criteria andUnitPriceIn(List<BigDecimal> values) {
             addCriterion("unit_price in", values, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceNotIn(List<Integer> values) {
+        public Criteria andUnitPriceNotIn(List<BigDecimal> values) {
             addCriterion("unit_price not in", values, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceBetween(Integer value1, Integer value2) {
+        public Criteria andUnitPriceBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("unit_price between", value1, value2, "unitPrice");
             return (Criteria) this;
         }
 
-        public Criteria andUnitPriceNotBetween(Integer value1, Integer value2) {
+        public Criteria andUnitPriceNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("unit_price not between", value1, value2, "unitPrice");
             return (Criteria) this;
         }

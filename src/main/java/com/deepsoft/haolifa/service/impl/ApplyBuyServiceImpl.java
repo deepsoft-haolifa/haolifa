@@ -153,9 +153,12 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
 
     @Override
     public ResultBean getInfo(String applyBuyNo) {
-        return null;
+        ApplyBuyExample applyBuyExample = new ApplyBuyExample();
+        applyBuyExample.or().andApplyNoEqualTo(applyBuyNo);
+        List<ApplyBuy> applyBuyList = applyBuyMapper.selectByExample(applyBuyExample);
+        return ResultBean.success(applyBuyList);
     }
-
+    // TODO 暂未实现
     @Override
     public ResultBean getList(Integer currentPage, Integer pageSize) {
         return null;
