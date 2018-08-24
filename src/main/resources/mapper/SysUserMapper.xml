@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SysUser">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="real_name" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -79,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, username, password, real_name, user_no, sex, native_place, phone, id_card, 
-    photo_url, is_delete, entry_time, create_time, update_time
+    id, username, password, real_name, user_no, sex, native_place, phone, id_card, photo_url, 
+    is_delete, entry_time, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.SysUserExample" resultMap="BaseResultMap">
     select
@@ -113,27 +112,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
-    insert into sys_user (id, user_id, username, 
-      password, real_name, user_no, 
-      sex, native_place, phone, 
-      id_card, photo_url, is_delete, 
-      entry_time, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=TINYINT}, #{nativePlace,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{idCard,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, 
-      #{entryTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into sys_user (id, username, password, 
+      real_name, user_no, sex, 
+      native_place, phone, id_card, 
+      photo_url, is_delete, entry_time, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{realName,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
+      #{nativePlace,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{photoUrl,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{entryTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="userId != null">
-        user_id,
       </if>
       <if test="username != null">
         username,
@@ -178,9 +172,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
@@ -235,9 +226,6 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=VARCHAR},
-      </if>
       <if test="record.username != null">
         username = #{record.username,jdbcType=VARCHAR},
       </if>
@@ -285,7 +273,6 @@
   <update id="updateByExample" parameterType="map">
     update sys_user
     set id = #{record.id,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=VARCHAR},
       username = #{record.username,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       real_name = #{record.realName,jdbcType=VARCHAR},
@@ -306,9 +293,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
     update sys_user
     <set>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
       <if test="username != null">
         username = #{username,jdbcType=VARCHAR},
       </if>
@@ -353,8 +337,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
     update sys_user
-    set user_id = #{userId,jdbcType=VARCHAR},
-      username = #{username,jdbcType=VARCHAR},
+    set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       real_name = #{realName,jdbcType=VARCHAR},
       user_no = #{userNo,jdbcType=VARCHAR},

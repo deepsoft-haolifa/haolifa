@@ -48,7 +48,6 @@ public class SysUserServiceImpl implements SysUserService {
     public int insertSysUser(UserBaseDTO user) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
-        sysUser.setUserId(UUIDGenerator.getUUID32());
         return userMapper.insertSelective(sysUser);
     }
 
