@@ -6,7 +6,9 @@ import com.deepsoft.haolifa.model.dto.DepartmentDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
