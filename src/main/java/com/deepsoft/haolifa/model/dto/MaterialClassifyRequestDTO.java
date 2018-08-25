@@ -14,9 +14,9 @@ public class MaterialClassifyRequestDTO {
 //    @ApiModelProperty(value = "主键Id", name = "Id", required = true)
 //    private Integer id;
 
-    @ApiModelProperty(value = "分类名称", name = "name", required = true)
+    @ApiModelProperty(value = "分类名称", required = true)
     private String classifyName;
 
-    @ApiModelProperty(value = "备注", name = "remark")
+    @ApiModelProperty(value = "备注")
     private String remark;
 }

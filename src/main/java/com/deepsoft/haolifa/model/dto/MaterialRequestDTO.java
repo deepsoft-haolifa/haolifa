@@ -39,8 +39,17 @@ public class MaterialRequestDTO {
     @ApiModelProperty(value = "规格", name = "specifications")
     private String specifications;
 
+    @ApiModelProperty(value = "实际单重", name = "actualWeight")
+    private String actualWeight;
+
+    @ApiModelProperty(value = "理论单重", name = "theoreticalWeight")
+    private String theoreticalWeight;
+
     @ApiModelProperty(value = "型号", name = "model")
     private String model;
+
+    @ApiModelProperty(value = "税率", name = "taxRate")
+    private String taxRate;
 
     @ApiModelProperty(value = "备注", name = "remark")
     private String remark;

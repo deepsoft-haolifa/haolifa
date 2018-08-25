@@ -1016,6 +1016,216 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andActualWeightIsNull() {
+            addCriterion("actual_weight is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightIsNotNull() {
+            addCriterion("actual_weight is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightEqualTo(String value) {
+            addCriterion("actual_weight =", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightNotEqualTo(String value) {
+            addCriterion("actual_weight <>", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightGreaterThan(String value) {
+            addCriterion("actual_weight >", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightGreaterThanOrEqualTo(String value) {
+            addCriterion("actual_weight >=", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightLessThan(String value) {
+            addCriterion("actual_weight <", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightLessThanOrEqualTo(String value) {
+            addCriterion("actual_weight <=", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightLike(String value) {
+            addCriterion("actual_weight like", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightNotLike(String value) {
+            addCriterion("actual_weight not like", value, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightIn(List<String> values) {
+            addCriterion("actual_weight in", values, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightNotIn(List<String> values) {
+            addCriterion("actual_weight not in", values, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightBetween(String value1, String value2) {
+            addCriterion("actual_weight between", value1, value2, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualWeightNotBetween(String value1, String value2) {
+            addCriterion("actual_weight not between", value1, value2, "actualWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightIsNull() {
+            addCriterion("theoretical_weight is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightIsNotNull() {
+            addCriterion("theoretical_weight is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightEqualTo(String value) {
+            addCriterion("theoretical_weight =", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightNotEqualTo(String value) {
+            addCriterion("theoretical_weight <>", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightGreaterThan(String value) {
+            addCriterion("theoretical_weight >", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightGreaterThanOrEqualTo(String value) {
+            addCriterion("theoretical_weight >=", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightLessThan(String value) {
+            addCriterion("theoretical_weight <", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightLessThanOrEqualTo(String value) {
+            addCriterion("theoretical_weight <=", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightLike(String value) {
+            addCriterion("theoretical_weight like", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightNotLike(String value) {
+            addCriterion("theoretical_weight not like", value, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightIn(List<String> values) {
+            addCriterion("theoretical_weight in", values, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightNotIn(List<String> values) {
+            addCriterion("theoretical_weight not in", values, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightBetween(String value1, String value2) {
+            addCriterion("theoretical_weight between", value1, value2, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalWeightNotBetween(String value1, String value2) {
+            addCriterion("theoretical_weight not between", value1, value2, "theoreticalWeight");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateIsNull() {
+            addCriterion("tax_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateIsNotNull() {
+            addCriterion("tax_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateEqualTo(String value) {
+            addCriterion("tax_rate =", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotEqualTo(String value) {
+            addCriterion("tax_rate <>", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateGreaterThan(String value) {
+            addCriterion("tax_rate >", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateGreaterThanOrEqualTo(String value) {
+            addCriterion("tax_rate >=", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateLessThan(String value) {
+            addCriterion("tax_rate <", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateLessThanOrEqualTo(String value) {
+            addCriterion("tax_rate <=", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateLike(String value) {
+            addCriterion("tax_rate like", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotLike(String value) {
+            addCriterion("tax_rate not like", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateIn(List<String> values) {
+            addCriterion("tax_rate in", values, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotIn(List<String> values) {
+            addCriterion("tax_rate not in", values, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateBetween(String value1, String value2) {
+            addCriterion("tax_rate between", value1, value2, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotBetween(String value1, String value2) {
+            addCriterion("tax_rate not between", value1, value2, "taxRate");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

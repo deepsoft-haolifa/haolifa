@@ -16,13 +16,13 @@ public class Stock {
 
     private String stockId;
 
-    private String storeRoomRackId;
+    private Integer storeRoomId;
 
-    private String storeRoomRackPositionNo;
+    private Integer storeRoomRackId;
+
+    private String storeRoomRackNo;
 
     private String productNo;
-
-    private Integer materialId;
 
     private String materialGraphNo;
 
@@ -38,17 +38,17 @@ public class Stock {
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, String storeRoomRackId, String storeRoomRackPositionNo, String productNo, Integer materialId, String materialGraphNo, Integer quantity, Integer safeQuantity, String safetyFactor, BigDecimal price, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, Integer storeRoomId, Integer storeRoomRackId, String storeRoomRackNo, String productNo, String materialGraphNo, Integer quantity, Integer safeQuantity, String safetyFactor, BigDecimal price, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.stockId = stockId;
+        this.storeRoomId = storeRoomId;
         this.storeRoomRackId = storeRoomRackId;
-        this.storeRoomRackPositionNo = storeRoomRackPositionNo;
+        this.storeRoomRackNo = storeRoomRackNo;
         this.productNo = productNo;
-        this.materialId = materialId;
         this.materialGraphNo = materialGraphNo;
         this.quantity = quantity;
         this.safeQuantity = safeQuantity;
@@ -110,20 +110,28 @@ public class Stock {
         this.stockId = stockId == null ? null : stockId.trim();
     }
 
-    public String getStoreRoomRackId() {
+    public Integer getStoreRoomId() {
+        return storeRoomId;
+    }
+
+    public void setStoreRoomId(Integer storeRoomId) {
+        this.storeRoomId = storeRoomId;
+    }
+
+    public Integer getStoreRoomRackId() {
         return storeRoomRackId;
     }
 
-    public void setStoreRoomRackId(String storeRoomRackId) {
-        this.storeRoomRackId = storeRoomRackId == null ? null : storeRoomRackId.trim();
+    public void setStoreRoomRackId(Integer storeRoomRackId) {
+        this.storeRoomRackId = storeRoomRackId;
     }
 
-    public String getStoreRoomRackPositionNo() {
-        return storeRoomRackPositionNo;
+    public String getStoreRoomRackNo() {
+        return storeRoomRackNo;
     }
 
-    public void setStoreRoomRackPositionNo(String storeRoomRackPositionNo) {
-        this.storeRoomRackPositionNo = storeRoomRackPositionNo == null ? null : storeRoomRackPositionNo.trim();
+    public void setStoreRoomRackNo(String storeRoomRackNo) {
+        this.storeRoomRackNo = storeRoomRackNo == null ? null : storeRoomRackNo.trim();
     }
 
     public String getProductNo() {
@@ -132,14 +140,6 @@ public class Stock {
 
     public void setProductNo(String productNo) {
         this.productNo = productNo == null ? null : productNo.trim();
-    }
-
-    public Integer getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Integer materialId) {
-        this.materialId = materialId;
     }
 
     public String getMaterialGraphNo() {

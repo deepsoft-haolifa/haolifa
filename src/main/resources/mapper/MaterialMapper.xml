@@ -17,6 +17,9 @@
       <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="model" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="actual_weight" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="theoretical_weight" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="tax_rate" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -82,8 +85,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, material_classify_id, material_classify_name, 
-    name, material, graph_no, unit, price, specifications, model, status, is_delete, 
-    remark
+    name, material, graph_no, unit, price, specifications, model, actual_weight, theoretical_weight, 
+    tax_rate, status, is_delete, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialExample" resultMap="BaseResultMap">
     select
@@ -120,13 +123,15 @@
       create_user, update_user, material_classify_id, 
       material_classify_name, name, material, 
       graph_no, unit, price, 
-      specifications, model, status, 
+      specifications, model, actual_weight, 
+      theoretical_weight, tax_rate, status, 
       is_delete, remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{materialClassifyId,jdbcType=INTEGER}, 
       #{materialClassifyName,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
       #{graphNo,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{actualWeight,jdbcType=VARCHAR}, 
+      #{theoreticalWeight,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
       #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Material">
@@ -173,6 +178,15 @@
       </if>
       <if test="model != null">
         model,
+      </if>
+      <if test="actualWeight != null">
+        actual_weight,
+      </if>
+      <if test="theoreticalWeight != null">
+        theoretical_weight,
+      </if>
+      <if test="taxRate != null">
+        tax_rate,
       </if>
       <if test="status != null">
         status,
@@ -226,6 +240,15 @@
       </if>
       <if test="model != null">
         #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="actualWeight != null">
+        #{actualWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="theoreticalWeight != null">
+        #{theoreticalWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRate != null">
+        #{taxRate,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -289,6 +312,15 @@
       <if test="record.model != null">
         model = #{record.model,jdbcType=VARCHAR},
       </if>
+      <if test="record.actualWeight != null">
+        actual_weight = #{record.actualWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.theoreticalWeight != null">
+        theoretical_weight = #{record.theoreticalWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxRate != null">
+        tax_rate = #{record.taxRate,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
@@ -319,6 +351,9 @@
       price = #{record.price,jdbcType=DECIMAL},
       specifications = #{record.specifications,jdbcType=VARCHAR},
       model = #{record.model,jdbcType=VARCHAR},
+      actual_weight = #{record.actualWeight,jdbcType=VARCHAR},
+      theoretical_weight = #{record.theoreticalWeight,jdbcType=VARCHAR},
+      tax_rate = #{record.taxRate,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR}
@@ -368,6 +403,15 @@
       <if test="model != null">
         model = #{model,jdbcType=VARCHAR},
       </if>
+      <if test="actualWeight != null">
+        actual_weight = #{actualWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="theoreticalWeight != null">
+        theoretical_weight = #{theoreticalWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRate != null">
+        tax_rate = #{taxRate,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
@@ -395,6 +439,9 @@
       price = #{price,jdbcType=DECIMAL},
       specifications = #{specifications,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
+      actual_weight = #{actualWeight,jdbcType=VARCHAR},
+      theoretical_weight = #{theoreticalWeight,jdbcType=VARCHAR},
+      tax_rate = #{taxRate,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       is_delete = #{isDelete,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR}

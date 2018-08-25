@@ -32,13 +32,19 @@ public class Material {
 
     private String model;
 
+    private String actualWeight;
+
+    private String theoreticalWeight;
+
+    private String taxRate;
+
     private Byte status;
 
     private Byte isDelete;
 
     private String remark;
 
-    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, Byte status, Byte isDelete, String remark) {
+    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -53,6 +59,9 @@ public class Material {
         this.price = price;
         this.specifications = specifications;
         this.model = model;
+        this.actualWeight = actualWeight;
+        this.theoreticalWeight = theoreticalWeight;
+        this.taxRate = taxRate;
         this.status = status;
         this.isDelete = isDelete;
         this.remark = remark;
@@ -172,6 +181,30 @@ public class Material {
 
     public void setModel(String model) {
         this.model = model == null ? null : model.trim();
+    }
+
+    public String getActualWeight() {
+        return actualWeight;
+    }
+
+    public void setActualWeight(String actualWeight) {
+        this.actualWeight = actualWeight == null ? null : actualWeight.trim();
+    }
+
+    public String getTheoreticalWeight() {
+        return theoreticalWeight;
+    }
+
+    public void setTheoreticalWeight(String theoreticalWeight) {
+        this.theoreticalWeight = theoreticalWeight == null ? null : theoreticalWeight.trim();
+    }
+
+    public String getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(String taxRate) {
+        this.taxRate = taxRate == null ? null : taxRate.trim();
     }
 
     public Byte getStatus() {

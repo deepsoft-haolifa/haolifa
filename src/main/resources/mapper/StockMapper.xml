@@ -9,10 +9,10 @@
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="stock_id" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="store_room_rack_id" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="store_room_rack_position_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="store_room_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="store_room_rack_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="store_room_rack_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="product_no" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="material_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="safe_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -81,8 +81,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, stock_id, store_room_rack_id, 
-    store_room_rack_position_no, product_no, material_id, material_graph_no, quantity, 
+    id, create_time, update_time, create_user, update_user, stock_id, store_room_id, 
+    store_room_rack_id, store_room_rack_no, product_no, material_graph_no, quantity, 
     safe_quantity, safety_factor, price, is_delete, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StockExample" resultMap="BaseResultMap">
@@ -118,18 +118,16 @@
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Stock">
     insert into stock (id, create_time, update_time, 
       create_user, update_user, stock_id, 
-      store_room_rack_id, store_room_rack_position_no, 
-      product_no, material_id, material_graph_no, 
-      quantity, safe_quantity, safety_factor, 
-      price, is_delete, remark
-      )
+      store_room_id, store_room_rack_id, store_room_rack_no, 
+      product_no, material_graph_no, quantity, 
+      safe_quantity, safety_factor, price, 
+      is_delete, remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{stockId,jdbcType=CHAR}, 
-      #{storeRoomRackId,jdbcType=CHAR}, #{storeRoomRackPositionNo,jdbcType=VARCHAR}, 
-      #{productNo,jdbcType=CHAR}, #{materialId,jdbcType=INTEGER}, #{materialGraphNo,jdbcType=VARCHAR}, 
-      #{quantity,jdbcType=INTEGER}, #{safeQuantity,jdbcType=INTEGER}, #{safetyFactor,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}
-      )
+      #{storeRoomId,jdbcType=INTEGER}, #{storeRoomRackId,jdbcType=INTEGER}, #{storeRoomRackNo,jdbcType=VARCHAR}, 
+      #{productNo,jdbcType=CHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
+      #{safeQuantity,jdbcType=INTEGER}, #{safetyFactor,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Stock">
     insert into stock
@@ -152,17 +150,17 @@
       <if test="stockId != null">
         stock_id,
       </if>
+      <if test="storeRoomId != null">
+        store_room_id,
+      </if>
       <if test="storeRoomRackId != null">
         store_room_rack_id,
       </if>
-      <if test="storeRoomRackPositionNo != null">
-        store_room_rack_position_no,
+      <if test="storeRoomRackNo != null">
+        store_room_rack_no,
       </if>
       <if test="productNo != null">
         product_no,
-      </if>
-      <if test="materialId != null">
-        material_id,
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
@@ -205,17 +203,17 @@
       <if test="stockId != null">
         #{stockId,jdbcType=CHAR},
       </if>
-      <if test="storeRoomRackId != null">
-        #{storeRoomRackId,jdbcType=CHAR},
+      <if test="storeRoomId != null">
+        #{storeRoomId,jdbcType=INTEGER},
       </if>
-      <if test="storeRoomRackPositionNo != null">
-        #{storeRoomRackPositionNo,jdbcType=VARCHAR},
+      <if test="storeRoomRackId != null">
+        #{storeRoomRackId,jdbcType=INTEGER},
+      </if>
+      <if test="storeRoomRackNo != null">
+        #{storeRoomRackNo,jdbcType=VARCHAR},
       </if>
       <if test="productNo != null">
         #{productNo,jdbcType=CHAR},
-      </if>
-      <if test="materialId != null">
-        #{materialId,jdbcType=INTEGER},
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
@@ -267,17 +265,17 @@
       <if test="record.stockId != null">
         stock_id = #{record.stockId,jdbcType=CHAR},
       </if>
-      <if test="record.storeRoomRackId != null">
-        store_room_rack_id = #{record.storeRoomRackId,jdbcType=CHAR},
+      <if test="record.storeRoomId != null">
+        store_room_id = #{record.storeRoomId,jdbcType=INTEGER},
       </if>
-      <if test="record.storeRoomRackPositionNo != null">
-        store_room_rack_position_no = #{record.storeRoomRackPositionNo,jdbcType=VARCHAR},
+      <if test="record.storeRoomRackId != null">
+        store_room_rack_id = #{record.storeRoomRackId,jdbcType=INTEGER},
+      </if>
+      <if test="record.storeRoomRackNo != null">
+        store_room_rack_no = #{record.storeRoomRackNo,jdbcType=VARCHAR},
       </if>
       <if test="record.productNo != null">
         product_no = #{record.productNo,jdbcType=CHAR},
-      </if>
-      <if test="record.materialId != null">
-        material_id = #{record.materialId,jdbcType=INTEGER},
       </if>
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
@@ -313,10 +311,10 @@
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
       stock_id = #{record.stockId,jdbcType=CHAR},
-      store_room_rack_id = #{record.storeRoomRackId,jdbcType=CHAR},
-      store_room_rack_position_no = #{record.storeRoomRackPositionNo,jdbcType=VARCHAR},
+      store_room_id = #{record.storeRoomId,jdbcType=INTEGER},
+      store_room_rack_id = #{record.storeRoomRackId,jdbcType=INTEGER},
+      store_room_rack_no = #{record.storeRoomRackNo,jdbcType=VARCHAR},
       product_no = #{record.productNo,jdbcType=CHAR},
-      material_id = #{record.materialId,jdbcType=INTEGER},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       quantity = #{record.quantity,jdbcType=INTEGER},
       safe_quantity = #{record.safeQuantity,jdbcType=INTEGER},
@@ -346,17 +344,17 @@
       <if test="stockId != null">
         stock_id = #{stockId,jdbcType=CHAR},
       </if>
-      <if test="storeRoomRackId != null">
-        store_room_rack_id = #{storeRoomRackId,jdbcType=CHAR},
+      <if test="storeRoomId != null">
+        store_room_id = #{storeRoomId,jdbcType=INTEGER},
       </if>
-      <if test="storeRoomRackPositionNo != null">
-        store_room_rack_position_no = #{storeRoomRackPositionNo,jdbcType=VARCHAR},
+      <if test="storeRoomRackId != null">
+        store_room_rack_id = #{storeRoomRackId,jdbcType=INTEGER},
+      </if>
+      <if test="storeRoomRackNo != null">
+        store_room_rack_no = #{storeRoomRackNo,jdbcType=VARCHAR},
       </if>
       <if test="productNo != null">
         product_no = #{productNo,jdbcType=CHAR},
-      </if>
-      <if test="materialId != null">
-        material_id = #{materialId,jdbcType=INTEGER},
       </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
@@ -389,10 +387,10 @@
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},
       stock_id = #{stockId,jdbcType=CHAR},
-      store_room_rack_id = #{storeRoomRackId,jdbcType=CHAR},
-      store_room_rack_position_no = #{storeRoomRackPositionNo,jdbcType=VARCHAR},
+      store_room_id = #{storeRoomId,jdbcType=INTEGER},
+      store_room_rack_id = #{storeRoomRackId,jdbcType=INTEGER},
+      store_room_rack_no = #{storeRoomRackNo,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=CHAR},
-      material_id = #{materialId,jdbcType=INTEGER},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
       safe_quantity = #{safeQuantity,jdbcType=INTEGER},

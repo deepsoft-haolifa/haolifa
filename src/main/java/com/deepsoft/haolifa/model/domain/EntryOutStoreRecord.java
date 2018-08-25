@@ -3,7 +3,7 @@ package com.deepsoft.haolifa.model.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class StoreRoomRecord {
+public class EntryOutStoreRecord {
     private Integer id;
 
     private Date createTime;
@@ -20,8 +20,6 @@ public class StoreRoomRecord {
 
     private String productNo;
 
-    private Integer materialId;
-
     private String materialGraphNo;
 
     private Byte operationType;
@@ -36,11 +34,21 @@ public class StoreRoomRecord {
 
     private String productDepartment;
 
+    private String customerNo;
+
+    private String customerName;
+
+    private String supplier;
+
+    private String receiveDepartment;
+
+    private BigDecimal price;
+
     private Byte status;
 
     private String remark;
 
-    public StoreRoomRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String orderNo, String productNo, Integer materialId, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, Integer storeRoomRackId, String productDepartment, Byte status, String remark) {
+    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String orderNo, String productNo, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, Integer storeRoomRackId, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -49,7 +57,6 @@ public class StoreRoomRecord {
         this.recordId = recordId;
         this.orderNo = orderNo;
         this.productNo = productNo;
-        this.materialId = materialId;
         this.materialGraphNo = materialGraphNo;
         this.operationType = operationType;
         this.type = type;
@@ -57,11 +64,16 @@ public class StoreRoomRecord {
         this.amount = amount;
         this.storeRoomRackId = storeRoomRackId;
         this.productDepartment = productDepartment;
+        this.customerNo = customerNo;
+        this.customerName = customerName;
+        this.supplier = supplier;
+        this.receiveDepartment = receiveDepartment;
+        this.price = price;
         this.status = status;
         this.remark = remark;
     }
 
-    public StoreRoomRecord() {
+    public EntryOutStoreRecord() {
         super();
     }
 
@@ -129,14 +141,6 @@ public class StoreRoomRecord {
         this.productNo = productNo == null ? null : productNo.trim();
     }
 
-    public Integer getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Integer materialId) {
-        this.materialId = materialId;
-    }
-
     public String getMaterialGraphNo() {
         return materialGraphNo;
     }
@@ -191,6 +195,46 @@ public class StoreRoomRecord {
 
     public void setProductDepartment(String productDepartment) {
         this.productDepartment = productDepartment == null ? null : productDepartment.trim();
+    }
+
+    public String getCustomerNo() {
+        return customerNo;
+    }
+
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo == null ? null : customerNo.trim();
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName == null ? null : customerName.trim();
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier == null ? null : supplier.trim();
+    }
+
+    public String getReceiveDepartment() {
+        return receiveDepartment;
+    }
+
+    public void setReceiveDepartment(String receiveDepartment) {
+        this.receiveDepartment = receiveDepartment == null ? null : receiveDepartment.trim();
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public Byte getStatus() {
