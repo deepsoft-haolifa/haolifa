@@ -5,9 +5,12 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SupplierMapper;
 import com.deepsoft.haolifa.model.domain.Supplier;
 import com.deepsoft.haolifa.model.domain.SupplierExample;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.SupplierListDTO;
 import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
 import com.deepsoft.haolifa.service.SupplierService;
+import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +24,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class SupplierServiceImpl implements SupplierService {
+public class SupplierServiceImpl extends BaseService implements SupplierService {
 
     @Autowired
     SupplierMapper supplierMapper;
@@ -32,14 +35,16 @@ public class SupplierServiceImpl implements SupplierService {
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+        String supplierNo = "sn_"+ RandomUtils.orderNoStr();
         Supplier supplier = new Supplier();
-        BeanUtils.copyProperties(supplier, model);
+        BeanUtils.copyProperties(model,supplier);
+        supplier.setSuppilerNo(supplierNo);
         supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentials()));
         supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancial()));
         supplier.setMainOrgan(JSONObject.toJSONString(model.getMainOrgan()));
         supplier.setQualityAssuranceInfo(JSONObject.toJSONString(model.getQualityAssurance()));
-        // TODO 需替换为真实userId
-        supplier.setCreateUserId(1);
+//        supplier.setCreateUserId(1);
+        supplier.setCreateUserId(getLoginUserId());
         int insertId = supplierMapper.insertSelective(supplier);
         return ResultBean.success(insertId);
     }
@@ -47,11 +52,11 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public ResultBean updateInfo(SupplierRequestDTO model) {
         log.info("SupplierServiceImpl updateInfo start|{}", JSONObject.toJSON(model));
-        if (StringUtils.isAnyBlank()) {
+        if (model.getId() == null || model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         Supplier supplier = new Supplier();
-        BeanUtils.copyProperties(supplier, model);
+        BeanUtils.copyProperties(model, supplier);
         supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentials()));
         supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancial()));
         supplier.setMainOrgan(JSONObject.toJSONString(model.getMainOrgan()));
@@ -80,19 +85,29 @@ public class SupplierServiceImpl implements SupplierService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         Supplier supplier = supplierMapper.selectByPrimaryKey(id);
+        if(supplier.getIsDelete().equals(CommonEnum.Consts.YES.code)) {
+            return new ResultBean(CommonEnum.ResponseEnum.RESOURCE_NOT_EXIST);
+        }
         return ResultBean.success(supplier);
     }
 
     @Override
-    public ResultBean getList(Integer currentPage, Integer pageSize, String supplierName, String supplierNo) {
-        Supplier supplier = new Supplier();
-        PageHelper.startPage(currentPage,pageSize);
-        Page<Supplier> pageData = supplierMapper.selectListByExample(supplier);
-        Map<String,Object> result = new HashMap<>(3);
-        result.put("totalCount", pageData.getTotal());
-        result.put("pageSize", pageData.getPageSize());
-        result.put("pages", pageData.getPages());
-        result.put("list", pageData.getResult());
-        return ResultBean.success(result);
+    public ResultBean getList(SupplierListDTO model) {
+        if(model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if(model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+        SupplierExample supplierExample = new SupplierExample();
+        supplierExample.or().andSuppilerNameLike("%"+model.getSupplierName()+"%")
+                .andSuppilerNoLike("%"+model.getSupplierNo()+"%").andIsDeleteEqualTo(CommonEnum.Consts.YES.code);
+        Page<Supplier> pageData = PageHelper.startPage(model.getPageNum(),model.getPageSize()).doSelectPage(()->{
+            supplierMapper.selectByExample(supplierExample);
+        });
+        PageDTO<Supplier> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData,pageDTO);
+        pageDTO.setList(pageData.getResult());
+        return ResultBean.success(pageDTO);
     }
 }

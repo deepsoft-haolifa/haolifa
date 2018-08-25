@@ -1,10 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.Equipment;
-import com.deepsoft.haolifa.model.dto.EquipRepairedRecordDTO;
-import com.deepsoft.haolifa.model.dto.EquipmentBaseDTO;
-import com.deepsoft.haolifa.model.dto.EquipmentRequestDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 
 public interface EquipmentService {
     /**
@@ -37,13 +34,10 @@ public interface EquipmentService {
 
     /**
      * 好利阀设备列表
-     * @param currentPage
-     * @param pageSize
-     * @param name
-     * @param equipmentNo
+     * @param model
      * @return
      */
-    ResultBean getList(Integer currentPage, Integer pageSize, String name, String equipmentNo);
+    ResultBean getList(EquipmentListDTO model);
 
     /**
      * 好利阀设备维修记录保存

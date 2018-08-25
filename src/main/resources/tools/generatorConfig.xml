@@ -127,7 +127,7 @@
 
         <!--<table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>-->
 
-        <table tableName="entry_out_store_record" domainObjectName="EntryOutStoreRecord"></table>
+        <!--<table tableName="entry_out_store_record" domainObjectName="EntryOutStoreRecord"></table>-->
 
         <!--<table tableName="order_review" domainObjectName="OrderReview"></table>-->
 

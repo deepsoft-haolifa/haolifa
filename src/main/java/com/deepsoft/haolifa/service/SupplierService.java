@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.SupplierListDTO;
 import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
 
 public interface SupplierService {
@@ -34,9 +35,8 @@ public interface SupplierService {
 
     /**
      * 获取供应商列表
-     * @param currentPage
-     * @param pageSize
+     * @param model
      * @return
      */
-    ResultBean getList(Integer currentPage, Integer pageSize,String supplierName,String supplierNo);
+    ResultBean getList(SupplierListDTO model);
 }

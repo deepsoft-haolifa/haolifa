@@ -2,12 +2,8 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.dao.repository.EquipmentMaintainRecordMapper;
 import com.deepsoft.haolifa.dao.repository.EquipmentMapper;
-import com.deepsoft.haolifa.model.domain.Equipment;
-import com.deepsoft.haolifa.model.domain.EquipmentMaintainRecord;
-import com.deepsoft.haolifa.model.domain.EquipmentMaintainRecordExample;
-import com.deepsoft.haolifa.model.dto.EquipRepairedRecordDTO;
-import com.deepsoft.haolifa.model.dto.EquipmentRequestDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.EquipmentService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -22,7 +18,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class EquipmentServiceImpl implements EquipmentService {
+public class EquipmentServiceImpl extends BaseService implements EquipmentService {
 
     @Autowired
     EquipmentMapper equipmentMapper;
@@ -31,6 +27,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public ResultBean save(Equipment model) {
+        model.setCreateUserId(1);
         int insert = equipmentMapper.insertSelective(model);
         return ResultBean.success(insert);
     }
@@ -54,15 +51,35 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public ResultBean getList(Integer currentPage, Integer pageSize, String name, String equipmentNo) {
-        PageHelper.startPage(currentPage, pageSize);
-        Page<Equipment> pageData = equipmentMapper.selectListByPage(name, equipmentNo);
-        Map<String, Object> result = new HashMap<>(4);
-        result.put("totalCount", pageData.getTotal());
-        result.put("pageSize", pageData.getPageSize());
-        result.put("pages", pageData.getPages());
-        result.put("list", pageData.getResult());
-        return ResultBean.success(result);
+    public ResultBean getList(EquipmentListDTO model) {
+        if (model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if (model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+        EquipmentExample equipmentExample = new EquipmentExample();
+        EquipmentExample.Criteria criteria = equipmentExample.createCriteria();
+        if (model.getType() == 1 && model.getSupplierNo() != null) {
+            criteria.andSupplierNoLike("%" + model.getSupplierNo() + "%");
+        }
+        if (model.getType() == 2) {
+            criteria.andSupplierNoEqualTo("0");
+        }
+        if (model.getEquipmentNo() != null) {
+            criteria.andEquipmentNoLike("%" + model.getEquipmentNo() + "%");
+        }
+        if (model.getName() != null) {
+            criteria.andNameLike("%" + model.getName() + "%");
+        }
+        Page<Equipment> pageData = PageHelper.startPage(model.getPageNum(),model.getPageSize())
+                .doSelectPage(()->{
+                   equipmentMapper.selectByExample(equipmentExample);
+                });
+        PageDTO<Equipment> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData,pageDTO);
+        pageDTO.setList(pageData.getResult());
+        return ResultBean.success(pageDTO);
     }
 
     @Override
