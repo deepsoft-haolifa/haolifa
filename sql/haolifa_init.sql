@@ -116,7 +116,7 @@
 	DROP TABLE IF EXISTS `sys_role`;
 	CREATE TABLE `sys_role` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	  `dept_id` int(11) unsigned NOT NULL COMMENT '部门id',
+	  `dept_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '部门id',
 	  `role_name` varchar(20) NOT NULL COMMENT '角色名',
 	  `description` varchar(64) NOT NULL DEFAULT '' COMMENT '描述',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
