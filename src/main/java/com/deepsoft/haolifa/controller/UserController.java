@@ -53,7 +53,7 @@ public class UserController {
 
 
     @PostMapping("")
-    @ApiOperation("添加用户")
+    @ApiOperation("添加员工")
     public ResultBean user(UserBaseDTO userBase){
         return ResultBean.success(userService.insertSysUser(userBase));
     }

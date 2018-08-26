@@ -5,8 +5,6 @@ import java.util.Date;
 public class SysUser {
     private Integer id;
 
-    private String userId;
-
     private String username;
 
     private String password;
@@ -33,9 +31,8 @@ public class SysUser {
 
     private Date updateTime;
 
-    public SysUser(Integer id, String userId, String username, String password, String realName, String userNo, Byte sex, String nativePlace, String phone, String idCard, String photoUrl, Byte isDelete, Date entryTime, Date createTime, Date updateTime) {
+    public SysUser(Integer id, String username, String password, String realName, String userNo, Byte sex, String nativePlace, String phone, String idCard, String photoUrl, Byte isDelete, Date entryTime, Date createTime, Date updateTime) {
         this.id = id;
-        this.userId = userId;
         this.username = username;
         this.password = password;
         this.realName = realName;
@@ -61,14 +58,6 @@ public class SysUser {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getUsername() {
