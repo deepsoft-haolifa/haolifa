@@ -575,18 +575,4 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <select id="selectListByExample" parameterType="com.deepsoft.haolifa.model.domain.Supplier" resultMap="BaseResultMap">
-    <include refid="Base_Column_List" />
-    from supplier
-    where
-      is_delete = 0
-      <if test="supplierNo != null and supplierNo !=''">
-        and supplier_no like CONCAT('%',#{supplierNo},'%')
-      </if>
-      <if test="supplierName != null and supplierName !=''">
-        and supplier_name like CONCAT('%',#{supplierName},'%')
-      </if>
-      order by update_time desc
-  </select>
 </mapper>

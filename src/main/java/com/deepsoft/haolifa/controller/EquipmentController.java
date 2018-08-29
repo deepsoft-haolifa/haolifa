@@ -2,9 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.model.domain.Equipment;
-import com.deepsoft.haolifa.model.dto.EquipRepairedRecordDTO;
-import com.deepsoft.haolifa.model.dto.EquipmentRequestDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.EquipmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,7 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"好利阀设备管理"})
+@Api(tags = {"设备管理"})
 @RestController
 @RequestMapping("/equipment")
 public class EquipmentController {
@@ -23,13 +21,20 @@ public class EquipmentController {
     EquipmentService equipmentService;
 
 
-    @ApiOperation("设备添加")
+    @ApiOperation("好利阀设备添加")
     @PostMapping("/save")
     public ResultBean save(@RequestBody EquipmentRequestDTO model) {
         Equipment equipment = new Equipment();
         BeanUtils.copyProperties(model, equipment);
-        // TODO 需替换为真实userId
-        equipment.setCreateUserId(1);
+        equipment.setSupplierNo("0");
+        return equipmentService.save(equipment);
+    }
+
+    @ApiOperation("供应商设备添加")
+    @PostMapping("/supplier-save")
+    public ResultBean save(@RequestBody SupplierEquipmentRequestDTO model) {
+        Equipment equipment = new Equipment();
+        BeanUtils.copyProperties(model, equipment);
         return equipmentService.save(equipment);
     }
 
@@ -42,9 +47,17 @@ public class EquipmentController {
         return equipmentService.delete(id);
     }
 
-    @ApiOperation("更新设备信息")
+    @ApiOperation("更新好利阀设备信息")
     @PostMapping("update")
     public ResultBean update(@RequestBody EquipmentRequestDTO model) {
+        Equipment equipment = new Equipment();
+        BeanUtils.copyProperties(model, equipment);
+        return equipmentService.update(equipment);
+    }
+
+    @ApiOperation("更新供应商设备信息")
+    @PostMapping("supplier-update")
+    public ResultBean update(@RequestBody SupplierEquipmentRequestDTO model) {
         Equipment equipment = new Equipment();
         BeanUtils.copyProperties(model, equipment);
         return equipmentService.update(equipment);
@@ -60,15 +73,9 @@ public class EquipmentController {
     }
 
     @ApiOperation("获取设备列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "设备编号", name = "equipmentNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "设备名称", name = "name", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "页码", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "展示数量", name = "pageSize", dataType = "int", paramType = "query")
-    })
-    @GetMapping("getList")
-    public ResultBean getList(@RequestParam Integer currentPage, @RequestParam Integer pageSize, String name, String equipmentNo) {
-        return equipmentService.getList(currentPage, pageSize, name, equipmentNo);
+    @PostMapping("getList")
+    public ResultBean getList(@RequestBody EquipmentListDTO model) {
+        return equipmentService.getList(model);
     }
 
     @ApiOperation("添加维修记录")
