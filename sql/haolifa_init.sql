@@ -143,13 +143,12 @@
 	DROP TABLE IF EXISTS `sys_user`;
 	CREATE TABLE `sys_user` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	  `user_id` varchar(36) NOT NULL COMMENT '用户业务id',
 	  `username` varchar(32) NOT NULL COMMENT '账号',
 	  `password` varchar(64) NOT NULL COMMENT '密码',
 	  `real_name` varchar(32) NOT NULL COMMENT '真实姓名',
 	  `user_no` varchar(64) NOT NULL DEFAULT '' COMMENT '编号',
-	  `sex` tinyint(4) NOT NULL DEFAULT '0' COMMENT '性别：0-未知，1-男，2-女',
-	  `native_place` varchar(64) DEFAULT '' COMMENT '籍贯',
+	  `sex` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '性别：0-未知，1-男，2-女',
+	  `native_place` varchar(64) NOT NULL DEFAULT '' COMMENT '籍贯',
 	  `phone` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
 	  `id_card` varchar(20) NOT NULL DEFAULT '' COMMENT '身份证号',
 	  `photo_url` varchar(128) NOT NULL DEFAULT '' COMMENT '照片链接',

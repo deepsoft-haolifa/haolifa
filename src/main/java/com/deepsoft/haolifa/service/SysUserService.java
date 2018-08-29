@@ -47,4 +47,12 @@ public interface SysUserService {
      */
     int deleteSysUser(Integer id);
 
+    /**
+     * 给用户分配角色
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    int insertUserRole(Integer userId, Integer[] roleId);
+
 }

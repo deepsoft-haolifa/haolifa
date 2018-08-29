@@ -34,7 +34,7 @@ public class PermissionServiceImpl implements PermissionService {
     public List<PermissionNode> getMenu() {
         List<CustomPermission> permissions =
                 userService.selectLoginUser().getPermissions().stream()
-                .filter(p -> p.getPermName().equals("r")).collect(Collectors.toList());
+                .filter(p -> p.getPermName().equals("m")).collect(Collectors.toList());
         return generatorPermissions(permissions);
     }
 

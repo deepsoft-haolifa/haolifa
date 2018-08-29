@@ -1,6 +1,9 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
+import com.deepsoft.haolifa.model.domain.SysRoleUser;
+import com.deepsoft.haolifa.model.domain.SysRoleUserExample;
 import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.domain.SysUserExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
@@ -28,6 +31,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserMapper userMapper;
     @Autowired
     private CustomUserServiceImpl customUserService;
+    @Autowired
+    private SysRoleUserMapper roleUserMapper;
 
     @Override
     public CustomUser selectLoginUser() {
@@ -75,5 +80,21 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public int deleteSysUser(Integer id) {
         return userMapper.deleteByPrimaryKey(id);
+    }
+
+
+    @Override
+    public int insertUserRole(Integer userId, Integer[] roleIds) {
+        SysRoleUserExample sysRoleUserExample = new SysRoleUserExample();
+        sysRoleUserExample.createCriteria().andSysUserIdEqualTo(userId);
+        roleUserMapper.deleteByExample(sysRoleUserExample);
+        int count = 0;
+        for (Integer roleId:roleIds) {
+            SysRoleUser roleUser = new SysRoleUser();
+            roleUser.setSysUserId(userId);
+            roleUser.setSysRoleId(roleId);
+            count += roleUserMapper.insertSelective(roleUser);
+        }
+        return count;
     }
 }

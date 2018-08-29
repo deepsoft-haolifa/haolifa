@@ -51,7 +51,6 @@ public class UserController {
         return ResultBean.success(userService.getUserList(pageNum, pageSize));
     }
 
-
     @PostMapping("")
     @ApiOperation("添加员工")
     public ResultBean user(UserBaseDTO userBase){
@@ -69,6 +68,12 @@ public class UserController {
     @ApiOperation("删除用户")
     public ResultBean deleteUser(@PathVariable("id") Integer id){
         return ResultBean.success(deleteUser(id));
+    }
+
+
+    @PostMapping("/{userId}/role")
+    public ResultBean insertUserRole(@PathVariable("userId")Integer userId, @RequestBody Integer[] roleIds){
+       return ResultBean.success(userService.insertUserRole(userId, roleIds));
     }
 
 }

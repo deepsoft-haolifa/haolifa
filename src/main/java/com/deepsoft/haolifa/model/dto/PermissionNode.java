@@ -14,8 +14,6 @@ import java.util.List;
 public class PermissionNode {
 
     @NonNull
-    private String url;
-    @NonNull
     private String description;
 
     private List<PermissionNode> child = new ArrayList<>();
