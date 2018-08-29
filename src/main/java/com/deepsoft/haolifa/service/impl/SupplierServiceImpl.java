@@ -100,8 +100,15 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
             model.setPageSize(10);
         }
         SupplierExample supplierExample = new SupplierExample();
-        supplierExample.or().andSuppilerNameLike("%"+model.getSupplierName()+"%")
-                .andSuppilerNoLike("%"+model.getSupplierNo()+"%").andIsDeleteEqualTo(CommonEnum.Consts.YES.code);
+        SupplierExample.Criteria criteria = supplierExample.createCriteria();
+        if(StringUtils.isNotEmpty(model.getSupplierNo())) {
+            criteria.andSuppilerNoLike("%"+model.getSupplierNo()+"%");
+        }
+        if(StringUtils.isNotEmpty(model.getSupplierName())) {
+            criteria.andSuppilerNameLike("%"+model.getSupplierName()+"%");
+        }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        supplierExample.or(criteria);
         Page<Supplier> pageData = PageHelper.startPage(model.getPageNum(),model.getPageSize()).doSelectPage(()->{
             supplierMapper.selectByExample(supplierExample);
         });
