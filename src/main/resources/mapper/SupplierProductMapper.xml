@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SupplierProduct">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="suppiler_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supplier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, suppiler_no, material_type, material_graph_no, material_name, annual_production, 
+    id, supplier_no, material_type, material_graph_no, material_name, annual_production, 
     main_customer, is_delete, create_time, update_time, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.SupplierProductExample" resultMap="BaseResultMap">
@@ -109,11 +109,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SupplierProduct">
-    insert into supplier_product (id, suppiler_no, material_type, 
+    insert into supplier_product (id, supplier_no, material_type, 
       material_graph_no, material_name, annual_production, 
       main_customer, is_delete, create_time, 
       update_time, create_user_id)
-    values (#{id,jdbcType=INTEGER}, #{suppilerNo,jdbcType=VARCHAR}, #{materialType,jdbcType=TINYINT}, 
+    values (#{id,jdbcType=INTEGER}, #{supplierNo,jdbcType=VARCHAR}, #{materialType,jdbcType=TINYINT}, 
       #{materialGraphNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{annualProduction,jdbcType=INTEGER}, 
       #{mainCustomer,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER})
@@ -124,8 +124,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="suppilerNo != null">
-        suppiler_no,
+      <if test="supplierNo != null">
+        supplier_no,
       </if>
       <if test="materialType != null">
         material_type,
@@ -159,8 +159,8 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="suppilerNo != null">
-        #{suppilerNo,jdbcType=VARCHAR},
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="materialType != null">
         #{materialType,jdbcType=TINYINT},
@@ -203,8 +203,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.suppilerNo != null">
-        suppiler_no = #{record.suppilerNo,jdbcType=VARCHAR},
+      <if test="record.supplierNo != null">
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="record.materialType != null">
         material_type = #{record.materialType,jdbcType=TINYINT},
@@ -241,7 +241,7 @@
   <update id="updateByExample" parameterType="map">
     update supplier_product
     set id = #{record.id,jdbcType=INTEGER},
-      suppiler_no = #{record.suppilerNo,jdbcType=VARCHAR},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       material_type = #{record.materialType,jdbcType=TINYINT},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       material_name = #{record.materialName,jdbcType=VARCHAR},
@@ -258,8 +258,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SupplierProduct">
     update supplier_product
     <set>
-      <if test="suppilerNo != null">
-        suppiler_no = #{suppilerNo,jdbcType=VARCHAR},
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="materialType != null">
         material_type = #{materialType,jdbcType=TINYINT},
@@ -293,7 +293,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SupplierProduct">
     update supplier_product
-    set suppiler_no = #{suppilerNo,jdbcType=VARCHAR},
+    set supplier_no = #{supplierNo,jdbcType=VARCHAR},
       material_type = #{materialType,jdbcType=TINYINT},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       material_name = #{materialName,jdbcType=VARCHAR},
@@ -305,18 +305,4 @@
       create_user_id = #{createUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <select id="selectListByPage" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from
-    supplier_product
-    where
-    is_delete = 0
-    and
-    material_type = #{materialType}
-    <if test="materialName != null and materialName != ''">
-      and material_name like concat('%',#{materialName},'%')
-    </if>
-  </select>
 </mapper>

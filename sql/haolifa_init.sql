@@ -671,7 +671,7 @@ CREATE TABLE `supplier` (
 DROP TABLE IF EXISTS `supplier_product`;
 CREATE TABLE `supplier_product` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `suppiler_no` varchar(20) NOT NULL DEFAULT '' COMMENT '供应商编号',
+  `supplier_no` varchar(20) NOT NULL DEFAULT '' COMMENT '供应商编号',
   `material_type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '零件的类型：0 供应商供货零件  1 供应商有但不供货的零件',
   `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
   `material_name` varchar(50) NOT NULL DEFAULT '' COMMENT '零件名称',

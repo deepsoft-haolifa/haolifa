@@ -101,13 +101,13 @@
 
         <!--<table tableName="sys_permission_role" domainObjectName="SysPermissionRole"></table>-->
 
-        <table tableName="sys_role" domainObjectName="SysRole"></table>
+        <!--<table tableName="sys_role" domainObjectName="SysRole"></table>-->
 
         <!--<table tableName="sys_department_user" domainObjectName="SysDepartmentUser"></table>-->
 
         <!--<table tableName="sys_role_user" domainObjectName="SysRoleUser"></table>-->
 
-        <table tableName="sys_user" domainObjectName="SysUser"></table>
+        <!--<table tableName="sys_user" domainObjectName="SysUser"></table>-->
 
         <!--<table tableName="material" domainObjectName="Material"></table>-->
 
@@ -155,7 +155,7 @@
 
         <!--<table tableName="supplier" domainObjectName="Supplier"></table>-->
 
-        <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
+        <table tableName="supplier_product" domainObjectName="SupplierProduct"></table>
 
         <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult"></table>-->
 

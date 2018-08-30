@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.model.dto.PurchasePlanDTO;
+import com.deepsoft.haolifa.model.dto.PurchasePlanListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.PurchasePlanService;
 import io.swagger.annotations.Api;
@@ -50,9 +51,9 @@ public class PurchasePlanController {
     }
 
     @ApiOperation("查询采购计划列表")
-    @GetMapping("list")
-    public ResultBean getList(@RequestParam Integer currentPage, @RequestParam Integer pageSize, String productOrderNo) {
-        return purchasePlanService.getList(currentPage, pageSize, productOrderNo);
+    @PostMapping("list")
+    public ResultBean getList(@RequestBody PurchasePlanListDTO model) {
+        return purchasePlanService.getList(model);
     }
 
     @ApiOperation("查询采购计划详情")

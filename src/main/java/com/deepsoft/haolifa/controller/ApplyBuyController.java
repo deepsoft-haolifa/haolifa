@@ -1,9 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
-import com.deepsoft.haolifa.model.dto.ApplyBuyDTO;
-import com.deepsoft.haolifa.model.dto.ApplyBuyUpdateDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StoreKeeperApplyBuyDTO;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.ApplyBuyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -58,8 +55,8 @@ public class ApplyBuyController {
 
     @ApiOperation("请购单列表")
     @GetMapping("list")
-    public ResultBean getList(@RequestParam Integer currentPage, @RequestParam Integer pageSize) {
-        return applyBuyService.getList(currentPage,pageSize);
+    public ResultBean getList(@RequestBody ApplyBuyListDTO model) {
+        return applyBuyService.getList(model);
     }
 
     // TODO 涉及流程初始化

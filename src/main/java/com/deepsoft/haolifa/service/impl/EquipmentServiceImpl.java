@@ -72,7 +72,6 @@ public class EquipmentServiceImpl extends BaseService implements EquipmentServic
         if (model.getName() != null) {
             criteria.andNameLike("%" + model.getName() + "%");
         }
-        equipmentExample.or(criteria);
         Page<Equipment> pageData = PageHelper.startPage(model.getPageNum(),model.getPageSize())
                 .doSelectPage(()->{
                    equipmentMapper.selectByExample(equipmentExample);

@@ -1,9 +1,6 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.ApplyBuyDTO;
-import com.deepsoft.haolifa.model.dto.ApplyBuyUpdateDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StoreKeeperApplyBuyDTO;
+import com.deepsoft.haolifa.model.dto.*;
 
 import java.util.List;
 
@@ -45,11 +42,10 @@ public interface ApplyBuyService {
 
     /**
      * 获取请购单列表
-     * @param currentPage
-     * @param pageSize
+     * @param model
      * @return
      */
-    ResultBean getList(Integer currentPage, Integer pageSize);
+    ResultBean getList(ApplyBuyListDTO model);
 
     /**
      * 删除请购单单项

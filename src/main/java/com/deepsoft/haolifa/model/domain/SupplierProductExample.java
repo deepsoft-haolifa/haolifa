@@ -165,73 +165,73 @@ public class SupplierProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoIsNull() {
-            addCriterion("suppiler_no is null");
+        public Criteria andSupplierNoIsNull() {
+            addCriterion("supplier_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoIsNotNull() {
-            addCriterion("suppiler_no is not null");
+        public Criteria andSupplierNoIsNotNull() {
+            addCriterion("supplier_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoEqualTo(String value) {
-            addCriterion("suppiler_no =", value, "suppilerNo");
+        public Criteria andSupplierNoEqualTo(String value) {
+            addCriterion("supplier_no =", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoNotEqualTo(String value) {
-            addCriterion("suppiler_no <>", value, "suppilerNo");
+        public Criteria andSupplierNoNotEqualTo(String value) {
+            addCriterion("supplier_no <>", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoGreaterThan(String value) {
-            addCriterion("suppiler_no >", value, "suppilerNo");
+        public Criteria andSupplierNoGreaterThan(String value) {
+            addCriterion("supplier_no >", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoGreaterThanOrEqualTo(String value) {
-            addCriterion("suppiler_no >=", value, "suppilerNo");
+        public Criteria andSupplierNoGreaterThanOrEqualTo(String value) {
+            addCriterion("supplier_no >=", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoLessThan(String value) {
-            addCriterion("suppiler_no <", value, "suppilerNo");
+        public Criteria andSupplierNoLessThan(String value) {
+            addCriterion("supplier_no <", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoLessThanOrEqualTo(String value) {
-            addCriterion("suppiler_no <=", value, "suppilerNo");
+        public Criteria andSupplierNoLessThanOrEqualTo(String value) {
+            addCriterion("supplier_no <=", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoLike(String value) {
-            addCriterion("suppiler_no like", value, "suppilerNo");
+        public Criteria andSupplierNoLike(String value) {
+            addCriterion("supplier_no like", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoNotLike(String value) {
-            addCriterion("suppiler_no not like", value, "suppilerNo");
+        public Criteria andSupplierNoNotLike(String value) {
+            addCriterion("supplier_no not like", value, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoIn(List<String> values) {
-            addCriterion("suppiler_no in", values, "suppilerNo");
+        public Criteria andSupplierNoIn(List<String> values) {
+            addCriterion("supplier_no in", values, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoNotIn(List<String> values) {
-            addCriterion("suppiler_no not in", values, "suppilerNo");
+        public Criteria andSupplierNoNotIn(List<String> values) {
+            addCriterion("supplier_no not in", values, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoBetween(String value1, String value2) {
-            addCriterion("suppiler_no between", value1, value2, "suppilerNo");
+        public Criteria andSupplierNoBetween(String value1, String value2) {
+            addCriterion("supplier_no between", value1, value2, "supplierNo");
             return (Criteria) this;
         }
 
-        public Criteria andSuppilerNoNotBetween(String value1, String value2) {
-            addCriterion("suppiler_no not between", value1, value2, "suppilerNo");
+        public Criteria andSupplierNoNotBetween(String value1, String value2) {
+            addCriterion("supplier_no not between", value1, value2, "supplierNo");
             return (Criteria) this;
         }
 

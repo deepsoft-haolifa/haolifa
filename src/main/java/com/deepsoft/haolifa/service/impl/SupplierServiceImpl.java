@@ -108,7 +108,6 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
             criteria.andSuppilerNameLike("%"+model.getSupplierName()+"%");
         }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        supplierExample.or(criteria);
         Page<Supplier> pageData = PageHelper.startPage(model.getPageNum(),model.getPageSize()).doSelectPage(()->{
             supplierMapper.selectByExample(supplierExample);
         });

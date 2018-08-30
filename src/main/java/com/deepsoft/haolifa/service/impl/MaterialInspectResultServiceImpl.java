@@ -76,7 +76,7 @@ public class MaterialInspectResultServiceImpl extends BaseService implements Mat
             model.setPageSize(10);
         }
         MaterialInspectResultExample example = new MaterialInspectResultExample();
-        if (!StringUtils.isEmpty(model.getInspectNo())) {
+        if (!StringUtils.isNotEmpty(model.getInspectNo())) {
             example.or().andInspectNoLike("%" + model.getInspectNo() + "%");
         }
         Page<MaterialInspectResult> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {

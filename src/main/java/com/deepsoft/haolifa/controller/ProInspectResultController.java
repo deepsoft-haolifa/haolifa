@@ -42,7 +42,7 @@ public class ProInspectResultController {
     }
 
     @ApiOperation("查询成品送检报告列表")
-    @GetMapping("list")
+    @PostMapping("list")
     public ResultBean getList(@RequestBody MaterialInspectResListDTO model) {
         return proInspectResultService.getList(model);
     }

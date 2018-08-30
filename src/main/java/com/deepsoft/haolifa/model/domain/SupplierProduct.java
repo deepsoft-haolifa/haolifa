@@ -5,7 +5,7 @@ import java.util.Date;
 public class SupplierProduct {
     private Integer id;
 
-    private String suppilerNo;
+    private String supplierNo;
 
     private Byte materialType;
 
@@ -25,9 +25,9 @@ public class SupplierProduct {
 
     private Integer createUserId;
 
-    public SupplierProduct(Integer id, String suppilerNo, Byte materialType, String materialGraphNo, String materialName, Integer annualProduction, String mainCustomer, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public SupplierProduct(Integer id, String supplierNo, Byte materialType, String materialGraphNo, String materialName, Integer annualProduction, String mainCustomer, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
-        this.suppilerNo = suppilerNo;
+        this.supplierNo = supplierNo;
         this.materialType = materialType;
         this.materialGraphNo = materialGraphNo;
         this.materialName = materialName;
@@ -51,12 +51,12 @@ public class SupplierProduct {
         this.id = id;
     }
 
-    public String getSuppilerNo() {
-        return suppilerNo;
+    public String getSupplierNo() {
+        return supplierNo;
     }
 
-    public void setSuppilerNo(String suppilerNo) {
-        this.suppilerNo = suppilerNo == null ? null : suppilerNo.trim();
+    public void setSupplierNo(String supplierNo) {
+        this.supplierNo = supplierNo == null ? null : supplierNo.trim();
     }
 
     public Byte getMaterialType() {

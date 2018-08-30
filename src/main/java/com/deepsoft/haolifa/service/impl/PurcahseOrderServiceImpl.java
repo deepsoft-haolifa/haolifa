@@ -44,7 +44,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     public ResultBean save(PurchaseOrderDTO model) {
         String purchaseOrderNo = "cgno" + RandomUtils.orderNoStr();
         PurchaseOrder purchaseOrder = new PurchaseOrder();
-        BeanUtils.copyProperties(model,purchaseOrder);
+        BeanUtils.copyProperties(model, purchaseOrder);
         purchaseOrder.setPurchaseOrderNo(purchaseOrderNo);
         purchaseOrderMapper.insertSelective(purchaseOrder);
         ApplyBuyExample applyBuyExample = new ApplyBuyExample();
@@ -52,8 +52,8 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         List<ApplyBuy> applyBuyList = applyBuyMapper.selectByExample(applyBuyExample);
         List<String> materialGrapgNoList = applyBuyList.stream().map(ApplyBuy::getMaterialGraphNo).distinct().collect(Collectors.toList());
 
-        Map<String,ApplyBuy> tempApplyBuy = new HashMap<>();
-        applyBuyList.stream().forEach(applyBuy -> tempApplyBuy.put(applyBuy.getMaterialGraphNo(),applyBuy));
+        Map<String, ApplyBuy> tempApplyBuy = new HashMap<>();
+        applyBuyList.stream().forEach(applyBuy -> tempApplyBuy.put(applyBuy.getMaterialGraphNo(), applyBuy));
 
         MaterialExample materialExample = new MaterialExample();
         materialExample.or().andGraphNoIn(materialGrapgNoList);
@@ -94,7 +94,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         productPurchaseRecord.setPurchaseOrderNo("");
         ProductPurchaseRecordExample productPurchaseRecordExample = new ProductPurchaseRecordExample();
         productPurchaseRecordExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
-        productPurchaseRecordMapper.updateByExampleSelective(productPurchaseRecord,productPurchaseRecordExample);
+        productPurchaseRecordMapper.updateByExampleSelective(productPurchaseRecord, productPurchaseRecordExample);
         return ResultBean.success(1);
     }
 
@@ -153,6 +153,10 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             model.setPageSize(10);
         }
         PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        PurchaseOrderExample.Criteria criteria = purchaseOrderExample.createCriteria();
+        if (StringUtils.isNotEmpty(model.getPurchaseOrderNo())) {
+            criteria.andPurchaseOrderNoLike("%" + model.getPurchaseOrderNo() + "%");
+        }
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(model.getPageNum(), model.getPageSize())
                 .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
         PageDTO<PurchaseOrder> purchaseOrderPageDTO = new PageDTO<>();

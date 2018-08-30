@@ -5,12 +5,11 @@ import com.deepsoft.haolifa.dao.repository.ApplyBuyMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
 import com.deepsoft.haolifa.dao.repository.ProductPurchaseRecordMapper;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.ApplyBuyDTO;
-import com.deepsoft.haolifa.model.dto.ApplyBuyUpdateDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StoreKeeperApplyBuyDTO;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.util.RandomUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,16 +44,12 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
         MaterialExample materialExample = new MaterialExample();
         materialExample.or().andGraphNoIn(materialGraphNoList);
         List<Material> materialList = materialMapper.selectByExample(materialExample);
-        Map<String, Material> tempMaterial = new HashMap<>();
-        materialList.stream().map(material -> {
-            tempMaterial.put(material.getGraphNo(), material);
-            return null;
-        });
+        Map<String, List<Material>> tempMaterial = materialList.stream().collect(Collectors.groupingBy(Material::getGraphNo));
         // 封装持久化数据
         int createUserId = getLoginUserId();
         List<ApplyBuy> applyBuyList = modelList.stream().map(applyBuyDTO -> {
             ApplyBuy applyBuy = new ApplyBuy();
-            Material material = tempMaterial.get(applyBuyDTO.getMaterialGraphNo());
+            Material material = tempMaterial.get(applyBuyDTO.getMaterialGraphNo()).get(0);
             applyBuy.setApplyNo(applyBuyNo);
             applyBuy.setMaterialGraphNo(applyBuyDTO.getMaterialGraphNo());
             applyBuy.setUnit(material.getUnit());
@@ -147,20 +142,42 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
         materialExample.or().andGraphNoEqualTo(model.getMaterialGraphNo());
         Material material = materialMapper.selectByExample(materialExample).get(0);
         applyBuy.setValuation(material.getPrice().multiply(new BigDecimal(model.getNumber())));
-        applyBuyMapper.updateByExampleSelective(applyBuy,applyBuyExample);
+        applyBuyMapper.updateByExampleSelective(applyBuy, applyBuyExample);
         return ResultBean.success(1);
     }
 
     @Override
     public ResultBean getInfo(String applyBuyNo) {
+        if (StringUtils.isEmpty(applyBuyNo)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         ApplyBuyExample applyBuyExample = new ApplyBuyExample();
         applyBuyExample.or().andApplyNoEqualTo(applyBuyNo);
         List<ApplyBuy> applyBuyList = applyBuyMapper.selectByExample(applyBuyExample);
-        return ResultBean.success(applyBuyList);
+        if (applyBuyList == null || applyBuyList.size() == 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.RESOURCE_NOT_EXIST);
+        }
+        Map<String, Object> result = new HashMap<>(2);
+        ApplyBuy applyBuy = applyBuyList.get(0);
+        result.put("order", applyBuy);
+        result.put("items", applyBuyList);
+        return ResultBean.success(result);
     }
-    // TODO 暂未实现
+
+
     @Override
-    public ResultBean getList(Integer currentPage, Integer pageSize) {
-        return null;
+    public ResultBean getList(ApplyBuyListDTO model) {
+        if (model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if (model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+        Page<ApplyBuy> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+                .doSelectPage(() -> applyBuyMapper.selectByGroup(model));
+        PageDTO<ApplyBuy> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+        pageDTO.setList(pageData.getResult());
+        return ResultBean.success(pageDTO);
     }
 }
