@@ -12,13 +12,15 @@ public class CustomUser extends User {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     private final Integer id;
+    private final String realName;
     private final List<CustomPermission> permissions;
 
-    public CustomUser(Integer id, String username, String password,
+    public CustomUser(Integer id, String username, String realName,String password,
                       Collection<? extends GrantedAuthority> authorities,
                        List<CustomPermission> permissions) {
         super(username, password, authorities);
         this.id = id;
+        this.realName = realName;
         this.permissions = permissions;
     }
 
@@ -28,6 +30,10 @@ public class CustomUser extends User {
 
     public List<CustomPermission> getPermissions() {
         return permissions;
+    }
+
+    public String getRealName(){
+        return realName;
     }
 
     @Override

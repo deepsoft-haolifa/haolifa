@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.domain.SysUserExample;
 import com.deepsoft.haolifa.model.dto.CustomPermission;
 import com.deepsoft.haolifa.model.dto.CustomUser;
+import com.deepsoft.haolifa.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,6 +37,8 @@ public class CustomUserServiceImpl implements UserDetailsService { //自定义Us
     private SysUserMapper userMapper;
     @Autowired
     private MyPermissionMapper myPermissionMapper;
+    @Autowired
+    private DepartmentService departmentService;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -50,11 +53,11 @@ public class CustomUserServiceImpl implements UserDetailsService { //自定义Us
             Set<SysRole> roles = myPermissionMapper.findRolesByUserId(user.getId());
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
             for (SysRole role :roles) {
-              GrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName());
+              GrantedAuthority authority = new CustomGrantedAuthority(role.getRoleName(), role.getDescription());
               grantedAuthorities.add(authority);
             }
             List<CustomPermission> permissios = myPermissionMapper.findPermissiosByRoles(roles.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
-            return new CustomUser(user.getId(), user.getUsername(), user.getPassword(), grantedAuthorities, permissios);
+            return new CustomUser(user.getId(), user.getUsername(),user.getRealName(), user.getPassword(), grantedAuthorities, permissios);
         } else {
             throw new UsernameNotFoundException("admin: " + username + " do not exist!");
         }

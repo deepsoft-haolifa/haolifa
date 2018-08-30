@@ -33,8 +33,6 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Autowired
     private SysUserService userService;
-    @Autowired
-    private PermissionService permissionService;
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 
@@ -46,7 +44,7 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("customeUser:{}, time:",customUser, new Date());
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();
-        writer.write(JSONObject.toJSONString(ResultBean.success(permissionService.getMenu())));
+        writer.write(JSONObject.toJSONString(ResultBean.success(userService.selectUserInfo())));
         writer.flush();
         writer.close();
 

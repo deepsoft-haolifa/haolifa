@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
+import com.deepsoft.haolifa.model.vo.UserInfoVO;
 
 public interface SysUserService {
 
@@ -12,6 +13,12 @@ public interface SysUserService {
      * @return
      */
     CustomUser selectLoginUser();
+
+    /**
+     * 获取当前用户信息
+     * @return
+     */
+    UserInfoVO selectUserInfo();
 
     /**
      * 获取用户详细信息

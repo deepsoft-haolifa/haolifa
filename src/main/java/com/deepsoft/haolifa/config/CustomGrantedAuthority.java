@@ -13,16 +13,13 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
  **/
 @Data
 @AllArgsConstructor
-public class CustomGrantedAuthority extends SysPermission implements GrantedAuthority  {
+public class CustomGrantedAuthority implements GrantedAuthority  {
 
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
     private final String role;
 
-    public CustomGrantedAuthority(Long id, String name, String description, String url, Long pid, String role) {
-//        super(id, name, description, url, pid);
-        this.role = role;
-    }
+    private final String roleName;
 
     @Override
     public String getAuthority() {

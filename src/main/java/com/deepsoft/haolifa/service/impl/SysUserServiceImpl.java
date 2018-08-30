@@ -10,6 +10,8 @@ import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
+import com.deepsoft.haolifa.model.vo.UserInfoVO;
+import com.deepsoft.haolifa.service.PermissionService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.UUIDGenerator;
 import com.github.pagehelper.Page;
@@ -33,13 +35,22 @@ public class SysUserServiceImpl implements SysUserService {
     private CustomUserServiceImpl customUserService;
     @Autowired
     private SysRoleUserMapper roleUserMapper;
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     public CustomUser selectLoginUser() {
         //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return (CustomUser) customUserService.loadUserByUsername("admin");
+        return  (CustomUser) customUserService.loadUserByUsername("admin");
     }
 
+    @Override
+    public UserInfoVO selectUserInfo() {
+        CustomUser customUser = selectLoginUser();
+        UserInfoVO userInfoVO = new UserInfoVO(customUser.getUsername(), customUser.getRealName(),
+                customUser.getAuthorities(), permissionService.getMenu());
+        return userInfoVO;
+    }
 
     @Override
     public SysUser getSysUser(Integer userId) {

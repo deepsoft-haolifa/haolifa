@@ -22,10 +22,10 @@ public class UserController {
     @Autowired
     private SysUserService userService;
 
-    @GetMapping("/auth")
-    @ApiOperation("获取当前用户权限列表")
+    @GetMapping("/self/info")
+    @ApiOperation("获取当前用户信息")
     public ResultBean index() {
-        return ResultBean.success(userService.selectLoginUser());
+        return ResultBean.success(userService.selectUserInfo());
     }
 
 
