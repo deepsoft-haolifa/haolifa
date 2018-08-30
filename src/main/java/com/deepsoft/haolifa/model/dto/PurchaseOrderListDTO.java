@@ -10,4 +10,6 @@ public class PurchaseOrderListDTO {
     private Integer pageSize;
     @ApiModelProperty(required = true, value = "页码")
     private Integer pageNum;
+    @ApiModelProperty(value = "采购单号")
+    private String purchaseOrderNo;
 }

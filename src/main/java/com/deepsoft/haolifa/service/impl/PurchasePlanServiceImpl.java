@@ -7,10 +7,7 @@ import com.deepsoft.haolifa.model.domain.ProductPurchaseRecord;
 import com.deepsoft.haolifa.model.domain.ProductPurchaseRecordExample;
 import com.deepsoft.haolifa.model.domain.PurchasePlan;
 import com.deepsoft.haolifa.model.domain.PurchasePlanExample;
-import com.deepsoft.haolifa.model.dto.CustomUser;
-import com.deepsoft.haolifa.model.dto.PurchasePlanDTO;
-import com.deepsoft.haolifa.model.dto.PurchasePlanItem;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.PurchasePlanService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
@@ -20,6 +17,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class PurchasePlanServiceImpl implements PurchasePlanService {
+public class PurchasePlanServiceImpl extends BaseService implements PurchasePlanService {
 
     @Autowired
     PurchasePlanMapper purchasePlanMapper;
@@ -44,6 +42,10 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
 
     @Override
     public ResultBean save(PurchasePlanDTO model) {
+        if (StringUtils.isAnyEmpty(model.getProductOrderNo(), model.getExpectedTime())
+                || model.getMaterialList() == null || model.getMaterialList().size() == 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         String purchaseNo = "cgjh_" + RandomUtils.orderNoStr();
         List<PurchasePlan> purchasePlanList = new ArrayList<>();
         List<ProductPurchaseRecord> productPurchaseRecordList = new ArrayList<>();
@@ -52,7 +54,7 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
             PurchasePlan purchasePlan = new PurchasePlan();
             purchasePlan.setMaterialGraphNo(purchasePlanItem.getMaterialGraphNo());
             purchasePlan.setNumber(purchasePlanItem.getNumber());
-            purchasePlan.setExpectedTime(DateFormatterUtils.parseDateString(DateFormatterUtils.ONE_FORMATTERPATTERN, model.getExpectedTime()));
+            purchasePlan.setExpectedTime(DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getExpectedTime()));
             purchasePlan.setProductOrderNo(model.getProductOrderNo());
             purchasePlan.setPurchasePlanNo(purchaseNo);
             purchasePlan.setCreateUserId(getLoginUserId());
@@ -71,7 +73,7 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
 
     @Override
     public ResultBean delete(String purchasePlanNo) {
-        if(StringUtils.isAnyEmpty(purchasePlanNo)) {
+        if (StringUtils.isAnyEmpty(purchasePlanNo)) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         // 删除 采购计划元数据
@@ -89,7 +91,7 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
 
     @Override
     public ResultBean deleteItem(String purchasePlanNo, String materialGraphNo) {
-        if(StringUtils.isAnyEmpty(purchasePlanNo,materialGraphNo)) {
+        if (StringUtils.isAnyEmpty(purchasePlanNo, materialGraphNo)) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         PurchasePlanExample purchasePlanExample = new PurchasePlanExample();
@@ -126,30 +128,39 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
         PurchasePlanExample purchasePlanExample = new PurchasePlanExample();
         purchasePlanExample.or().andPurchasePlanNoEqualTo(model.getPurchasePlanNo());
         PurchasePlan purchasePlan = new PurchasePlan();
-        purchasePlan.setExpectedTime(DateFormatterUtils.parseDateString(DateFormatterUtils.ONE_FORMATTERPATTERN, model.getExpectedTime()));
+        purchasePlan.setExpectedTime(DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getExpectedTime()));
         int update = purchasePlanMapper.updateByExampleSelective(purchasePlan, purchasePlanExample);
         return ResultBean.success(update);
     }
 
     /**
-     *
-     * @param currentPage
-     * @param pageSize
-     * @param productOrderNo
+     * @param model
      * @return
      */
     @Override
-    public ResultBean getList(Integer currentPage, Integer pageSize, String productOrderNo) {
-        PageInfo<PurchasePlan> pageData = PageHelper.startPage(currentPage, pageSize)
-                .doSelectPageInfo(() -> purchasePlanMapper.selectWithGroupBy(productOrderNo));
-        return ResultBean.success(pageData);
+    public ResultBean getList(PurchasePlanListDTO model) {
+        if (model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if (model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+        Page<PurchasePlan> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+                .doSelectPage(() -> purchasePlanMapper.selectWithGroupBy(model.getProductOrderNo()));
+        PageDTO<PurchasePlan> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+        pageDTO.setList(pageData.getResult());
+        return ResultBean.success(pageDTO);
     }
 
     @Override
     public ResultBean getInfo(String purchasePlanNo) {
         PurchasePlanExample purchasePlanExample = new PurchasePlanExample();
-        purchasePlanExample.or().andPurchasePlanNoEqualTo(purchasePlanNo);
+        purchasePlanExample.or().andPurchasePlanNoEqualTo(purchasePlanNo).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         List<PurchasePlan> purchasePlanList = purchasePlanMapper.selectByExample(purchasePlanExample);
+        if(purchasePlanList == null || purchasePlanList.size() ==0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.RESOURCE_NOT_EXIST);
+        }
         PurchasePlan purchasePlan = purchasePlanList.get(0);
         PurchasePlanDTO purchasePlanDTO = new PurchasePlanDTO();
         purchasePlanDTO.setExpectedTime(DateFormatterUtils
@@ -165,15 +176,5 @@ public class PurchasePlanServiceImpl implements PurchasePlanService {
         }
         purchasePlanDTO.setMaterialList(items);
         return ResultBean.success(purchasePlanDTO);
-    }
-
-    /**
-     * 获取登录用户id
-     *
-     * @return
-     */
-    private int getLoginUserId() {
-        CustomUser customUser = sysUserService.selectLoginUser();
-        return customUser != null ? customUser.getId() : 1;
     }
 }

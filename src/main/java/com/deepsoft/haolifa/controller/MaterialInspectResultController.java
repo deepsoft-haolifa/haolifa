@@ -25,7 +25,7 @@ public class MaterialInspectResultController {
     }
 
     @ApiOperation("删除原料送检报告(功能待定)")
-    @PostMapping("delete/{id}")
+    @GetMapping("delete/{id}")
     public ResultBean delete(@PathVariable("id") Integer id) {
         return materialInspectResultService.delete(id);
     }
@@ -43,7 +43,7 @@ public class MaterialInspectResultController {
     }
 
     @ApiOperation("查询原料送检报告列表")
-    @GetMapping("list")
+    @PostMapping("list")
     public ResultBean getList(@RequestBody MaterialInspectResListDTO model) {
         return materialInspectResultService.getList(model);
     }

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -27,11 +28,15 @@ public class DateFormatterUtils {
     }
 
     public static Date parseDateString(String formatter, String dateString) {
+        if(dateString.length() == 10 || dateString.length() == 8) {
+            return Date.from(LocalDate.parse(dateString,getDateTimeFormatter(formatter)).atStartOfDay().toInstant(ZoneOffset.UTC));
+        }
         return Date.from(LocalDateTime.parse(dateString, getDateTimeFormatter(formatter)).toInstant(ZoneOffset.UTC));
     }
 
     public static void main(String[] args) {
         System.out.println("yyyy-MM-dd HH:mm:ss:"+formatterDateString(THREE_FORMATTERPATTERN,null));
+        System.out.println("yyyy-MM-dd :"+parseDateString(TWO_FORMATTERPATTERN,"2018-09-10"));
         System.out.println("yyyy-MM-dd HH:mm:ss:"+parseDateString(ONE_FORMATTERPATTERN,"2018-08-15 21:55:32"));
     }
 }

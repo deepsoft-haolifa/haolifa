@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.PurchasePlanDTO;
+import com.deepsoft.haolifa.model.dto.PurchasePlanListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
 public interface PurchasePlanService {
@@ -28,12 +29,10 @@ public interface PurchasePlanService {
 
     /**
      * 获取列表
-     * @param currentPage
-     * @param pageSize
-     * @param productOrderNo
+     * @param model
      * @return
      */
-    ResultBean getList(Integer currentPage, Integer pageSize, String productOrderNo);
+    ResultBean getList(PurchasePlanListDTO model);
 
     /**
      * 获取详情

@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierPorductDTO;
+import com.deepsoft.haolifa.model.dto.SupplierProductListDTO;
 
 public interface SupplierProductService {
     /**
@@ -34,11 +35,8 @@ public interface SupplierProductService {
 
     /**
      * 获取列表
-     * @param currentPage
-     * @param pageSize
-     * @param materialType
-     * @param materialName
+     * @param model
      * @return
      */
-    ResultBean getList(Integer currentPage, Integer pageSize, Integer materialType, String materialName);
+    ResultBean getList(SupplierProductListDTO model);
 }

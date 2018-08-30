@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.FinanceDTO;
+import com.deepsoft.haolifa.model.dto.FinanceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
 public interface FinanceService {
@@ -27,10 +28,8 @@ public interface FinanceService {
 
     /**
      * 获取财务记录列表
-     * @param currentPage
-     * @param pageSize
-     * @param orderNo
+     * @param modelList
      * @return
      */
-    ResultBean getList(Integer currentPage, Integer pageSize, String orderNo);
+    ResultBean getList(FinanceListDTO modelList);
 }

@@ -68,7 +68,7 @@ public class ProInspectResultServiceImpl extends BaseService implements ProInspe
             model.setPageSize(10);
         }
         ProInspectResultExample example = new ProInspectResultExample();
-        if (!StringUtils.isEmpty(model.getInspectNo())) {
+        if (!StringUtils.isNotEmpty(model.getInspectNo())) {
             example.or().andInspectNoLike("%" + model.getInspectNo() + "%");
         }
         Page<ProInspectResult> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {

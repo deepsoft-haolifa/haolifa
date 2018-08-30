@@ -30,13 +30,17 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
 
     @Override
     public ResultBean save(EntrustDTO model) {
+        if (StringUtils.isAnyEmpty(model.getEntrustPerson(), model.getMaterialGraphNo(), model.getPurchaseOrderNo())
+                || model.getNumber() == null || model.getNumber() <= 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         String entrustNo = "en_" + RandomUtils.orderNoStr();
         Entrust entrust = new Entrust();
         BeanUtils.copyProperties(model, entrust);
         entrust.setCreateUserId(getLoginUserId());
         entrust.setEntrustNo(entrustNo);
-        int insert = entrustMapper.insertSelective(entrust);
-        return ResultBean.success(insert);
+        entrustMapper.insertSelective(entrust);
+        return ResultBean.success(entrustNo);
     }
 
     @Override
@@ -51,6 +55,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
 
     @Override
     public ResultBean update(EntrustDTO model) {
+        if (StringUtils.isEmpty(model.getEntrustNo()) || model.getNumber()== null || model.getNumber() ==0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         Entrust entrust = new Entrust();
         BeanUtils.copyProperties(model, entrust);
         EntrustExample entrustExample = new EntrustExample();
@@ -79,9 +86,16 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
             model.setPageSize(10);
         }
         EntrustExample entrustExample = new EntrustExample();
-        entrustExample.or().andEntrustNoLike("%" + model.getEntrustNo() + "%")
-                .andPurchaseOrderNoLike("%" + model.getPurchaseOrderNo() + "%")
-                .andStatusEqualTo(model.getStatus().byteValue());
+        EntrustExample.Criteria criteria = entrustExample.createCriteria();
+        if (StringUtils.isNotEmpty(model.getPurchaseOrderNo())) {
+            criteria.andPurchaseOrderNoLike("%" + model.getPurchaseOrderNo() + "%");
+        }
+        if (StringUtils.isNotEmpty(model.getEntrustNo())) {
+            criteria.andEntrustNoLike("%" + model.getEntrustNo() + "%");
+        }
+        if (null != model.getStatus()) {
+            criteria.andStatusEqualTo(model.getStatus().byteValue());
+        }
         Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->
                 entrustMapper.selectByExample(entrustExample));
         PageDTO<Entrust> pageDTO = new PageDTO<>();

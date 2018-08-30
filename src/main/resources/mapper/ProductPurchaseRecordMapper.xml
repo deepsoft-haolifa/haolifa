@@ -281,19 +281,19 @@
       </trim>
       <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="item.purchasePlanNo != null">
-          #{purchasePlanNo,jdbcType=VARCHAR},
+          #{item.purchasePlanNo ,jdbcType=VARCHAR},
         </if>
         <if test="item.productOrderNo != null">
-          #{productOrderNo,jdbcType=VARCHAR},
+          #{item.productOrderNo,jdbcType=VARCHAR},
         </if>
         <if test="item.materialGraphNo != null">
-          #{materialGraphNo,jdbcType=VARCHAR},
+          #{item.materialGraphNo,jdbcType=VARCHAR},
         </if>
         <if test="item.applyBuyNo != null">
-          #{applyBuyNo,jdbcType=VARCHAR},
+          #{item.applyBuyNo,jdbcType=VARCHAR},
         </if>
         <if test="item.purchaseOrderNo != null">
-          #{purchaseOrderNo,jdbcType=VARCHAR},
+          #{item.purchaseOrderNo,jdbcType=VARCHAR},
         </if>
       </trim>
     </foreach>

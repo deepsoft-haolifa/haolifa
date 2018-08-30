@@ -2,7 +2,11 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.ApplyBuy;
 import com.deepsoft.haolifa.model.domain.ApplyBuyExample;
+
 import java.util.List;
+import java.util.Map;
+
+import com.deepsoft.haolifa.model.dto.ApplyBuyListDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface ApplyBuyMapper {
@@ -30,7 +34,16 @@ public interface ApplyBuyMapper {
 
     /**
      * 批量插入请购单记录
+     *
      * @param applyBuyList
      */
     void batchInsertApplyBuy(List<ApplyBuy> applyBuyList);
+
+    /**
+     * 分组查询
+     *
+     * @param model
+     * @return
+     */
+    List<Map<String, Object>> selectByGroup(ApplyBuyListDTO model);
 }
