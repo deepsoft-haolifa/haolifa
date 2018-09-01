@@ -87,4 +87,35 @@ public class CommonEnum {
         }
 
     }
+
+    /**
+     * 出入库操作类型
+     */
+    public enum OperationType {
+        // 出库
+        OUT((byte) 1),
+        //入库
+        ENTRY((byte) 2);
+
+        public final byte code;
+
+        OperationType(byte code) {
+            this.code = code;
+        }
+    }
+    /**
+     * 出入库品种类型
+     */
+    public enum StorageType {
+        // 成品
+        PRODUCT((byte) 1),
+        // 零件
+        MATERIAL((byte) 2);
+
+        public final byte code;
+
+        StorageType(byte code) {
+            this.code = code;
+        }
+    }
 }
