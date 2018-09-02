@@ -1,35 +1,73 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.dao.repository.StockMapper;
+import com.deepsoft.haolifa.model.domain.Stock;
+import com.deepsoft.haolifa.model.domain.StockExample;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StockReqDTO;
 import com.deepsoft.haolifa.service.StockService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
-public class StockServiceImpl implements StockService {
+public class StockServiceImpl extends BaseService implements StockService {
 
     @Autowired
     private StockMapper stockMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean addReduceStock(EntryOutStorageDTO model) {
-        return false;
+        log.info("StockServiceImpl addReduceStock:{}", model.toString());
+        boolean result = false;
+        Stock stock = null;
+        StockExample example = new StockExample();
+        StockExample.Criteria criteria = example.createCriteria();
+        criteria.andStoreRoomIdEqualTo(model.getStoreRoomId())
+                .andStoreRoomRackIdEqualTo(model.getStoreRoomRackId())
+                .andStoreRoomRackNoEqualTo(model.getStoreRoomRackNo());
+        if (StringUtils.isNotBlank(model.getProductNo())) {
+            criteria.andProductNoEqualTo(model.getProductNo());
+        }
+        if (StringUtils.isNotBlank(model.getMaterialGraphNo())) {
+            criteria.andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
+        }
+        List<Stock> stocks = stockMapper.selectByExample(example);
+        if (stocks.size() > 0) {
+            stock = stocks.get(0);
+            //更新库存数量
+            if (model.getQuantity() != 0) {
+                stock.setQuantity(stock.getQuantity() + model.getQuantity());
+            }
+            // 更新锁定数量
+            if (model.getLockQuantity() != 0) {
+                stock.setLockQuantity(stock.getLockQuantity() + model.getLockQuantity());
+            }
+            stock.setUpdateTime(new Date());
+            int update = stockMapper.updateByExampleSelective(stock, example);
+            if (update > 0) {
+                result = true;
+            }
+        } else {
+            stock = new Stock();
+            BeanUtils.copyProperties(model, stock);
+            stock.setCreateUser(getLoginUserId());
+            int insert = stockMapper.insertSelective(stock);
+            if (insert > 0) {
+                result = true;
+            }
+        }
+        return result;
     }
 
-    @Override
-    public boolean updateStock(StockReqDTO model) {
-        return false;
-    }
-
-    @Override
-    public int getStockInfo(String materialGraphNo, String productNo) {
-        return 0;
-    }
 
     @Override
     public ResultBean pageInfoStockWarn(Integer currentPage, Integer pageSize, String type) {

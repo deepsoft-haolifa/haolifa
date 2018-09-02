@@ -9,24 +9,30 @@ public class ProductMaterial {
 
     private Date updateTime;
 
-    private String productNo;
+    private Integer createUser;
 
-    private Integer materialId;
+    private Integer updateUser;
+
+    private String productNo;
 
     private String materialGraphNo;
 
     private Byte status;
 
+    private Byte isDelete;
+
     private String remark;
 
-    public ProductMaterial(Integer id, Date createTime, Date updateTime, String productNo, Integer materialId, String materialGraphNo, Byte status, String remark) {
+    public ProductMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String materialGraphNo, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.createUser = createUser;
+        this.updateUser = updateUser;
         this.productNo = productNo;
-        this.materialId = materialId;
         this.materialGraphNo = materialGraphNo;
         this.status = status;
+        this.isDelete = isDelete;
         this.remark = remark;
     }
 
@@ -58,20 +64,28 @@ public class ProductMaterial {
         this.updateTime = updateTime;
     }
 
+    public Integer getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(Integer createUser) {
+        this.createUser = createUser;
+    }
+
+    public Integer getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Integer updateUser) {
+        this.updateUser = updateUser;
+    }
+
     public String getProductNo() {
         return productNo;
     }
 
     public void setProductNo(String productNo) {
         this.productNo = productNo == null ? null : productNo.trim();
-    }
-
-    public Integer getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Integer materialId) {
-        this.materialId = materialId;
     }
 
     public String getMaterialGraphNo() {
@@ -88,6 +102,14 @@ public class ProductMaterial {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Byte getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Byte isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getRemark() {
