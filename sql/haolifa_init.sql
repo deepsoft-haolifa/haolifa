@@ -183,6 +183,8 @@
 	  `theoretical_weight` varchar(32) NOT NULL DEFAULT '' COMMENT '理论重量',
 	  `tax_rate` varchar(32) NOT NULL DEFAULT '' COMMENT '税率',
 	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '零件状态',
+	  `safe_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '安全库存量（上浮10%提醒）',
+	  `safety_factor` varchar(16) NOT NULL DEFAULT '' COMMENT '存库安全系数',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
@@ -322,12 +324,15 @@
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号（行业规范如：D7A1X3P-16Q-DN50）',
-    `material_id` int(11) NOT NULL DEFAULT 0 COMMENT '零件业务Id',
-	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',	 
+	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '关联状态（0关联，1不关联）',
+	   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
-	  PRIMARY KEY (`id`)
+	  PRIMARY KEY (`id`),
+	  UNIQUE KEY `uk_multi` (`product_no`,`material_graph_no`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品零件关联表（主要记录一个成品是由哪些零件组成，多对多的关系）';
 
 
@@ -346,9 +351,7 @@
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '库存类型：1.成品；2：零件;',
 	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '库存数量(编码时候考虑并发)',
-	  `safe_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '安全库存量（上浮10%提醒）',
-	  `safety_factor` varchar(16) NOT NULL DEFAULT '' COMMENT '存库安全系数',
-	  `price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '单价',
+	  `lock_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '锁定数量（核料成功锁定，零件出库的时候释放）',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)

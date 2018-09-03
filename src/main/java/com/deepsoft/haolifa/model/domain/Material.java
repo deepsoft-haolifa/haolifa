@@ -40,11 +40,15 @@ public class Material {
 
     private Byte status;
 
+    private Integer safeQuantity;
+
+    private String safetyFactor;
+
     private Byte isDelete;
 
     private String remark;
 
-    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Byte isDelete, String remark) {
+    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -63,6 +67,8 @@ public class Material {
         this.theoreticalWeight = theoreticalWeight;
         this.taxRate = taxRate;
         this.status = status;
+        this.safeQuantity = safeQuantity;
+        this.safetyFactor = safetyFactor;
         this.isDelete = isDelete;
         this.remark = remark;
     }
@@ -213,6 +219,22 @@ public class Material {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Integer getSafeQuantity() {
+        return safeQuantity;
+    }
+
+    public void setSafeQuantity(Integer safeQuantity) {
+        this.safeQuantity = safeQuantity;
+    }
+
+    public String getSafetyFactor() {
+        return safetyFactor;
+    }
+
+    public void setSafetyFactor(String safetyFactor) {
+        this.safetyFactor = safetyFactor == null ? null : safetyFactor.trim();
     }
 
     public Byte getIsDelete() {

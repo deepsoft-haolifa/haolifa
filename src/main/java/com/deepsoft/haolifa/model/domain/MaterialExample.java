@@ -1286,6 +1286,136 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andSafeQuantityIsNull() {
+            addCriterion("safe_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityIsNotNull() {
+            addCriterion("safe_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityEqualTo(Integer value) {
+            addCriterion("safe_quantity =", value, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityNotEqualTo(Integer value) {
+            addCriterion("safe_quantity <>", value, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityGreaterThan(Integer value) {
+            addCriterion("safe_quantity >", value, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("safe_quantity >=", value, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityLessThan(Integer value) {
+            addCriterion("safe_quantity <", value, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("safe_quantity <=", value, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityIn(List<Integer> values) {
+            addCriterion("safe_quantity in", values, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityNotIn(List<Integer> values) {
+            addCriterion("safe_quantity not in", values, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("safe_quantity between", value1, value2, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("safe_quantity not between", value1, value2, "safeQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorIsNull() {
+            addCriterion("safety_factor is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorIsNotNull() {
+            addCriterion("safety_factor is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorEqualTo(String value) {
+            addCriterion("safety_factor =", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorNotEqualTo(String value) {
+            addCriterion("safety_factor <>", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorGreaterThan(String value) {
+            addCriterion("safety_factor >", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorGreaterThanOrEqualTo(String value) {
+            addCriterion("safety_factor >=", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorLessThan(String value) {
+            addCriterion("safety_factor <", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorLessThanOrEqualTo(String value) {
+            addCriterion("safety_factor <=", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorLike(String value) {
+            addCriterion("safety_factor like", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorNotLike(String value) {
+            addCriterion("safety_factor not like", value, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorIn(List<String> values) {
+            addCriterion("safety_factor in", values, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorNotIn(List<String> values) {
+            addCriterion("safety_factor not in", values, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorBetween(String value1, String value2) {
+            addCriterion("safety_factor between", value1, value2, "safetyFactor");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafetyFactorNotBetween(String value1, String value2) {
+            addCriterion("safety_factor not between", value1, value2, "safetyFactor");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDeleteIsNull() {
             addCriterion("is_delete is null");
             return (Criteria) this;

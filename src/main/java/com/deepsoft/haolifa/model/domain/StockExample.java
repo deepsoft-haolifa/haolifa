@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -806,6 +805,66 @@ public class StockExample {
             return (Criteria) this;
         }
 
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(Byte value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(Byte value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(Byte value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(Byte value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<Byte> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<Byte> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(Byte value1, Byte value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("type not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
         public Criteria andQuantityIsNull() {
             addCriterion("quantity is null");
             return (Criteria) this;
@@ -866,193 +925,63 @@ public class StockExample {
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityIsNull() {
-            addCriterion("safe_quantity is null");
+        public Criteria andLockQuantityIsNull() {
+            addCriterion("lock_quantity is null");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityIsNotNull() {
-            addCriterion("safe_quantity is not null");
+        public Criteria andLockQuantityIsNotNull() {
+            addCriterion("lock_quantity is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityEqualTo(Integer value) {
-            addCriterion("safe_quantity =", value, "safeQuantity");
+        public Criteria andLockQuantityEqualTo(Integer value) {
+            addCriterion("lock_quantity =", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityNotEqualTo(Integer value) {
-            addCriterion("safe_quantity <>", value, "safeQuantity");
+        public Criteria andLockQuantityNotEqualTo(Integer value) {
+            addCriterion("lock_quantity <>", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityGreaterThan(Integer value) {
-            addCriterion("safe_quantity >", value, "safeQuantity");
+        public Criteria andLockQuantityGreaterThan(Integer value) {
+            addCriterion("lock_quantity >", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityGreaterThanOrEqualTo(Integer value) {
-            addCriterion("safe_quantity >=", value, "safeQuantity");
+        public Criteria andLockQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity >=", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityLessThan(Integer value) {
-            addCriterion("safe_quantity <", value, "safeQuantity");
+        public Criteria andLockQuantityLessThan(Integer value) {
+            addCriterion("lock_quantity <", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityLessThanOrEqualTo(Integer value) {
-            addCriterion("safe_quantity <=", value, "safeQuantity");
+        public Criteria andLockQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity <=", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityIn(List<Integer> values) {
-            addCriterion("safe_quantity in", values, "safeQuantity");
+        public Criteria andLockQuantityIn(List<Integer> values) {
+            addCriterion("lock_quantity in", values, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityNotIn(List<Integer> values) {
-            addCriterion("safe_quantity not in", values, "safeQuantity");
+        public Criteria andLockQuantityNotIn(List<Integer> values) {
+            addCriterion("lock_quantity not in", values, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityBetween(Integer value1, Integer value2) {
-            addCriterion("safe_quantity between", value1, value2, "safeQuantity");
+        public Criteria andLockQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity between", value1, value2, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andSafeQuantityNotBetween(Integer value1, Integer value2) {
-            addCriterion("safe_quantity not between", value1, value2, "safeQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorIsNull() {
-            addCriterion("safety_factor is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorIsNotNull() {
-            addCriterion("safety_factor is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorEqualTo(String value) {
-            addCriterion("safety_factor =", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorNotEqualTo(String value) {
-            addCriterion("safety_factor <>", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorGreaterThan(String value) {
-            addCriterion("safety_factor >", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorGreaterThanOrEqualTo(String value) {
-            addCriterion("safety_factor >=", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorLessThan(String value) {
-            addCriterion("safety_factor <", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorLessThanOrEqualTo(String value) {
-            addCriterion("safety_factor <=", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorLike(String value) {
-            addCriterion("safety_factor like", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorNotLike(String value) {
-            addCriterion("safety_factor not like", value, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorIn(List<String> values) {
-            addCriterion("safety_factor in", values, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorNotIn(List<String> values) {
-            addCriterion("safety_factor not in", values, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorBetween(String value1, String value2) {
-            addCriterion("safety_factor between", value1, value2, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafetyFactorNotBetween(String value1, String value2) {
-            addCriterion("safety_factor not between", value1, value2, "safetyFactor");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceIsNull() {
-            addCriterion("price is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceIsNotNull() {
-            addCriterion("price is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceEqualTo(BigDecimal value) {
-            addCriterion("price =", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceNotEqualTo(BigDecimal value) {
-            addCriterion("price <>", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceGreaterThan(BigDecimal value) {
-            addCriterion("price >", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("price >=", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceLessThan(BigDecimal value) {
-            addCriterion("price <", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("price <=", value, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceIn(List<BigDecimal> values) {
-            addCriterion("price in", values, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceNotIn(List<BigDecimal> values) {
-            addCriterion("price not in", values, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price between", value1, value2, "price");
-            return (Criteria) this;
-        }
-
-        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price not between", value1, value2, "price");
+        public Criteria andLockQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity not between", value1, value2, "lockQuantity");
             return (Criteria) this;
         }
 

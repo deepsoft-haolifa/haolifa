@@ -17,23 +17,6 @@ public interface StockService {
 
 
     /**
-     * 修改安全库存信息
-     *
-     * @return
-     */
-    boolean updateStock(StockReqDTO model);
-
-    /**
-     * 获取某个零件或者成品的库存
-     *
-     * @param materialGraphNo 零件图号
-     * @param productNo       产品号
-     * @return
-     */
-    int getStockInfo(String materialGraphNo, String productNo);
-
-
-    /**
      * 分页获取预警库存
      *
      * @param currentPage 页码

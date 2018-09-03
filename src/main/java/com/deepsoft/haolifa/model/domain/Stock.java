@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class Stock {
@@ -26,19 +25,17 @@ public class Stock {
 
     private String materialGraphNo;
 
+    private Byte type;
+
     private Integer quantity;
 
-    private Integer safeQuantity;
-
-    private String safetyFactor;
-
-    private BigDecimal price;
+    private Integer lockQuantity;
 
     private Byte isDelete;
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, Integer storeRoomId, Integer storeRoomRackId, String storeRoomRackNo, String productNo, String materialGraphNo, Integer quantity, Integer safeQuantity, String safetyFactor, BigDecimal price, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, Integer storeRoomId, Integer storeRoomRackId, String storeRoomRackNo, String productNo, String materialGraphNo, Byte type, Integer quantity, Integer lockQuantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -50,10 +47,9 @@ public class Stock {
         this.storeRoomRackNo = storeRoomRackNo;
         this.productNo = productNo;
         this.materialGraphNo = materialGraphNo;
+        this.type = type;
         this.quantity = quantity;
-        this.safeQuantity = safeQuantity;
-        this.safetyFactor = safetyFactor;
-        this.price = price;
+        this.lockQuantity = lockQuantity;
         this.isDelete = isDelete;
         this.remark = remark;
     }
@@ -150,6 +146,14 @@ public class Stock {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
     }
 
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -158,28 +162,12 @@ public class Stock {
         this.quantity = quantity;
     }
 
-    public Integer getSafeQuantity() {
-        return safeQuantity;
+    public Integer getLockQuantity() {
+        return lockQuantity;
     }
 
-    public void setSafeQuantity(Integer safeQuantity) {
-        this.safeQuantity = safeQuantity;
-    }
-
-    public String getSafetyFactor() {
-        return safetyFactor;
-    }
-
-    public void setSafetyFactor(String safetyFactor) {
-        this.safetyFactor = safetyFactor == null ? null : safetyFactor.trim();
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setLockQuantity(Integer lockQuantity) {
+        this.lockQuantity = lockQuantity;
     }
 
     public Byte getIsDelete() {

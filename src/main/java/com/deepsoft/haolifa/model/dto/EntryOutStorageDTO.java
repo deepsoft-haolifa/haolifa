@@ -21,12 +21,7 @@ public class EntryOutStorageDTO {
     /**
      * 库房货位号
      */
-    private Integer storeRoomRackNo;
-
-    /**
-     * 订单号
-     */
-    private String orderNo;
+    private String storeRoomRackNo;
 
     /**
      * 成品号
@@ -42,6 +37,10 @@ public class EntryOutStorageDTO {
      * 出入库数量
      */
     private Integer quantity;
+    /**
+     * 出入库数量
+     */
+    private Integer lockQuantity;
     /**
      * 出入库单价
      */

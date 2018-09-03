@@ -2,6 +2,10 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
+import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
+import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
+import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
 
 public interface EntryOutStoreRecordService {
 
@@ -10,28 +14,28 @@ public interface EntryOutStoreRecordService {
      *
      * @return
      */
-    int entryProduct(EntryOutStorageDTO model);
+    int entryProduct(EntryProductStorageDTO model);
 
     /**
      * 成品出库
      *
      * @return
      */
-    int outProduct(EntryOutStorageDTO model);
+    int outProduct(OutProductStorageDTO model);
 
     /**
      * 零件入库
      *
      * @return
      */
-    int entryMaterial(EntryOutStorageDTO model);
+    int entryMaterial(EntryMaterialStorageDTO model);
 
     /**
      * 零件出库
      *
      * @return
      */
-    int outMaterial(EntryOutStorageDTO model);
+    int outMaterial(OutMaterialStorageDTO model);
 
 
     /**

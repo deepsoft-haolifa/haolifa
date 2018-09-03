@@ -121,7 +121,7 @@
 
         <!--<table tableName="product" domainObjectName="Product"></table>-->
 
-        <!--<table tableName="product_material" domainObjectName="ProductMaterial"></table>-->
+        <table tableName="product_material" domainObjectName="ProductMaterial"></table>
 
         <!--<table tableName="stock" domainObjectName="Stock"></table>-->
 
@@ -155,7 +155,7 @@
 
         <!--<table tableName="supplier" domainObjectName="Supplier"></table>-->
 
-        <table tableName="supplier_product" domainObjectName="SupplierProduct"></table>
+        <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
 
         <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult"></table>-->
 

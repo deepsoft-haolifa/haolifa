@@ -12,4 +12,8 @@ public class CacheConsts {
      */
     public static final String REDIS_KEY__USERBASE_INFO = "deepsoft:haolifa:userBaseInfo:";
 
+    /**
+     * 核料，锁定的零件（包括数量和库位）
+     */
+    public static final String REDIS_KEY_LOCK_MATERIAL = "deepsoft:haolifa:lockMaterial:";
 }
