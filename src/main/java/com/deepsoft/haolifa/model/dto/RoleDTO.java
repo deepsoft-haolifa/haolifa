@@ -9,9 +9,10 @@ public class RoleDTO {
 
     private Integer deptId;
 
+    private String deptName;
+
     private String roleName;
 
     private String description;
-
 
 }

@@ -5,8 +5,10 @@
 
   <select id="findRolesByUserId" parameterType="long" resultType="com.deepsoft.haolifa.model.domain.SysRole">
     select
+    r.id,
     r.role_name as roleName,
-    r.description
+    r.description,
+    r.dept_id as deptId
     from sys_user u
     LEFT JOIN sys_role_user sru on u.id= sru.sys_user_id
     LEFT JOIN sys_role r on sru.sys_role_id=r.id

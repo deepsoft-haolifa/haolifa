@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface RoleService {
 
-    PageDTO<RoleDTO> getRoles(Integer paheNUm, Integer pageSize);
+    List<RoleDTO> getRoles();
+
+    List<RoleDTO> getRolesByUserId(Integer userId);
 
     int deleteRole(Integer id);
 

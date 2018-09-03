@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.*;
  * @create 2018-07-11 15:33
  * @desc
  **/
-@Api(tags = {"人事管理"})
+@Api(tags = {"人员管理"})
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private SysUserService userService;
+
 
     @GetMapping("/self/info")
     @ApiOperation("获取当前用户信息")
@@ -72,6 +73,7 @@ public class UserController {
 
 
     @PostMapping("/{userId}/role")
+    @ApiOperation("给用户分配角色")
     public ResultBean insertUserRole(@PathVariable("userId")Integer userId, @RequestBody Integer[] roleIds){
        return ResultBean.success(userService.insertUserRole(userId, roleIds));
     }

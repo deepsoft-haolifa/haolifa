@@ -1,8 +1,11 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SysRoleMapper;
+import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
 import com.deepsoft.haolifa.model.domain.SysRole;
 import com.deepsoft.haolifa.model.domain.SysRoleExample;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.service.RoleService;
@@ -20,20 +23,25 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private SysRoleMapper roleMapper;
+    @Autowired
+    private MyPermissionMapper myPermissionMapper;
 
     @Override
-    public PageDTO<RoleDTO> getRoles(Integer pageNum, Integer pageSize) {
-        Page<SysRole> roles = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPage(() -> roleMapper.selectByExample(new SysRoleExample()));
-        PageDTO<RoleDTO> page = new PageDTO<>();
-        BeanUtils.copyProperties(roles, page);
-        List<RoleDTO> roleDTOs = roles.stream().map(r -> {
+    public List<RoleDTO> getRoles() {
+        return roleMapper.selectByExample(null).stream().map(r -> {
             RoleDTO role = new RoleDTO();
             BeanUtils.copyProperties(r, role);
             return role;
         }).collect(Collectors.toList());
-        page.setList(roleDTOs);
-        return page;
+    }
+
+    @Override
+    public List<RoleDTO> getRolesByUserId(Integer userId) {
+        return myPermissionMapper.findRolesByUserId(userId).stream().map(r -> {
+            RoleDTO role = new RoleDTO();
+            BeanUtils.copyProperties(r, role);
+            return role;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -47,11 +55,16 @@ public class RoleServiceImpl implements RoleService {
     public int insertRole(RoleDTO role) {
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(role, sysRole);
-        return 0;
+        return roleMapper.insertSelective(sysRole);
     }
 
     @Override
     public int updateRole(RoleDTO role) {
-        return 0;
+        if(null != role || role.getId() == null){
+            throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        SysRole sysRole = new SysRole();
+        BeanUtils.copyProperties(role, sysRole);
+        return roleMapper.updateByPrimaryKeySelective(sysRole);
     }
 }
