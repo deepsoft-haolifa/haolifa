@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ProductRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.service.ProductMaterialService;
 import com.deepsoft.haolifa.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +18,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductMaterialService productMaterialService;
 
     @ApiOperation("新增成品信息")
     @PostMapping("/product/save")
@@ -44,11 +47,42 @@ public class ProductController {
             @ApiImplicitParam(value = "成品名称", name = "nameLike", dataType = "string", paramType = "query"),
             @ApiImplicitParam(value = "成品编号", name = "productNoLike", dataType = "string", paramType = "query")
     })
-    @PostMapping("/product/pageInfo")
+    @GetMapping("/product/pageInfo")
     public ResultBean pageInfoProduct(@RequestParam(defaultValue = "1") Integer currentPage,
                                       @RequestParam(defaultValue = "20") Integer pageSize,
                                       @RequestParam(required = false) String nameLike,
                                       @RequestParam(required = false) String productNoLike) {
-        return productService.pageInfo(currentPage, pageSize, nameLike,productNoLike);
+        return productService.pageInfo(currentPage, pageSize, nameLike, productNoLike);
+    }
+
+
+    @ApiOperation("新增成品信息")
+    @PostMapping("/product/material/save")
+    public ResultBean saveProductMaterial(@RequestParam String productNo,
+                                          @RequestParam String materialGraphNo) {
+        return productMaterialService.saveInfo(productNo, materialGraphNo);
+    }
+
+    @ApiOperation("删除成品零件配置信息")
+    @DeleteMapping("/product/delete/{productNo}/{materialGraphNo}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "productNo", value = "产品编号", dataType = "string", paramType = "path", required = true),
+            @ApiImplicitParam(name = "materialGraphNo", value = "零件编号", dataType = "string", paramType = "path", required = true)
+    })
+    public ResultBean deleteProductMaterial(@PathVariable String productNo, @PathVariable String materialGraphNo) {
+        return productMaterialService.delete(productNo, materialGraphNo);
+    }
+
+    @ApiOperation("获取成品零件配置分页列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(required = true, value = "成品编号", name = "productNo", dataType = "string", paramType = "query")
+    })
+    @GetMapping("/product/material/pageInfo")
+    public ResultBean pageInfoProduct(@RequestParam(defaultValue = "1") Integer currentPage,
+                                      @RequestParam(defaultValue = "20") Integer pageSize,
+                                      @RequestParam String productNo) {
+        return productMaterialService.pageInfo(currentPage, pageSize, productNo);
     }
 }

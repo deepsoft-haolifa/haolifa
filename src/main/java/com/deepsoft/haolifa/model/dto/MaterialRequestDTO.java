@@ -52,7 +52,7 @@ public class MaterialRequestDTO {
     private String taxRate;
 
     @ApiModelProperty(value = "安全库存")
-    private String safeQuantity;
+    private Integer safeQuantity;
 
     @ApiModelProperty(value = "安全库存系数")
     private String safetyFactor;
