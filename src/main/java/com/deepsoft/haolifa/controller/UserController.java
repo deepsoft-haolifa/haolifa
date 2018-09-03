@@ -23,12 +23,6 @@ public class UserController {
     private SysUserService userService;
 
 
-    @GetMapping("/self/info")
-    @ApiOperation("获取当前用户信息")
-    public ResultBean index() {
-        return ResultBean.success(userService.selectUserInfo());
-    }
-
 
     @GetMapping("")
     @ApiOperation("获取用户列表")

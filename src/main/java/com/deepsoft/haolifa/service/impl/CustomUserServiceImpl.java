@@ -53,10 +53,17 @@ public class CustomUserServiceImpl implements UserDetailsService { //自定义Us
             Set<SysRole> roles = myPermissionMapper.findRolesByUserId(user.getId());
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
             for (SysRole role :roles) {
-              GrantedAuthority authority = new CustomGrantedAuthority(role.getRoleName(), role.getDescription());
-              grantedAuthorities.add(authority);
+                if(null == role){
+                    roles.remove(null);
+                    continue;
+                }
+                GrantedAuthority authority = new CustomGrantedAuthority(role.getRoleName(), role.getDescription());
+                grantedAuthorities.add(authority);
             }
-            List<CustomPermission> permissios = myPermissionMapper.findPermissiosByRoles(roles.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
+            List<CustomPermission> permissios = new ArrayList<>();
+            if(!roles.isEmpty()) {
+                permissios = myPermissionMapper.findPermissiosByRoles(roles.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
+            }
             return new CustomUser(user.getId(), user.getUsername(),user.getRealName(), user.getPassword(), grantedAuthorities, permissios);
         } else {
             throw new UsernameNotFoundException("admin: " + username + " do not exist!");

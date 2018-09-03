@@ -19,8 +19,11 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.synth.SynthColorChooserUI;
 import java.util.List;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PARAM_ERROR;
@@ -29,7 +32,6 @@ import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PARAM_ERROR;
 @Slf4j
 public class SysUserServiceImpl implements SysUserService {
 
-    @Autowired
     private SysUserMapper userMapper;
     @Autowired
     private CustomUserServiceImpl customUserService;
@@ -37,11 +39,13 @@ public class SysUserServiceImpl implements SysUserService {
     private SysRoleUserMapper roleUserMapper;
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public CustomUser selectLoginUser() {
-        //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return  (CustomUser) customUserService.loadUserByUsername("admin");
+        return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //return  (CustomUser) customUserService.loadUserByUsername("admin");
     }
 
     @Override
@@ -64,6 +68,7 @@ public class SysUserServiceImpl implements SysUserService {
     public int insertSysUser(UserBaseDTO user) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
+        sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
         return userMapper.insertSelective(sysUser);
     }
 
