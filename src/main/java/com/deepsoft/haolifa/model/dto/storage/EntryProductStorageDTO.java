@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.storage;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,19 +11,14 @@ import java.math.BigDecimal;
 @Data
 public class EntryProductStorageDTO extends BaseStorageDTO{
 
-    /**
-     * 成品号
-     */
+
+    @ApiModelProperty(value = "成品号",required = true)
     private String productNo;
 
-    /**
-     * 入库数量（正数）
-     */
+    @ApiModelProperty(value = "入库数量（正数）",required = true)
     private Integer quantity;
 
-    /**
-     * 生产部门
-     */
+    @ApiModelProperty(value = "生产部门",required = true)
     private String productDepartment;
 
 }

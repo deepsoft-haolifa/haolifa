@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.storage;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -9,23 +10,19 @@ import java.math.BigDecimal;
  */
 @Data
 public class EntryMaterialStorageDTO extends BaseStorageDTO{
-    /**
-     * 零件号
-     */
+
+    @ApiModelProperty(value = "零件号",required = true)
     private String materialGraphNo;
 
-    /**
-     * 入库数量（正数）
-     */
+    @ApiModelProperty(value = "入库数量（正数）",required = true)
     private Integer quantity;
-    /**
-     * 零件购买单价
-     */
+
+
+    @ApiModelProperty(value = "零件购买单价")
     private BigDecimal price;
 
-    /**
-     * 供应商
-     */
+
+    @ApiModelProperty(value = "供应商",required = true)
     private String supplier;
 
 }

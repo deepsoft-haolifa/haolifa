@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.domain.StockExample;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.StockService;
+import com.deepsoft.haolifa.util.RandomUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -32,7 +33,6 @@ public class StockServiceImpl extends BaseService implements StockService {
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
         criteria.andStoreRoomIdEqualTo(model.getStoreRoomId())
-                .andStoreRoomRackIdEqualTo(model.getStoreRoomRackId())
                 .andStoreRoomRackNoEqualTo(model.getStoreRoomRackNo());
         if (StringUtils.isNotBlank(model.getProductNo())) {
             criteria.andProductNoEqualTo(model.getProductNo());
@@ -44,11 +44,11 @@ public class StockServiceImpl extends BaseService implements StockService {
         if (stocks.size() > 0) {
             stock = stocks.get(0);
             //更新库存数量
-            if (model.getQuantity() != 0) {
+            if (null != model.getQuantity() && model.getQuantity() != 0) {
                 stock.setQuantity(stock.getQuantity() + model.getQuantity());
             }
             // 更新锁定数量
-            if (model.getLockQuantity() != 0) {
+            if (null != model.getLockQuantity() && model.getLockQuantity() != 0) {
                 stock.setLockQuantity(stock.getLockQuantity() + model.getLockQuantity());
             }
             stock.setUpdateTime(new Date());
@@ -60,6 +60,7 @@ public class StockServiceImpl extends BaseService implements StockService {
             stock = new Stock();
             BeanUtils.copyProperties(model, stock);
             stock.setCreateUser(getLoginUserId());
+            stock.setStockId(RandomUtils.uuidStr());
             int insert = stockMapper.insertSelective(stock);
             if (insert > 0) {
                 result = true;

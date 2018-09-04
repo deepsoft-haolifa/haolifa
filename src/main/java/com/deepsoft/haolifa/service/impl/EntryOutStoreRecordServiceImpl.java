@@ -17,6 +17,7 @@ import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
 import com.deepsoft.haolifa.service.EntryOutStoreRecordService;
 import com.deepsoft.haolifa.service.StockService;
+import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setOperationType(operationType);
             setType(storageType);
             setCreateUser(getLoginUserId());
+            setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
         // 插入出入库记录表
@@ -60,8 +62,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
                 setStoreRoomId(model.getStoreRoomId());
-                setStoreRoomRackId(model.getStoreRoomRackId());
-                setStoreRoomRackId(model.getStoreRoomRackNo());
+                setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setProductNo(model.getProductNo());
                 setOperationType((int) operationType);
                 setType((int) storageType);
@@ -91,6 +92,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setCreateUser(getLoginUserId());
             setCustomerName(customeName);
             setCustomerNo(customeNo);
+            setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
         // 插入出入库表
@@ -98,8 +100,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
                 setStoreRoomId(model.getStoreRoomId());
-                setStoreRoomRackId(model.getStoreRoomRackId());
-                setStoreRoomRackId(model.getStoreRoomRackNo());
+                setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setProductNo(model.getProductNo());
                 setOperationType((int) operationType);
                 setType((int) storageType);
@@ -122,12 +123,15 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setOperationType(operationType);
             setType(storageType);
             setCreateUser(getLoginUserId());
+            setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
         // 插入出入库记录表
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
+                setStoreRoomId(model.getStoreRoomId());
+                setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setMaterialGraphNo(model.getMaterialGraphNo());
                 setOperationType((int) operationType);
                 setType((int) storageType);
@@ -154,17 +158,21 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setOperationType(operationType);
             setType(storageType);
             setCreateUser(getLoginUserId());
+            setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
         // 插入出入库记录表
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
+                setStoreRoomId(model.getStoreRoomId());
+                setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setMaterialGraphNo(model.getMaterialGraphNo());
                 setOperationType((int) operationType);
                 setType((int) storageType);
                 setQuantity(model.getQuantity());
                 setLockQuantity(model.getQuantity());
+
             }};
             // 增加库存
             stockService.addReduceStock(entryOutStorageDTO);

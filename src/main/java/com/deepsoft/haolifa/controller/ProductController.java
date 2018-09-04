@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(tags = {"成品管理"})
 @RestController
-@RequestMapping("/")
+@RequestMapping("/product")
 public class ProductController {
 
     @Autowired
@@ -22,19 +22,19 @@ public class ProductController {
     private ProductMaterialService productMaterialService;
 
     @ApiOperation("新增成品信息")
-    @PostMapping("/product/save")
+    @PostMapping("/save")
     public ResultBean saveProduct(@RequestBody ProductRequestDTO model) {
         return productService.saveInfo(model);
     }
 
     @ApiOperation("更新成品信息")
-    @PutMapping("/product/update")
+    @PutMapping("/update")
     public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
         return productService.updateInfo(model);
     }
 
     @ApiOperation("删除成品信息")
-    @DeleteMapping("/product/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteProduct(@PathVariable int id) {
         return productService.delete(id);
@@ -47,7 +47,7 @@ public class ProductController {
             @ApiImplicitParam(value = "成品名称", name = "nameLike", dataType = "string", paramType = "query"),
             @ApiImplicitParam(value = "成品编号", name = "productNoLike", dataType = "string", paramType = "query")
     })
-    @GetMapping("/product/pageInfo")
+    @GetMapping("/pageInfo")
     public ResultBean pageInfoProduct(@RequestParam(defaultValue = "1") Integer currentPage,
                                       @RequestParam(defaultValue = "20") Integer pageSize,
                                       @RequestParam(required = false) String nameLike,
@@ -57,14 +57,14 @@ public class ProductController {
 
 
     @ApiOperation("新增成品信息")
-    @PostMapping("/product/material/save")
+    @PostMapping("/material/save")
     public ResultBean saveProductMaterial(@RequestParam String productNo,
                                           @RequestParam String materialGraphNo) {
         return productMaterialService.saveInfo(productNo, materialGraphNo);
     }
 
     @ApiOperation("删除成品零件配置信息")
-    @DeleteMapping("/product/delete/{productNo}/{materialGraphNo}")
+    @DeleteMapping("/material/delete/{productNo}/{materialGraphNo}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "productNo", value = "产品编号", dataType = "string", paramType = "path", required = true),
             @ApiImplicitParam(name = "materialGraphNo", value = "零件编号", dataType = "string", paramType = "path", required = true)
@@ -79,7 +79,7 @@ public class ProductController {
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "成品编号", name = "productNo", dataType = "string", paramType = "query")
     })
-    @GetMapping("/product/material/pageInfo")
+    @GetMapping("/material/pageInfo")
     public ResultBean pageInfoProduct(@RequestParam(defaultValue = "1") Integer currentPage,
                                       @RequestParam(defaultValue = "20") Integer pageSize,
                                       @RequestParam String productNo) {
