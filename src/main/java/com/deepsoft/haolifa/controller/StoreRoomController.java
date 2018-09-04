@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.service.EntryOutStoreRecordService;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.StoreRoomRackService;
 import com.deepsoft.haolifa.service.StoreRoomService;
@@ -17,7 +18,8 @@ public class StoreRoomController {
     private StoreRoomService storeRoomService;
     @Autowired
     private StoreRoomRackService storeRoomRackService;
-
+    @Autowired
+    private EntryOutStoreRecordService entryOutStoreRecordService;
 
     @ApiOperation("新增库房信息")
     @PostMapping("/save")
@@ -102,5 +104,26 @@ public class StoreRoomController {
         return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomId);
     }
 
+
+    @ApiOperation("获取零件，成品出入库分页列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "类型：1.成品；2：零件;", name = "type", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(value = "操作类型：1.出库；2：入库;", name = "operationType", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(value = "产品号", name = "productNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "零件号", name = "materialGraphNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "当前页面", name = "currentPage", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(value = "每页数量", name = "pageSize", dataType = "int", paramType = "query", required = true)
+    })
+    @GetMapping("/pageInfoEntryOutRecord")
+    public ResultBean pageInfoEntryOutRecord(@RequestParam(defaultValue = "1") Integer currentPage,
+                                     @RequestParam(defaultValue = "20") Integer pageSize,
+                                     @RequestParam Integer type,
+                                     @RequestParam Integer operationType,
+                                     @RequestParam(required = false) String productNo,
+                                     @RequestParam(required = false) String materialGraphNo,
+                                     @RequestParam(required = false) String orderNo) {
+        return entryOutStoreRecordService.pageInfoEntryOutRecord(currentPage, pageSize, type, operationType, productNo, materialGraphNo, orderNo);
+    }
 
 }
