@@ -31,11 +31,10 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<PermissionNode> getMenu() {
-        List<CustomPermission> permissions =
+    public List<String> getMenu() {
+        return
                 userService.selectLoginUser().getPermissions().stream()
-                .filter(p -> p.getPermName().equals("m")).collect(Collectors.toList());
-        return generatorPermissions(permissions);
+                .filter(p -> p.getPermName().equals("m")).map(CustomPermission::getUrl).collect(Collectors.toList());
     }
 
     private List<PermissionNode> generatorPermissions(List<CustomPermission> permissions){

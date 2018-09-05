@@ -21,6 +21,6 @@ public class UserInfoVO {
 
     private Collection<GrantedAuthority> roles;
 
-    private List<PermissionNode> menus;
+    private List<String> menus;
 
 }

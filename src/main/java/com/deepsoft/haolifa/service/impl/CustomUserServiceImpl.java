@@ -63,6 +63,7 @@ public class CustomUserServiceImpl implements UserDetailsService { //自定义Us
             List<CustomPermission> permissios = new ArrayList<>();
             if(!roles.isEmpty()) {
                 permissios = myPermissionMapper.findPermissiosByRoles(roles.stream().map(SysRole::getRoleName).collect(Collectors.toList()));
+                permissios.remove(null);
             }
             return new CustomUser(user.getId(), user.getUsername(),user.getRealName(), user.getPassword(), grantedAuthorities, permissios);
         } else {
