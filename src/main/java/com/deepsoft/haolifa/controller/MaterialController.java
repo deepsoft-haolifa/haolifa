@@ -20,20 +20,20 @@ public class MaterialController {
     private MaterialService materialService;
 
     @ApiOperation("新增零件类别信息")
-    @PostMapping("/saveClassify")
+    @PostMapping("/classify/save")
     public ResultBean saveClassify(@RequestBody MaterialClassifyRequestDTO model) {
         return materialService.saveClassify(model);
     }
 
     @ApiOperation("删除零件类别")
-    @DeleteMapping("/deleteClassify/{id}")
+    @DeleteMapping("/classify/delete/{id}")
     @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteClassify(@PathVariable int id) {
         return materialService.deleteClassify(id);
     }
 
     @ApiOperation("零件类别列表")
-    @GetMapping("/listClassify")
+    @GetMapping("/classify/list")
     public ResultBean listClassify() {
         return ResultBean.success(materialService.listClassify());
     }
@@ -45,10 +45,10 @@ public class MaterialController {
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
             @ApiImplicitParam(value = "分类名称", name = "classifyNameLike", dataType = "string", paramType = "query")
     })
-    @GetMapping("/pageClassify")
-    public ResultBean pageClassify(@RequestParam(defaultValue = "1") Integer currentPage,
-                                   @RequestParam(defaultValue = "20") Integer pageSize,
-                                   @RequestParam(required = false) String classifyNameLike) {
+    @GetMapping("/classify/pageInfo")
+    public ResultBean pageInfoClassify(@RequestParam(defaultValue = "1") Integer currentPage,
+                                       @RequestParam(defaultValue = "20") Integer pageSize,
+                                       @RequestParam(required = false) String classifyNameLike) {
         return materialService.pageInfoClassify(currentPage, pageSize, classifyNameLike);
     }
 
