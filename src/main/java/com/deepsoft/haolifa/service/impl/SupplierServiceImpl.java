@@ -39,11 +39,11 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
         Supplier supplier = new Supplier();
         BeanUtils.copyProperties(model,supplier);
         supplier.setSuppilerNo(supplierNo);
-        supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentials()));
-        supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancial()));
+        supplier.setStaffInfo(JSONObject.toJSONString(model.getStaffInfo()));
+        supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentialsInfo()));
+        supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancialInfo()));
         supplier.setMainOrgan(JSONObject.toJSONString(model.getMainOrgan()));
-        supplier.setQualityAssuranceInfo(JSONObject.toJSONString(model.getQualityAssurance()));
-//        supplier.setCreateUserId(1);
+        supplier.setQualityAssuranceInfo(JSONObject.toJSONString(model.getQualityAssuranceInfo()));
         supplier.setCreateUserId(getLoginUserId());
         int insertId = supplierMapper.insertSelective(supplier);
         return ResultBean.success(insertId);
@@ -57,10 +57,10 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
         }
         Supplier supplier = new Supplier();
         BeanUtils.copyProperties(model, supplier);
-        supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentials()));
-        supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancial()));
+        supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentialsInfo()));
+        supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancialInfo()));
         supplier.setMainOrgan(JSONObject.toJSONString(model.getMainOrgan()));
-        supplier.setQualityAssuranceInfo(JSONObject.toJSONString(model.getQualityAssurance()));
+        supplier.setQualityAssuranceInfo(JSONObject.toJSONString(model.getQualityAssuranceInfo()));
         int update = supplierMapper.updateByPrimaryKeySelective(supplier);
         return ResultBean.success(update);
     }

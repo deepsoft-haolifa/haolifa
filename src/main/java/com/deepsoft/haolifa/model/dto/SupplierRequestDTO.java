@@ -41,13 +41,13 @@ public class SupplierRequestDTO {
     @ApiModelProperty(required = true, value = "企业员工")
     private SupplierStaff staffInfo;
     @ApiModelProperty(required = true, value = "资格证书")
-    private SupplierCredential credentials;
+    private SupplierCredential credentialsInfo;
     @ApiModelProperty(required = true, value = "近三年经营状况")
-    private SupplierFinancial financial;
+    private SupplierFinancial financialInfo;
     @ApiModelProperty(required = true, value = "主要机构")
-    private SupplierMainOrgan mainOrgan;
+    private List<SupplierMainOrgan> mainOrgan;
     @ApiModelProperty(required = true, value = "质量体系")
-    private SupplierAualityAssurance qualityAssurance;
+    private SupplierAualityAssurance qualityAssuranceInfo;
     @ApiModelProperty(required = true, value = "工艺路线")
     private String processRoute;
     @ApiModelProperty(required = true, value = "负责人")
