@@ -31,7 +31,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class OrderProductServiceImpl implements OrderProductService {
+public class OrderProductServiceImpl extends BaseService implements OrderProductService {
     @Autowired
     private OrderProductMapper orderProductMapper;
 
@@ -198,8 +198,8 @@ public class OrderProductServiceImpl implements OrderProductService {
         String orderProductNo = RandomUtils.orderNoStr();
         log.info("save orderProduct info start|orderProductNo:{},model:{}", orderProductNo, JSONObject.toJSONString(orderProduct));
         orderProduct.setOrderNo(orderProductNo);
-        // todo 换成当前登录人Id
-        orderProduct.setCreateUser(1);
+
+        orderProduct.setCreateUser(getLoginUserId());
         orderProduct.setOrderStatus(CommonEnum.OrderStatus.CREATE.code);
         int insert = orderProductMapper.insertSelective(orderProduct);
         log.info("save orderProduct info end|orderProductNo:{},result:{}", orderProductNo, insert);
