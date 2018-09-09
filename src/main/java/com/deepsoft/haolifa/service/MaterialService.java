@@ -103,5 +103,5 @@ public interface MaterialService {
      * @param graphNoLike      图号
      * @return
      */
-    ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike);
+    ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike,int status);
 }

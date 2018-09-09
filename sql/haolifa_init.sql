@@ -185,6 +185,7 @@
 	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '零件状态',
 	  `safe_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '安全库存量（上浮10%提醒）',
 	  `safety_factor` varchar(16) NOT NULL DEFAULT '' COMMENT '存库安全系数',
+	  `current_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '目前库存量（每次出库，入库的时候实时更新）',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
