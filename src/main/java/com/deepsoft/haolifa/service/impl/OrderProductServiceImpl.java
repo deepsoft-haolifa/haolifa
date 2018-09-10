@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.util.Base64Utils;
@@ -20,6 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -230,14 +232,25 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
-    public Page<OrderProduct> pageOrderProduct(Page page) {
+    public ResultBean pageOrderProduct(Integer currentPage, Integer pageSize, String orderNo, int status) {
+        currentPage = currentPage == null ? 1 : currentPage;
+        pageSize = pageSize == null ? 20 : pageSize;
+
         OrderProductExample example = new OrderProductExample();
-        int pageNum = 0;
-        int pageSize = 0;
-        Page<OrderProduct> orderProducts = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPage(() ->
-                        orderProductMapper.selectByExample(example)
-                );
-        return orderProducts;
+        OrderProductExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(orderNo)) {
+            criteria.andOrderNoEqualTo(orderNo);
+        }
+        if (status > 0) {
+            criteria.andOrderStatusEqualTo((byte) status);
+        }
+        example.setOrderByClause("create_time desc");
+        Page<OrderProduct> materials = PageHelper.startPage(currentPage, pageSize)
+                .doSelectPage(() -> orderProductMapper.selectByExample(example));
+
+        PageDTO<OrderProduct> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(materials, pageDTO);
+        pageDTO.setList(materials);
+        return ResultBean.success(pageDTO);
     }
 }

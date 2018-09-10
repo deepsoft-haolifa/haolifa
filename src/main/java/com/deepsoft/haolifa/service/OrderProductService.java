@@ -7,6 +7,7 @@ import com.github.pagehelper.Page;
 public interface OrderProductService {
     /**
      * 上传订单excel
+     *
      * @param base64Source base64 excel
      * @return
      */
@@ -14,6 +15,7 @@ public interface OrderProductService {
 
     /**
      * 添加order信息
+     *
      * @param order
      * @return
      */
@@ -21,14 +23,16 @@ public interface OrderProductService {
 
     /**
      * 修改订单状态
+     *
      * @param orderNo
      * @param status
      * @return
      */
-    int updateOrderProductStatus(String orderNo,byte status);
+    int updateOrderProductStatus(String orderNo, byte status);
 
     /**
      * 获取订单详情
+     *
      * @param orderNo
      * @return
      */
@@ -36,7 +40,8 @@ public interface OrderProductService {
 
     /**
      * 获取订单分页列表
+     *
      * @return
      */
-    Page<OrderProduct> pageOrderProduct(Page page);
+    ResultBean pageOrderProduct(Integer currentPage, Integer pageSize, String orderNo, int orderStatus);
 }

@@ -33,12 +33,22 @@ public class StoreRoomServiceImpl implements StoreRoomService {
     @Override
     public ResultBean saveInfo(StoreRoomRequestDTO model) {
         log.info("StoreRoomServiceImpl saveInfo start|{}", JSONObject.toJSON(model));
-        if (StringUtils.isAnyBlank(model.getName(), model.getRoomNo())) {
+        final String roomNo = model.getRoomNo();
+        if (StringUtils.isAnyBlank(model.getName(), roomNo)) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         StoreRoom storeRoom = new StoreRoom();
         BeanUtils.copyProperties(model, storeRoom);
         storeRoom.setCreateUser(sysUserService.selectLoginUser().getId());
+
+        // 判断库房号是否存在
+        StoreRoomExample storeRoomExample = new StoreRoomExample();
+        storeRoomExample.or().andRoomNoEqualTo(roomNo).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        long count = storeRoomMapper.countByExample(storeRoomExample);
+        if (count > 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_NO_EXISTS);
+        }
+
         int insert = storeRoomMapper.insertSelective(storeRoom);
         return ResultBean.success(insert);
     }
@@ -49,6 +59,14 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         if (model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+        // 判断库房号是否存在
+        StoreRoomExample storeRoomExample = new StoreRoomExample();
+        storeRoomExample.or().andRoomNoEqualTo(model.getRoomNo()).andIdNotEqualTo(model.getId()).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        long count = storeRoomMapper.countByExample(storeRoomExample);
+        if (count > 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_NO_EXISTS);
+        }
+
         StoreRoom storeRoom = new StoreRoom();
         BeanUtils.copyProperties(model, storeRoom);
         storeRoom.setUpdateTime(new Date());
