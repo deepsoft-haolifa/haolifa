@@ -104,4 +104,14 @@ public interface MaterialService {
      * @return
      */
     ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike,int status);
+
+    /**
+     * 更新零件当前数量
+     *
+     * @param graphNo      图号
+     * @param quantity     数量（正数增加，负数减少）
+     * @return
+     */
+    int updateCurrentQuantity(String graphNo,int quantity);
+
 }

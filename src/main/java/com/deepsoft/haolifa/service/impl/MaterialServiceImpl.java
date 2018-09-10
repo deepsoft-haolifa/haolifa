@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
+import com.deepsoft.haolifa.dao.repository.extend.MaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.Material;
 import com.deepsoft.haolifa.model.domain.MaterialClassify;
 import com.deepsoft.haolifa.model.domain.MaterialClassifyExample;
@@ -33,6 +34,9 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private MaterialExtendMapper materialExtendMapper;
+
 
     @Override
     public ResultBean saveClassify(MaterialClassifyRequestDTO model) {
@@ -178,7 +182,7 @@ public class MaterialServiceImpl implements MaterialService {
             criteria.andCurrentQuantityLessThan("safe_quantity");
         }
         // 正常状态2（库存数量>预警值）
-        if (status == 1) {
+        if (status == 2) {
             criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
         }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
@@ -190,6 +194,12 @@ public class MaterialServiceImpl implements MaterialService {
         BeanUtils.copyProperties(materials, pageDTO);
         pageDTO.setList(materials);
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public int updateCurrentQuantity(String graphNo, int quantity) {
+        log.info("update current quantity start,graphNo:{},quantity:{}", graphNo, quantity);
+        return materialExtendMapper.updateCurrentQuantity(graphNo, quantity);
     }
 
 }
