@@ -82,20 +82,20 @@ public class StoreRoomController {
         return storeRoomRackService.saveRackInfo(model);
     }
 
-    @ApiOperation("更新库房货位信息")
+    @ApiOperation("更新库房库位信息")
     @PutMapping("/rack/update")
     public ResultBean updateRack(@RequestBody StoreRoomRackRequestDTO model) {
         return storeRoomRackService.updateRackInfo(model);
     }
 
-    @ApiOperation("删除库房货位信息")
+    @ApiOperation("删除库房库位信息")
     @DeleteMapping("/rack/delete/{id}")
     @ApiImplicitParam(name = "id", value = "库房货位id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteRack(@PathVariable int id) {
         return storeRoomRackService.delete(id);
     }
 
-    @ApiOperation("获取库房货位分页列表")
+    @ApiOperation("获取库房库位分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "库房Id", name = "roomId", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),

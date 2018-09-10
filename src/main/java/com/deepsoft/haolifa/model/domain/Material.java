@@ -44,11 +44,13 @@ public class Material {
 
     private String safetyFactor;
 
+    private Integer currentQuantity;
+
     private Byte isDelete;
 
     private String remark;
 
-    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Byte isDelete, String remark) {
+    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Integer currentQuantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -69,6 +71,7 @@ public class Material {
         this.status = status;
         this.safeQuantity = safeQuantity;
         this.safetyFactor = safetyFactor;
+        this.currentQuantity = currentQuantity;
         this.isDelete = isDelete;
         this.remark = remark;
     }
@@ -235,6 +238,14 @@ public class Material {
 
     public void setSafetyFactor(String safetyFactor) {
         this.safetyFactor = safetyFactor == null ? null : safetyFactor.trim();
+    }
+
+    public Integer getCurrentQuantity() {
+        return currentQuantity;
+    }
+
+    public void setCurrentQuantity(Integer currentQuantity) {
+        this.currentQuantity = currentQuantity;
     }
 
     public Byte getIsDelete() {

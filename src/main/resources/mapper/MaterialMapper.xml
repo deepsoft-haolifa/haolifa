@@ -23,6 +23,7 @@
       <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="safe_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="safety_factor" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="current_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
@@ -88,7 +89,7 @@
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, material_classify_id, material_classify_name, 
     name, material, graph_no, unit, price, specifications, model, actual_weight, theoretical_weight, 
-    tax_rate, status, safe_quantity, safety_factor, is_delete, remark
+    tax_rate, status, safe_quantity, safety_factor, current_quantity, is_delete, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialExample" resultMap="BaseResultMap">
     select
@@ -127,16 +128,16 @@
       graph_no, unit, price, 
       specifications, model, actual_weight, 
       theoretical_weight, tax_rate, status, 
-      safe_quantity, safety_factor, is_delete, 
-      remark)
+      safe_quantity, safety_factor, current_quantity, 
+      is_delete, remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{materialClassifyId,jdbcType=INTEGER}, 
       #{materialClassifyName,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
       #{graphNo,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
       #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{actualWeight,jdbcType=VARCHAR}, 
       #{theoreticalWeight,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{safeQuantity,jdbcType=INTEGER}, #{safetyFactor,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, 
-      #{remark,jdbcType=VARCHAR})
+      #{safeQuantity,jdbcType=INTEGER}, #{safetyFactor,jdbcType=VARCHAR}, #{currentQuantity,jdbcType=INTEGER}, 
+      #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Material">
     insert into material
@@ -200,6 +201,9 @@
       </if>
       <if test="safetyFactor != null">
         safety_factor,
+      </if>
+      <if test="currentQuantity != null">
+        current_quantity,
       </if>
       <if test="isDelete != null">
         is_delete,
@@ -268,6 +272,9 @@
       </if>
       <if test="safetyFactor != null">
         #{safetyFactor,jdbcType=VARCHAR},
+      </if>
+      <if test="currentQuantity != null">
+        #{currentQuantity,jdbcType=INTEGER},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -346,6 +353,9 @@
       <if test="record.safetyFactor != null">
         safety_factor = #{record.safetyFactor,jdbcType=VARCHAR},
       </if>
+      <if test="record.currentQuantity != null">
+        current_quantity = #{record.currentQuantity,jdbcType=INTEGER},
+      </if>
       <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=TINYINT},
       </if>
@@ -379,6 +389,7 @@
       status = #{record.status,jdbcType=TINYINT},
       safe_quantity = #{record.safeQuantity,jdbcType=INTEGER},
       safety_factor = #{record.safetyFactor,jdbcType=VARCHAR},
+      current_quantity = #{record.currentQuantity,jdbcType=INTEGER},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -445,6 +456,9 @@
       <if test="safetyFactor != null">
         safety_factor = #{safetyFactor,jdbcType=VARCHAR},
       </if>
+      <if test="currentQuantity != null">
+        current_quantity = #{currentQuantity,jdbcType=INTEGER},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -475,6 +489,7 @@
       status = #{status,jdbcType=TINYINT},
       safe_quantity = #{safeQuantity,jdbcType=INTEGER},
       safety_factor = #{safetyFactor,jdbcType=VARCHAR},
+      current_quantity = #{currentQuantity,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

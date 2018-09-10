@@ -1416,6 +1416,67 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andCurrentQuantityIsNull() {
+            addCriterion("current_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityIsNotNull() {
+            addCriterion("current_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityEqualTo(Integer value) {
+            addCriterion("current_quantity =", value, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityNotEqualTo(Integer value) {
+            addCriterion("current_quantity <>", value, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityGreaterThan(String value) {
+            addCriterion("current_quantity >", value, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityGreaterThanOrEqualTo(String value) {
+            addCriterion("current_quantity >=", value, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityLessThan(String value) {
+            addCriterion("current_quantity <", value, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("current_quantity <=", value, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityIn(List<Integer> values) {
+            addCriterion("current_quantity in", values, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityNotIn(List<Integer> values) {
+            addCriterion("current_quantity not in", values, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("current_quantity between", value1, value2, "currentQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("current_quantity not between", value1, value2, "currentQuantity");
+            return (Criteria) this;
+        }
+
+
         public Criteria andIsDeleteIsNull() {
             addCriterion("is_delete is null");
             return (Criteria) this;
@@ -1545,6 +1606,7 @@ public class MaterialExample {
             addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
+
     }
 
     public static class Criteria extends GeneratedCriteria {
