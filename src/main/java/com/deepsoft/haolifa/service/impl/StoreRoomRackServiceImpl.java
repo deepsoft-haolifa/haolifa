@@ -46,7 +46,7 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
         // 判断这个仓库是否存在货位号
         Integer storeRoomId = model.getStoreRoomId();
         String stackNo = model.getStackNo();
-        boolean existRackNo = judgeRackNo(stackNo, storeRoomId);
+        boolean existRackNo = judgeRackNo(stackNo, storeRoomId, 0);
         log.info("saveRackInfo existRackNo roomId:{},stackNo:{},result:{}", storeRoomId, stackNo, existRackNo);
         if (!existRackNo) {
             return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_RACK_EXISTS);
@@ -66,6 +66,14 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
     public ResultBean updateRackInfo(StoreRoomRackRequestDTO model) {
         if (model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        // 判断这个仓库是否存在货位号
+        Integer storeRoomId = model.getStoreRoomId();
+        String stackNo = model.getStackNo();
+        boolean existRackNo = judgeRackNo(stackNo, storeRoomId, model.getId());
+        log.info("updateRackInfo existRackNo roomId:{},stackNo:{},result:{}", storeRoomId, stackNo, existRackNo);
+        if (!existRackNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_RACK_EXISTS);
         }
         StoreRoomRack storeRoomRack = new StoreRoomRack();
         BeanUtils.copyProperties(model, storeRoomRack);
@@ -114,9 +122,13 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
      * @param roomId
      * @return
      */
-    private boolean judgeRackNo(String rackNo, int roomId) {
+    private boolean judgeRackNo(String rackNo, int roomId, int id) {
         StoreRoomRackExample example = new StoreRoomRackExample();
-        example.or().andRackNoEqualTo(rackNo).andStoreRoomIdEqualTo(roomId).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        StoreRoomRackExample.Criteria criteria = example.createCriteria();
+        if (id > 0) {
+            criteria.andIdEqualTo(id);
+        }
+        criteria.andRackNoEqualTo(rackNo).andStoreRoomIdEqualTo(roomId).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         long count = storeRoomRackMapper.countByExample(example);
         if (count > 0) {
             return false;

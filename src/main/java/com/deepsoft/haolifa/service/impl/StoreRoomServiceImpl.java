@@ -43,7 +43,7 @@ public class StoreRoomServiceImpl implements StoreRoomService {
 
         // 判断库房号是否存在
         StoreRoomExample storeRoomExample = new StoreRoomExample();
-        storeRoomExample.or().andRoomNoEqualTo(roomNo).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        storeRoomExample.or().andRoomNoEqualTo(roomNo);
         long count = storeRoomMapper.countByExample(storeRoomExample);
         if (count > 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_NO_EXISTS);
@@ -61,7 +61,7 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         }
         // 判断库房号是否存在
         StoreRoomExample storeRoomExample = new StoreRoomExample();
-        storeRoomExample.or().andRoomNoEqualTo(model.getRoomNo()).andIdNotEqualTo(model.getId()).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        storeRoomExample.or().andRoomNoEqualTo(model.getRoomNo()).andIdNotEqualTo(model.getId());
         long count = storeRoomMapper.countByExample(storeRoomExample);
         if (count > 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_NO_EXISTS);
