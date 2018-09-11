@@ -18,6 +18,8 @@ public class OrderProduct {
 
     private Byte orderStatus;
 
+    private String orderContractUrl;
+
     private String demandName;
 
     private String demandAgentName;
@@ -80,7 +82,7 @@ public class OrderProduct {
 
     private String warrantyPeriod;
 
-    private String packagingspecification;
+    private String packagingSpecification;
 
     private String transportType;
 
@@ -92,7 +94,7 @@ public class OrderProduct {
 
     private String freight;
 
-    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingspecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String orderContractUrl, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -100,6 +102,7 @@ public class OrderProduct {
         this.updateUser = updateUser;
         this.orderNo = orderNo;
         this.orderStatus = orderStatus;
+        this.orderContractUrl = orderContractUrl;
         this.demandName = demandName;
         this.demandAgentName = demandAgentName;
         this.demandTelphone = demandTelphone;
@@ -131,7 +134,7 @@ public class OrderProduct {
         this.signBoard = signBoard;
         this.acceptanceCriteria = acceptanceCriteria;
         this.warrantyPeriod = warrantyPeriod;
-        this.packagingspecification = packagingspecification;
+        this.packagingSpecification = packagingSpecification;
         this.transportType = transportType;
         this.deliveryTime = deliveryTime;
         this.receiptInfo = receiptInfo;
@@ -197,6 +200,14 @@ public class OrderProduct {
 
     public void setOrderStatus(Byte orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getOrderContractUrl() {
+        return orderContractUrl;
+    }
+
+    public void setOrderContractUrl(String orderContractUrl) {
+        this.orderContractUrl = orderContractUrl == null ? null : orderContractUrl.trim();
     }
 
     public String getDemandName() {
@@ -447,12 +458,12 @@ public class OrderProduct {
         this.warrantyPeriod = warrantyPeriod == null ? null : warrantyPeriod.trim();
     }
 
-    public String getPackagingspecification() {
-        return packagingspecification;
+    public String getPackagingSpecification() {
+        return packagingSpecification;
     }
 
-    public void setPackagingspecification(String packagingspecification) {
-        this.packagingspecification = packagingspecification == null ? null : packagingspecification.trim();
+    public void setPackagingSpecification(String packagingSpecification) {
+        this.packagingSpecification = packagingSpecification == null ? null : packagingSpecification.trim();
     }
 
     public String getTransportType() {

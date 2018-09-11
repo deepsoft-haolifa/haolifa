@@ -536,6 +536,76 @@ public class OrderProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderContractUrlIsNull() {
+            addCriterion("order_contract_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlIsNotNull() {
+            addCriterion("order_contract_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlEqualTo(String value) {
+            addCriterion("order_contract_url =", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlNotEqualTo(String value) {
+            addCriterion("order_contract_url <>", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlGreaterThan(String value) {
+            addCriterion("order_contract_url >", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("order_contract_url >=", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlLessThan(String value) {
+            addCriterion("order_contract_url <", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlLessThanOrEqualTo(String value) {
+            addCriterion("order_contract_url <=", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlLike(String value) {
+            addCriterion("order_contract_url like", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlNotLike(String value) {
+            addCriterion("order_contract_url not like", value, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlIn(List<String> values) {
+            addCriterion("order_contract_url in", values, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlNotIn(List<String> values) {
+            addCriterion("order_contract_url not in", values, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlBetween(String value1, String value2) {
+            addCriterion("order_contract_url between", value1, value2, "orderContractUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractUrlNotBetween(String value1, String value2) {
+            addCriterion("order_contract_url not between", value1, value2, "orderContractUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andDemandNameIsNull() {
             addCriterion("demand_name is null");
             return (Criteria) this;
@@ -2666,73 +2736,73 @@ public class OrderProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationIsNull() {
-            addCriterion("packagingSpecification is null");
+        public Criteria andPackagingSpecificationIsNull() {
+            addCriterion("packaging_specification is null");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationIsNotNull() {
-            addCriterion("packagingSpecification is not null");
+        public Criteria andPackagingSpecificationIsNotNull() {
+            addCriterion("packaging_specification is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationEqualTo(String value) {
-            addCriterion("packagingSpecification =", value, "packagingspecification");
+        public Criteria andPackagingSpecificationEqualTo(String value) {
+            addCriterion("packaging_specification =", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationNotEqualTo(String value) {
-            addCriterion("packagingSpecification <>", value, "packagingspecification");
+        public Criteria andPackagingSpecificationNotEqualTo(String value) {
+            addCriterion("packaging_specification <>", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationGreaterThan(String value) {
-            addCriterion("packagingSpecification >", value, "packagingspecification");
+        public Criteria andPackagingSpecificationGreaterThan(String value) {
+            addCriterion("packaging_specification >", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationGreaterThanOrEqualTo(String value) {
-            addCriterion("packagingSpecification >=", value, "packagingspecification");
+        public Criteria andPackagingSpecificationGreaterThanOrEqualTo(String value) {
+            addCriterion("packaging_specification >=", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationLessThan(String value) {
-            addCriterion("packagingSpecification <", value, "packagingspecification");
+        public Criteria andPackagingSpecificationLessThan(String value) {
+            addCriterion("packaging_specification <", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationLessThanOrEqualTo(String value) {
-            addCriterion("packagingSpecification <=", value, "packagingspecification");
+        public Criteria andPackagingSpecificationLessThanOrEqualTo(String value) {
+            addCriterion("packaging_specification <=", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationLike(String value) {
-            addCriterion("packagingSpecification like", value, "packagingspecification");
+        public Criteria andPackagingSpecificationLike(String value) {
+            addCriterion("packaging_specification like", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationNotLike(String value) {
-            addCriterion("packagingSpecification not like", value, "packagingspecification");
+        public Criteria andPackagingSpecificationNotLike(String value) {
+            addCriterion("packaging_specification not like", value, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationIn(List<String> values) {
-            addCriterion("packagingSpecification in", values, "packagingspecification");
+        public Criteria andPackagingSpecificationIn(List<String> values) {
+            addCriterion("packaging_specification in", values, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationNotIn(List<String> values) {
-            addCriterion("packagingSpecification not in", values, "packagingspecification");
+        public Criteria andPackagingSpecificationNotIn(List<String> values) {
+            addCriterion("packaging_specification not in", values, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationBetween(String value1, String value2) {
-            addCriterion("packagingSpecification between", value1, value2, "packagingspecification");
+        public Criteria andPackagingSpecificationBetween(String value1, String value2) {
+            addCriterion("packaging_specification between", value1, value2, "packagingSpecification");
             return (Criteria) this;
         }
 
-        public Criteria andPackagingspecificationNotBetween(String value1, String value2) {
-            addCriterion("packagingSpecification not between", value1, value2, "packagingspecification");
+        public Criteria andPackagingSpecificationNotBetween(String value1, String value2) {
+            addCriterion("packaging_specification not between", value1, value2, "packagingSpecification");
             return (Criteria) this;
         }
 

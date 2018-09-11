@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.dto.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.github.pagehelper.Page;
 
@@ -19,7 +20,7 @@ public interface OrderProductService {
      * @param order
      * @return
      */
-    ResultBean saveOrderProductInfo(OrderProduct order);
+    ResultBean saveOrderProductInfo(OrderProductDTO order);
 
     /**
      * 修改订单状态
