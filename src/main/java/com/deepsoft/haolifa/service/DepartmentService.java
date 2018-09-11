@@ -15,4 +15,6 @@ public interface DepartmentService {
 
     int deleteDepartment(Integer id);
 
+    DepartmentDTO selectDepartmentById(Integer id);
+
 }

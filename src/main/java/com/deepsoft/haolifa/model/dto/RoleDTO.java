@@ -7,9 +7,7 @@ public class RoleDTO {
 
     private Integer id;
 
-    private Integer deptId;
-
-    private String deptName;
+    private DepartmentDTO department;
 
     private String roleName;
 

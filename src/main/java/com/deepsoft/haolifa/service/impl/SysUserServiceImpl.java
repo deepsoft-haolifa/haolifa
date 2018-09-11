@@ -1,30 +1,34 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.dao.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.model.domain.SysRoleUser;
 import com.deepsoft.haolifa.model.domain.SysRoleUserExample;
 import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.domain.SysUserExample;
-import com.deepsoft.haolifa.model.dto.BaseException;
-import com.deepsoft.haolifa.model.dto.CustomUser;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.UserBaseDTO;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
+import com.deepsoft.haolifa.model.vo.UserPageVO;
+import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.PermissionService;
+import com.deepsoft.haolifa.service.RoleService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.util.UUIDGenerator;
+import com.deepsoft.haolifa.util.RedisKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.plaf.synth.SynthColorChooserUI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PARAM_ERROR;
 
@@ -32,6 +36,7 @@ import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PARAM_ERROR;
 @Slf4j
 public class SysUserServiceImpl implements SysUserService {
 
+    @Autowired
     private SysUserMapper userMapper;
     @Autowired
     private CustomUserServiceImpl customUserService;
@@ -41,6 +46,12 @@ public class SysUserServiceImpl implements SysUserService {
     private PermissionService permissionService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private DepartmentService departmentService;
+    @Autowired
+    private RedisDao redisDao;
 
     @Override
     public CustomUser selectLoginUser() {
@@ -58,10 +69,23 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public SysUser getSysUser(Integer userId) {
+        String userKey = RedisKeyUtil.getUserKey(userId);
+        String userCacheStr = redisDao.get(userKey);
+        if(StringUtils.isNotBlank(userCacheStr)){
+            return JSONObject.parseObject(userCacheStr, UserCacheDTO.class);
+        }
         SysUserExample userExample = new SysUserExample();
-        userExample.or().andIdEqualTo(selectLoginUser().getId());
+        userExample.or().andIdEqualTo(userId);
         List<SysUser> sysUsers = userMapper.selectByExample(userExample);
-        return sysUsers.size()>0?sysUsers.get(0):null;
+        List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(userId);
+        UserCacheDTO userCacheDTO = new UserCacheDTO();
+        if(sysUsers.size() > 0){
+            BeanUtils.copyProperties(sysUsers.get(0), userCacheDTO);
+            userCacheDTO.setRoles(rolesByUserId);
+
+        }
+        redisDao.set(userKey, JSON.toJSONString(userCacheDTO));
+        return userCacheDTO;
     }
 
     @Override
@@ -73,12 +97,19 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public PageDTO<SysUser> getUserList(Integer pageNum, Integer pageSize) {
+    public PageDTO<UserPageVO> getUserList(Integer pageNum, Integer pageSize) {
         Page<SysUser> users = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPage(() -> userMapper.selectByExample(new SysUserExample()));
-        PageDTO<SysUser> pageDTO = new PageDTO<>();
+        log.info("users:{}", users);
+        List<UserPageVO> userPageVOS = users.stream().map(u -> {
+            UserCacheDTO sysUser = (UserCacheDTO) getSysUser(u.getId());
+            UserPageVO userPageVO = new UserPageVO();
+            BeanUtils.copyProperties(sysUser, userPageVO);
+            return userPageVO;
+        }).collect(Collectors.toList());
+        PageDTO<UserPageVO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(users, pageDTO);
-        pageDTO.setList(users);
+        pageDTO.setList(userPageVOS);
         return pageDTO;
     }
 

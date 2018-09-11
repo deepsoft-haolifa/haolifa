@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
+import com.deepsoft.haolifa.model.vo.UserPageVO;
 
 public interface SysUserService {
 
@@ -38,7 +39,7 @@ public interface SysUserService {
      * 获取用户列表
      * @return
      */
-    PageDTO<SysUser> getUserList(Integer pageNum, Integer pageSize);
+    PageDTO<UserPageVO> getUserList(Integer pageNum, Integer pageSize);
 
     /**
      * 修改用户
