@@ -1,6 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
-import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.dto.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.OrderProductService;
 import io.swagger.annotations.Api;
@@ -36,7 +36,7 @@ public class OrderProductController {
     @ApiOperation("成品订单信息添加")
     @DeleteMapping("/save")
     @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
-    public ResultBean deleteClassify(@RequestBody OrderProduct orderProduct) {
+    public ResultBean deleteClassify(@RequestBody OrderProductDTO orderProduct) {
         return orderProductService.saveOrderProductInfo(orderProduct);
     }
 

@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.dto;
 
+import com.deepsoft.haolifa.util.BeanUtils;
+import com.github.pagehelper.Page;
 import lombok.Data;
 
 import java.util.List;
@@ -40,4 +42,11 @@ public class PageDTO<E> {
 
     private List<E> list;
 
+
+    public static PageDTO pageTOPageDTO(Page page){
+        PageDTO pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(page, pageDTO);
+        pageDTO.setList(page);
+        return pageDTO;
+    }
 }

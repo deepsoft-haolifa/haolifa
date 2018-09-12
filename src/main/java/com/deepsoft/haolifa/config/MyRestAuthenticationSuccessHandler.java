@@ -43,6 +43,7 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CustomUser customUser = userService.selectLoginUser();
         log.info("customeUser:{}, time:",customUser, new Date());
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
         writer.write(JSONObject.toJSONString(ResultBean.success(userService.selectUserInfo())));
         writer.flush();

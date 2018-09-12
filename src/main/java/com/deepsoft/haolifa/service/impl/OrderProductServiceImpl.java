@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
+import com.deepsoft.haolifa.model.dto.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -166,7 +167,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         orderProduct.setWarrantyPeriod(cellValue);
                         break;
                     case 31:
-                        orderProduct.setPackagingspecification(cellValue);
+                        orderProduct.setPackagingSpecification(cellValue);
                         break;
                     case 32:
                         orderProduct.setTransportType(cellValue);
@@ -196,10 +197,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
 
     @Override
-    public ResultBean saveOrderProductInfo(OrderProduct orderProduct) {
+    public ResultBean saveOrderProductInfo(OrderProductDTO orderProductDTO) {
+        OrderProduct orderProduct = new OrderProduct();
         String orderProductNo = RandomUtils.orderNoStr();
         log.info("save orderProduct info start|orderProductNo:{},model:{}", orderProductNo, JSONObject.toJSONString(orderProduct));
-        orderProduct.setOrderNo(orderProductNo);
+        orderProductDTO.setOrderNo(orderProductNo);
+        BeanUtils.copyProperties(orderProductDTO, orderProduct);
 
         orderProduct.setCreateUser(getLoginUserId());
         orderProduct.setOrderStatus(CommonEnum.OrderStatus.CREATE.code);

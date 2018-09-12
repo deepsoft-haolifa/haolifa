@@ -54,4 +54,12 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return departmentMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public DepartmentDTO selectDepartmentById(Integer id) {
+        SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(id);
+        DepartmentDTO departmentDTO = new DepartmentDTO();
+        BeanUtils.copyProperties(sysDepartment, departmentDTO);
+        return departmentDTO;
+    }
 }
