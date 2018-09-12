@@ -98,6 +98,20 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         return storeRoom;
     }
 
+    @Override
+    public StoreRoom getInfoByNo(String roomNo) {
+        log.info("StoreRoomServiceImpl getInfo start|roomNo={}", roomNo);
+        if (StringUtils.isNotBlank(roomNo)) {
+            return null;
+        }
+        StoreRoomExample example = new StoreRoomExample();
+        example.or().andRoomNoEqualTo(roomNo);
+        List<StoreRoom> storeRooms = storeRoomMapper.selectByExample(example);
+        if (storeRooms.size() > 0) {
+            return storeRooms.get(0);
+        }
+        return null;
+    }
 
     @Override
     public ResultBean listInfo(int type) {

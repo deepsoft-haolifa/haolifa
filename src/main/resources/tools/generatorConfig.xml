@@ -121,13 +121,13 @@
 
         <!--<table tableName="product" domainObjectName="Product"></table>-->
 
-        <table tableName="product_material" domainObjectName="ProductMaterial"></table>
+        <!--<table tableName="product_material" domainObjectName="ProductMaterial"></table>-->
 
         <!--<table tableName="stock" domainObjectName="Stock"></table>-->
 
         <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->
 
-        <!--<table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>-->
+        <table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>
 
         <!--<table tableName="entry_out_store_record" domainObjectName="EntryOutStoreRecord"></table>-->
 

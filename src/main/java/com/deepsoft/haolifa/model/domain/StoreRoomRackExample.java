@@ -405,63 +405,73 @@ public class StoreRoomRackExample {
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdIsNull() {
-            addCriterion("store_room_id is null");
+        public Criteria andStoreRoomNoIsNull() {
+            addCriterion("store_room_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdIsNotNull() {
-            addCriterion("store_room_id is not null");
+        public Criteria andStoreRoomNoIsNotNull() {
+            addCriterion("store_room_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdEqualTo(Integer value) {
-            addCriterion("store_room_id =", value, "storeRoomId");
+        public Criteria andStoreRoomNoEqualTo(String value) {
+            addCriterion("store_room_no =", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdNotEqualTo(Integer value) {
-            addCriterion("store_room_id <>", value, "storeRoomId");
+        public Criteria andStoreRoomNoNotEqualTo(String value) {
+            addCriterion("store_room_no <>", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdGreaterThan(Integer value) {
-            addCriterion("store_room_id >", value, "storeRoomId");
+        public Criteria andStoreRoomNoGreaterThan(String value) {
+            addCriterion("store_room_no >", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("store_room_id >=", value, "storeRoomId");
+        public Criteria andStoreRoomNoGreaterThanOrEqualTo(String value) {
+            addCriterion("store_room_no >=", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdLessThan(Integer value) {
-            addCriterion("store_room_id <", value, "storeRoomId");
+        public Criteria andStoreRoomNoLessThan(String value) {
+            addCriterion("store_room_no <", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdLessThanOrEqualTo(Integer value) {
-            addCriterion("store_room_id <=", value, "storeRoomId");
+        public Criteria andStoreRoomNoLessThanOrEqualTo(String value) {
+            addCriterion("store_room_no <=", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdIn(List<Integer> values) {
-            addCriterion("store_room_id in", values, "storeRoomId");
+        public Criteria andStoreRoomNoLike(String value) {
+            addCriterion("store_room_no like", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdNotIn(List<Integer> values) {
-            addCriterion("store_room_id not in", values, "storeRoomId");
+        public Criteria andStoreRoomNoNotLike(String value) {
+            addCriterion("store_room_no not like", value, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdBetween(Integer value1, Integer value2) {
-            addCriterion("store_room_id between", value1, value2, "storeRoomId");
+        public Criteria andStoreRoomNoIn(List<String> values) {
+            addCriterion("store_room_no in", values, "storeRoomNo");
             return (Criteria) this;
         }
 
-        public Criteria andStoreRoomIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("store_room_id not between", value1, value2, "storeRoomId");
+        public Criteria andStoreRoomNoNotIn(List<String> values) {
+            addCriterion("store_room_no not in", values, "storeRoomNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStoreRoomNoBetween(String value1, String value2) {
+            addCriterion("store_room_no between", value1, value2, "storeRoomNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andStoreRoomNoNotBetween(String value1, String value2) {
+            addCriterion("store_room_no not between", value1, value2, "storeRoomNo");
             return (Criteria) this;
         }
 
@@ -722,6 +732,76 @@ public class StoreRoomRackExample {
 
         public Criteria andIsDeleteNotBetween(Byte value1, Byte value2) {
             addCriterion("is_delete not between", value1, value2, "isDelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameIsNull() {
+            addCriterion("rack_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameIsNotNull() {
+            addCriterion("rack_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameEqualTo(String value) {
+            addCriterion("rack_name =", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameNotEqualTo(String value) {
+            addCriterion("rack_name <>", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameGreaterThan(String value) {
+            addCriterion("rack_name >", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameGreaterThanOrEqualTo(String value) {
+            addCriterion("rack_name >=", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameLessThan(String value) {
+            addCriterion("rack_name <", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameLessThanOrEqualTo(String value) {
+            addCriterion("rack_name <=", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameLike(String value) {
+            addCriterion("rack_name like", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameNotLike(String value) {
+            addCriterion("rack_name not like", value, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameIn(List<String> values) {
+            addCriterion("rack_name in", values, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameNotIn(List<String> values) {
+            addCriterion("rack_name not in", values, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameBetween(String value1, String value2) {
+            addCriterion("rack_name between", value1, value2, "rackName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNameNotBetween(String value1, String value2) {
+            addCriterion("rack_name not between", value1, value2, "rackName");
             return (Criteria) this;
         }
     }

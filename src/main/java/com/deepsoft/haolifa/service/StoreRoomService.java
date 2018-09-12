@@ -39,6 +39,14 @@ public interface StoreRoomService {
     StoreRoom getInfo(int id);
 
     /**
+     * 获取roomNo库房详情
+     *
+     * @return
+     */
+    StoreRoom getInfoByNo(String roomNo);
+
+
+    /**
      * 获取库房列表
      *
      * @param type 0.所有库；1.原料库；2：成品库；3.既有原料，又有成品;

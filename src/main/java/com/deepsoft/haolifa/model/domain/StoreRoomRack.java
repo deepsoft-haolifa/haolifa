@@ -13,7 +13,7 @@ public class StoreRoomRack {
 
     private Integer updateUser;
 
-    private Integer storeRoomId;
+    private String storeRoomNo;
 
     private String rackNo;
 
@@ -23,17 +23,20 @@ public class StoreRoomRack {
 
     private Byte isDelete;
 
-    public StoreRoomRack(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer storeRoomId, String rackNo, Byte status, String remark, Byte isDelete) {
+    private String rackName;
+
+    public StoreRoomRack(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String storeRoomNo, String rackNo, Byte status, String remark, Byte isDelete, String rackName) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
-        this.storeRoomId = storeRoomId;
+        this.storeRoomNo = storeRoomNo;
         this.rackNo = rackNo;
         this.status = status;
         this.remark = remark;
         this.isDelete = isDelete;
+        this.rackName = rackName;
     }
 
     public StoreRoomRack() {
@@ -80,12 +83,12 @@ public class StoreRoomRack {
         this.updateUser = updateUser;
     }
 
-    public Integer getStoreRoomId() {
-        return storeRoomId;
+    public String getStoreRoomNo() {
+        return storeRoomNo;
     }
 
-    public void setStoreRoomId(Integer storeRoomId) {
-        this.storeRoomId = storeRoomId;
+    public void setStoreRoomNo(String storeRoomNo) {
+        this.storeRoomNo = storeRoomNo == null ? null : storeRoomNo.trim();
     }
 
     public String getRackNo() {
@@ -118,5 +121,13 @@ public class StoreRoomRack {
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getRackName() {
+        return rackName;
+    }
+
+    public void setRackName(String rackName) {
+        this.rackName = rackName == null ? null : rackName.trim();
     }
 }
