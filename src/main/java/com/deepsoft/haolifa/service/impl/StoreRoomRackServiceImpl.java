@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -72,7 +73,7 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
         String storeRoomNo = model.getStoreRoomNo();
         String rackNo = model.getRackNo();
         boolean existRackNo = judgeRackNo(rackNo, storeRoomNo, model.getId());
-        log.info("updateRackInfo existRackNo roomId:{},stackNo:{},result:{}", storeRoomNo, rackNo, existRackNo);
+        log.info("updateRackInfo existRackNo roomId:{},rackNo:{},result:{}", storeRoomNo, rackNo, existRackNo);
         if (!existRackNo) {
             return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_RACK_EXISTS);
         }
@@ -135,12 +136,16 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
     private boolean judgeRackNo(String rackNo, String storeRoomNo, int id) {
         StoreRoomRackExample example = new StoreRoomRackExample();
         StoreRoomRackExample.Criteria criteria = example.createCriteria();
-        if (id > 0) {
-            criteria.andIdEqualTo(id);
-        }
         criteria.andRackNoEqualTo(rackNo).andStoreRoomNoEqualTo(storeRoomNo).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        long count = storeRoomRackMapper.countByExample(example);
-        if (count > 0) {
+        List<StoreRoomRack> storeRoomRacks = storeRoomRackMapper.selectByExample(example);
+        if (storeRoomRacks.size() > 0) {
+            // 更新的时候传id，如果查出来的id和传过来的id相同，则返回false
+            if (id > 0) {
+                StoreRoomRack storeRoomRack = storeRoomRacks.get(0);
+                if (storeRoomRack.getId() == id) {
+                    return true;
+                }
+            }
             return false;
         }
         return true;

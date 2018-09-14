@@ -20,8 +20,8 @@ public class StoreRoomRackRequestDTO {
     private String rackNo;
     @ApiModelProperty(value = "库位名称")
     private String rackName;
-    @ApiModelProperty(value = "库位状态（1：删除；0；正常）")
-    private Byte status;
+//    @ApiModelProperty(value = "库位状态（1：删除；0；正常）")
+//    private Byte status;
     @ApiModelProperty(value = "备注")
     private String remark;
 }

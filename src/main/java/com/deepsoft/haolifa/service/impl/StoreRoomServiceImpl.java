@@ -101,7 +101,7 @@ public class StoreRoomServiceImpl implements StoreRoomService {
     @Override
     public StoreRoom getInfoByNo(String roomNo) {
         log.info("StoreRoomServiceImpl getInfo start|roomNo={}", roomNo);
-        if (StringUtils.isNotBlank(roomNo)) {
+        if (StringUtils.isBlank(roomNo)) {
             return null;
         }
         StoreRoomExample example = new StoreRoomExample();
