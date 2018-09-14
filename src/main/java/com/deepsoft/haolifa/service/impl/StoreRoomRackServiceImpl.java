@@ -40,7 +40,7 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
         CustomUser customUser = sysUserService.selectLoginUser();
         int createUser = customUser != null ? customUser.getId() : 1;
         // 判断是否有这个仓库
-        StoreRoom info = storeRoomService.getInfoByNo(model.getRackNo());
+        StoreRoom info = storeRoomService.getInfoByNo(model.getStoreRoomNo());
         if (info == null) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "库房不存在");
         }
