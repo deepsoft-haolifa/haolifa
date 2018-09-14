@@ -57,7 +57,7 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
             setCreateUser(createUser);
             setStoreRoomNo(storeRoomNo);
             setRackNo(rackNo);
-            setStatus(CommonEnum.Consts.NO.code);
+            setRackName(model.getRackName());
             setRemark(model.getRemark());
         }};
         int insert = storeRoomRackMapper.insertSelective(record);
