@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 //                .antMatchers("/swagger-ui.html").permitAll()
-                .anyRequest().authenticated()//permitAll()
+                .anyRequest().permitAll()//authenticated()
                 .and()
                 .formLogin().successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
