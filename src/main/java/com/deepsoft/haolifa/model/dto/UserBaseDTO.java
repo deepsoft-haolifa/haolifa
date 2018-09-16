@@ -41,7 +41,7 @@ public class UserBaseDTO {
 //    @ApiModelProperty(required = false,value = "照片")
 //    private String photo;
 
-    @ApiModelProperty(required = true,value = "入职时间")
+    @ApiModelProperty(required = true,value = "入职时间：yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date entryTime;
 

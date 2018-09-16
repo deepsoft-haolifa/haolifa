@@ -22,4 +22,8 @@ public class UserPageVO {
 
     @ApiModelProperty(value = "角色部门")
     private List<RoleDTO> roles;
+
+    @ApiModelProperty(value = "是否停用：1-是； 0-否")
+    private Byte isDelete;
+
 }

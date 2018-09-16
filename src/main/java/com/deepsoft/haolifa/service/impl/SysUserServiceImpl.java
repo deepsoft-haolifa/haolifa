@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.dao.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
+import com.deepsoft.haolifa.dao.repository.extend.MyUserMapper;
 import com.deepsoft.haolifa.model.domain.SysRoleUser;
 import com.deepsoft.haolifa.model.domain.SysRoleUserExample;
 import com.deepsoft.haolifa.model.domain.SysUser;
@@ -52,6 +53,8 @@ public class SysUserServiceImpl implements SysUserService {
     private DepartmentService departmentService;
     @Autowired
     private RedisDao redisDao;
+    @Autowired
+    private MyUserMapper myUserMapper;
 
     @Override
     public CustomUser selectLoginUser() {
@@ -143,5 +146,10 @@ public class SysUserServiceImpl implements SysUserService {
             count += roleUserMapper.insertSelective(roleUser);
         }
         return count;
+    }
+
+    @Override
+    public int closeUser(Integer id) {
+        return myUserMapper.closeOrOpenUser(id);
     }
 }

@@ -9,6 +9,6 @@ public interface PermissionService {
 
     boolean authorized(List<GrantedAuthority> roles, String url, String permission);
 
-    List<String> getMenu();
+    List<PermissionNode> getMenu();
 
 }

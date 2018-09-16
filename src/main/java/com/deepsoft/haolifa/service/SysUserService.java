@@ -63,4 +63,11 @@ public interface SysUserService {
      */
     int insertUserRole(Integer userId, Integer[] roleId);
 
+    /**
+     * 禁用启用用户
+     * @param id
+     * @return
+     */
+    int closeUser(Integer id);
+
 }

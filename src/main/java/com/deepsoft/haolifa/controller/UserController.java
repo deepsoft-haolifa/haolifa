@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("")
     @ApiOperation("获取用户列表")
-    public ResultBean users(@RequestParam(name = "pageNum", defaultValue = "0")
+    public ResultBean users(@RequestParam(name = "pageNum", defaultValue = "1")
                             Integer pageNum,
                             @RequestParam(name = "pageSize", defaultValue = "10")
                             Integer pageSize){
@@ -39,12 +39,6 @@ public class UserController {
         return ResultBean.success(userService.getSysUser(id));
     }
 
-    @GetMapping("/all")
-    @ApiOperation("获取所有用户")
-    public ResultBean getUser(@RequestParam(name = "pageNum", defaultValue = "1")Integer pageNum,
-                              @RequestParam(name = "pageSize", defaultValue = "10")Integer pageSize){
-        return ResultBean.success(userService.getUserList(pageNum, pageSize));
-    }
 
     @PostMapping("")
     @ApiOperation("添加员工")
@@ -62,7 +56,14 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ApiOperation("删除用户")
     public ResultBean deleteUser(@PathVariable("id") Integer id){
-        return ResultBean.success(deleteUser(id));
+        return ResultBean.success(userService.deleteSysUser(id));
+    }
+
+
+    @PutMapping("/{id}")
+    @ApiOperation("禁用/启用用户")
+    public ResultBean closeUser(@PathVariable("id") Integer id){
+        return ResultBean.success(userService.closeUser(id));
     }
 
 
