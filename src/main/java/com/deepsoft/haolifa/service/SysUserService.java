@@ -6,8 +6,11 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
 import com.deepsoft.haolifa.model.vo.UserPageVO;
+import com.sun.tools.corba.se.idl.StringGen;
 
 public interface SysUserService {
+
+    String DEFAULT_PASSWORD = "Haolifa123456";
 
     /**
      * 获取当前用户的认证信息，角色 权限等
@@ -69,5 +72,12 @@ public interface SysUserService {
      * @return
      */
     int closeUser(Integer id);
+
+    /**
+     * 重置密码
+     * @param id
+     * @return
+     */
+    String initPwd(Integer id);
 
 }

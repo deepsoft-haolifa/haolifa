@@ -53,6 +53,14 @@ public class UserController {
         return ResultBean.success(userService.updateSysUser(userBase));
     }
 
+    @PutMapping("/{id}/pwd")
+    @ApiOperation("重置用户密码")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResultBean initUserPwd(@PathVariable("id") Integer id){
+        return ResultBean.success(userService.initPwd(id));
+    }
+
+
     @DeleteMapping("/{id}")
     @ApiOperation("删除用户")
     public ResultBean deleteUser(@PathVariable("id") Integer id){

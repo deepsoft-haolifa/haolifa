@@ -42,6 +42,7 @@ public class RoleController {
     }
 
     @PutMapping("")
+    @ApiOperation("修改角色")
     public ResultBean updateRole(@RequestBody RoleDTO roleDTO){
         return ResultBean.success(roleService.updateRole(roleDTO));
     }

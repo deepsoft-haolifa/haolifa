@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.domain.SysDepartmentExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.DepartmentDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -59,7 +60,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDTO selectDepartmentById(Integer id) {
         SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(id);
         DepartmentDTO departmentDTO = new DepartmentDTO();
-        BeanUtils.copyProperties(sysDepartment, departmentDTO);
+        if(sysDepartment!=null)
+            BeanUtils.copyProperties(sysDepartment, departmentDTO);
         return departmentDTO;
+    }
+
+    @Override
+    public List<RoleDTO> selectRolesByDepartmentId(Integer id) {
+
+        return null;
     }
 }

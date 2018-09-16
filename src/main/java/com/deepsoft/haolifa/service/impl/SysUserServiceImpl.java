@@ -73,6 +73,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser getSysUser(Integer userId) {
         String userKey = RedisKeyUtil.getUserKey(userId);
+        //暂时不用缓存
         redisDao.del(userKey);
         String userCacheStr = redisDao.get(userKey);
         if(StringUtils.isNotBlank(userCacheStr)){
@@ -152,5 +153,15 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public int closeUser(Integer id) {
         return myUserMapper.closeOrOpenUser(id);
+    }
+
+
+    @Override
+    public String initPwd(Integer id) {
+        UserBaseDTO userBaseDTO = new UserBaseDTO();
+        userBaseDTO.setId(id);
+        userBaseDTO.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        updateSysUser(userBaseDTO);
+        return DEFAULT_PASSWORD;
     }
 }
