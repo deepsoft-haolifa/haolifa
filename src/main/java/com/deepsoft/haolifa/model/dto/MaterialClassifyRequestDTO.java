@@ -11,7 +11,7 @@ import lombok.Data;
 @ApiModel(value = "零件分类配置对象", description = "新增，更新零件分类")
 public class MaterialClassifyRequestDTO {
 
-    @ApiModelProperty(value = "主键Id", name = "Id", required = true)
+    @ApiModelProperty(value = "主键Id")
     private Integer id;
 
     @ApiModelProperty(value = "分类名称", required = true)

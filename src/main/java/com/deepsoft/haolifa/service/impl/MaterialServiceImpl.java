@@ -63,6 +63,7 @@ public class MaterialServiceImpl implements MaterialService {
         int updateUser = customUser != null ? customUser.getId() : 1;
         materialClassify.setUpdateUser(updateUser);
         materialClassify.setUpdateTime(new Date());
+        materialClassify.setId(model.getId());
         materialClassify.setRemark(model.getRemark());
         materialClassify.setClassifyName(model.getClassifyName());
         int update = materialClassifyMapper.updateByPrimaryKeySelective(materialClassify);
