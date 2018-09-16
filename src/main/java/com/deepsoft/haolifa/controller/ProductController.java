@@ -40,6 +40,13 @@ public class ProductController {
         return productService.delete(id);
     }
 
+    @ApiOperation("获取成品信息")
+    @PutMapping("/getInfo/{id}")
+    @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
+    public ResultBean getInfoProduct(@PathVariable int id) {
+        return ResultBean.success(productService.getInfo(id));
+    }
+
     @ApiOperation("获取成品分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
