@@ -26,11 +26,9 @@ public interface MaterialService {
     /**
      * 更新零件分类
      *
-     * @param id
-     * @param classifyName
      * @return
      */
-    ResultBean updateClassify(int id, String classifyName);
+    ResultBean  updateClassify(MaterialClassifyRequestDTO model);
 
     /**
      * 删除成品分类

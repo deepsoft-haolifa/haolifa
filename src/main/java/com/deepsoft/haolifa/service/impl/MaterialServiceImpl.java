@@ -54,8 +54,8 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public ResultBean updateClassify(int id, String classifyName) {
-        if (id == 0 || StringUtils.isBlank(classifyName)) {
+    public ResultBean updateClassify(MaterialClassifyRequestDTO model) {
+        if (model.getId() == 0 || StringUtils.isBlank(model.getClassifyName())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         MaterialClassify materialClassify = new MaterialClassify();
@@ -63,7 +63,8 @@ public class MaterialServiceImpl implements MaterialService {
         int updateUser = customUser != null ? customUser.getId() : 1;
         materialClassify.setUpdateUser(updateUser);
         materialClassify.setUpdateTime(new Date());
-        materialClassify.setClassifyName(classifyName);
+        materialClassify.setRemark(model.getRemark());
+        materialClassify.setClassifyName(model.getClassifyName());
         int update = materialClassifyMapper.updateByPrimaryKeySelective(materialClassify);
         return ResultBean.success(update);
     }

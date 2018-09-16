@@ -25,6 +25,12 @@ public class MaterialController {
         return materialService.saveClassify(model);
     }
 
+    @ApiOperation("零件分类设置-更新零件类别信息")
+    @PutMapping("/classify/update")
+    public ResultBean updateClassify(@RequestBody MaterialClassifyRequestDTO model) {
+        return materialService.updateClassify(model);
+    }
+
     @ApiOperation("零件分类设置-删除零件类别")
     @DeleteMapping("/classify/delete/{id}")
     @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
