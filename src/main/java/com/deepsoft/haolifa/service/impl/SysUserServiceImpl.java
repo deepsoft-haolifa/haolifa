@@ -73,6 +73,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser getSysUser(Integer userId) {
         String userKey = RedisKeyUtil.getUserKey(userId);
+        redisDao.del(userKey);
         String userCacheStr = redisDao.get(userKey);
         if(StringUtils.isNotBlank(userCacheStr)){
             return JSONObject.parseObject(userCacheStr, UserCacheDTO.class);
