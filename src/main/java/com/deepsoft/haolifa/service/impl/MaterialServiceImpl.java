@@ -101,6 +101,7 @@ public class MaterialServiceImpl implements MaterialService {
         if (StringUtils.isNotBlank(classifyNameLike)) {
             criteria.andClassifyNameLike("%" + classifyNameLike + "%");
         }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("create_time desc");
         Page<MaterialClassify> materialClassifies = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> materialClassifyMapper.selectByExample(example));
