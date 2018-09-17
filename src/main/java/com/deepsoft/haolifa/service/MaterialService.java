@@ -45,6 +45,13 @@ public interface MaterialService {
     List<MaterialClassify> listClassify();
 
     /**
+     * 获取零件分类详情
+     *
+     * @return
+     */
+    MaterialClassify getClassifyInfo(int id);
+
+    /**
      * 获取零件分页列表
      *
      * @param currentPage      页码

@@ -92,6 +92,11 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public MaterialClassify getClassifyInfo(int id) {
+        return materialClassifyMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public ResultBean pageInfoClassify(Integer currentPage, Integer pageSize, String classifyNameLike) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;

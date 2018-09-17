@@ -38,6 +38,14 @@ public class MaterialController {
         return materialService.deleteClassify(id);
     }
 
+
+    @ApiOperation("零件分类设置-获取零件类别详情")
+    @GetMapping("/classify/getInfo/{id}")
+    @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
+    public ResultBean listClassify(@PathVariable int id) {
+        return ResultBean.success(materialService.getClassifyInfo(id));
+    }
+
     @ApiOperation("零件分类设置-零件类别列表")
     @GetMapping("/classify/list")
     public ResultBean listClassify() {
