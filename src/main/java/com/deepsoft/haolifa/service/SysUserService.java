@@ -6,7 +6,6 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
 import com.deepsoft.haolifa.model.vo.UserPageVO;
-import com.sun.tools.corba.se.idl.StringGen;
 
 public interface SysUserService {
 
