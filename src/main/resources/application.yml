@@ -20,3 +20,6 @@ pagehelper:
 #配置日志存储路径
 log:
   path: /data/log/haolifa
+
+project:
+   url: http://47.105.36.56

@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"零件相关管理"})
+@Api(tags = {"配套管理--零件设置，零件分类设置"})
 @RestController
 @RequestMapping("/material")
 public class MaterialController {
@@ -19,27 +19,41 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
-    @ApiOperation("新增零件类别信息")
+    @ApiOperation("零件分类设置-新增零件类别信息")
     @PostMapping("/classify/save")
     public ResultBean saveClassify(@RequestBody MaterialClassifyRequestDTO model) {
         return materialService.saveClassify(model);
     }
 
-    @ApiOperation("删除零件类别")
+    @ApiOperation("零件分类设置-更新零件类别信息")
+    @PutMapping("/classify/update")
+    public ResultBean updateClassify(@RequestBody MaterialClassifyRequestDTO model) {
+        return materialService.updateClassify(model);
+    }
+
+    @ApiOperation("零件分类设置-删除零件类别")
     @DeleteMapping("/classify/delete/{id}")
     @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteClassify(@PathVariable int id) {
         return materialService.deleteClassify(id);
     }
 
-    @ApiOperation("零件类别列表")
+
+    @ApiOperation("零件分类设置-获取零件类别详情")
+    @GetMapping("/classify/getInfo/{id}")
+    @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
+    public ResultBean listClassify(@PathVariable int id) {
+        return ResultBean.success(materialService.getClassifyInfo(id));
+    }
+
+    @ApiOperation("零件分类设置-零件类别列表")
     @GetMapping("/classify/list")
     public ResultBean listClassify() {
         return ResultBean.success(materialService.listClassify());
     }
 
 
-    @ApiOperation("获取零件类别分页列表")
+    @ApiOperation("零件分类设置-获取零件类别分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
@@ -53,34 +67,34 @@ public class MaterialController {
     }
 
 
-    @ApiOperation("新增零件信息")
+    @ApiOperation("零件设置-新增零件信息")
     @PostMapping("/save")
     public ResultBean save(@RequestBody MaterialRequestDTO model) {
         return materialService.save(model);
     }
 
 
-    @ApiOperation("更新零件信息")
+    @ApiOperation("零件设置-更新零件信息")
     @PutMapping("/update")
     public ResultBean update(@RequestBody MaterialRequestDTO model) {
         return materialService.update(model);
     }
 
-    @ApiOperation("删除零件")
+    @ApiOperation("零件设置-删除零件")
     @DeleteMapping("/delete/{id}")
     @ApiImplicitParam(name = "id", value = "主键id", dataType = "int", paramType = "path", required = true)
     public ResultBean delete(@PathVariable int id) {
         return materialService.delete(id);
     }
 
-    @ApiOperation("根据主键ID获取零件详情")
+    @ApiOperation("零件设置-获取零件详情")
     @GetMapping("/getInfo/{id}")
     @ApiImplicitParam(name = "id", value = "主键id", dataType = "int", paramType = "path", required = true)
     public ResultBean getInfo(@PathVariable int id) {
         return ResultBean.success(materialService.getInfoById(id));
     }
 
-    @ApiOperation("获取零件分页列表")
+    @ApiOperation("零件设置-获取零件分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),

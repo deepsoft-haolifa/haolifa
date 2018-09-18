@@ -54,8 +54,8 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public ResultBean updateClassify(int id, String classifyName) {
-        if (id == 0 || StringUtils.isBlank(classifyName)) {
+    public ResultBean updateClassify(MaterialClassifyRequestDTO model) {
+        if (model.getId() == 0 || StringUtils.isBlank(model.getClassifyName())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         MaterialClassify materialClassify = new MaterialClassify();
@@ -63,7 +63,9 @@ public class MaterialServiceImpl implements MaterialService {
         int updateUser = customUser != null ? customUser.getId() : 1;
         materialClassify.setUpdateUser(updateUser);
         materialClassify.setUpdateTime(new Date());
-        materialClassify.setClassifyName(classifyName);
+        materialClassify.setId(model.getId());
+        materialClassify.setRemark(model.getRemark());
+        materialClassify.setClassifyName(model.getClassifyName());
         int update = materialClassifyMapper.updateByPrimaryKeySelective(materialClassify);
         return ResultBean.success(update);
     }
@@ -90,6 +92,11 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public MaterialClassify getClassifyInfo(int id) {
+        return materialClassifyMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public ResultBean pageInfoClassify(Integer currentPage, Integer pageSize, String classifyNameLike) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
@@ -99,6 +106,7 @@ public class MaterialServiceImpl implements MaterialService {
         if (StringUtils.isNotBlank(classifyNameLike)) {
             criteria.andClassifyNameLike("%" + classifyNameLike + "%");
         }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("create_time desc");
         Page<MaterialClassify> materialClassifies = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> materialClassifyMapper.selectByExample(example));

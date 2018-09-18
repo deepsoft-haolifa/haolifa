@@ -58,7 +58,7 @@ public class MaterialRequestDTO {
     private String safetyFactor;
 
     @ApiModelProperty(value = "当前库存数量")
-    private String currentQuantity;
+    private Integer currentQuantity;
     @ApiModelProperty(value = "备注")
     private String remark;
 }

@@ -146,10 +146,10 @@ public class StoreRoomController {
 
     @ApiOperation("获取零件，成品出入库分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "类型：1.成品；2：零件;", name = "type", dataType = "int", paramType = "query", required = true),
-            @ApiImplicitParam(value = "操作类型：1.出库；2：入库;", name = "operationType", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(value = "类型：0.全部;1.成品；2：零件;", name = "type", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(value = "操作类型：0.全部;1.出库；2：入库;", name = "operationType", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(value = "产品号", name = "productNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "零件号", name = "materialGraphNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "零件图号", name = "materialGraphNo", dataType = "string", paramType = "query"),
             @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
             @ApiImplicitParam(value = "当前页面", name = "currentPage", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(value = "每页数量", name = "pageSize", dataType = "int", paramType = "query", required = true)
