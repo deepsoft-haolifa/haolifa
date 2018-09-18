@@ -8,18 +8,20 @@ import lombok.Data;
  * 库房配置请求实体
  */
 @Data
-@ApiModel(value="库房货位配置对象",description="新增，更新库房货位实体")
+@ApiModel(value = "库房货位配置对象", description = "新增，更新库房货位实体")
 public class StoreRoomRackRequestDTO {
 
-    @ApiModelProperty(value="库房库位主键Id",required=true)
+    @ApiModelProperty(value = "库房库位主键Id", required = true)
     private Integer id;
 
-    @ApiModelProperty(value="库房Id",required=true)
-    private Integer storeRoomId;
-    @ApiModelProperty(value="货位编号（全局唯一）",required=true)
-    private String stackNo;
-    @ApiModelProperty(value="货位状态（1：删除；0；正常）",required=true)
-    private Byte status;
-    @ApiModelProperty(value="备注")
+    @ApiModelProperty(value = "库房号", required = true)
+    private String storeRoomNo;
+    @ApiModelProperty(value = "库位编号（全局唯一）", required = true)
+    private String rackNo;
+    @ApiModelProperty(value = "库位名称")
+    private String rackName;
+//    @ApiModelProperty(value = "库位状态（1：删除；0；正常）")
+//    private Byte status;
+    @ApiModelProperty(value = "备注")
     private String remark;
 }

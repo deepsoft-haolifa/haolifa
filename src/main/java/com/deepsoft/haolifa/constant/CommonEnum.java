@@ -27,7 +27,10 @@ public class CommonEnum {
         LOGIN_ERROR("1001", "登陆错误"),
 
         // 库房货位已经存在
-        STORE_ROOM_RACK_EXISTS("2001", "货位已经存在"),
+        STORE_ROOM_NO_EXISTS("2001", "库房号已经存在"),
+
+        STORE_ROOM_RACK_EXISTS("2002", "库位已经存在"),
+
 
         // 采购计划、请购单、采购单模块错误码开头3***
         PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0"),

@@ -5,8 +5,11 @@ import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
+import com.deepsoft.haolifa.model.vo.UserPageVO;
 
 public interface SysUserService {
+
+    String DEFAULT_PASSWORD = "Haolifa123456";
 
     /**
      * 获取当前用户的认证信息，角色 权限等
@@ -38,7 +41,7 @@ public interface SysUserService {
      * 获取用户列表
      * @return
      */
-    PageDTO<SysUser> getUserList(Integer pageNum, Integer pageSize);
+    PageDTO<UserPageVO> getUserList(Integer pageNum, Integer pageSize);
 
     /**
      * 修改用户
@@ -61,5 +64,19 @@ public interface SysUserService {
      * @return
      */
     int insertUserRole(Integer userId, Integer[] roleId);
+
+    /**
+     * 禁用启用用户
+     * @param id
+     * @return
+     */
+    int closeUser(Integer id);
+
+    /**
+     * 重置密码
+     * @param id
+     * @return
+     */
+    String initPwd(Integer id);
 
 }

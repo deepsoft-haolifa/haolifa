@@ -6,6 +6,8 @@ import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
+import com.deepsoft.haolifa.model.dto.OrderProductDTO;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.util.Base64Utils;
@@ -20,6 +22,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellType;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +34,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class OrderProductServiceImpl implements OrderProductService {
+public class OrderProductServiceImpl extends BaseService implements OrderProductService {
     @Autowired
     private OrderProductMapper orderProductMapper;
 
@@ -164,7 +167,7 @@ public class OrderProductServiceImpl implements OrderProductService {
                         orderProduct.setWarrantyPeriod(cellValue);
                         break;
                     case 31:
-                        orderProduct.setPackagingspecification(cellValue);
+                        orderProduct.setPackagingSpecification(cellValue);
                         break;
                     case 32:
                         orderProduct.setTransportType(cellValue);
@@ -194,12 +197,14 @@ public class OrderProductServiceImpl implements OrderProductService {
 
 
     @Override
-    public ResultBean saveOrderProductInfo(OrderProduct orderProduct) {
+    public ResultBean saveOrderProductInfo(OrderProductDTO orderProductDTO) {
+        OrderProduct orderProduct = new OrderProduct();
         String orderProductNo = RandomUtils.orderNoStr();
         log.info("save orderProduct info start|orderProductNo:{},model:{}", orderProductNo, JSONObject.toJSONString(orderProduct));
-        orderProduct.setOrderNo(orderProductNo);
-        // todo 换成当前登录人Id
-        orderProduct.setCreateUser(1);
+        orderProductDTO.setOrderNo(orderProductNo);
+        BeanUtils.copyProperties(orderProductDTO, orderProduct);
+
+        orderProduct.setCreateUser(getLoginUserId());
         orderProduct.setOrderStatus(CommonEnum.OrderStatus.CREATE.code);
         int insert = orderProductMapper.insertSelective(orderProduct);
         log.info("save orderProduct info end|orderProductNo:{},result:{}", orderProductNo, insert);
@@ -230,14 +235,25 @@ public class OrderProductServiceImpl implements OrderProductService {
     }
 
     @Override
-    public Page<OrderProduct> pageOrderProduct(Page page) {
+    public ResultBean pageOrderProduct(Integer currentPage, Integer pageSize, String orderNo, int status) {
+        currentPage = currentPage == null ? 1 : currentPage;
+        pageSize = pageSize == null ? 20 : pageSize;
+
         OrderProductExample example = new OrderProductExample();
-        int pageNum = 0;
-        int pageSize = 0;
-        Page<OrderProduct> orderProducts = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPage(() ->
-                        orderProductMapper.selectByExample(example)
-                );
-        return orderProducts;
+        OrderProductExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(orderNo)) {
+            criteria.andOrderNoEqualTo(orderNo);
+        }
+        if (status > 0) {
+            criteria.andOrderStatusEqualTo((byte) status);
+        }
+        example.setOrderByClause("create_time desc");
+        Page<OrderProduct> materials = PageHelper.startPage(currentPage, pageSize)
+                .doSelectPage(() -> orderProductMapper.selectByExample(example));
+
+        PageDTO<OrderProduct> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(materials, pageDTO);
+        pageDTO.setList(materials);
+        return ResultBean.success(pageDTO);
     }
 }

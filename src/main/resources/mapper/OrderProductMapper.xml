@@ -10,6 +10,7 @@
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="order_status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="order_contract_url" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_agent_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_telphone" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -41,7 +42,7 @@
       <arg column="sign_board" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="acceptance_criteria" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="warranty_period" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="packagingSpecification" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="packaging_specification" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="transport_type" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="delivery_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="receipt_info" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -108,14 +109,14 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, order_no, order_status, demand_name, 
-    demand_agent_name, demand_telphone, demand_fax, demand_address, supply_name, supply_agent_name, 
-    supply_telphone, supply_fax, supply_address, contract_number, contract_sign_date, 
-    product_no, product_name, product_model, lable, specifications, product_color, product_number, 
-    price, total_price, discount_total_price, material_description, product_remark, purchase_feedback_time, 
-    production_feedback_time, special_require, cargo_information, sign_board, acceptance_criteria, 
-    warranty_period, packagingSpecification, transport_type, delivery_time, receipt_info, 
-    payment_method, freight
+    id, create_time, update_time, create_user, update_user, order_no, order_status, order_contract_url, 
+    demand_name, demand_agent_name, demand_telphone, demand_fax, demand_address, supply_name, 
+    supply_agent_name, supply_telphone, supply_fax, supply_address, contract_number, 
+    contract_sign_date, product_no, product_name, product_model, lable, specifications, 
+    product_color, product_number, price, total_price, discount_total_price, material_description, 
+    product_remark, purchase_feedback_time, production_feedback_time, special_require, 
+    cargo_information, sign_board, acceptance_criteria, warranty_period, packaging_specification, 
+    transport_type, delivery_time, receipt_info, payment_method, freight
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" resultMap="BaseResultMap">
     select
@@ -150,32 +151,34 @@
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct">
     insert into order_product (id, create_time, update_time, 
       create_user, update_user, order_no, 
-      order_status, demand_name, demand_agent_name, 
-      demand_telphone, demand_fax, demand_address, 
-      supply_name, supply_agent_name, supply_telphone, 
-      supply_fax, supply_address, contract_number, 
-      contract_sign_date, product_no, product_name, 
-      product_model, lable, specifications, 
-      product_color, product_number, price, 
-      total_price, discount_total_price, material_description, 
-      product_remark, purchase_feedback_time, production_feedback_time, 
-      special_require, cargo_information, sign_board, 
-      acceptance_criteria, warranty_period, packagingSpecification, 
+      order_status, order_contract_url, demand_name, 
+      demand_agent_name, demand_telphone, demand_fax, 
+      demand_address, supply_name, supply_agent_name, 
+      supply_telphone, supply_fax, supply_address, 
+      contract_number, contract_sign_date, product_no, 
+      product_name, product_model, lable, 
+      specifications, product_color, product_number, 
+      price, total_price, discount_total_price, 
+      material_description, product_remark, purchase_feedback_time, 
+      production_feedback_time, special_require, 
+      cargo_information, sign_board, acceptance_criteria, 
+      warranty_period, packaging_specification, 
       transport_type, delivery_time, receipt_info, 
       payment_method, freight)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=CHAR}, 
-      #{orderStatus,jdbcType=TINYINT}, #{demandName,jdbcType=VARCHAR}, #{demandAgentName,jdbcType=VARCHAR}, 
-      #{demandTelphone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR}, #{demandAddress,jdbcType=VARCHAR}, 
-      #{supplyName,jdbcType=VARCHAR}, #{supplyAgentName,jdbcType=VARCHAR}, #{supplyTelphone,jdbcType=VARCHAR}, 
-      #{supplyFax,jdbcType=VARCHAR}, #{supplyAddress,jdbcType=VARCHAR}, #{contractNumber,jdbcType=VARCHAR}, 
-      #{contractSignDate,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
-      #{productModel,jdbcType=VARCHAR}, #{lable,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
-      #{productColor,jdbcType=VARCHAR}, #{productNumber,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
-      #{totalPrice,jdbcType=DECIMAL}, #{discountTotalPrice,jdbcType=DECIMAL}, #{materialDescription,jdbcType=VARCHAR}, 
-      #{productRemark,jdbcType=VARCHAR}, #{purchaseFeedbackTime,jdbcType=VARCHAR}, #{productionFeedbackTime,jdbcType=VARCHAR}, 
-      #{specialRequire,jdbcType=VARCHAR}, #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, 
-      #{acceptanceCriteria,jdbcType=VARCHAR}, #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingspecification,jdbcType=VARCHAR}, 
+      #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{demandName,jdbcType=VARCHAR}, 
+      #{demandAgentName,jdbcType=VARCHAR}, #{demandTelphone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR}, 
+      #{demandAddress,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR}, #{supplyAgentName,jdbcType=VARCHAR}, 
+      #{supplyTelphone,jdbcType=VARCHAR}, #{supplyFax,jdbcType=VARCHAR}, #{supplyAddress,jdbcType=VARCHAR}, 
+      #{contractNumber,jdbcType=VARCHAR}, #{contractSignDate,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, #{lable,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{productColor,jdbcType=VARCHAR}, #{productNumber,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{discountTotalPrice,jdbcType=DECIMAL}, 
+      #{materialDescription,jdbcType=VARCHAR}, #{productRemark,jdbcType=VARCHAR}, #{purchaseFeedbackTime,jdbcType=VARCHAR}, 
+      #{productionFeedbackTime,jdbcType=VARCHAR}, #{specialRequire,jdbcType=VARCHAR}, 
+      #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, #{acceptanceCriteria,jdbcType=VARCHAR}, 
+      #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
       #{transportType,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=VARCHAR}, #{receiptInfo,jdbcType=VARCHAR}, 
       #{paymentMethod,jdbcType=VARCHAR}, #{freight,jdbcType=VARCHAR})
   </insert>
@@ -202,6 +205,9 @@
       </if>
       <if test="orderStatus != null">
         order_status,
+      </if>
+      <if test="orderContractUrl != null">
+        order_contract_url,
       </if>
       <if test="demandName != null">
         demand_name,
@@ -296,8 +302,8 @@
       <if test="warrantyPeriod != null">
         warranty_period,
       </if>
-      <if test="packagingspecification != null">
-        packagingSpecification,
+      <if test="packagingSpecification != null">
+        packaging_specification,
       </if>
       <if test="transportType != null">
         transport_type,
@@ -336,6 +342,9 @@
       </if>
       <if test="orderStatus != null">
         #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="orderContractUrl != null">
+        #{orderContractUrl,jdbcType=VARCHAR},
       </if>
       <if test="demandName != null">
         #{demandName,jdbcType=VARCHAR},
@@ -430,8 +439,8 @@
       <if test="warrantyPeriod != null">
         #{warrantyPeriod,jdbcType=VARCHAR},
       </if>
-      <if test="packagingspecification != null">
-        #{packagingspecification,jdbcType=VARCHAR},
+      <if test="packagingSpecification != null">
+        #{packagingSpecification,jdbcType=VARCHAR},
       </if>
       <if test="transportType != null">
         #{transportType,jdbcType=VARCHAR},
@@ -479,6 +488,9 @@
       </if>
       <if test="record.orderStatus != null">
         order_status = #{record.orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.orderContractUrl != null">
+        order_contract_url = #{record.orderContractUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.demandName != null">
         demand_name = #{record.demandName,jdbcType=VARCHAR},
@@ -573,8 +585,8 @@
       <if test="record.warrantyPeriod != null">
         warranty_period = #{record.warrantyPeriod,jdbcType=VARCHAR},
       </if>
-      <if test="record.packagingspecification != null">
-        packagingSpecification = #{record.packagingspecification,jdbcType=VARCHAR},
+      <if test="record.packagingSpecification != null">
+        packaging_specification = #{record.packagingSpecification,jdbcType=VARCHAR},
       </if>
       <if test="record.transportType != null">
         transport_type = #{record.transportType,jdbcType=VARCHAR},
@@ -605,6 +617,7 @@
       update_user = #{record.updateUser,jdbcType=INTEGER},
       order_no = #{record.orderNo,jdbcType=CHAR},
       order_status = #{record.orderStatus,jdbcType=TINYINT},
+      order_contract_url = #{record.orderContractUrl,jdbcType=VARCHAR},
       demand_name = #{record.demandName,jdbcType=VARCHAR},
       demand_agent_name = #{record.demandAgentName,jdbcType=VARCHAR},
       demand_telphone = #{record.demandTelphone,jdbcType=VARCHAR},
@@ -636,7 +649,7 @@
       sign_board = #{record.signBoard,jdbcType=VARCHAR},
       acceptance_criteria = #{record.acceptanceCriteria,jdbcType=VARCHAR},
       warranty_period = #{record.warrantyPeriod,jdbcType=VARCHAR},
-      packagingSpecification = #{record.packagingspecification,jdbcType=VARCHAR},
+      packaging_specification = #{record.packagingSpecification,jdbcType=VARCHAR},
       transport_type = #{record.transportType,jdbcType=VARCHAR},
       delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
       receipt_info = #{record.receiptInfo,jdbcType=VARCHAR},
@@ -666,6 +679,9 @@
       </if>
       <if test="orderStatus != null">
         order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="orderContractUrl != null">
+        order_contract_url = #{orderContractUrl,jdbcType=VARCHAR},
       </if>
       <if test="demandName != null">
         demand_name = #{demandName,jdbcType=VARCHAR},
@@ -760,8 +776,8 @@
       <if test="warrantyPeriod != null">
         warranty_period = #{warrantyPeriod,jdbcType=VARCHAR},
       </if>
-      <if test="packagingspecification != null">
-        packagingSpecification = #{packagingspecification,jdbcType=VARCHAR},
+      <if test="packagingSpecification != null">
+        packaging_specification = #{packagingSpecification,jdbcType=VARCHAR},
       </if>
       <if test="transportType != null">
         transport_type = #{transportType,jdbcType=VARCHAR},
@@ -789,6 +805,7 @@
       update_user = #{updateUser,jdbcType=INTEGER},
       order_no = #{orderNo,jdbcType=CHAR},
       order_status = #{orderStatus,jdbcType=TINYINT},
+      order_contract_url = #{orderContractUrl,jdbcType=VARCHAR},
       demand_name = #{demandName,jdbcType=VARCHAR},
       demand_agent_name = #{demandAgentName,jdbcType=VARCHAR},
       demand_telphone = #{demandTelphone,jdbcType=VARCHAR},
@@ -820,7 +837,7 @@
       sign_board = #{signBoard,jdbcType=VARCHAR},
       acceptance_criteria = #{acceptanceCriteria,jdbcType=VARCHAR},
       warranty_period = #{warrantyPeriod,jdbcType=VARCHAR},
-      packagingSpecification = #{packagingspecification,jdbcType=VARCHAR},
+      packaging_specification = #{packagingSpecification,jdbcType=VARCHAR},
       transport_type = #{transportType,jdbcType=VARCHAR},
       delivery_time = #{deliveryTime,jdbcType=VARCHAR},
       receipt_info = #{receiptInfo,jdbcType=VARCHAR},

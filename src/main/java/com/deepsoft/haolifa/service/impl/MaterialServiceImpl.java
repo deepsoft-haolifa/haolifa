@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
+import com.deepsoft.haolifa.dao.repository.extend.MaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.Material;
 import com.deepsoft.haolifa.model.domain.MaterialClassify;
 import com.deepsoft.haolifa.model.domain.MaterialClassifyExample;
@@ -33,6 +34,9 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private MaterialExtendMapper materialExtendMapper;
+
 
     @Override
     public ResultBean saveClassify(MaterialClassifyRequestDTO model) {
@@ -50,8 +54,8 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public ResultBean updateClassify(int id, String classifyName) {
-        if (id == 0 || StringUtils.isBlank(classifyName)) {
+    public ResultBean updateClassify(MaterialClassifyRequestDTO model) {
+        if (model.getId() == 0 || StringUtils.isBlank(model.getClassifyName())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         MaterialClassify materialClassify = new MaterialClassify();
@@ -59,7 +63,9 @@ public class MaterialServiceImpl implements MaterialService {
         int updateUser = customUser != null ? customUser.getId() : 1;
         materialClassify.setUpdateUser(updateUser);
         materialClassify.setUpdateTime(new Date());
-        materialClassify.setClassifyName(classifyName);
+        materialClassify.setId(model.getId());
+        materialClassify.setRemark(model.getRemark());
+        materialClassify.setClassifyName(model.getClassifyName());
         int update = materialClassifyMapper.updateByPrimaryKeySelective(materialClassify);
         return ResultBean.success(update);
     }
@@ -86,6 +92,11 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public MaterialClassify getClassifyInfo(int id) {
+        return materialClassifyMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public ResultBean pageInfoClassify(Integer currentPage, Integer pageSize, String classifyNameLike) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
@@ -95,6 +106,7 @@ public class MaterialServiceImpl implements MaterialService {
         if (StringUtils.isNotBlank(classifyNameLike)) {
             criteria.andClassifyNameLike("%" + classifyNameLike + "%");
         }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("create_time desc");
         Page<MaterialClassify> materialClassifies = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> materialClassifyMapper.selectByExample(example));
@@ -158,7 +170,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike) {
+    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike, int status) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
 
@@ -173,6 +185,14 @@ public class MaterialServiceImpl implements MaterialService {
         if (StringUtils.isNotBlank(graphNoLike)) {
             criteria.andGraphNoLike("%" + graphNoLike + "%");
         }
+        // 告警状态1（库存数量<预警值）
+        if (status == 1) {
+            criteria.andCurrentQuantityLessThan("safe_quantity");
+        }
+        // 正常状态2（库存数量>预警值）
+        if (status == 2) {
+            criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
+        }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("create_time desc");
         Page<Material> materials = PageHelper.startPage(currentPage, pageSize)
@@ -182,6 +202,12 @@ public class MaterialServiceImpl implements MaterialService {
         BeanUtils.copyProperties(materials, pageDTO);
         pageDTO.setList(materials);
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public int updateCurrentQuantity(String graphNo, int quantity) {
+        log.info("update current quantity start,graphNo:{},quantity:{}", graphNo, quantity);
+        return materialExtendMapper.updateCurrentQuantity(graphNo, quantity);
     }
 
 }

@@ -16,11 +16,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -39,23 +41,23 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
         CustomUser customUser = sysUserService.selectLoginUser();
         int createUser = customUser != null ? customUser.getId() : 1;
         // 判断是否有这个仓库
-        StoreRoom info = storeRoomService.getInfo(model.getStoreRoomId());
+        StoreRoom info = storeRoomService.getInfoByNo(model.getStoreRoomNo());
         if (info == null) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "库房不存在");
         }
         // 判断这个仓库是否存在货位号
-        Integer storeRoomId = model.getStoreRoomId();
-        String stackNo = model.getStackNo();
-        boolean existRackNo = judgeRackNo(stackNo, storeRoomId);
-        log.info("saveRackInfo existRackNo roomId:{},stackNo:{},result:{}", storeRoomId, stackNo, existRackNo);
+        String storeRoomNo = model.getStoreRoomNo();
+        String rackNo = model.getRackNo();
+        boolean existRackNo = judgeRackNo(rackNo, storeRoomNo, 0);
+        log.info("saveRackInfo existRackNo roomId:{},stackNo:{},result:{}", storeRoomNo, rackNo, existRackNo);
         if (!existRackNo) {
             return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_RACK_EXISTS);
         }
         StoreRoomRack record = new StoreRoomRack() {{
             setCreateUser(createUser);
-            setStoreRoomId(storeRoomId);
-            setRackNo(stackNo);
-            setStatus(CommonEnum.Consts.NO.code);
+            setStoreRoomNo(storeRoomNo);
+            setRackNo(rackNo);
+            setRackName(model.getRackName());
             setRemark(model.getRemark());
         }};
         int insert = storeRoomRackMapper.insertSelective(record);
@@ -66,6 +68,14 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
     public ResultBean updateRackInfo(StoreRoomRackRequestDTO model) {
         if (model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        // 判断这个仓库是否存在货位号
+        String storeRoomNo = model.getStoreRoomNo();
+        String rackNo = model.getRackNo();
+        boolean existRackNo = judgeRackNo(rackNo, storeRoomNo, model.getId());
+        log.info("updateRackInfo existRackNo roomId:{},rackNo:{},result:{}", storeRoomNo, rackNo, existRackNo);
+        if (!existRackNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.STORE_ROOM_RACK_EXISTS);
         }
         StoreRoomRack storeRoomRack = new StoreRoomRack();
         BeanUtils.copyProperties(model, storeRoomRack);
@@ -89,15 +99,24 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
     }
 
     @Override
-    public ResultBean pageRackInfo(Integer currentPage, Integer pageSize, Integer roomId) {
+    public StoreRoomRack getInfo(int id) {
+        StoreRoomRack storeRoomRack = storeRoomRackMapper.selectByPrimaryKey(id);
+        return storeRoomRack;
+    }
+
+    @Override
+    public ResultBean pageRackInfo(Integer currentPage, Integer pageSize, String roomNo, String rackNameLike) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
         StoreRoomRackExample example = new StoreRoomRackExample();
         StoreRoomRackExample.Criteria criteria = example.createCriteria();
         example.setOrderByClause("create_time desc");
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        if (null != roomId && roomId > 0) {
-            criteria.andStoreRoomIdEqualTo(roomId);
+        if (StringUtils.isNotBlank(roomNo)) {
+            criteria.andStoreRoomNoLike("%" + roomNo + "%");
+        }
+        if (StringUtils.isNotBlank(rackNameLike)) {
+            criteria.andRackNameLike("%" + rackNameLike + "%");
         }
         Page<StoreRoomRack> storeRoomRacks = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> storeRoomRackMapper.selectByExample(example));
@@ -111,14 +130,22 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
      * 判断该库房中是否存在相同的货位号
      *
      * @param rackNo
-     * @param roomId
+     * @param storeRoomNo
      * @return
      */
-    private boolean judgeRackNo(String rackNo, int roomId) {
+    private boolean judgeRackNo(String rackNo, String storeRoomNo, int id) {
         StoreRoomRackExample example = new StoreRoomRackExample();
-        example.or().andRackNoEqualTo(rackNo).andStoreRoomIdEqualTo(roomId).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        long count = storeRoomRackMapper.countByExample(example);
-        if (count > 0) {
+        StoreRoomRackExample.Criteria criteria = example.createCriteria();
+        criteria.andRackNoEqualTo(rackNo).andStoreRoomNoEqualTo(storeRoomNo).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        List<StoreRoomRack> storeRoomRacks = storeRoomRackMapper.selectByExample(example);
+        if (storeRoomRacks.size() > 0) {
+            // 更新的时候传id，如果查出来的id和传过来的id相同，则返回false
+            if (id > 0) {
+                StoreRoomRack storeRoomRack = storeRoomRacks.get(0);
+                if (storeRoomRack.getId() == id) {
+                    return true;
+                }
+            }
             return false;
         }
         return true;

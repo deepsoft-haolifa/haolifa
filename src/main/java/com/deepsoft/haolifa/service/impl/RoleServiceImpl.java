@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.domain.SysRoleExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
+import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.RoleService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,19 +27,24 @@ public class RoleServiceImpl implements RoleService {
     private SysRoleMapper roleMapper;
     @Autowired
     private MyPermissionMapper myPermissionMapper;
+    @Autowired
+    private DepartmentService departmentService;
 
     @Override
     public List<RoleDTO> getRoles() {
         return roleMapper.selectByExample(null).stream().map(r -> {
             RoleDTO role = new RoleDTO();
             BeanUtils.copyProperties(r, role);
+            role.setDepartment(departmentService.selectDepartmentById(r.getDeptId()));
             return role;
         }).collect(Collectors.toList());
     }
 
     @Override
     public List<RoleDTO> getRolesByUserId(Integer userId) {
-        return myPermissionMapper.findRolesByUserId(userId).stream().map(r -> {
+        Set<SysRole> rolesByUserId = myPermissionMapper.findRolesByUserId(userId);
+        rolesByUserId.remove(null);
+        return rolesByUserId.stream().map(r -> {
             RoleDTO role = new RoleDTO();
             BeanUtils.copyProperties(r, role);
             return role;

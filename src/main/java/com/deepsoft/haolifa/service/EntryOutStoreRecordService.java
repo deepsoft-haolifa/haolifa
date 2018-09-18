@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;

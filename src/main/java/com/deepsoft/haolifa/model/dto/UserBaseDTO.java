@@ -26,7 +26,7 @@ public class UserBaseDTO {
     @ApiModelProperty(required = true,value = "员工编号")
     private String userNo;
 
-    @ApiModelProperty(required = true,value = "性别", notes = "0-未知，1-男，2-女")
+    @ApiModelProperty(required = true,value = "性别, 0-未知，1-男，2-女")
     private Byte sex;
 
     @ApiModelProperty(required = true,value = "籍贯")
@@ -38,10 +38,10 @@ public class UserBaseDTO {
     @ApiModelProperty(required = true,value = "身份证")
     private String idCard;
 
-    @ApiModelProperty(required = false,value = "照片")
-    private String photo;
+//    @ApiModelProperty(required = false,value = "照片")
+//    private String photo;
 
-    @ApiModelProperty(required = true,value = "入职时间")
+    @ApiModelProperty(required = true,value = "入职时间：yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date entryTime;
 

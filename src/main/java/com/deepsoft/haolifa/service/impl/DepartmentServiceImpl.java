@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.domain.SysDepartmentExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.DepartmentDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -53,5 +54,20 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR.code, "id不能为空");
         }
         return departmentMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public DepartmentDTO selectDepartmentById(Integer id) {
+        SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(id);
+        DepartmentDTO departmentDTO = new DepartmentDTO();
+        if(sysDepartment!=null)
+            BeanUtils.copyProperties(sysDepartment, departmentDTO);
+        return departmentDTO;
+    }
+
+    @Override
+    public List<RoleDTO> selectRolesByDepartmentId(Integer id) {
+
+        return null;
     }
 }

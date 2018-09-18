@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"成品管理"})
+@Api(tags = {"配套管理--成品管理"})
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -38,6 +38,13 @@ public class ProductController {
     @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteProduct(@PathVariable int id) {
         return productService.delete(id);
+    }
+
+    @ApiOperation("获取成品信息")
+    @GetMapping("/getInfo/{id}")
+    @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
+    public ResultBean getInfoProduct(@PathVariable int id) {
+        return ResultBean.success(productService.getInfo(id));
     }
 
     @ApiOperation("获取成品分页列表")

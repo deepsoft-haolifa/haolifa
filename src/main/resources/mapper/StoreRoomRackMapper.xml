@@ -8,11 +8,12 @@
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="store_room_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="store_room_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="rack_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="rack_name" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, store_room_id, rack_no, status, 
-    remark, is_delete
+    id, create_time, update_time, create_user, update_user, store_room_no, rack_no, status, 
+    remark, is_delete, rack_name
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StoreRoomRackExample" resultMap="BaseResultMap">
     select
@@ -109,13 +110,13 @@
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.StoreRoomRack">
     insert into store_room_rack (id, create_time, update_time, 
-      create_user, update_user, store_room_id, 
+      create_user, update_user, store_room_no, 
       rack_no, status, remark, 
-      is_delete)
+      is_delete, rack_name)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{storeRoomId,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{storeRoomNo,jdbcType=VARCHAR}, 
       #{rackNo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT})
+      #{isDelete,jdbcType=TINYINT}, #{rackName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.StoreRoomRack">
     insert into store_room_rack
@@ -135,8 +136,8 @@
       <if test="updateUser != null">
         update_user,
       </if>
-      <if test="storeRoomId != null">
-        store_room_id,
+      <if test="storeRoomNo != null">
+        store_room_no,
       </if>
       <if test="rackNo != null">
         rack_no,
@@ -149,6 +150,9 @@
       </if>
       <if test="isDelete != null">
         is_delete,
+      </if>
+      <if test="rackName != null">
+        rack_name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -167,8 +171,8 @@
       <if test="updateUser != null">
         #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="storeRoomId != null">
-        #{storeRoomId,jdbcType=INTEGER},
+      <if test="storeRoomNo != null">
+        #{storeRoomNo,jdbcType=VARCHAR},
       </if>
       <if test="rackNo != null">
         #{rackNo,jdbcType=VARCHAR},
@@ -181,6 +185,9 @@
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="rackName != null">
+        #{rackName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -208,8 +215,8 @@
       <if test="record.updateUser != null">
         update_user = #{record.updateUser,jdbcType=INTEGER},
       </if>
-      <if test="record.storeRoomId != null">
-        store_room_id = #{record.storeRoomId,jdbcType=INTEGER},
+      <if test="record.storeRoomNo != null">
+        store_room_no = #{record.storeRoomNo,jdbcType=VARCHAR},
       </if>
       <if test="record.rackNo != null">
         rack_no = #{record.rackNo,jdbcType=VARCHAR},
@@ -223,6 +230,9 @@
       <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=TINYINT},
       </if>
+      <if test="record.rackName != null">
+        rack_name = #{record.rackName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -235,11 +245,12 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
-      store_room_id = #{record.storeRoomId,jdbcType=INTEGER},
+      store_room_no = #{record.storeRoomNo,jdbcType=VARCHAR},
       rack_no = #{record.rackNo,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR},
-      is_delete = #{record.isDelete,jdbcType=TINYINT}
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      rack_name = #{record.rackName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -259,8 +270,8 @@
       <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="storeRoomId != null">
-        store_room_id = #{storeRoomId,jdbcType=INTEGER},
+      <if test="storeRoomNo != null">
+        store_room_no = #{storeRoomNo,jdbcType=VARCHAR},
       </if>
       <if test="rackNo != null">
         rack_no = #{rackNo,jdbcType=VARCHAR},
@@ -274,6 +285,9 @@
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
+      <if test="rackName != null">
+        rack_name = #{rackName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -283,11 +297,12 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},
-      store_room_id = #{storeRoomId,jdbcType=INTEGER},
+      store_room_no = #{storeRoomNo,jdbcType=VARCHAR},
       rack_no = #{rackNo,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=TINYINT}
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      rack_name = #{rackName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

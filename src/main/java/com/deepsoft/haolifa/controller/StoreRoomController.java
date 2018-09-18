@@ -76,36 +76,46 @@ public class StoreRoomController {
     }
 
 
-    @ApiOperation("新增库房库位信息")
+    @ApiOperation("新增库房库位")
     @PostMapping("/rack/save")
     public ResultBean saveRack(@RequestBody StoreRoomRackRequestDTO model) {
         return storeRoomRackService.saveRackInfo(model);
     }
 
-    @ApiOperation("更新库房货位信息")
+    @ApiOperation("更新库房库位")
     @PutMapping("/rack/update")
     public ResultBean updateRack(@RequestBody StoreRoomRackRequestDTO model) {
         return storeRoomRackService.updateRackInfo(model);
     }
 
-    @ApiOperation("删除库房货位信息")
+    @ApiOperation("删除库房库位")
     @DeleteMapping("/rack/delete/{id}")
     @ApiImplicitParam(name = "id", value = "库房货位id", dataType = "int", paramType = "path", required = true)
     public ResultBean deleteRack(@PathVariable int id) {
         return storeRoomRackService.delete(id);
     }
 
-    @ApiOperation("获取库房货位分页列表")
+    @ApiOperation("获取库房库位详情")
+    @DeleteMapping("/rack/getInfo/{id}")
+    @ApiImplicitParam(name = "id", value = "库房货位id", dataType = "int", paramType = "path", required = true)
+    public ResultBean getInfoRack(@PathVariable int id) {
+        return new ResultBean(storeRoomRackService.getInfo(id));
+    }
+
+
+    @ApiOperation("获取库房库位分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "库房Id", name = "roomId", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query")
+            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(value = "库房号", name = "roomNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "库位名称", name = "rackNameLike", dataType = "string", paramType = "query")
     })
     @GetMapping("/rack/pageInfo")
     public ResultBean pageRackInfo(@RequestParam(defaultValue = "1") Integer currentPage,
                                    @RequestParam(defaultValue = "20") Integer pageSize,
-                                   @RequestParam(required = false) Integer roomId) {
-        return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomId);
+                                   @RequestParam(required = false) String roomNo,
+                                   @RequestParam(required = false) String rackNameLike) {
+        return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomNo,rackNameLike);
     }
 
 
@@ -136,8 +146,8 @@ public class StoreRoomController {
 
     @ApiOperation("获取零件，成品出入库分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "类型：1.成品；2：零件;", name = "type", dataType = "int", paramType = "query", required = true),
-            @ApiImplicitParam(value = "操作类型：1.出库；2：入库;", name = "operationType", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(value = "类型：0.全部;1.成品；2：零件;", name = "type", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(value = "操作类型：0.全部;1.出库；2：入库;", name = "operationType", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(value = "产品号", name = "productNo", dataType = "string", paramType = "query"),
             @ApiImplicitParam(value = "零件号", name = "materialGraphNo", dataType = "string", paramType = "query"),
             @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),

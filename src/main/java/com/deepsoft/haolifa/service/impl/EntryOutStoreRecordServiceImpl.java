@@ -16,6 +16,7 @@ import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
 import com.deepsoft.haolifa.service.EntryOutStoreRecordService;
+import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.StockService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
@@ -39,6 +40,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
 
     @Autowired
     private StockService stockService;
+    @Autowired
+    private MaterialService materialService;
 
     @Autowired
     private RedisDao redisDao;
@@ -119,6 +122,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte operationType = CommonEnum.OperationType.ENTRY.code;
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
         String orderNo = model.getOrderNo();
+        final String materialGraphNo = model.getMaterialGraphNo();
+        final Integer quantity = model.getQuantity();
         EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
             setOperationType(operationType);
             setType(storageType);
@@ -132,13 +137,15 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
                 setStoreRoomId(model.getStoreRoomId());
                 setStoreRoomRackNo(model.getStoreRoomRackNo());
-                setMaterialGraphNo(model.getMaterialGraphNo());
+                setMaterialGraphNo(materialGraphNo);
                 setOperationType((int) operationType);
                 setType((int) storageType);
-                setQuantity(model.getQuantity());
+                setQuantity(quantity);
             }};
             // 增加库存
             stockService.addReduceStock(entryOutStorageDTO);
+            // 更新零件的当前库存量
+            materialService.updateCurrentQuantity(materialGraphNo, quantity);
         }
         return insert;
     }
@@ -149,7 +156,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         log.info("EntryOutStoreRecordServiceImpl outMaterial start model:{}", model.toString());
         byte operationType = CommonEnum.OperationType.OUT.code;
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
-        String orderNo = model.getOrderNo();
+        final String orderNo = model.getOrderNo();
+        final String materialGraphNo = model.getMaterialGraphNo();
+        final Integer quantity = model.getQuantity();
         // todo 根据orderNo获取核料时候，锁定原料的数量和库位（从redis中）
         String lockMaterial = redisDao.get(CacheConsts.REDIS_KEY_LOCK_MATERIAL + orderNo);
         List<RedisLockMaterial> redisLockMaterials = JSONObject.parseArray(lockMaterial, RedisLockMaterial.class);
@@ -167,15 +176,17 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
                 setStoreRoomId(model.getStoreRoomId());
                 setStoreRoomRackNo(model.getStoreRoomRackNo());
-                setMaterialGraphNo(model.getMaterialGraphNo());
+                setMaterialGraphNo(materialGraphNo);
                 setOperationType((int) operationType);
                 setType((int) storageType);
-                setQuantity(model.getQuantity());
-                setLockQuantity(model.getQuantity());
+                setQuantity(quantity);
+                setLockQuantity(quantity);
 
             }};
-            // 增加库存
+            // 减少库存
             stockService.addReduceStock(entryOutStorageDTO);
+            // 更新零件的当前库存量
+            materialService.updateCurrentQuantity(materialGraphNo, quantity);
         }
         return insert;
     }
