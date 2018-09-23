@@ -1,15 +1,18 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class Finance {
+public class Invoice {
     private Integer id;
 
     private String orderNo;
 
     private Byte type;
 
-    private Integer totalAmount;
+    private String invoiceNo;
+
+    private BigDecimal totalAmount;
 
     private Byte status;
 
@@ -21,10 +24,11 @@ public class Finance {
 
     private Integer createUserId;
 
-    public Finance(Integer id, String orderNo, Byte type, Integer totalAmount, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public Invoice(Integer id, String orderNo, Byte type, String invoiceNo, BigDecimal totalAmount, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.orderNo = orderNo;
         this.type = type;
+        this.invoiceNo = invoiceNo;
         this.totalAmount = totalAmount;
         this.status = status;
         this.isDelete = isDelete;
@@ -33,7 +37,7 @@ public class Finance {
         this.createUserId = createUserId;
     }
 
-    public Finance() {
+    public Invoice() {
         super();
     }
 
@@ -61,11 +65,19 @@ public class Finance {
         this.type = type;
     }
 
-    public Integer getTotalAmount() {
+    public String getInvoiceNo() {
+        return invoiceNo;
+    }
+
+    public void setInvoiceNo(String invoiceNo) {
+        this.invoiceNo = invoiceNo == null ? null : invoiceNo.trim();
+    }
+
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Integer totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 

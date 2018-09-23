@@ -113,7 +113,7 @@
 
         <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
 
-        <table tableName="order_product" domainObjectName="OrderProduct"></table>
+        <!--<table tableName="order_product" domainObjectName="OrderProduct"></table>-->
 
         <!--<table tableName="order_material" domainObjectName="OrderMaterial"></table>-->
 
@@ -127,7 +127,7 @@
 
         <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->
 
-        <table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>
+        <!--<table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>-->
 
         <!--<table tableName="entry_out_store_record" domainObjectName="EntryOutStoreRecord"></table>-->
 
@@ -141,7 +141,9 @@
 
         <!--<table tableName="entrust" domainObjectName="Entrust"></table>-->
 
-        <!--<table tableName="finance" domainObjectName="Finance"></table>-->
+        <!--<table tableName="invoice" domainObjectName="Invoice"></table>-->
+        <!--<table tableName="expenses" domainObjectName="Expenses"></table>-->
+        <!--<table tableName="contract" domainObjectName="Contract"></table>-->
 
         <!--<table tableName="inspect" domainObjectName="Inspect"></table>-->
 

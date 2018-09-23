@@ -1,14 +1,14 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.FinanceMapper;
-import com.deepsoft.haolifa.model.domain.FinanceExample;
-import com.deepsoft.haolifa.model.dto.FinanceDTO;
-import com.deepsoft.haolifa.model.domain.Finance;
-import com.deepsoft.haolifa.model.dto.FinanceListDTO;
+import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
+import com.deepsoft.haolifa.model.domain.Invoice;
+import com.deepsoft.haolifa.model.domain.InvoiceExample;
+import com.deepsoft.haolifa.model.dto.InvoiceDTO;
+import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.service.FinanceService;
+import com.deepsoft.haolifa.service.InvoiceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -17,57 +17,59 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @Service
-public class FinanceServiceImpl extends BaseService implements FinanceService {
+public class InvoiceServiceImpl extends BaseService implements InvoiceService {
 
     @Autowired
-    FinanceMapper financeMapper;
+    InvoiceMapper invoiceMapper;
 
     @Override
-    public ResultBean save(FinanceDTO model) {
-        if (StringUtils.isAnyEmpty(model.getOrderNo()) || model.getStatus() == null || model.getType() == null
+    public ResultBean save(InvoiceDTO model) {
+        if (StringUtils.isAnyEmpty(model.getOrderNo(), model.getInvoiceNo()) || model.getStatus() == null || model.getType() == null
                 || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        Finance finance = new Finance();
-        BeanUtils.copyProperties(model, finance);
-        finance.setCreateUserId(getLoginUserId());
-        int insert = financeMapper.insertSelective(finance);
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(model, invoice);
+        invoice.setCreateUserId(getLoginUserId());
+        int insert = invoiceMapper.insertSelective(invoice);
         return ResultBean.success(insert);
     }
 
     @Override
     public ResultBean delete(Integer id) {
-        int delete = financeMapper.deleteByPrimaryKey(id);
+        Invoice invoice = new Invoice();
+        invoice.setIsDelete(CommonEnum.Consts.YES.code);
+        InvoiceExample invoiceExample = new InvoiceExample();
+        invoiceExample.or().andIdEqualTo(id);
+        int delete = invoiceMapper.updateByExampleSelective(invoice, invoiceExample);
         return ResultBean.success(delete);
     }
 
     @Override
-    public ResultBean update(FinanceDTO model) {
-        if (StringUtils.isAnyEmpty(model.getOrderNo()) || model.getStatus() == null || model.getType() == null
+    public ResultBean update(InvoiceDTO model) {
+        if (StringUtils.isAnyEmpty(model.getOrderNo(), model.getInvoiceNo()) || model.getStatus() == null || model.getType() == null
                 || model.getTotalAmount() == null || model.getTotalAmount() == 0 || model.getId() == null || model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        Finance finance = new Finance();
-        BeanUtils.copyProperties(model, finance);
-        int update = financeMapper.updateByPrimaryKeySelective(finance);
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(model, invoice);
+        int update = invoiceMapper.updateByPrimaryKeySelective(invoice);
         return ResultBean.success(update);
     }
 
     @Override
-    public ResultBean getList(FinanceListDTO modelList) {
+    public ResultBean getList(InvoiceListDTO modelList) {
         if (modelList.getPageNum() == null || modelList.getPageNum() == 0) {
             modelList.setPageNum(1);
         }
         if (modelList.getPageSize() == null || modelList.getPageSize() == 0) {
             modelList.setPageSize(10);
         }
-        FinanceExample financeExample = new FinanceExample();
-        FinanceExample.Criteria criteria = financeExample.createCriteria();
+        InvoiceExample invoiceExample = new InvoiceExample();
+        InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         if (modelList.getOrderStatus() != null) {
             criteria.andStatusEqualTo(modelList.getOrderStatus().byteValue());
         }
@@ -78,9 +80,9 @@ public class FinanceServiceImpl extends BaseService implements FinanceService {
             criteria.andOrderNoLike("%" + modelList.getOrderNo() + "%");
         }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        Page<Finance> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize())
-                .doSelectPage(() -> financeMapper.selectByExample(financeExample));
-        PageDTO<Finance> pageDTO = new PageDTO<>();
+        Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize())
+                .doSelectPage(() -> invoiceMapper.selectByExample(invoiceExample));
+        PageDTO<Invoice> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
