@@ -17,6 +17,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Slf4j
 @Service
 public class InvoiceServiceImpl extends BaseService implements InvoiceService {
@@ -32,6 +34,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(model, invoice);
+        invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         invoice.setCreateUserId(getLoginUserId());
         int insert = invoiceMapper.insertSelective(invoice);
         return ResultBean.success(insert);
@@ -55,6 +58,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(model, invoice);
+        invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         int update = invoiceMapper.updateByPrimaryKeySelective(invoice);
         return ResultBean.success(update);
     }

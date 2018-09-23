@@ -15,6 +15,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @Slf4j
 public class ExpensesServiceImpl extends BaseService implements ExpensesService {
@@ -27,6 +29,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         Expenses expenses = new Expenses();
         BeanUtils.copyProperties(model, expenses);
         expenses.setCreateUserId(getLoginUserId());
+        expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         expensesMapper.insertSelective(expenses);
         return ResultBean.success(0);
     }
@@ -45,6 +48,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     public ResultBean update(ExpensesDTO model) {
         Expenses expenses = new Expenses();
         BeanUtils.copyProperties(model, expenses);
+        expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         expensesMapper.updateByPrimaryKeySelective(expenses);
         return ResultBean.success(0);
     }
