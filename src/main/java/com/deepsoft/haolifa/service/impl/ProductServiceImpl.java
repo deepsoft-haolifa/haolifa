@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -28,6 +29,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResultBean saveInfo(ProductRequestDTO model) {
+        String productNo = model.getProductNo();
+        boolean existProductNo = judgeProductNo(productNo, 0);
+        log.info("saveInfo existProductNo productNo:{},result:{}", productNo, existProductNo);
+        if (existProductNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
+        }
         CustomUser customUser = sysUserService.selectLoginUser();
         int createUser = customUser != null ? customUser.getId() : 1;
         Product product = new Product();
@@ -42,6 +49,12 @@ public class ProductServiceImpl implements ProductService {
         if (model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+        String productNo = model.getProductNo();
+        boolean existProductNo = judgeProductNo(productNo, model.getId());
+        log.info("saveInfo existProductNo productNo:{},result:{}", productNo, existProductNo);
+        if (existProductNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
+        }
         Product product = new Product();
         BeanUtils.copyProperties(model, product);
         product.setUpdateTime(new Date());
@@ -54,12 +67,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResultBean delete(int id) {
-        Product record = new Product() {{
-            setId(id);
-            setIsDelete(CommonEnum.Consts.YES.code);
-        }};
-        int update = productMapper.updateByPrimaryKeySelective(record);
-        return ResultBean.success(update);
+        if (id == 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+//        Product record = new Product() {{
+//            setId(id);
+//            setIsDelete(CommonEnum.Consts.YES.code);
+//        }};
+        int delete = productMapper.deleteByPrimaryKey(id);
+        return ResultBean.success(delete);
     }
 
     @Override
@@ -92,5 +108,29 @@ public class ProductServiceImpl implements ProductService {
         BeanUtils.copyProperties(products, pageDTO);
         pageDTO.setList(products);
         return ResultBean.success(pageDTO);
+    }
+
+    /**
+     * 判断是否有相同的图号
+     *
+     * @param productNo
+     * @return
+     */
+    private boolean judgeProductNo(String productNo, int id) {
+        ProductExample example = new ProductExample();
+        ProductExample.Criteria criteria = example.createCriteria();
+        criteria.andProductNoEqualTo(productNo);
+        List<Product> productList = productMapper.selectByExample(example);
+        if (productList.size() > 0) {
+            // 更新的时候传id，如果查出来的id和传过来的id相同，则返回false
+            if (id > 0) {
+                Product product = productList.get(0);
+                if (product.getId() == id) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
