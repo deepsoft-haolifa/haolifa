@@ -67,8 +67,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setStoreRoomId(model.getStoreRoomId());
                 setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setProductNo(model.getProductNo());
-                setOperationType((int) operationType);
-                setType((int) storageType);
+                setOperationType(operationType);
+                setType(storageType);
                 setQuantity(model.getQuantity());
             }};
             // 增加库存
@@ -105,8 +105,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setStoreRoomId(model.getStoreRoomId());
                 setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setProductNo(model.getProductNo());
-                setOperationType((int) operationType);
-                setType((int) storageType);
+                setOperationType(operationType);
+                setType(storageType);
                 setQuantity(model.getQuantity());
             }};
             // 减少库存
@@ -138,8 +138,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setStoreRoomId(model.getStoreRoomId());
                 setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setMaterialGraphNo(materialGraphNo);
-                setOperationType((int) operationType);
-                setType((int) storageType);
+                setOperationType(operationType);
+                setType(storageType);
                 setQuantity(quantity);
             }};
             // 增加库存
@@ -177,8 +177,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setStoreRoomId(model.getStoreRoomId());
                 setStoreRoomRackNo(model.getStoreRoomRackNo());
                 setMaterialGraphNo(materialGraphNo);
-                setOperationType((int) operationType);
-                setType((int) storageType);
+                setOperationType(operationType);
+                setType(storageType);
                 setQuantity(quantity);
                 setLockQuantity(quantity);
 
