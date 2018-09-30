@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.config;
+package com.deepsoft.haolifa.authentication;
 
 import org.apache.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -24,6 +24,7 @@ public class MyRestLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
             throws IOException, ServletException {
         response.setStatus(HttpStatus.SC_OK);
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
         writer.write("{\"code\":\"0\", \"msg\":\"注销成功\"}");
         writer.flush();

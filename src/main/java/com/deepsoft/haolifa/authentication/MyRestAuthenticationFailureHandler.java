@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.config;
+package com.deepsoft.haolifa.authentication;
 
 import org.apache.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -24,8 +24,9 @@ public class MyRestAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             throws IOException, ServletException {
         response.setStatus(HttpStatus.SC_UNAUTHORIZED);
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
-        writer.write("{\"code\":\"1\", \"msg\":\"认证失败\"}");
+        writer.write("{\"code\":\"1\", \"msg\":\""+exception.getMessage()+"\"}");
         writer.flush();
         writer.close();
     }

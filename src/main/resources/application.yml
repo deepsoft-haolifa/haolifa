@@ -23,3 +23,11 @@ log:
 
 project:
    url: http://47.105.36.56
+
+my:
+  security:
+    image:
+      width: 60
+      height: 40
+      expire-sec: 60
+      length: 4

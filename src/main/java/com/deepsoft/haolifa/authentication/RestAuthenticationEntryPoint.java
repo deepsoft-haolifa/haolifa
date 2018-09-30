@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.config;
+package com.deepsoft.haolifa.authentication;
 
 import org.apache.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -23,11 +23,11 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletRequest request,
             HttpServletResponse response,
             AuthenticationException authException) throws IOException {
-
         response.setStatus(HttpStatus.SC_UNAUTHORIZED);
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
-        writer.write("{\"code\":\"1\", \"msg\":\"未认证\"}");
+        writer.write("{\"code\":\"1\", \"msg\":\""+authException.getMessage()+"\"}");
         writer.flush();
         writer.close();
     }

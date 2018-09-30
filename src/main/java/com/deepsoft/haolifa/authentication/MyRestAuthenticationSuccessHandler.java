@@ -1,9 +1,8 @@
-package com.deepsoft.haolifa.config;
+package com.deepsoft.haolifa.authentication;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.service.PermissionService;
 import com.deepsoft.haolifa.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
