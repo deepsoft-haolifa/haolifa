@@ -122,6 +122,13 @@ public class MaterialServiceImpl implements MaterialService {
         CustomUser customUser = sysUserService.selectLoginUser();
         int createUser = customUser != null ? customUser.getId() : 1;
         Material record = new Material();
+        // 判断图号是否已经存在
+        String graphNo = model.getGraphNo();
+        boolean existGraphNo = judgeGraphNo(graphNo, 0);
+        log.info("save material existGraphNo graphNo:{},result:{}", graphNo, existGraphNo);
+        if (existGraphNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_EXISTS);
+        }
         BeanUtils.copyProperties(model, record);
         record.setCreateUser(createUser);
         int insert = materialMapper.insertSelective(record);
@@ -131,6 +138,12 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public ResultBean update(MaterialRequestDTO model) {
         Material record = new Material();
+        String graphNo = model.getGraphNo();
+        boolean existGraphNo = judgeGraphNo(graphNo, model.getId());
+        log.info("update material existGraphNo graphNo:{},result:{}", graphNo, existGraphNo);
+        if (existGraphNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_EXISTS);
+        }
         CustomUser customUser = sysUserService.selectLoginUser();
         int updateUser = customUser != null ? customUser.getId() : 1;
         record.setUpdateUser(updateUser);
@@ -145,12 +158,8 @@ public class MaterialServiceImpl implements MaterialService {
         if (id == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        Material record = new Material() {{
-            setId(id);
-            setIsDelete(CommonEnum.Consts.YES.code);
-        }};
-        int update = materialMapper.updateByPrimaryKeySelective(record);
-        return ResultBean.success(update);
+        int delete = materialMapper.deleteByPrimaryKey(id);
+        return ResultBean.success(delete);
     }
 
     @Override
@@ -210,4 +219,27 @@ public class MaterialServiceImpl implements MaterialService {
         return materialExtendMapper.updateCurrentQuantity(graphNo, quantity);
     }
 
+    /**
+     * 判断是否有相同的图号
+     *
+     * @param graphNo
+     * @return
+     */
+    private boolean judgeGraphNo(String graphNo, int id) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoEqualTo(graphNo);
+        List<Material> materials = materialMapper.selectByExample(example);
+        if (materials.size() > 0) {
+            // 更新的时候传id，如果查出来的id和传过来的id相同，则返回false
+            if (id > 0) {
+                Material material = materials.get(0);
+                if (material.getId() == id) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

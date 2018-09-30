@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class FinanceListDTO {
+public class InvoiceListDTO {
 
     @ApiModelProperty(required = true,value = "页码")
     private Integer pageNum;

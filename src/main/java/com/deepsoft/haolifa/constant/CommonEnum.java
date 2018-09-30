@@ -30,7 +30,8 @@ public class CommonEnum {
         STORE_ROOM_NO_EXISTS("2001", "库房号已经存在"),
 
         STORE_ROOM_RACK_EXISTS("2002", "库位已经存在"),
-
+        MATERIAL_GRAPH_NO_EXISTS("2003", "零件图号已经存在"),
+        PRODUCT_NO_EXISTS("2004", "成品号已经存在"),
 
         // 采购计划、请购单、采购单模块错误码开头3***
         PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0"),

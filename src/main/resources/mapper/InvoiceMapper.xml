@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.FinanceMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Finance">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.InvoiceMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Invoice">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="total_amount" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="invoice_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="total_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -73,15 +74,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_no, type, total_amount, status, is_delete, create_time, update_time, create_user_id
+    id, order_no, type, invoice_no, total_amount, status, is_delete, create_time, update_time, 
+    create_user_id
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FinanceExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InvoiceExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from finance
+    from invoice
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,31 +94,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from finance
+    from invoice
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from finance
+    delete from invoice
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.FinanceExample">
-    delete from finance
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.InvoiceExample">
+    delete from invoice
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Finance">
-    insert into finance (id, order_no, type, 
-      total_amount, status, is_delete, 
-      create_time, update_time, create_user_id
-      )
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
+    insert into invoice (id, order_no, type, 
+      invoice_no, total_amount, status, 
+      is_delete, create_time, update_time, 
+      create_user_id)
     values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{totalAmount,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}
-      )
+      #{invoiceNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Finance">
-    insert into finance
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
+    insert into invoice
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -126,6 +128,9 @@
       </if>
       <if test="type != null">
         type,
+      </if>
+      <if test="invoiceNo != null">
+        invoice_no,
       </if>
       <if test="totalAmount != null">
         total_amount,
@@ -156,8 +161,11 @@
       <if test="type != null">
         #{type,jdbcType=TINYINT},
       </if>
+      <if test="invoiceNo != null">
+        #{invoiceNo,jdbcType=VARCHAR},
+      </if>
       <if test="totalAmount != null">
-        #{totalAmount,jdbcType=INTEGER},
+        #{totalAmount,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -176,14 +184,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.FinanceExample" resultType="java.lang.Long">
-    select count(*) from finance
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.InvoiceExample" resultType="java.lang.Long">
+    select count(*) from invoice
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update finance
+    update invoice
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -194,8 +202,11 @@
       <if test="record.type != null">
         type = #{record.type,jdbcType=TINYINT},
       </if>
+      <if test="record.invoiceNo != null">
+        invoice_no = #{record.invoiceNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.totalAmount != null">
-        total_amount = #{record.totalAmount,jdbcType=INTEGER},
+        total_amount = #{record.totalAmount,jdbcType=DECIMAL},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
@@ -218,11 +229,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update finance
+    update invoice
     set id = #{record.id,jdbcType=INTEGER},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
-      total_amount = #{record.totalAmount,jdbcType=INTEGER},
+      invoice_no = #{record.invoiceNo,jdbcType=VARCHAR},
+      total_amount = #{record.totalAmount,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=TINYINT},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -232,8 +244,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Finance">
-    update finance
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
+    update invoice
     <set>
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
@@ -241,8 +253,11 @@
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
       </if>
+      <if test="invoiceNo != null">
+        invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      </if>
       <if test="totalAmount != null">
-        total_amount = #{totalAmount,jdbcType=INTEGER},
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
@@ -262,11 +277,12 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Finance">
-    update finance
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
+    update invoice
     set order_no = #{orderNo,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
-      total_amount = #{totalAmount,jdbcType=INTEGER},
+      invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
       status = #{status,jdbcType=TINYINT},
       is_delete = #{isDelete,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -274,16 +290,4 @@
       create_user_id = #{createUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <select id="selectListByPage" parameterType="string" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from finance
-    where
-    is_delete = 0
-    <if test="orderNo != null and orderNo != ''">
-      and order_no like concat('%',#{orderNo},'%')
-    </if>
-    order by update_time desc
-  </select>
 </mapper>

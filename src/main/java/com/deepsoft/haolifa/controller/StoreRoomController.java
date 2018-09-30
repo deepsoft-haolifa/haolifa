@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
@@ -10,6 +11,7 @@ import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.StoreRoomRackService;
 import com.deepsoft.haolifa.service.StoreRoomService;
 import io.swagger.annotations.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -115,31 +117,43 @@ public class StoreRoomController {
                                    @RequestParam(defaultValue = "20") Integer pageSize,
                                    @RequestParam(required = false) String roomNo,
                                    @RequestParam(required = false) String rackNameLike) {
-        return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomNo,rackNameLike);
+        return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomNo, rackNameLike);
     }
 
 
     @ApiOperation("成品入库")
     @PutMapping("/entryOut/entryProduct")
     public ResultBean updateRack(@RequestBody EntryProductStorageDTO model) {
+        if (StringUtils.isAnyBlank(model.getProductNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         return ResultBean.success(entryOutStoreRecordService.entryProduct(model));
     }
 
     @ApiOperation("成品出库")
     @PutMapping("/entryOut/outProduct")
     public ResultBean updateRack(@RequestBody OutProductStorageDTO model) {
+        if (StringUtils.isAnyBlank(model.getProductNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         return ResultBean.success(entryOutStoreRecordService.outProduct(model));
     }
 
     @ApiOperation("零件入库")
     @PutMapping("/entryOut/entryMaterial")
     public ResultBean updateRack(@RequestBody EntryMaterialStorageDTO model) {
+        if (StringUtils.isAnyBlank(model.getMaterialGraphNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         return ResultBean.success(entryOutStoreRecordService.entryMaterial(model));
     }
 
     @ApiOperation("零件出库")
     @PutMapping("/entryOut/outMaterial")
     public ResultBean updateRack(@RequestBody OutMaterialStorageDTO model) {
+        if (StringUtils.isAnyBlank(model.getMaterialGraphNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         return ResultBean.success(entryOutStoreRecordService.outMaterial(model));
     }
 

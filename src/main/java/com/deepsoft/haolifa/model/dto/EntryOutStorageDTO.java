@@ -49,10 +49,10 @@ public class EntryOutStorageDTO {
     /**
      * 库存类型（1.成品；2.零件）
      */
-    private Integer type;
+    private Byte type;
 
     /**
      * 库存操作类型（1.出库；2.入库）
      */
-    private Integer operationType;
+    private Byte operationType;
 }

@@ -458,19 +458,59 @@
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='订单审批表';
 	
 	
-	DROP TABLE IF EXISTS `finance`;
-CREATE TABLE `finance` (
+DROP TABLE IF EXISTS `Invoice`;
+CREATE TABLE `invoice` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '订单合同编号',
   `type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '类型：0  订单合同编号 1 采购编号',
-  `total_amount` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '总金额',
+  `invoice_no` varchar(64) NOT NULL DEFAULT '' COMMENT '发票号',
+  `total_amount` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
   `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态： 0 未收款 1 未打款 2 打款中 3 收款中 4 处理完成',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0  未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-财务管理表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-发票管理表';
+
+DROP TABLE IF EXISTS `expenses`;
+CREATE TABLE `expenses` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `total_amount` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
+  `expenses_classify` varchar(255) NOT NULL DEFAULT '' COMMENT '费用类别',
+  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
+  `commit_user` varchar(255) NOT NULL DEFAULT '' COMMENT '提交人',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-费用管理';
+
+DROP TABLE IF EXISTS `contract`;
+CREATE TABLE `contract` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单编号',
+  `contract_name` varchar(255) NOT NULL DEFAULT '' COMMENT '合同名称',
+  `contract_type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '合同类型：1 租赁 2 采购 3 装修 4 服务 5 印刷 6 教材编写 7 初版 8 加盟 9 收购 10 其他',
+  `contract_duration` varchar(255) NOT NULL DEFAULT '' COMMENT '合同期间',
+  `contract_subject` varchar(255) NOT NULL DEFAULT '' COMMENT '合同主体',
+  `total_amount` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
+  `contract_party` varchar(255) NOT NULL DEFAULT '' COMMENT '合同方',
+  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '地址',
+  `linkman` varchar(255) NOT NULL DEFAULT '' COMMENT '联系人',
+  `linkman_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '联系人电话',
+  `leader` varchar(255) NOT NULL DEFAULT '' COMMENT '负责人',
+  `leader_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '负责人电话',
+  `payment_cycle` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '支付周期：1 月付 2 两月付 3 季付 4 半年付 5 年付 6 其他',
+  `payment_mode` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '付款方式：1 现金 2 支票 3 汇款',
+  `contract_summary` varchar(1023) NOT NULL DEFAULT '' COMMENT '合同摘要及说明',
+  `accessory` varchar(2047) NOT NULL DEFAULT '' COMMENT '合同附件：json格式；{“附件名称”："附件地址"}',
+  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
+  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-合同表';
 
 DROP TABLE IF EXISTS `purchase_plan`;
 CREATE TABLE `purchase_plan` (

@@ -1,16 +1,16 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.FinanceDTO;
-import com.deepsoft.haolifa.model.dto.FinanceListDTO;
+import com.deepsoft.haolifa.model.dto.InvoiceDTO;
+import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
-public interface FinanceService {
+public interface InvoiceService {
     /**
      * 添加财务记录
      * @param model
      * @return
      */
-    ResultBean save(FinanceDTO model);
+    ResultBean save(InvoiceDTO model);
 
     /**
      * 删除财务记录
@@ -24,12 +24,12 @@ public interface FinanceService {
      * @param model
      * @return
      */
-    ResultBean update(FinanceDTO model);
+    ResultBean update(InvoiceDTO model);
 
     /**
      * 获取财务记录列表
      * @param modelList
      * @return
      */
-    ResultBean getList(FinanceListDTO modelList);
+    ResultBean getList(InvoiceListDTO modelList);
 }
