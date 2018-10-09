@@ -23,6 +23,8 @@ public class CommonEnum {
         SYSTEM_ERROR("0003", "网络请求错误，请稍后再试"),
 
         SYSTEM_EXCEPTION("0004", "系统异常"),
+        UPLOAD_PIC_EXT_ERROR("0005", "图片上传参数格式有误"),
+
         //用户登陆错误
         LOGIN_ERROR("1001", "登陆错误"),
 
