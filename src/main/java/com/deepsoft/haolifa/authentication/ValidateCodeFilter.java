@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.authentication;
 
 import com.deepsoft.haolifa.exception.ValidateCodeException;
 import com.deepsoft.haolifa.validator.ValidateCode;
+import com.github.pagehelper.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -56,7 +57,7 @@ public class ValidateCodeFilter extends GenericFilterBean {
 
         String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
 
-        if("".equals(codeInRequest)){
+        if(StringUtil.isEmpty(codeInRequest)){
             throw new ValidateCodeException("验证码不能为空");
         }
 
@@ -74,6 +75,6 @@ public class ValidateCodeFilter extends GenericFilterBean {
             throw new ValidateCodeException("验证码不匹配");
         }
 
-        httpSession.removeAttribute(ValidateCode.IMAGE_VALIDATE_CODE);
+        //httpSession.removeAttribute(ValidateCode.IMAGE_VALIDATE_CODE);
     }
 }

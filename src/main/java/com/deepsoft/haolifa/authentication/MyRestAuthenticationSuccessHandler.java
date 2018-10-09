@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.SysUserService;
+import com.deepsoft.haolifa.validator.ValidateCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -32,6 +34,9 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Autowired
     private SysUserService userService;
+
+    @Autowired
+    private HttpSession httpSession;
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 
@@ -63,7 +68,7 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         clearAuthenticationAttributes(request);
-
+        httpSession.removeAttribute(ValidateCode.IMAGE_VALIDATE_CODE);
     }
 
     public void setRequestCache(RequestCache requestCache) {

@@ -1,12 +1,12 @@
 package com.deepsoft.haolifa.validator.properties;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 
-@Component
 @Data
+//@ConfigurationProperties(prefix = "my.security.image")
+@Component
 public class SecurityImageProperties {
 
     private int width = 60;

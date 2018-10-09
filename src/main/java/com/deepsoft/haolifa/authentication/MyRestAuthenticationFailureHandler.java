@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.authentication;
 
+import com.deepsoft.haolifa.exception.ValidateCodeException;
 import org.apache.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,10 @@ public class MyRestAuthenticationFailureHandler extends SimpleUrlAuthenticationF
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
-        writer.write("{\"code\":\"1\", \"msg\":\""+exception.getMessage()+"\"}");
+        if(exception instanceof ValidateCodeException)
+            writer.write("{\"code\":\"2\", \"msg\":\""+exception.getMessage()+"\"}");
+        if(exception instanceof BadCredentialsException)
+            writer.write("{\"code\":\"1\", \"msg\":\"账号密码错误\"}");
         writer.flush();
         writer.close();
     }
