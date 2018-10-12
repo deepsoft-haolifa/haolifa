@@ -34,9 +34,8 @@ public class OrderProductController {
     }
 
     @ApiOperation("成品订单信息添加")
-    @DeleteMapping("/save")
-    @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
-    public ResultBean deleteClassify(@RequestBody OrderProductDTO orderProduct) {
+    @PostMapping("/save")
+    public ResultBean save(@RequestBody OrderProductDTO orderProduct) {
         return orderProductService.saveOrderProductInfo(orderProduct);
     }
 
