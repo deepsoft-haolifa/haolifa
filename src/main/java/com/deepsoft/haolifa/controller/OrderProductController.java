@@ -51,9 +51,10 @@ public class OrderProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query")
+            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "订单状态", name = "orderStatus", dataType = "int", paramType = "query")
     })
-    @GetMapping("/classify/pageInfo")
+    @GetMapping("/pageInfo")
     public ResultBean pageInfoClassify(@RequestParam(defaultValue = "1") Integer currentPage,
                                        @RequestParam(defaultValue = "20") Integer pageSize,
                                        @RequestParam(required = false) String orderNo,

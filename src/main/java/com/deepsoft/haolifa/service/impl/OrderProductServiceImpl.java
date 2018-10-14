@@ -217,7 +217,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         OrderProduct record = new OrderProduct();
         record.setOrderStatus(status);
         OrderProductExample example = new OrderProductExample();
-        example.or().andProductNoEqualTo(orderProductNo);
+        example.or().andOrderNoEqualTo(orderProductNo);
         int update = orderProductMapper.updateByExampleSelective(record, example);
         log.info("update orderProduct status end|orderProductNo:{},status:{},result:{}", orderProductNo, status, update);
         return 0;
@@ -226,7 +226,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Override
     public OrderProduct getOrderProductInfo(String orderProductNo) {
         OrderProductExample example = new OrderProductExample();
-        example.or().andProductNoEqualTo(orderProductNo);
+        example.or().andOrderNoEqualTo(orderProductNo);
         List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
         if (orderProducts.size() > 0) {
             return orderProducts.get(0);
