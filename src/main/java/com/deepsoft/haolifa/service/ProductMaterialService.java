@@ -1,17 +1,18 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.dto.ProductMaterialDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
 public interface ProductMaterialService {
 
     /**
-     * 添加成品零件配置
+     * 编辑成品零件配置（添加修改信息）
      *
      * @param productNo       产品No
-     * @param materialGraphNo 原料图号
+     * @param model       产品No
      * @return
      */
-    ResultBean saveInfo(String productNo, String materialGraphNo);
+    ResultBean editInfo(String productNo,ProductMaterialDTO model);
 
 
     /**

@@ -333,8 +333,10 @@
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号（行业规范如：D7A1X3P-16Q-DN50）',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '零件数量',
+	  `replace_material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '可替换零件编号',
 	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '关联状态（0关联，1不关联）',
-	   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY `uk_multi` (`product_no`,`material_graph_no`)

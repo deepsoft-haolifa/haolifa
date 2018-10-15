@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 成品配置请求实体
  */
@@ -16,7 +18,7 @@ public class ProductRequestDTO {
 
     @ApiModelProperty(value = "成品名称", required = true)
     private String name;
-    @ApiModelProperty(value = "成品编号（全局唯一）", required = true)
+    @ApiModelProperty(value = "成品号（全局唯一）", required = true)
     private String productNo;
     @ApiModelProperty(value = "适配组件")
     private String fitComponent;
@@ -24,4 +26,7 @@ public class ProductRequestDTO {
     private String specifications;
     @ApiModelProperty(value = "备注")
     private String remark;
+
+    @ApiModelProperty(value = "成品所关联的零件列表")
+    private List<ProductMaterialDTO> productMaterialList;
 }

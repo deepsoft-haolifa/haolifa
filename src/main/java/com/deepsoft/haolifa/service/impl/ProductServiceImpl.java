@@ -2,8 +2,12 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.ProductMapper;
+import com.deepsoft.haolifa.dao.repository.ProductMaterialMapper;
+import com.deepsoft.haolifa.dao.repository.extend.ProductMaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.Product;
 import com.deepsoft.haolifa.model.domain.ProductExample;
+import com.deepsoft.haolifa.model.domain.ProductMaterial;
+import com.deepsoft.haolifa.model.domain.ProductMaterialExample;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.SysUserService;
@@ -14,7 +18,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,9 +31,14 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductMapper productMapper;
     @Autowired
+    private ProductMaterialExtendMapper productMaterialExtendMapper;
+    @Autowired
+    private ProductMaterialMapper productMaterialMapper;
+    @Autowired
     private SysUserService sysUserService;
 
     @Override
+    @Transactional
     public ResultBean saveInfo(ProductRequestDTO model) {
         String productNo = model.getProductNo();
         boolean existProductNo = judgeProductNo(productNo, 0);
@@ -41,10 +52,33 @@ public class ProductServiceImpl implements ProductService {
         BeanUtils.copyProperties(model, product);
         product.setCreateUser(createUser);
         int insert = productMapper.insertSelective(product);
+        if (insert > 0) {
+            // 批量增加成品零件配置
+            List<ProductMaterialDTO> productMaterialList = model.getProductMaterialList();
+            if (null != productMaterialList && productMaterialList.size() > 0) {
+                List<ProductMaterial> list = new ArrayList<>();
+                productMaterialList.forEach(e -> {
+                    ProductMaterial productMaterial = new ProductMaterial() {{
+                        setProductNo(productNo);
+                        setCreateUser(createUser);
+                        setMaterialGraphNo(e.getMaterialGraphNo());
+                        setMaterialCount(e.getMaterialCount());
+                        if (StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())) {
+                            setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());
+                        } else {
+                            setReplaceMaterialGraphNo("");
+                        }
+                    }};
+                    list.add(productMaterial);
+                });
+                productMaterialExtendMapper.insertBatch(list);
+            }
+        }
         return ResultBean.success(insert);
     }
 
     @Override
+    @Transactional
     public ResultBean updateInfo(ProductRequestDTO model) {
         if (model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
@@ -66,15 +100,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResultBean delete(int id) {
-        if (id == 0) {
+    @Transactional
+    public ResultBean delete(int id, String productNo) {
+        if (id == 0 || StringUtils.isBlank(productNo)) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-//        Product record = new Product() {{
-//            setId(id);
-//            setIsDelete(CommonEnum.Consts.YES.code);
-//        }};
         int delete = productMapper.deleteByPrimaryKey(id);
+        // 删除成功产品后，将管理的零件也删除了
+        ProductMaterialExample example = new ProductMaterialExample();
+        example.or().andProductNoEqualTo(productNo);
+        productMaterialMapper.deleteByExample(example);
         return ResultBean.success(delete);
     }
 
@@ -85,6 +120,44 @@ public class ProductServiceImpl implements ProductService {
         }
         Product product = productMapper.selectByPrimaryKey(id);
         return product;
+    }
+
+    @Override
+    public Product getInfoByNo(String productNo) {
+        if (StringUtils.isBlank(productNo)) {
+            return null;
+        }
+        ProductExample example = new ProductExample();
+        example.or().andProductNoEqualTo(productNo);
+        List<Product> products = productMapper.selectByExample(example);
+        if (products.size() > 0) {
+            return products.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public ProductRequestDTO getProductAllInfo(int id) {
+        ProductRequestDTO productRequestDTO = new ProductRequestDTO();
+        if (id == 0) {
+            return null;
+        }
+        Product product = productMapper.selectByPrimaryKey(id);
+        // 根据产品no 查询管理的零件列表
+        ProductMaterialExample example = new ProductMaterialExample();
+        example.or().andProductNoEqualTo(product.getProductNo());
+        List<ProductMaterial> productMaterials = productMaterialMapper.selectByExample(example);
+        List<ProductMaterialDTO> productMaterialDTOList = new ArrayList<>();
+        productMaterials.forEach(e -> {
+            ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO() {{
+                setMaterialCount(e.getMaterialCount());
+                setMaterialGraphNo(e.getMaterialGraphNo());
+                setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());
+            }};
+            productMaterialDTOList.add(productMaterialDTO);
+        });
+        productRequestDTO.setProductMaterialList(productMaterialDTOList);
+        return productRequestDTO;
     }
 
     @Override

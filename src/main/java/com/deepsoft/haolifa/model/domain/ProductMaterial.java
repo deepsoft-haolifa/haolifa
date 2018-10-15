@@ -17,13 +17,17 @@ public class ProductMaterial {
 
     private String materialGraphNo;
 
+    private Integer materialCount;
+
+    private String replaceMaterialGraphNo;
+
     private Byte status;
 
     private Byte isDelete;
 
     private String remark;
 
-    public ProductMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String materialGraphNo, Byte status, Byte isDelete, String remark) {
+    public ProductMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String materialGraphNo, Integer materialCount, String replaceMaterialGraphNo, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -31,6 +35,8 @@ public class ProductMaterial {
         this.updateUser = updateUser;
         this.productNo = productNo;
         this.materialGraphNo = materialGraphNo;
+        this.materialCount = materialCount;
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo;
         this.status = status;
         this.isDelete = isDelete;
         this.remark = remark;
@@ -94,6 +100,22 @@ public class ProductMaterial {
 
     public void setMaterialGraphNo(String materialGraphNo) {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public Integer getMaterialCount() {
+        return materialCount;
+    }
+
+    public void setMaterialCount(Integer materialCount) {
+        this.materialCount = materialCount;
+    }
+
+    public String getReplaceMaterialGraphNo() {
+        return replaceMaterialGraphNo;
+    }
+
+    public void setReplaceMaterialGraphNo(String replaceMaterialGraphNo) {
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo == null ? null : replaceMaterialGraphNo.trim();
     }
 
     public Byte getStatus() {
