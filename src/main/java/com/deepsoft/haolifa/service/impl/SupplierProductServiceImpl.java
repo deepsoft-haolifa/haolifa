@@ -69,9 +69,6 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
 
     @Override
     public ResultBean getList(SupplierProductListDTO model) {
-        if (StringUtils.isEmpty(model.getSupplierNo())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -80,7 +77,9 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
         }
         SupplierProductExample supplierProductExample = new SupplierProductExample();
         SupplierProductExample.Criteria criteria = supplierProductExample.createCriteria();
-        criteria.andSupplierNoEqualTo(model.getSupplierNo());
+        if(StringUtils.isNotEmpty(model.getSupplierNo())) {
+            criteria.andSupplierNoLike("%"+model.getSupplierNo()+"%");
+        }
         if (model.getMaterialType() != null) {
             criteria.andMaterialTypeEqualTo(model.getMaterialType().byteValue());
         }
