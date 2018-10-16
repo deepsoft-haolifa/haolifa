@@ -40,7 +40,10 @@ public class CommonEnum {
 
         PURCHASE_NO_NOT_EXIST("3001","采购单不存在"),
 
-        RESOURCE_NOT_EXIST("3404","资源不存在");
+        RESOURCE_NOT_EXIST("3404","资源不存在"),
+
+        SUPPLIER_NO_WRONG("3002","供应商编号格式不正确")
+        ;
 
         public final String code;
 
