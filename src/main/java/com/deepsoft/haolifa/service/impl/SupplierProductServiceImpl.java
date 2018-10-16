@@ -57,6 +57,7 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
     public ResultBean update(SupplierPorductDTO model) {
         SupplierProduct supplierProduct = new SupplierProduct();
         BeanUtils.copyProperties(model, supplierProduct);
+        supplierProduct.setMaterialType(model.getMaterialType().byteValue());
         int update = supplierProductMapper.updateByPrimaryKeySelective(supplierProduct);
         return ResultBean.success(update);
     }
