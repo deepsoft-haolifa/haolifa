@@ -219,6 +219,18 @@ public class MaterialServiceImpl implements MaterialService {
         return materialExtendMapper.updateCurrentQuantity(graphNo, quantity);
     }
 
+    @Override
+    public List<Material> getListByClassifyId(int classifyId) {
+        if (classifyId <= 0) {
+            return null;
+        }
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andMaterialClassifyIdEqualTo(classifyId);
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
     /**
      * 判断是否有相同的图号
      *

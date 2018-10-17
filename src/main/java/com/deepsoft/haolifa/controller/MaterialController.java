@@ -94,6 +94,14 @@ public class MaterialController {
         return ResultBean.success(materialService.getInfoById(id));
     }
 
+
+    @ApiOperation("零件设置-根据零件分类Id获取零件列表")
+    @GetMapping("/getListByClassifyId/{classifyId}")
+    @ApiImplicitParam(name = "classifyId", value = "分类Id", dataType = "int", paramType = "path", required = true)
+    public ResultBean getListByClassifyId(@PathVariable int classifyId) {
+        return ResultBean.success(materialService.getListByClassifyId(classifyId));
+    }
+
     @ApiOperation("零件设置-获取零件分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
