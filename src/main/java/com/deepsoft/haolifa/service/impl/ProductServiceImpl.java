@@ -143,6 +143,10 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
         Product product = productMapper.selectByPrimaryKey(id);
+        if (product == null) {
+            return null;
+        }
+        BeanUtils.copyProperties(product, productRequestDTO);
         // 根据产品no 查询管理的零件列表
         ProductMaterialExample example = new ProductMaterialExample();
         example.or().andProductNoEqualTo(product.getProductNo());
@@ -157,6 +161,7 @@ public class ProductServiceImpl implements ProductService {
             productMaterialDTOList.add(productMaterialDTO);
         });
         productRequestDTO.setProductMaterialList(productMaterialDTOList);
+
         return productRequestDTO;
     }
 
