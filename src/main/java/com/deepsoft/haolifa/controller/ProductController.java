@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ProductMaterialDTO;
 import com.deepsoft.haolifa.model.dto.ProductRequestDTO;
+import com.deepsoft.haolifa.model.dto.ProductUpdateRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.ProductMaterialService;
 import com.deepsoft.haolifa.service.ProductService;
@@ -30,7 +31,7 @@ public class ProductController {
 
     @ApiOperation("更新成品信息")
     @PutMapping("/update")
-    public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
+    public ResultBean updateProduct(@RequestBody ProductUpdateRequestDTO model) {
         return productService.updateInfo(model);
     }
 

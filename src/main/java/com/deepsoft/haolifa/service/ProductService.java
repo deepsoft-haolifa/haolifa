@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.Product;
 import com.deepsoft.haolifa.model.dto.ProductRequestDTO;
+import com.deepsoft.haolifa.model.dto.ProductUpdateRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
 /**
@@ -24,7 +25,7 @@ public interface ProductService {
      * @param model
      * @return
      */
-    ResultBean updateInfo(ProductRequestDTO model);
+    ResultBean updateInfo(ProductUpdateRequestDTO model);
 
     /**
      * 删除成品配置

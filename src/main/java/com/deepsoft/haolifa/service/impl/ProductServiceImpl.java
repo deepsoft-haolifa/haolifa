@@ -79,16 +79,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ResultBean updateInfo(ProductRequestDTO model) {
+    public ResultBean updateInfo(ProductUpdateRequestDTO model) {
         if (model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         String productNo = model.getProductNo();
+        // 判断是否存在成品号
         boolean existProductNo = judgeProductNo(productNo, model.getId());
         log.info("saveInfo existProductNo productNo:{},result:{}", productNo, existProductNo);
         if (existProductNo) {
             return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
         }
+        // 判断是否更改了成品号
+        Product productOrigin = productMapper.selectByPrimaryKey(model.getId());
+        if (null == productOrigin) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        // 获取更新前的成品号
+        String productNoOrigin = productOrigin.getProductNo();
+
+
         Product product = new Product();
         BeanUtils.copyProperties(model, product);
         product.setUpdateTime(new Date());
@@ -96,6 +106,15 @@ public class ProductServiceImpl implements ProductService {
         int updateUser = customUser != null ? customUser.getId() : 1;
         product.setUpdateUser(updateUser);
         int update = productMapper.updateByPrimaryKeySelective(product);
+
+        // 如果成品号不一致，需要更新成品配置表的数据
+        if (!productNoOrigin.equals(productNo)) {
+            ProductMaterialExample example = new ProductMaterialExample();
+            example.or().andProductNoEqualTo(productNoOrigin);
+            productMaterialMapper.updateByExampleSelective(new ProductMaterial() {{
+                setProductNo(productNo);
+            }}, example);
+        }
         return ResultBean.success(update);
     }
 
