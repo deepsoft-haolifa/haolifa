@@ -10,6 +10,7 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import com.qiniu.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,15 +28,17 @@ public class QiniuUtil {
 
     private static final String QINIU_AK = "eL1I7mEOm1JrlO2BsSs0j0fxXCMFo8J1396Uqq_w";
     private static final String QINIU_SK = "2UeiBk74-o7uE_c2K1nXRyo2eSeb4LgSyctV2Dil";
-    private static final String QINIU_URL = "http://pgbgaxtme.bkt.clouddn.com/";
+    private static final String QINIU_URL = "http://d.miaojiebei.com/";
     private static final String QINIU_BUCKET = "haolifa";
 
-    public static Map<String, String> parseFileBase64Str(String base64Str) {
+    public static Map<String, String> parseFileBase64Str(String base64Str, String originFileName) {
         Matcher matcher = pattern.matcher(base64Str);
-        String fileName = null;
+        String fileName = originFileName;
         String source = null;
         if (matcher.find()) {
-            fileName = "temp." + matcher.group(1);
+            if (org.apache.commons.lang3.StringUtils.isBlank(originFileName)) {
+                fileName = System.currentTimeMillis() + "." + matcher.group(1);
+            }
             source = matcher.group(2);
         } else {
             throw new BaseException(CommonEnum.ResponseEnum.UPLOAD_PIC_EXT_ERROR);
@@ -54,7 +57,6 @@ public class QiniuUtil {
             //...生成上传凭证，然后准备上传
             Auth auth = Auth.create(QINIU_AK, QINIU_SK);
             String token = auth.uploadToken(QINIU_BUCKET);
-//            String fileKey = genFileKey(fileBytes, originFileName);
             String fileKey = originFileName;
             Response res = uploadManager.put(fileBytes, originFileName, token);
             logger.warn("上传文件 " + originFileName + " 到七牛成功");
@@ -68,6 +70,13 @@ public class QiniuUtil {
         return null;
     }
 
+    public static String uploadFile(String base64Str, String originFileName) {
+        Map<String, String> parse = parseFileBase64Str(base64Str, originFileName);
+        base64Str = parse.get("source");
+        originFileName = parse.get("fileName");
+        byte[] bytes = Base64.decodeBytes(base64Str);
+        return uploadFile(bytes, originFileName);
+    }
 
     public static String uploadFile(InputStream inputStream, String originFileName) {
         return uploadFile(getBytes(inputStream), originFileName);
