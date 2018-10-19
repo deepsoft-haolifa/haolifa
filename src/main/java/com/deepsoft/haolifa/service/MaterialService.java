@@ -119,4 +119,11 @@ public interface MaterialService {
      */
     int updateCurrentQuantity(String graphNo,int quantity);
 
+
+    /**
+     * 根据分类id获取列表
+     * @param classifyId
+     */
+   List<Material> getListByClassifyId(int classifyId);
+
 }

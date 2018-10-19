@@ -14,5 +14,6 @@ public class EquipmentBaseDTO {
     @ApiModelProperty(value = "生产厂家")
     private String productFactory;
     @ApiModelProperty(value = "服役年限")
-    private String serviceYears;
+    private Integer servicedYears;
+
 }

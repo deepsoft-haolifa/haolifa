@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.Equipment;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.EquipmentService;
@@ -8,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +37,13 @@ public class EquipmentController {
     public ResultBean save(@RequestBody SupplierEquipmentRequestDTO model) {
         Equipment equipment = new Equipment();
         BeanUtils.copyProperties(model, equipment);
+        if(StringUtils.isEmpty(model.getSupplierNo()) || "0".equals(model.getSupplierNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.SUPPLIER_NO_WRONG);
+        }
         return equipmentService.save(equipment);
     }
 
     @ApiOperation("删除设备信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "设备唯一标示id", name = "id", dataType = "string", paramType = "query"),
-    })
     @GetMapping("/delete/{id}")
     public ResultBean delete(@PathVariable("id") Integer id) {
         return equipmentService.delete(id);
@@ -60,15 +62,15 @@ public class EquipmentController {
     public ResultBean update(@RequestBody SupplierEquipmentRequestDTO model) {
         Equipment equipment = new Equipment();
         BeanUtils.copyProperties(model, equipment);
+        if(StringUtils.isEmpty(model.getSupplierNo()) || "0".equals(model.getSupplierNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.SUPPLIER_NO_WRONG);
+        }
         return equipmentService.update(equipment);
     }
 
     @ApiOperation("查询设备详情")
-    @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "设备唯一标示id", name = "id", dataType = "string", paramType = "query"),
-    })
     @GetMapping("getInfo/{id}")
-    public ResultBean getInfo(@PathVariable("id") Integer id) {
+    public ResultBean getInfo(@PathVariable(value = "id") Integer id) {
         return equipmentService.getInfo(id);
     }
 

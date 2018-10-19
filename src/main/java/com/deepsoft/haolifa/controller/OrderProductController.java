@@ -34,9 +34,8 @@ public class OrderProductController {
     }
 
     @ApiOperation("成品订单信息添加")
-    @DeleteMapping("/save")
-    @ApiImplicitParam(name = "id", value = "分类id", dataType = "int", paramType = "path", required = true)
-    public ResultBean deleteClassify(@RequestBody OrderProductDTO orderProduct) {
+    @PostMapping("/save")
+    public ResultBean save(@RequestBody OrderProductDTO orderProduct) {
         return orderProductService.saveOrderProductInfo(orderProduct);
     }
 
@@ -52,9 +51,10 @@ public class OrderProductController {
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query")
+            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "订单状态", name = "orderStatus", dataType = "int", paramType = "query")
     })
-    @GetMapping("/classify/pageInfo")
+    @GetMapping("/pageInfo")
     public ResultBean pageInfoClassify(@RequestParam(defaultValue = "1") Integer currentPage,
                                        @RequestParam(defaultValue = "20") Integer pageSize,
                                        @RequestParam(required = false) String orderNo,

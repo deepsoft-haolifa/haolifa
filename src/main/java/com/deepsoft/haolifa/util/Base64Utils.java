@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Base64;
+import java.util.Map;
 
 public class Base64Utils {
     final static Base64.Decoder decoder = Base64.getDecoder();
@@ -64,10 +65,5 @@ public class Base64Utils {
             e.printStackTrace();
         }
         return "指定路径下生成文件成功！";
-    }
-
-    public static void main(String[] args) {
-        String fileBase64Str = Base64Utils.encryptToBase64("d:\\123.xls");
-        System.out.println(fileBase64Str);
     }
 }

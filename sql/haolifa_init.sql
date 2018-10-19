@@ -20,7 +20,7 @@
     `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '步骤名字',
 	  `description` varchar(256)  NOT NULL DEFAULT '' COMMENT '步骤描述',
-	  `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '角色id',
+	  `role_ids` varchar(32) NOT NULL DEFAULT 0 COMMENT '角色ids(一个步骤对应对个角色)',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='步骤配置表（也叫节点，可以认为一个审核就是一个步骤）';
 
@@ -62,12 +62,15 @@
     `create_user` int(11) NOT NULL COMMENT '发起人用户Id',
 	  `flow_id` int(11) NOT NULL DEFAULT 0 COMMENT '流程id',
 	  `step_id` int(11) NOT NULL  DEFAULT 0 COMMENT '步骤id',
-	  `next_step_id` int(11) NOT NULL  DEFAULT 0  COMMENT '下一步流程Id',
+	  `next_flow_id` int(11) NOT NULL  DEFAULT 0  COMMENT '下一步流程Id(如果当前流程有子流程，这个字段存子流程id)',
 	  `audit_user_id` int(11) DEFAULT NULL DEFAULT 0 COMMENT '审核人',
 	  `audit_info` varchar(1024) NOT NULL DEFAULT '' COMMENT '审核备注',
     `audit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审批日期',
 	  `buy_no` char(36) NOT NULL DEFAULT '' COMMENT '采购号',
 	  `order_no` char(36) NOT NULL DEFAULT '' COMMENT '订单Id',
+	  `user_id` int(11) NOT NULL DEFAULT 0 COMMENT '流程中指定的用户',
+	  `bus_id` int(11) NOT NULL DEFAULT 0 COMMENT '业务Id(如果这个节点有外表存储信息，则保存一个ID)',
+	  `bus_json`  varchar(1024) NOT NULL DEFAULT '' COMMENT '如果填写的信息比较多，需要保存一个json信息',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程记录表';
 
@@ -330,8 +333,10 @@
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号（行业规范如：D7A1X3P-16Q-DN50）',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '零件数量',
+	  `replace_material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '可替换零件编号',
 	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '关联状态（0关联，1不关联）',
-	   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY `uk_multi` (`product_no`,`material_graph_no`)

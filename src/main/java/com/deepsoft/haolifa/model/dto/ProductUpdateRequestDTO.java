@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Data
 @ApiModel(value = "成品配置对象", description = "新增，更新成品实体")
-public class ProductRequestDTO {
+public class ProductUpdateRequestDTO {
 
     @ApiModelProperty(value = "主键Id",required = true)
     private Integer id;
@@ -26,7 +26,4 @@ public class ProductRequestDTO {
     private String specifications;
     @ApiModelProperty(value = "备注")
     private String remark;
-
-    @ApiModelProperty(value = "成品所关联的零件列表")
-    private List<ProductMaterialDTO> productMaterialList;
 }

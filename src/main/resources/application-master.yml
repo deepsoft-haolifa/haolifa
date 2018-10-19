@@ -1,9 +1,9 @@
 server:
-  port: 9090
+  port: 8080
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.105.36.56:3306/haolifa_prod?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: haolifa
     password: haolifa3306
     hikari:
@@ -20,6 +20,3 @@ spring:
     timeout: 10000ms
   session:
     store-type: redis
-
-log:
-  path: /data/log/haolifa_prod
