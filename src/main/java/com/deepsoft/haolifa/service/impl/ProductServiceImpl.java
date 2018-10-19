@@ -4,11 +4,9 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.ProductMapper;
 import com.deepsoft.haolifa.dao.repository.ProductMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.extend.ProductMaterialExtendMapper;
-import com.deepsoft.haolifa.model.domain.Product;
-import com.deepsoft.haolifa.model.domain.ProductExample;
-import com.deepsoft.haolifa.model.domain.ProductMaterial;
-import com.deepsoft.haolifa.model.domain.ProductMaterialExample;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -34,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductMaterialExtendMapper productMaterialExtendMapper;
     @Autowired
     private ProductMaterialMapper productMaterialMapper;
+    @Autowired
+    private MaterialService materialService;
     @Autowired
     private SysUserService sysUserService;
 
@@ -173,6 +173,8 @@ public class ProductServiceImpl implements ProductService {
         List<ProductMaterialDTO> productMaterialDTOList = new ArrayList<>();
         productMaterials.forEach(e -> {
             ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO() {{
+                Material infoByGraphNo = materialService.getInfoByGraphNo(e.getMaterialGraphNo());
+                setMaterialClassifyId(infoByGraphNo.getMaterialClassifyId());
                 setMaterialCount(e.getMaterialCount());
                 setMaterialGraphNo(e.getMaterialGraphNo());
                 setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());

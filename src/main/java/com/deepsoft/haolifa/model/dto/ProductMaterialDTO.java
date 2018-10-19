@@ -12,10 +12,13 @@ import lombok.Data;
 @Data
 public class ProductMaterialDTO {
 
+    @ApiModelProperty(value = "零件分类Id", required = true)
+    private Integer materialClassifyId;
     @ApiModelProperty(value = "零件图号", required = true)
     private String materialGraphNo;
     @ApiModelProperty(value = "零件数量", required = true)
     private Integer materialCount;
     @ApiModelProperty(value = "该零件可替换的图号")
     private String replaceMaterialGraphNo;
+
 }
