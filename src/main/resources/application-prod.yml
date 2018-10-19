@@ -20,6 +20,3 @@ spring:
     timeout: 10000ms
   session:
     store-type: redis
-
-log:
-  path: /data/log/haolifa_prod
