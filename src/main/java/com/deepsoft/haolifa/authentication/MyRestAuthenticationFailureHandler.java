@@ -31,7 +31,7 @@ public class MyRestAuthenticationFailureHandler extends SimpleUrlAuthenticationF
         if(exception instanceof ValidateCodeException)
             writer.write("{\"code\":\"2\", \"msg\":\""+exception.getMessage()+"\"}");
         if(exception instanceof BadCredentialsException)
-            writer.write("{\"code\":\"1\", \"msg\":\"账号密码错误\"}");
+            writer.write("{\"code\":\"1\", \"msg\":\"账号或密码错误\"}");
         writer.flush();
         writer.close();
     }

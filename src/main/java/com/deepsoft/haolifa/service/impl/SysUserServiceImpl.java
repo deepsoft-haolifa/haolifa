@@ -59,7 +59,11 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public CustomUser selectLoginUser() {
         //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return  (CustomUser) customUserService.loadUserByUsername("admin");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if("anonymousUser".equals(principal))
+            return  (CustomUser) customUserService.loadUserByUsername("admin");
+        else
+            return (CustomUser) principal;
     }
 
     @Override
@@ -84,10 +88,9 @@ public class SysUserServiceImpl implements SysUserService {
         List<SysUser> sysUsers = userMapper.selectByExample(userExample);
         List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(userId);
         UserCacheDTO userCacheDTO = new UserCacheDTO();
-        if(sysUsers.size() > 0){
+        if(sysUsers.size() > 0) {
             BeanUtils.copyProperties(sysUsers.get(0), userCacheDTO);
             userCacheDTO.setRoles(rolesByUserId);
-
         }
         redisDao.set(userKey, JSON.toJSONString(userCacheDTO));
         return userCacheDTO;
@@ -126,7 +129,11 @@ public class SysUserServiceImpl implements SysUserService {
         }
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
-        return userMapper.updateByPrimaryKeySelective(sysUser);
+        int count = userMapper.updateByPrimaryKeySelective(sysUser);
+        String userKey = RedisKeyUtil.getUserKey(user.getId());
+        //暂时不用缓存
+        redisDao.del(userKey);
+        return count;
     }
 
     @Override
