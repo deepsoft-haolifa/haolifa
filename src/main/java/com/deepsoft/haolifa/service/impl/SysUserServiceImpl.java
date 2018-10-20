@@ -70,7 +70,7 @@ public class SysUserServiceImpl implements SysUserService {
     public UserInfoVO selectUserInfo() {
         CustomUser customUser = selectLoginUser();
         UserInfoVO userInfoVO = new UserInfoVO(customUser.getUsername(), customUser.getRealName(),
-                customUser.getAuthorities(), permissionService.getMenu());
+                customUser.getAuthorities(), permissionService.getMenu("m"));
         return userInfoVO;
     }
 

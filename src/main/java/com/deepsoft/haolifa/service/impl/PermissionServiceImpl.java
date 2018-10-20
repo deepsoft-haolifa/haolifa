@@ -31,9 +31,9 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<String> getMenu() {
+    public List<String> getMenu(String menuType) {
         return userService.selectLoginUser().getPermissions().stream()
-                .filter(p -> p.getPermName().equals("m")).map(CustomPermission::getUrl).collect(Collectors.toList());
+                .filter(p -> p.getPermName().equals(menuType)).map(CustomPermission::getUrl).collect(Collectors.toList());
         //return generatorPermissions(customPermissions);
     }
 

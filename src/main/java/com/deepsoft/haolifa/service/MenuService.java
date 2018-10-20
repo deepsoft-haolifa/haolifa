@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface MenuService {
 
-    List<MenuVO> getMenuList();
+    List<MenuVO> getMenuList(String menuType);
 
-    MenuVO getMenusById(Integer id);
+    MenuVO getMenusById(Integer id, String menuType);
 
     int updateMenu(MenuVO menuVO);
 
