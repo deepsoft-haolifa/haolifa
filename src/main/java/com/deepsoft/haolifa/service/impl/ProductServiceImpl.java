@@ -79,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ResultBean updateInfo(ProductUpdateRequestDTO model) {
+    public ResultBean updateInfo(ProductRequestDTO model) {
         if (model.getId() == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
@@ -107,13 +107,28 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdateUser(updateUser);
         int update = productMapper.updateByPrimaryKeySelective(product);
 
-        // 如果成品号不一致，需要更新成品配置表的数据
-        if (!productNoOrigin.equals(productNo)) {
-            ProductMaterialExample example = new ProductMaterialExample();
-            example.or().andProductNoEqualTo(productNoOrigin);
-            productMaterialMapper.updateByExampleSelective(new ProductMaterial() {{
-                setProductNo(productNo);
-            }}, example);
+        ProductMaterialExample example = new ProductMaterialExample();
+        example.or().andProductNoEqualTo(productNoOrigin);
+        productMaterialMapper.deleteByExample(example);
+        // 批量增加成品零件配置
+        List<ProductMaterialDTO> productMaterialList = model.getProductMaterialList();
+        if (null != productMaterialList && productMaterialList.size() > 0) {
+            List<ProductMaterial> list = new ArrayList<>();
+            productMaterialList.forEach(e -> {
+                ProductMaterial productMaterial = new ProductMaterial() {{
+                    setProductNo(productNo);
+                    setCreateUser(updateUser);
+                    setMaterialGraphNo(e.getMaterialGraphNo());
+                    setMaterialCount(e.getMaterialCount());
+                    if (StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())) {
+                        setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());
+                    } else {
+                        setReplaceMaterialGraphNo("");
+                    }
+                }};
+                list.add(productMaterial);
+            });
+            productMaterialExtendMapper.insertBatch(list);
         }
         return ResultBean.success(update);
     }
@@ -174,7 +189,13 @@ public class ProductServiceImpl implements ProductService {
         productMaterials.forEach(e -> {
             ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO() {{
                 Material infoByGraphNo = materialService.getInfoByGraphNo(e.getMaterialGraphNo());
-                setMaterialClassifyId(infoByGraphNo.getMaterialClassifyId());
+                int classifyId = 0;
+                if (infoByGraphNo == null) {
+                    log.error("根据零件图号获取零件信息为空");
+                } else {
+                    classifyId = infoByGraphNo.getMaterialClassifyId();
+                }
+                setMaterialClassifyId(classifyId);
                 setMaterialCount(e.getMaterialCount());
                 setMaterialGraphNo(e.getMaterialGraphNo());
                 setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());
