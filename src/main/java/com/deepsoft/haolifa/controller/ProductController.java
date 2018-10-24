@@ -31,7 +31,7 @@ public class ProductController {
 
     @ApiOperation("更新成品信息")
     @PutMapping("/update")
-    public ResultBean updateProduct(@RequestBody ProductUpdateRequestDTO model) {
+    public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
         return productService.updateInfo(model);
     }
 
@@ -68,24 +68,24 @@ public class ProductController {
     }
 
 
-    @ApiOperation("（编辑成品信息时用的到）编辑成品零件关联信息")
-    @PutMapping("/material/edit/{productNo}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true)
-    })
-    public ResultBean saveProductMaterial(@PathVariable String productNo, @RequestBody ProductMaterialDTO model) {
-        return productMaterialService.editInfo(productNo, model);
-    }
-
-    @ApiOperation("（编辑成品信息时用的到）删除成品零件关联信息")
-    @DeleteMapping("/material/delete/{productNo}/{materialGraphNo}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true),
-            @ApiImplicitParam(name = "materialGraphNo", value = "零件编号", dataType = "string", paramType = "path", required = true)
-    })
-    public ResultBean deleteProductMaterial(@PathVariable String productNo, @PathVariable String materialGraphNo) {
-        return productMaterialService.delete(productNo, materialGraphNo);
-    }
+//    @ApiOperation("（编辑成品信息时用的到）编辑成品零件关联信息")
+//    @PutMapping("/material/edit/{productNo}")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true)
+//    })
+//    public ResultBean saveProductMaterial(@PathVariable String productNo, @RequestBody ProductMaterialDTO model) {
+//        return productMaterialService.editInfo(productNo, model);
+//    }
+//
+//    @ApiOperation("（编辑成品信息时用的到）删除成品零件关联信息")
+//    @DeleteMapping("/material/delete/{productNo}/{materialGraphNo}")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true),
+//            @ApiImplicitParam(name = "materialGraphNo", value = "零件编号", dataType = "string", paramType = "path", required = true)
+//    })
+//    public ResultBean deleteProductMaterial(@PathVariable String productNo, @PathVariable String materialGraphNo) {
+//        return productMaterialService.delete(productNo, materialGraphNo);
+//    }
 
 //    @ApiOperation("获取成品零件配置分页列表")
 //    @ApiImplicitParams({
