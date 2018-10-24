@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SysMessage">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="show_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -14,6 +15,7 @@
   <resultMap id="ResultMapWithBLOBs" type="com.deepsoft.haolifa.model.domain.SysMessage">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="show_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -81,7 +83,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, type, show_time, create_user, create_time, update_time
+    id, title, type, show_time, create_user, create_time, update_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -135,18 +137,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SysMessage">
-    insert into sys_message (id, type, show_time, 
-      create_user, create_time, update_time, 
-      content)
-    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, #{showTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARCHAR})
+    insert into sys_message (id, title, type, 
+      show_time, create_user, create_time, 
+      update_time, content)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{showTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SysMessage">
     insert into sys_message
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="title != null">
+        title,
       </if>
       <if test="type != null">
         type,
@@ -170,6 +175,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=TINYINT},
@@ -203,6 +211,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=TINYINT},
       </if>
@@ -229,6 +240,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update sys_message
     set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
       show_time = #{record.showTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
@@ -242,6 +254,7 @@
   <update id="updateByExample" parameterType="map">
     update sys_message
     set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
       show_time = #{record.showTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
@@ -254,6 +267,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SysMessage">
     update sys_message
     <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
       </if>
@@ -277,7 +293,8 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.deepsoft.haolifa.model.domain.SysMessage">
     update sys_message
-    set type = #{type,jdbcType=TINYINT},
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
       show_time = #{showTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -287,7 +304,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SysMessage">
     update sys_message
-    set type = #{type,jdbcType=TINYINT},
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
       show_time = #{showTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

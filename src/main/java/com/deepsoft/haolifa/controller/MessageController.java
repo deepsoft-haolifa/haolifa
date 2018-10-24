@@ -3,12 +3,14 @@ package com.deepsoft.haolifa.controller;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.vo.MessageVO;
 import com.deepsoft.haolifa.service.MessageService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Api(tags = {"新闻/消息管理"})
 @RequestMapping("/message")
 public class MessageController {
 
@@ -23,27 +25,27 @@ public class MessageController {
                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize ){
         switch (messageType){
             case "news": return ResultBean.success(messageService.getMessagesByType((byte)1, pageNum, pageSize));
-            case "notices": return ResultBean.success(messageService.getMessagesByType((byte)1, pageNum, pageSize));
+            case "notice": return ResultBean.success(messageService.getMessagesByType((byte)1, pageNum, pageSize));
             default: return ResultBean.success("不支持的类型");
         }
 
     }
 
     @PostMapping("")
-    @ApiOperation("添加新闻/消息列表")
+    @ApiOperation("添加新闻/消息")
     public ResultBean addMessage(@RequestBody MessageVO messageVO){
         return ResultBean.success(messageService.insertMessage(messageVO));
     }
 
     @PutMapping("")
-    @ApiOperation("修改新闻/消息列表")
+    @ApiOperation("修改新闻/消息")
     public ResultBean modifyMessage(@RequestBody MessageVO messageVO){
-        return ResultBean.success(messageService.insertMessage(messageVO));
+        return ResultBean.success(messageService.updateMessage(messageVO));
     }
 
-    @DeleteMapping("/{id}")
-    @ApiOperation("删除新闻/消息列表")
-    public ResultBean deleteMessage(@PathVariable("id")Integer id){
+    @DeleteMapping("")
+    @ApiOperation("删除新闻/消息")
+    public ResultBean deleteMessage(@RequestParam("id")Integer id){
         return ResultBean.success(messageService.deleteMessage(id));
     }
 

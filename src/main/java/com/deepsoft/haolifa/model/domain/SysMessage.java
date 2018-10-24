@@ -5,6 +5,8 @@ import java.util.Date;
 public class SysMessage {
     private Integer id;
 
+    private String title;
+
     private Byte type;
 
     private Date showTime;
@@ -17,8 +19,9 @@ public class SysMessage {
 
     private String content;
 
-    public SysMessage(Integer id, Byte type, Date showTime, Integer createUser, Date createTime, Date updateTime, String content) {
+    public SysMessage(Integer id, String title, Byte type, Date showTime, Integer createUser, Date createTime, Date updateTime, String content) {
         this.id = id;
+        this.title = title;
         this.type = type;
         this.showTime = showTime;
         this.createUser = createUser;
@@ -37,6 +40,14 @@ public class SysMessage {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
     public Byte getType() {

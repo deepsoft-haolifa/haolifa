@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.vo.MessageVO;
 import com.deepsoft.haolifa.service.MessageService;
+import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
@@ -21,13 +22,16 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private SysMessageMapper sysMessageMapper;
+    @Autowired
+    private SysUserService userService;
 
     @Override
     public PageDTO<MessageVO> getMessagesByType(Byte type, Integer pageNum, Integer pageSize) {
         SysMessageExample messageExample = new SysMessageExample();
         messageExample.or().andTypeEqualTo(type);
+        messageExample.setOrderByClause("show_time desc");
         Page<SysMessage> messages = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPage(() -> sysMessageMapper.selectByExample(messageExample));
+                .doSelectPage(() -> sysMessageMapper.selectByExampleWithBLOBs(messageExample));
         List<MessageVO> messageVOS = messages.stream().map(m -> {
             return new MessageVO() {{
                 setId(m.getId());
@@ -45,6 +49,7 @@ public class MessageServiceImpl implements MessageService {
     public int insertMessage(MessageVO messageVO) {
         SysMessage sysMessage = new SysMessage();
         BeanUtils.copyProperties(messageVO, sysMessage);
+        sysMessage.setCreateUser(userService.selectLoginUser().getId());
         return sysMessageMapper.insertSelective(sysMessage);
     }
 
@@ -55,7 +60,7 @@ public class MessageServiceImpl implements MessageService {
         }
         SysMessage sysMessage = new SysMessage();
         BeanUtils.copyProperties(messageVO, sysMessage);
-        return sysMessageMapper.updateByPrimaryKeyWithBLOBs(sysMessage);
+        return sysMessageMapper.updateByPrimaryKeySelective(sysMessage);
     }
 
     @Override
