@@ -42,14 +42,14 @@ public class UserController {
 
     @PostMapping("")
     @ApiOperation("添加员工")
-    public ResultBean user(@RequestBody UserBaseDTO userBase){
+    public ResultBean user(UserBaseDTO userBase){
         return ResultBean.success(userService.insertSysUser(userBase));
     }
 
 
     @PutMapping("")
     @ApiOperation("修改用户")
-    public ResultBean updateUser(@RequestBody UserBaseDTO userBase){
+    public ResultBean updateUser(UserBaseDTO userBase){
         return ResultBean.success(userService.updateSysUser(userBase));
     }
 
