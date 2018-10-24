@@ -11,7 +11,7 @@ public class SecurityImageProperties {
 
     private int width = 60;
 
-    private int height = 40;
+    private int height = 25;
 
     private int length = 4;
 

@@ -27,21 +27,21 @@ public class MenuServiceImpl implements MenuService {
     private MyPermissionMapper myPermissionMapper;
 
     @Override
-    public List<MenuVO> getMenuList() {
-        return PermissionToMenuVo(sysPermissionMapper.selectByExample(null));
+    public List<MenuVO> getMenuList(String menuType) {
+        return PermissionToMenuVo(sysPermissionMapper.selectByExample(null), menuType);
     }
 
     @Override
-    public MenuVO getMenusById(Integer id) {
+    public MenuVO getMenusById(Integer id, String menuType) {
         SysPermissionExample permissionExample = new SysPermissionExample();
         permissionExample.or().andIdEqualTo(id);
-        List<MenuVO> menuVOS = PermissionToMenuVo(sysPermissionMapper.selectByExample(permissionExample));
+        List<MenuVO> menuVOS = PermissionToMenuVo(sysPermissionMapper.selectByExample(permissionExample), menuType);
         return menuVOS.isEmpty() ? null : menuVOS.get(0);
     }
 
-    private List<MenuVO> PermissionToMenuVo(List<SysPermission> permissions){
+    private List<MenuVO> PermissionToMenuVo(List<SysPermission> permissions, String menuType){
          return permissions.stream().filter(m ->
-                m.getUrl().equals("m")).map(m -> {
+                m.getUrl().equals(menuType)).map(m -> {
             MenuVO menuVO = new MenuVO();
             BeanUtils.copyProperties(m, menuVO);
             menuVO.setCode(m.getUrl());

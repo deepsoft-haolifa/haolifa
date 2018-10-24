@@ -25,7 +25,6 @@ public class RoleController {
         return ResultBean.success(roleService.getRolesByUserId(userId));
     }
 
-
     @GetMapping("")
     @ApiOperation("获取所有角色")
     public ResultBean getRoles(){

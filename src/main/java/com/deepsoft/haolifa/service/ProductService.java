@@ -25,7 +25,7 @@ public interface ProductService {
      * @param model
      * @return
      */
-    ResultBean updateInfo(ProductUpdateRequestDTO model);
+    ResultBean updateInfo(ProductRequestDTO model);
 
     /**
      * 删除成品配置
