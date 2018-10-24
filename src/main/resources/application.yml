@@ -1,6 +1,11 @@
 server:
   servlet:
     context-path: /haolifa
+    session:
+      timeout: 1h
+      cookie:
+        http-only: true
+        max-age: 1h
 
 spring:
   profiles:
