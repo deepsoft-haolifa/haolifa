@@ -17,16 +17,10 @@ public class ApplyBuyController {
     @Autowired
     private ApplyBuyService applyBuyService;
 
-    @ApiOperation("创建请购单（根据请购计划）")
-    @PostMapping("saveByPurchasePlan")
-    public ResultBean saveByPurchasePlan(@RequestBody List<ApplyBuyDTO> modelList) {
-        return applyBuyService.saveByPurchasePlan(modelList);
-    }
-
-    @ApiOperation("创建请购单（库房管理员）")
-    @PostMapping("saveByStoreKeeper")
-    public ResultBean saveByStoreKeeper(@RequestBody List<StoreKeeperApplyBuyDTO> modelList) {
-        return applyBuyService.saveByStoreKeeper(modelList);
+    @ApiOperation("创建请购单")
+    @PostMapping("save")
+    public ResultBean save(@RequestBody ApplyBuyDTO model) {
+        return applyBuyService.save(model);
     }
 
     @ApiOperation("删除请购单单项")
@@ -59,18 +53,6 @@ public class ApplyBuyController {
         return applyBuyService.getList(model);
     }
 
-    // TODO 涉及流程初始化
-    @ApiOperation("发起审批(流程初始化)--接口未实现")
-    @GetMapping("initiateApproval/{applyBuyNo}")
-    public ResultBean initiateApproval(@PathVariable("applyBuyNo") String applyBuyNo){
-        return null;
-    }
-
-    @ApiOperation("撤销审批--接口未实现")
-    @GetMapping("cancelApproval/{applyBuyNo}")
-    public ResultBean cancelApproval(@PathVariable("applyBuyNo") String applyBuyNo){
-        return null;
-    }
 
 
 

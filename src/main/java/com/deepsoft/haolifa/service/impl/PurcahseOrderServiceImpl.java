@@ -1,13 +1,16 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.dao.repository.extend.PurchaseOrderItemExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
+import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -34,46 +37,34 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     @Autowired
     private PurchaseOrderItemMapper purchaseOrderItemMapper;
     @Autowired
-    private ApplyBuyMapper applyBuyMapper;
-    @Autowired
-    private MaterialMapper materialMapper;
+    private PurchaseOrderItemExtendMapper itemExtendMapper;
     @Autowired
     private ProductPurchaseRecordMapper productPurchaseRecordMapper;
 
     @Override
     public ResultBean save(PurchaseOrderDTO model) {
-        String purchaseOrderNo = "cgno" + RandomUtils.orderNoStr();
+        String purchaseOrderNo = "cgno_" + RandomUtils.orderNoStr();
         PurchaseOrder purchaseOrder = new PurchaseOrder();
         BeanUtils.copyProperties(model, purchaseOrder);
         purchaseOrder.setPurchaseOrderNo(purchaseOrderNo);
+        purchaseOrder.setCreateUserId(getLoginUserId());
+        purchaseOrder.setDeliveryTime(DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getDeliveryTime()));
+        purchaseOrder.setOperateTime(DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
+        purchaseOrder.setConfirmTime(DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
+        log.info("添加订单内容：{}", JSON.toJSONString(purchaseOrder));
         purchaseOrderMapper.insertSelective(purchaseOrder);
-        ApplyBuyExample applyBuyExample = new ApplyBuyExample();
-        applyBuyExample.or().andApplyNoEqualTo(model.getApplyBuyNo()).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        List<ApplyBuy> applyBuyList = applyBuyMapper.selectByExample(applyBuyExample);
-        List<String> materialGrapgNoList = applyBuyList.stream().map(ApplyBuy::getMaterialGraphNo).distinct().collect(Collectors.toList());
-
-        Map<String, ApplyBuy> tempApplyBuy = new HashMap<>();
-        applyBuyList.stream().forEach(applyBuy -> tempApplyBuy.put(applyBuy.getMaterialGraphNo(), applyBuy));
-
-        MaterialExample materialExample = new MaterialExample();
-        materialExample.or().andGraphNoIn(materialGrapgNoList);
-        List<Material> materialList = materialMapper.selectByExample(materialExample);
-        List<PurchaseOrderItem> purchaseOrderItemList = materialList.stream().map(material -> {
-            ApplyBuy applyBuy = tempApplyBuy.get(material.getGraphNo());
-            PurchaseOrderItem purchaseOrderItem = new PurchaseOrderItem();
-            purchaseOrderItem.setMaterial(material.getMaterial());
-            purchaseOrderItem.setMaterialGraphNo(material.getGraphNo());
-            purchaseOrderItem.setNumber(applyBuy.getNumber());
-            purchaseOrderItem.setProductName(material.getName());
-            purchaseOrderItem.setRemark(applyBuy.getRemark());
-            purchaseOrderItem.setSpecification(material.getSpecifications());
-            purchaseOrderItem.setUnit(material.getUnit());
-            purchaseOrderItem.setUnitPrice(material.getPrice());
-            // TODO 无单重字段，需要添加
-            purchaseOrderItem.setUnitWeight(new BigDecimal(0));
-            return purchaseOrderItem;
+        // 插入单项
+        List<PurchaseOrderItem> items = model.getItemList().stream().map(item -> {
+            PurchaseOrderItem orderItem = new PurchaseOrderItem();
+            BeanUtils.copyProperties(item, orderItem);
+            orderItem.setUnitPrice(new BigDecimal(item.getUnitPrice()));
+            orderItem.setUnitWeight(new BigDecimal(item.getUnitWeight()));
+            orderItem.setPurchaseOrderNo(purchaseOrderNo);
+            return orderItem;
         }).collect(Collectors.toList());
-        purchaseOrderItemMapper.batchInsertPurchaseOrderItem(purchaseOrderItemList);
+        log.info("添加订单单项：{}", JSON.toJSONString(items));
+        itemExtendMapper.batchInsertPurchaseOrderItem(items);
+        //TODO 流程
         return ResultBean.success(purchaseOrderNo);
     }
 
@@ -108,16 +99,17 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 
     @Override
     public ResultBean update(PurchaseOrderDTO model) {
-        if (StringUtils.isAnyEmpty(model.getDeliveryTime(), model.getDemander(), model.getDemanderAddr(), model.getDemanderLinkman()
-                , model.getDemanderPhone(), model.getPurchaseOrderNo(), model.getSuppilerPhone(), model.getSupplierAddr(), model.getSupplierLinkman()
-                , model.getSupplierName(), model.getSupplierNo())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
-        PurchaseOrder purchaseOrder = new PurchaseOrder();
-        BeanUtils.copyProperties(model, purchaseOrder);
-        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
-        purchaseOrderExample.or().andPurchaseOrderNoEqualTo(model.getPurchaseOrderNo()).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        purchaseOrderMapper.updateByExampleSelective(purchaseOrder, purchaseOrderExample);
+//        if (StringUtils.isAnyEmpty(model.getDeliveryTime(), model.getDemander(), model.getDemanderAddr(), model.getDemanderLinkman()
+//                , model.getDemanderPhone(), model.getPurchaseOrderNo(), model.getSuppilerPhone(), model.getSupplierAddr(), model
+// .getSupplierLinkman()
+//                , model.getSupplierName(), model.getSupplierNo())) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+//        }
+//        PurchaseOrder purchaseOrder = new PurchaseOrder();
+//        BeanUtils.copyProperties(model, purchaseOrder);
+//        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+//        purchaseOrderExample.or().andPurchaseOrderNoEqualTo(model.getPurchaseOrderNo()).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+//        purchaseOrderMapper.updateByExampleSelective(purchaseOrder, purchaseOrderExample);
         return ResultBean.success(1);
     }
 

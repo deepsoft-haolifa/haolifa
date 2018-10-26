@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Slf4j
@@ -28,8 +29,9 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
 
     @Override
     public ResultBean save(InvoiceDTO model) {
-        if (StringUtils.isAnyEmpty(model.getOrderNo(), model.getInvoiceNo()) || model.getStatus() == null || model.getType() == null
-                || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+        if (StringUtils.isAnyEmpty(model.getOrderNo(),model.getCompany(),model.getLinkman(),model.getMialingAddress())
+                || model.getTotalAmount() == null || model.getTotalAmount() == 0
+                || (model.getType() == 1 && StringUtils.isEmpty(model.getInvoiceNo()))) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         Invoice invoice = new Invoice();
@@ -52,15 +54,20 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
 
     @Override
     public ResultBean update(InvoiceDTO model) {
-        if (StringUtils.isAnyEmpty(model.getOrderNo(), model.getInvoiceNo()) || model.getStatus() == null || model.getType() == null
-                || model.getTotalAmount() == null || model.getTotalAmount() == 0 || model.getId() == null || model.getId() == 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(model, invoice);
         invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         int update = invoiceMapper.updateByPrimaryKeySelective(invoice);
         return ResultBean.success(update);
+    }
+
+    @Override
+    public ResultBean updateInvoiceNo(Integer id, String invoiceNo) {
+        Invoice invoice = new Invoice();
+        invoice.setInvoiceNo(invoiceNo);
+        invoice.setId(id);
+        invoiceMapper.updateByPrimaryKeySelective(invoice);
+        return ResultBean.success(1);
     }
 
     @Override
@@ -74,12 +81,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         InvoiceExample invoiceExample = new InvoiceExample();
         InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        if (modelList.getOrderStatus() != null) {
-            criteria.andStatusEqualTo(modelList.getOrderStatus().byteValue());
-        }
-        if (modelList.getOrderType() != null) {
-            criteria.andTypeEqualTo(modelList.getOrderType().byteValue());
-        }
+
         if (StringUtils.isNotEmpty(modelList.getOrderNo())) {
             criteria.andOrderNoLike("%" + modelList.getOrderNo() + "%");
         }

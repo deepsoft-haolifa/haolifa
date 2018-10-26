@@ -33,6 +33,10 @@ public class PurchaseOrder {
 
     private Date operateTime;
 
+    private String supplierConfirmer;
+
+    private Date confirmTime;
+
     private Date createTime;
 
     private Date updateTime;
@@ -41,7 +45,7 @@ public class PurchaseOrder {
 
     private Integer createUserId;
 
-    public PurchaseOrder(Integer id, Integer flowId, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
+    public PurchaseOrder(Integer id, Integer flowId, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
         this.id = id;
         this.flowId = flowId;
         this.purchaseOrderNo = purchaseOrderNo;
@@ -57,6 +61,8 @@ public class PurchaseOrder {
         this.deliveryTime = deliveryTime;
         this.operatorUserName = operatorUserName;
         this.operateTime = operateTime;
+        this.supplierConfirmer = supplierConfirmer;
+        this.confirmTime = confirmTime;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.isDelete = isDelete;
@@ -185,6 +191,22 @@ public class PurchaseOrder {
 
     public void setOperateTime(Date operateTime) {
         this.operateTime = operateTime;
+    }
+
+    public String getSupplierConfirmer() {
+        return supplierConfirmer;
+    }
+
+    public void setSupplierConfirmer(String supplierConfirmer) {
+        this.supplierConfirmer = supplierConfirmer == null ? null : supplierConfirmer.trim();
+    }
+
+    public Date getConfirmTime() {
+        return confirmTime;
+    }
+
+    public void setConfirmTime(Date confirmTime) {
+        this.confirmTime = confirmTime;
     }
 
     public Date getCreateTime() {

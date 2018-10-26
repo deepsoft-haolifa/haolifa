@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.ApplyBuyMapper">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.ApplyBuyExtendMapper">
 
 
     <select id="selectByGroup" resultType="Map"
             parameterType="com.deepsoft.haolifa.model.dto.ApplyBuyListDTO">
-    select distinct
-    id,
-    flow_id flowId,
-    apply_no applyNo,
-    create_time createTime,
-    update_time updateTime,
-    create_user_id createUserId
-    from apply_buy
-    where
-    is_delete = 0
-    <if test="applyBuyNo != null and applyBuyNo != ''">
-        and apply_no like concat('%',#{applyBuyNO},'%')
-    </if>
-    group by apply_no
-    order by update_time desc
+        select distinct
+        id,
+        flow_id flowId,
+        apply_no applyNo,
+        create_time createTime,
+        update_time updateTime,
+        create_user_id createUserId
+        from apply_buy
+        where
+        is_delete = 0
+        <if test="applyBuyNo != null and applyBuyNo != ''">
+            and apply_no like concat('%',#{applyBuyNO},'%')
+        </if>
+        group by apply_no
+        order by update_time desc
     </select>
+
+    <insert id="batchInsertApplyBuy" parameterType="List">
+        <foreach collection="list" item="item">
+            insert into apply_buy (apply_no,material_graph_no, `number`, unit,valuation,
+            remark, purpose,create_user_id)
+            values (#{item.applyNo},
+            #{item.materialGraphNo}, #{item.number}, #{item.unit},#{item.valuation},
+            #{item.remark}, #{item.purpose},#{item.createUserId});
+        </foreach>
+    </insert>
 </mapper>

@@ -6,12 +6,8 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="apply_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="unit" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="valuation" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="purpose" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="target_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -77,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, flow_id, apply_no, material_graph_no, number, unit, valuation, remark, purpose, 
-    is_delete, create_time, update_time, create_user_id
+    id, flow_id, apply_no, product_order_no, target_time, is_delete, create_time, update_time, 
+    create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuyExample" resultMap="BaseResultMap">
     select
@@ -112,15 +108,13 @@
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
     insert into apply_buy (id, flow_id, apply_no, 
-      material_graph_no, number, unit, 
-      valuation, remark, purpose, 
-      is_delete, create_time, update_time, 
-      create_user_id)
+      product_order_no, target_time, is_delete, 
+      create_time, update_time, create_user_id
+      )
     values (#{id,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{applyNo,jdbcType=VARCHAR}, 
-      #{materialGraphNo,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, 
-      #{valuation,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{purpose,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER})
+      #{productOrderNo,jdbcType=VARCHAR}, #{targetTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
     insert into apply_buy
@@ -134,23 +128,11 @@
       <if test="applyNo != null">
         apply_no,
       </if>
-      <if test="materialGraphNo != null">
-        material_graph_no,
+      <if test="productOrderNo != null">
+        product_order_no,
       </if>
-      <if test="number != null">
-        number,
-      </if>
-      <if test="unit != null">
-        unit,
-      </if>
-      <if test="valuation != null">
-        valuation,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="purpose != null">
-        purpose,
+      <if test="targetTime != null">
+        target_time,
       </if>
       <if test="isDelete != null">
         is_delete,
@@ -175,23 +157,11 @@
       <if test="applyNo != null">
         #{applyNo,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
-        #{materialGraphNo,jdbcType=VARCHAR},
+      <if test="productOrderNo != null">
+        #{productOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="number != null">
-        #{number,jdbcType=INTEGER},
-      </if>
-      <if test="unit != null">
-        #{unit,jdbcType=VARCHAR},
-      </if>
-      <if test="valuation != null">
-        #{valuation,jdbcType=DECIMAL},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="purpose != null">
-        #{purpose,jdbcType=VARCHAR},
+      <if test="targetTime != null">
+        #{targetTime,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -225,23 +195,11 @@
       <if test="record.applyNo != null">
         apply_no = #{record.applyNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialGraphNo != null">
-        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      <if test="record.productOrderNo != null">
+        product_order_no = #{record.productOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.number != null">
-        number = #{record.number,jdbcType=INTEGER},
-      </if>
-      <if test="record.unit != null">
-        unit = #{record.unit,jdbcType=VARCHAR},
-      </if>
-      <if test="record.valuation != null">
-        valuation = #{record.valuation,jdbcType=DECIMAL},
-      </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
-      <if test="record.purpose != null">
-        purpose = #{record.purpose,jdbcType=VARCHAR},
+      <if test="record.targetTime != null">
+        target_time = #{record.targetTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=TINYINT},
@@ -265,12 +223,8 @@
     set id = #{record.id,jdbcType=INTEGER},
       flow_id = #{record.flowId,jdbcType=INTEGER},
       apply_no = #{record.applyNo,jdbcType=VARCHAR},
-      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
-      number = #{record.number,jdbcType=INTEGER},
-      unit = #{record.unit,jdbcType=VARCHAR},
-      valuation = #{record.valuation,jdbcType=DECIMAL},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      purpose = #{record.purpose,jdbcType=VARCHAR},
+      product_order_no = #{record.productOrderNo,jdbcType=VARCHAR},
+      target_time = #{record.targetTime,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -288,23 +242,11 @@
       <if test="applyNo != null">
         apply_no = #{applyNo,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
-        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      <if test="productOrderNo != null">
+        product_order_no = #{productOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="number != null">
-        number = #{number,jdbcType=INTEGER},
-      </if>
-      <if test="unit != null">
-        unit = #{unit,jdbcType=VARCHAR},
-      </if>
-      <if test="valuation != null">
-        valuation = #{valuation,jdbcType=DECIMAL},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="purpose != null">
-        purpose = #{purpose,jdbcType=VARCHAR},
+      <if test="targetTime != null">
+        target_time = #{targetTime,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
@@ -325,26 +267,12 @@
     update apply_buy
     set flow_id = #{flowId,jdbcType=INTEGER},
       apply_no = #{applyNo,jdbcType=VARCHAR},
-      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
-      number = #{number,jdbcType=INTEGER},
-      unit = #{unit,jdbcType=VARCHAR},
-      valuation = #{valuation,jdbcType=DECIMAL},
-      remark = #{remark,jdbcType=VARCHAR},
-      purpose = #{purpose,jdbcType=VARCHAR},
+      product_order_no = #{productOrderNo,jdbcType=VARCHAR},
+      target_time = #{targetTime,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <insert id="batchInsertApplyBuy" parameterType="List">
-    <foreach collection="list" item="item">
-      insert into apply_buy (apply_no,material_graph_no, `number`, unit,valuation,
-      remark, purpose,create_user_id)
-      values (#{item.applyNo},
-      #{item.materialGraphNo}, #{item.number}, #{item.unit},#{item.valuation},
-      #{item.remark}, #{item.purpose},#{item.createUserId});
-    </foreach>
-  </insert>
 </mapper>

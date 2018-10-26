@@ -143,7 +143,7 @@
 
         <!--<table tableName="entrust" domainObjectName="Entrust"></table>-->
 
-        <!--<table tableName="invoice" domainObjectName="Invoice"></table>-->
+        <table tableName="invoice" domainObjectName="Invoice"></table>
         <!--<table tableName="expenses" domainObjectName="Expenses"></table>-->
         <!--<table tableName="contract" domainObjectName="Contract"></table>-->
 
@@ -166,7 +166,7 @@
         <!--<table tableName="equipment" domainObjectName="Equipment"></table>-->
 
         <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
-        <table tableName="sys_message" domainObjectName="SysMessage"></table>
+        <!--<table tableName="sys_message" domainObjectName="SysMessage"></table>-->
 
 
         <!-- 选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素

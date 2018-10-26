@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ApplyBuy {
@@ -10,17 +9,9 @@ public class ApplyBuy {
 
     private String applyNo;
 
-    private String materialGraphNo;
+    private String productOrderNo;
 
-    private Integer number;
-
-    private String unit;
-
-    private BigDecimal valuation;
-
-    private String remark;
-
-    private String purpose;
+    private Date targetTime;
 
     private Byte isDelete;
 
@@ -30,16 +21,12 @@ public class ApplyBuy {
 
     private Integer createUserId;
 
-    public ApplyBuy(Integer id, Integer flowId, String applyNo, String materialGraphNo, Integer number, String unit, BigDecimal valuation, String remark, String purpose, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public ApplyBuy(Integer id, Integer flowId, String applyNo, String productOrderNo, Date targetTime, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.flowId = flowId;
         this.applyNo = applyNo;
-        this.materialGraphNo = materialGraphNo;
-        this.number = number;
-        this.unit = unit;
-        this.valuation = valuation;
-        this.remark = remark;
-        this.purpose = purpose;
+        this.productOrderNo = productOrderNo;
+        this.targetTime = targetTime;
         this.isDelete = isDelete;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -74,52 +61,20 @@ public class ApplyBuy {
         this.applyNo = applyNo == null ? null : applyNo.trim();
     }
 
-    public String getMaterialGraphNo() {
-        return materialGraphNo;
+    public String getProductOrderNo() {
+        return productOrderNo;
     }
 
-    public void setMaterialGraphNo(String materialGraphNo) {
-        this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    public void setProductOrderNo(String productOrderNo) {
+        this.productOrderNo = productOrderNo == null ? null : productOrderNo.trim();
     }
 
-    public Integer getNumber() {
-        return number;
+    public Date getTargetTime() {
+        return targetTime;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit == null ? null : unit.trim();
-    }
-
-    public BigDecimal getValuation() {
-        return valuation;
-    }
-
-    public void setValuation(BigDecimal valuation) {
-        this.valuation = valuation;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getPurpose() {
-        return purpose;
-    }
-
-    public void setPurpose(String purpose) {
-        this.purpose = purpose == null ? null : purpose.trim();
+    public void setTargetTime(Date targetTime) {
+        this.targetTime = targetTime;
     }
 
     public Byte getIsDelete() {

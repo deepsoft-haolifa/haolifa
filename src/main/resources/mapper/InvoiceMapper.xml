@@ -4,11 +4,14 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Invoice">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="invoice_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="total_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="company" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="linkman" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="mialing_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="details" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -74,8 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_no, type, invoice_no, total_amount, status, is_delete, create_time, update_time, 
-    create_user_id
+    id, flow_id, order_no, invoice_no, total_amount, company, linkman, mialing_address, 
+    details, is_delete, create_time, update_time, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InvoiceExample" resultMap="BaseResultMap">
     select
@@ -108,12 +111,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
-    insert into invoice (id, order_no, type, 
-      invoice_no, total_amount, status, 
+    insert into invoice (id, flow_id, order_no, 
+      invoice_no, total_amount, company, 
+      linkman, mialing_address, details, 
       is_delete, create_time, update_time, 
       create_user_id)
-    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{invoiceNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+    values (#{id,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, 
+      #{invoiceNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{company,jdbcType=VARCHAR}, 
+      #{linkman,jdbcType=VARCHAR}, #{mialingAddress,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, 
       #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER})
   </insert>
@@ -123,11 +128,11 @@
       <if test="id != null">
         id,
       </if>
+      <if test="flowId != null">
+        flow_id,
+      </if>
       <if test="orderNo != null">
         order_no,
-      </if>
-      <if test="type != null">
-        type,
       </if>
       <if test="invoiceNo != null">
         invoice_no,
@@ -135,8 +140,17 @@
       <if test="totalAmount != null">
         total_amount,
       </if>
-      <if test="status != null">
-        status,
+      <if test="company != null">
+        company,
+      </if>
+      <if test="linkman != null">
+        linkman,
+      </if>
+      <if test="mialingAddress != null">
+        mialing_address,
+      </if>
+      <if test="details != null">
+        details,
       </if>
       <if test="isDelete != null">
         is_delete,
@@ -155,11 +169,11 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=INTEGER},
+      </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=TINYINT},
       </if>
       <if test="invoiceNo != null">
         #{invoiceNo,jdbcType=VARCHAR},
@@ -167,8 +181,17 @@
       <if test="totalAmount != null">
         #{totalAmount,jdbcType=DECIMAL},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="mialingAddress != null">
+        #{mialingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=VARCHAR},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -196,11 +219,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.flowId != null">
+        flow_id = #{record.flowId,jdbcType=INTEGER},
+      </if>
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=TINYINT},
       </if>
       <if test="record.invoiceNo != null">
         invoice_no = #{record.invoiceNo,jdbcType=VARCHAR},
@@ -208,8 +231,17 @@
       <if test="record.totalAmount != null">
         total_amount = #{record.totalAmount,jdbcType=DECIMAL},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
+      <if test="record.company != null">
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkman != null">
+        linkman = #{record.linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mialingAddress != null">
+        mialing_address = #{record.mialingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.details != null">
+        details = #{record.details,jdbcType=VARCHAR},
       </if>
       <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=TINYINT},
@@ -231,11 +263,14 @@
   <update id="updateByExample" parameterType="map">
     update invoice
     set id = #{record.id,jdbcType=INTEGER},
+      flow_id = #{record.flowId,jdbcType=INTEGER},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=TINYINT},
       invoice_no = #{record.invoiceNo,jdbcType=VARCHAR},
       total_amount = #{record.totalAmount,jdbcType=DECIMAL},
-      status = #{record.status,jdbcType=TINYINT},
+      company = #{record.company,jdbcType=VARCHAR},
+      linkman = #{record.linkman,jdbcType=VARCHAR},
+      mialing_address = #{record.mialingAddress,jdbcType=VARCHAR},
+      details = #{record.details,jdbcType=VARCHAR},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -247,11 +282,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
     update invoice
     <set>
+      <if test="flowId != null">
+        flow_id = #{flowId,jdbcType=INTEGER},
+      </if>
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=TINYINT},
       </if>
       <if test="invoiceNo != null">
         invoice_no = #{invoiceNo,jdbcType=VARCHAR},
@@ -259,8 +294,17 @@
       <if test="totalAmount != null">
         total_amount = #{totalAmount,jdbcType=DECIMAL},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null">
+        linkman = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="mialingAddress != null">
+        mialing_address = #{mialingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="details != null">
+        details = #{details,jdbcType=VARCHAR},
       </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
@@ -279,11 +323,14 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
     update invoice
-    set order_no = #{orderNo,jdbcType=VARCHAR},
-      type = #{type,jdbcType=TINYINT},
+    set flow_id = #{flowId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
       invoice_no = #{invoiceNo,jdbcType=VARCHAR},
       total_amount = #{totalAmount,jdbcType=DECIMAL},
-      status = #{status,jdbcType=TINYINT},
+      company = #{company,jdbcType=VARCHAR},
+      linkman = #{linkman,jdbcType=VARCHAR},
+      mialing_address = #{mialingAddress,jdbcType=VARCHAR},
+      details = #{details,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

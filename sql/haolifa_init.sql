@@ -466,11 +466,14 @@
 DROP TABLE IF EXISTS `Invoice`;
 CREATE TABLE `invoice` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
   `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '订单合同编号',
-  `type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '类型：0  订单合同编号 1 采购编号',
   `invoice_no` varchar(64) NOT NULL DEFAULT '' COMMENT '发票号',
   `total_amount` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
-  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态： 0 未收款 1 未打款 2 打款中 3 收款中 4 处理完成',
+  `company` varchar(255) NOT NULL DEFAULT '' COMMENT '单位',
+  `linkman` varchar(255) NOT NULL DEFAULT '' COMMENT '联系人',
+  `mialing_address` varchar(255) NOT NULL DEFAULT '' COMMENT '邮寄地址',
+  `details` varchar(255) NOT NULL DEFAULT '' COMMENT '明细',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0  未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -517,32 +520,14 @@ CREATE TABLE `contract` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-合同表';
 
-DROP TABLE IF EXISTS `purchase_plan`;
-CREATE TABLE `purchase_plan` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `purchase_plan_no` varchar(64) NOT NULL DEFAULT '' COMMENT '采购计划号',
-  `product_order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '生产订单号',
-  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
-  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '数量',
-  `expected_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '期望到货时间',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
-  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '流程表单-采购计划表';
 
 DROP TABLE IF EXISTS `apply_buy`;
 CREATE TABLE `apply_buy` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
   `apply_no` varchar(64) NOT NULL DEFAULT '' COMMENT '请购单号',
-  `material_graph_no` varchar(30) NOT NULL DEFAULT '' COMMENT '零件图号',
-  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '请购数量',
-  `unit` varchar(10) NOT NULL DEFAULT '' COMMENT '单位（个）',
-  `valuation` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '采购估价',
-  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `purpose` varchar(255) NOT NULL DEFAULT '' COMMENT '用途',
+  `product_order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '生产订单编号',
+  `target_time` timestamp NOT NULL COMMENT '预期时间',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0  未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -580,6 +565,8 @@ CREATE TABLE `purchase_order` (
   `delivery_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '交货日期',
   `operator_user_name` varchar(30) NOT NULL DEFAULT '0' COMMENT '订单经办人',
   `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '经办日期',
+  `supplier_confirmer` varchar(255) NOT NULL DEFAULT '' COMMENT '供方确认人',
+  `confirm_time` timestamp NOT NULL COMMENT '确认时间',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
@@ -590,9 +577,10 @@ CREATE TABLE `purchase_order` (
 
 DROP TABLE IF EXISTS `purchase_order_item`;
 CREATE TABLE `purchase_order_item` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '采购单单项id',
-  `purchase_order_no` varchar(20) NOT NULL COMMENT '采购单编号',
-  `product_name` varchar(20) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '单项id',
+  `purchase_order_no` varchar(64) NOT NULL COMMENT '采购订单编号',
+  `apply_no` varchar(64) NOT NULL COMMENT '请购单编号',
+  `material_name` varchar(20) NOT NULL DEFAULT '' COMMENT '物料名称',
   `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
   `specification` varchar(50) NOT NULL DEFAULT '' COMMENT '规格',
   `material` varchar(20) NOT NULL DEFAULT '' COMMENT '材质',
@@ -601,6 +589,8 @@ CREATE TABLE `purchase_order_item` (
   `unit_weight` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '单重',
   `unit_price` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '单价',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `purpose` varchar(255) NOT NULL DEFAULT '' COMMENT '用途--请购单',
+  `valuation` double(12,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '估价-请购单',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单单项表';
 

@@ -10,16 +10,20 @@ import lombok.Data;
 public class InvoiceDTO {
 
     private Integer id;
-
     @ApiModelProperty(required = true,value = "合同编号")
     private String orderNo;
-    @ApiModelProperty(required = true,value = "合同类型：0  订单合同编号 1 采购编号", allowableValues = "0,1")
+    @ApiModelProperty(required = true,value = "类型 0 流程申请 1 财务填写" ,allowableValues = "0,1")
     private Integer type;
-    @ApiModelProperty(required = true,value = "发票编号")
+    @ApiModelProperty(value = "发票编号：流程中,即type=0，该字段不是必填；菜单中新增字段必填,type=1")
     private String invoiceNo;
     @ApiModelProperty(required = true,value = "合同金额")
     private Double totalAmount;
-    @ApiModelProperty(value = "合同状态:0 未收款 1 未打款 2 打款中 3 收款中 4 处理完成",allowableValues = "0,1,2,3,4")
-    private Integer status;
-
+    @ApiModelProperty(required = true,value = "单位")
+    private String company;
+    @ApiModelProperty(required = true,value = "联系人")
+    private String linkman;
+    @ApiModelProperty(required = true,value = "邮寄地址")
+    private String mialingAddress;
+    @ApiModelProperty(value = "明细")
+    private String details;
 }
