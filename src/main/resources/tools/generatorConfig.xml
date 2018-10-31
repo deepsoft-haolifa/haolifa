@@ -91,9 +91,12 @@
 
         <!--<table tableName="flow_step" domainObjectName="FlowStep"></table>-->
 
-        <!--<table tableName="flow_step_config" domainObjectName="FlowStepConfig"></table>-->
 
-        <!--<table tableName="flow_history" domainObjectName="FlowHistory"></table>-->
+        <table tableName="flow_history" domainObjectName="FlowHistory"></table>
+
+        <table tableName="flow_instance" domainObjectName="FlowInstance">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
 
         <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
 
@@ -143,7 +146,7 @@
 
         <!--<table tableName="entrust" domainObjectName="Entrust"></table>-->
 
-        <table tableName="invoice" domainObjectName="Invoice"></table>
+        <!--<table tableName="invoice" domainObjectName="Invoice"></table>-->
         <!--<table tableName="expenses" domainObjectName="Expenses"></table>-->
         <!--<table tableName="contract" domainObjectName="Contract"></table>-->
 

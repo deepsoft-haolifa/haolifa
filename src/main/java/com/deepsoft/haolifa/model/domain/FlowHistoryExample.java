@@ -285,123 +285,63 @@ public class FlowHistoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIsNull() {
-            addCriterion("create_user is null");
+        public Criteria andInstanceIdIsNull() {
+            addCriterion("instance_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIsNotNull() {
-            addCriterion("create_user is not null");
+        public Criteria andInstanceIdIsNotNull() {
+            addCriterion("instance_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserEqualTo(Integer value) {
-            addCriterion("create_user =", value, "createUser");
+        public Criteria andInstanceIdEqualTo(Integer value) {
+            addCriterion("instance_id =", value, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserNotEqualTo(Integer value) {
-            addCriterion("create_user <>", value, "createUser");
+        public Criteria andInstanceIdNotEqualTo(Integer value) {
+            addCriterion("instance_id <>", value, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserGreaterThan(Integer value) {
-            addCriterion("create_user >", value, "createUser");
+        public Criteria andInstanceIdGreaterThan(Integer value) {
+            addCriterion("instance_id >", value, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserGreaterThanOrEqualTo(Integer value) {
-            addCriterion("create_user >=", value, "createUser");
+        public Criteria andInstanceIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("instance_id >=", value, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserLessThan(Integer value) {
-            addCriterion("create_user <", value, "createUser");
+        public Criteria andInstanceIdLessThan(Integer value) {
+            addCriterion("instance_id <", value, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserLessThanOrEqualTo(Integer value) {
-            addCriterion("create_user <=", value, "createUser");
+        public Criteria andInstanceIdLessThanOrEqualTo(Integer value) {
+            addCriterion("instance_id <=", value, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIn(List<Integer> values) {
-            addCriterion("create_user in", values, "createUser");
+        public Criteria andInstanceIdIn(List<Integer> values) {
+            addCriterion("instance_id in", values, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserNotIn(List<Integer> values) {
-            addCriterion("create_user not in", values, "createUser");
+        public Criteria andInstanceIdNotIn(List<Integer> values) {
+            addCriterion("instance_id not in", values, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserBetween(Integer value1, Integer value2) {
-            addCriterion("create_user between", value1, value2, "createUser");
+        public Criteria andInstanceIdBetween(Integer value1, Integer value2) {
+            addCriterion("instance_id between", value1, value2, "instanceId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserNotBetween(Integer value1, Integer value2) {
-            addCriterion("create_user not between", value1, value2, "createUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdIsNull() {
-            addCriterion("flow_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdIsNotNull() {
-            addCriterion("flow_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdEqualTo(Integer value) {
-            addCriterion("flow_id =", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotEqualTo(Integer value) {
-            addCriterion("flow_id <>", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdGreaterThan(Integer value) {
-            addCriterion("flow_id >", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("flow_id >=", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdLessThan(Integer value) {
-            addCriterion("flow_id <", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdLessThanOrEqualTo(Integer value) {
-            addCriterion("flow_id <=", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdIn(List<Integer> values) {
-            addCriterion("flow_id in", values, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotIn(List<Integer> values) {
-            addCriterion("flow_id not in", values, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdBetween(Integer value1, Integer value2) {
-            addCriterion("flow_id between", value1, value2, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("flow_id not between", value1, value2, "flowId");
+        public Criteria andInstanceIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("instance_id not between", value1, value2, "instanceId");
             return (Criteria) this;
         }
 
@@ -462,66 +402,6 @@ public class FlowHistoryExample {
 
         public Criteria andStepIdNotBetween(Integer value1, Integer value2) {
             addCriterion("step_id not between", value1, value2, "stepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdIsNull() {
-            addCriterion("next_step_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdIsNotNull() {
-            addCriterion("next_step_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdEqualTo(Integer value) {
-            addCriterion("next_step_id =", value, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdNotEqualTo(Integer value) {
-            addCriterion("next_step_id <>", value, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdGreaterThan(Integer value) {
-            addCriterion("next_step_id >", value, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("next_step_id >=", value, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdLessThan(Integer value) {
-            addCriterion("next_step_id <", value, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdLessThanOrEqualTo(Integer value) {
-            addCriterion("next_step_id <=", value, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdIn(List<Integer> values) {
-            addCriterion("next_step_id in", values, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdNotIn(List<Integer> values) {
-            addCriterion("next_step_id not in", values, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdBetween(Integer value1, Integer value2) {
-            addCriterion("next_step_id between", value1, value2, "nextStepId");
-            return (Criteria) this;
-        }
-
-        public Criteria andNextStepIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("next_step_id not between", value1, value2, "nextStepId");
             return (Criteria) this;
         }
 
@@ -715,143 +595,253 @@ public class FlowHistoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoIsNull() {
-            addCriterion("buy_no is null");
+        public Criteria andAuditResultIsNull() {
+            addCriterion("audit_result is null");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoIsNotNull() {
-            addCriterion("buy_no is not null");
+        public Criteria andAuditResultIsNotNull() {
+            addCriterion("audit_result is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoEqualTo(String value) {
-            addCriterion("buy_no =", value, "buyNo");
+        public Criteria andAuditResultEqualTo(Byte value) {
+            addCriterion("audit_result =", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoNotEqualTo(String value) {
-            addCriterion("buy_no <>", value, "buyNo");
+        public Criteria andAuditResultNotEqualTo(Byte value) {
+            addCriterion("audit_result <>", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoGreaterThan(String value) {
-            addCriterion("buy_no >", value, "buyNo");
+        public Criteria andAuditResultGreaterThan(Byte value) {
+            addCriterion("audit_result >", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoGreaterThanOrEqualTo(String value) {
-            addCriterion("buy_no >=", value, "buyNo");
+        public Criteria andAuditResultGreaterThanOrEqualTo(Byte value) {
+            addCriterion("audit_result >=", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoLessThan(String value) {
-            addCriterion("buy_no <", value, "buyNo");
+        public Criteria andAuditResultLessThan(Byte value) {
+            addCriterion("audit_result <", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoLessThanOrEqualTo(String value) {
-            addCriterion("buy_no <=", value, "buyNo");
+        public Criteria andAuditResultLessThanOrEqualTo(Byte value) {
+            addCriterion("audit_result <=", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoLike(String value) {
-            addCriterion("buy_no like", value, "buyNo");
+        public Criteria andAuditResultIn(List<Byte> values) {
+            addCriterion("audit_result in", values, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoNotLike(String value) {
-            addCriterion("buy_no not like", value, "buyNo");
+        public Criteria andAuditResultNotIn(List<Byte> values) {
+            addCriterion("audit_result not in", values, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoIn(List<String> values) {
-            addCriterion("buy_no in", values, "buyNo");
+        public Criteria andAuditResultBetween(Byte value1, Byte value2) {
+            addCriterion("audit_result between", value1, value2, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoNotIn(List<String> values) {
-            addCriterion("buy_no not in", values, "buyNo");
+        public Criteria andAuditResultNotBetween(Byte value1, Byte value2) {
+            addCriterion("audit_result not between", value1, value2, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoBetween(String value1, String value2) {
-            addCriterion("buy_no between", value1, value2, "buyNo");
+        public Criteria andFormTypeIsNull() {
+            addCriterion("form_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andBuyNoNotBetween(String value1, String value2) {
-            addCriterion("buy_no not between", value1, value2, "buyNo");
+        public Criteria andFormTypeIsNotNull() {
+            addCriterion("form_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoIsNull() {
-            addCriterion("order_no is null");
+        public Criteria andFormTypeEqualTo(Byte value) {
+            addCriterion("form_type =", value, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoIsNotNull() {
-            addCriterion("order_no is not null");
+        public Criteria andFormTypeNotEqualTo(Byte value) {
+            addCriterion("form_type <>", value, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoEqualTo(String value) {
-            addCriterion("order_no =", value, "orderNo");
+        public Criteria andFormTypeGreaterThan(Byte value) {
+            addCriterion("form_type >", value, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotEqualTo(String value) {
-            addCriterion("order_no <>", value, "orderNo");
+        public Criteria andFormTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("form_type >=", value, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThan(String value) {
-            addCriterion("order_no >", value, "orderNo");
+        public Criteria andFormTypeLessThan(Byte value) {
+            addCriterion("form_type <", value, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThanOrEqualTo(String value) {
-            addCriterion("order_no >=", value, "orderNo");
+        public Criteria andFormTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("form_type <=", value, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLessThan(String value) {
-            addCriterion("order_no <", value, "orderNo");
+        public Criteria andFormTypeIn(List<Byte> values) {
+            addCriterion("form_type in", values, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLessThanOrEqualTo(String value) {
-            addCriterion("order_no <=", value, "orderNo");
+        public Criteria andFormTypeNotIn(List<Byte> values) {
+            addCriterion("form_type not in", values, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLike(String value) {
-            addCriterion("order_no like", value, "orderNo");
+        public Criteria andFormTypeBetween(Byte value1, Byte value2) {
+            addCriterion("form_type between", value1, value2, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotLike(String value) {
-            addCriterion("order_no not like", value, "orderNo");
+        public Criteria andFormTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("form_type not between", value1, value2, "formType");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoIn(List<String> values) {
-            addCriterion("order_no in", values, "orderNo");
+        public Criteria andFormIdIsNull() {
+            addCriterion("form_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotIn(List<String> values) {
-            addCriterion("order_no not in", values, "orderNo");
+        public Criteria andFormIdIsNotNull() {
+            addCriterion("form_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoBetween(String value1, String value2) {
-            addCriterion("order_no between", value1, value2, "orderNo");
+        public Criteria andFormIdEqualTo(Integer value) {
+            addCriterion("form_id =", value, "formId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotBetween(String value1, String value2) {
-            addCriterion("order_no not between", value1, value2, "orderNo");
+        public Criteria andFormIdNotEqualTo(Integer value) {
+            addCriterion("form_id <>", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdGreaterThan(Integer value) {
+            addCriterion("form_id >", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("form_id >=", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdLessThan(Integer value) {
+            addCriterion("form_id <", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdLessThanOrEqualTo(Integer value) {
+            addCriterion("form_id <=", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdIn(List<Integer> values) {
+            addCriterion("form_id in", values, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdNotIn(List<Integer> values) {
+            addCriterion("form_id not in", values, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdBetween(Integer value1, Integer value2) {
+            addCriterion("form_id between", value1, value2, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("form_id not between", value1, value2, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoIsNull() {
+            addCriterion("form_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoIsNotNull() {
+            addCriterion("form_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoEqualTo(String value) {
+            addCriterion("form_no =", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoNotEqualTo(String value) {
+            addCriterion("form_no <>", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoGreaterThan(String value) {
+            addCriterion("form_no >", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoGreaterThanOrEqualTo(String value) {
+            addCriterion("form_no >=", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoLessThan(String value) {
+            addCriterion("form_no <", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoLessThanOrEqualTo(String value) {
+            addCriterion("form_no <=", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoLike(String value) {
+            addCriterion("form_no like", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoNotLike(String value) {
+            addCriterion("form_no not like", value, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoIn(List<String> values) {
+            addCriterion("form_no in", values, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoNotIn(List<String> values) {
+            addCriterion("form_no not in", values, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoBetween(String value1, String value2) {
+            addCriterion("form_no between", value1, value2, "formNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormNoNotBetween(String value1, String value2) {
+            addCriterion("form_no not between", value1, value2, "formNo");
             return (Criteria) this;
         }
     }

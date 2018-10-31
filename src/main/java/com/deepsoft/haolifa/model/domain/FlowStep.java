@@ -9,33 +9,27 @@ public class FlowStep {
 
     private Date updateTime;
 
-    private Integer createUser;
-
-    private Integer updateUser;
+    private Integer createUserId;
 
     private Integer flowId;
 
     private Integer stepId;
 
-    private Integer nextStepId;
+    private String userId;
 
-    private Integer preStepId;
-
-    private Integer gotoStepId;
+    private Integer roleId;
 
     private Integer stepOrder;
 
-    public FlowStep(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer flowId, Integer stepId, Integer nextStepId, Integer preStepId, Integer gotoStepId, Integer stepOrder) {
+    public FlowStep(Integer id, Date createTime, Date updateTime, Integer createUserId, Integer flowId, Integer stepId, String userId, Integer roleId, Integer stepOrder) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.createUser = createUser;
-        this.updateUser = updateUser;
+        this.createUserId = createUserId;
         this.flowId = flowId;
         this.stepId = stepId;
-        this.nextStepId = nextStepId;
-        this.preStepId = preStepId;
-        this.gotoStepId = gotoStepId;
+        this.userId = userId;
+        this.roleId = roleId;
         this.stepOrder = stepOrder;
     }
 
@@ -67,20 +61,12 @@ public class FlowStep {
         this.updateTime = updateTime;
     }
 
-    public Integer getCreateUser() {
-        return createUser;
+    public Integer getCreateUserId() {
+        return createUserId;
     }
 
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
+    public void setCreateUserId(Integer createUserId) {
+        this.createUserId = createUserId;
     }
 
     public Integer getFlowId() {
@@ -99,28 +85,20 @@ public class FlowStep {
         this.stepId = stepId;
     }
 
-    public Integer getNextStepId() {
-        return nextStepId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setNextStepId(Integer nextStepId) {
-        this.nextStepId = nextStepId;
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
-    public Integer getPreStepId() {
-        return preStepId;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setPreStepId(Integer preStepId) {
-        this.preStepId = preStepId;
-    }
-
-    public Integer getGotoStepId() {
-        return gotoStepId;
-    }
-
-    public void setGotoStepId(Integer gotoStepId) {
-        this.gotoStepId = gotoStepId;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public Integer getStepOrder() {
