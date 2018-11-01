@@ -94,9 +94,9 @@
 
         <table tableName="flow_history" domainObjectName="FlowHistory"></table>
 
-        <table tableName="flow_instance" domainObjectName="FlowInstance">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table tableName="flow_instance" domainObjectName="FlowInstance">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
 

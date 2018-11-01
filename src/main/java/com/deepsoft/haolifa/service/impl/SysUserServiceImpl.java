@@ -63,7 +63,8 @@ public class SysUserServiceImpl implements SysUserService {
 //        if("anonymousUser".equals(principal))
 //            return  (CustomUser) customUserService.loadUserByUsername("admin");
 //        else
-            return (CustomUser) principal;
+//            return (CustomUser) principal;
+        return null;
     }
 
     @Override

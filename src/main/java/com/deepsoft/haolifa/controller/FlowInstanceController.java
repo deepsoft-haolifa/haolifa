@@ -8,10 +8,7 @@ import com.deepsoft.haolifa.service.FlowInstanceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(tags = {"流程创建以及流转"})
@@ -32,7 +29,7 @@ public class FlowInstanceController {
         return flowInstanceService.handleStep(model);
     }
 
-    @PostMapping("flow-history/{instaceId}")
+    @GetMapping("flow-history/{instaceId}")
     @ApiOperation("当前流程实例审核历史信息")
     public ResultBean flowInstanceHistory(@PathVariable("instaceId") Integer instaceId) {
         return flowInstanceService.flowInstanceHistory(instaceId);

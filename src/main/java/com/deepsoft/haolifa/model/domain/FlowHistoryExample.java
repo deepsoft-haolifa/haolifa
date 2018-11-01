@@ -535,6 +535,66 @@ public class FlowHistoryExample {
             return (Criteria) this;
         }
 
+        public Criteria andAllotUserIdIsNull() {
+            addCriterion("allot_user_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdIsNotNull() {
+            addCriterion("allot_user_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdEqualTo(Integer value) {
+            addCriterion("allot_user_id =", value, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdNotEqualTo(Integer value) {
+            addCriterion("allot_user_id <>", value, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdGreaterThan(Integer value) {
+            addCriterion("allot_user_id >", value, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("allot_user_id >=", value, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdLessThan(Integer value) {
+            addCriterion("allot_user_id <", value, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("allot_user_id <=", value, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdIn(List<Integer> values) {
+            addCriterion("allot_user_id in", values, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdNotIn(List<Integer> values) {
+            addCriterion("allot_user_id not in", values, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("allot_user_id between", value1, value2, "allotUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAllotUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("allot_user_id not between", value1, value2, "allotUserId");
+            return (Criteria) this;
+        }
+
         public Criteria andAuditTimeIsNull() {
             addCriterion("audit_time is null");
             return (Criteria) this;

@@ -17,6 +17,8 @@ public class FlowHistory {
 
     private String auditInfo;
 
+    private Integer allotUserId;
+
     private Date auditTime;
 
     private Byte auditResult;
@@ -27,7 +29,7 @@ public class FlowHistory {
 
     private String formNo;
 
-    public FlowHistory(Integer id, Date createTime, Date updateTime, Integer instanceId, Integer stepId, Integer auditUserId, String auditInfo, Date auditTime, Byte auditResult, Byte formType, Integer formId, String formNo) {
+    public FlowHistory(Integer id, Date createTime, Date updateTime, Integer instanceId, Integer stepId, Integer auditUserId, String auditInfo, Integer allotUserId, Date auditTime, Byte auditResult, Byte formType, Integer formId, String formNo) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -35,6 +37,7 @@ public class FlowHistory {
         this.stepId = stepId;
         this.auditUserId = auditUserId;
         this.auditInfo = auditInfo;
+        this.allotUserId = allotUserId;
         this.auditTime = auditTime;
         this.auditResult = auditResult;
         this.formType = formType;
@@ -100,6 +103,14 @@ public class FlowHistory {
 
     public void setAuditInfo(String auditInfo) {
         this.auditInfo = auditInfo == null ? null : auditInfo.trim();
+    }
+
+    public Integer getAllotUserId() {
+        return allotUserId;
+    }
+
+    public void setAllotUserId(Integer allotUserId) {
+        this.allotUserId = allotUserId;
     }
 
     public Date getAuditTime() {

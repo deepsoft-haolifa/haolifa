@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/code/image","/login").permitAll().anyRequest().authenticated()
+                .antMatchers(/*"/code/image","/login"*/"/**").permitAll().anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)

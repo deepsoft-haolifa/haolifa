@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper">
+
+    <select id="selectInstanceHistory" parameterType="com.deepsoft.haolifa.model.dto.HistoryInfo"
+            resultType="com.deepsoft.haolifa.model.dto.HistoryInfo">
+		SELECT
+			fh.id historyId,
+			fh.instance_id instanceId,
+			fh.step_id stepId,
+			fh.audit_user_id auditUserId,
+			fh.audit_info auditInfo,
+			fh.allot_user_id allotUserId,
+			fh.audit_result auditResult,
+			fh.form_type formType,
+			fh.form_id formId,
+			fh.form_no formNo,
+			fh.create_time createTime,
+			s.`name` stepName,
+			s.description description,
+			su.real_name userName
+		FROM
+			flow_history fh
+			LEFT JOIN step s ON s.id = fh.step_id
+			LEFT JOIN sys_user su ON su.id = fh.audit_user_id
+		<where>
+			<if test="instanceId != null and instanceId != ''">
+				and fh.instance_id = #{instanceId}
+			</if>
+			<if test="stepId != null and stepId != ''">
+				and fh.step_id =#{stepId}
+			</if>
+		</where>
+    </select>
+
+	<select id="selectByPrimaryKey" parameterType="int" resultType="com.deepsoft.haolifa.model.domain.FlowInstanceWrapper">
+		SELECT
+			fi.id,
+			fi.summary,
+			fi.form_no formNo,
+			fi.flow_id flowId,
+			fi.current_step_id currentStepId,
+			fi.next_step_id nextStepId,
+			fi.prev_step_id prevStepId,
+			fi.user_id userId,
+			fi.role_id roleId,
+			fi.is_over isOver,
+			fi.create_user_id createUserId,
+			fi.create_time createTime,
+			fi.update_time updateTime,
+			su.real_name initUserName,
+			su.id initUserId
+		FROM
+			flow_instance fi
+			LEFT JOIN sys_user su ON su.id = fi.create_user_id
+		WHERE
+			fi.id = #{instanceId}
+	</select>
+</mapper>

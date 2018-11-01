@@ -10,6 +10,7 @@
       <arg column="step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="audit_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="audit_info" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="allot_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="audit_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="audit_result" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="form_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
@@ -76,8 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, instance_id, step_id, audit_user_id, audit_info, audit_time, 
-    audit_result, form_type, form_id, form_no
+    id, create_time, update_time, instance_id, step_id, audit_user_id, audit_info, allot_user_id, 
+    audit_time, audit_result, form_type, form_id, form_no
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowHistoryExample" resultMap="BaseResultMap">
     select
@@ -112,14 +113,14 @@
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
     insert into flow_history (id, create_time, update_time, 
       instance_id, step_id, audit_user_id, 
-      audit_info, audit_time, audit_result, 
-      form_type, form_id, form_no
-      )
+      audit_info, allot_user_id, audit_time, 
+      audit_result, form_type, form_id, 
+      form_no)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{instanceId,jdbcType=INTEGER}, #{stepId,jdbcType=INTEGER}, #{auditUserId,jdbcType=INTEGER}, 
-      #{auditInfo,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, #{auditResult,jdbcType=TINYINT}, 
-      #{formType,jdbcType=TINYINT}, #{formId,jdbcType=INTEGER}, #{formNo,jdbcType=VARCHAR}
-      )
+      #{auditInfo,jdbcType=VARCHAR}, #{allotUserId,jdbcType=INTEGER}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{auditResult,jdbcType=TINYINT}, #{formType,jdbcType=TINYINT}, #{formId,jdbcType=INTEGER}, 
+      #{formNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
     insert into flow_history
@@ -144,6 +145,9 @@
       </if>
       <if test="auditInfo != null">
         audit_info,
+      </if>
+      <if test="allotUserId != null">
+        allot_user_id,
       </if>
       <if test="auditTime != null">
         audit_time,
@@ -182,6 +186,9 @@
       </if>
       <if test="auditInfo != null">
         #{auditInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="allotUserId != null">
+        #{allotUserId,jdbcType=INTEGER},
       </if>
       <if test="auditTime != null">
         #{auditTime,jdbcType=TIMESTAMP},
@@ -230,6 +237,9 @@
       <if test="record.auditInfo != null">
         audit_info = #{record.auditInfo,jdbcType=VARCHAR},
       </if>
+      <if test="record.allotUserId != null">
+        allot_user_id = #{record.allotUserId,jdbcType=INTEGER},
+      </if>
       <if test="record.auditTime != null">
         audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
       </if>
@@ -259,6 +269,7 @@
       step_id = #{record.stepId,jdbcType=INTEGER},
       audit_user_id = #{record.auditUserId,jdbcType=INTEGER},
       audit_info = #{record.auditInfo,jdbcType=VARCHAR},
+      allot_user_id = #{record.allotUserId,jdbcType=INTEGER},
       audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
       audit_result = #{record.auditResult,jdbcType=TINYINT},
       form_type = #{record.formType,jdbcType=TINYINT},
@@ -289,6 +300,9 @@
       <if test="auditInfo != null">
         audit_info = #{auditInfo,jdbcType=VARCHAR},
       </if>
+      <if test="allotUserId != null">
+        allot_user_id = #{allotUserId,jdbcType=INTEGER},
+      </if>
       <if test="auditTime != null">
         audit_time = #{auditTime,jdbcType=TIMESTAMP},
       </if>
@@ -315,6 +329,7 @@
       step_id = #{stepId,jdbcType=INTEGER},
       audit_user_id = #{auditUserId,jdbcType=INTEGER},
       audit_info = #{auditInfo,jdbcType=VARCHAR},
+      allot_user_id = #{allotUserId,jdbcType=INTEGER},
       audit_time = #{auditTime,jdbcType=TIMESTAMP},
       audit_result = #{auditResult,jdbcType=TINYINT},
       form_type = #{formType,jdbcType=TINYINT},

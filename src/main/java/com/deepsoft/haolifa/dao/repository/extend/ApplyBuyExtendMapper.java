@@ -1,10 +1,7 @@
 package com.deepsoft.haolifa.dao.repository.extend;
 
-import com.deepsoft.haolifa.model.domain.ApplyBuy;
-import com.deepsoft.haolifa.model.domain.ApplyBuyExample;
-import com.deepsoft.haolifa.model.dto.ApplyBuyListDTO;
-import org.apache.ibatis.annotations.Param;
 
+import com.deepsoft.haolifa.model.dto.ApplyBuyListDTO;
 import java.util.List;
 import java.util.Map;
 
