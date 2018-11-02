@@ -13,6 +13,7 @@
       <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="role_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="is_over" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="is_back" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, summary, form_no, flow_id, current_step_id, next_step_id, prev_step_id, user_id, 
-    role_id, is_over, create_user_id, create_time, update_time
+    role_id, is_over, is_back, create_user_id, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowInstanceExample" resultMap="BaseResultMap">
     select
@@ -117,13 +118,13 @@
     insert into flow_instance (summary, form_no, flow_id, 
       current_step_id, next_step_id, prev_step_id, 
       user_id, role_id, is_over, 
-      create_user_id, create_time, update_time
-      )
+      is_back, create_user_id, create_time, 
+      update_time)
     values (#{summary,jdbcType=VARCHAR}, #{formNo,jdbcType=VARCHAR}, #{flowId,jdbcType=INTEGER}, 
       #{currentStepId,jdbcType=INTEGER}, #{nextStepId,jdbcType=INTEGER}, #{prevStepId,jdbcType=INTEGER}, 
       #{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{isOver,jdbcType=TINYINT}, 
-      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{isBack,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowInstance">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -157,6 +158,9 @@
       </if>
       <if test="isOver != null">
         is_over,
+      </if>
+      <if test="isBack != null">
+        is_back,
       </if>
       <if test="createUserId != null">
         create_user_id,
@@ -195,6 +199,9 @@
       </if>
       <if test="isOver != null">
         #{isOver,jdbcType=TINYINT},
+      </if>
+      <if test="isBack != null">
+        #{isBack,jdbcType=TINYINT},
       </if>
       <if test="createUserId != null">
         #{createUserId,jdbcType=INTEGER},
@@ -246,6 +253,9 @@
       <if test="record.isOver != null">
         is_over = #{record.isOver,jdbcType=TINYINT},
       </if>
+      <if test="record.isBack != null">
+        is_back = #{record.isBack,jdbcType=TINYINT},
+      </if>
       <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
@@ -272,6 +282,7 @@
       user_id = #{record.userId,jdbcType=INTEGER},
       role_id = #{record.roleId,jdbcType=INTEGER},
       is_over = #{record.isOver,jdbcType=TINYINT},
+      is_back = #{record.isBack,jdbcType=TINYINT},
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -309,6 +320,9 @@
       <if test="isOver != null">
         is_over = #{isOver,jdbcType=TINYINT},
       </if>
+      <if test="isBack != null">
+        is_back = #{isBack,jdbcType=TINYINT},
+      </if>
       <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
@@ -332,6 +346,7 @@
       user_id = #{userId,jdbcType=INTEGER},
       role_id = #{roleId,jdbcType=INTEGER},
       is_over = #{isOver,jdbcType=TINYINT},
+      is_back = #{isBack,jdbcType=TINYINT},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

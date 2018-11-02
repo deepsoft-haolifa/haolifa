@@ -31,6 +31,7 @@
 				and fh.step_id =#{stepId}
 			</if>
 		</where>
+		order by fh.create_time asc
     </select>
 
 	<select id="selectByPrimaryKey" parameterType="int" resultType="com.deepsoft.haolifa.model.domain.FlowInstanceWrapper">
@@ -45,6 +46,7 @@
 			fi.user_id userId,
 			fi.role_id roleId,
 			fi.is_over isOver,
+			fi.is_back isBack,
 			fi.create_user_id createUserId,
 			fi.create_time createTime,
 			fi.update_time updateTime,
@@ -55,5 +57,19 @@
 			LEFT JOIN sys_user su ON su.id = fi.create_user_id
 		WHERE
 			fi.id = #{instanceId}
+	</select>
+
+	<select id="selectBackStepsByFlowIdAndStepId" parameterType="int" resultType="com.deepsoft.haolifa.model.dto.BackStepDTO">
+		select
+			fs.step_id stepId,
+			s.`name` stepName
+		from
+		flow_step fs
+		left join step s on s.id=fs.step_id
+		where
+		fs.flow_id = #{flowId}
+		and
+		step_order &lt; (select step_order from flow_step where flow_id=#{flowId} and step_id=#{stepId})
+		order by step_order asc
 	</select>
 </mapper>

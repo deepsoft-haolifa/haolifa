@@ -30,11 +30,16 @@ public class FlowInstanceController {
         return flowInstanceService.handleStep(model);
     }
 
-    @GetMapping("flow-history/{instaceId}")
+    @GetMapping("flow-history/{instanceId}")
     @ApiOperation("当前流程实例审核历史信息")
-    public ResultBean flowInstanceHistory(@PathVariable("instaceId") Integer instaceId) {
-        return flowInstanceService.flowInstanceHistory(instaceId);
+    public ResultBean flowInstanceHistory(@PathVariable("instanceId") Integer instanceId) {
+        return flowInstanceService.flowInstanceHistory(instanceId);
     }
 
+    @GetMapping("backSteps/{instanceId}")
+    @ApiOperation("获取当前实例可退回节点的列表")
+    public ResultBean backSteps(@PathVariable("instanceId") Integer instanceId) {
+        return flowInstanceService.backSteps(instanceId);
+    }
 
 }

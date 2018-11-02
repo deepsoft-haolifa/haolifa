@@ -46,7 +46,8 @@ public class CommonEnum {
 
         STEP_INCONFORMITY("4001","处理节点与当前节点不一致"),
         STEP_BACK_ERROR("4002","无可退回节点"),
-        FLOW_IS_OVER("4003","流程已结束")
+        FLOW_IS_OVER("4003","流程已结束"),
+        BACK_STEP_NOT_EXIST("4004","未指定退回节点")
         ;
 
         public final String code;

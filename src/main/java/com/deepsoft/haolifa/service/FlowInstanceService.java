@@ -22,8 +22,15 @@ public interface FlowInstanceService {
 
     /**
      * 获取流程实例审核历史
-     * @param instaceId
+     * @param instanceId
      * @return
      */
-    ResultBean flowInstanceHistory(Integer instaceId);
+    ResultBean flowInstanceHistory(Integer instanceId);
+
+    /**
+     * 获取可退回节点列表
+     * @param instanceId
+     * @return
+     */
+    ResultBean backSteps(Integer instanceId);
 }

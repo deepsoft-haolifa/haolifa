@@ -23,13 +23,15 @@ public class FlowInstance {
 
     private Byte isOver;
 
+    private Byte isBack;
+
     private Integer createUserId;
 
     private Date createTime;
 
     private Date updateTime;
 
-    public FlowInstance(Integer id, String summary, String formNo, Integer flowId, Integer currentStepId, Integer nextStepId, Integer prevStepId, Integer userId, Integer roleId, Byte isOver, Integer createUserId, Date createTime, Date updateTime) {
+    public FlowInstance(Integer id, String summary, String formNo, Integer flowId, Integer currentStepId, Integer nextStepId, Integer prevStepId, Integer userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
         this.id = id;
         this.summary = summary;
         this.formNo = formNo;
@@ -40,6 +42,7 @@ public class FlowInstance {
         this.userId = userId;
         this.roleId = roleId;
         this.isOver = isOver;
+        this.isBack = isBack;
         this.createUserId = createUserId;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -127,6 +130,14 @@ public class FlowInstance {
 
     public void setIsOver(Byte isOver) {
         this.isOver = isOver;
+    }
+
+    public Byte getIsBack() {
+        return isBack;
+    }
+
+    public void setIsBack(Byte isBack) {
+        this.isBack = isBack;
     }
 
     public Integer getCreateUserId() {

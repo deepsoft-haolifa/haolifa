@@ -725,6 +725,66 @@ public class FlowInstanceExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsBackIsNull() {
+            addCriterion("is_back is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackIsNotNull() {
+            addCriterion("is_back is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackEqualTo(Byte value) {
+            addCriterion("is_back =", value, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackNotEqualTo(Byte value) {
+            addCriterion("is_back <>", value, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackGreaterThan(Byte value) {
+            addCriterion("is_back >", value, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_back >=", value, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackLessThan(Byte value) {
+            addCriterion("is_back <", value, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackLessThanOrEqualTo(Byte value) {
+            addCriterion("is_back <=", value, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackIn(List<Byte> values) {
+            addCriterion("is_back in", values, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackNotIn(List<Byte> values) {
+            addCriterion("is_back not in", values, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackBetween(Byte value1, Byte value2) {
+            addCriterion("is_back between", value1, value2, "isBack");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBackNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_back not between", value1, value2, "isBack");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateUserIdIsNull() {
             addCriterion("create_user_id is null");
             return (Criteria) this;
