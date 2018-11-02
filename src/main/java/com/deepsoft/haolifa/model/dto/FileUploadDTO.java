@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class FileUploadDTO {
-    @ApiModelProperty(value = "文件名称（带上后缀）")
+    @ApiModelProperty(value = "文件名称（自定义，不带文件后缀）")
     private String fileName;
     @ApiModelProperty(required = true, value = "base64")
     private String base64Source;
