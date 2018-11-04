@@ -1115,6 +1115,136 @@ public class PurchaseOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andSupplierConfirmerIsNull() {
+            addCriterion("supplier_confirmer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerIsNotNull() {
+            addCriterion("supplier_confirmer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerEqualTo(String value) {
+            addCriterion("supplier_confirmer =", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerNotEqualTo(String value) {
+            addCriterion("supplier_confirmer <>", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerGreaterThan(String value) {
+            addCriterion("supplier_confirmer >", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerGreaterThanOrEqualTo(String value) {
+            addCriterion("supplier_confirmer >=", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerLessThan(String value) {
+            addCriterion("supplier_confirmer <", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerLessThanOrEqualTo(String value) {
+            addCriterion("supplier_confirmer <=", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerLike(String value) {
+            addCriterion("supplier_confirmer like", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerNotLike(String value) {
+            addCriterion("supplier_confirmer not like", value, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerIn(List<String> values) {
+            addCriterion("supplier_confirmer in", values, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerNotIn(List<String> values) {
+            addCriterion("supplier_confirmer not in", values, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerBetween(String value1, String value2) {
+            addCriterion("supplier_confirmer between", value1, value2, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierConfirmerNotBetween(String value1, String value2) {
+            addCriterion("supplier_confirmer not between", value1, value2, "supplierConfirmer");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeIsNull() {
+            addCriterion("confirm_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeIsNotNull() {
+            addCriterion("confirm_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeEqualTo(Date value) {
+            addCriterion("confirm_time =", value, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeNotEqualTo(Date value) {
+            addCriterion("confirm_time <>", value, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeGreaterThan(Date value) {
+            addCriterion("confirm_time >", value, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("confirm_time >=", value, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeLessThan(Date value) {
+            addCriterion("confirm_time <", value, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeLessThanOrEqualTo(Date value) {
+            addCriterion("confirm_time <=", value, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeIn(List<Date> values) {
+            addCriterion("confirm_time in", values, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeNotIn(List<Date> values) {
+            addCriterion("confirm_time not in", values, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeBetween(Date value1, Date value2) {
+            addCriterion("confirm_time between", value1, value2, "confirmTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmTimeNotBetween(Date value1, Date value2) {
+            addCriterion("confirm_time not between", value1, value2, "confirmTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

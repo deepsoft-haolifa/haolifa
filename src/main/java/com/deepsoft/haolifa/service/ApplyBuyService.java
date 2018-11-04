@@ -5,19 +5,19 @@ import com.deepsoft.haolifa.model.dto.*;
 import java.util.List;
 
 public interface ApplyBuyService {
-    /**
-     * 保存请购单by请购计划
-     * @param modelList
-     * @return
-     */
-    ResultBean saveByPurchasePlan(List<ApplyBuyDTO> modelList);
+//    /**
+//     * 保存请购单by请购计划
+//     * @param modelList
+//     * @return
+//     */
+//    ResultBean saveByPurchasePlan(List<ApplyBuyDTO> modelList);
 
     /**
-     * 保存请购单by库管
-     * @param modelList
+     * 保存请购单
+     * @param model
      * @return
      */
-    ResultBean saveByStoreKeeper(List<StoreKeeperApplyBuyDTO> modelList);
+    ResultBean save(ApplyBuyDTO model);
 
     /**
      * 删除请购单

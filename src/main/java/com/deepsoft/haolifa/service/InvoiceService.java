@@ -32,4 +32,12 @@ public interface InvoiceService {
      * @return
      */
     ResultBean getList(InvoiceListDTO modelList);
+
+    /**
+     * 填写发票编号
+     * @param id
+     * @param invoiceNo
+     * @return
+     */
+    ResultBean updateInvoiceNo(Integer id, String invoiceNo);
 }

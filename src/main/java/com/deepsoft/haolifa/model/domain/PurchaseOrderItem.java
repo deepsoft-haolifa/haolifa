@@ -7,7 +7,9 @@ public class PurchaseOrderItem {
 
     private String purchaseOrderNo;
 
-    private String productName;
+    private String applyNo;
+
+    private String materialName;
 
     private String materialGraphNo;
 
@@ -25,10 +27,15 @@ public class PurchaseOrderItem {
 
     private String remark;
 
-    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String productName, String materialGraphNo, String specification, String material, String unit, Integer number, BigDecimal unitWeight, BigDecimal unitPrice, String remark) {
+    private String purpose;
+
+    private Double valuation;
+
+    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String applyNo, String materialName, String materialGraphNo, String specification, String material, String unit, Integer number, BigDecimal unitWeight, BigDecimal unitPrice, String remark, String purpose, Double valuation) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
-        this.productName = productName;
+        this.applyNo = applyNo;
+        this.materialName = materialName;
         this.materialGraphNo = materialGraphNo;
         this.specification = specification;
         this.material = material;
@@ -37,6 +44,8 @@ public class PurchaseOrderItem {
         this.unitWeight = unitWeight;
         this.unitPrice = unitPrice;
         this.remark = remark;
+        this.purpose = purpose;
+        this.valuation = valuation;
     }
 
     public PurchaseOrderItem() {
@@ -59,12 +68,20 @@ public class PurchaseOrderItem {
         this.purchaseOrderNo = purchaseOrderNo == null ? null : purchaseOrderNo.trim();
     }
 
-    public String getProductName() {
-        return productName;
+    public String getApplyNo() {
+        return applyNo;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
+    public void setApplyNo(String applyNo) {
+        this.applyNo = applyNo == null ? null : applyNo.trim();
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName == null ? null : materialName.trim();
     }
 
     public String getMaterialGraphNo() {
@@ -129,5 +146,21 @@ public class PurchaseOrderItem {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose == null ? null : purpose.trim();
+    }
+
+    public Double getValuation() {
+        return valuation;
+    }
+
+    public void setValuation(Double valuation) {
+        this.valuation = valuation;
     }
 }

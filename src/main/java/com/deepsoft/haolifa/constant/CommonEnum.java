@@ -42,7 +42,12 @@ public class CommonEnum {
 
         RESOURCE_NOT_EXIST("3404","资源不存在"),
 
-        SUPPLIER_NO_WRONG("3002","供应商编号格式不正确")
+        SUPPLIER_NO_WRONG("3002","供应商编号格式不正确"),
+
+        STEP_INCONFORMITY("4001","处理节点与当前节点不一致"),
+        STEP_BACK_ERROR("4002","无可退回节点"),
+        FLOW_IS_OVER("4003","流程已结束"),
+        BACK_STEP_NOT_EXIST("4004","未指定退回节点")
         ;
 
         public final String code;
@@ -70,7 +75,12 @@ public class CommonEnum {
         //否
         NO((byte) 0),
         //是
-        YES((byte) 1);
+        YES((byte) 1),
+        AUDIT_PASS((byte)1),
+        AUDIT_NO_PASS((byte)0),
+        AUDIT_BACK((byte)2),
+        FLOW_INIT((byte)3),
+        ;
 
         public final byte code;
 

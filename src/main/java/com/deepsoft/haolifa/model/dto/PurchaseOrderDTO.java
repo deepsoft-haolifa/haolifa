@@ -3,13 +3,12 @@ package com.deepsoft.haolifa.model.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Data
 public class PurchaseOrderDTO {
-    @ApiModelProperty(value = "采购单编号")
-    private String purchaseOrderNo;
-    @ApiModelProperty(value = "请购单编号")
-    private String applyBuyNo;
 
     @ApiModelProperty(required = true,value = "供应商编号")
     private String supplierNo;
@@ -35,5 +34,12 @@ public class PurchaseOrderDTO {
     private String operatorUserName;
     @ApiModelProperty(value = "经办时间")
     private String operateTime;
+    @ApiModelProperty(required = true,value = "供方确认人")
+    private String SupplierConfirmer;
+    @ApiModelProperty(required = true,value = "确认时间")
+    private String confirmTime;
+
+    @ApiModelProperty(required = true,value = "采购单项")
+    private List<PurchaseOrderItem> itemList;
 
 }

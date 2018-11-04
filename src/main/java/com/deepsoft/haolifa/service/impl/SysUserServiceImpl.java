@@ -60,9 +60,9 @@ public class SysUserServiceImpl implements SysUserService {
     public CustomUser selectLoginUser() {
         //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if("anonymousUser".equals(principal))
-            return  (CustomUser) customUserService.loadUserByUsername("admin");
-        else
+//        if("anonymousUser".equals(principal))
+//            return  (CustomUser) customUserService.loadUserByUsername("admin");
+//        else
             return (CustomUser) principal;
     }
 

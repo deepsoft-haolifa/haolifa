@@ -9,37 +9,40 @@ public class FlowHistory {
 
     private Date updateTime;
 
-    private Integer createUser;
-
-    private Integer flowId;
+    private Integer instanceId;
 
     private Integer stepId;
-
-    private Integer nextStepId;
 
     private Integer auditUserId;
 
     private String auditInfo;
 
+    private Integer allotUserId;
+
     private Date auditTime;
 
-    private String buyNo;
+    private Byte auditResult;
 
-    private String orderNo;
+    private Byte formType;
 
-    public FlowHistory(Integer id, Date createTime, Date updateTime, Integer createUser, Integer flowId, Integer stepId, Integer nextStepId, Integer auditUserId, String auditInfo, Date auditTime, String buyNo, String orderNo) {
+    private Integer formId;
+
+    private String formNo;
+
+    public FlowHistory(Integer id, Date createTime, Date updateTime, Integer instanceId, Integer stepId, Integer auditUserId, String auditInfo, Integer allotUserId, Date auditTime, Byte auditResult, Byte formType, Integer formId, String formNo) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.createUser = createUser;
-        this.flowId = flowId;
+        this.instanceId = instanceId;
         this.stepId = stepId;
-        this.nextStepId = nextStepId;
         this.auditUserId = auditUserId;
         this.auditInfo = auditInfo;
+        this.allotUserId = allotUserId;
         this.auditTime = auditTime;
-        this.buyNo = buyNo;
-        this.orderNo = orderNo;
+        this.auditResult = auditResult;
+        this.formType = formType;
+        this.formId = formId;
+        this.formNo = formNo;
     }
 
     public FlowHistory() {
@@ -70,20 +73,12 @@ public class FlowHistory {
         this.updateTime = updateTime;
     }
 
-    public Integer getCreateUser() {
-        return createUser;
+    public Integer getInstanceId() {
+        return instanceId;
     }
 
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Integer getFlowId() {
-        return flowId;
-    }
-
-    public void setFlowId(Integer flowId) {
-        this.flowId = flowId;
+    public void setInstanceId(Integer instanceId) {
+        this.instanceId = instanceId;
     }
 
     public Integer getStepId() {
@@ -92,14 +87,6 @@ public class FlowHistory {
 
     public void setStepId(Integer stepId) {
         this.stepId = stepId;
-    }
-
-    public Integer getNextStepId() {
-        return nextStepId;
-    }
-
-    public void setNextStepId(Integer nextStepId) {
-        this.nextStepId = nextStepId;
     }
 
     public Integer getAuditUserId() {
@@ -118,6 +105,14 @@ public class FlowHistory {
         this.auditInfo = auditInfo == null ? null : auditInfo.trim();
     }
 
+    public Integer getAllotUserId() {
+        return allotUserId;
+    }
+
+    public void setAllotUserId(Integer allotUserId) {
+        this.allotUserId = allotUserId;
+    }
+
     public Date getAuditTime() {
         return auditTime;
     }
@@ -126,19 +121,35 @@ public class FlowHistory {
         this.auditTime = auditTime;
     }
 
-    public String getBuyNo() {
-        return buyNo;
+    public Byte getAuditResult() {
+        return auditResult;
     }
 
-    public void setBuyNo(String buyNo) {
-        this.buyNo = buyNo == null ? null : buyNo.trim();
+    public void setAuditResult(Byte auditResult) {
+        this.auditResult = auditResult;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public Byte getFormType() {
+        return formType;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+    public void setFormType(Byte formType) {
+        this.formType = formType;
+    }
+
+    public Integer getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Integer formId) {
+        this.formId = formId;
+    }
+
+    public String getFormNo() {
+        return formNo;
+    }
+
+    public void setFormNo(String formNo) {
+        this.formNo = formNo == null ? null : formNo.trim();
     }
 }

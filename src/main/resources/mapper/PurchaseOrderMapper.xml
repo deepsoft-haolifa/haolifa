@@ -18,6 +18,8 @@
       <arg column="delivery_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="operator_user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="operate_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="supplier_confirmer" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="confirm_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
@@ -85,7 +87,8 @@
   <sql id="Base_Column_List">
     id, flow_id, purchase_order_no, supplier_no, supplier_name, demander, supplier_linkman, 
     demander_linkman, supplier_addr, demander_addr, suppiler_phone, demander_phone, delivery_time, 
-    operator_user_name, operate_time, create_time, update_time, is_delete, create_user_id
+    operator_user_name, operate_time, supplier_confirmer, confirm_time, create_time, 
+    update_time, is_delete, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" resultMap="BaseResultMap">
     select
@@ -123,15 +126,17 @@
       supplier_linkman, demander_linkman, supplier_addr, 
       demander_addr, suppiler_phone, demander_phone, 
       delivery_time, operator_user_name, operate_time, 
-      create_time, update_time, is_delete, 
-      create_user_id)
+      supplier_confirmer, confirm_time, create_time, 
+      update_time, is_delete, create_user_id
+      )
     values (#{id,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, 
       #{supplierNo,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR}, #{demander,jdbcType=VARCHAR}, 
       #{supplierLinkman,jdbcType=VARCHAR}, #{demanderLinkman,jdbcType=VARCHAR}, #{supplierAddr,jdbcType=VARCHAR}, 
       #{demanderAddr,jdbcType=VARCHAR}, #{suppilerPhone,jdbcType=VARCHAR}, #{demanderPhone,jdbcType=VARCHAR}, 
       #{deliveryTime,jdbcType=TIMESTAMP}, #{operatorUserName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
-      #{createUserId,jdbcType=INTEGER})
+      #{supplierConfirmer,jdbcType=VARCHAR}, #{confirmTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder">
     insert into purchase_order
@@ -180,6 +185,12 @@
       </if>
       <if test="operateTime != null">
         operate_time,
+      </if>
+      <if test="supplierConfirmer != null">
+        supplier_confirmer,
+      </if>
+      <if test="confirmTime != null">
+        confirm_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -239,6 +250,12 @@
       </if>
       <if test="operateTime != null">
         #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierConfirmer != null">
+        #{supplierConfirmer,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmTime != null">
+        #{confirmTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -308,6 +325,12 @@
       <if test="record.operateTime != null">
         operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.supplierConfirmer != null">
+        supplier_confirmer = #{record.supplierConfirmer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.confirmTime != null">
+        confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -342,6 +365,8 @@
       delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP},
       operator_user_name = #{record.operatorUserName,jdbcType=VARCHAR},
       operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+      supplier_confirmer = #{record.supplierConfirmer,jdbcType=VARCHAR},
+      confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
@@ -395,6 +420,12 @@
       <if test="operateTime != null">
         operate_time = #{operateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="supplierConfirmer != null">
+        supplier_confirmer = #{supplierConfirmer,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmTime != null">
+        confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -426,6 +457,8 @@
       delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
       operator_user_name = #{operatorUserName,jdbcType=VARCHAR},
       operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      supplier_confirmer = #{supplierConfirmer,jdbcType=VARCHAR},
+      confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT},

@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.vo.MenuVO;
+import com.deepsoft.haolifa.model.vo.QuickStartVO;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface MenuService {
     List<MenuVO> selectByRoleId(Integer roleId);
 
     int insertRoleMenu(Integer roleId, Integer[] menuIds);
+
 }

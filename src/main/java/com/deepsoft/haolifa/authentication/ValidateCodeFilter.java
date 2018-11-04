@@ -46,6 +46,13 @@ public class ValidateCodeFilter extends GenericFilterBean {
                 return;//当失败时则不执行后面的过滤器
             }
         }
+        if(StringUtils.equals("/haolifa/code/image", request.getRequestURI())){
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         chain.doFilter(req, res);
 

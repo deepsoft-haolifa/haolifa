@@ -1,78 +1,74 @@
-  DROP TABLE IF EXISTS `flow`;
-	CREATE TABLE `flow` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	 	`name` varchar(64) NOT NULL DEFAULT '' COMMENT '流程名字',
-	  `description` varchar(256) NOT NULL DEFAULT '' COMMENT '流程描述',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程配置表（用来配置系统中用到的流程）';
+DROP TABLE IF EXISTS `step`;
+CREATE TABLE `step` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user_id` int(11) NOT NULL COMMENT '创建用户',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '步骤名字',
+  `description` varchar(256) NOT NULL DEFAULT '' COMMENT '步骤描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='步骤定义表（也叫节点，可以认为一个审核就是一个步骤）';
 
+DROP TABLE IF EXISTS `flow`;
+CREATE TABLE `flow` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user_id` int(11) NOT NULL COMMENT '创建用户',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '流程名字',
+  `description` varchar(256) NOT NULL DEFAULT '' COMMENT '流程描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程配置表（用来配置系统中用到的流程）';
 
-	DROP TABLE IF EXISTS `step`;
-	CREATE TABLE `step` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `create_user` int(11) NOT NULL COMMENT '创建用户',
-    `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '步骤名字',
-	  `description` varchar(256)  NOT NULL DEFAULT '' COMMENT '步骤描述',
-	  `role_ids` varchar(32) NOT NULL DEFAULT 0 COMMENT '角色ids(一个步骤对应对个角色)',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='步骤配置表（也叫节点，可以认为一个审核就是一个步骤）';
+DROP TABLE IF EXISTS `flow_step`;
+CREATE TABLE `flow_step` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user_id` int(11) NOT NULL COMMENT '创建用户',
+  `flow_id` int(11) NOT NULL DEFAULT '0' COMMENT '流程id',
+  `step_id` int(11) NOT NULL DEFAULT '0' COMMENT '步骤id',
+  `user_id` varchar(255) NOT NULL DEFAULT '' COMMENT '节点关联的',
+  `role_id` int(11) NOT NULL DEFAULT 0 COMMENT '关联角色id',
+  `step_order` int(11) DEFAULT NULL COMMENT '序号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程步骤关联表（一个流程关联多个步骤）';
 
- 	DROP TABLE IF EXISTS `flow_step`;
-	CREATE TABLE `flow_step` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `create_user` int(11) NOT NULL COMMENT '创建用户',
-    `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `flow_id` int(11) NOT NULL DEFAULT '0' COMMENT '流程id',
-    `step_id` int(11) NOT NULL DEFAULT '0' COMMENT '步骤id',
-    `next_step_id` int(11) DEFAULT NULL COMMENT '下一步stepId',
-    `pre_step_id` int(11) DEFAULT NULL COMMENT '暂时不用',
-    `goto_step_id` int(11) DEFAULT NULL COMMENT 'false跳转节点暂时不用',
-    `step_order` int(11) DEFAULT NULL COMMENT '序号',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程步骤关联表（一个流程关联多个步骤）';
+DROP TABLE IF EXISTS `flow_instance`;
+CREATE TABLE `flow_instance` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键-流程实例id',
+  `summary` varchar(255) NOT NULL COMMENT '流程实例描述',
+  `form_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单编号（采购、生产）',
+  `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
+  `current_step_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '待处理节点id ',
+  `next_step_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '下一个节点id',
+  `prev_step_id` int(11) NOT NULL COMMENT '上一个节点id',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '当前节点处理人id',
+  `role_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '当前节点处理人角色',
+  `is_over` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '流程是否结束 1 结束 0 进行中',
+  `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '流程实例创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '流程实例更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='流程实例表';
 
-  DROP TABLE IF EXISTS `flow_step_config`;
-  CREATE TABLE `flow_step_config` (
-    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `create_user` int(11) NOT NULL COMMENT '创建用户',
-    `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
-    `step_id` int(11) NOT NULL DEFAULT '0' COMMENT '步骤id',
-    `approval_field_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '节点审批字段中文名称',
-    `english_name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '节点审批字段英文名称',
-    `type` VARCHAR(10) NOT NULL DEFAULT '' COMMENT '字段类型,如string,int等',
-    PRIMARY KEY (`id`)
-  ) ENGINE = INNODB COMMENT '流程节点配置表';
-
- 	DROP TABLE IF EXISTS `flow_history`;
-	CREATE TABLE `flow_history` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `create_user` int(11) NOT NULL COMMENT '发起人用户Id',
-	  `flow_id` int(11) NOT NULL DEFAULT 0 COMMENT '流程id',
-	  `step_id` int(11) NOT NULL  DEFAULT 0 COMMENT '步骤id',
-	  `next_flow_id` int(11) NOT NULL  DEFAULT 0  COMMENT '下一步流程Id(如果当前流程有子流程，这个字段存子流程id)',
-	  `audit_user_id` int(11) DEFAULT NULL DEFAULT 0 COMMENT '审核人',
-	  `audit_info` varchar(1024) NOT NULL DEFAULT '' COMMENT '审核备注',
-    `audit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审批日期',
-	  `buy_no` char(36) NOT NULL DEFAULT '' COMMENT '采购号',
-	  `order_no` char(36) NOT NULL DEFAULT '' COMMENT '订单Id',
-	  `user_id` int(11) NOT NULL DEFAULT 0 COMMENT '流程中指定的用户',
-	  `bus_id` int(11) NOT NULL DEFAULT 0 COMMENT '业务Id(如果这个节点有外表存储信息，则保存一个ID)',
-	  `bus_json`  varchar(1024) NOT NULL DEFAULT '' COMMENT '如果填写的信息比较多，需要保存一个json信息',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程记录表';
+DROP TABLE IF EXISTS `flow_history`;
+CREATE TABLE `flow_history` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `instance_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
+  `step_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '步骤id',
+  `audit_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '审核人',
+  `audit_info` varchar(1024) NOT NULL DEFAULT '' COMMENT '审核备注',
+  `allot_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '指定下一节点操作人（指定采购员、装配组等）',
+  `audit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审批日期',
+  `audit_result` tinyint(4) NOT NULL COMMENT '审核结果： 0 审核不通过 1 审核通过 2 退回 3 流程初始化',
+  `form_type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '外部表单类型：默认0 无 1 生产订单 2 请购单 3 采购单 4 送检单 5 产品质检单 6 零件质检单 7 发票单 8 发货单',
+  `form_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '表单Id',
+  `form_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单编号（生产、采购等）',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='流程记录表';
 
 
 	DROP TABLE IF EXISTS `sys_department`;
@@ -466,11 +462,14 @@
 DROP TABLE IF EXISTS `Invoice`;
 CREATE TABLE `invoice` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
   `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '订单合同编号',
-  `type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '类型：0  订单合同编号 1 采购编号',
   `invoice_no` varchar(64) NOT NULL DEFAULT '' COMMENT '发票号',
   `total_amount` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
-  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态： 0 未收款 1 未打款 2 打款中 3 收款中 4 处理完成',
+  `company` varchar(255) NOT NULL DEFAULT '' COMMENT '单位',
+  `linkman` varchar(255) NOT NULL DEFAULT '' COMMENT '联系人',
+  `mialing_address` varchar(255) NOT NULL DEFAULT '' COMMENT '邮寄地址',
+  `details` varchar(255) NOT NULL DEFAULT '' COMMENT '明细',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0  未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -517,32 +516,14 @@ CREATE TABLE `contract` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-合同表';
 
-DROP TABLE IF EXISTS `purchase_plan`;
-CREATE TABLE `purchase_plan` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `purchase_plan_no` varchar(64) NOT NULL DEFAULT '' COMMENT '采购计划号',
-  `product_order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '生产订单号',
-  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
-  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '数量',
-  `expected_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '期望到货时间',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
-  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '流程表单-采购计划表';
 
 DROP TABLE IF EXISTS `apply_buy`;
 CREATE TABLE `apply_buy` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
   `apply_no` varchar(64) NOT NULL DEFAULT '' COMMENT '请购单号',
-  `material_graph_no` varchar(30) NOT NULL DEFAULT '' COMMENT '零件图号',
-  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '请购数量',
-  `unit` varchar(10) NOT NULL DEFAULT '' COMMENT '单位（个）',
-  `valuation` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '采购估价',
-  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `purpose` varchar(255) NOT NULL DEFAULT '' COMMENT '用途',
+  `product_order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '生产订单编号',
+  `target_time` timestamp NOT NULL COMMENT '预期时间',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0  未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -580,6 +561,8 @@ CREATE TABLE `purchase_order` (
   `delivery_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '交货日期',
   `operator_user_name` varchar(30) NOT NULL DEFAULT '0' COMMENT '订单经办人',
   `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '经办日期',
+  `supplier_confirmer` varchar(255) NOT NULL DEFAULT '' COMMENT '供方确认人',
+  `confirm_time` timestamp NOT NULL COMMENT '确认时间',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
@@ -590,9 +573,10 @@ CREATE TABLE `purchase_order` (
 
 DROP TABLE IF EXISTS `purchase_order_item`;
 CREATE TABLE `purchase_order_item` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '采购单单项id',
-  `purchase_order_no` varchar(20) NOT NULL COMMENT '采购单编号',
-  `product_name` varchar(20) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '单项id',
+  `purchase_order_no` varchar(64) NOT NULL COMMENT '采购订单编号',
+  `apply_no` varchar(64) NOT NULL COMMENT '请购单编号',
+  `material_name` varchar(20) NOT NULL DEFAULT '' COMMENT '物料名称',
   `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
   `specification` varchar(50) NOT NULL DEFAULT '' COMMENT '规格',
   `material` varchar(20) NOT NULL DEFAULT '' COMMENT '材质',
@@ -601,6 +585,8 @@ CREATE TABLE `purchase_order_item` (
   `unit_weight` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '单重',
   `unit_price` decimal(12,4) unsigned NOT NULL DEFAULT '0.0000' COMMENT '单价',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `purpose` varchar(255) NOT NULL DEFAULT '' COMMENT '用途--请购单',
+  `valuation` double(12,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '估价-请购单',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单单项表';
 

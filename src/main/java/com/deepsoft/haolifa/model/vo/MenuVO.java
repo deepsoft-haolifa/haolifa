@@ -2,8 +2,10 @@ package com.deepsoft.haolifa.model.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class MenuVO {
 
     private Integer id;
