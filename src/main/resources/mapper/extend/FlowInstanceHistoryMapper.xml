@@ -72,4 +72,37 @@
 		step_order &lt; (select step_order from flow_step where flow_id=#{flowId} and step_id=#{stepId})
 		order by step_order asc
 	</select>
+
+	<select id="selectFlowByUserRoles" parameterType="int" resultType="com.deepsoft.haolifa.model.vo.QuickStartVO">
+		SELECT
+			f.`id` AS flowId,
+			f.`name` AS name,
+			f.`description` AS description
+		 FROM `sys_role` r
+			JOIN `sys_role_user` ru
+			ON r.`id` = ru.`sys_role_id` AND ru.`sys_user_id` = #{userId}
+			JOIN `flow` f
+			ON f.`role_id` = r.`id`
+		 ORDER BY f.`name`;
+	</select>
+
+    <select id="selectToDoItems" parameterType="int" resultType="com.deepsoft.haolifa.model.vo.TodoItemVO">
+        SELECT
+            f.`id` AS flowId,
+            f.`name` AS flowName,
+            s.`id` AS stepId,
+            s.`name` AS stepName,
+            u.`username` AS createUser,
+            u.`real_name` AS createUserRealName,
+            fi.`create_time` AS createTime
+        FROM `flow_instance` fi JOIN `step` s
+          ON fi.`current_step_id` = s.`id`
+          AND fi.`is_over` = 0
+          AND fi.`user_id` = #{userId}
+        JOIN `sys_user` u
+          ON fi.`create_user_id` = u.`id`
+        JOIN `flow` f
+          ON fi.`flow_id` = f.`id`
+        ORDER BY fi.`create_time` DESC;
+    </select>
 </mapper>

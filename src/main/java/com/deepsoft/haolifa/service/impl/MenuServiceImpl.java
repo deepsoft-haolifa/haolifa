@@ -8,23 +8,24 @@ import com.deepsoft.haolifa.model.domain.SysPermissionExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.vo.MenuVO;
 import com.deepsoft.haolifa.service.MenuService;
-import io.netty.util.internal.ObjectUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
     @Autowired
     private MyPermissionMapper myPermissionMapper;
+
 
     @Override
     public List<MenuVO> getMenuList(String menuType) {
@@ -41,10 +42,11 @@ public class MenuServiceImpl implements MenuService {
 
     private List<MenuVO> PermissionToMenuVo(List<SysPermission> permissions, String menuType){
          return permissions.stream().filter(m ->
-                m.getUrl().equals(menuType)).map(m -> {
+                m.getPermName().equals(menuType)).map(m -> {
             MenuVO menuVO = new MenuVO();
             BeanUtils.copyProperties(m, menuVO);
             menuVO.setCode(m.getUrl());
+            log.info("menu:{}", menuVO);
             return menuVO;
         }).collect(Collectors.toList());
     }

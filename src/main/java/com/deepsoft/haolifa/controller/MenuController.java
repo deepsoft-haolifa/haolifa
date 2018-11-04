@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.controller;
 
-import com.deepsoft.haolifa.model.dto.PermissionNode;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.vo.MenuVO;
 import com.deepsoft.haolifa.service.MenuService;
@@ -9,8 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author zhaozhihong
@@ -34,11 +31,6 @@ public class MenuController {
         return ResultBean.success(permissionService.getMenu("m"));
     }
 
-    @ApiOperation("获取当前用户用快捷入口")
-    @GetMapping("/quick-start")
-    public ResultBean getQuickStartMenu(){
-        return ResultBean.success(permissionService.getMenu("qs"));
-    }
 
     @ApiOperation("获取菜单列表")
     @GetMapping("/list")
@@ -46,11 +38,6 @@ public class MenuController {
         return ResultBean.success(menuService.getMenuList("m"));
     }
 
-    @ApiOperation("获取快捷入口列表")
-    @GetMapping("/quick-start/list")
-    public ResultBean getQuickStartMenus(){
-        return ResultBean.success(menuService.getMenuList("qs"));
-    }
 
     @ApiOperation("获取单个菜单")
     @GetMapping("/{id}")
@@ -75,6 +62,5 @@ public class MenuController {
     public ResultBean updateMenu(@RequestBody MenuVO menuVO){
         return ResultBean.success(menuService.updateMenu(menuVO));
     }
-
 
 }

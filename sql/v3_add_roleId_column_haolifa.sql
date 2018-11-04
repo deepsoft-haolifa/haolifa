@@ -1,0 +1,1 @@
+ALTER TABLE `flow` ADD COLUMN `role_id` INT(11) unsigned NOT NULL DEFAULT 0 COMMENT '发起流程的角色id';
