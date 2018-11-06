@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.model.dto;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Data
 public class HistoryInfo {
@@ -21,5 +23,7 @@ public class HistoryInfo {
     private String auditUserName;
     private Integer auditUserId;
     private Date createTime;
+
+    private List<Map<String,Integer>> forms;
 
 }

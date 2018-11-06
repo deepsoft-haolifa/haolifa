@@ -18,7 +18,7 @@ public class FlowHandleStepDTO {
     @ApiModelProperty(value = "节点分配的人员id")
     private Integer allotUserId;
 
-    @ApiModelProperty(required = true, value = "审核结果 0 终止 1 通过 2 退回")
+    @ApiModelProperty(required = true, value = "审核结果 0 不同意 1 通过（下一步） 2 退回")
     private Integer auditResult;
 
     @ApiModelProperty(required = true, value = "表单id,流程节点填写表单的实例id")
@@ -29,4 +29,7 @@ public class FlowHandleStepDTO {
 
     @ApiModelProperty(value = "当审核结果为 2 时（退回），该字段必填")
     private Integer backStepId;
+
+    @ApiModelProperty(required = true,value = "节点条件判断：true ：条件为真 or false：条件为假;默认为true")
+    private Boolean condition;
 }

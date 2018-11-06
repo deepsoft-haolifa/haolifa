@@ -19,9 +19,15 @@ public class FlowStep {
 
     private Integer roleId;
 
-    private Integer stepOrder;
+    private Integer prevStepId;
 
-    public FlowStep(Integer id, Date createTime, Date updateTime, Integer createUserId, Integer flowId, Integer stepId, String userId, Integer roleId, Integer stepOrder) {
+    private Integer conditionTrue;
+
+    private Integer conditionFalse;
+
+    private String formShowStepId;
+
+    public FlowStep(Integer id, Date createTime, Date updateTime, Integer createUserId, Integer flowId, Integer stepId, String userId, Integer roleId, Integer prevStepId, Integer conditionTrue, Integer conditionFalse, String formShowStepId) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -30,7 +36,10 @@ public class FlowStep {
         this.stepId = stepId;
         this.userId = userId;
         this.roleId = roleId;
-        this.stepOrder = stepOrder;
+        this.prevStepId = prevStepId;
+        this.conditionTrue = conditionTrue;
+        this.conditionFalse = conditionFalse;
+        this.formShowStepId = formShowStepId;
     }
 
     public FlowStep() {
@@ -101,11 +110,35 @@ public class FlowStep {
         this.roleId = roleId;
     }
 
-    public Integer getStepOrder() {
-        return stepOrder;
+    public Integer getPrevStepId() {
+        return prevStepId;
     }
 
-    public void setStepOrder(Integer stepOrder) {
-        this.stepOrder = stepOrder;
+    public void setPrevStepId(Integer prevStepId) {
+        this.prevStepId = prevStepId;
+    }
+
+    public Integer getConditionTrue() {
+        return conditionTrue;
+    }
+
+    public void setConditionTrue(Integer conditionTrue) {
+        this.conditionTrue = conditionTrue;
+    }
+
+    public Integer getConditionFalse() {
+        return conditionFalse;
+    }
+
+    public void setConditionFalse(Integer conditionFalse) {
+        this.conditionFalse = conditionFalse;
+    }
+
+    public String getFormShowStepId() {
+        return formShowStepId;
+    }
+
+    public void setFormShowStepId(String formShowStepId) {
+        this.formShowStepId = formShowStepId == null ? null : formShowStepId.trim();
     }
 }

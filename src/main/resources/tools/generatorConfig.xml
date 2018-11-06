@@ -85,18 +85,18 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="flow" domainObjectName="Flow"></table>
+        <!--<table tableName="flow" domainObjectName="Flow"></table>-->
 
         <!--<table tableName="step" domainObjectName="Step"></table>-->
 
-        <!--<table tableName="flow_step" domainObjectName="FlowStep"></table>-->
+        <table tableName="flow_step" domainObjectName="FlowStep"></table>
 
 
         <!--<table tableName="flow_history" domainObjectName="FlowHistory"></table>-->
 
-        <!--<table tableName="flow_instance" domainObjectName="FlowInstance">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
+        <table tableName="flow_instance" domainObjectName="FlowInstance">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
 
         <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
 
