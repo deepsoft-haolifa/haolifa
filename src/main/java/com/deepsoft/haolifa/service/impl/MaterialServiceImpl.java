@@ -220,6 +220,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public int updateLockQuantity(String graphNo, int quantity) {
+        log.info("update lock quantity start,graphNo:{},quantity:{}", graphNo, quantity);
+        return materialExtendMapper.updateLockQuantity(graphNo, quantity);
+    }
+
+    @Override
     public List<Material> getListByClassifyId(int classifyId) {
         if (classifyId <= 0) {
             return null;

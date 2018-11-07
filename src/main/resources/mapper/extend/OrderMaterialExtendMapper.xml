@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.OrderMaterialExtendMapper">
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into order_material
+        (create_user,order_no, material_graph_no, material_count)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.createUser},
+            #{item.orderNo},
+            #{item.materialGraphNo},
+            #{item.materialCount}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

@@ -46,11 +46,13 @@ public class Material {
 
     private Integer currentQuantity;
 
+    private Integer lockQuantity;
+
     private Byte isDelete;
 
     private String remark;
 
-    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Integer currentQuantity, Byte isDelete, String remark) {
+    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Integer currentQuantity, Integer lockQuantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -72,6 +74,7 @@ public class Material {
         this.safeQuantity = safeQuantity;
         this.safetyFactor = safetyFactor;
         this.currentQuantity = currentQuantity;
+        this.lockQuantity = lockQuantity;
         this.isDelete = isDelete;
         this.remark = remark;
     }
@@ -246,6 +249,14 @@ public class Material {
 
     public void setCurrentQuantity(Integer currentQuantity) {
         this.currentQuantity = currentQuantity;
+    }
+
+    public Integer getLockQuantity() {
+        return lockQuantity;
+    }
+
+    public void setLockQuantity(Integer lockQuantity) {
+        this.lockQuantity = lockQuantity;
     }
 
     public Byte getIsDelete() {

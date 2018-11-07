@@ -1436,6 +1436,11 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andCurrentQuantityGreaterThan(Integer value) {
+            addCriterion("current_quantity >", value, "currentQuantity");
+            return (Criteria) this;
+        }
+
         public Criteria andCurrentQuantityGreaterThan(String value) {
             addCriterion("current_quantity >", value, "currentQuantity");
             return (Criteria) this;
@@ -1448,11 +1453,6 @@ public class MaterialExample {
 
         public Criteria andCurrentQuantityLessThan(String value) {
             addCriterion("current_quantity <", value, "currentQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentQuantityLessThanOrEqualTo(Integer value) {
-            addCriterion("current_quantity <=", value, "currentQuantity");
             return (Criteria) this;
         }
 
@@ -1476,6 +1476,65 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andLockQuantityIsNull() {
+            addCriterion("lock_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityIsNotNull() {
+            addCriterion("lock_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityEqualTo(Integer value) {
+            addCriterion("lock_quantity =", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityNotEqualTo(Integer value) {
+            addCriterion("lock_quantity <>", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityGreaterThan(Integer value) {
+            addCriterion("lock_quantity >", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity >=", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityLessThan(Integer value) {
+            addCriterion("lock_quantity <", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity <=", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityIn(List<Integer> values) {
+            addCriterion("lock_quantity in", values, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityNotIn(List<Integer> values) {
+            addCriterion("lock_quantity not in", values, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity between", value1, value2, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity not between", value1, value2, "lockQuantity");
+            return (Criteria) this;
+        }
 
         public Criteria andIsDeleteIsNull() {
             addCriterion("is_delete is null");
@@ -1606,7 +1665,6 @@ public class MaterialExample {
             addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
-
     }
 
     public static class Criteria extends GeneratedCriteria {

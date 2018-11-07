@@ -13,6 +13,9 @@ public interface MaterialExtendMapper {
 
     @Update("update material set current_quantity=current_quantity+#{quantity} where graph_no=#{graphNo}")
     int updateCurrentQuantity(@Param("graphNo") String graphNo, @Param("quantity") int quantity);
+
+    @Update("update material set lock_quantity=lock_quantity+#{quantity} where graph_no=#{graphNo}")
+    int updateLockQuantity(@Param("graphNo") String graphNo, @Param("quantity") int quantity);
 }
 
 

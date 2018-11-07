@@ -29,13 +29,11 @@ public class Stock {
 
     private Integer quantity;
 
-    private Integer lockQuantity;
-
     private Byte isDelete;
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, Integer storeRoomId, Integer storeRoomRackId, String storeRoomRackNo, String productNo, String materialGraphNo, Byte type, Integer quantity, Integer lockQuantity, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, Integer storeRoomId, Integer storeRoomRackId, String storeRoomRackNo, String productNo, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -49,7 +47,6 @@ public class Stock {
         this.materialGraphNo = materialGraphNo;
         this.type = type;
         this.quantity = quantity;
-        this.lockQuantity = lockQuantity;
         this.isDelete = isDelete;
         this.remark = remark;
     }
@@ -160,14 +157,6 @@ public class Stock {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Integer getLockQuantity() {
-        return lockQuantity;
-    }
-
-    public void setLockQuantity(Integer lockQuantity) {
-        this.lockQuantity = lockQuantity;
     }
 
     public Byte getIsDelete() {

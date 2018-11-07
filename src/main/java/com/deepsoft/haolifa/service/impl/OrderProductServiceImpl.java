@@ -2,14 +2,17 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.CheckMaterialLogMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
-import com.deepsoft.haolifa.model.domain.OrderProduct;
-import com.deepsoft.haolifa.model.domain.OrderProductExample;
+import com.deepsoft.haolifa.dao.repository.extend.OrderMaterialExtendMapper;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.OrderProductService;
+import com.deepsoft.haolifa.service.ProductMaterialService;
 import com.deepsoft.haolifa.util.Base64Utils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
@@ -25,11 +28,14 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 
 @Service
@@ -37,6 +43,14 @@ import java.util.List;
 public class OrderProductServiceImpl extends BaseService implements OrderProductService {
     @Autowired
     private OrderProductMapper orderProductMapper;
+    @Autowired
+    private ProductMaterialService productMaterialService;
+    @Autowired
+    private MaterialService materialService;
+    @Autowired
+    private OrderMaterialExtendMapper orderMaterialExtendMapper;
+    @Autowired
+    private CheckMaterialLogMapper checkMaterialLogMapper;
 
     @Override
     public ResultBean uploadOrderProductExcel(String base64Source) {
@@ -199,7 +213,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Override
     public ResultBean saveOrderProductInfo(OrderProductDTO orderProductDTO) {
         OrderProduct orderProduct = new OrderProduct();
-        String orderProductNo = RandomUtils.orderNoStr();
+        String orderProductNo = "op_" + RandomUtils.orderNoStr();
         log.info("save orderProduct info start|orderProductNo:{},model:{}", orderProductNo, JSONObject.toJSONString(orderProduct));
         orderProductDTO.setOrderNo(orderProductNo);
         BeanUtils.copyProperties(orderProductDTO, orderProduct);
@@ -255,5 +269,108 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         BeanUtils.copyProperties(materials, pageDTO);
         pageDTO.setList(materials);
         return ResultBean.success(pageDTO);
+    }
+
+
+    // 如果替换料审核成功，需要做一些业务操作，流程怎么做？
+    @Transactional(rollbackFor = Exception.class)
+    public int checkMaterial(String orderNo) {
+        OrderProduct orderProductInfo = getOrderProductInfo(orderNo);
+        if (orderProductInfo == null) {
+            return 0;
+        }
+        // 核料状态
+        int checkState = 0;
+        String checkResult = "";
+        int currentUser = getLoginUserId();
+        // 核料
+        List<OrderMaterial> orderMaterialList = new ArrayList<>();
+        // 替换料列表
+        List<OrderMaterial> replaceMaterialList = new ArrayList<>();
+        // 缺料，需要购买的零件列表及数量
+        List<OrderMaterial> needBuyMaterialList = new ArrayList<>();
+
+        try {
+            // 成品号
+            String productNo = orderProductInfo.getProductNo();
+            // 需要成品的数量
+            Integer productNumber = orderProductInfo.getProductNumber();
+
+            // 获取一个成品所需的零件
+            List<ProductMaterial> materialListByNo = productMaterialService.getMaterialListByNo(productNo);
+            for (ProductMaterial productMaterial : materialListByNo) {
+                String materialGraphNo = productMaterial.getMaterialGraphNo();
+                Integer materialCount = productMaterial.getMaterialCount();
+                String replaceMaterialGraphNo = productMaterial.getReplaceMaterialGraphNo();
+                // 获取零件的库存
+                Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
+                Integer currentQuantity = infoByGraphNo.getCurrentQuantity();
+                // 需要的零件数量
+                int needCount = productNumber * materialCount;
+                if (currentQuantity >= needCount) {
+                    orderMaterialList.add(new OrderMaterial() {{
+                        setCreateUser(currentUser);
+                        setOrderNo(orderNo);
+                        setMaterialGraphNo(materialGraphNo);
+                        setMaterialCount(materialCount);
+                    }});
+                } else {
+                    // 缺料列表
+                    needBuyMaterialList.add(new OrderMaterial() {{
+                        setMaterialCount(materialCount);
+                        setMaterialGraphNo(replaceMaterialGraphNo);
+                    }});
+                    // 缺料查找是否有替换料
+                    if (StringUtils.isBlank(replaceMaterialGraphNo)) {
+                        // 无料可以替换，需要走采购流程
+                        checkState = 1;
+                        checkResult += "【" + materialGraphNo + "库存不足，且无替换料】";
+                    } else {
+                        Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
+                        if (replaceGraphNoInfo.getCurrentQuantity() >= needCount) {
+                            checkResult += "【" + materialGraphNo + "库存不足，有替换料】";
+                            // 如果已经确定缺料了，核料状态就不能改变了
+                            if (checkState != 1) {
+                                checkState = 2;
+                            }
+                            replaceMaterialList.add(new OrderMaterial() {{
+                                setMaterialCount(materialCount);
+                                setMaterialGraphNo(replaceMaterialGraphNo);
+                            }});
+                        } else {
+                            // 如果替换料库存也不足，那就只能走采购
+                            checkState = 1;
+                        }
+                    }
+                }
+            }
+            if (checkState == 0) {
+                if (orderMaterialList != null && orderMaterialList.size() > 0) {
+                    // 核料成功，插入核料表
+                    orderMaterialExtendMapper.insertBatch(orderMaterialList);
+                    for (OrderMaterial orderMaterial : orderMaterialList) {
+                        // 更新零件当前库存和锁定库存
+                        String materialGraphNo = orderMaterial.getMaterialGraphNo();
+                        int materialCount = orderMaterial.getMaterialCount();
+                        materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
+                        materialService.updateLockQuantity(materialGraphNo, materialCount);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
+        } finally {
+            // 添加核料日志
+            int finalCheckState = checkState;
+            String finalCheckResult = checkResult;
+            CheckMaterialLog checkMaterialLog = new CheckMaterialLog() {{
+                setCheckUserId(currentUser);
+                setOrderNo(orderNo);
+                setCheckResult(finalCheckResult);
+                setCheckState(String.valueOf(finalCheckState));
+            }};
+            checkMaterialLogMapper.insertSelective(checkMaterialLog);
+        }
+        return checkState;
     }
 }

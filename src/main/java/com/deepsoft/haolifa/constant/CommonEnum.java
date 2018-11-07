@@ -96,8 +96,11 @@ public class CommonEnum {
     public enum OrderStatus {
         // 创建
         CREATE((byte) 0),
-        //是
-        YES((byte) 1);
+        // 完成
+        COMPLETE((byte) 1),
+        // 核料中
+        CHECK_MATERIAL((byte) 2),
+        ;
 
         public final byte code;
 

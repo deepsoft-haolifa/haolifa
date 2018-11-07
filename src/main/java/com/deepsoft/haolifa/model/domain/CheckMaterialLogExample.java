@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderMaterialExample {
+public class CheckMaterialLogExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OrderMaterialExample() {
+    public CheckMaterialLogExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -285,123 +285,63 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIsNull() {
-            addCriterion("create_user is null");
+        public Criteria andCheckUserIdIsNull() {
+            addCriterion("check_user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIsNotNull() {
-            addCriterion("create_user is not null");
+        public Criteria andCheckUserIdIsNotNull() {
+            addCriterion("check_user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserEqualTo(Integer value) {
-            addCriterion("create_user =", value, "createUser");
+        public Criteria andCheckUserIdEqualTo(Integer value) {
+            addCriterion("check_user_id =", value, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserNotEqualTo(Integer value) {
-            addCriterion("create_user <>", value, "createUser");
+        public Criteria andCheckUserIdNotEqualTo(Integer value) {
+            addCriterion("check_user_id <>", value, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserGreaterThan(Integer value) {
-            addCriterion("create_user >", value, "createUser");
+        public Criteria andCheckUserIdGreaterThan(Integer value) {
+            addCriterion("check_user_id >", value, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserGreaterThanOrEqualTo(Integer value) {
-            addCriterion("create_user >=", value, "createUser");
+        public Criteria andCheckUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("check_user_id >=", value, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserLessThan(Integer value) {
-            addCriterion("create_user <", value, "createUser");
+        public Criteria andCheckUserIdLessThan(Integer value) {
+            addCriterion("check_user_id <", value, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserLessThanOrEqualTo(Integer value) {
-            addCriterion("create_user <=", value, "createUser");
+        public Criteria andCheckUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("check_user_id <=", value, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIn(List<Integer> values) {
-            addCriterion("create_user in", values, "createUser");
+        public Criteria andCheckUserIdIn(List<Integer> values) {
+            addCriterion("check_user_id in", values, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserNotIn(List<Integer> values) {
-            addCriterion("create_user not in", values, "createUser");
+        public Criteria andCheckUserIdNotIn(List<Integer> values) {
+            addCriterion("check_user_id not in", values, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserBetween(Integer value1, Integer value2) {
-            addCriterion("create_user between", value1, value2, "createUser");
+        public Criteria andCheckUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("check_user_id between", value1, value2, "checkUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserNotBetween(Integer value1, Integer value2) {
-            addCriterion("create_user not between", value1, value2, "createUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIsNull() {
-            addCriterion("update_user is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIsNotNull() {
-            addCriterion("update_user is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserEqualTo(Integer value) {
-            addCriterion("update_user =", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserNotEqualTo(Integer value) {
-            addCriterion("update_user <>", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserGreaterThan(Integer value) {
-            addCriterion("update_user >", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserGreaterThanOrEqualTo(Integer value) {
-            addCriterion("update_user >=", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserLessThan(Integer value) {
-            addCriterion("update_user <", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserLessThanOrEqualTo(Integer value) {
-            addCriterion("update_user <=", value, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserIn(List<Integer> values) {
-            addCriterion("update_user in", values, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserNotIn(List<Integer> values) {
-            addCriterion("update_user not in", values, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserBetween(Integer value1, Integer value2) {
-            addCriterion("update_user between", value1, value2, "updateUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateUserNotBetween(Integer value1, Integer value2) {
-            addCriterion("update_user not between", value1, value2, "updateUser");
+        public Criteria andCheckUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("check_user_id not between", value1, value2, "checkUserId");
             return (Criteria) this;
         }
 
@@ -475,133 +415,143 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoIsNull() {
-            addCriterion("material_graph_no is null");
+        public Criteria andCheckResultIsNull() {
+            addCriterion("check_result is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoIsNotNull() {
-            addCriterion("material_graph_no is not null");
+        public Criteria andCheckResultIsNotNull() {
+            addCriterion("check_result is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoEqualTo(String value) {
-            addCriterion("material_graph_no =", value, "materialGraphNo");
+        public Criteria andCheckResultEqualTo(String value) {
+            addCriterion("check_result =", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotEqualTo(String value) {
-            addCriterion("material_graph_no <>", value, "materialGraphNo");
+        public Criteria andCheckResultNotEqualTo(String value) {
+            addCriterion("check_result <>", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoGreaterThan(String value) {
-            addCriterion("material_graph_no >", value, "materialGraphNo");
+        public Criteria andCheckResultGreaterThan(String value) {
+            addCriterion("check_result >", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoGreaterThanOrEqualTo(String value) {
-            addCriterion("material_graph_no >=", value, "materialGraphNo");
+        public Criteria andCheckResultGreaterThanOrEqualTo(String value) {
+            addCriterion("check_result >=", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoLessThan(String value) {
-            addCriterion("material_graph_no <", value, "materialGraphNo");
+        public Criteria andCheckResultLessThan(String value) {
+            addCriterion("check_result <", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoLessThanOrEqualTo(String value) {
-            addCriterion("material_graph_no <=", value, "materialGraphNo");
+        public Criteria andCheckResultLessThanOrEqualTo(String value) {
+            addCriterion("check_result <=", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoLike(String value) {
-            addCriterion("material_graph_no like", value, "materialGraphNo");
+        public Criteria andCheckResultLike(String value) {
+            addCriterion("check_result like", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotLike(String value) {
-            addCriterion("material_graph_no not like", value, "materialGraphNo");
+        public Criteria andCheckResultNotLike(String value) {
+            addCriterion("check_result not like", value, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoIn(List<String> values) {
-            addCriterion("material_graph_no in", values, "materialGraphNo");
+        public Criteria andCheckResultIn(List<String> values) {
+            addCriterion("check_result in", values, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotIn(List<String> values) {
-            addCriterion("material_graph_no not in", values, "materialGraphNo");
+        public Criteria andCheckResultNotIn(List<String> values) {
+            addCriterion("check_result not in", values, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoBetween(String value1, String value2) {
-            addCriterion("material_graph_no between", value1, value2, "materialGraphNo");
+        public Criteria andCheckResultBetween(String value1, String value2) {
+            addCriterion("check_result between", value1, value2, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotBetween(String value1, String value2) {
-            addCriterion("material_graph_no not between", value1, value2, "materialGraphNo");
+        public Criteria andCheckResultNotBetween(String value1, String value2) {
+            addCriterion("check_result not between", value1, value2, "checkResult");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountIsNull() {
-            addCriterion("material_count is null");
+        public Criteria andCheckStateIsNull() {
+            addCriterion("check_state is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountIsNotNull() {
-            addCriterion("material_count is not null");
+        public Criteria andCheckStateIsNotNull() {
+            addCriterion("check_state is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountEqualTo(Integer value) {
-            addCriterion("material_count =", value, "materialCount");
+        public Criteria andCheckStateEqualTo(String value) {
+            addCriterion("check_state =", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountNotEqualTo(Integer value) {
-            addCriterion("material_count <>", value, "materialCount");
+        public Criteria andCheckStateNotEqualTo(String value) {
+            addCriterion("check_state <>", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountGreaterThan(Integer value) {
-            addCriterion("material_count >", value, "materialCount");
+        public Criteria andCheckStateGreaterThan(String value) {
+            addCriterion("check_state >", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountGreaterThanOrEqualTo(Integer value) {
-            addCriterion("material_count >=", value, "materialCount");
+        public Criteria andCheckStateGreaterThanOrEqualTo(String value) {
+            addCriterion("check_state >=", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountLessThan(Integer value) {
-            addCriterion("material_count <", value, "materialCount");
+        public Criteria andCheckStateLessThan(String value) {
+            addCriterion("check_state <", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountLessThanOrEqualTo(Integer value) {
-            addCriterion("material_count <=", value, "materialCount");
+        public Criteria andCheckStateLessThanOrEqualTo(String value) {
+            addCriterion("check_state <=", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountIn(List<Integer> values) {
-            addCriterion("material_count in", values, "materialCount");
+        public Criteria andCheckStateLike(String value) {
+            addCriterion("check_state like", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountNotIn(List<Integer> values) {
-            addCriterion("material_count not in", values, "materialCount");
+        public Criteria andCheckStateNotLike(String value) {
+            addCriterion("check_state not like", value, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountBetween(Integer value1, Integer value2) {
-            addCriterion("material_count between", value1, value2, "materialCount");
+        public Criteria andCheckStateIn(List<String> values) {
+            addCriterion("check_state in", values, "checkState");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountNotBetween(Integer value1, Integer value2) {
-            addCriterion("material_count not between", value1, value2, "materialCount");
+        public Criteria andCheckStateNotIn(List<String> values) {
+            addCriterion("check_state not in", values, "checkState");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStateBetween(String value1, String value2) {
+            addCriterion("check_state between", value1, value2, "checkState");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckStateNotBetween(String value1, String value2) {
+            addCriterion("check_state not between", value1, value2, "checkState");
             return (Criteria) this;
         }
     }

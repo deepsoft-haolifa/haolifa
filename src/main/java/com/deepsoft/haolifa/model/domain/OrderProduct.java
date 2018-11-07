@@ -16,6 +16,8 @@ public class OrderProduct {
 
     private String orderNo;
 
+    private String orderContractNo;
+
     private Byte orderStatus;
 
     private String orderContractUrl;
@@ -94,13 +96,14 @@ public class OrderProduct {
 
     private String freight;
 
-    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String orderContractUrl, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.orderNo = orderNo;
+        this.orderContractNo = orderContractNo;
         this.orderStatus = orderStatus;
         this.orderContractUrl = orderContractUrl;
         this.demandName = demandName;
@@ -192,6 +195,14 @@ public class OrderProduct {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public String getOrderContractNo() {
+        return orderContractNo;
+    }
+
+    public void setOrderContractNo(String orderContractNo) {
+        this.orderContractNo = orderContractNo == null ? null : orderContractNo.trim();
     }
 
     public Byte getOrderStatus() {

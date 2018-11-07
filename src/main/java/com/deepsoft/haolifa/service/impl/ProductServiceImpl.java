@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.dao.repository.extend.ProductMaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.MaterialService;
+import com.deepsoft.haolifa.service.ProductMaterialService;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -32,6 +33,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductMaterialExtendMapper productMaterialExtendMapper;
     @Autowired
     private ProductMaterialMapper productMaterialMapper;
+    @Autowired
+    private ProductMaterialService productMaterialService;
     @Autowired
     private MaterialService materialService;
     @Autowired
@@ -182,9 +185,7 @@ public class ProductServiceImpl implements ProductService {
         }
         BeanUtils.copyProperties(product, productRequestDTO);
         // 根据产品no 查询管理的零件列表
-        ProductMaterialExample example = new ProductMaterialExample();
-        example.or().andProductNoEqualTo(product.getProductNo());
-        List<ProductMaterial> productMaterials = productMaterialMapper.selectByExample(example);
+        List<ProductMaterial> productMaterials = productMaterialService.getMaterialListByNo(product.getProductNo());
         List<ProductMaterialDTO> productMaterialDTOList = new ArrayList<>();
         productMaterials.forEach(e -> {
             ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO() {{
