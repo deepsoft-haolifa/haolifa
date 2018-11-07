@@ -127,7 +127,9 @@
         <!--<table tableName="product_material" domainObjectName="ProductMaterial">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-
+       <table tableName="delivery_record" domainObjectName="DeliveryRecord">
+                 <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+       </table>
         <!--<table tableName="stock" domainObjectName="Stock"></table>-->
 
         <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->
