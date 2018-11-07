@@ -94,9 +94,9 @@
 
         <!--<table tableName="flow_history" domainObjectName="FlowHistory"></table>-->
 
-        <table tableName="flow_instance" domainObjectName="FlowInstance">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table tableName="flow_instance" domainObjectName="FlowInstance">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
 
@@ -138,23 +138,39 @@
 
         <!--<table tableName="order_review" domainObjectName="OrderReview"></table>-->
 
-        <!--<table tableName="apply_buy" domainObjectName="ApplyBuy"></table>-->
+        <!--<table tableName="apply_buy" domainObjectName="ApplyBuy">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="product_purchase_record" domainObjectName="ProductPurchaseRecord"></table>-->
 
         <!--<table tableName="purchase_plan" domainObjectName="PurchasePlan"></table>-->
 
-        <!--<table tableName="entrust" domainObjectName="Entrust"></table>-->
+        <!--<table tableName="entrust" domainObjectName="Entrust">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <!--<table tableName="invoice" domainObjectName="Invoice"></table>-->
-        <!--<table tableName="expenses" domainObjectName="Expenses"></table>-->
-        <!--<table tableName="contract" domainObjectName="Contract"></table>-->
+        <!--<table tableName="invoice" domainObjectName="Invoice">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="expenses" domainObjectName="Expenses">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="contract" domainObjectName="Contract">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <!--<table tableName="inspect" domainObjectName="Inspect"></table>-->
+        <!--<table tableName="inspect" domainObjectName="Inspect">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult"></table>-->
+        <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder"></table>-->
+        <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 
@@ -164,7 +180,9 @@
 
         <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
 
-        <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult"></table>-->
+        <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="equipment" domainObjectName="Equipment"></table>-->
 

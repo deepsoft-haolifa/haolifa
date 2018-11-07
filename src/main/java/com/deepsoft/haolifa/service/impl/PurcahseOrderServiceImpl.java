@@ -64,8 +64,12 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         }).collect(Collectors.toList());
         log.info("添加订单单项：{}", JSON.toJSONString(items));
         itemExtendMapper.batchInsertPurchaseOrderItem(items);
-        //TODO 流程
-        return ResultBean.success(purchaseOrderNo);
+
+        Map<String,Object> result = new HashMap<>(8);
+        result.put("formId",purchaseOrder.getId());
+        result.put("formType",CommonEnum.FormType.PURCHASE_TYPE.code);
+        result.put("formNo",purchaseOrder.getPurchaseOrderNo());
+        return ResultBean.success(result);
     }
 
     @Override

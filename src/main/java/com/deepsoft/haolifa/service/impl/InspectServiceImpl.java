@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.InspectMapper;
+import com.deepsoft.haolifa.dao.repository.extend.InspectExtendMapper;
 import com.deepsoft.haolifa.model.domain.Inspect;
 import com.deepsoft.haolifa.model.domain.InspectExample;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
@@ -18,7 +19,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,6 +30,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
 
     @Autowired
     InspectMapper inspectMapper;
+    @Autowired
+    InspectExtendMapper inspectExtendMapper;
 
     @Override
     public ResultBean save(List<InspectDTO> modelList) {
@@ -39,8 +44,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             inspect.setInspectNo(inspectNo);
             return inspect;
         }).collect(Collectors.toList());
-        inspectMapper.batchInsertInspect(inspectList);
-        return ResultBean.success(inspectNo);
+        inspectExtendMapper.batchInsertInspect(inspectList);
+        Map<String,Object> result = new HashMap<>(8);
+        result.put("formId",0);
+        result.put("formNo",inspectNo);
+        result.put("formType",CommonEnum.FormType.INSPECT_TYPE.code);
+        return ResultBean.success(result);
     }
 
     @Override
@@ -85,7 +94,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             model.setPageSize(10);
         }
         Page<Inspect> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->
-                inspectMapper.selectInspectDistinctList(model));
+                inspectExtendMapper.selectInspectDistinctList(model));
         PageDTO<Inspect> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());

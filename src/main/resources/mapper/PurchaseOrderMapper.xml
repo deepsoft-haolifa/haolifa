@@ -121,29 +121,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder">
-    insert into purchase_order (id, flow_id, purchase_order_no, 
-      supplier_no, supplier_name, demander, 
-      supplier_linkman, demander_linkman, supplier_addr, 
-      demander_addr, suppiler_phone, demander_phone, 
-      delivery_time, operator_user_name, operate_time, 
-      supplier_confirmer, confirm_time, create_time, 
-      update_time, is_delete, create_user_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, 
-      #{supplierNo,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR}, #{demander,jdbcType=VARCHAR}, 
-      #{supplierLinkman,jdbcType=VARCHAR}, #{demanderLinkman,jdbcType=VARCHAR}, #{supplierAddr,jdbcType=VARCHAR}, 
-      #{demanderAddr,jdbcType=VARCHAR}, #{suppilerPhone,jdbcType=VARCHAR}, #{demanderPhone,jdbcType=VARCHAR}, 
-      #{deliveryTime,jdbcType=TIMESTAMP}, #{operatorUserName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, 
-      #{supplierConfirmer,jdbcType=VARCHAR}, #{confirmTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}
-      )
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into purchase_order (flow_id, purchase_order_no, supplier_no, 
+      supplier_name, demander, supplier_linkman, 
+      demander_linkman, supplier_addr, demander_addr, 
+      suppiler_phone, demander_phone, delivery_time, 
+      operator_user_name, operate_time, supplier_confirmer, 
+      confirm_time, create_time, update_time, 
+      is_delete, create_user_id)
+    values (#{flowId,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, 
+      #{supplierName,jdbcType=VARCHAR}, #{demander,jdbcType=VARCHAR}, #{supplierLinkman,jdbcType=VARCHAR}, 
+      #{demanderLinkman,jdbcType=VARCHAR}, #{supplierAddr,jdbcType=VARCHAR}, #{demanderAddr,jdbcType=VARCHAR}, 
+      #{suppilerPhone,jdbcType=VARCHAR}, #{demanderPhone,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=TIMESTAMP}, 
+      #{operatorUserName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{supplierConfirmer,jdbcType=VARCHAR}, 
+      #{confirmTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into purchase_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="flowId != null">
         flow_id,
       </if>
@@ -206,9 +207,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="flowId != null">
         #{flowId,jdbcType=INTEGER},
       </if>

@@ -137,4 +137,23 @@ public class CommonEnum {
             this.code = code;
         }
     }
+
+    public enum FormType {
+
+        DEFAULT_TYPE((byte)0),
+        PRODUCT_TYPE((byte)1),
+        APPLYBUY_TYPE((byte)2),
+        PURCHASE_TYPE((byte)3),
+        INSPECT_TYPE((byte)4),
+        PROINSPECT_TYPE((byte)5),
+        MATERIALINSPECT_TYPE((byte)6),
+        INVOICE_TYPE((byte)7),
+        DELIVER_TYPE((byte)8),
+        ENTRUST_TYPE((byte)9);
+
+        public final byte code;
+        FormType(byte code) {
+            this.code = code;
+        }
+    }
 }

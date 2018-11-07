@@ -32,6 +32,7 @@ public class ProInspectResultServiceImpl extends BaseService implements ProInspe
         BeanUtils.copyProperties(model, proInspectResult);
         proInspectResult.setCreateUserId(getLoginUserId());
         int insert = proInspectResultMapper.insertSelective(proInspectResult);
+        // 看接口入参怎么设计
         return ResultBean.success(insert);
     }
 
