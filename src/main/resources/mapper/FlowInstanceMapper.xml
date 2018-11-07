@@ -8,7 +8,7 @@
       <arg column="form_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="current_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="role_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="is_over" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="is_back" javaType="java.lang.Byte" jdbcType="TINYINT" />
@@ -118,7 +118,7 @@
       is_over, is_back, create_user_id, 
       create_time, update_time)
     values (#{summary,jdbcType=VARCHAR}, #{formNo,jdbcType=VARCHAR}, #{flowId,jdbcType=INTEGER}, 
-      #{currentStepId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, 
+      #{currentStepId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, 
       #{isOver,jdbcType=TINYINT}, #{isBack,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -176,7 +176,7 @@
         #{currentStepId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="roleId != null">
         #{roleId,jdbcType=INTEGER},
@@ -223,7 +223,7 @@
         current_step_id = #{record.currentStepId,jdbcType=INTEGER},
       </if>
       <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
       <if test="record.roleId != null">
         role_id = #{record.roleId,jdbcType=INTEGER},
@@ -255,7 +255,7 @@
       form_no = #{record.formNo,jdbcType=VARCHAR},
       flow_id = #{record.flowId,jdbcType=INTEGER},
       current_step_id = #{record.currentStepId,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=VARCHAR},
       role_id = #{record.roleId,jdbcType=INTEGER},
       is_over = #{record.isOver,jdbcType=TINYINT},
       is_back = #{record.isBack,jdbcType=TINYINT},
@@ -282,7 +282,7 @@
         current_step_id = #{currentStepId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="roleId != null">
         role_id = #{roleId,jdbcType=INTEGER},
@@ -311,7 +311,7 @@
       form_no = #{formNo,jdbcType=VARCHAR},
       flow_id = #{flowId,jdbcType=INTEGER},
       current_step_id = #{currentStepId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=VARCHAR},
       role_id = #{roleId,jdbcType=INTEGER},
       is_over = #{isOver,jdbcType=TINYINT},
       is_back = #{isBack,jdbcType=TINYINT},

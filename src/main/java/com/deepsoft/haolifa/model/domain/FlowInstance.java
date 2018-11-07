@@ -13,7 +13,7 @@ public class FlowInstance {
 
     private Integer currentStepId;
 
-    private Integer userId;
+    private String userId;
 
     private Integer roleId;
 
@@ -27,7 +27,7 @@ public class FlowInstance {
 
     private Date updateTime;
 
-    public FlowInstance(Integer id, String summary, String formNo, Integer flowId, Integer currentStepId, Integer userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
+    public FlowInstance(Integer id, String summary, String formNo, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
         this.id = id;
         this.summary = summary;
         this.formNo = formNo;
@@ -86,12 +86,12 @@ public class FlowInstance {
         this.currentStepId = currentStepId;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public Integer getRoleId() {

@@ -63,7 +63,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         flowInstance.setCreateUserId(getLoginUserId());
         flowInstance.setFlowId(model.getFlowId());
         flowInstance.setSummary(model.getSummary());
-        flowInstance.setUserId(Integer.parseInt(currentStep.getUserId()));
+        flowInstance.setUserId(currentStep.getUserId());
         flowInstance.setRoleId(currentStep.getRoleId());
         flowInstance.setCurrentStepId(currentStep.getStepId());
         flowInstance.setFormNo(model.getFormNo());// 流程初始化关联的主表单编号（采购单、生产订单、发票编号、机加工等）
@@ -127,7 +127,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                     updateInstance.setIsOver(CommonEnum.Consts.YES.code);
                 } else {
                     // 流程实例更新
-                    // 获取孩子节点以及孙子节点信息
+                    // 获取孩子节点
                     FlowStep nextStep = new FlowStep();
                     if (model.getCondition()) {
                         updateInstance.setCurrentStepId(currentStep.getConditionTrue());
@@ -137,7 +137,12 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                         nextStep = instanceHistoryMapper.selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionTrue());
                     }
                     updateInstance.setRoleId(nextStep.getRoleId());
-                    updateInstance.setUserId(model.getAllotUserId() == null ? Integer.parseInt(nextStep.getUserId()) : model.getAllotUserId());
+                    // 特殊化处理:采购流程最后一个节点指向发起人
+                    if(flowInstance.getFlowId() == 2 && nextStep.getConditionTrue()==0 && nextStep.getConditionFalse()==0) {
+                        updateInstance.setUserId(flowInstance.getCreateUserId().toString());
+                    } else {
+                        updateInstance.setUserId(model.getAllotUserId() == null ? nextStep.getUserId() : model.getAllotUserId().toString());
+                    }
                 }
             } else {
                 // 退回
@@ -159,7 +164,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                 FlowHistoryExample flowHistoryExample = new FlowHistoryExample();
                 flowHistoryExample.createCriteria().andInstanceIdEqualTo(flowInstance.getId()).andStepIdEqualTo(currentBackStep.getStepId());
                 FlowHistory flowHistorySwap = historyMapper.selectByExample(flowHistoryExample).get(0);
-                updateInstance.setUserId(flowHistorySwap.getAuditUserId());
+                updateInstance.setUserId(flowHistorySwap.getAuditUserId().toString());
             }
         }
         // 添加审核历史
@@ -183,7 +188,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         FlowInstanceWrapper flowInstance = instanceHistoryMapper.selectByPrimaryKey(instanceId);
         // 3、获取FlowStep详情
         FlowStep flowStep = instanceHistoryMapper.selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
-        if (getLoginUserId() == flowInstance.getUserId() && flowInstance.getIsOver() == 0) {
+        List<String> userIds = Arrays.asList(flowInstance.getUserId().split(","));
+        if (userIds.contains(getLoginUserId()) && flowInstance.getIsOver() == 0) {
             // 当前查看用户是该节点的处理人 并且流程未结束
             // 如果当前实例的退回标示为true，则查询当前节点的审核历史，供审核人重新审核
             HistoryInfo dealStep = new HistoryInfo();
