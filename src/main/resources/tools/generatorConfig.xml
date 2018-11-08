@@ -116,9 +116,13 @@
 
         <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
 
-        <!--<table tableName="order_product" domainObjectName="OrderProduct"></table>-->
+        <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="order_material" domainObjectName="OrderMaterial"></table>-->
+        <!--<table tableName="check_material_log" domainObjectName="CheckMaterialLog"></table>-->
+
 
         <!--<table tableName="material_receive_record" domainObjectName="MaterialReceiveRecord"></table>-->
 
@@ -127,9 +131,25 @@
         <!--<table tableName="product_material" domainObjectName="ProductMaterial">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-       <table tableName="delivery_record" domainObjectName="DeliveryRecord">
-                 <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-       </table>
+       <!--<table tableName="delivery_record" domainObjectName="DeliveryRecord">-->
+                 <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+       <!--</table>-->
+        <table tableName="order_product_associate" domainObjectName="OrderProductAssociate">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+        <table tableName="order_material" domainObjectName="OrderMaterial">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+
+        <table tableName="product" domainObjectName="Product">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+        <table tableName="product_material" domainObjectName="ProductMaterial">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+        <table tableName="order_product" domainObjectName="OrderProduct">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
         <!--<table tableName="stock" domainObjectName="Stock"></table>-->
 
         <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->

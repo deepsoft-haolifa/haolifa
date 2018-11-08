@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.model.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class DeliveryRecordDTO {
 
@@ -18,22 +20,6 @@ public class DeliveryRecordDTO {
     private String collectName;
     @ApiModelProperty(value = "收货人电话")
     private String collectPhone;
-    @ApiModelProperty(value = "产品编号")
-    private String productNo;
-    @ApiModelProperty(value = "产品名称")
-    private String productName;
-    @ApiModelProperty(value = "型号")
-    private String productModel;
-    @ApiModelProperty(value = "标签属性")
-    private String lable;
-    @ApiModelProperty(value = "规格")
-    private String specifications;
-    @ApiModelProperty(value = "颜色")
-    private String productColor;
-    @ApiModelProperty(value = "产品数量")
-    private Integer productNumber;
-    @ApiModelProperty(value = "产品备注")
-    private String productRemark;
     @ApiModelProperty(value = "运输方式")
     private String transportType;
     @ApiModelProperty(value = "运费付费方式")
@@ -42,4 +28,6 @@ public class DeliveryRecordDTO {
     private String isDelivery;
     @ApiModelProperty(value = "备注")
     private String remark;
+    @ApiModelProperty(value = "成品列表")
+    List<OrderProductAssociateDTO> productList;
 }

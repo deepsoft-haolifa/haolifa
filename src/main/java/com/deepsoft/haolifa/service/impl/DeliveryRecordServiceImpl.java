@@ -66,6 +66,7 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
         List<DeliveryRecord> deliveryRecords = deliveryRecordMapper.selectByExample(example);
         if (deliveryRecords.size() > 0) {
             DeliveryRecord deliveryRecord = deliveryRecords.get(0);
+            deliveryRecordDTO.setProductList(null);
             BeanUtils.copyProperties(deliveryRecord, deliveryRecordDTO);
         } else {
             // 如果发货记录表没有，根据订单no从订单表中查询记录
