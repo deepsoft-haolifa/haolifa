@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -38,8 +40,12 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         BeanUtils.copyProperties(model, invoice);
         invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         invoice.setCreateUserId(getLoginUserId());
-        int insert = invoiceMapper.insertSelective(invoice);
-        return ResultBean.success(insert);
+        invoiceMapper.insertSelective(invoice);
+        Map<String,Object> result = new HashMap<>(8);
+        result.put("formId",invoice.getId());
+        result.put("formNo",invoice.getInvoiceNo());
+        result.put("formType",CommonEnum.FormType.INVOICE_TYPE.code);
+        return ResultBean.success(result);
     }
 
     @Override

@@ -109,21 +109,24 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Inspect">
-    insert into inspect (id, order_no, type, 
-      status, inspect_no, material_graph_no, 
-      product_model, number, create_time, 
-      update_time, create_user_id)
-    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{status,jdbcType=TINYINT}, #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
-      #{productModel,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into inspect (order_no, type, status, 
+      inspect_no, material_graph_no, product_model, 
+      number, create_time, update_time, 
+      create_user_id)
+    values (#{orderNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
+      #{number,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Inspect">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into inspect
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="orderNo != null">
         order_no,
       </if>
@@ -156,9 +159,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
       </if>
@@ -305,108 +305,4 @@
       create_user_id = #{createUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <insert id="batchInsertInspect" parameterType="List">
-    <foreach collection="list" item="item" separator=";">
-      insert into inspect
-      <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="item.id != null">
-          id,
-        </if>
-        <if test="item.orderNo != null">
-          order_no,
-        </if>
-        <if test="item.type != null">
-          type,
-        </if>
-        <if test="item.status != null">
-          status,
-        </if>
-        <if test="item.inspectNo != null">
-          inspect_no,
-        </if>
-        <if test="item.materialGraphNo != null">
-          material_graph_no,
-        </if>
-        <if test="item.productModel != null">
-          product_model,
-        </if>
-        <if test="item.number != null">
-          number,
-        </if>
-        <if test="item.createTime != null">
-          create_time,
-        </if>
-        <if test="item.updateTime != null">
-          update_time,
-        </if>
-        <if test="item.createUserId != null">
-          create_user_id,
-        </if>
-      </trim>
-      <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="item.id != null">
-          #{item.id,jdbcType=INTEGER},
-        </if>
-        <if test="item.orderNo != null">
-          #{item.orderNo,jdbcType=VARCHAR},
-        </if>
-        <if test="item.type != null">
-          #{item.type,jdbcType=TINYINT},
-        </if>
-        <if test="item.status != null">
-          #{item.status,jdbcType=TINYINT},
-        </if>
-        <if test="item.inspectNo != null">
-          #{item.inspectNo,jdbcType=VARCHAR},
-        </if>
-        <if test="item.materialGraphNo != null">
-          #{item.materialGraphNo,jdbcType=VARCHAR},
-        </if>
-        <if test="item.productModel != null">
-          #{item.productModel,jdbcType=VARCHAR},
-        </if>
-        <if test="item.number != null">
-          #{item.number,jdbcType=INTEGER},
-        </if>
-        <if test="item.createTime != null">
-          #{item.createTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.updateTime != null">
-          #{item.updateTime,jdbcType=TIMESTAMP},
-        </if>
-        <if test="item.createUserId != null">
-          #{item.createUserId,jdbcType=INTEGER},
-        </if>
-      </trim>
-    </foreach>
-  </insert>
-
-  <select id="selectInspectDistinctList" parameterType="com.deepsoft.haolifa.model.dto.InspectDTO" resultType="Map">
-    select distinct
-    order_no orderNo,
-    `type`,
-    `status`,
-    inspect_no inspectNo,
-    create_time createTime,
-    update_time updateTime,
-    create_user_id createUserId
-    from
-    inspect
-    where
-    is_delete = 0
-    <if test="type != null and type != ''">
-      and `type` = #{type}
-    </if>
-    <if test="status != null and status != ''" >
-      and `status` = #{status}
-    </if>
-    <if test="inspectNo != null">
-      and inspect_no like concat('%',#{inspectNo},'%')
-    </if>
-    <if test="orderNo != null">
-      and order_no like concat('%',#{orderNo},'%')
-    </if>
-    order by update_time desc
-  </select>
 </mapper>

@@ -121,29 +121,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Contract">
-    insert into contract (id, order_no, contract_name, 
-      contract_type, contract_duration, contract_subject, 
-      total_amount, contract_party, address, 
-      linkman, linkman_phone, leader, 
-      leader_phone, payment_cycle, payment_mode, 
-      contract_summary, accessory, create_user_id, 
-      is_delete, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{contractName,jdbcType=VARCHAR}, 
-      #{contractType,jdbcType=TINYINT}, #{contractDuration,jdbcType=VARCHAR}, #{contractSubject,jdbcType=VARCHAR}, 
-      #{totalAmount,jdbcType=DECIMAL}, #{contractParty,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{linkman,jdbcType=VARCHAR}, #{linkmanPhone,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}, 
-      #{leaderPhone,jdbcType=VARCHAR}, #{paymentCycle,jdbcType=TINYINT}, #{paymentMode,jdbcType=TINYINT}, 
-      #{contractSummary,jdbcType=VARCHAR}, #{accessory,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
-      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into contract (order_no, contract_name, contract_type, 
+      contract_duration, contract_subject, total_amount, 
+      contract_party, address, linkman, 
+      linkman_phone, leader, leader_phone, 
+      payment_cycle, payment_mode, contract_summary, 
+      accessory, create_user_id, is_delete, 
+      create_time, update_time)
+    values (#{orderNo,jdbcType=VARCHAR}, #{contractName,jdbcType=VARCHAR}, #{contractType,jdbcType=TINYINT}, 
+      #{contractDuration,jdbcType=VARCHAR}, #{contractSubject,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, 
+      #{contractParty,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{linkman,jdbcType=VARCHAR}, 
+      #{linkmanPhone,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}, #{leaderPhone,jdbcType=VARCHAR}, 
+      #{paymentCycle,jdbcType=TINYINT}, #{paymentMode,jdbcType=TINYINT}, #{contractSummary,jdbcType=VARCHAR}, 
+      #{accessory,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Contract">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into contract
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="orderNo != null">
         order_no,
       </if>
@@ -206,9 +207,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
       </if>

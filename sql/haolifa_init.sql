@@ -795,3 +795,32 @@ CREATE TABLE `equipment_maintain_record` (
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-设备维修记录';
+
+
+DROP TABLE IF EXISTS `delivery_record`;
+CREATE TABLE `delivery_record` (
+	`id` INT (11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+	`create_user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建者id',
+	`delivery_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '发货号',
+	`order_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '订单号',
+	`customer_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '客户代号',
+	`delivery_time` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '发货日期',
+	`collect_address` VARCHAR (128) NOT NULL DEFAULT '' COMMENT '发往地',
+	`collect_name` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '收货人',
+	`collect_phone` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '收货人电话',
+	`product_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '成品编号',
+	`product_name` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '成品名称',
+	`product_model` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '成品型号',
+	`lable` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '标签属性',
+	`specifications` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '规格',
+	`product_color` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '颜色',
+	`product_number` INT (11) NOT NULL DEFAULT 0 COMMENT '成品数量',
+	`product_remark` VARCHAR (128) NOT NULL DEFAULT '' COMMENT '成品备注',
+	`transport_type` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '运输方式',
+	`freight` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '运费承担',
+	`is_delivery` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '是否送货',
+	`remark` VARCHAR (128) NOT NULL COMMENT '备注',
+	PRIMARY KEY (`id`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8 COMMENT = '业务表单-发货记录表单';

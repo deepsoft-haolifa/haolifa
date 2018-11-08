@@ -5,7 +5,6 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="purchase_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="inspect_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -77,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, flow_id, purchase_order_no, inspect_no, material_graph_no, material_name, inspect_number, 
-    unqualified_number, handling_result, is_delete, create_time, update_time, create_user_id
+    id, flow_id, inspect_no, material_graph_no, material_name, inspect_number, unqualified_number, 
+    handling_result, is_delete, create_time, update_time, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialInspectResultExample" resultMap="BaseResultMap">
     select
@@ -111,28 +110,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.MaterialInspectResult">
-    insert into material_inspect_result (id, flow_id, purchase_order_no, 
-      inspect_no, material_graph_no, material_name, 
-      inspect_number, unqualified_number, handling_result, 
-      is_delete, create_time, update_time, 
-      create_user_id)
-    values (#{id,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, 
-      #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
-      #{inspectNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{handlingResult,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material_inspect_result (flow_id, inspect_no, material_graph_no, 
+      material_name, inspect_number, unqualified_number, 
+      handling_result, is_delete, create_time, 
+      update_time, create_user_id)
+    values (#{flowId,jdbcType=INTEGER}, #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{materialName,jdbcType=VARCHAR}, #{inspectNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
+      #{handlingResult,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.MaterialInspectResult">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into material_inspect_result
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="flowId != null">
         flow_id,
-      </if>
-      <if test="purchaseOrderNo != null">
-        purchase_order_no,
       </if>
       <if test="inspectNo != null">
         inspect_no,
@@ -166,14 +163,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="flowId != null">
         #{flowId,jdbcType=INTEGER},
-      </if>
-      <if test="purchaseOrderNo != null">
-        #{purchaseOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="inspectNo != null">
         #{inspectNo,jdbcType=VARCHAR},
@@ -222,9 +213,6 @@
       <if test="record.flowId != null">
         flow_id = #{record.flowId,jdbcType=INTEGER},
       </if>
-      <if test="record.purchaseOrderNo != null">
-        purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
-      </if>
       <if test="record.inspectNo != null">
         inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
       </if>
@@ -264,7 +252,6 @@
     update material_inspect_result
     set id = #{record.id,jdbcType=INTEGER},
       flow_id = #{record.flowId,jdbcType=INTEGER},
-      purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
       inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       material_name = #{record.materialName,jdbcType=VARCHAR},
@@ -284,9 +271,6 @@
     <set>
       <if test="flowId != null">
         flow_id = #{flowId,jdbcType=INTEGER},
-      </if>
-      <if test="purchaseOrderNo != null">
-        purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="inspectNo != null">
         inspect_no = #{inspectNo,jdbcType=VARCHAR},
@@ -324,7 +308,6 @@
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.MaterialInspectResult">
     update material_inspect_result
     set flow_id = #{flowId,jdbcType=INTEGER},
-      purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
       inspect_no = #{inspectNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       material_name = #{materialName,jdbcType=VARCHAR},
