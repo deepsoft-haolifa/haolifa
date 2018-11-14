@@ -301,7 +301,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             for (ProductMaterial productMaterial : materialListByNo) {
                 String materialGraphNo = productMaterial.getMaterialGraphNo();
                 Integer materialCount = productMaterial.getMaterialCount();
-                String replaceMaterialGraphNo = productMaterial.getReplaceMaterialGraphNo();
+                String replaceMaterialGraphNo = productMaterial.getReplaceMaterialGraphNos();
                 // 获取零件的库存
                 Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
                 Integer currentQuantity = infoByGraphNo.getCurrentQuantity();

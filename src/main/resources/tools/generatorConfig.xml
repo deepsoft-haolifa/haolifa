@@ -134,22 +134,22 @@
        <!--<table tableName="delivery_record" domainObjectName="DeliveryRecord">-->
                  <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
        <!--</table>-->
-        <table tableName="order_product_associate" domainObjectName="OrderProductAssociate">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
+        <!--<table tableName="order_product_associate" domainObjectName="OrderProductAssociate">-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        <!--</table>-->
         <table tableName="order_material" domainObjectName="OrderMaterial">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 
-        <table tableName="product" domainObjectName="Product">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="product_material" domainObjectName="ProductMaterial">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-        <table tableName="order_product" domainObjectName="OrderProduct">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
+        <!--<table tableName="product" domainObjectName="Product">-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="product_material" domainObjectName="ProductMaterial">-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        <!--</table>-->
         <!--<table tableName="stock" domainObjectName="Stock"></table>-->
 
         <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->

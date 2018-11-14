@@ -69,8 +69,9 @@
 	  `create_user` int(11) NOT NULL COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `order_no` char(36) NOT NULL COMMENT '订单号',
-	  `product_no` varchar(32) NOT NULL COMMENT '成品号',
+	  `order_product_associate_id` int(11) NOT NULL  default 0 COMMENT '订单成品Id',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `replace_material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '可替换零件图号',
 	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '需要的零件数量',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单零件关联表（一个订单需要哪些零件）';

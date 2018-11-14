@@ -2,10 +2,10 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.DeliveryRecordMapper;
-import com.deepsoft.haolifa.model.domain.DeliveryRecord;
-import com.deepsoft.haolifa.model.domain.DeliveryRecordExample;
-import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.DeliveryRecordDTO;
+import com.deepsoft.haolifa.model.dto.OrderProductAssociateDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.DeliveryRecordService;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -16,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
 
     @Autowired
     private DeliveryRecordMapper deliveryRecordMapper;
+    @Autowired
+    private OrderProductAssociateMapper orderProductAssociateMapper;
     @Autowired
     private OrderProductService orderProductService;
 
@@ -55,6 +58,17 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
             log.error("get delivery record param error");
             return null;
         }
+        //从订单产品关联表读取信息
+        List<OrderProductAssociate> orderProductAssociates = orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
+            or().andOrderNoEqualTo(orderNo);
+        }});
+        List<OrderProductAssociateDTO> list = new ArrayList<>();
+        orderProductAssociates.stream().forEach(e -> {
+            OrderProductAssociateDTO orderProductAssociateDTO = new OrderProductAssociateDTO();
+            BeanUtils.copyProperties(e, orderProductAssociateDTO);
+            list.add(orderProductAssociateDTO);
+        });
+
         DeliveryRecordExample example = new DeliveryRecordExample();
         DeliveryRecordExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(deliveryNo)) {
@@ -66,13 +80,15 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
         List<DeliveryRecord> deliveryRecords = deliveryRecordMapper.selectByExample(example);
         if (deliveryRecords.size() > 0) {
             DeliveryRecord deliveryRecord = deliveryRecords.get(0);
-            deliveryRecordDTO.setProductList(null);
+
+            deliveryRecordDTO.setProductList(list);
             BeanUtils.copyProperties(deliveryRecord, deliveryRecordDTO);
         } else {
             // 如果发货记录表没有，根据订单no从订单表中查询记录
             if (StringUtils.isNotBlank(orderNo)) {
                 OrderProduct orderProductInfo = orderProductService.getOrderProductInfo(orderNo);
                 BeanUtils.copyProperties(orderProductInfo, deliveryRecordDTO);
+                deliveryRecordDTO.setProductList(list);
                 // 需要解析下订单表的发货信息
                 deliveryRecordDTO.setCollectAddress("");
                 deliveryRecordDTO.setCollectPhone("");

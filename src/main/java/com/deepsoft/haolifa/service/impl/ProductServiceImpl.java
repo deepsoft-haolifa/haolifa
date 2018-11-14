@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.ProductMaterialService;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.SysUserService;
+import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +45,13 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ResultBean saveInfo(ProductRequestDTO model) {
         String productNo = model.getProductNo();
-        boolean existProductNo = judgeProductNo(productNo, 0);
-        log.info("saveInfo existProductNo productNo:{},result:{}", productNo, existProductNo);
-        if (existProductNo) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
+//        boolean existProductNo = judgeProductNo(productNo, 0);
+//        log.info("saveInfo existProductNo productNo:{},result:{}", productNo, existProductNo);
+//        if (existProductNo) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
+//        }
+        if (StringUtils.isBlank(productNo)) {
+            model.setProductNo("prod_" + RandomUtils.orderNoStr());
         }
         CustomUser customUser = sysUserService.selectLoginUser();
         int createUser = customUser != null ? customUser.getId() : 1;
@@ -67,9 +71,9 @@ public class ProductServiceImpl implements ProductService {
                         setMaterialGraphNo(e.getMaterialGraphNo());
                         setMaterialCount(e.getMaterialCount());
                         if (StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())) {
-                            setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());
+                            setReplaceMaterialGraphNos(e.getReplaceMaterialGraphNo());
                         } else {
-                            setReplaceMaterialGraphNo("");
+                            setReplaceMaterialGraphNos("");
                         }
                     }};
                     list.add(productMaterial);
@@ -87,19 +91,19 @@ public class ProductServiceImpl implements ProductService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         String productNo = model.getProductNo();
-        // 判断是否存在成品号
-        boolean existProductNo = judgeProductNo(productNo, model.getId());
-        log.info("saveInfo existProductNo productNo:{},result:{}", productNo, existProductNo);
-        if (existProductNo) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
-        }
-        // 判断是否更改了成品号
-        Product productOrigin = productMapper.selectByPrimaryKey(model.getId());
-        if (null == productOrigin) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
-        // 获取更新前的成品号
-        String productNoOrigin = productOrigin.getProductNo();
+//        // 判断是否存在成品号
+//        boolean existProductNo = judgeProductNo(productNo, model.getId());
+//        log.info("saveInfo existProductNo productNo:{},result:{}", productNo, existProductNo);
+//        if (existProductNo) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
+//        }
+//        // 判断是否更改了成品号
+//        Product productOrigin = productMapper.selectByPrimaryKey(model.getId());
+//        if (null == productOrigin) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+//        }
+//        // 获取更新前的成品号
+//        String productNoOrigin = productOrigin.getProductNo();
 
 
         Product product = new Product();
@@ -111,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
         int update = productMapper.updateByPrimaryKeySelective(product);
 
         ProductMaterialExample example = new ProductMaterialExample();
-        example.or().andProductNoEqualTo(productNoOrigin);
+        example.or().andProductNoEqualTo(productNo);
         productMaterialMapper.deleteByExample(example);
         // 批量增加成品零件配置
         List<ProductMaterialDTO> productMaterialList = model.getProductMaterialList();
@@ -120,13 +124,15 @@ public class ProductServiceImpl implements ProductService {
             productMaterialList.forEach(e -> {
                 ProductMaterial productMaterial = new ProductMaterial() {{
                     setProductNo(productNo);
+                    setProductModel(model.getProductModel());
+                    setSpecification(model.getSpecifications());
                     setCreateUser(updateUser);
                     setMaterialGraphNo(e.getMaterialGraphNo());
                     setMaterialCount(e.getMaterialCount());
                     if (StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())) {
-                        setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());
+                        setReplaceMaterialGraphNos(e.getReplaceMaterialGraphNo());
                     } else {
-                        setReplaceMaterialGraphNo("");
+                        setReplaceMaterialGraphNos("");
                     }
                 }};
                 list.add(productMaterial);
@@ -199,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
                 setMaterialClassifyId(classifyId);
                 setMaterialCount(e.getMaterialCount());
                 setMaterialGraphNo(e.getMaterialGraphNo());
-                setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNo());
+                setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNos());
             }};
             productMaterialDTOList.add(productMaterialDTO);
         });

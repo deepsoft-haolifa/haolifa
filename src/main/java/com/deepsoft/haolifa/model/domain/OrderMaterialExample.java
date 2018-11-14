@@ -475,6 +475,66 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderProductAssociateIdIsNull() {
+            addCriterion("order_product_associate_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdIsNotNull() {
+            addCriterion("order_product_associate_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdEqualTo(Integer value) {
+            addCriterion("order_product_associate_id =", value, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdNotEqualTo(Integer value) {
+            addCriterion("order_product_associate_id <>", value, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdGreaterThan(Integer value) {
+            addCriterion("order_product_associate_id >", value, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_product_associate_id >=", value, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdLessThan(Integer value) {
+            addCriterion("order_product_associate_id <", value, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdLessThanOrEqualTo(Integer value) {
+            addCriterion("order_product_associate_id <=", value, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdIn(List<Integer> values) {
+            addCriterion("order_product_associate_id in", values, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdNotIn(List<Integer> values) {
+            addCriterion("order_product_associate_id not in", values, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdBetween(Integer value1, Integer value2) {
+            addCriterion("order_product_associate_id between", value1, value2, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderProductAssociateIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_product_associate_id not between", value1, value2, "orderProductAssociateId");
+            return (Criteria) this;
+        }
+
         public Criteria andMaterialGraphNoIsNull() {
             addCriterion("material_graph_no is null");
             return (Criteria) this;
@@ -542,6 +602,76 @@ public class OrderMaterialExample {
 
         public Criteria andMaterialGraphNoNotBetween(String value1, String value2) {
             addCriterion("material_graph_no not between", value1, value2, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoIsNull() {
+            addCriterion("replace_material_graph_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoIsNotNull() {
+            addCriterion("replace_material_graph_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoEqualTo(String value) {
+            addCriterion("replace_material_graph_no =", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotEqualTo(String value) {
+            addCriterion("replace_material_graph_no <>", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoGreaterThan(String value) {
+            addCriterion("replace_material_graph_no >", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("replace_material_graph_no >=", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoLessThan(String value) {
+            addCriterion("replace_material_graph_no <", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("replace_material_graph_no <=", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoLike(String value) {
+            addCriterion("replace_material_graph_no like", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotLike(String value) {
+            addCriterion("replace_material_graph_no not like", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoIn(List<String> values) {
+            addCriterion("replace_material_graph_no in", values, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotIn(List<String> values) {
+            addCriterion("replace_material_graph_no not in", values, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoBetween(String value1, String value2) {
+            addCriterion("replace_material_graph_no between", value1, value2, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotBetween(String value1, String value2) {
+            addCriterion("replace_material_graph_no not between", value1, value2, "replaceMaterialGraphNo");
             return (Criteria) this;
         }
 
