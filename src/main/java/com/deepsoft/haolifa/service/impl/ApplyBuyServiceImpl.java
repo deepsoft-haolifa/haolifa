@@ -78,7 +78,7 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
         result.put("formId",applyBuy.getId());
         result.put("formType",CommonEnum.FormType.APPLYBUY_TYPE.code);
         result.put("formNo",applyBuy.getApplyNo());
-        return ResultBean.success(applyBuyNo);
+        return ResultBean.success(result);
     }
 
     @Override

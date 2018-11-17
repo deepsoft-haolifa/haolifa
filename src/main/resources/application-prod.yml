@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.105.36.56:3306/haolifa_prod?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://47.105.36.56:3306/haolifa_prod?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
     username: haolifa
     password: haolifa3306
     hikari:

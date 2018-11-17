@@ -25,5 +25,7 @@ public class PurchaseOrderItem {
     private String remark;
     @ApiModelProperty(required = true,value = "单位")
     private String unit;
+    @ApiModelProperty(value = "请购单号：多个用逗号隔开")
+    private String applyBuyNo;
 
 }
