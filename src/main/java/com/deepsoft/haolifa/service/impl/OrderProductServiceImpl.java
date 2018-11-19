@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.ProductMaterialService;
+import com.deepsoft.haolifa.service.ProductModelConfigService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -42,6 +44,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private OrderProductAssociateMapper orderProductAssociateMapper;
     @Autowired
     private OrderExtendMapper orderExtendMapper;
+
+    @Autowired
+    private ProductModelConfigService productModelConfigService;
 
     @Override
     public ResultBean uploadOrderProductExcel(String base64Source) {
@@ -308,7 +313,22 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         String fati = productModel.substring(productModel.length() - 1);
         // 6.获取阀体压力(-后两位)
         String fatiyali = productModel.substring(lastIndexOf + 1, lastIndexOf + 3);
-        // todo 获取规则列表
+
+
+        // 获取全部规则列表
+        List<ProductModelConfig> modelConfigs = productModelConfigService.getList(0, "");
+        // 获取阀板规则
+        List<ProductModelConfig> fabanModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == faban && e.getType() == CommonEnum.ProductModelType.FABAN.code).collect(Collectors.toList());
+        // 获取阀座规则
+        List<ProductModelConfig> fazuoModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fazuo && e.getType() == CommonEnum.ProductModelType.FAZUO.code).collect(Collectors.toList());
+        // 获取阀体规则
+        List<ProductModelConfig> fatiModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fati && e.getType() == CommonEnum.ProductModelType.FABTI.code).collect(Collectors.toList());
+        // 获取阀体规则
+        List<ProductModelConfig> fatiYaliModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fatiyali && e.getType() == CommonEnum.ProductModelType.FATI_YALI.code).collect(Collectors.toList());
+
+        // 根据型号和规格，获取图号列表
+
+
         // todo 根据条件获取图号
         return null;
     }

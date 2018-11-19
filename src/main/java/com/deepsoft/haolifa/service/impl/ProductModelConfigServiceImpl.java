@@ -31,20 +31,24 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
 
 
     @Override
-    public List<ProductModelConfig> getListByTypeAndRule(int type, String indexRule) {
-        List<ProductModelConfig> modelConfigs = null;
+    public List<ProductModelConfig> getList(int type, String indexRule) {
+        List<ProductModelConfig> productModelConfigs = null;
         String redisValue = redisDao.get(redisKey);
         if (StringUtils.isNotBlank(redisValue)) {
-            List<ProductModelConfig> productModelConfigs = JSONObject.parseObject(redisValue, new TypeReference<List<ProductModelConfig>>() {
+            productModelConfigs = JSONObject.parseObject(redisValue, new TypeReference<List<ProductModelConfig>>() {
             });
-            modelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
+            if (type > 0 && StringUtils.isNotBlank(indexRule)) {
+                productModelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
+            }
         } else {// 从数据库中查
-            List<ProductModelConfig> productModelConfigs = productModelConfigMapper.selectByExample(new ProductModelConfigExample());
-            modelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
+            productModelConfigs = productModelConfigMapper.selectByExample(new ProductModelConfigExample());
+            if (type > 0 && StringUtils.isNotBlank(indexRule)) {
+                productModelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
+            }
             redisDao.set(redisKey, JSONObject.toJSONString(productModelConfigs));
             redisDao.expire(redisKey, 3600 * 24 * 30);
         }
-        return modelConfigs;
+        return productModelConfigs;
     }
 
     @Override

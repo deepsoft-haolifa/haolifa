@@ -38,17 +38,16 @@ public class CommonEnum {
         // 采购计划、请购单、采购单模块错误码开头3***
         PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0"),
 
-        PURCHASE_NO_NOT_EXIST("3001","采购单不存在"),
+        PURCHASE_NO_NOT_EXIST("3001", "采购单不存在"),
 
-        RESOURCE_NOT_EXIST("3404","资源不存在"),
+        RESOURCE_NOT_EXIST("3404", "资源不存在"),
 
-        SUPPLIER_NO_WRONG("3002","供应商编号格式不正确"),
+        SUPPLIER_NO_WRONG("3002", "供应商编号格式不正确"),
 
-        STEP_INCONFORMITY("4001","处理节点与当前节点不一致"),
-        STEP_BACK_ERROR("4002","无可退回节点"),
-        FLOW_IS_OVER("4003","流程已结束"),
-        BACK_STEP_NOT_EXIST("4004","未指定退回节点")
-        ;
+        STEP_INCONFORMITY("4001", "处理节点与当前节点不一致"),
+        STEP_BACK_ERROR("4002", "无可退回节点"),
+        FLOW_IS_OVER("4003", "流程已结束"),
+        BACK_STEP_NOT_EXIST("4004", "未指定退回节点");
 
         public final String code;
 
@@ -76,11 +75,10 @@ public class CommonEnum {
         NO((byte) 0),
         //是
         YES((byte) 1),
-        AUDIT_PASS((byte)1),
-        AUDIT_NO_PASS((byte)0),
-        AUDIT_BACK((byte)2),
-        FLOW_INIT((byte)3),
-        ;
+        AUDIT_PASS((byte) 1),
+        AUDIT_NO_PASS((byte) 0),
+        AUDIT_BACK((byte) 2),
+        FLOW_INIT((byte) 3),;
 
         public final byte code;
 
@@ -99,8 +97,7 @@ public class CommonEnum {
         // 完成
         COMPLETE((byte) 1),
         // 核料中
-        CHECK_MATERIAL((byte) 2),
-        ;
+        CHECK_MATERIAL((byte) 2),;
 
         public final byte code;
 
@@ -125,6 +122,7 @@ public class CommonEnum {
             this.code = code;
         }
     }
+
     /**
      * 出入库品种类型
      */
@@ -143,19 +141,40 @@ public class CommonEnum {
 
     public enum FormType {
 
-        DEFAULT_TYPE((byte)0),
-        PRODUCT_TYPE((byte)1),
-        APPLYBUY_TYPE((byte)2),
-        PURCHASE_TYPE((byte)3),
-        INSPECT_TYPE((byte)4),
-        PROINSPECT_TYPE((byte)5),
-        MATERIALINSPECT_TYPE((byte)6),
-        INVOICE_TYPE((byte)7),
-        DELIVER_TYPE((byte)8),
-        ENTRUST_TYPE((byte)9);
+        DEFAULT_TYPE((byte) 0),
+        PRODUCT_TYPE((byte) 1),
+        APPLYBUY_TYPE((byte) 2),
+        PURCHASE_TYPE((byte) 3),
+        INSPECT_TYPE((byte) 4),
+        PROINSPECT_TYPE((byte) 5),
+        MATERIALINSPECT_TYPE((byte) 6),
+        INVOICE_TYPE((byte) 7),
+        DELIVER_TYPE((byte) 8),
+        ENTRUST_TYPE((byte) 9);
 
         public final byte code;
+
         FormType(byte code) {
+            this.code = code;
+        }
+    }
+
+    /**
+     * 产品型号规则配置
+     */
+    public enum ProductModelType {
+        // 阀座
+        FAZUO((byte) 1),
+        // 阀板
+        FABAN((byte) 2),
+        // 阀体
+        FABTI((byte) 2),
+        // 阀体压力
+        FATI_YALI((byte) 3),;
+
+        public final byte code;
+
+        ProductModelType(byte code) {
             this.code = code;
         }
     }

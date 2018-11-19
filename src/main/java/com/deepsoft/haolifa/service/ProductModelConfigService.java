@@ -13,7 +13,7 @@ public interface ProductModelConfigService {
      * @param indexRule
      * @return
      */
-    List<ProductModelConfig> getListByTypeAndRule(int type, String indexRule);
+    List<ProductModelConfig> getList(int type, String indexRule);
 
     /**
      * 新增成品模型规则
@@ -34,8 +34,6 @@ public interface ProductModelConfigService {
     /**
      * 更新成品模型规则
      *
-     * @param type
-     * @param indexRule
      * @return
      */
     int update(ProductModelConfig model);
