@@ -26,11 +26,13 @@ public class OrderProductAssociate {
 
     private BigDecimal price;
 
+    private BigDecimal totalPrice;
+
     private String materialDescription;
 
     private String productRemark;
 
-    public OrderProductAssociate(Integer id, Date createTime, String orderNo, String productNo, String productName, String specifications, String productModel, String lable, String productColor, Integer productNumber, BigDecimal price, String materialDescription, String productRemark) {
+    public OrderProductAssociate(Integer id, Date createTime, String orderNo, String productNo, String productName, String specifications, String productModel, String lable, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, String materialDescription, String productRemark) {
         this.id = id;
         this.createTime = createTime;
         this.orderNo = orderNo;
@@ -42,6 +44,7 @@ public class OrderProductAssociate {
         this.productColor = productColor;
         this.productNumber = productNumber;
         this.price = price;
+        this.totalPrice = totalPrice;
         this.materialDescription = materialDescription;
         this.productRemark = productRemark;
     }
@@ -136,6 +139,14 @@ public class OrderProductAssociate {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getMaterialDescription() {

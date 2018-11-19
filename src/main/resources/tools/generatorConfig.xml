@@ -137,9 +137,12 @@
         <!--<table tableName="order_product_associate" domainObjectName="OrderProductAssociate">-->
             <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--</table>-->
-        <table tableName="order_material" domainObjectName="OrderMaterial">
+        <table tableName="product_model_config" domainObjectName="ProductModelConfig">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
+        <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table tableName="product" domainObjectName="Product">-->
             <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->

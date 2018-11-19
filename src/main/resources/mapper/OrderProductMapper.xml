@@ -14,28 +14,24 @@
       <arg column="order_contract_url" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_agent_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="demand_telphone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="demand_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_fax" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="demand_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="demand_bank_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="demand_bank_card_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="supply_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="supply_agent_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="supply_telphone" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supply_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="supply_fax" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="supply_address" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="contract_number" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supply_bank_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="contract_bank_card_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="delivery_place" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="delivery_date" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="contract_sign_date" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="lable" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_color" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="total_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="discount_total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="material_description" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="finish_feedback_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="feedback_time_confirm_user" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="purchase_feedback_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="production_feedback_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="special_require" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -44,11 +40,6 @@
       <arg column="acceptance_criteria" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="warranty_period" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="packaging_specification" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="transport_type" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="delivery_time" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="receipt_info" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="payment_method" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="freight" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -111,14 +102,12 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, order_no, order_contract_no, 
-    order_status, order_contract_url, demand_name, demand_agent_name, demand_telphone, 
-    demand_fax, demand_address, supply_name, supply_agent_name, supply_telphone, supply_fax, 
-    supply_address, contract_number, contract_sign_date, product_no, product_name, product_model, 
-    lable, specifications, product_color, product_number, price, total_price, discount_total_price, 
-    material_description, product_remark, purchase_feedback_time, production_feedback_time, 
-    special_require, cargo_information, sign_board, acceptance_criteria, warranty_period, 
-    packaging_specification, transport_type, delivery_time, receipt_info, payment_method, 
-    freight
+    order_status, order_contract_url, demand_name, demand_agent_name, demand_phone, demand_fax, 
+    demand_bank_name, demand_bank_card_no, supply_name, supply_agent_name, supply_phone, 
+    supply_fax, supply_bank_name, contract_bank_card_no, delivery_place, delivery_date, 
+    contract_sign_date, total_count, discount_total_price, total_price, finish_feedback_time, 
+    feedback_time_confirm_user, purchase_feedback_time, production_feedback_time, special_require, 
+    cargo_information, sign_board, acceptance_criteria, warranty_period, packaging_specification
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" resultMap="BaseResultMap">
     select
@@ -157,35 +146,29 @@
     insert into order_product (create_time, update_time, create_user, 
       update_user, order_no, order_contract_no, 
       order_status, order_contract_url, demand_name, 
-      demand_agent_name, demand_telphone, demand_fax, 
-      demand_address, supply_name, supply_agent_name, 
-      supply_telphone, supply_fax, supply_address, 
-      contract_number, contract_sign_date, product_no, 
-      product_name, product_model, lable, 
-      specifications, product_color, product_number, 
-      price, total_price, discount_total_price, 
-      material_description, product_remark, purchase_feedback_time, 
+      demand_agent_name, demand_phone, demand_fax, 
+      demand_bank_name, demand_bank_card_no, supply_name, 
+      supply_agent_name, supply_phone, supply_fax, 
+      supply_bank_name, contract_bank_card_no, delivery_place, 
+      delivery_date, contract_sign_date, total_count, 
+      discount_total_price, total_price, finish_feedback_time, 
+      feedback_time_confirm_user, purchase_feedback_time, 
       production_feedback_time, special_require, 
       cargo_information, sign_board, acceptance_criteria, 
-      warranty_period, packaging_specification, 
-      transport_type, delivery_time, receipt_info, 
-      payment_method, freight)
+      warranty_period, packaging_specification)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
       #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR}, 
       #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{demandName,jdbcType=VARCHAR}, 
-      #{demandAgentName,jdbcType=VARCHAR}, #{demandTelphone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR}, 
-      #{demandAddress,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR}, #{supplyAgentName,jdbcType=VARCHAR}, 
-      #{supplyTelphone,jdbcType=VARCHAR}, #{supplyFax,jdbcType=VARCHAR}, #{supplyAddress,jdbcType=VARCHAR}, 
-      #{contractNumber,jdbcType=VARCHAR}, #{contractSignDate,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
-      #{productName,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, #{lable,jdbcType=VARCHAR}, 
-      #{specifications,jdbcType=VARCHAR}, #{productColor,jdbcType=VARCHAR}, #{productNumber,jdbcType=INTEGER}, 
-      #{price,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{discountTotalPrice,jdbcType=DECIMAL}, 
-      #{materialDescription,jdbcType=VARCHAR}, #{productRemark,jdbcType=VARCHAR}, #{purchaseFeedbackTime,jdbcType=VARCHAR}, 
+      #{demandAgentName,jdbcType=VARCHAR}, #{demandPhone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR}, 
+      #{demandBankName,jdbcType=VARCHAR}, #{demandBankCardNo,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR}, 
+      #{supplyAgentName,jdbcType=VARCHAR}, #{supplyPhone,jdbcType=VARCHAR}, #{supplyFax,jdbcType=VARCHAR}, 
+      #{supplyBankName,jdbcType=VARCHAR}, #{contractBankCardNo,jdbcType=VARCHAR}, #{deliveryPlace,jdbcType=VARCHAR}, 
+      #{deliveryDate,jdbcType=VARCHAR}, #{contractSignDate,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, 
+      #{discountTotalPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{finishFeedbackTime,jdbcType=VARCHAR}, 
+      #{feedbackTimeConfirmUser,jdbcType=VARCHAR}, #{purchaseFeedbackTime,jdbcType=VARCHAR}, 
       #{productionFeedbackTime,jdbcType=VARCHAR}, #{specialRequire,jdbcType=VARCHAR}, 
       #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, #{acceptanceCriteria,jdbcType=VARCHAR}, 
-      #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
-      #{transportType,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=VARCHAR}, #{receiptInfo,jdbcType=VARCHAR}, 
-      #{paymentMethod,jdbcType=VARCHAR}, #{freight,jdbcType=VARCHAR})
+      #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -223,14 +206,17 @@
       <if test="demandAgentName != null">
         demand_agent_name,
       </if>
-      <if test="demandTelphone != null">
-        demand_telphone,
+      <if test="demandPhone != null">
+        demand_phone,
       </if>
       <if test="demandFax != null">
         demand_fax,
       </if>
-      <if test="demandAddress != null">
-        demand_address,
+      <if test="demandBankName != null">
+        demand_bank_name,
+      </if>
+      <if test="demandBankCardNo != null">
+        demand_bank_card_no,
       </if>
       <if test="supplyName != null">
         supply_name,
@@ -238,56 +224,41 @@
       <if test="supplyAgentName != null">
         supply_agent_name,
       </if>
-      <if test="supplyTelphone != null">
-        supply_telphone,
+      <if test="supplyPhone != null">
+        supply_phone,
       </if>
       <if test="supplyFax != null">
         supply_fax,
       </if>
-      <if test="supplyAddress != null">
-        supply_address,
+      <if test="supplyBankName != null">
+        supply_bank_name,
       </if>
-      <if test="contractNumber != null">
-        contract_number,
+      <if test="contractBankCardNo != null">
+        contract_bank_card_no,
+      </if>
+      <if test="deliveryPlace != null">
+        delivery_place,
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date,
       </if>
       <if test="contractSignDate != null">
         contract_sign_date,
       </if>
-      <if test="productNo != null">
-        product_no,
-      </if>
-      <if test="productName != null">
-        product_name,
-      </if>
-      <if test="productModel != null">
-        product_model,
-      </if>
-      <if test="lable != null">
-        lable,
-      </if>
-      <if test="specifications != null">
-        specifications,
-      </if>
-      <if test="productColor != null">
-        product_color,
-      </if>
-      <if test="productNumber != null">
-        product_number,
-      </if>
-      <if test="price != null">
-        price,
-      </if>
-      <if test="totalPrice != null">
-        total_price,
+      <if test="totalCount != null">
+        total_count,
       </if>
       <if test="discountTotalPrice != null">
         discount_total_price,
       </if>
-      <if test="materialDescription != null">
-        material_description,
+      <if test="totalPrice != null">
+        total_price,
       </if>
-      <if test="productRemark != null">
-        product_remark,
+      <if test="finishFeedbackTime != null">
+        finish_feedback_time,
+      </if>
+      <if test="feedbackTimeConfirmUser != null">
+        feedback_time_confirm_user,
       </if>
       <if test="purchaseFeedbackTime != null">
         purchase_feedback_time,
@@ -312,21 +283,6 @@
       </if>
       <if test="packagingSpecification != null">
         packaging_specification,
-      </if>
-      <if test="transportType != null">
-        transport_type,
-      </if>
-      <if test="deliveryTime != null">
-        delivery_time,
-      </if>
-      <if test="receiptInfo != null">
-        receipt_info,
-      </if>
-      <if test="paymentMethod != null">
-        payment_method,
-      </if>
-      <if test="freight != null">
-        freight,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -360,14 +316,17 @@
       <if test="demandAgentName != null">
         #{demandAgentName,jdbcType=VARCHAR},
       </if>
-      <if test="demandTelphone != null">
-        #{demandTelphone,jdbcType=VARCHAR},
+      <if test="demandPhone != null">
+        #{demandPhone,jdbcType=VARCHAR},
       </if>
       <if test="demandFax != null">
         #{demandFax,jdbcType=VARCHAR},
       </if>
-      <if test="demandAddress != null">
-        #{demandAddress,jdbcType=VARCHAR},
+      <if test="demandBankName != null">
+        #{demandBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="demandBankCardNo != null">
+        #{demandBankCardNo,jdbcType=VARCHAR},
       </if>
       <if test="supplyName != null">
         #{supplyName,jdbcType=VARCHAR},
@@ -375,56 +334,41 @@
       <if test="supplyAgentName != null">
         #{supplyAgentName,jdbcType=VARCHAR},
       </if>
-      <if test="supplyTelphone != null">
-        #{supplyTelphone,jdbcType=VARCHAR},
+      <if test="supplyPhone != null">
+        #{supplyPhone,jdbcType=VARCHAR},
       </if>
       <if test="supplyFax != null">
         #{supplyFax,jdbcType=VARCHAR},
       </if>
-      <if test="supplyAddress != null">
-        #{supplyAddress,jdbcType=VARCHAR},
+      <if test="supplyBankName != null">
+        #{supplyBankName,jdbcType=VARCHAR},
       </if>
-      <if test="contractNumber != null">
-        #{contractNumber,jdbcType=VARCHAR},
+      <if test="contractBankCardNo != null">
+        #{contractBankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryPlace != null">
+        #{deliveryPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryDate != null">
+        #{deliveryDate,jdbcType=VARCHAR},
       </if>
       <if test="contractSignDate != null">
         #{contractSignDate,jdbcType=VARCHAR},
       </if>
-      <if test="productNo != null">
-        #{productNo,jdbcType=VARCHAR},
-      </if>
-      <if test="productName != null">
-        #{productName,jdbcType=VARCHAR},
-      </if>
-      <if test="productModel != null">
-        #{productModel,jdbcType=VARCHAR},
-      </if>
-      <if test="lable != null">
-        #{lable,jdbcType=VARCHAR},
-      </if>
-      <if test="specifications != null">
-        #{specifications,jdbcType=VARCHAR},
-      </if>
-      <if test="productColor != null">
-        #{productColor,jdbcType=VARCHAR},
-      </if>
-      <if test="productNumber != null">
-        #{productNumber,jdbcType=INTEGER},
-      </if>
-      <if test="price != null">
-        #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="totalPrice != null">
-        #{totalPrice,jdbcType=DECIMAL},
+      <if test="totalCount != null">
+        #{totalCount,jdbcType=INTEGER},
       </if>
       <if test="discountTotalPrice != null">
         #{discountTotalPrice,jdbcType=DECIMAL},
       </if>
-      <if test="materialDescription != null">
-        #{materialDescription,jdbcType=VARCHAR},
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
       </if>
-      <if test="productRemark != null">
-        #{productRemark,jdbcType=VARCHAR},
+      <if test="finishFeedbackTime != null">
+        #{finishFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTimeConfirmUser != null">
+        #{feedbackTimeConfirmUser,jdbcType=VARCHAR},
       </if>
       <if test="purchaseFeedbackTime != null">
         #{purchaseFeedbackTime,jdbcType=VARCHAR},
@@ -449,21 +393,6 @@
       </if>
       <if test="packagingSpecification != null">
         #{packagingSpecification,jdbcType=VARCHAR},
-      </if>
-      <if test="transportType != null">
-        #{transportType,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryTime != null">
-        #{deliveryTime,jdbcType=VARCHAR},
-      </if>
-      <if test="receiptInfo != null">
-        #{receiptInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="paymentMethod != null">
-        #{paymentMethod,jdbcType=VARCHAR},
-      </if>
-      <if test="freight != null">
-        #{freight,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -509,14 +438,17 @@
       <if test="record.demandAgentName != null">
         demand_agent_name = #{record.demandAgentName,jdbcType=VARCHAR},
       </if>
-      <if test="record.demandTelphone != null">
-        demand_telphone = #{record.demandTelphone,jdbcType=VARCHAR},
+      <if test="record.demandPhone != null">
+        demand_phone = #{record.demandPhone,jdbcType=VARCHAR},
       </if>
       <if test="record.demandFax != null">
         demand_fax = #{record.demandFax,jdbcType=VARCHAR},
       </if>
-      <if test="record.demandAddress != null">
-        demand_address = #{record.demandAddress,jdbcType=VARCHAR},
+      <if test="record.demandBankName != null">
+        demand_bank_name = #{record.demandBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demandBankCardNo != null">
+        demand_bank_card_no = #{record.demandBankCardNo,jdbcType=VARCHAR},
       </if>
       <if test="record.supplyName != null">
         supply_name = #{record.supplyName,jdbcType=VARCHAR},
@@ -524,56 +456,41 @@
       <if test="record.supplyAgentName != null">
         supply_agent_name = #{record.supplyAgentName,jdbcType=VARCHAR},
       </if>
-      <if test="record.supplyTelphone != null">
-        supply_telphone = #{record.supplyTelphone,jdbcType=VARCHAR},
+      <if test="record.supplyPhone != null">
+        supply_phone = #{record.supplyPhone,jdbcType=VARCHAR},
       </if>
       <if test="record.supplyFax != null">
         supply_fax = #{record.supplyFax,jdbcType=VARCHAR},
       </if>
-      <if test="record.supplyAddress != null">
-        supply_address = #{record.supplyAddress,jdbcType=VARCHAR},
+      <if test="record.supplyBankName != null">
+        supply_bank_name = #{record.supplyBankName,jdbcType=VARCHAR},
       </if>
-      <if test="record.contractNumber != null">
-        contract_number = #{record.contractNumber,jdbcType=VARCHAR},
+      <if test="record.contractBankCardNo != null">
+        contract_bank_card_no = #{record.contractBankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryPlace != null">
+        delivery_place = #{record.deliveryPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryDate != null">
+        delivery_date = #{record.deliveryDate,jdbcType=VARCHAR},
       </if>
       <if test="record.contractSignDate != null">
         contract_sign_date = #{record.contractSignDate,jdbcType=VARCHAR},
       </if>
-      <if test="record.productNo != null">
-        product_no = #{record.productNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productName != null">
-        product_name = #{record.productName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productModel != null">
-        product_model = #{record.productModel,jdbcType=VARCHAR},
-      </if>
-      <if test="record.lable != null">
-        lable = #{record.lable,jdbcType=VARCHAR},
-      </if>
-      <if test="record.specifications != null">
-        specifications = #{record.specifications,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productColor != null">
-        product_color = #{record.productColor,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productNumber != null">
-        product_number = #{record.productNumber,jdbcType=INTEGER},
-      </if>
-      <if test="record.price != null">
-        price = #{record.price,jdbcType=DECIMAL},
-      </if>
-      <if test="record.totalPrice != null">
-        total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      <if test="record.totalCount != null">
+        total_count = #{record.totalCount,jdbcType=INTEGER},
       </if>
       <if test="record.discountTotalPrice != null">
         discount_total_price = #{record.discountTotalPrice,jdbcType=DECIMAL},
       </if>
-      <if test="record.materialDescription != null">
-        material_description = #{record.materialDescription,jdbcType=VARCHAR},
+      <if test="record.totalPrice != null">
+        total_price = #{record.totalPrice,jdbcType=DECIMAL},
       </if>
-      <if test="record.productRemark != null">
-        product_remark = #{record.productRemark,jdbcType=VARCHAR},
+      <if test="record.finishFeedbackTime != null">
+        finish_feedback_time = #{record.finishFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.feedbackTimeConfirmUser != null">
+        feedback_time_confirm_user = #{record.feedbackTimeConfirmUser,jdbcType=VARCHAR},
       </if>
       <if test="record.purchaseFeedbackTime != null">
         purchase_feedback_time = #{record.purchaseFeedbackTime,jdbcType=VARCHAR},
@@ -599,21 +516,6 @@
       <if test="record.packagingSpecification != null">
         packaging_specification = #{record.packagingSpecification,jdbcType=VARCHAR},
       </if>
-      <if test="record.transportType != null">
-        transport_type = #{record.transportType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.deliveryTime != null">
-        delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.receiptInfo != null">
-        receipt_info = #{record.receiptInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.paymentMethod != null">
-        payment_method = #{record.paymentMethod,jdbcType=VARCHAR},
-      </if>
-      <if test="record.freight != null">
-        freight = #{record.freight,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -632,28 +534,24 @@
       order_contract_url = #{record.orderContractUrl,jdbcType=VARCHAR},
       demand_name = #{record.demandName,jdbcType=VARCHAR},
       demand_agent_name = #{record.demandAgentName,jdbcType=VARCHAR},
-      demand_telphone = #{record.demandTelphone,jdbcType=VARCHAR},
+      demand_phone = #{record.demandPhone,jdbcType=VARCHAR},
       demand_fax = #{record.demandFax,jdbcType=VARCHAR},
-      demand_address = #{record.demandAddress,jdbcType=VARCHAR},
+      demand_bank_name = #{record.demandBankName,jdbcType=VARCHAR},
+      demand_bank_card_no = #{record.demandBankCardNo,jdbcType=VARCHAR},
       supply_name = #{record.supplyName,jdbcType=VARCHAR},
       supply_agent_name = #{record.supplyAgentName,jdbcType=VARCHAR},
-      supply_telphone = #{record.supplyTelphone,jdbcType=VARCHAR},
+      supply_phone = #{record.supplyPhone,jdbcType=VARCHAR},
       supply_fax = #{record.supplyFax,jdbcType=VARCHAR},
-      supply_address = #{record.supplyAddress,jdbcType=VARCHAR},
-      contract_number = #{record.contractNumber,jdbcType=VARCHAR},
+      supply_bank_name = #{record.supplyBankName,jdbcType=VARCHAR},
+      contract_bank_card_no = #{record.contractBankCardNo,jdbcType=VARCHAR},
+      delivery_place = #{record.deliveryPlace,jdbcType=VARCHAR},
+      delivery_date = #{record.deliveryDate,jdbcType=VARCHAR},
       contract_sign_date = #{record.contractSignDate,jdbcType=VARCHAR},
-      product_no = #{record.productNo,jdbcType=VARCHAR},
-      product_name = #{record.productName,jdbcType=VARCHAR},
-      product_model = #{record.productModel,jdbcType=VARCHAR},
-      lable = #{record.lable,jdbcType=VARCHAR},
-      specifications = #{record.specifications,jdbcType=VARCHAR},
-      product_color = #{record.productColor,jdbcType=VARCHAR},
-      product_number = #{record.productNumber,jdbcType=INTEGER},
-      price = #{record.price,jdbcType=DECIMAL},
-      total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      total_count = #{record.totalCount,jdbcType=INTEGER},
       discount_total_price = #{record.discountTotalPrice,jdbcType=DECIMAL},
-      material_description = #{record.materialDescription,jdbcType=VARCHAR},
-      product_remark = #{record.productRemark,jdbcType=VARCHAR},
+      total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      finish_feedback_time = #{record.finishFeedbackTime,jdbcType=VARCHAR},
+      feedback_time_confirm_user = #{record.feedbackTimeConfirmUser,jdbcType=VARCHAR},
       purchase_feedback_time = #{record.purchaseFeedbackTime,jdbcType=VARCHAR},
       production_feedback_time = #{record.productionFeedbackTime,jdbcType=VARCHAR},
       special_require = #{record.specialRequire,jdbcType=VARCHAR},
@@ -661,12 +559,7 @@
       sign_board = #{record.signBoard,jdbcType=VARCHAR},
       acceptance_criteria = #{record.acceptanceCriteria,jdbcType=VARCHAR},
       warranty_period = #{record.warrantyPeriod,jdbcType=VARCHAR},
-      packaging_specification = #{record.packagingSpecification,jdbcType=VARCHAR},
-      transport_type = #{record.transportType,jdbcType=VARCHAR},
-      delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
-      receipt_info = #{record.receiptInfo,jdbcType=VARCHAR},
-      payment_method = #{record.paymentMethod,jdbcType=VARCHAR},
-      freight = #{record.freight,jdbcType=VARCHAR}
+      packaging_specification = #{record.packagingSpecification,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -704,14 +597,17 @@
       <if test="demandAgentName != null">
         demand_agent_name = #{demandAgentName,jdbcType=VARCHAR},
       </if>
-      <if test="demandTelphone != null">
-        demand_telphone = #{demandTelphone,jdbcType=VARCHAR},
+      <if test="demandPhone != null">
+        demand_phone = #{demandPhone,jdbcType=VARCHAR},
       </if>
       <if test="demandFax != null">
         demand_fax = #{demandFax,jdbcType=VARCHAR},
       </if>
-      <if test="demandAddress != null">
-        demand_address = #{demandAddress,jdbcType=VARCHAR},
+      <if test="demandBankName != null">
+        demand_bank_name = #{demandBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="demandBankCardNo != null">
+        demand_bank_card_no = #{demandBankCardNo,jdbcType=VARCHAR},
       </if>
       <if test="supplyName != null">
         supply_name = #{supplyName,jdbcType=VARCHAR},
@@ -719,56 +615,41 @@
       <if test="supplyAgentName != null">
         supply_agent_name = #{supplyAgentName,jdbcType=VARCHAR},
       </if>
-      <if test="supplyTelphone != null">
-        supply_telphone = #{supplyTelphone,jdbcType=VARCHAR},
+      <if test="supplyPhone != null">
+        supply_phone = #{supplyPhone,jdbcType=VARCHAR},
       </if>
       <if test="supplyFax != null">
         supply_fax = #{supplyFax,jdbcType=VARCHAR},
       </if>
-      <if test="supplyAddress != null">
-        supply_address = #{supplyAddress,jdbcType=VARCHAR},
+      <if test="supplyBankName != null">
+        supply_bank_name = #{supplyBankName,jdbcType=VARCHAR},
       </if>
-      <if test="contractNumber != null">
-        contract_number = #{contractNumber,jdbcType=VARCHAR},
+      <if test="contractBankCardNo != null">
+        contract_bank_card_no = #{contractBankCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryPlace != null">
+        delivery_place = #{deliveryPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryDate != null">
+        delivery_date = #{deliveryDate,jdbcType=VARCHAR},
       </if>
       <if test="contractSignDate != null">
         contract_sign_date = #{contractSignDate,jdbcType=VARCHAR},
       </if>
-      <if test="productNo != null">
-        product_no = #{productNo,jdbcType=VARCHAR},
-      </if>
-      <if test="productName != null">
-        product_name = #{productName,jdbcType=VARCHAR},
-      </if>
-      <if test="productModel != null">
-        product_model = #{productModel,jdbcType=VARCHAR},
-      </if>
-      <if test="lable != null">
-        lable = #{lable,jdbcType=VARCHAR},
-      </if>
-      <if test="specifications != null">
-        specifications = #{specifications,jdbcType=VARCHAR},
-      </if>
-      <if test="productColor != null">
-        product_color = #{productColor,jdbcType=VARCHAR},
-      </if>
-      <if test="productNumber != null">
-        product_number = #{productNumber,jdbcType=INTEGER},
-      </if>
-      <if test="price != null">
-        price = #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="totalPrice != null">
-        total_price = #{totalPrice,jdbcType=DECIMAL},
+      <if test="totalCount != null">
+        total_count = #{totalCount,jdbcType=INTEGER},
       </if>
       <if test="discountTotalPrice != null">
         discount_total_price = #{discountTotalPrice,jdbcType=DECIMAL},
       </if>
-      <if test="materialDescription != null">
-        material_description = #{materialDescription,jdbcType=VARCHAR},
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
       </if>
-      <if test="productRemark != null">
-        product_remark = #{productRemark,jdbcType=VARCHAR},
+      <if test="finishFeedbackTime != null">
+        finish_feedback_time = #{finishFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackTimeConfirmUser != null">
+        feedback_time_confirm_user = #{feedbackTimeConfirmUser,jdbcType=VARCHAR},
       </if>
       <if test="purchaseFeedbackTime != null">
         purchase_feedback_time = #{purchaseFeedbackTime,jdbcType=VARCHAR},
@@ -794,21 +675,6 @@
       <if test="packagingSpecification != null">
         packaging_specification = #{packagingSpecification,jdbcType=VARCHAR},
       </if>
-      <if test="transportType != null">
-        transport_type = #{transportType,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryTime != null">
-        delivery_time = #{deliveryTime,jdbcType=VARCHAR},
-      </if>
-      <if test="receiptInfo != null">
-        receipt_info = #{receiptInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="paymentMethod != null">
-        payment_method = #{paymentMethod,jdbcType=VARCHAR},
-      </if>
-      <if test="freight != null">
-        freight = #{freight,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -824,28 +690,24 @@
       order_contract_url = #{orderContractUrl,jdbcType=VARCHAR},
       demand_name = #{demandName,jdbcType=VARCHAR},
       demand_agent_name = #{demandAgentName,jdbcType=VARCHAR},
-      demand_telphone = #{demandTelphone,jdbcType=VARCHAR},
+      demand_phone = #{demandPhone,jdbcType=VARCHAR},
       demand_fax = #{demandFax,jdbcType=VARCHAR},
-      demand_address = #{demandAddress,jdbcType=VARCHAR},
+      demand_bank_name = #{demandBankName,jdbcType=VARCHAR},
+      demand_bank_card_no = #{demandBankCardNo,jdbcType=VARCHAR},
       supply_name = #{supplyName,jdbcType=VARCHAR},
       supply_agent_name = #{supplyAgentName,jdbcType=VARCHAR},
-      supply_telphone = #{supplyTelphone,jdbcType=VARCHAR},
+      supply_phone = #{supplyPhone,jdbcType=VARCHAR},
       supply_fax = #{supplyFax,jdbcType=VARCHAR},
-      supply_address = #{supplyAddress,jdbcType=VARCHAR},
-      contract_number = #{contractNumber,jdbcType=VARCHAR},
+      supply_bank_name = #{supplyBankName,jdbcType=VARCHAR},
+      contract_bank_card_no = #{contractBankCardNo,jdbcType=VARCHAR},
+      delivery_place = #{deliveryPlace,jdbcType=VARCHAR},
+      delivery_date = #{deliveryDate,jdbcType=VARCHAR},
       contract_sign_date = #{contractSignDate,jdbcType=VARCHAR},
-      product_no = #{productNo,jdbcType=VARCHAR},
-      product_name = #{productName,jdbcType=VARCHAR},
-      product_model = #{productModel,jdbcType=VARCHAR},
-      lable = #{lable,jdbcType=VARCHAR},
-      specifications = #{specifications,jdbcType=VARCHAR},
-      product_color = #{productColor,jdbcType=VARCHAR},
-      product_number = #{productNumber,jdbcType=INTEGER},
-      price = #{price,jdbcType=DECIMAL},
-      total_price = #{totalPrice,jdbcType=DECIMAL},
+      total_count = #{totalCount,jdbcType=INTEGER},
       discount_total_price = #{discountTotalPrice,jdbcType=DECIMAL},
-      material_description = #{materialDescription,jdbcType=VARCHAR},
-      product_remark = #{productRemark,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      finish_feedback_time = #{finishFeedbackTime,jdbcType=VARCHAR},
+      feedback_time_confirm_user = #{feedbackTimeConfirmUser,jdbcType=VARCHAR},
       purchase_feedback_time = #{purchaseFeedbackTime,jdbcType=VARCHAR},
       production_feedback_time = #{productionFeedbackTime,jdbcType=VARCHAR},
       special_require = #{specialRequire,jdbcType=VARCHAR},
@@ -853,12 +715,7 @@
       sign_board = #{signBoard,jdbcType=VARCHAR},
       acceptance_criteria = #{acceptanceCriteria,jdbcType=VARCHAR},
       warranty_period = #{warrantyPeriod,jdbcType=VARCHAR},
-      packaging_specification = #{packagingSpecification,jdbcType=VARCHAR},
-      transport_type = #{transportType,jdbcType=VARCHAR},
-      delivery_time = #{deliveryTime,jdbcType=VARCHAR},
-      receipt_info = #{receiptInfo,jdbcType=VARCHAR},
-      payment_method = #{paymentMethod,jdbcType=VARCHAR},
-      freight = #{freight,jdbcType=VARCHAR}
+      packaging_specification = #{packagingSpecification,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

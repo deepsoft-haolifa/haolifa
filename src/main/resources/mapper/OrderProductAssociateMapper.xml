@@ -14,6 +14,7 @@
       <arg column="product_color" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="product_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="material_description" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="product_remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, order_no, product_no, product_name, specifications, product_model, 
-    lable, product_color, product_number, price, material_description, product_remark
+    lable, product_color, product_number, price, total_price, material_description, product_remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderProductAssociateExample" resultMap="BaseResultMap">
     select
@@ -117,13 +118,13 @@
     insert into order_product_associate (create_time, order_no, product_no, 
       product_name, specifications, product_model, 
       lable, product_color, product_number, 
-      price, material_description, product_remark
-      )
+      price, total_price, material_description, 
+      product_remark)
     values (#{createTime,jdbcType=TIMESTAMP}, #{orderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
       #{productName,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
       #{lable,jdbcType=VARCHAR}, #{productColor,jdbcType=VARCHAR}, #{productNumber,jdbcType=INTEGER}, 
-      #{price,jdbcType=DECIMAL}, #{materialDescription,jdbcType=VARCHAR}, #{productRemark,jdbcType=VARCHAR}
-      )
+      #{price,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{materialDescription,jdbcType=VARCHAR}, 
+      #{productRemark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProductAssociate">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -160,6 +161,9 @@
       </if>
       <if test="price != null">
         price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
       </if>
       <if test="materialDescription != null">
         material_description,
@@ -198,6 +202,9 @@
       </if>
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
       </if>
       <if test="materialDescription != null">
         #{materialDescription,jdbcType=VARCHAR},
@@ -249,6 +256,9 @@
       <if test="record.price != null">
         price = #{record.price,jdbcType=DECIMAL},
       </if>
+      <if test="record.totalPrice != null">
+        total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      </if>
       <if test="record.materialDescription != null">
         material_description = #{record.materialDescription,jdbcType=VARCHAR},
       </if>
@@ -273,6 +283,7 @@
       product_color = #{record.productColor,jdbcType=VARCHAR},
       product_number = #{record.productNumber,jdbcType=INTEGER},
       price = #{record.price,jdbcType=DECIMAL},
+      total_price = #{record.totalPrice,jdbcType=DECIMAL},
       material_description = #{record.materialDescription,jdbcType=VARCHAR},
       product_remark = #{record.productRemark,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -312,6 +323,9 @@
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
       </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
       <if test="materialDescription != null">
         material_description = #{materialDescription,jdbcType=VARCHAR},
       </if>
@@ -333,6 +347,7 @@
       product_color = #{productColor,jdbcType=VARCHAR},
       product_number = #{productNumber,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
       material_description = #{materialDescription,jdbcType=VARCHAR},
       product_remark = #{productRemark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

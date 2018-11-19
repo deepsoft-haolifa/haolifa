@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.model.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @className: OrderProductAssociateDTO
  * @description: 产品订单关联表
@@ -12,6 +14,8 @@ import lombok.Data;
 @Data
 public class OrderProductAssociateDTO {
 
+    @ApiModelProperty(value = "订单编号")
+    private String orderNo;
     @ApiModelProperty(value = "产品编号")
     private String productNo;
     @ApiModelProperty(value = "产品名称")
@@ -26,6 +30,12 @@ public class OrderProductAssociateDTO {
     private String productColor;
     @ApiModelProperty(value = "产品数量")
     private Integer productNumber;
+    @ApiModelProperty(value = "单价")
+    private BigDecimal price;
+    @ApiModelProperty(value = "总计价格")
+    private BigDecimal totalPrice;
+    @ApiModelProperty(value = "材质说明")
+    private String materialDescription;
     @ApiModelProperty(value = "产品备注")
     private String productRemark;
 

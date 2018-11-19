@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.DeliveryRecordDTO;
 import com.deepsoft.haolifa.model.dto.OrderProductAssociateDTO;
+import com.deepsoft.haolifa.model.dto.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.DeliveryRecordService;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -86,7 +87,7 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
         } else {
             // 如果发货记录表没有，根据订单no从订单表中查询记录
             if (StringUtils.isNotBlank(orderNo)) {
-                OrderProduct orderProductInfo = orderProductService.getOrderProductInfo(orderNo);
+                OrderProductDTO orderProductInfo = orderProductService.getOrderProductInfo(orderNo);
                 BeanUtils.copyProperties(orderProductInfo, deliveryRecordDTO);
                 deliveryRecordDTO.setProductList(list);
                 // 需要解析下订单表的发货信息
