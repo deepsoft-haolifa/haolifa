@@ -237,6 +237,20 @@ public class MaterialServiceImpl implements MaterialService {
         return materials;
     }
 
+    @Override
+    public List<Material> getListByModelAndSpec(String model, String specifications) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model)) {
+            criteria.andModelEqualTo(model);
+        }
+        if (StringUtils.isNotBlank(specifications)) {
+            criteria.andSpecificationsEqualTo(specifications);
+        }
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
     /**
      * 判断是否有相同的图号
      *

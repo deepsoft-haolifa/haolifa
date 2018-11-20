@@ -303,7 +303,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         String spec = String.format("%04d", Integer.parseInt(specifications.replaceAll("[^0-9]", "")));
         // 成品型号示例（270DD7A1XH-16Q）
         // 2.获取型号的数据（270）
-        String smallModel = productModel.substring(0, 3);
+        String smallModel = "D" + productModel.substring(0, 3);
         int lastIndexOf = productModel.lastIndexOf("-");
         // 3.获取阀板材质(-前一位)
         String faban = productModel.substring(lastIndexOf - 1, lastIndexOf);
@@ -327,7 +327,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<ProductModelConfig> fatiYaliModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fatiyali && e.getType() == CommonEnum.ProductModelType.FATI_YALI.code).collect(Collectors.toList());
 
         // 根据型号和规格，获取图号列表
+        List<Material> listByModelAndSpec = materialService.getListByModelAndSpec(smallModel, specifications);
+        // 获取符合阀板的列表
 
+        // 获取符合阀座的列表
+
+        // 获取符合阀体的列表
 
         // todo 根据条件获取图号
         return null;

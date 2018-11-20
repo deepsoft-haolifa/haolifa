@@ -129,10 +129,19 @@ public interface MaterialService {
     int updateLockQuantity(String graphNo, int quantity);
 
     /**
-     * 根据分类id获取列表
+     * 根据分类id获取零件列表
      *
      * @param classifyId
      */
     List<Material> getListByClassifyId(int classifyId);
+
+
+    /**
+     * 根据型号和规格获取列表
+     *
+     * @param model 型号
+     * @param specifications 规格
+     */
+    List<Material> getListByModelAndSpec(String model,String specifications);
 
 }
