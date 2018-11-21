@@ -163,14 +163,15 @@ public class CommonEnum {
      * 产品型号规则配置
      */
     public enum ProductModelType {
-        // 阀座
-        FAZUO((byte) 1),
-        // 阀板
-        FABAN((byte) 2),
+
         // 阀体
-        FABTI((byte) 2),
+        FATI((byte) 1),
+        // 阀座
+        FAZUO((byte) 2),
+        // 阀板
+        FABAN((byte) 3),
         // 阀体压力
-        FATI_YALI((byte) 3),;
+        FATI_YALI((byte) 4),;
 
         public final byte code;
 

@@ -124,7 +124,7 @@ DROP TABLE IF EXISTS `product`;
 	  `index_rule` varchar(36) NOT NULL DEFAULT '' COMMENT '索引规则（例如：Q/P/X）',
 	  `material_graph_no_str` varchar(36) NOT NULL DEFAULT '' COMMENT '零件图号中对应的单词（例如：Qa/Qb/Qc）',
 	  `material_graph_no_indexof` varchar(36) NOT NULL DEFAULT '' COMMENT '零件图号中对应的位置',
-	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '类型（1.阀座；2.阀板；3：阀体；4.阀体压力）',
+	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '类型（1.阀体；2.阀座；3：阀板；4.阀体压力）',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注描述',
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY `uk_multi` (`index_rule`,`type`)

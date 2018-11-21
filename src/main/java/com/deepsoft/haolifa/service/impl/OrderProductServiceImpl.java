@@ -23,8 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -298,7 +301,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
      * @param specifications
      * @return
      */
-    public List<String> getMaterials(String productModel, String specifications) {
+    public MaterialTypeListDTO getMaterials(String productModel, String specifications) {
+        MaterialTypeListDTO materialTypeListDTO = new MaterialTypeListDTO();
         // 1.获取规格,截取数字，保留四位数，前面补0（DN65=>0065）
         String spec = String.format("%04d", Integer.parseInt(specifications.replaceAll("[^0-9]", "")));
         // 成品型号示例（270DD7A1XH-16Q）
@@ -314,7 +318,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 6.获取阀体压力(-后两位)
         String fatiyali = productModel.substring(lastIndexOf + 1, lastIndexOf + 3);
 
-
         // 获取全部规则列表
         List<ProductModelConfig> modelConfigs = productModelConfigService.getList(0, "");
         // 获取阀板规则
@@ -322,25 +325,90 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 获取阀座规则
         List<ProductModelConfig> fazuoModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fazuo && e.getType() == CommonEnum.ProductModelType.FAZUO.code).collect(Collectors.toList());
         // 获取阀体规则
-        List<ProductModelConfig> fatiModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fati && e.getType() == CommonEnum.ProductModelType.FABTI.code).collect(Collectors.toList());
+        List<ProductModelConfig> fatiModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fati && e.getType() == CommonEnum.ProductModelType.FATI.code).collect(Collectors.toList());
         // 获取阀体规则
         List<ProductModelConfig> fatiYaliModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fatiyali && e.getType() == CommonEnum.ProductModelType.FATI_YALI.code).collect(Collectors.toList());
 
         // 根据型号和规格，获取图号列表
         List<Material> listByModelAndSpec = materialService.getListByModelAndSpec(smallModel, specifications);
-        // 获取符合阀板的列表
+        // 获取符合阀板的列表(D270-0050-03-Hc-02-00)
+        List<String> fabanCollect = listByModelAndSpec.stream().filter(e -> {
+            String[] split = e.getGraphNo().split("-");
+            if (split.length > 3) {
+                return split[2].equals("03") && fabanModelConfig.contains(split[3]);
+            }
+            return false;
+        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
 
-        // 获取符合阀座的列表
+        // 获取符合阀座的列表(D270-0050-02-E0-01)
+        List<String> fazuoCollect = listByModelAndSpec.stream().filter(e -> {
+            String[] split = e.getGraphNo().split("-");
+            if (split.length > 3) {
+                return split[2].equals("02") && fazuoModelConfig.contains(split[3]);
+            }
+            return false;
+        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
+        // 获取符合阀体的列表(D270-0050-01-00Qa-aF05-01-001)
+        List<String> fatiCollect = listByModelAndSpec.stream().filter(e -> {
+            String[] split = e.getGraphNo().split("-");
+            if (split.length > 3) {
+                return split[2].equals("01") && fatiModelConfig.contains(split[3].replaceAll("[^0-9]", ""));
+            }
+            return false;
+        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
+        // 获取符合阀体压力的列表
+        List<String> fatiYalicollect = listByModelAndSpec.stream().filter(e -> {
+            String[] split = e.getGraphNo().split("-");
+            if (split.length > 4) {
+                return split[2].equals("01") && fatiYaliModelConfig.contains(split[4].substring(0, 1));
+            }
+            return false;
+        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
 
-        // 获取符合阀体的列表
-
-        // todo 根据条件获取图号
-        return null;
+        materialTypeListDTO.setType(CommonEnum.ProductModelType.FABAN.code);
+        materialTypeListDTO.setList(fabanCollect);
+        materialTypeListDTO.setType(CommonEnum.ProductModelType.FAZUO.code);
+        materialTypeListDTO.setList(fazuoCollect);
+        materialTypeListDTO.setType(CommonEnum.ProductModelType.FATI.code);
+        materialTypeListDTO.setList(fatiCollect);
+        materialTypeListDTO.setType(CommonEnum.ProductModelType.FATI_YALI.code);
+        materialTypeListDTO.setList(fatiYalicollect);
+        return materialTypeListDTO;
     }
 
     public static void main(String[] args) {
-        String productModel = "270DD7A1XH-16Q";
-        int lastIndexOf = productModel.lastIndexOf("-");
+        List<String> def = new ArrayList<String>() {{
+            add("E0");
+            add("E1");
+            add("E2");
+        }};
+
+        String productModel = "D270-0050-02-E0-01";
+        String productModel1 = "D270-0050-02-F0-01";
+        String productModel2 = "D270-0050-02-D0-01";
+        List<String> abc = new ArrayList<String>() {{
+            add("D270-0050-02-E0-01");
+            add("D270-0050-02-F0-01");
+            add("D270-0050-02-G0-01");
+            add("GB/T 893.1-1986-22");
+        }};
+        List<String> collect = abc.stream().filter(e -> {
+            String[] split = e.split("-");
+            if (split.length > 3) {
+                System.out.println(split[2]);
+                System.out.println(split[3]);
+                boolean rsult = split[2].equals("02") && def.contains(split[3]);
+                return rsult;
+            }
+            return false;
+        }).collect(Collectors.toList());
+        System.out.println("========");
+
+        System.out.println(abc);
+        System.out.println(collect);
+
+//        String productModel = "";
+        String[] split = productModel.split("-");
         String fati = "";
         System.out.println(fati);
     }
