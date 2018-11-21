@@ -36,10 +36,10 @@ public interface PurcahseOrderService {
 
     /**
      * 获取采购订单详情
-     * @param purchaseOrderNo
+     * @param id
      * @return
      */
-    ResultBean getInfo(String purchaseOrderNo);
+    ResultBean getInfo(Integer id);
 
     /**
      * 获取列表

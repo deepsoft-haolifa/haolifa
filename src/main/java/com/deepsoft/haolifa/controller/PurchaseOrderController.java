@@ -30,27 +30,21 @@ public class PurchaseOrderController {
         return purcahseOrderService.delete(purchaseOrderNo);
     }
 
-    @ApiOperation("删除采购订单单项(功能是否需要待定)")
+    @ApiOperation("删除采购订单单项")
     @GetMapping("deleteItem/{purchaseOrderNo}/{materialGraphNo}")
     public ResultBean deleteItem(@PathVariable("purchaseOrderNo") String purchaseOrderNo,@PathVariable("materialGraphNo") String materialGraphNo){
         return purcahseOrderService.deleteItem(purchaseOrderNo,materialGraphNo);
     }
 
-    @ApiOperation("修改采购订单")
+    @ApiOperation("修改采购订单,待完善")
     @PostMapping("update")
     public ResultBean update(@RequestBody PurchaseOrderDTO model){
         return purcahseOrderService.update(model);
     }
 
     @ApiOperation("查询订单详情")
-    @GetMapping("info/{purchaseOrderNo}")
-    public ResultBean getInfo(@PathVariable("purchaseOrderNo") String purchaseOrderNo){
-        return purcahseOrderService.getInfo(purchaseOrderNo);
-    }
-
-    @ApiOperation("查询订单列表")
-    @PostMapping("list")
-    public ResultBean getInfo(@RequestBody PurchaseOrderListDTO model){
-        return purcahseOrderService.getList(model);
+    @GetMapping("info/{formId}")
+    public ResultBean getInfo(@PathVariable("formId") Integer id){
+        return purcahseOrderService.getInfo(id);
     }
 }

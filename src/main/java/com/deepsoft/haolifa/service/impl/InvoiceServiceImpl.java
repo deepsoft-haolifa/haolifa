@@ -50,12 +50,8 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
 
     @Override
     public ResultBean delete(Integer id) {
-        Invoice invoice = new Invoice();
-        invoice.setIsDelete(CommonEnum.Consts.YES.code);
-        InvoiceExample invoiceExample = new InvoiceExample();
-        invoiceExample.or().andIdEqualTo(id);
-        int delete = invoiceMapper.updateByExampleSelective(invoice, invoiceExample);
-        return ResultBean.success(delete);
+        invoiceMapper.deleteByPrimaryKey(id);
+        return ResultBean.success(1);
     }
 
     @Override
@@ -98,5 +94,10 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean info(Integer id) {
+        return ResultBean.success(invoiceMapper.selectByPrimaryKey(id));
     }
 }
