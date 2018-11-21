@@ -91,6 +91,7 @@
             f.`id` AS flowId,
             f.`name` AS flowName,
             s.`id` AS stepId,
+            fi.`id` AS instanceId,
             s.`name` AS stepName,
             u.`username` AS createUser,
             u.`real_name` AS createUserRealName,

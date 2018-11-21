@@ -56,4 +56,19 @@
     </foreach>
   </insert>
 
+  <select id="selectUserByRole" parameterType="java.lang.String" resultType="com.deepsoft.haolifa.model.vo.UserPageVO">
+    SELECT
+      u.`id` AS id,
+      u.`username` AS username,
+      u.`real_name` AS realName
+   FROM `sys_role` r LEFT JOIN
+   	`sys_role_user` ru ON
+   	 r.`id` = ru.`sys_role_id`
+   LEFT JOIN
+    `sys_user` u ON
+     u.`id` = ru.`sys_user_id`
+	WHERE r.`role_name` = #{roleName}
+	AND u.`is_delete` = 0;
+  </select>
+
 </mapper>
