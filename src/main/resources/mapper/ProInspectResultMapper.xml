@@ -121,29 +121,32 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
-    insert into pro_inspect_result (id, inspect_no, order_no, 
-      product_model, testing_unit, testing_process, 
-      testing_number, unqualified_number, testing_person, 
-      technical_requirements, testing_result, inspector, 
-      inspecte_time, reason, responsible_department, 
-      department_leader, responsible_analyze_time, 
-      create_time, update_time, is_delete, 
-      create_user_id)
-    values (#{id,jdbcType=INTEGER}, #{inspectNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
-      #{productModel,jdbcType=VARCHAR}, #{testingUnit,jdbcType=VARCHAR}, #{testingProcess,jdbcType=VARCHAR}, 
-      #{testingNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{testingPerson,jdbcType=VARCHAR}, 
-      #{technicalRequirements,jdbcType=VARCHAR}, #{testingResult,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, 
-      #{inspecteTime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, #{responsibleDepartment,jdbcType=VARCHAR}, 
-      #{departmentLeader,jdbcType=VARCHAR}, #{responsibleAnalyzeTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
-      #{createUserId,jdbcType=INTEGER})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pro_inspect_result (inspect_no, order_no, product_model, 
+      testing_unit, testing_process, testing_number, 
+      unqualified_number, testing_person, technical_requirements, 
+      testing_result, inspector, inspecte_time, 
+      reason, responsible_department, department_leader, 
+      responsible_analyze_time, create_time, 
+      update_time, is_delete, create_user_id
+      )
+    values (#{inspectNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
+      #{testingUnit,jdbcType=VARCHAR}, #{testingProcess,jdbcType=VARCHAR}, #{testingNumber,jdbcType=INTEGER}, 
+      #{unqualifiedNumber,jdbcType=INTEGER}, #{testingPerson,jdbcType=VARCHAR}, #{technicalRequirements,jdbcType=VARCHAR}, 
+      #{testingResult,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, #{inspecteTime,jdbcType=TIMESTAMP}, 
+      #{reason,jdbcType=VARCHAR}, #{responsibleDepartment,jdbcType=VARCHAR}, #{departmentLeader,jdbcType=VARCHAR}, 
+      #{responsibleAnalyzeTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into pro_inspect_result
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="inspectNo != null">
         inspect_no,
       </if>
@@ -206,9 +209,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="inspectNo != null">
         #{inspectNo,jdbcType=VARCHAR},
       </if>

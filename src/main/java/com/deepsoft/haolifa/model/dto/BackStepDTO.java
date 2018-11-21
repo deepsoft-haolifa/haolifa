@@ -9,4 +9,6 @@ public class BackStepDTO {
 
     private String stepName;
 
+    private Integer prevStepId;
+
 }

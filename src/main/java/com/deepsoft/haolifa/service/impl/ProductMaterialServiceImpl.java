@@ -33,36 +33,16 @@ public class ProductMaterialServiceImpl extends BaseService implements ProductMa
     private ProductService productService;
 
     @Override
-    public ResultBean editInfo(String productNo, ProductMaterialDTO model) {
+    public List<ProductMaterial> getMaterialListByNo(String productNo) {
         // 判断是否有这个产品
         Product infoByNo = productService.getInfoByNo(productNo);
         if (infoByNo == null) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+            return null;
         }
-        int result = 0;
-        String materialGraphNo = model.getMaterialGraphNo();
         ProductMaterialExample example = new ProductMaterialExample();
-        example.or().andProductNoEqualTo(productNo).andMaterialGraphNoEqualTo(materialGraphNo);
+        example.or().andProductNoEqualTo(productNo);
         List<ProductMaterial> productMaterials = productMaterialMapper.selectByExample(example);
-        // 如果有，就更新数据
-        if (null != productMaterials && productMaterials.size() > 0) {
-            ProductMaterial productMaterial = productMaterials.get(0);
-            productMaterial.setReplaceMaterialGraphNo(model.getMaterialGraphNo());
-            productMaterial.setMaterialGraphNo(model.getMaterialGraphNo());
-            productMaterial.setMaterialCount(model.getMaterialCount());
-            productMaterial.setUpdateUser(getLoginUserId());
-            productMaterial.setUpdateTime(new Date());
-            result = productMaterialMapper.updateByPrimaryKey(productMaterial);
-        } else {
-            result = productMaterialMapper.insertSelective(new ProductMaterial() {{
-                setCreateUser(getLoginUserId());
-                setProductNo(productNo);
-                setMaterialCount(model.getMaterialCount());
-                setMaterialGraphNo(model.getMaterialGraphNo());
-                setReplaceMaterialGraphNo(model.getReplaceMaterialGraphNo());
-            }});
-        }
-        return ResultBean.success(result);
+        return productMaterials;
     }
 
     @Override

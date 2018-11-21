@@ -595,63 +595,253 @@ public class FlowStepExample {
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderIsNull() {
-            addCriterion("step_order is null");
+        public Criteria andPrevStepIdIsNull() {
+            addCriterion("prev_step_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderIsNotNull() {
-            addCriterion("step_order is not null");
+        public Criteria andPrevStepIdIsNotNull() {
+            addCriterion("prev_step_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderEqualTo(Integer value) {
-            addCriterion("step_order =", value, "stepOrder");
+        public Criteria andPrevStepIdEqualTo(Integer value) {
+            addCriterion("prev_step_id =", value, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderNotEqualTo(Integer value) {
-            addCriterion("step_order <>", value, "stepOrder");
+        public Criteria andPrevStepIdNotEqualTo(Integer value) {
+            addCriterion("prev_step_id <>", value, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderGreaterThan(Integer value) {
-            addCriterion("step_order >", value, "stepOrder");
+        public Criteria andPrevStepIdGreaterThan(Integer value) {
+            addCriterion("prev_step_id >", value, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderGreaterThanOrEqualTo(Integer value) {
-            addCriterion("step_order >=", value, "stepOrder");
+        public Criteria andPrevStepIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("prev_step_id >=", value, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderLessThan(Integer value) {
-            addCriterion("step_order <", value, "stepOrder");
+        public Criteria andPrevStepIdLessThan(Integer value) {
+            addCriterion("prev_step_id <", value, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderLessThanOrEqualTo(Integer value) {
-            addCriterion("step_order <=", value, "stepOrder");
+        public Criteria andPrevStepIdLessThanOrEqualTo(Integer value) {
+            addCriterion("prev_step_id <=", value, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderIn(List<Integer> values) {
-            addCriterion("step_order in", values, "stepOrder");
+        public Criteria andPrevStepIdIn(List<Integer> values) {
+            addCriterion("prev_step_id in", values, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderNotIn(List<Integer> values) {
-            addCriterion("step_order not in", values, "stepOrder");
+        public Criteria andPrevStepIdNotIn(List<Integer> values) {
+            addCriterion("prev_step_id not in", values, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderBetween(Integer value1, Integer value2) {
-            addCriterion("step_order between", value1, value2, "stepOrder");
+        public Criteria andPrevStepIdBetween(Integer value1, Integer value2) {
+            addCriterion("prev_step_id between", value1, value2, "prevStepId");
             return (Criteria) this;
         }
 
-        public Criteria andStepOrderNotBetween(Integer value1, Integer value2) {
-            addCriterion("step_order not between", value1, value2, "stepOrder");
+        public Criteria andPrevStepIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("prev_step_id not between", value1, value2, "prevStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueIsNull() {
+            addCriterion("condition_true is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueIsNotNull() {
+            addCriterion("condition_true is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueEqualTo(Integer value) {
+            addCriterion("condition_true =", value, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueNotEqualTo(Integer value) {
+            addCriterion("condition_true <>", value, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueGreaterThan(Integer value) {
+            addCriterion("condition_true >", value, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueGreaterThanOrEqualTo(Integer value) {
+            addCriterion("condition_true >=", value, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueLessThan(Integer value) {
+            addCriterion("condition_true <", value, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueLessThanOrEqualTo(Integer value) {
+            addCriterion("condition_true <=", value, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueIn(List<Integer> values) {
+            addCriterion("condition_true in", values, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueNotIn(List<Integer> values) {
+            addCriterion("condition_true not in", values, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueBetween(Integer value1, Integer value2) {
+            addCriterion("condition_true between", value1, value2, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionTrueNotBetween(Integer value1, Integer value2) {
+            addCriterion("condition_true not between", value1, value2, "conditionTrue");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseIsNull() {
+            addCriterion("condition_false is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseIsNotNull() {
+            addCriterion("condition_false is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseEqualTo(Integer value) {
+            addCriterion("condition_false =", value, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseNotEqualTo(Integer value) {
+            addCriterion("condition_false <>", value, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseGreaterThan(Integer value) {
+            addCriterion("condition_false >", value, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseGreaterThanOrEqualTo(Integer value) {
+            addCriterion("condition_false >=", value, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseLessThan(Integer value) {
+            addCriterion("condition_false <", value, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseLessThanOrEqualTo(Integer value) {
+            addCriterion("condition_false <=", value, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseIn(List<Integer> values) {
+            addCriterion("condition_false in", values, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseNotIn(List<Integer> values) {
+            addCriterion("condition_false not in", values, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseBetween(Integer value1, Integer value2) {
+            addCriterion("condition_false between", value1, value2, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andConditionFalseNotBetween(Integer value1, Integer value2) {
+            addCriterion("condition_false not between", value1, value2, "conditionFalse");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdIsNull() {
+            addCriterion("form_show_step_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdIsNotNull() {
+            addCriterion("form_show_step_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdEqualTo(String value) {
+            addCriterion("form_show_step_id =", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdNotEqualTo(String value) {
+            addCriterion("form_show_step_id <>", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdGreaterThan(String value) {
+            addCriterion("form_show_step_id >", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdGreaterThanOrEqualTo(String value) {
+            addCriterion("form_show_step_id >=", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdLessThan(String value) {
+            addCriterion("form_show_step_id <", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdLessThanOrEqualTo(String value) {
+            addCriterion("form_show_step_id <=", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdLike(String value) {
+            addCriterion("form_show_step_id like", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdNotLike(String value) {
+            addCriterion("form_show_step_id not like", value, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdIn(List<String> values) {
+            addCriterion("form_show_step_id in", values, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdNotIn(List<String> values) {
+            addCriterion("form_show_step_id not in", values, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdBetween(String value1, String value2) {
+            addCriterion("form_show_step_id between", value1, value2, "formShowStepId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormShowStepIdNotBetween(String value1, String value2) {
+            addCriterion("form_show_step_id not between", value1, value2, "formShowStepId");
             return (Criteria) this;
         }
     }

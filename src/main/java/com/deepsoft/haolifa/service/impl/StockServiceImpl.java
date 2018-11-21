@@ -47,10 +47,10 @@ public class StockServiceImpl extends BaseService implements StockService {
             if (null != model.getQuantity() && model.getQuantity() != 0) {
                 stock.setQuantity(stock.getQuantity() + model.getQuantity());
             }
-            // 更新锁定数量
-            if (null != model.getLockQuantity() && model.getLockQuantity() != 0) {
-                stock.setLockQuantity(stock.getLockQuantity() + model.getLockQuantity());
-            }
+//            // 更新锁定数量
+//            if (null != model.getLockQuantity() && model.getLockQuantity() != 0) {
+//                stock.setLockQuantity(stock.getLockQuantity() + model.getLockQuantity());
+//            }
             stock.setUpdateTime(new Date());
             int update = stockMapper.updateByExampleSelective(stock, example);
             if (update > 0) {

@@ -106,19 +106,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Expenses">
-    insert into expenses (id, total_amount, expenses_classify, 
-      create_user_id, commit_user, is_delete, 
-      create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{totalAmount,jdbcType=DECIMAL}, #{expensesClassify,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=INTEGER}, #{commitUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into expenses (total_amount, expenses_classify, create_user_id, 
+      commit_user, is_delete, create_time, 
+      update_time)
+    values (#{totalAmount,jdbcType=DECIMAL}, #{expensesClassify,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
+      #{commitUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Expenses">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into expenses
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="totalAmount != null">
         total_amount,
       </if>
@@ -142,9 +145,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="totalAmount != null">
         #{totalAmount,jdbcType=DECIMAL},
       </if>

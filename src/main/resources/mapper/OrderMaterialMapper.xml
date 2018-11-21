@@ -9,9 +9,10 @@
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="material_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="order_product_associate_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="material_count" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="replace_material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, order_no, material_id, material_graph_no, 
-    material_count
+    id, create_time, update_time, create_user, update_user, order_no, order_product_associate_id, 
+    material_graph_no, replace_material_graph_no, material_count
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterialExample" resultMap="BaseResultMap">
     select
@@ -107,21 +108,24 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterial">
-    insert into order_material (id, create_time, update_time, 
-      create_user, update_user, order_no, 
-      material_id, material_graph_no, material_count
-      )
-    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=CHAR}, 
-      #{materialId,jdbcType=INTEGER}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialCount,jdbcType=CHAR}
-      )
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_material (create_time, update_time, create_user, 
+      update_user, order_no, order_product_associate_id, 
+      material_graph_no, replace_material_graph_no, 
+      material_count)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
+      #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=CHAR}, #{orderProductAssociateId,jdbcType=INTEGER}, 
+      #{materialGraphNo,jdbcType=VARCHAR}, #{replaceMaterialGraphNo,jdbcType=VARCHAR}, 
+      #{materialCount,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterial">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into order_material
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="createTime != null">
         create_time,
       </if>
@@ -137,20 +141,20 @@
       <if test="orderNo != null">
         order_no,
       </if>
-      <if test="materialId != null">
-        material_id,
+      <if test="orderProductAssociateId != null">
+        order_product_associate_id,
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
+      </if>
+      <if test="replaceMaterialGraphNo != null">
+        replace_material_graph_no,
       </if>
       <if test="materialCount != null">
         material_count,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -166,14 +170,17 @@
       <if test="orderNo != null">
         #{orderNo,jdbcType=CHAR},
       </if>
-      <if test="materialId != null">
-        #{materialId,jdbcType=INTEGER},
+      <if test="orderProductAssociateId != null">
+        #{orderProductAssociateId,jdbcType=INTEGER},
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
       </if>
+      <if test="replaceMaterialGraphNo != null">
+        #{replaceMaterialGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="materialCount != null">
-        #{materialCount,jdbcType=CHAR},
+        #{materialCount,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -204,14 +211,17 @@
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=CHAR},
       </if>
-      <if test="record.materialId != null">
-        material_id = #{record.materialId,jdbcType=INTEGER},
+      <if test="record.orderProductAssociateId != null">
+        order_product_associate_id = #{record.orderProductAssociateId,jdbcType=INTEGER},
       </if>
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.replaceMaterialGraphNo != null">
+        replace_material_graph_no = #{record.replaceMaterialGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.materialCount != null">
-        material_count = #{record.materialCount,jdbcType=CHAR},
+        material_count = #{record.materialCount,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -226,9 +236,10 @@
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
       order_no = #{record.orderNo,jdbcType=CHAR},
-      material_id = #{record.materialId,jdbcType=INTEGER},
+      order_product_associate_id = #{record.orderProductAssociateId,jdbcType=INTEGER},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
-      material_count = #{record.materialCount,jdbcType=CHAR}
+      replace_material_graph_no = #{record.replaceMaterialGraphNo,jdbcType=VARCHAR},
+      material_count = #{record.materialCount,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -251,14 +262,17 @@
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=CHAR},
       </if>
-      <if test="materialId != null">
-        material_id = #{materialId,jdbcType=INTEGER},
+      <if test="orderProductAssociateId != null">
+        order_product_associate_id = #{orderProductAssociateId,jdbcType=INTEGER},
       </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       </if>
+      <if test="replaceMaterialGraphNo != null">
+        replace_material_graph_no = #{replaceMaterialGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="materialCount != null">
-        material_count = #{materialCount,jdbcType=CHAR},
+        material_count = #{materialCount,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -270,9 +284,10 @@
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},
       order_no = #{orderNo,jdbcType=CHAR},
-      material_id = #{materialId,jdbcType=INTEGER},
+      order_product_associate_id = #{orderProductAssociateId,jdbcType=INTEGER},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
-      material_count = #{materialCount,jdbcType=CHAR}
+      replace_material_graph_no = #{replaceMaterialGraphNo,jdbcType=VARCHAR},
+      material_count = #{materialCount,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

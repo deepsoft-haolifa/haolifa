@@ -28,13 +28,6 @@ public class ApplyBuyController {
     public ResultBean deleteItem(@PathVariable("applyBuyNo") String applyBuyNo, @PathVariable("materialGraphNo") String materialGraphNo) {
         return applyBuyService.deleteItem(applyBuyNo,materialGraphNo);
     }
-
-    @ApiOperation("删除请购单")
-    @GetMapping("delete/{applyBuyNo}")
-    public ResultBean delete(@PathVariable("applyBuyNo") String applyBuyNo) {
-        return applyBuyService.delete(applyBuyNo);
-    }
-
     @ApiOperation("修改请购单单项")
     @PostMapping("update")
     public ResultBean update(@RequestBody ApplyBuyUpdateDTO model) {
@@ -42,17 +35,10 @@ public class ApplyBuyController {
     }
 
     @ApiOperation("请购单详情")
-    @GetMapping("info/{applyBuyNo}")
-    public ResultBean getInfo(@PathVariable("applyBuyNo") String applyBuyNo) {
-        return applyBuyService.getInfo(applyBuyNo);
+    @GetMapping("info/{formId}")
+    public ResultBean getInfo(@PathVariable(value = "formId") Integer applyBuyId) {
+        return applyBuyService.getInfo(applyBuyId);
     }
-
-    @ApiOperation("请购单列表")
-    @GetMapping("list")
-    public ResultBean getList(@RequestBody ApplyBuyListDTO model) {
-        return applyBuyService.getList(model);
-    }
-
 
 
 

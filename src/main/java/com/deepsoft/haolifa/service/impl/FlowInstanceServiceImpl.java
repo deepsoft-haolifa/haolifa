@@ -10,10 +10,14 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import javax.print.DocFlavor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,23 +40,32 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         //1、 添加一条初始化历史记录（流程节点表单内容通过单独的接口，前端调用添加）
         //2、添加实例信息，当前节点为初始化后节点
         //3、返回实例id
-        List<FlowStep> flowSteps = rangeStepArray(model.getFlowId(), 0, 3);
-        // 获取默认初始化节点
-        FlowStep prevStep = flowSteps.get(0);
-        // 获取当前后节点
-        FlowStep currentStep = flowSteps.get(1);
-        // 获取下一节点
-        FlowStep nextStep = flowSteps.get(2);
+        FlowStepExample flowStepExample = new FlowStepExample();
+        flowStepExample.createCriteria().andFlowIdEqualTo(model.getFlowId());
+        List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
+        FlowStep initStep = new FlowStep();
+        for (int i = 0; i < flowSteps.size(); i++) {
+            FlowStep f = flowSteps.get(i);
+            if (f.getPrevStepId() == 0) {
+                initStep = f;
+            }
+        }
+        // 获取第一个节点
+        FlowStep currentStep = new FlowStep();
+        for (int i = 0; i < flowSteps.size(); i++) {
+            FlowStep f = flowSteps.get(i);
+            if (initStep.getConditionTrue() == f.getStepId()) {
+                currentStep = f;
+            }
+        }
         // 添加当前流程实例
         FlowInstance flowInstance = new FlowInstance();
         flowInstance.setCreateUserId(getLoginUserId());
         flowInstance.setFlowId(model.getFlowId());
         flowInstance.setSummary(model.getSummary());
-        flowInstance.setUserId(Integer.parseInt(currentStep.getUserId()));
+        flowInstance.setUserId(currentStep.getUserId());
         flowInstance.setRoleId(currentStep.getRoleId());
-        flowInstance.setPrevStepId(prevStep.getStepId());
         flowInstance.setCurrentStepId(currentStep.getStepId());
-        flowInstance.setNextStepId(nextStep == null ? 0 : nextStep.getStepId()); // 无下个节点
         flowInstance.setFormNo(model.getFormNo());// 流程初始化关联的主表单编号（采购单、生产订单、发票编号、机加工等）
         instanceMapper.insertSelective(flowInstance);
         // 添加初始化流程实例历史（默认第一条已处理）
@@ -63,7 +76,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         flowHistory.setAuditUserId(getLoginUserId());
         flowHistory.setFormType(model.getFormType().byteValue());
         flowHistory.setAuditResult(CommonEnum.Consts.FLOW_INIT.code);// 流程初始化历史
-        flowHistory.setStepId(prevStep.getStepId());
+        flowHistory.setStepId(initStep.getStepId());
         historyMapper.insertSelective(flowHistory);
         Map<String, Object> result = new HashMap<>(4);
         result.put("instanceId", flowInstance.getId());
@@ -82,6 +95,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         if (flowInstance.getIsOver() == 1) {
             return ResultBean.error(CommonEnum.ResponseEnum.FLOW_IS_OVER);
         }
+        // 获取当前待处理节点
+        FlowStep currentStep = instanceHistoryMapper.selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
         // 添加历史
         FlowHistory flowHistory = new FlowHistory();
         flowHistory.setAuditUserId(getLoginUserId());
@@ -106,25 +121,33 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                 // 通过
                 flowHistory.setAuditResult(CommonEnum.Consts.AUDIT_PASS.code);
                 // 判断流程是否结束
-                if (flowInstance.getNextStepId() == 0) {
+                if ((model.getCondition() && currentStep.getConditionTrue() == 0)
+                        || (!model.getCondition() && currentStep.getConditionFalse() == 0)) {
                     // 流程结束
                     updateInstance.setIsOver(CommonEnum.Consts.YES.code);
                 } else {
                     // 流程实例更新
-                    // 获取孩子节点以及孙子节点信息
-                    List<FlowStep> childFlowStep = new ArrayList<>(rangeStepArray(flowInstance.getFlowId(), flowInstance.getCurrentStepId(), 2));
-                    FlowStep nextStep = childFlowStep.get(0);
-                    FlowStep grandStep = childFlowStep.get(1);
-                    updateInstance.setPrevStepId(flowInstance.getCurrentStepId());
-                    updateInstance.setCurrentStepId(flowInstance.getNextStepId());
+                    // 获取孩子节点
+                    FlowStep nextStep = new FlowStep();
+                    if (model.getCondition()) {
+                        updateInstance.setCurrentStepId(currentStep.getConditionTrue());
+                        nextStep = instanceHistoryMapper.selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionTrue());
+                    } else {
+                        updateInstance.setCurrentStepId(currentStep.getConditionFalse());
+                        nextStep = instanceHistoryMapper.selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionTrue());
+                    }
                     updateInstance.setRoleId(nextStep.getRoleId());
-                    updateInstance.setUserId(model.getAllotUserId() == null ? Integer.parseInt(nextStep.getUserId()) : model.getAllotUserId());
-                    updateInstance.setNextStepId(grandStep.getStepId() == null ? 0 : grandStep.getStepId());//最后一个节点无下一个节点
+                    // 特殊化处理:采购流程最后一个节点指向发起人
+                    if(flowInstance.getFlowId() == 2 && nextStep.getConditionTrue()==0 && nextStep.getConditionFalse()==0) {
+                        updateInstance.setUserId(flowInstance.getCreateUserId().toString());
+                    } else {
+                        updateInstance.setUserId(model.getAllotUserId() == null ? nextStep.getUserId() : model.getAllotUserId().toString());
+                    }
                 }
             } else {
                 // 退回
                 flowHistory.setAuditResult(CommonEnum.Consts.AUDIT_BACK.code);
-                if (flowInstance.getPrevStepId() == 0) { // 如果上一节点为0 表示不可再退回
+                if (currentStep.getPrevStepId() == 0) { // 如果上一节点为0 表示不可再退回
                     return ResultBean.error(CommonEnum.ResponseEnum.STEP_BACK_ERROR);
                 }
                 // 是否指定了退回节点
@@ -132,26 +155,16 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                     return ResultBean.error(CommonEnum.ResponseEnum.BACK_STEP_NOT_EXIST);
                 }
                 // 实例退回至指定节点:currentStep = backStep
-                FlowStepExample flowStepExample = new FlowStepExample();
-                FlowStepExample.Criteria criteria = flowStepExample.createCriteria();
-                criteria.andFlowIdEqualTo(flowInstance.getFlowId()).andStepIdEqualTo(model.getBackStepId());
-                FlowStep currentStep = flowStepMapper.selectByExample(flowStepExample).get(0);
-                List<FlowStep> fatherFlowStep = new ArrayList<>(rangeStepArray(flowInstance.getFlowId(), model.getBackStepId(), -1));
-                List<FlowStep> childFolwStep = new ArrayList<>(rangeStepArray(flowInstance.getFlowId(), model.getBackStepId(), 1));
-
-                FlowStep prevStep = fatherFlowStep.get(0);
-                FlowStep nextStep = childFolwStep.get(0);
-                updateInstance.setCurrentStepId(currentStep.getStepId());
-                updateInstance.setPrevStepId(prevStep.getStepId() == null ? 0 : prevStep.getStepId());// 初始化节点无上一个节点
-                updateInstance.setNextStepId(nextStep.getStepId());
-                updateInstance.setRoleId(nextStep.getRoleId());
+                FlowStep currentBackStep = instanceHistoryMapper.selectFlowStepByStepId(flowInstance.getFlowId(), model.getBackStepId());
+                updateInstance.setCurrentStepId(currentBackStep.getStepId());
+                updateInstance.setRoleId(currentBackStep.getRoleId());
                 // 实例退回标示 变为true
                 updateInstance.setIsBack(CommonEnum.Consts.YES.code);
                 // 获取上一节点的审核人//可能存在指定分配，所以从历史中查询审核人
                 FlowHistoryExample flowHistoryExample = new FlowHistoryExample();
-                flowHistoryExample.createCriteria().andInstanceIdEqualTo(flowInstance.getId()).andStepIdEqualTo(currentStep.getStepId());
+                flowHistoryExample.createCriteria().andInstanceIdEqualTo(flowInstance.getId()).andStepIdEqualTo(currentBackStep.getStepId());
                 FlowHistory flowHistorySwap = historyMapper.selectByExample(flowHistoryExample).get(0);
-                updateInstance.setUserId(flowHistorySwap.getAuditUserId());
+                updateInstance.setUserId(flowHistorySwap.getAuditUserId().toString());
             }
         }
         // 添加审核历史
@@ -161,57 +174,6 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         Map<String, Object> result = new HashMap<>();
         result.put("instanceId", model.getId());
         return ResultBean.success(result);
-    }
-
-    /**
-     * 获取有序节点列表指定位置，向前或向后若干范围内的子序列（不包含自身）。若range=0 ,则返回完整列表
-     *
-     * @param flowId
-     * @param stepId
-     * @param range
-     * @return
-     */
-    private List<FlowStep> rangeStepArray(Integer flowId, Integer stepId, Integer range) {
-        // 查询结果按照step_order升序
-        FlowStepExample flowStepExample = new FlowStepExample();
-        FlowStepExample.Criteria criteria = flowStepExample.createCriteria();
-        criteria.andFlowIdEqualTo(flowId);
-        flowStepExample.setOrderByClause("step_order asc");
-        List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
-        int beginIdx = 0;
-        boolean findflag = false;
-        for (int i = 0; i < flowSteps.size(); i++) {
-            if (stepId == flowSteps.get(i).getStepId()) {
-                beginIdx = i;
-                findflag  =true;
-                break;
-            }
-        }
-        List<FlowStep> result = flowSteps;
-        if (range < 0) {
-            if (range + beginIdx < 0) {
-                result = flowSteps.subList(0, beginIdx);
-            } else {
-                result = flowSteps.subList(range + beginIdx, beginIdx);
-            }
-        } else if (range > 0) {
-            if (findflag)
-                beginIdx += 1;
-            if ((beginIdx + range) > flowSteps.size()) {
-                result = flowSteps.subList(beginIdx, flowSteps.size());
-            } else {
-                result = flowSteps.subList(beginIdx, beginIdx + range);
-            }
-        }
-        if (range != 0 && result.size() < Math.abs(range)) {
-            final int len = result.size() == 0 ? Math.abs(range) : result.size();
-            for (int i = 0; i < len; i++) {
-                result.add(new FlowStep());
-            }
-            if (range < 0) // 保证有序
-                Collections.reverse(result);
-        }
-        return result;
     }
 
     @Override
@@ -224,18 +186,45 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
 
         // 2、返回当前要处理的节点
         FlowInstanceWrapper flowInstance = instanceHistoryMapper.selectByPrimaryKey(instanceId);
-        if (getLoginUserId() == flowInstance.getUserId() && flowInstance.getIsOver() == 0) {
+        // 3、获取FlowStep详情
+        FlowStep flowStep = instanceHistoryMapper.selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
+        List<String> userIds = Arrays.asList(flowInstance.getUserId().split(","));
+        if (userIds.contains(getLoginUserId()) && flowInstance.getIsOver() == 0) {
             // 当前查看用户是该节点的处理人 并且流程未结束
             // 如果当前实例的退回标示为true，则查询当前节点的审核历史，供审核人重新审核
+            HistoryInfo dealStep = new HistoryInfo();
             if (flowInstance.getIsBack().intValue() == 1) {
                 // 如果是被退回至当前节点，则查询最晚的一次审核信息
                 historyInfo.setStepId(flowInstance.getCurrentStepId());
                 List<HistoryInfo> historyInfoOlds = instanceHistoryMapper.selectInstanceHistory(historyInfo);
-                instanceRecordDTO.setDealStep(historyInfoOlds.get(historyInfoOlds.size() - 1));
+                dealStep = historyInfoOlds.get(historyInfoOlds.size() - 1);
             } else {
-                historyInfo.setStepId(flowInstance.getCurrentStepId());
-                instanceRecordDTO.setDealStep(historyInfo);
+                flowInstance.getCurrentStepId();
+                dealStep.setInstanceId(instanceId);
+                dealStep.setStepId(flowInstance.getCurrentStepId());
             }
+            // 获取要展示的表单
+            String formStepIds = flowStep.getFormShowStepId();
+            List<Integer> stepIds = new ArrayList<>();
+            if (StringUtils.isNotEmpty(formStepIds)) {
+                stepIds = CollectionUtils.arrayToList(formStepIds.split(","));
+            }
+            if (stepIds.size() == 0) {
+                dealStep.setForms(new ArrayList<>());
+            } else {
+                FlowHistoryExample flowHistoryExample = new FlowHistoryExample();
+                flowHistoryExample.createCriteria().andInstanceIdEqualTo(flowInstance.getId()).andStepIdIn(stepIds);
+                List<FlowHistory> flowHistories = historyMapper.selectByExample(flowHistoryExample);
+                List<Map<String, Integer>> forms = flowHistories.stream().filter(f -> f.getFormId() != 0).map(f -> {
+                    Map<String, Integer> map = new HashMap<>();
+                    map.put("formId", f.getFormId());
+                    map.put("formType", f.getFormType().intValue());
+                    return map;
+                }).distinct().collect(Collectors.toList());
+                dealStep.setForms(forms);
+            }
+            instanceRecordDTO.setDealStep(dealStep);
+
         }
         // 当前节点处理人不是当前用户，只返回历史
         instanceRecordDTO.setHistoryInfos(historyInfos);
@@ -248,9 +237,24 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
 
     @Override
     public ResultBean backSteps(Integer instanceId) {
+        // 获取当前节点之前的前驱节点集合
         FlowInstance flowInstance = instanceMapper.selectByPrimaryKey(instanceId);
-        List<BackStepDTO> backStepDTOS = instanceHistoryMapper.selectBackStepsByFlowIdAndStepId(flowInstance.getFlowId(), flowInstance
-                .getCurrentStepId());
-        return ResultBean.success(backStepDTOS);
+        List<BackStepDTO> backStepDTOS = instanceHistoryMapper.selectBackStepsByFlowId(flowInstance.getFlowId());
+        Map<Integer, List<BackStepDTO>> backStepSwap = backStepDTOS.stream().collect(Collectors.groupingBy(f -> f.getStepId()));
+        int preStepId = 0;
+        for (int i = 0; i < backStepDTOS.size(); i++) {
+            BackStepDTO backStepDTO = backStepDTOS.get(i);
+            if (backStepDTO.getStepId() == flowInstance.getCurrentStepId()) {
+                preStepId = backStepDTO.getPrevStepId();
+                break;
+            }
+        }
+        List<BackStepDTO> result = new ArrayList<>();
+        while (preStepId != 0) {
+            BackStepDTO back = backStepSwap.get(preStepId).get(0);
+            result.add(back);
+            preStepId = back.getPrevStepId();
+        }
+        return ResultBean.success(result);
     }
 }

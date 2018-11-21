@@ -13,11 +13,7 @@ public class FlowInstance {
 
     private Integer currentStepId;
 
-    private Integer nextStepId;
-
-    private Integer prevStepId;
-
-    private Integer userId;
+    private String userId;
 
     private Integer roleId;
 
@@ -31,14 +27,12 @@ public class FlowInstance {
 
     private Date updateTime;
 
-    public FlowInstance(Integer id, String summary, String formNo, Integer flowId, Integer currentStepId, Integer nextStepId, Integer prevStepId, Integer userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
+    public FlowInstance(Integer id, String summary, String formNo, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
         this.id = id;
         this.summary = summary;
         this.formNo = formNo;
         this.flowId = flowId;
         this.currentStepId = currentStepId;
-        this.nextStepId = nextStepId;
-        this.prevStepId = prevStepId;
         this.userId = userId;
         this.roleId = roleId;
         this.isOver = isOver;
@@ -92,28 +86,12 @@ public class FlowInstance {
         this.currentStepId = currentStepId;
     }
 
-    public Integer getNextStepId() {
-        return nextStepId;
-    }
-
-    public void setNextStepId(Integer nextStepId) {
-        this.nextStepId = nextStepId;
-    }
-
-    public Integer getPrevStepId() {
-        return prevStepId;
-    }
-
-    public void setPrevStepId(Integer prevStepId) {
-        this.prevStepId = prevStepId;
-    }
-
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public Integer getRoleId() {

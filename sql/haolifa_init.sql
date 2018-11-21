@@ -185,6 +185,7 @@ CREATE TABLE `flow_history` (
 	  `safe_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '安全库存量（上浮10%提醒）',
 	  `safety_factor` varchar(16) NOT NULL DEFAULT '' COMMENT '存库安全系数',
 	  `current_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '目前库存量（每次出库，入库的时候实时更新）',
+	  `lock_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '锁定数量（核料成功锁定，零件出库的时候释放）',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
@@ -209,135 +210,6 @@ CREATE TABLE `flow_history` (
 
 
 
-	DROP TABLE IF EXISTS `order_product`;
-	CREATE TABLE `order_product` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `order_no` char(36) NOT NULL COMMENT '订单编号',
-	  `order_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '订单状态',
-	  `order_contract_url` varchar(64) NOT NULL DEFAULT '' COMMENT '订单合同url',
-	  `demand_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方名称',
-	  `demand_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方代理人',
-	  `demand_telphone` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方电话',
-	  `demand_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方传真',
-	  `demand_address` varchar(128) NOT NULL DEFAULT '' COMMENT '需求方地址',
-	  `supply_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方',
-	  `supply_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方代理人',
-	  `supply_telphone` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方电话',
-	  `supply_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方传真',
-	  `supply_address` varchar(128) NOT NULL DEFAULT '' COMMENT '供应方地址',
-	  `contract_number` varchar(32) NOT NULL DEFAULT '' COMMENT '合同编号',
-	  `contract_sign_date` varchar(32) NOT NULL DEFAULT '' COMMENT '合同签订日期',
-	  `product_no` varchar(64) NOT NULL DEFAULT '' COMMENT '成品编号',
-	  `product_name` varchar(64) NOT NULL DEFAULT '' COMMENT '成品名称',
-	  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
-	  `lable` varchar(64) NOT NULL DEFAULT '' COMMENT '标签属性',
-	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '规格',
-	  `product_color` varchar(32) NOT NULL DEFAULT '' COMMENT '颜色',
-	  `product_number` int(11) NOT NULL DEFAULT 0 COMMENT '数量',
-	  `price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '单价',
-	  `total_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '总价',
-	  `discount_total_price` decimal(12,4) NOT NULL COMMENT '优惠后总价',
-	  `material_description` varchar(128) NOT NULL DEFAULT '' COMMENT '材质说明',
-	  `product_remark` varchar(1024) NOT NULL DEFAULT '' COMMENT '成品备注',
-	  `purchase_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '采购反馈时间',
-	  `production_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '生产反馈时间',
-	  `special_require` varchar(256) NOT NULL DEFAULT '' COMMENT '特殊要求',
-	  `cargo_information` varchar(128) NOT NULL DEFAULT '' COMMENT '随货资料',
-	  `sign_board` varchar(32) NOT NULL DEFAULT '' COMMENT '标牌',
-	  `acceptance_criteria` varchar(32) NOT NULL DEFAULT '' COMMENT '验收标准',
-	  `warranty_period` varchar(64) NOT NULL DEFAULT '' COMMENT '质保期限',
-	  `packaging_specification` varchar(64) NOT NULL DEFAULT '' COMMENT '包装规范',
-	  `transport_type` varchar(32) NOT NULL DEFAULT '' COMMENT '运输方式',
-	  `delivery_time` varchar(32) NOT NULL DEFAULT '' COMMENT '发货时间',
-	  `receipt_info` varchar(256) NOT NULL DEFAULT '' COMMENT '收货信息',
-	  `payment_method` varchar(32) NOT NULL DEFAULT '' COMMENT '付款方式',
-	  `freight` varchar(32) NOT NULL DEFAULT '' COMMENT '运费承担',
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_order_no` (`order_no`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
-
-
-
-	DROP TABLE IF EXISTS `order_material`;
-	CREATE TABLE `order_material` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	   `order_no` char(36) NOT NULL COMMENT '订单号',
-	  `material_id` int(11) NOT NULL DEFAULT 0 COMMENT '零件业务Id',
-	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
-	  `material_count` char(36) NOT NULL DEFAULT '' COMMENT '需要的零件数量',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单零件关联表（一个订单需要哪些零件）';
-
-
-  DROP TABLE IF EXISTS `material_receive_record`;
-	CREATE TABLE `material_receive_record` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `receive_no` char(36) NOT NULL COMMENT '领料单号',
-	  `order_no` char(36) NOT NULL COMMENT '订单号',
-	  `receive_department` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
-	  `receive_user_id` varchar(36) NOT NULL DEFAULT '' COMMENT '领料用户Id',
-	  `material_id` int(11) NOT NULL DEFAULT 0 COMMENT '零件业务Id',
-	  `material_graph_no` char(36) NOT NULL DEFAULT '' COMMENT '零件图号',
-	  `material_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '平均单价',
-	  `start_material_count` char(36) NOT NULL DEFAULT '' COMMENT '期初领料数量',
-	  `start_material_amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '期初领料金额',
-	  `actual_material_count` char(36) NOT NULL DEFAULT '' COMMENT '本期领料数量',
-	  `actual_material_amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '本期领料金额',
-	  `end_material_count` char(36) NOT NULL DEFAULT '' COMMENT '期末领料数量',
-	  `end_material_amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '期末领料金额',
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_receive_no` (`receive_no`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料记录表（一个订单需要哪些零件）';
-
-
-	DROP TABLE IF EXISTS `product`;
-	CREATE TABLE `product` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号（行业规范如：D7A1X3P-16Q-DN50）',
-	  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '成品名称',
-	  `fit_component` varchar(64) NOT NULL DEFAULT '' COMMENT '适配组件',
-	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '成品规格（如：DN65，DN80）',
-	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '成品状态',
-	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
-	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品表';
-
-
-	DROP TABLE IF EXISTS `product_material`;
-	CREATE TABLE `product_material` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号（行业规范如：D7A1X3P-16Q-DN50）',
-	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
-	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '零件数量',
-	  `replace_material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '可替换零件编号',
-	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '关联状态（0关联，1不关联）',
-	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
-	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_multi` (`product_no`,`material_graph_no`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品零件关联表（主要记录一个成品是由哪些零件组成，多对多的关系）';
-
 
 	DROP TABLE IF EXISTS `stock`;
 	CREATE TABLE `stock` (
@@ -354,7 +226,6 @@ CREATE TABLE `flow_history` (
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '库存类型：1.成品；2：零件;',
 	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '库存数量(编码时候考虑并发)',
-	  `lock_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '锁定数量（核料成功锁定，零件出库的时候释放）',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)
@@ -427,6 +298,147 @@ CREATE TABLE `flow_history` (
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='出库，入库记录表（和订单相关联）,出库，入库的时候，修改库存表的数量';
 
+
+DROP TABLE IF EXISTS `order_product`;
+	CREATE TABLE `order_product` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+	  `order_no` varchar(128) NOT NULL COMMENT '订单编号（自己生成）',
+	  `order_contract_no` varchar (128) NOT NULL DEFAULT '' COMMENT '合同订单编号',
+	  `order_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '订单状态',
+	  `order_contract_url` varchar(64) NOT NULL DEFAULT '' COMMENT '订单合同url',
+	  `demand_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方名称',
+	  `demand_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方代理人',
+	  `demand_telphone` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方电话',
+	  `demand_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方传真',
+	  `demand_address` varchar(128) NOT NULL DEFAULT '' COMMENT '需求方地址',
+	  `supply_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方',
+	  `supply_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方代理人',
+	  `supply_telphone` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方电话',
+	  `supply_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方传真',
+	  `supply_address` varchar(128) NOT NULL DEFAULT '' COMMENT '供应方地址',
+	  `contract_number` varchar(32) NOT NULL DEFAULT '' COMMENT '合同编号',
+	  `contract_sign_date` varchar(32) NOT NULL DEFAULT '' COMMENT '合同签订日期',
+	  `product_no` varchar(64) NOT NULL DEFAULT '' COMMENT '成品编号',
+	  `product_name` varchar(64) NOT NULL DEFAULT '' COMMENT '成品名称',
+	  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
+	  `lable` varchar(64) NOT NULL DEFAULT '' COMMENT '标签属性',
+	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '规格',
+	  `product_color` varchar(32) NOT NULL DEFAULT '' COMMENT '颜色',
+	  `product_number` int(11) NOT NULL DEFAULT 0 COMMENT '数量',
+	  `price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '单价',
+	  `total_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '总价',
+	  `discount_total_price` decimal(12,4) NOT NULL COMMENT '优惠后总价',
+	  `material_description` varchar(128) NOT NULL DEFAULT '' COMMENT '材质说明',
+	  `product_remark` varchar(1024) NOT NULL DEFAULT '' COMMENT '成品备注',
+	  `purchase_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '采购反馈时间',
+	  `production_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '生产反馈时间',
+	  `special_require` varchar(256) NOT NULL DEFAULT '' COMMENT '特殊要求',
+	  `cargo_information` varchar(128) NOT NULL DEFAULT '' COMMENT '随货资料',
+	  `sign_board` varchar(32) NOT NULL DEFAULT '' COMMENT '标牌',
+	  `acceptance_criteria` varchar(32) NOT NULL DEFAULT '' COMMENT '验收标准',
+	  `warranty_period` varchar(64) NOT NULL DEFAULT '' COMMENT '质保期限',
+	  `packaging_specification` varchar(64) NOT NULL DEFAULT '' COMMENT '包装规范',
+	  `transport_type` varchar(32) NOT NULL DEFAULT '' COMMENT '运输方式',
+	  `delivery_time` varchar(32) NOT NULL DEFAULT '' COMMENT '发货时间',
+	  `receipt_info` varchar(256) NOT NULL DEFAULT '' COMMENT '收货信息',
+	  `payment_method` varchar(32) NOT NULL DEFAULT '' COMMENT '付款方式',
+	  `freight` varchar(32) NOT NULL DEFAULT '' COMMENT '运费承担',
+	  PRIMARY KEY (`id`),
+	  UNIQUE KEY `uk_order_no` (`order_no`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
+
+
+
+	DROP TABLE IF EXISTS `order_material`;
+	CREATE TABLE `order_material` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+	  `order_no` char(36) NOT NULL COMMENT '订单号',
+	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '需要的零件数量',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单零件关联表（一个订单需要哪些零件）';
+
+  DROP TABLE IF EXISTS `check_material_log`;
+	CREATE TABLE `order_material` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `check_user_id` int(11) NOT NULL COMMENT '核料人',
+	  `order_no` char(36) NOT NULL COMMENT '订单号',
+	  `check_result` varchar(64) NOT NULL DEFAULT '' COMMENT '核料结果',
+	  `check_state` varchar(64) NOT NULL DEFAULT '' COMMENT '核料状态',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='核料日志记录表';
+
+
+  DROP TABLE IF EXISTS `material_receive_record`;
+	CREATE TABLE `material_receive_record` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+	  `receive_no` char(36) NOT NULL COMMENT '领料单号',
+	  `order_no` char(36) NOT NULL COMMENT '订单号',
+	  `receive_department` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
+	  `receive_user_id` varchar(36) NOT NULL DEFAULT '' COMMENT '领料用户Id',
+	  `material_id` int(11) NOT NULL DEFAULT 0 COMMENT '零件业务Id',
+	  `material_graph_no` char(36) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `material_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '平均单价',
+	  `start_material_count` char(36) NOT NULL DEFAULT '' COMMENT '期初领料数量',
+	  `start_material_amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '期初领料金额',
+	  `actual_material_count` char(36) NOT NULL DEFAULT '' COMMENT '本期领料数量',
+	  `actual_material_amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '本期领料金额',
+	  `end_material_count` char(36) NOT NULL DEFAULT '' COMMENT '期末领料数量',
+	  `end_material_amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '期末领料金额',
+	  PRIMARY KEY (`id`),
+	  UNIQUE KEY `uk_receive_no` (`receive_no`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料记录表（一个订单需要哪些零件）';
+
+
+	DROP TABLE IF EXISTS `product`;
+	CREATE TABLE `product` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号（行业规范如：D7A1X3P-16Q-DN50）',
+	  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '成品名称',
+	  `fit_component` varchar(64) NOT NULL DEFAULT '' COMMENT '适配组件',
+	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '成品规格（如：DN65，DN80）',
+	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '成品状态',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
+	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品表';
+
+
+	DROP TABLE IF EXISTS `product_material`;
+	CREATE TABLE `product_material` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号（行业规范如：D7A1X3P-16Q-DN50）',
+	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '零件数量',
+	  `replace_material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '可替换零件编号',
+	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '关联状态（0关联，1不关联）',
+	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
+	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
+	  PRIMARY KEY (`id`),
+	  UNIQUE KEY `uk_multi` (`product_no`,`material_graph_no`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品零件关联表（主要记录一个成品是由哪些零件组成，多对多的关系）';
 
 
 	DROP TABLE IF EXISTS `order_review`;
@@ -783,3 +795,32 @@ CREATE TABLE `equipment_maintain_record` (
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-设备维修记录';
+
+
+DROP TABLE IF EXISTS `delivery_record`;
+CREATE TABLE `delivery_record` (
+	`id` INT (11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+	`create_user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建者id',
+	`delivery_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '发货号',
+	`order_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '订单号',
+	`customer_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '客户代号',
+	`delivery_time` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '发货日期',
+	`collect_address` VARCHAR (128) NOT NULL DEFAULT '' COMMENT '发往地',
+	`collect_name` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '收货人',
+	`collect_phone` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '收货人电话',
+	`product_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '成品编号',
+	`product_name` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '成品名称',
+	`product_model` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '成品型号',
+	`lable` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '标签属性',
+	`specifications` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '规格',
+	`product_color` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '颜色',
+	`product_number` INT (11) NOT NULL DEFAULT 0 COMMENT '成品数量',
+	`product_remark` VARCHAR (128) NOT NULL DEFAULT '' COMMENT '成品备注',
+	`transport_type` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '运输方式',
+	`freight` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '运费承担',
+	`is_delivery` VARCHAR (32) NOT NULL DEFAULT '' COMMENT '是否送货',
+	`remark` VARCHAR (128) NOT NULL COMMENT '备注',
+	PRIMARY KEY (`id`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8 COMMENT = '业务表单-发货记录表单';

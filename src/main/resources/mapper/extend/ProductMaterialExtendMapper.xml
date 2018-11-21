@@ -3,12 +3,14 @@
 <mapper namespace="com.deepsoft.haolifa.dao.repository.extend.ProductMaterialExtendMapper">
     <insert id="insertBatch" parameterType="java.util.List">
         insert into product_material
-        (create_user, product_no, material_graph_no, material_count,replace_material_graph_no)
+        (create_user, product_no,product_model,specification, material_graph_no, material_count,replace_material_graph_no)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.createUser},
             #{item.productNo},
+            #{item.productModel},
+            #{item.specification},
             #{item.materialGraphNo},
             #{item.materialCount},
             #{item.replaceMaterialGraphNo}

@@ -15,9 +15,9 @@ public class Product {
 
     private String productNo;
 
-    private String name;
+    private String productModel;
 
-    private String fitComponent;
+    private String name;
 
     private String specifications;
 
@@ -27,15 +27,15 @@ public class Product {
 
     private String remark;
 
-    public Product(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String name, String fitComponent, String specifications, Byte status, Byte isDelete, String remark) {
+    public Product(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String productModel, String name, String specifications, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.productNo = productNo;
+        this.productModel = productModel;
         this.name = name;
-        this.fitComponent = fitComponent;
         this.specifications = specifications;
         this.status = status;
         this.isDelete = isDelete;
@@ -94,20 +94,20 @@ public class Product {
         this.productNo = productNo == null ? null : productNo.trim();
     }
 
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel == null ? null : productModel.trim();
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public String getFitComponent() {
-        return fitComponent;
-    }
-
-    public void setFitComponent(String fitComponent) {
-        this.fitComponent = fitComponent == null ? null : fitComponent.trim();
     }
 
     public String getSpecifications() {

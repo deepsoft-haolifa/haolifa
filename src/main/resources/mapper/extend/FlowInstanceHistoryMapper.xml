@@ -4,45 +4,43 @@
 
     <select id="selectInstanceHistory" parameterType="com.deepsoft.haolifa.model.dto.HistoryInfo"
             resultType="com.deepsoft.haolifa.model.dto.HistoryInfo">
-		SELECT
-			fh.id historyId,
-			fh.instance_id instanceId,
-			fh.step_id stepId,
-			fh.audit_user_id auditUserId,
-			fh.audit_info auditInfo,
-			fh.allot_user_id allotUserId,
-			fh.audit_result auditResult,
-			fh.form_type formType,
-			fh.form_id formId,
-			fh.form_no formNo,
-			fh.create_time createTime,
-			s.`name` stepName,
-			s.description description,
-			su.real_name userName
-		FROM
-			flow_history fh
-			LEFT JOIN step s ON s.id = fh.step_id
-			LEFT JOIN sys_user su ON su.id = fh.audit_user_id
-		<where>
-			<if test="instanceId != null and instanceId != ''">
-				and fh.instance_id = #{instanceId}
-			</if>
-			<if test="stepId != null and stepId != ''">
-				and fh.step_id =#{stepId}
-			</if>
-		</where>
-		order by fh.create_time asc
+        SELECT
+        fh.id historyId,
+        fh.instance_id instanceId,
+        fh.step_id stepId,
+        fh.audit_user_id auditUserId,
+        fh.audit_info auditInfo,
+        fh.allot_user_id allotUserId,
+        fh.audit_result auditResult,
+        fh.form_type formType,
+        fh.form_id formId,
+        fh.form_no formNo,
+        fh.create_time createTime,
+        s.`name` stepName,
+        s.description description,
+        su.real_name userName
+        FROM
+        flow_history fh
+        LEFT JOIN step s ON s.id = fh.step_id
+        LEFT JOIN sys_user su ON su.id = fh.audit_user_id
+        <where>
+            <if test="instanceId != null and instanceId != ''">
+                and fh.instance_id = #{instanceId}
+            </if>
+            <if test="stepId != null and stepId != ''">
+                and fh.step_id =#{stepId}
+            </if>
+        </where>
+        order by fh.create_time asc
     </select>
 
-	<select id="selectByPrimaryKey" parameterType="int" resultType="com.deepsoft.haolifa.model.domain.FlowInstanceWrapper">
+    <select id="selectByPrimaryKey" parameterType="int" resultType="com.deepsoft.haolifa.model.domain.FlowInstanceWrapper">
 		SELECT
 			fi.id,
 			fi.summary,
 			fi.form_no formNo,
 			fi.flow_id flowId,
 			fi.current_step_id currentStepId,
-			fi.next_step_id nextStepId,
-			fi.prev_step_id prevStepId,
 			fi.user_id userId,
 			fi.role_id roleId,
 			fi.is_over isOver,
@@ -59,21 +57,19 @@
 			fi.id = #{instanceId}
 	</select>
 
-	<select id="selectBackStepsByFlowIdAndStepId" parameterType="int" resultType="com.deepsoft.haolifa.model.dto.BackStepDTO">
+    <select id="selectBackStepsByFlowId" parameterType="int" resultType="com.deepsoft.haolifa.model.dto.BackStepDTO">
 		select
-			fs.step_id stepId,
-			s.`name` stepName
+			fs.step_id as stepId,
+			s.`name` as stepName,
+			fs.prev_step_id as prevStepId
 		from
 		flow_step fs
 		left join step s on s.id=fs.step_id
 		where
 		fs.flow_id = #{flowId}
-		and
-		step_order &lt; (select step_order from flow_step where flow_id=#{flowId} and step_id=#{stepId})
-		order by step_order asc
 	</select>
 
-	<select id="selectFlowByUserRoles" parameterType="int" resultType="com.deepsoft.haolifa.model.vo.QuickStartVO">
+    <select id="selectFlowByUserRoles" parameterType="int" resultType="com.deepsoft.haolifa.model.vo.QuickStartVO">
 		SELECT
 			f.`id` AS flowId,
 			f.`name` AS name,
@@ -106,4 +102,24 @@
           ON fi.`flow_id` = f.`id`
         ORDER BY fi.`create_time` DESC;
     </select>
+
+    <select id="selectFlowStepByStepId" parameterType="int"
+            resultType="com.deepsoft.haolifa.model.domain.FlowStep">
+		select
+			id,
+			flow_id as flowId,
+			step_id as stepId,
+			user_id as userId,
+			role_id as roleId,
+			prev_step_id as prevStepId,
+			condition_true as conditionTrue,
+			condition_false as conditionFalse,
+			form_show_step_id as formShowStepId
+		from
+		flow_step
+		where
+		flow_id = #{flowId}
+		and
+		step_id =#{stepId}
+	</select>
 </mapper>

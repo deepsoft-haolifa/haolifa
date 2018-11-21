@@ -64,8 +64,12 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         }).collect(Collectors.toList());
         log.info("添加订单单项：{}", JSON.toJSONString(items));
         itemExtendMapper.batchInsertPurchaseOrderItem(items);
-        //TODO 流程
-        return ResultBean.success(purchaseOrderNo);
+
+        Map<String,Object> result = new HashMap<>(8);
+        result.put("formId",purchaseOrder.getId());
+        result.put("formType",CommonEnum.FormType.PURCHASE_TYPE.code);
+        result.put("formNo",purchaseOrder.getPurchaseOrderNo());
+        return ResultBean.success(result);
     }
 
     @Override
@@ -73,9 +77,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         // 删除采购订单
         PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
         purchaseOrderExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
-        PurchaseOrder purchaseOrder = new PurchaseOrder();
-        purchaseOrder.setIsDelete(CommonEnum.Consts.YES.code);
-        purchaseOrderMapper.updateByExampleSelective(purchaseOrder, purchaseOrderExample);
+        purchaseOrderMapper.deleteByExample(purchaseOrderExample);
         // 删除子项
         PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
         purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
@@ -114,18 +116,12 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }
 
     @Override
-    public ResultBean getInfo(String purchaseOrderNo) {
-        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
-        purchaseOrderExample.or().andIsDeleteEqualTo(CommonEnum.Consts.NO.code).andPurchaseOrderNoEqualTo(purchaseOrderNo);
-        List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
-        PurchaseOrder purchaseOrder = null;
-        if (purchaseOrderList != null && purchaseOrderList.size() > 0) {
-            purchaseOrder = purchaseOrderList.get(0);
-        }
+    public ResultBean getInfo(Integer id) {
+        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(id);
         if (purchaseOrder == null)
             return ResultBean.success(CommonEnum.ResponseEnum.PURCHASE_NO_NOT_EXIST);
         PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
-        purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
+        purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrder.getPurchaseOrderNo());
         List<PurchaseOrderItem> purchaseOrderItemList = purchaseOrderItemMapper.selectByExample(purchaseOrderItemExample);
         if (purchaseOrderItemList == null) {
             purchaseOrderItemList = new ArrayList<>();

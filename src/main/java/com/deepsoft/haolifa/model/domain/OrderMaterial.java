@@ -15,21 +15,24 @@ public class OrderMaterial {
 
     private String orderNo;
 
-    private Integer materialId;
+    private Integer orderProductAssociateId;
 
     private String materialGraphNo;
 
-    private String materialCount;
+    private String replaceMaterialGraphNo;
 
-    public OrderMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Integer materialId, String materialGraphNo, String materialCount) {
+    private Integer materialCount;
+
+    public OrderMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Integer orderProductAssociateId, String materialGraphNo, String replaceMaterialGraphNo, Integer materialCount) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.orderNo = orderNo;
-        this.materialId = materialId;
+        this.orderProductAssociateId = orderProductAssociateId;
         this.materialGraphNo = materialGraphNo;
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo;
         this.materialCount = materialCount;
     }
 
@@ -85,12 +88,12 @@ public class OrderMaterial {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
-    public Integer getMaterialId() {
-        return materialId;
+    public Integer getOrderProductAssociateId() {
+        return orderProductAssociateId;
     }
 
-    public void setMaterialId(Integer materialId) {
-        this.materialId = materialId;
+    public void setOrderProductAssociateId(Integer orderProductAssociateId) {
+        this.orderProductAssociateId = orderProductAssociateId;
     }
 
     public String getMaterialGraphNo() {
@@ -101,11 +104,19 @@ public class OrderMaterial {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
     }
 
-    public String getMaterialCount() {
+    public String getReplaceMaterialGraphNo() {
+        return replaceMaterialGraphNo;
+    }
+
+    public void setReplaceMaterialGraphNo(String replaceMaterialGraphNo) {
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo == null ? null : replaceMaterialGraphNo.trim();
+    }
+
+    public Integer getMaterialCount() {
         return materialCount;
     }
 
-    public void setMaterialCount(String materialCount) {
-        this.materialCount = materialCount == null ? null : materialCount.trim();
+    public void setMaterialCount(Integer materialCount) {
+        this.materialCount = materialCount;
     }
 }

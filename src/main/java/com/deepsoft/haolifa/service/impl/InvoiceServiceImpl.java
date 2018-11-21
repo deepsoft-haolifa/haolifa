@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -38,18 +40,18 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         BeanUtils.copyProperties(model, invoice);
         invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         invoice.setCreateUserId(getLoginUserId());
-        int insert = invoiceMapper.insertSelective(invoice);
-        return ResultBean.success(insert);
+        invoiceMapper.insertSelective(invoice);
+        Map<String,Object> result = new HashMap<>(8);
+        result.put("formId",invoice.getId());
+        result.put("formNo",invoice.getInvoiceNo());
+        result.put("formType",CommonEnum.FormType.INVOICE_TYPE.code);
+        return ResultBean.success(result);
     }
 
     @Override
     public ResultBean delete(Integer id) {
-        Invoice invoice = new Invoice();
-        invoice.setIsDelete(CommonEnum.Consts.YES.code);
-        InvoiceExample invoiceExample = new InvoiceExample();
-        invoiceExample.or().andIdEqualTo(id);
-        int delete = invoiceMapper.updateByExampleSelective(invoice, invoiceExample);
-        return ResultBean.success(delete);
+        invoiceMapper.deleteByPrimaryKey(id);
+        return ResultBean.success(1);
     }
 
     @Override
@@ -92,5 +94,10 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean info(Integer id) {
+        return ResultBean.success(invoiceMapper.selectByPrimaryKey(id));
     }
 }

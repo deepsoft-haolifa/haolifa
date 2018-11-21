@@ -15,11 +15,15 @@ public class ProductMaterial {
 
     private String productNo;
 
+    private String productModel;
+
+    private String specification;
+
     private String materialGraphNo;
 
     private Integer materialCount;
 
-    private String replaceMaterialGraphNo;
+    private String replaceMaterialGraphNos;
 
     private Byte status;
 
@@ -27,16 +31,18 @@ public class ProductMaterial {
 
     private String remark;
 
-    public ProductMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String materialGraphNo, Integer materialCount, String replaceMaterialGraphNo, Byte status, Byte isDelete, String remark) {
+    public ProductMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String productModel, String specification, String materialGraphNo, Integer materialCount, String replaceMaterialGraphNos, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.productNo = productNo;
+        this.productModel = productModel;
+        this.specification = specification;
         this.materialGraphNo = materialGraphNo;
         this.materialCount = materialCount;
-        this.replaceMaterialGraphNo = replaceMaterialGraphNo;
+        this.replaceMaterialGraphNos = replaceMaterialGraphNos;
         this.status = status;
         this.isDelete = isDelete;
         this.remark = remark;
@@ -94,6 +100,22 @@ public class ProductMaterial {
         this.productNo = productNo == null ? null : productNo.trim();
     }
 
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel == null ? null : productModel.trim();
+    }
+
+    public String getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(String specification) {
+        this.specification = specification == null ? null : specification.trim();
+    }
+
     public String getMaterialGraphNo() {
         return materialGraphNo;
     }
@@ -110,12 +132,12 @@ public class ProductMaterial {
         this.materialCount = materialCount;
     }
 
-    public String getReplaceMaterialGraphNo() {
-        return replaceMaterialGraphNo;
+    public String getReplaceMaterialGraphNos() {
+        return replaceMaterialGraphNos;
     }
 
-    public void setReplaceMaterialGraphNo(String replaceMaterialGraphNo) {
-        this.replaceMaterialGraphNo = replaceMaterialGraphNo == null ? null : replaceMaterialGraphNo.trim();
+    public void setReplaceMaterialGraphNos(String replaceMaterialGraphNos) {
+        this.replaceMaterialGraphNos = replaceMaterialGraphNos == null ? null : replaceMaterialGraphNos.trim();
     }
 
     public Byte getStatus() {

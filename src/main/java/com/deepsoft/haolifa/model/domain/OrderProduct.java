@@ -16,6 +16,8 @@ public class OrderProduct {
 
     private String orderNo;
 
+    private String orderContractNo;
+
     private Byte orderStatus;
 
     private String orderContractUrl;
@@ -24,49 +26,41 @@ public class OrderProduct {
 
     private String demandAgentName;
 
-    private String demandTelphone;
+    private String demandPhone;
 
     private String demandFax;
 
-    private String demandAddress;
+    private String demandBankName;
+
+    private String demandBankCardNo;
 
     private String supplyName;
 
     private String supplyAgentName;
 
-    private String supplyTelphone;
+    private String supplyPhone;
 
     private String supplyFax;
 
-    private String supplyAddress;
+    private String supplyBankName;
 
-    private String contractNumber;
+    private String contractBankCardNo;
+
+    private String deliveryPlace;
+
+    private String deliveryDate;
 
     private String contractSignDate;
 
-    private String productNo;
-
-    private String productName;
-
-    private String productModel;
-
-    private String lable;
-
-    private String specifications;
-
-    private String productColor;
-
-    private Integer productNumber;
-
-    private BigDecimal price;
-
-    private BigDecimal totalPrice;
+    private Integer totalCount;
 
     private BigDecimal discountTotalPrice;
 
-    private String materialDescription;
+    private BigDecimal totalPrice;
 
-    private String productRemark;
+    private String finishFeedbackTime;
+
+    private String feedbackTimeConfirmUser;
 
     private String purchaseFeedbackTime;
 
@@ -84,49 +78,36 @@ public class OrderProduct {
 
     private String packagingSpecification;
 
-    private String transportType;
-
-    private String deliveryTime;
-
-    private String receiptInfo;
-
-    private String paymentMethod;
-
-    private String freight;
-
-    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Byte orderStatus, String orderContractUrl, String demandName, String demandAgentName, String demandTelphone, String demandFax, String demandAddress, String supplyName, String supplyAgentName, String supplyTelphone, String supplyFax, String supplyAddress, String contractNumber, String contractSignDate, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, BigDecimal discountTotalPrice, String materialDescription, String productRemark, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String transportType, String deliveryTime, String receiptInfo, String paymentMethod, String freight) {
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.orderNo = orderNo;
+        this.orderContractNo = orderContractNo;
         this.orderStatus = orderStatus;
         this.orderContractUrl = orderContractUrl;
         this.demandName = demandName;
         this.demandAgentName = demandAgentName;
-        this.demandTelphone = demandTelphone;
+        this.demandPhone = demandPhone;
         this.demandFax = demandFax;
-        this.demandAddress = demandAddress;
+        this.demandBankName = demandBankName;
+        this.demandBankCardNo = demandBankCardNo;
         this.supplyName = supplyName;
         this.supplyAgentName = supplyAgentName;
-        this.supplyTelphone = supplyTelphone;
+        this.supplyPhone = supplyPhone;
         this.supplyFax = supplyFax;
-        this.supplyAddress = supplyAddress;
-        this.contractNumber = contractNumber;
+        this.supplyBankName = supplyBankName;
+        this.contractBankCardNo = contractBankCardNo;
+        this.deliveryPlace = deliveryPlace;
+        this.deliveryDate = deliveryDate;
         this.contractSignDate = contractSignDate;
-        this.productNo = productNo;
-        this.productName = productName;
-        this.productModel = productModel;
-        this.lable = lable;
-        this.specifications = specifications;
-        this.productColor = productColor;
-        this.productNumber = productNumber;
-        this.price = price;
-        this.totalPrice = totalPrice;
+        this.totalCount = totalCount;
         this.discountTotalPrice = discountTotalPrice;
-        this.materialDescription = materialDescription;
-        this.productRemark = productRemark;
+        this.totalPrice = totalPrice;
+        this.finishFeedbackTime = finishFeedbackTime;
+        this.feedbackTimeConfirmUser = feedbackTimeConfirmUser;
         this.purchaseFeedbackTime = purchaseFeedbackTime;
         this.productionFeedbackTime = productionFeedbackTime;
         this.specialRequire = specialRequire;
@@ -135,11 +116,6 @@ public class OrderProduct {
         this.acceptanceCriteria = acceptanceCriteria;
         this.warrantyPeriod = warrantyPeriod;
         this.packagingSpecification = packagingSpecification;
-        this.transportType = transportType;
-        this.deliveryTime = deliveryTime;
-        this.receiptInfo = receiptInfo;
-        this.paymentMethod = paymentMethod;
-        this.freight = freight;
     }
 
     public OrderProduct() {
@@ -194,6 +170,14 @@ public class OrderProduct {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
+    public String getOrderContractNo() {
+        return orderContractNo;
+    }
+
+    public void setOrderContractNo(String orderContractNo) {
+        this.orderContractNo = orderContractNo == null ? null : orderContractNo.trim();
+    }
+
     public Byte getOrderStatus() {
         return orderStatus;
     }
@@ -226,12 +210,12 @@ public class OrderProduct {
         this.demandAgentName = demandAgentName == null ? null : demandAgentName.trim();
     }
 
-    public String getDemandTelphone() {
-        return demandTelphone;
+    public String getDemandPhone() {
+        return demandPhone;
     }
 
-    public void setDemandTelphone(String demandTelphone) {
-        this.demandTelphone = demandTelphone == null ? null : demandTelphone.trim();
+    public void setDemandPhone(String demandPhone) {
+        this.demandPhone = demandPhone == null ? null : demandPhone.trim();
     }
 
     public String getDemandFax() {
@@ -242,12 +226,20 @@ public class OrderProduct {
         this.demandFax = demandFax == null ? null : demandFax.trim();
     }
 
-    public String getDemandAddress() {
-        return demandAddress;
+    public String getDemandBankName() {
+        return demandBankName;
     }
 
-    public void setDemandAddress(String demandAddress) {
-        this.demandAddress = demandAddress == null ? null : demandAddress.trim();
+    public void setDemandBankName(String demandBankName) {
+        this.demandBankName = demandBankName == null ? null : demandBankName.trim();
+    }
+
+    public String getDemandBankCardNo() {
+        return demandBankCardNo;
+    }
+
+    public void setDemandBankCardNo(String demandBankCardNo) {
+        this.demandBankCardNo = demandBankCardNo == null ? null : demandBankCardNo.trim();
     }
 
     public String getSupplyName() {
@@ -266,12 +258,12 @@ public class OrderProduct {
         this.supplyAgentName = supplyAgentName == null ? null : supplyAgentName.trim();
     }
 
-    public String getSupplyTelphone() {
-        return supplyTelphone;
+    public String getSupplyPhone() {
+        return supplyPhone;
     }
 
-    public void setSupplyTelphone(String supplyTelphone) {
-        this.supplyTelphone = supplyTelphone == null ? null : supplyTelphone.trim();
+    public void setSupplyPhone(String supplyPhone) {
+        this.supplyPhone = supplyPhone == null ? null : supplyPhone.trim();
     }
 
     public String getSupplyFax() {
@@ -282,20 +274,36 @@ public class OrderProduct {
         this.supplyFax = supplyFax == null ? null : supplyFax.trim();
     }
 
-    public String getSupplyAddress() {
-        return supplyAddress;
+    public String getSupplyBankName() {
+        return supplyBankName;
     }
 
-    public void setSupplyAddress(String supplyAddress) {
-        this.supplyAddress = supplyAddress == null ? null : supplyAddress.trim();
+    public void setSupplyBankName(String supplyBankName) {
+        this.supplyBankName = supplyBankName == null ? null : supplyBankName.trim();
     }
 
-    public String getContractNumber() {
-        return contractNumber;
+    public String getContractBankCardNo() {
+        return contractBankCardNo;
     }
 
-    public void setContractNumber(String contractNumber) {
-        this.contractNumber = contractNumber == null ? null : contractNumber.trim();
+    public void setContractBankCardNo(String contractBankCardNo) {
+        this.contractBankCardNo = contractBankCardNo == null ? null : contractBankCardNo.trim();
+    }
+
+    public String getDeliveryPlace() {
+        return deliveryPlace;
+    }
+
+    public void setDeliveryPlace(String deliveryPlace) {
+        this.deliveryPlace = deliveryPlace == null ? null : deliveryPlace.trim();
+    }
+
+    public String getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.deliveryDate = deliveryDate == null ? null : deliveryDate.trim();
     }
 
     public String getContractSignDate() {
@@ -306,76 +314,12 @@ public class OrderProduct {
         this.contractSignDate = contractSignDate == null ? null : contractSignDate.trim();
     }
 
-    public String getProductNo() {
-        return productNo;
+    public Integer getTotalCount() {
+        return totalCount;
     }
 
-    public void setProductNo(String productNo) {
-        this.productNo = productNo == null ? null : productNo.trim();
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
-    }
-
-    public String getProductModel() {
-        return productModel;
-    }
-
-    public void setProductModel(String productModel) {
-        this.productModel = productModel == null ? null : productModel.trim();
-    }
-
-    public String getLable() {
-        return lable;
-    }
-
-    public void setLable(String lable) {
-        this.lable = lable == null ? null : lable.trim();
-    }
-
-    public String getSpecifications() {
-        return specifications;
-    }
-
-    public void setSpecifications(String specifications) {
-        this.specifications = specifications == null ? null : specifications.trim();
-    }
-
-    public String getProductColor() {
-        return productColor;
-    }
-
-    public void setProductColor(String productColor) {
-        this.productColor = productColor == null ? null : productColor.trim();
-    }
-
-    public Integer getProductNumber() {
-        return productNumber;
-    }
-
-    public void setProductNumber(Integer productNumber) {
-        this.productNumber = productNumber;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 
     public BigDecimal getDiscountTotalPrice() {
@@ -386,20 +330,28 @@ public class OrderProduct {
         this.discountTotalPrice = discountTotalPrice;
     }
 
-    public String getMaterialDescription() {
-        return materialDescription;
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setMaterialDescription(String materialDescription) {
-        this.materialDescription = materialDescription == null ? null : materialDescription.trim();
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public String getProductRemark() {
-        return productRemark;
+    public String getFinishFeedbackTime() {
+        return finishFeedbackTime;
     }
 
-    public void setProductRemark(String productRemark) {
-        this.productRemark = productRemark == null ? null : productRemark.trim();
+    public void setFinishFeedbackTime(String finishFeedbackTime) {
+        this.finishFeedbackTime = finishFeedbackTime == null ? null : finishFeedbackTime.trim();
+    }
+
+    public String getFeedbackTimeConfirmUser() {
+        return feedbackTimeConfirmUser;
+    }
+
+    public void setFeedbackTimeConfirmUser(String feedbackTimeConfirmUser) {
+        this.feedbackTimeConfirmUser = feedbackTimeConfirmUser == null ? null : feedbackTimeConfirmUser.trim();
     }
 
     public String getPurchaseFeedbackTime() {
@@ -464,45 +416,5 @@ public class OrderProduct {
 
     public void setPackagingSpecification(String packagingSpecification) {
         this.packagingSpecification = packagingSpecification == null ? null : packagingSpecification.trim();
-    }
-
-    public String getTransportType() {
-        return transportType;
-    }
-
-    public void setTransportType(String transportType) {
-        this.transportType = transportType == null ? null : transportType.trim();
-    }
-
-    public String getDeliveryTime() {
-        return deliveryTime;
-    }
-
-    public void setDeliveryTime(String deliveryTime) {
-        this.deliveryTime = deliveryTime == null ? null : deliveryTime.trim();
-    }
-
-    public String getReceiptInfo() {
-        return receiptInfo;
-    }
-
-    public void setReceiptInfo(String receiptInfo) {
-        this.receiptInfo = receiptInfo == null ? null : receiptInfo.trim();
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod == null ? null : paymentMethod.trim();
-    }
-
-    public String getFreight() {
-        return freight;
-    }
-
-    public void setFreight(String freight) {
-        this.freight = freight == null ? null : freight.trim();
     }
 }

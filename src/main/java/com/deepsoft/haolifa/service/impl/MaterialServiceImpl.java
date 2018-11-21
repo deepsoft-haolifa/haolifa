@@ -220,6 +220,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public int updateLockQuantity(String graphNo, int quantity) {
+        log.info("update lock quantity start,graphNo:{},quantity:{}", graphNo, quantity);
+        return materialExtendMapper.updateLockQuantity(graphNo, quantity);
+    }
+
+    @Override
     public List<Material> getListByClassifyId(int classifyId) {
         if (classifyId <= 0) {
             return null;
@@ -227,6 +233,20 @@ public class MaterialServiceImpl implements MaterialService {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
         criteria.andMaterialClassifyIdEqualTo(classifyId);
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
+    @Override
+    public List<Material> getListByModelAndSpec(String model, String specifications) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model)) {
+            criteria.andModelEqualTo(model);
+        }
+        if (StringUtils.isNotBlank(specifications)) {
+            criteria.andSpecificationsEqualTo(specifications);
+        }
         List<Material> materials = materialMapper.selectByExample(example);
         return materials;
     }

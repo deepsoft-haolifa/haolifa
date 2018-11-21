@@ -41,6 +41,8 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
     MaterialMapper materialMapper;
     @Autowired
     ProductPurchaseRecordMapper productPurchaseRecordMapper;
+    @Autowired
+    PurchaseOrderItemMapper orderItemMapper;
 
     @Override
     public ResultBean save(ApplyBuyDTO model) {
@@ -74,93 +76,40 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
 //            return productPurchaseRecord;
 //        }).collect(Collectors.toList());
 //        productPurchaseRecordMapper.batchInsertProductPurchaseRecord(productPurchaseRecordList);
-        return ResultBean.success(applyBuyNo);
-    }
-
-    @Override
-    public ResultBean delete(String applyBuyNo) {
-        ApplyBuy applyBuy = new ApplyBuy();
-        applyBuy.setIsDelete(CommonEnum.Consts.YES.code);
-        ApplyBuyExample applyBuyExample = new ApplyBuyExample();
-        applyBuyExample.or().andApplyNoEqualTo(applyBuyNo);
-        applyBuyMapper.updateByExampleSelective(applyBuy, applyBuyExample);
-        // 删除采购记录
-        ProductPurchaseRecordExample productPurchaseRecordExample = new ProductPurchaseRecordExample();
-        productPurchaseRecordExample.or().andApplyBuyNoEqualTo(applyBuyNo);
-        productPurchaseRecordMapper.deleteByExample(productPurchaseRecordExample);
-        return ResultBean.success(1);
-    }
-
-    @Override
-    public ResultBean deleteItem(String applyBuyNo, String materialGraphNo) {
-//        ApplyBuy applyBuy = new ApplyBuy();
-//        applyBuy.setIsDelete(CommonEnum.Consts.YES.code);
-//        ApplyBuyExample applyBuyExample = new ApplyBuyExample();
-//        applyBuyExample.or().andApplyNoEqualTo(applyBuyNo).andMaterialGraphNoEqualTo(materialGraphNo);
-//        applyBuyMapper.updateByExampleSelective(applyBuy, applyBuyExample);
-//        // 删除采购记录
-//        ProductPurchaseRecordExample productPurchaseRecordExample = new ProductPurchaseRecordExample();
-//        productPurchaseRecordExample.or().andApplyBuyNoEqualTo(applyBuyNo).andMaterialGraphNoEqualTo(materialGraphNo);
-//        productPurchaseRecordMapper.deleteByExample(productPurchaseRecordExample);
-        return ResultBean.success(1);
-    }
-
-    @Override
-    public ResultBean update(ApplyBuyUpdateDTO model) {
-//        if (StringUtils.isAnyEmpty(model.getApplyNo(), model.getMaterialGraphNo())) {
-//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-//        }
-//        if (model.getNumber() == 0) {
-//            return ResultBean.error(CommonEnum.ResponseEnum.PURCHASE_NUMBER_NOT_ZERO);
-//        }
-//        ApplyBuyExample applyBuyExample = new ApplyBuyExample();
-//        applyBuyExample.or().andApplyNoEqualTo(model.getApplyNo())
-//                .andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
-//        ApplyBuy applyBuy = new ApplyBuy();
-//        applyBuy.setNumber(model.getNumber());
-//        applyBuy.setPurpose(model.getPurpose());
-//        applyBuy.setRemark(model.getRemark());
-//        // 获取单价
-//        MaterialExample materialExample = new MaterialExample();
-//        materialExample.or().andGraphNoEqualTo(model.getMaterialGraphNo());
-//        Material material = materialMapper.selectByExample(materialExample).get(0);
-//        applyBuy.setValuation(material.getPrice().multiply(new BigDecimal(model.getNumber())));
-//        applyBuyMapper.updateByExampleSelective(applyBuy, applyBuyExample);
-        return ResultBean.success(1);
-    }
-
-    @Override
-    public ResultBean getInfo(String applyBuyNo) {
-        if (StringUtils.isEmpty(applyBuyNo)) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
-        ApplyBuyExample applyBuyExample = new ApplyBuyExample();
-        applyBuyExample.or().andApplyNoEqualTo(applyBuyNo);
-        List<ApplyBuy> applyBuyList = applyBuyMapper.selectByExample(applyBuyExample);
-        if (applyBuyList == null || applyBuyList.size() == 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.RESOURCE_NOT_EXIST);
-        }
-        Map<String, Object> result = new HashMap<>(2);
-        ApplyBuy applyBuy = applyBuyList.get(0);
-        result.put("order", applyBuy);
-        result.put("items", applyBuyList);
+        Map<String,Object> result = new HashMap<>(8);
+        result.put("formId",applyBuy.getId());
+        result.put("formType",CommonEnum.FormType.APPLYBUY_TYPE.code);
+        result.put("formNo",applyBuy.getApplyNo());
         return ResultBean.success(result);
     }
 
 
     @Override
-    public ResultBean getList(ApplyBuyListDTO model) {
-        if (model.getPageNum() == null || model.getPageNum() == 0) {
-            model.setPageNum(1);
-        }
-        if (model.getPageSize() == null || model.getPageSize() == 0) {
-            model.setPageSize(10);
-        }
-        Page<ApplyBuy> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize())
-                .doSelectPage(() -> applyBuyExtendMapper.selectByGroup(model));
-        PageDTO<ApplyBuy> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(pageData, pageDTO);
-        pageDTO.setList(pageData.getResult());
-        return ResultBean.success(pageDTO);
+    public ResultBean deleteItem(String applyBuyNo, String materialGraphNo) {
+        PurchaseOrderItemExample itemExample = new PurchaseOrderItemExample();
+        itemExample.createCriteria().andApplyNoEqualTo(applyBuyNo).andMaterialGraphNoEqualTo(materialGraphNo);
+        orderItemMapper.deleteByExample(itemExample);
+        return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean update(ApplyBuyUpdateDTO model) {
+        PurchaseOrderItem purchaseOrderItem = new PurchaseOrderItem();
+        BeanUtils.copyProperties(model,purchaseOrderItem);
+        purchaseOrderItem.setId(model.getItemId());
+        orderItemMapper.updateByPrimaryKeySelective(purchaseOrderItem);
+        return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean getInfo(Integer applyBuyId) {
+        ApplyBuy applyBuy = applyBuyMapper.selectByPrimaryKey(applyBuyId);
+        PurchaseOrderItemExample itemExample = new PurchaseOrderItemExample();
+        itemExample.createCriteria().andApplyNoEqualTo(applyBuy.getApplyNo());
+        List<PurchaseOrderItem> items = orderItemMapper.selectByExample(itemExample);
+        Map<String, Object> result = new HashMap<>(2);
+        result.put("order", applyBuy);
+        result.put("items", items);
+        return ResultBean.success(result);
     }
 }

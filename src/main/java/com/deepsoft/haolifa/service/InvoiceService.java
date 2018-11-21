@@ -40,4 +40,11 @@ public interface InvoiceService {
      * @return
      */
     ResultBean updateInvoiceNo(Integer id, String invoiceNo);
+
+    /**
+     * 查询发票详情
+     * @param id
+     * @return
+     */
+    ResultBean info(Integer id);
 }

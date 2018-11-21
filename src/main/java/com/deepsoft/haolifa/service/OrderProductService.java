@@ -1,9 +1,12 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import com.deepsoft.haolifa.model.dto.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.github.pagehelper.Page;
+
+import java.util.List;
 
 public interface OrderProductService {
     /**
@@ -37,7 +40,15 @@ public interface OrderProductService {
      * @param orderNo
      * @return
      */
-    OrderProduct getOrderProductInfo(String orderNo);
+    OrderProductDTO getOrderProductInfo(String orderNo);
+
+    /**
+     * 获取订单产品列表(只包含产品列表)
+     *
+     * @param orderNo
+     * @return
+     */
+    List<OrderProductAssociate> getOrderProductList(String orderNo);
 
     /**
      * 获取订单分页列表

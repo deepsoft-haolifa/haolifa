@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -40,6 +41,10 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         entrust.setCreateUserId(getLoginUserId());
         entrust.setEntrustNo(entrustNo);
         entrustMapper.insertSelective(entrust);
+        Map<String,Object> result = new HashMap<>(8);
+        result.put("formId",entrust.getId());
+        result.put("formNo",entrust.getEntrustNo());
+        result.put("formType",CommonEnum.FormType.ENTRUST_TYPE.code);
         return ResultBean.success(entrustNo);
     }
 

@@ -107,21 +107,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
-    insert into apply_buy (id, flow_id, apply_no, 
-      product_order_no, target_time, is_delete, 
-      create_time, update_time, create_user_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{applyNo,jdbcType=VARCHAR}, 
-      #{productOrderNo,jdbcType=VARCHAR}, #{targetTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}
-      )
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into apply_buy (flow_id, apply_no, product_order_no, 
+      target_time, is_delete, create_time, 
+      update_time, create_user_id)
+    values (#{flowId,jdbcType=INTEGER}, #{applyNo,jdbcType=VARCHAR}, #{productOrderNo,jdbcType=VARCHAR}, 
+      #{targetTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into apply_buy
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="flowId != null">
         flow_id,
       </if>
@@ -148,9 +149,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="flowId != null">
         #{flowId,jdbcType=INTEGER},
       </if>

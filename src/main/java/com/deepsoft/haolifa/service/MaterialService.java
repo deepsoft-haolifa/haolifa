@@ -28,7 +28,7 @@ public interface MaterialService {
      *
      * @return
      */
-    ResultBean  updateClassify(MaterialClassifyRequestDTO model);
+    ResultBean updateClassify(MaterialClassifyRequestDTO model);
 
     /**
      * 删除成品分类
@@ -108,22 +108,40 @@ public interface MaterialService {
      * @param graphNoLike      图号
      * @return
      */
-    ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike,int status);
+    ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike, int status);
 
     /**
      * 更新零件当前数量
      *
-     * @param graphNo      图号
-     * @param quantity     数量（正数增加，负数减少）
+     * @param graphNo  图号
+     * @param quantity 数量（正数增加，负数减少）
      * @return
      */
-    int updateCurrentQuantity(String graphNo,int quantity);
+    int updateCurrentQuantity(String graphNo, int quantity);
+
+    /**
+     * 更新零件锁定数量
+     *
+     * @param graphNo  图号
+     * @param quantity 数量（正数增加，负数减少）
+     * @return
+     */
+    int updateLockQuantity(String graphNo, int quantity);
+
+    /**
+     * 根据分类id获取零件列表
+     *
+     * @param classifyId
+     */
+    List<Material> getListByClassifyId(int classifyId);
 
 
     /**
-     * 根据分类id获取列表
-     * @param classifyId
+     * 根据型号和规格获取列表
+     *
+     * @param model 型号
+     * @param specifications 规格
      */
-   List<Material> getListByClassifyId(int classifyId);
+    List<Material> getListByModelAndSpec(String model,String specifications);
 
 }

@@ -25,14 +25,6 @@ public class OrderProductController {
         return orderProductService.uploadOrderProductExcel(base64Source);
     }
 
-    @ApiOperation("成品订单合同上传--开发中")
-    @PostMapping("/uploadContract")
-    @ApiImplicitParam(name = "base64Source", value = "上传成品订单合同的base64编码", dataType = "String", required = true)
-    public ResultBean uploadOrderProductContract(@RequestParam String base64Source) {
-//        return orderProductService.uploadOrderProductExcel(base64Source);
-        return null;
-    }
-
     @ApiOperation("成品订单信息添加")
     @PostMapping("/save")
     public ResultBean save(@RequestBody OrderProductDTO orderProduct) {
@@ -61,4 +53,17 @@ public class OrderProductController {
                                        @RequestParam(required = false) int orderStatus) {
         return orderProductService.pageOrderProduct(currentPage, pageSize, orderNo,orderStatus);
     }
+
+    @ApiOperation("核料")
+    @ApiImplicitParams({
+            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "订单状态", name = "orderStatus", dataType = "int", paramType = "query")
+    })
+    @GetMapping("/check-material")
+    public ResultBean checkMaterial(@RequestParam(required = false) String orderNo) {
+        return null;
+    }
+
 }
