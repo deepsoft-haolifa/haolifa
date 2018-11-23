@@ -6,12 +6,10 @@ import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
 import com.deepsoft.haolifa.model.domain.SysRole;
 import com.deepsoft.haolifa.model.domain.SysRoleExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
-import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
+import com.deepsoft.haolifa.model.vo.UserPageVO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.RoleService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,5 +73,10 @@ public class RoleServiceImpl implements RoleService {
         BeanUtils.copyProperties(role, sysRole);
         sysRole.setDeptId(role.getDepartment().getId());
         return roleMapper.updateByPrimaryKeySelective(sysRole);
+    }
+
+    @Override
+    public List<UserPageVO> getBuyers() {
+        return myPermissionMapper.selectUserByRole("ROLE_CGY");
     }
 }

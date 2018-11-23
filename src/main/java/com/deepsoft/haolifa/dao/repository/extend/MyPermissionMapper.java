@@ -1,14 +1,12 @@
 package com.deepsoft.haolifa.dao.repository.extend;
 
 
-import com.deepsoft.haolifa.config.CustomGrantedAuthority;
-import com.deepsoft.haolifa.model.domain.SysPermission;
 import com.deepsoft.haolifa.model.domain.SysRole;
 import com.deepsoft.haolifa.model.dto.CustomPermission;
 import com.deepsoft.haolifa.model.vo.MenuVO;
+import com.deepsoft.haolifa.model.vo.UserPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Set;
@@ -23,5 +21,7 @@ public interface MyPermissionMapper {
     List<MenuVO> findPermissiosByRoleId(Integer roleId);
 
     int inserRoleMenu(@Param("roleId") Integer roleId, @Param("menuIds") Integer[] menuIds);
+
+    List<UserPageVO> selectUserByRole(@Param("roleName") String roleName);
 
 }

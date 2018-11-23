@@ -37,10 +37,16 @@ public class InvoiceController {
         return invoiceService.update(model);
     }
 
-    @ApiOperation("流程中审批完成-填写发票编号")
+    @ApiOperation("流程中财务审批完成-填写发票编号")
     @GetMapping("updateInvoiceNo/{id}/{invoiceNo}")
     public ResultBean updateInvoiceNo(@PathVariable(value = "id") Integer id, @PathVariable("invoiceNo") String invoiceNo) {
         return invoiceService.updateInvoiceNo(id, invoiceNo);
+    }
+
+    @ApiOperation("查询发票详情(formId等同于记录唯一标示id)")
+    @GetMapping("/info/{formId}")
+    public ResultBean info(@PathVariable(value = "formId") Integer id) {
+        return invoiceService.info(id);
     }
 
 

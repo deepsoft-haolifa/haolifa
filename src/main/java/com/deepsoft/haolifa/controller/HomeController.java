@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.HomeApiService;
+import com.deepsoft.haolifa.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class HomeController {
 
     @Autowired
     private HomeApiService homeApiService;
+    @Autowired
+    private RoleService roleService;
 
     @ApiOperation("获取发起流程的快捷入口")
     @GetMapping("/quick-start")
@@ -27,6 +30,11 @@ public class HomeController {
         return ResultBean.success(homeApiService.getTodoItems());
     }
 
+    @ApiOperation("采购员列表")
+    @GetMapping("/buyers")
+    public ResultBean getBuyerList(){
+        return ResultBean.success(roleService.getBuyers());
+    }
 
 
 }

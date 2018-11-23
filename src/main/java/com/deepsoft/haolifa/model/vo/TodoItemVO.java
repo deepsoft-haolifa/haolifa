@@ -16,6 +16,8 @@ public class TodoItemVO {
     private String flowName;
     @ApiModelProperty("流程节点id")
     private Integer stepId;
+    @ApiModelProperty("流程实例id")
+    private Integer instanceId;
     @ApiModelProperty("节点名")
     private String stepName;
     @ApiModelProperty("创建人用户名")
