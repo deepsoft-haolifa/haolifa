@@ -1,10 +1,7 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
-import com.deepsoft.haolifa.model.dto.OrderProductDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.github.pagehelper.Page;
 
 import java.util.List;
 
@@ -56,4 +53,48 @@ public interface OrderProductService {
      * @return
      */
     ResultBean pageOrderProduct(Integer currentPage, Integer pageSize, String orderNo, int orderStatus);
+
+    /**
+     * 获取核料订单产品列表(包含需要选择的阀体，阀座等)
+     *
+     * @param orderNo
+     * @return
+     */
+    List<MaterialTypeListDTO> getCheckOrderProductList(String orderNo);
+
+    /**
+     * 核料（将前端提交过来的零件，进行核料）
+     *
+     * @param orderCheckMaterialDTOS
+     * @return
+     */
+    List<OrderCheckMaterialDTO> checkMaterial(List<OrderCheckMaterialDTO> orderCheckMaterialDTOS);
+
+    /**
+     * 核料成功（下一步）
+     *
+     * @param orderCheckMaterialDTOS
+     */
+    int checkPass(List<OrderCheckMaterialDTO> orderCheckMaterialDTOS);
+
+
+    /**
+     * 获取订单的零件列表
+     *
+     * @param orderNo
+     */
+    List<OrderMaterialDTO> listOrderMaterial(String orderNo);
+
+    /**
+     * 生成领料单
+     *
+     * @param model
+     */
+    MaterialRequisitionDTO saveMaterialRequisition(MaterialRequisitionDTO model);
+
+    /**
+     * 获取领料单详情
+     *
+     */
+    MaterialRequisitionDTO infoMaterialRequisition(String orderNo,String receiveNo);
 }

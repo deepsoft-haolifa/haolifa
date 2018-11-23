@@ -179,4 +179,25 @@ public class CommonEnum {
             this.code = code;
         }
     }
+
+    /**
+     * 核料状态
+     */
+    public enum CheckMaterialStatus {
+
+        // 核料成功
+        SUCCESS((byte) 1),
+        // 缺料，走采购
+        NEED_PURCHASE((byte) 2),
+        // 缺料，可提交可替换料
+        NEED_REPLACE((byte) 3),
+        // 机加工
+        JIJIAGONG((byte) 4),;
+
+        public final byte code;
+
+        CheckMaterialStatus(byte code) {
+            this.code = code;
+        }
+    }
 }
