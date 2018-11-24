@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.model.dto.MaterialRequisitionDTO;
+import com.deepsoft.haolifa.model.dto.OrderCheckMaterialDTO;
 import com.deepsoft.haolifa.model.dto.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -9,6 +11,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(tags = {"订单成品相关管理"})
 @RestController
@@ -51,19 +55,43 @@ public class OrderProductController {
                                        @RequestParam(defaultValue = "20") Integer pageSize,
                                        @RequestParam(required = false) String orderNo,
                                        @RequestParam(required = false) int orderStatus) {
-        return orderProductService.pageOrderProduct(currentPage, pageSize, orderNo,orderStatus);
+        return orderProductService.pageOrderProduct(currentPage, pageSize, orderNo, orderStatus);
+    }
+
+    @ApiOperation("核料时的零件选择")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "path", required = true)
+    @GetMapping("/pre-check-material/{orderNo}")
+    public ResultBean preCheckMaterial(@PathVariable String orderNo) {
+        return ResultBean.success(orderProductService.getCheckOrderProductList(orderNo));
     }
 
     @ApiOperation("核料")
+    @PostMapping("/check-material/")
+    public ResultBean checkMaterial(@RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+        return ResultBean.success(orderProductService.checkMaterial(orderCheckMaterialDTOS));
+    }
+
+    @ApiOperation("核料成功")
+    @PostMapping("/pass-check-material/")
+    public ResultBean passCheckMaterial(@RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+        return ResultBean.success(orderProductService.checkPass(orderCheckMaterialDTOS));
+    }
+
+
+    @ApiOperation("生成领料单")
+    @PostMapping("/material-requisition/save")
+    public ResultBean saveMaterialRequisition(@RequestBody MaterialRequisitionDTO model) {
+        return ResultBean.success(orderProductService.saveMaterialRequisition(model));
+    }
+
+    @ApiOperation("获取领料单详情")
+    @GetMapping("/material-requisition/info")
     @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "订单状态", name = "orderStatus", dataType = "int", paramType = "query")
+            @ApiImplicitParam(required = true, value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(value = "领料单号", name = "receiveNo", dataType = "string", paramType = "query")
     })
-    @GetMapping("/check-material")
-    public ResultBean checkMaterial(@RequestParam(required = false) String orderNo) {
-        return null;
+    public ResultBean infoMaterialRequisition(String orderNo, String receiveNo) {
+        return ResultBean.success(orderProductService.infoMaterialRequisition(orderNo, receiveNo));
     }
 
 }

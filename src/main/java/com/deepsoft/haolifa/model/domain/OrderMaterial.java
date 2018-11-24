@@ -7,12 +7,6 @@ public class OrderMaterial {
 
     private Date createTime;
 
-    private Date updateTime;
-
-    private Integer createUser;
-
-    private Integer updateUser;
-
     private String orderNo;
 
     private Integer orderProductAssociateId;
@@ -23,12 +17,9 @@ public class OrderMaterial {
 
     private Integer materialCount;
 
-    public OrderMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Integer orderProductAssociateId, String materialGraphNo, String replaceMaterialGraphNo, Integer materialCount) {
+    public OrderMaterial(Integer id, Date createTime, String orderNo, Integer orderProductAssociateId, String materialGraphNo, String replaceMaterialGraphNo, Integer materialCount) {
         this.id = id;
         this.createTime = createTime;
-        this.updateTime = updateTime;
-        this.createUser = createUser;
-        this.updateUser = updateUser;
         this.orderNo = orderNo;
         this.orderProductAssociateId = orderProductAssociateId;
         this.materialGraphNo = materialGraphNo;
@@ -54,30 +45,6 @@ public class OrderMaterial {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Integer getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
     }
 
     public String getOrderNo() {

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderMaterialExample {
+public class MaterialRequisitionExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OrderMaterialExample() {
+    public MaterialRequisitionExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -225,6 +225,136 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andCreateUserIsNull() {
+            addCriterion("create_user is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIsNotNull() {
+            addCriterion("create_user is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserEqualTo(Integer value) {
+            addCriterion("create_user =", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserNotEqualTo(Integer value) {
+            addCriterion("create_user <>", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserGreaterThan(Integer value) {
+            addCriterion("create_user >", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserGreaterThanOrEqualTo(Integer value) {
+            addCriterion("create_user >=", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserLessThan(Integer value) {
+            addCriterion("create_user <", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserLessThanOrEqualTo(Integer value) {
+            addCriterion("create_user <=", value, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIn(List<Integer> values) {
+            addCriterion("create_user in", values, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserNotIn(List<Integer> values) {
+            addCriterion("create_user not in", values, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserBetween(Integer value1, Integer value2) {
+            addCriterion("create_user between", value1, value2, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserNotBetween(Integer value1, Integer value2) {
+            addCriterion("create_user not between", value1, value2, "createUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoIsNull() {
+            addCriterion("receive_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoIsNotNull() {
+            addCriterion("receive_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoEqualTo(String value) {
+            addCriterion("receive_no =", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoNotEqualTo(String value) {
+            addCriterion("receive_no <>", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoGreaterThan(String value) {
+            addCriterion("receive_no >", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_no >=", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoLessThan(String value) {
+            addCriterion("receive_no <", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoLessThanOrEqualTo(String value) {
+            addCriterion("receive_no <=", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoLike(String value) {
+            addCriterion("receive_no like", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoNotLike(String value) {
+            addCriterion("receive_no not like", value, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoIn(List<String> values) {
+            addCriterion("receive_no in", values, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoNotIn(List<String> values) {
+            addCriterion("receive_no not in", values, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoBetween(String value1, String value2) {
+            addCriterion("receive_no between", value1, value2, "receiveNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveNoNotBetween(String value1, String value2) {
+            addCriterion("receive_no not between", value1, value2, "receiveNo");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoIsNull() {
             addCriterion("order_no is null");
             return (Criteria) this;
@@ -295,263 +425,213 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdIsNull() {
-            addCriterion("order_product_associate_id is null");
+        public Criteria andReceiveDepartmentIsNull() {
+            addCriterion("receive_department is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdIsNotNull() {
-            addCriterion("order_product_associate_id is not null");
+        public Criteria andReceiveDepartmentIsNotNull() {
+            addCriterion("receive_department is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdEqualTo(Integer value) {
-            addCriterion("order_product_associate_id =", value, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentEqualTo(String value) {
+            addCriterion("receive_department =", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdNotEqualTo(Integer value) {
-            addCriterion("order_product_associate_id <>", value, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentNotEqualTo(String value) {
+            addCriterion("receive_department <>", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdGreaterThan(Integer value) {
-            addCriterion("order_product_associate_id >", value, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentGreaterThan(String value) {
+            addCriterion("receive_department >", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("order_product_associate_id >=", value, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_department >=", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdLessThan(Integer value) {
-            addCriterion("order_product_associate_id <", value, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentLessThan(String value) {
+            addCriterion("receive_department <", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdLessThanOrEqualTo(Integer value) {
-            addCriterion("order_product_associate_id <=", value, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentLessThanOrEqualTo(String value) {
+            addCriterion("receive_department <=", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdIn(List<Integer> values) {
-            addCriterion("order_product_associate_id in", values, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentLike(String value) {
+            addCriterion("receive_department like", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdNotIn(List<Integer> values) {
-            addCriterion("order_product_associate_id not in", values, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentNotLike(String value) {
+            addCriterion("receive_department not like", value, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdBetween(Integer value1, Integer value2) {
-            addCriterion("order_product_associate_id between", value1, value2, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentIn(List<String> values) {
+            addCriterion("receive_department in", values, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("order_product_associate_id not between", value1, value2, "orderProductAssociateId");
+        public Criteria andReceiveDepartmentNotIn(List<String> values) {
+            addCriterion("receive_department not in", values, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoIsNull() {
-            addCriterion("material_graph_no is null");
+        public Criteria andReceiveDepartmentBetween(String value1, String value2) {
+            addCriterion("receive_department between", value1, value2, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoIsNotNull() {
-            addCriterion("material_graph_no is not null");
+        public Criteria andReceiveDepartmentNotBetween(String value1, String value2) {
+            addCriterion("receive_department not between", value1, value2, "receiveDepartment");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoEqualTo(String value) {
-            addCriterion("material_graph_no =", value, "materialGraphNo");
+        public Criteria andReceiveUserIdIsNull() {
+            addCriterion("receive_user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotEqualTo(String value) {
-            addCriterion("material_graph_no <>", value, "materialGraphNo");
+        public Criteria andReceiveUserIdIsNotNull() {
+            addCriterion("receive_user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoGreaterThan(String value) {
-            addCriterion("material_graph_no >", value, "materialGraphNo");
+        public Criteria andReceiveUserIdEqualTo(String value) {
+            addCriterion("receive_user_id =", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoGreaterThanOrEqualTo(String value) {
-            addCriterion("material_graph_no >=", value, "materialGraphNo");
+        public Criteria andReceiveUserIdNotEqualTo(String value) {
+            addCriterion("receive_user_id <>", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoLessThan(String value) {
-            addCriterion("material_graph_no <", value, "materialGraphNo");
+        public Criteria andReceiveUserIdGreaterThan(String value) {
+            addCriterion("receive_user_id >", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoLessThanOrEqualTo(String value) {
-            addCriterion("material_graph_no <=", value, "materialGraphNo");
+        public Criteria andReceiveUserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_user_id >=", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoLike(String value) {
-            addCriterion("material_graph_no like", value, "materialGraphNo");
+        public Criteria andReceiveUserIdLessThan(String value) {
+            addCriterion("receive_user_id <", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotLike(String value) {
-            addCriterion("material_graph_no not like", value, "materialGraphNo");
+        public Criteria andReceiveUserIdLessThanOrEqualTo(String value) {
+            addCriterion("receive_user_id <=", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoIn(List<String> values) {
-            addCriterion("material_graph_no in", values, "materialGraphNo");
+        public Criteria andReceiveUserIdLike(String value) {
+            addCriterion("receive_user_id like", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotIn(List<String> values) {
-            addCriterion("material_graph_no not in", values, "materialGraphNo");
+        public Criteria andReceiveUserIdNotLike(String value) {
+            addCriterion("receive_user_id not like", value, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoBetween(String value1, String value2) {
-            addCriterion("material_graph_no between", value1, value2, "materialGraphNo");
+        public Criteria andReceiveUserIdIn(List<String> values) {
+            addCriterion("receive_user_id in", values, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNoNotBetween(String value1, String value2) {
-            addCriterion("material_graph_no not between", value1, value2, "materialGraphNo");
+        public Criteria andReceiveUserIdNotIn(List<String> values) {
+            addCriterion("receive_user_id not in", values, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoIsNull() {
-            addCriterion("replace_material_graph_no is null");
+        public Criteria andReceiveUserIdBetween(String value1, String value2) {
+            addCriterion("receive_user_id between", value1, value2, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoIsNotNull() {
-            addCriterion("replace_material_graph_no is not null");
+        public Criteria andReceiveUserIdNotBetween(String value1, String value2) {
+            addCriterion("receive_user_id not between", value1, value2, "receiveUserId");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoEqualTo(String value) {
-            addCriterion("replace_material_graph_no =", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameIsNull() {
+            addCriterion("receive_user_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoNotEqualTo(String value) {
-            addCriterion("replace_material_graph_no <>", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameIsNotNull() {
+            addCriterion("receive_user_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoGreaterThan(String value) {
-            addCriterion("replace_material_graph_no >", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameEqualTo(String value) {
+            addCriterion("receive_user_name =", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoGreaterThanOrEqualTo(String value) {
-            addCriterion("replace_material_graph_no >=", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameNotEqualTo(String value) {
+            addCriterion("receive_user_name <>", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoLessThan(String value) {
-            addCriterion("replace_material_graph_no <", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameGreaterThan(String value) {
+            addCriterion("receive_user_name >", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoLessThanOrEqualTo(String value) {
-            addCriterion("replace_material_graph_no <=", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_user_name >=", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoLike(String value) {
-            addCriterion("replace_material_graph_no like", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameLessThan(String value) {
+            addCriterion("receive_user_name <", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoNotLike(String value) {
-            addCriterion("replace_material_graph_no not like", value, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameLessThanOrEqualTo(String value) {
+            addCriterion("receive_user_name <=", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoIn(List<String> values) {
-            addCriterion("replace_material_graph_no in", values, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameLike(String value) {
+            addCriterion("receive_user_name like", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoNotIn(List<String> values) {
-            addCriterion("replace_material_graph_no not in", values, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameNotLike(String value) {
+            addCriterion("receive_user_name not like", value, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoBetween(String value1, String value2) {
-            addCriterion("replace_material_graph_no between", value1, value2, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameIn(List<String> values) {
+            addCriterion("receive_user_name in", values, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoNotBetween(String value1, String value2) {
-            addCriterion("replace_material_graph_no not between", value1, value2, "replaceMaterialGraphNo");
+        public Criteria andReceiveUserNameNotIn(List<String> values) {
+            addCriterion("receive_user_name not in", values, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountIsNull() {
-            addCriterion("material_count is null");
+        public Criteria andReceiveUserNameBetween(String value1, String value2) {
+            addCriterion("receive_user_name between", value1, value2, "receiveUserName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialCountIsNotNull() {
-            addCriterion("material_count is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountEqualTo(Integer value) {
-            addCriterion("material_count =", value, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountNotEqualTo(Integer value) {
-            addCriterion("material_count <>", value, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountGreaterThan(Integer value) {
-            addCriterion("material_count >", value, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountGreaterThanOrEqualTo(Integer value) {
-            addCriterion("material_count >=", value, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountLessThan(Integer value) {
-            addCriterion("material_count <", value, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountLessThanOrEqualTo(Integer value) {
-            addCriterion("material_count <=", value, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountIn(List<Integer> values) {
-            addCriterion("material_count in", values, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountNotIn(List<Integer> values) {
-            addCriterion("material_count not in", values, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountBetween(Integer value1, Integer value2) {
-            addCriterion("material_count between", value1, value2, "materialCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCountNotBetween(Integer value1, Integer value2) {
-            addCriterion("material_count not between", value1, value2, "materialCount");
+        public Criteria andReceiveUserNameNotBetween(String value1, String value2) {
+            addCriterion("receive_user_name not between", value1, value2, "receiveUserName");
             return (Criteria) this;
         }
     }

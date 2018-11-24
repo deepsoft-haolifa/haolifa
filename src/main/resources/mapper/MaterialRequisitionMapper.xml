@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.OrderMaterialMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.OrderMaterial">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.MaterialRequisitionMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.MaterialRequisition">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="receive_no" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="order_product_associate_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="replace_material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="receive_department" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receive_user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receive_user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -71,16 +72,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, order_no, order_product_associate_id, material_graph_no, replace_material_graph_no, 
-    material_count
+    id, create_time, create_user, receive_no, order_no, receive_department, receive_user_id, 
+    receive_user_name
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterialExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisitionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order_material
+    from material_requisition
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,84 +92,90 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order_material
+    from material_requisition
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from order_material
+    delete from material_requisition
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterialExample">
-    delete from order_material
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisitionExample">
+    delete from material_requisition
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterial">
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order_material (create_time, order_no, order_product_associate_id, 
-      material_graph_no, replace_material_graph_no, 
-      material_count)
-    values (#{createTime,jdbcType=TIMESTAMP}, #{orderNo,jdbcType=CHAR}, #{orderProductAssociateId,jdbcType=INTEGER}, 
-      #{materialGraphNo,jdbcType=VARCHAR}, #{replaceMaterialGraphNo,jdbcType=VARCHAR}, 
-      #{materialCount,jdbcType=INTEGER})
+    insert into material_requisition (create_time, create_user, receive_no, 
+      order_no, receive_department, receive_user_id, 
+      receive_user_name)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, #{receiveNo,jdbcType=CHAR}, 
+      #{orderNo,jdbcType=CHAR}, #{receiveDepartment,jdbcType=VARCHAR}, #{receiveUserId,jdbcType=VARCHAR}, 
+      #{receiveUserName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterial">
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order_material
+    insert into material_requisition
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="receiveNo != null">
+        receive_no,
+      </if>
       <if test="orderNo != null">
         order_no,
       </if>
-      <if test="orderProductAssociateId != null">
-        order_product_associate_id,
+      <if test="receiveDepartment != null">
+        receive_department,
       </if>
-      <if test="materialGraphNo != null">
-        material_graph_no,
+      <if test="receiveUserId != null">
+        receive_user_id,
       </if>
-      <if test="replaceMaterialGraphNo != null">
-        replace_material_graph_no,
-      </if>
-      <if test="materialCount != null">
-        material_count,
+      <if test="receiveUserName != null">
+        receive_user_name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="receiveNo != null">
+        #{receiveNo,jdbcType=CHAR},
+      </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=CHAR},
       </if>
-      <if test="orderProductAssociateId != null">
-        #{orderProductAssociateId,jdbcType=INTEGER},
+      <if test="receiveDepartment != null">
+        #{receiveDepartment,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
-        #{materialGraphNo,jdbcType=VARCHAR},
+      <if test="receiveUserId != null">
+        #{receiveUserId,jdbcType=VARCHAR},
       </if>
-      <if test="replaceMaterialGraphNo != null">
-        #{replaceMaterialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="materialCount != null">
-        #{materialCount,jdbcType=INTEGER},
+      <if test="receiveUserName != null">
+        #{receiveUserName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterialExample" resultType="java.lang.Long">
-    select count(*) from order_material
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisitionExample" resultType="java.lang.Long">
+    select count(*) from material_requisition
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update order_material
+    update material_requisition
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -176,20 +183,23 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.receiveNo != null">
+        receive_no = #{record.receiveNo,jdbcType=CHAR},
+      </if>
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=CHAR},
       </if>
-      <if test="record.orderProductAssociateId != null">
-        order_product_associate_id = #{record.orderProductAssociateId,jdbcType=INTEGER},
+      <if test="record.receiveDepartment != null">
+        receive_department = #{record.receiveDepartment,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialGraphNo != null">
-        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      <if test="record.receiveUserId != null">
+        receive_user_id = #{record.receiveUserId,jdbcType=VARCHAR},
       </if>
-      <if test="record.replaceMaterialGraphNo != null">
-        replace_material_graph_no = #{record.replaceMaterialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.materialCount != null">
-        material_count = #{record.materialCount,jdbcType=INTEGER},
+      <if test="record.receiveUserName != null">
+        receive_user_name = #{record.receiveUserName,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -197,50 +207,55 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update order_material
+    update material_requisition
     set id = #{record.id,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=INTEGER},
+      receive_no = #{record.receiveNo,jdbcType=CHAR},
       order_no = #{record.orderNo,jdbcType=CHAR},
-      order_product_associate_id = #{record.orderProductAssociateId,jdbcType=INTEGER},
-      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
-      replace_material_graph_no = #{record.replaceMaterialGraphNo,jdbcType=VARCHAR},
-      material_count = #{record.materialCount,jdbcType=INTEGER}
+      receive_department = #{record.receiveDepartment,jdbcType=VARCHAR},
+      receive_user_id = #{record.receiveUserId,jdbcType=VARCHAR},
+      receive_user_name = #{record.receiveUserName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterial">
-    update order_material
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
+    update material_requisition
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="receiveNo != null">
+        receive_no = #{receiveNo,jdbcType=CHAR},
+      </if>
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=CHAR},
       </if>
-      <if test="orderProductAssociateId != null">
-        order_product_associate_id = #{orderProductAssociateId,jdbcType=INTEGER},
+      <if test="receiveDepartment != null">
+        receive_department = #{receiveDepartment,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
-        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      <if test="receiveUserId != null">
+        receive_user_id = #{receiveUserId,jdbcType=VARCHAR},
       </if>
-      <if test="replaceMaterialGraphNo != null">
-        replace_material_graph_no = #{replaceMaterialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="materialCount != null">
-        material_count = #{materialCount,jdbcType=INTEGER},
+      <if test="receiveUserName != null">
+        receive_user_name = #{receiveUserName,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterial">
-    update order_material
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
+    update material_requisition
     set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      receive_no = #{receiveNo,jdbcType=CHAR},
       order_no = #{orderNo,jdbcType=CHAR},
-      order_product_associate_id = #{orderProductAssociateId,jdbcType=INTEGER},
-      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
-      replace_material_graph_no = #{replaceMaterialGraphNo,jdbcType=VARCHAR},
-      material_count = #{materialCount,jdbcType=INTEGER}
+      receive_department = #{receiveDepartment,jdbcType=VARCHAR},
+      receive_user_id = #{receiveUserId,jdbcType=VARCHAR},
+      receive_user_name = #{receiveUserName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

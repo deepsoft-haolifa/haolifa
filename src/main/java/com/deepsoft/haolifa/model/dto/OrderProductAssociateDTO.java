@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
  * @date: 2018-11-08 20:33
  **/
 @Data
+@ApiModel
 public class OrderProductAssociateDTO {
 
     @ApiModelProperty(value = "订单编号")
