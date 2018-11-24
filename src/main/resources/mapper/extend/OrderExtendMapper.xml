@@ -35,7 +35,7 @@
         </foreach>
     </insert>
 
-    <select id="listOrderMaterial" resultMap="com.deepsoft.haolifa.model.dto.OrderMaterialDTO">
+    <select id="listOrderMaterial" resultType="com.deepsoft.haolifa.model.dto.OrderMaterialDTO">
         SELECT
         m.`name` AS materialName,
         m.model,
