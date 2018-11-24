@@ -2,10 +2,10 @@ server:
   servlet:
     context-path: /haolifa
     session:
-      timeout: 1h
+      timeout: 1d
       cookie:
         http-only: true
-        max-age: 1h
+        max-age: 1d
 
 spring:
   profiles:

@@ -95,7 +95,9 @@
         FROM `flow_instance` fi JOIN `step` s
           ON fi.`current_step_id` = s.`id`
           AND fi.`is_over` = 0
+          <if test="userId &gt; 0">
           AND fi.`user_id` = #{userId}
+		  </if>
         JOIN `sys_user` u
           ON fi.`create_user_id` = u.`id`
         JOIN `flow` f

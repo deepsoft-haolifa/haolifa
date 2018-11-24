@@ -49,6 +49,13 @@ public class HomeApiServiceImpl implements HomeApiService {
 
     @Override
     public List<TodoItemVO> getTodoItems() {
-        return flowInstanceHistoryMapper.selectToDoItems(userService.selectLoginUser().getId());
+        CustomUser customUser = userService.selectLoginUser();
+        List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
+        Integer userId = customUser.getId();
+        if(rolesByUserId.stream().map(RoleDTO::getRoleName)
+                .collect(Collectors.toList()).contains("ROLE_ADMIN")){
+            userId = 0;
+        }
+        return flowInstanceHistoryMapper.selectToDoItems(userId);
     }
 }
