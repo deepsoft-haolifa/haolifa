@@ -295,66 +295,6 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderProductAssociateIdIsNull() {
-            addCriterion("order_product_associate_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdIsNotNull() {
-            addCriterion("order_product_associate_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdEqualTo(Integer value) {
-            addCriterion("order_product_associate_id =", value, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdNotEqualTo(Integer value) {
-            addCriterion("order_product_associate_id <>", value, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdGreaterThan(Integer value) {
-            addCriterion("order_product_associate_id >", value, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("order_product_associate_id >=", value, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdLessThan(Integer value) {
-            addCriterion("order_product_associate_id <", value, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdLessThanOrEqualTo(Integer value) {
-            addCriterion("order_product_associate_id <=", value, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdIn(List<Integer> values) {
-            addCriterion("order_product_associate_id in", values, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdNotIn(List<Integer> values) {
-            addCriterion("order_product_associate_id not in", values, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdBetween(Integer value1, Integer value2) {
-            addCriterion("order_product_associate_id between", value1, value2, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderProductAssociateIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("order_product_associate_id not between", value1, value2, "orderProductAssociateId");
-            return (Criteria) this;
-        }
-
         public Criteria andMaterialGraphNoIsNull() {
             addCriterion("material_graph_no is null");
             return (Criteria) this;
@@ -425,73 +365,63 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoIsNull() {
-            addCriterion("replace_material_graph_no is null");
+        public Criteria andIsReplaceIsNull() {
+            addCriterion("is_replace is null");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoIsNotNull() {
-            addCriterion("replace_material_graph_no is not null");
+        public Criteria andIsReplaceIsNotNull() {
+            addCriterion("is_replace is not null");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoEqualTo(String value) {
-            addCriterion("replace_material_graph_no =", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceEqualTo(Byte value) {
+            addCriterion("is_replace =", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoNotEqualTo(String value) {
-            addCriterion("replace_material_graph_no <>", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceNotEqualTo(Byte value) {
+            addCriterion("is_replace <>", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoGreaterThan(String value) {
-            addCriterion("replace_material_graph_no >", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceGreaterThan(Byte value) {
+            addCriterion("is_replace >", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoGreaterThanOrEqualTo(String value) {
-            addCriterion("replace_material_graph_no >=", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_replace >=", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoLessThan(String value) {
-            addCriterion("replace_material_graph_no <", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceLessThan(Byte value) {
+            addCriterion("is_replace <", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoLessThanOrEqualTo(String value) {
-            addCriterion("replace_material_graph_no <=", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceLessThanOrEqualTo(Byte value) {
+            addCriterion("is_replace <=", value, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoLike(String value) {
-            addCriterion("replace_material_graph_no like", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceIn(List<Byte> values) {
+            addCriterion("is_replace in", values, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoNotLike(String value) {
-            addCriterion("replace_material_graph_no not like", value, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceNotIn(List<Byte> values) {
+            addCriterion("is_replace not in", values, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoIn(List<String> values) {
-            addCriterion("replace_material_graph_no in", values, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceBetween(Byte value1, Byte value2) {
+            addCriterion("is_replace between", value1, value2, "isReplace");
             return (Criteria) this;
         }
 
-        public Criteria andReplaceMaterialGraphNoNotIn(List<String> values) {
-            addCriterion("replace_material_graph_no not in", values, "replaceMaterialGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplaceMaterialGraphNoBetween(String value1, String value2) {
-            addCriterion("replace_material_graph_no between", value1, value2, "replaceMaterialGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andReplaceMaterialGraphNoNotBetween(String value1, String value2) {
-            addCriterion("replace_material_graph_no not between", value1, value2, "replaceMaterialGraphNo");
+        public Criteria andIsReplaceNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_replace not between", value1, value2, "isReplace");
             return (Criteria) this;
         }
 
@@ -552,6 +482,126 @@ public class OrderMaterialExample {
 
         public Criteria andMaterialCountNotBetween(Integer value1, Integer value2) {
             addCriterion("material_count not between", value1, value2, "materialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountIsNull() {
+            addCriterion("lack_material_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountIsNotNull() {
+            addCriterion("lack_material_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountEqualTo(Integer value) {
+            addCriterion("lack_material_count =", value, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountNotEqualTo(Integer value) {
+            addCriterion("lack_material_count <>", value, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountGreaterThan(Integer value) {
+            addCriterion("lack_material_count >", value, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("lack_material_count >=", value, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountLessThan(Integer value) {
+            addCriterion("lack_material_count <", value, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountLessThanOrEqualTo(Integer value) {
+            addCriterion("lack_material_count <=", value, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountIn(List<Integer> values) {
+            addCriterion("lack_material_count in", values, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountNotIn(List<Integer> values) {
+            addCriterion("lack_material_count not in", values, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountBetween(Integer value1, Integer value2) {
+            addCriterion("lack_material_count between", value1, value2, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLackMaterialCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("lack_material_count not between", value1, value2, "lackMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Integer value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Integer value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Integer value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Integer> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Integer> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

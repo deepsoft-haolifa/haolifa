@@ -676,6 +676,356 @@ public class OrderProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andTechnicalRequireIsNull() {
+            addCriterion("technical_require is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireIsNotNull() {
+            addCriterion("technical_require is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireEqualTo(String value) {
+            addCriterion("technical_require =", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireNotEqualTo(String value) {
+            addCriterion("technical_require <>", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireGreaterThan(String value) {
+            addCriterion("technical_require >", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireGreaterThanOrEqualTo(String value) {
+            addCriterion("technical_require >=", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireLessThan(String value) {
+            addCriterion("technical_require <", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireLessThanOrEqualTo(String value) {
+            addCriterion("technical_require <=", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireLike(String value) {
+            addCriterion("technical_require like", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireNotLike(String value) {
+            addCriterion("technical_require not like", value, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireIn(List<String> values) {
+            addCriterion("technical_require in", values, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireNotIn(List<String> values) {
+            addCriterion("technical_require not in", values, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireBetween(String value1, String value2) {
+            addCriterion("technical_require between", value1, value2, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andTechnicalRequireNotBetween(String value1, String value2) {
+            addCriterion("technical_require not between", value1, value2, "technicalRequire");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeIsNull() {
+            addCriterion("finish_feedback_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeIsNotNull() {
+            addCriterion("finish_feedback_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeEqualTo(String value) {
+            addCriterion("finish_feedback_time =", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeNotEqualTo(String value) {
+            addCriterion("finish_feedback_time <>", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeGreaterThan(String value) {
+            addCriterion("finish_feedback_time >", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("finish_feedback_time >=", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeLessThan(String value) {
+            addCriterion("finish_feedback_time <", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeLessThanOrEqualTo(String value) {
+            addCriterion("finish_feedback_time <=", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeLike(String value) {
+            addCriterion("finish_feedback_time like", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeNotLike(String value) {
+            addCriterion("finish_feedback_time not like", value, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeIn(List<String> values) {
+            addCriterion("finish_feedback_time in", values, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeNotIn(List<String> values) {
+            addCriterion("finish_feedback_time not in", values, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeBetween(String value1, String value2) {
+            addCriterion("finish_feedback_time between", value1, value2, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishFeedbackTimeNotBetween(String value1, String value2) {
+            addCriterion("finish_feedback_time not between", value1, value2, "finishFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserIsNull() {
+            addCriterion("feedback_time_confirm_user is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserIsNotNull() {
+            addCriterion("feedback_time_confirm_user is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserEqualTo(String value) {
+            addCriterion("feedback_time_confirm_user =", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserNotEqualTo(String value) {
+            addCriterion("feedback_time_confirm_user <>", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserGreaterThan(String value) {
+            addCriterion("feedback_time_confirm_user >", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserGreaterThanOrEqualTo(String value) {
+            addCriterion("feedback_time_confirm_user >=", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserLessThan(String value) {
+            addCriterion("feedback_time_confirm_user <", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserLessThanOrEqualTo(String value) {
+            addCriterion("feedback_time_confirm_user <=", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserLike(String value) {
+            addCriterion("feedback_time_confirm_user like", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserNotLike(String value) {
+            addCriterion("feedback_time_confirm_user not like", value, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserIn(List<String> values) {
+            addCriterion("feedback_time_confirm_user in", values, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserNotIn(List<String> values) {
+            addCriterion("feedback_time_confirm_user not in", values, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserBetween(String value1, String value2) {
+            addCriterion("feedback_time_confirm_user between", value1, value2, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackTimeConfirmUserNotBetween(String value1, String value2) {
+            addCriterion("feedback_time_confirm_user not between", value1, value2, "feedbackTimeConfirmUser");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeIsNull() {
+            addCriterion("purchase_feedback_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeIsNotNull() {
+            addCriterion("purchase_feedback_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeEqualTo(String value) {
+            addCriterion("purchase_feedback_time =", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeNotEqualTo(String value) {
+            addCriterion("purchase_feedback_time <>", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeGreaterThan(String value) {
+            addCriterion("purchase_feedback_time >", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("purchase_feedback_time >=", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeLessThan(String value) {
+            addCriterion("purchase_feedback_time <", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeLessThanOrEqualTo(String value) {
+            addCriterion("purchase_feedback_time <=", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeLike(String value) {
+            addCriterion("purchase_feedback_time like", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeNotLike(String value) {
+            addCriterion("purchase_feedback_time not like", value, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeIn(List<String> values) {
+            addCriterion("purchase_feedback_time in", values, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeNotIn(List<String> values) {
+            addCriterion("purchase_feedback_time not in", values, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeBetween(String value1, String value2) {
+            addCriterion("purchase_feedback_time between", value1, value2, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseFeedbackTimeNotBetween(String value1, String value2) {
+            addCriterion("purchase_feedback_time not between", value1, value2, "purchaseFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeIsNull() {
+            addCriterion("production_feedback_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeIsNotNull() {
+            addCriterion("production_feedback_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeEqualTo(String value) {
+            addCriterion("production_feedback_time =", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeNotEqualTo(String value) {
+            addCriterion("production_feedback_time <>", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeGreaterThan(String value) {
+            addCriterion("production_feedback_time >", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("production_feedback_time >=", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeLessThan(String value) {
+            addCriterion("production_feedback_time <", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeLessThanOrEqualTo(String value) {
+            addCriterion("production_feedback_time <=", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeLike(String value) {
+            addCriterion("production_feedback_time like", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeNotLike(String value) {
+            addCriterion("production_feedback_time not like", value, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeIn(List<String> values) {
+            addCriterion("production_feedback_time in", values, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeNotIn(List<String> values) {
+            addCriterion("production_feedback_time not in", values, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeBetween(String value1, String value2) {
+            addCriterion("production_feedback_time between", value1, value2, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionFeedbackTimeNotBetween(String value1, String value2) {
+            addCriterion("production_feedback_time not between", value1, value2, "productionFeedbackTime");
+            return (Criteria) this;
+        }
+
         public Criteria andDemandNameIsNull() {
             addCriterion("demand_name is null");
             return (Criteria) this;
@@ -1906,286 +2256,6 @@ public class OrderProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andFinishFeedbackTimeIsNull() {
-            addCriterion("finish_feedback_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeIsNotNull() {
-            addCriterion("finish_feedback_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeEqualTo(String value) {
-            addCriterion("finish_feedback_time =", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeNotEqualTo(String value) {
-            addCriterion("finish_feedback_time <>", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeGreaterThan(String value) {
-            addCriterion("finish_feedback_time >", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeGreaterThanOrEqualTo(String value) {
-            addCriterion("finish_feedback_time >=", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeLessThan(String value) {
-            addCriterion("finish_feedback_time <", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeLessThanOrEqualTo(String value) {
-            addCriterion("finish_feedback_time <=", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeLike(String value) {
-            addCriterion("finish_feedback_time like", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeNotLike(String value) {
-            addCriterion("finish_feedback_time not like", value, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeIn(List<String> values) {
-            addCriterion("finish_feedback_time in", values, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeNotIn(List<String> values) {
-            addCriterion("finish_feedback_time not in", values, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeBetween(String value1, String value2) {
-            addCriterion("finish_feedback_time between", value1, value2, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFinishFeedbackTimeNotBetween(String value1, String value2) {
-            addCriterion("finish_feedback_time not between", value1, value2, "finishFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserIsNull() {
-            addCriterion("feedback_time_confirm_user is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserIsNotNull() {
-            addCriterion("feedback_time_confirm_user is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserEqualTo(String value) {
-            addCriterion("feedback_time_confirm_user =", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserNotEqualTo(String value) {
-            addCriterion("feedback_time_confirm_user <>", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserGreaterThan(String value) {
-            addCriterion("feedback_time_confirm_user >", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserGreaterThanOrEqualTo(String value) {
-            addCriterion("feedback_time_confirm_user >=", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserLessThan(String value) {
-            addCriterion("feedback_time_confirm_user <", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserLessThanOrEqualTo(String value) {
-            addCriterion("feedback_time_confirm_user <=", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserLike(String value) {
-            addCriterion("feedback_time_confirm_user like", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserNotLike(String value) {
-            addCriterion("feedback_time_confirm_user not like", value, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserIn(List<String> values) {
-            addCriterion("feedback_time_confirm_user in", values, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserNotIn(List<String> values) {
-            addCriterion("feedback_time_confirm_user not in", values, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserBetween(String value1, String value2) {
-            addCriterion("feedback_time_confirm_user between", value1, value2, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andFeedbackTimeConfirmUserNotBetween(String value1, String value2) {
-            addCriterion("feedback_time_confirm_user not between", value1, value2, "feedbackTimeConfirmUser");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeIsNull() {
-            addCriterion("purchase_feedback_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeIsNotNull() {
-            addCriterion("purchase_feedback_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeEqualTo(String value) {
-            addCriterion("purchase_feedback_time =", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeNotEqualTo(String value) {
-            addCriterion("purchase_feedback_time <>", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeGreaterThan(String value) {
-            addCriterion("purchase_feedback_time >", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeGreaterThanOrEqualTo(String value) {
-            addCriterion("purchase_feedback_time >=", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeLessThan(String value) {
-            addCriterion("purchase_feedback_time <", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeLessThanOrEqualTo(String value) {
-            addCriterion("purchase_feedback_time <=", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeLike(String value) {
-            addCriterion("purchase_feedback_time like", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeNotLike(String value) {
-            addCriterion("purchase_feedback_time not like", value, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeIn(List<String> values) {
-            addCriterion("purchase_feedback_time in", values, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeNotIn(List<String> values) {
-            addCriterion("purchase_feedback_time not in", values, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeBetween(String value1, String value2) {
-            addCriterion("purchase_feedback_time between", value1, value2, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andPurchaseFeedbackTimeNotBetween(String value1, String value2) {
-            addCriterion("purchase_feedback_time not between", value1, value2, "purchaseFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeIsNull() {
-            addCriterion("production_feedback_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeIsNotNull() {
-            addCriterion("production_feedback_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeEqualTo(String value) {
-            addCriterion("production_feedback_time =", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeNotEqualTo(String value) {
-            addCriterion("production_feedback_time <>", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeGreaterThan(String value) {
-            addCriterion("production_feedback_time >", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeGreaterThanOrEqualTo(String value) {
-            addCriterion("production_feedback_time >=", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeLessThan(String value) {
-            addCriterion("production_feedback_time <", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeLessThanOrEqualTo(String value) {
-            addCriterion("production_feedback_time <=", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeLike(String value) {
-            addCriterion("production_feedback_time like", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeNotLike(String value) {
-            addCriterion("production_feedback_time not like", value, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeIn(List<String> values) {
-            addCriterion("production_feedback_time in", values, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeNotIn(List<String> values) {
-            addCriterion("production_feedback_time not in", values, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeBetween(String value1, String value2) {
-            addCriterion("production_feedback_time between", value1, value2, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductionFeedbackTimeNotBetween(String value1, String value2) {
-            addCriterion("production_feedback_time not between", value1, value2, "productionFeedbackTime");
-            return (Criteria) this;
-        }
-
         public Criteria andSpecialRequireIsNull() {
             addCriterion("special_require is null");
             return (Criteria) this;
@@ -2603,6 +2673,76 @@ public class OrderProductExample {
 
         public Criteria andPackagingSpecificationNotBetween(String value1, String value2) {
             addCriterion("packaging_specification not between", value1, value2, "packagingSpecification");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIsNull() {
+            addCriterion("remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIsNotNull() {
+            addCriterion("remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkEqualTo(String value) {
+            addCriterion("remark =", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotEqualTo(String value) {
+            addCriterion("remark <>", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThan(String value) {
+            addCriterion("remark >", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("remark >=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThan(String value) {
+            addCriterion("remark <", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThanOrEqualTo(String value) {
+            addCriterion("remark <=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLike(String value) {
+            addCriterion("remark like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotLike(String value) {
+            addCriterion("remark not like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIn(List<String> values) {
+            addCriterion("remark in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotIn(List<String> values) {
+            addCriterion("remark not in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkBetween(String value1, String value2) {
+            addCriterion("remark between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotBetween(String value1, String value2) {
+            addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
     }

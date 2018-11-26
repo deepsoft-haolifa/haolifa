@@ -24,6 +24,10 @@ public class Material {
 
     private String graphNo;
 
+    private String replaceGraphNos;
+
+    private String graphUrl;
+
     private String unit;
 
     private BigDecimal price;
@@ -52,7 +56,7 @@ public class Material {
 
     private String remark;
 
-    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Integer currentQuantity, Integer lockQuantity, Byte isDelete, String remark) {
+    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String replaceGraphNos, String graphUrl, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Integer currentQuantity, Integer lockQuantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -63,6 +67,8 @@ public class Material {
         this.name = name;
         this.material = material;
         this.graphNo = graphNo;
+        this.replaceGraphNos = replaceGraphNos;
+        this.graphUrl = graphUrl;
         this.unit = unit;
         this.price = price;
         this.specifications = specifications;
@@ -161,6 +167,22 @@ public class Material {
 
     public void setGraphNo(String graphNo) {
         this.graphNo = graphNo == null ? null : graphNo.trim();
+    }
+
+    public String getReplaceGraphNos() {
+        return replaceGraphNos;
+    }
+
+    public void setReplaceGraphNos(String replaceGraphNos) {
+        this.replaceGraphNos = replaceGraphNos == null ? null : replaceGraphNos.trim();
+    }
+
+    public String getGraphUrl() {
+        return graphUrl;
+    }
+
+    public void setGraphUrl(String graphUrl) {
+        this.graphUrl = graphUrl == null ? null : graphUrl.trim();
     }
 
     public String getUnit() {

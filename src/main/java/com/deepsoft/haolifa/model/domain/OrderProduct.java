@@ -22,6 +22,16 @@ public class OrderProduct {
 
     private String orderContractUrl;
 
+    private String technicalRequire;
+
+    private String finishFeedbackTime;
+
+    private String feedbackTimeConfirmUser;
+
+    private String purchaseFeedbackTime;
+
+    private String productionFeedbackTime;
+
     private String demandName;
 
     private String demandAgentName;
@@ -58,14 +68,6 @@ public class OrderProduct {
 
     private BigDecimal totalPrice;
 
-    private String finishFeedbackTime;
-
-    private String feedbackTimeConfirmUser;
-
-    private String purchaseFeedbackTime;
-
-    private String productionFeedbackTime;
-
     private String specialRequire;
 
     private String cargoInformation;
@@ -78,7 +80,9 @@ public class OrderProduct {
 
     private String packagingSpecification;
 
-    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification) {
+    private String remark;
+
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String technicalRequire, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -88,6 +92,11 @@ public class OrderProduct {
         this.orderContractNo = orderContractNo;
         this.orderStatus = orderStatus;
         this.orderContractUrl = orderContractUrl;
+        this.technicalRequire = technicalRequire;
+        this.finishFeedbackTime = finishFeedbackTime;
+        this.feedbackTimeConfirmUser = feedbackTimeConfirmUser;
+        this.purchaseFeedbackTime = purchaseFeedbackTime;
+        this.productionFeedbackTime = productionFeedbackTime;
         this.demandName = demandName;
         this.demandAgentName = demandAgentName;
         this.demandPhone = demandPhone;
@@ -106,16 +115,13 @@ public class OrderProduct {
         this.totalCount = totalCount;
         this.discountTotalPrice = discountTotalPrice;
         this.totalPrice = totalPrice;
-        this.finishFeedbackTime = finishFeedbackTime;
-        this.feedbackTimeConfirmUser = feedbackTimeConfirmUser;
-        this.purchaseFeedbackTime = purchaseFeedbackTime;
-        this.productionFeedbackTime = productionFeedbackTime;
         this.specialRequire = specialRequire;
         this.cargoInformation = cargoInformation;
         this.signBoard = signBoard;
         this.acceptanceCriteria = acceptanceCriteria;
         this.warrantyPeriod = warrantyPeriod;
         this.packagingSpecification = packagingSpecification;
+        this.remark = remark;
     }
 
     public OrderProduct() {
@@ -192,6 +198,46 @@ public class OrderProduct {
 
     public void setOrderContractUrl(String orderContractUrl) {
         this.orderContractUrl = orderContractUrl == null ? null : orderContractUrl.trim();
+    }
+
+    public String getTechnicalRequire() {
+        return technicalRequire;
+    }
+
+    public void setTechnicalRequire(String technicalRequire) {
+        this.technicalRequire = technicalRequire == null ? null : technicalRequire.trim();
+    }
+
+    public String getFinishFeedbackTime() {
+        return finishFeedbackTime;
+    }
+
+    public void setFinishFeedbackTime(String finishFeedbackTime) {
+        this.finishFeedbackTime = finishFeedbackTime == null ? null : finishFeedbackTime.trim();
+    }
+
+    public String getFeedbackTimeConfirmUser() {
+        return feedbackTimeConfirmUser;
+    }
+
+    public void setFeedbackTimeConfirmUser(String feedbackTimeConfirmUser) {
+        this.feedbackTimeConfirmUser = feedbackTimeConfirmUser == null ? null : feedbackTimeConfirmUser.trim();
+    }
+
+    public String getPurchaseFeedbackTime() {
+        return purchaseFeedbackTime;
+    }
+
+    public void setPurchaseFeedbackTime(String purchaseFeedbackTime) {
+        this.purchaseFeedbackTime = purchaseFeedbackTime == null ? null : purchaseFeedbackTime.trim();
+    }
+
+    public String getProductionFeedbackTime() {
+        return productionFeedbackTime;
+    }
+
+    public void setProductionFeedbackTime(String productionFeedbackTime) {
+        this.productionFeedbackTime = productionFeedbackTime == null ? null : productionFeedbackTime.trim();
     }
 
     public String getDemandName() {
@@ -338,38 +384,6 @@ public class OrderProduct {
         this.totalPrice = totalPrice;
     }
 
-    public String getFinishFeedbackTime() {
-        return finishFeedbackTime;
-    }
-
-    public void setFinishFeedbackTime(String finishFeedbackTime) {
-        this.finishFeedbackTime = finishFeedbackTime == null ? null : finishFeedbackTime.trim();
-    }
-
-    public String getFeedbackTimeConfirmUser() {
-        return feedbackTimeConfirmUser;
-    }
-
-    public void setFeedbackTimeConfirmUser(String feedbackTimeConfirmUser) {
-        this.feedbackTimeConfirmUser = feedbackTimeConfirmUser == null ? null : feedbackTimeConfirmUser.trim();
-    }
-
-    public String getPurchaseFeedbackTime() {
-        return purchaseFeedbackTime;
-    }
-
-    public void setPurchaseFeedbackTime(String purchaseFeedbackTime) {
-        this.purchaseFeedbackTime = purchaseFeedbackTime == null ? null : purchaseFeedbackTime.trim();
-    }
-
-    public String getProductionFeedbackTime() {
-        return productionFeedbackTime;
-    }
-
-    public void setProductionFeedbackTime(String productionFeedbackTime) {
-        this.productionFeedbackTime = productionFeedbackTime == null ? null : productionFeedbackTime.trim();
-    }
-
     public String getSpecialRequire() {
         return specialRequire;
     }
@@ -416,5 +430,13 @@ public class OrderProduct {
 
     public void setPackagingSpecification(String packagingSpecification) {
         this.packagingSpecification = packagingSpecification == null ? null : packagingSpecification.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }
