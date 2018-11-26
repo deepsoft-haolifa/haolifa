@@ -3,7 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CacheConsts;
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.redis.RedisDao;
+import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
 import com.deepsoft.haolifa.model.domain.EntryOutStoreRecord;
 import com.deepsoft.haolifa.model.domain.EntryOutStoreRecordExample;

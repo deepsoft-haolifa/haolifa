@@ -3,14 +3,17 @@
 <mapper namespace="com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper">
     <insert id="insertBatchOrderMaterial" parameterType="java.util.List">
         insert into order_material
-        (order_no,order_product_associate_id, material_graph_no, material_count)
+        (order_no, material_graph_no,replace_material_graph_no is_replace,material_count,lack_material_count,status)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.orderNo},
-            #{item.orderProductAssociateId},
             #{item.materialGraphNo},
-            #{item.materialCount}
+            #{item.replaceMaterialGraphNo},
+            #{item.isReplace},
+            #{item.materialCount},
+            #{item.lackMaterialCount}
+            #{item.status}
             )
         </foreach>
     </insert>
@@ -43,7 +46,10 @@
         m.unit,
         m.price,
         o.material_count AS materialCount,
-        o.order_no As orderNo
+        o.is_replace AS isReplace,
+        o.order_no As orderNo,
+        o.material_graph_no As materialGraphNo,
+        o.lack_material_count As lackMaterialCount
         FROM
         `order_material` o
         LEFT JOIN material m ON o.material_graph_no = m.graph_no

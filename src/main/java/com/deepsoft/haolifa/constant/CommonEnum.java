@@ -27,6 +27,8 @@ public class CommonEnum {
 
         //用户登陆错误
         LOGIN_ERROR("1001", "登陆错误"),
+        //生产订单重复
+        ORDER_NO_EXISTS("1002", "订单号已经存在，不能重复上传"),
 
         // 库房货位已经存在
         STORE_ROOM_NO_EXISTS("2001", "库房号已经存在"),

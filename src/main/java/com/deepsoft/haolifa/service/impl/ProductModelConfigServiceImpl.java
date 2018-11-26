@@ -1,9 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.deepsoft.haolifa.dao.redis.RedisDao;
+import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.ProductModelConfigMapper;
 import com.deepsoft.haolifa.model.domain.ProductModelConfig;
 import com.deepsoft.haolifa.model.domain.ProductModelConfigExample;

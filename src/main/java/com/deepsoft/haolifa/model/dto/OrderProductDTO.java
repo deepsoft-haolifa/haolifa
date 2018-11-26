@@ -20,6 +20,14 @@ public class OrderProductDTO {
     private Byte orderStatus;
     @ApiModelProperty(value = "订单合同url")
     private String orderContractUrl;
+    @ApiModelProperty(value = "工厂反馈完成时间")
+    private String finishFeedbackTime;
+    @ApiModelProperty(value = "反馈确认人")
+    private String feedbackTimeConfirmUser;
+    @ApiModelProperty(value = "采购反馈时间")
+    private String purchaseFeedbackTime;
+    @ApiModelProperty(value = "生产反馈时间")
+    private String productionFeedbackTime;
     @ApiModelProperty(value = "需求方名称")
     private String demandName;
     @ApiModelProperty(value = "需求方代理人")
@@ -56,18 +64,6 @@ public class OrderProductDTO {
     private BigDecimal totalPrice;
     @ApiModelProperty(value = "优惠后总价")
     private BigDecimal discountTotalPrice;
-    @ApiModelProperty(value = "材质说明")
-    private String materialDescription;
-    @ApiModelProperty(value = "成品备注")
-    private String productRemark;
-    @ApiModelProperty(value = "采购反馈时间")
-    private String finishFeedbackTime;
-    @ApiModelProperty(value = "生产反馈时间")
-    private String feedbackTimeConfirmUser;
-    @ApiModelProperty(value = "采购反馈时间")
-    private String purchaseFeedbackTime;
-    @ApiModelProperty(value = "生产反馈时间")
-    private String productionFeedbackTime;
     @ApiModelProperty(value = "特殊要求")
     private String specialRequire;
     @ApiModelProperty(value = "随货资料")
@@ -80,6 +76,7 @@ public class OrderProductDTO {
     private String warrantyPeriod;
     @ApiModelProperty(value = "包装规范")
     private String packagingSpecification;
+
     @ApiModelProperty(value = "订单产品列表")
     List<OrderProductAssociate> orderProductAssociates;
 }

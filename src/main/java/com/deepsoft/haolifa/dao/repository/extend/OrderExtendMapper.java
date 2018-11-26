@@ -25,7 +25,7 @@ public interface OrderExtendMapper {
 
 
     /**
-     * 获取订单零件列表
+     * 获取订单零件列表(核料清单)
      *
      * @param orderNo
      */

@@ -1,6 +1,10 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.deepsoft.haolifa.cache.CacheKeyManager;
+import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
+import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.CheckMaterialLogMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialRequisitionMapper;
@@ -21,11 +25,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.core.annotation.OrderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +42,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private OrderProductMapper orderProductMapper;
     @Autowired
-    private ProductMaterialService productMaterialService;
+    private RedisDao redisDao;
     @Autowired
     private MaterialService materialService;
     @Autowired
@@ -213,9 +219,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Override
     public ResultBean saveOrderProductInfo(OrderProductDTO orderProductDTO) {
         OrderProduct orderProduct = new OrderProduct();
-        String orderProductNo = "op_" + RandomUtils.orderNoStr();
-        log.info("save orderProduct info start|orderProductNo:{},model:{}", orderProductNo, JSONObject.toJSONString(orderProduct));
-        orderProductDTO.setOrderNo(orderProductNo);
+        String orderNo = orderProductDTO.getOrderContractNo();
+        log.info("save orderProduct info start|orderNo:{},model:{}", orderNo, JSONObject.toJSONString(orderProduct));
+        if (null != getOrderProductInfo(orderNo)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NO_EXISTS);
+        }
+        orderProductDTO.setOrderNo(orderNo);
         // 属性copy复制
         BeanUtils.copyProperties(orderProductDTO, orderProduct);
         orderProduct.setCreateUser(getLoginUserId());
@@ -225,40 +234,67 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             // 批量插入订单产品关联表
             orderExtendMapper.insertBatchOrderProduct(orderProductDTO.getOrderProductAssociates());
         }
-        log.info("save orderProduct info end|orderProductNo:{},result:{}", orderProductNo, insert);
+        log.info("save orderProduct info end|orderNo:{},result:{}", orderNo, insert);
         return ResultBean.success(insert);
     }
 
     @Override
-    public int updateOrderProductStatus(String orderProductNo, byte status) {
-        log.info("update orderProduct status start|orderProductNo:{},status:{}", orderProductNo, status);
+    public int updateTechnicalRequire(String orderNo, String technicalRequire) {
+        OrderProduct record = new OrderProduct();
+        record.setTechnicalRequire(technicalRequire);
+        OrderProductExample example = new OrderProductExample();
+        example.or().andOrderNoEqualTo(orderNo);
+        int update = orderProductMapper.updateByExampleSelective(record, example);
+        if (update > 0) {
+            //删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderNo).key);
+        }
+        return update;
+    }
+
+
+    @Override
+    public int updateOrderProductStatus(String orderNo, byte status) {
+        log.info("update orderProduct status start|orderNo:{},status:{}", orderNo, status);
         OrderProduct record = new OrderProduct();
         record.setOrderStatus(status);
         OrderProductExample example = new OrderProductExample();
-        example.or().andOrderNoEqualTo(orderProductNo);
+        example.or().andOrderNoEqualTo(orderNo);
         int update = orderProductMapper.updateByExampleSelective(record, example);
-        log.info("update orderProduct status end|orderProductNo:{},status:{},result:{}", orderProductNo, status, update);
-        return 0;
+        if (update > 0) {
+            // 删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderNo).key);
+        }
+        return update;
     }
 
     @Override
     public OrderProductDTO getOrderProductInfo(String orderNo) {
-        OrderProductDTO orderProductDTO = new OrderProductDTO();
-        OrderProductExample example = new OrderProductExample();
-        example.or().andOrderNoEqualTo(orderNo);
-        List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
-        if (orderProducts.size() > 0) {
-            OrderProduct orderProduct = orderProducts.get(0);
-            BeanUtils.copyProperties(orderProductDTO, orderProduct);
-            // 获取订单关联成品列表
-            List<OrderProductAssociate> orderProductAssociates = orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
-                or().andOrderNoEqualTo(orderNo);
-            }});
-            List<OrderProductAssociate> orderProductAssociateDTOS = new ArrayList<>();
-            BeanUtils.copyProperties(orderProductAssociateDTOS, orderProductAssociates);
-            orderProductDTO.setOrderProductAssociates(orderProductAssociateDTOS);
-        }
-        return orderProductDTO;
+        // 从redis中查，查不到从数据库中查
+        return redisDao.queryCache(CacheKeyManager.cacheKeyOrderInfo(orderNo), new TypeReference<OrderProductDTO>() {
+        }, new NoCacheLoadCallBack<OrderProductDTO>() {
+
+            @Override
+            public OrderProductDTO load() throws Exception {
+                OrderProductDTO orderProductDTO = new OrderProductDTO();
+                OrderProductExample example = new OrderProductExample();
+                example.or().andOrderNoEqualTo(orderNo);
+                List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
+                if (orderProducts.size() > 0) {
+                    OrderProduct orderProduct = orderProducts.get(0);
+                    BeanUtils.copyProperties(orderProductDTO, orderProduct);
+                    // 获取订单关联成品列表
+                    List<OrderProductAssociate> orderProductAssociates = orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
+                        or().andOrderNoEqualTo(orderNo);
+                    }});
+                    List<OrderProductAssociate> orderProductAssociateDTOS = new ArrayList<>();
+                    BeanUtils.copyProperties(orderProductAssociateDTOS, orderProductAssociates);
+                    orderProductDTO.setOrderProductAssociates(orderProductAssociateDTOS);
+                }
+                return orderProductDTO;
+            }
+        });
+
     }
 
     @Override
@@ -307,13 +343,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             MaterialTypeListDTO materials = getTypeMaterials(productModel, specifications);
             materials.setProductModel(productModel);
             materials.setSpecifications(specifications);
+            materials.setProductNumber(orderProductAssociate.getProductNumber());
             list.add(materials);
         }
         return list;
     }
 
     /**
-     * 根据型号和规格获取原料（阀体，阀板，阀座）
+     * 根据型号和规格获取原料（阀体，阀板，阀座,阀杆）
      *
      * @param productModel
      * @param specifications
@@ -336,52 +373,73 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 6.获取阀体压力(-后两位)
         String fatiyali = productModel.substring(lastIndexOf + 1, lastIndexOf + 3);
 
+        // 获取阀体规则
+        List<ProductModelConfig> fatiModelConfig = new ArrayList<>();
+        // 获取阀体压力规则
+        List<ProductModelConfig> fatiYaliModelConfig = new ArrayList<>();
+        // 获取阀座规则
+        List<ProductModelConfig> fazuoModelConfig = new ArrayList<>();
+        // 获取阀板规则
+        List<ProductModelConfig> fabanModelConfig = new ArrayList<>();
+
         // 获取全部规则列表
         List<ProductModelConfig> modelConfigs = productModelConfigService.getList(0, "");
-        // 获取阀板规则
-        List<ProductModelConfig> fabanModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == faban && e.getType() == CommonEnum.ProductModelType.FABAN.code).collect(Collectors.toList());
-        // 获取阀座规则
-        List<ProductModelConfig> fazuoModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fazuo && e.getType() == CommonEnum.ProductModelType.FAZUO.code).collect(Collectors.toList());
-        // 获取阀体规则
-        List<ProductModelConfig> fatiModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fati && e.getType() == CommonEnum.ProductModelType.FATI.code).collect(Collectors.toList());
-        // 获取阀体规则
-        List<ProductModelConfig> fatiYaliModelConfig = modelConfigs.stream().filter(e -> e.getIndexRule() == fatiyali && e.getType() == CommonEnum.ProductModelType.FATI_YALI.code).collect(Collectors.toList());
+        if (modelConfigs != null && modelConfigs.size() > 0) {
+            modelConfigs.stream().forEach(e -> {
+                final String indexRule = e.getIndexRule();
+                final Byte type = e.getType();
+                if (indexRule == fati && type == CommonEnum.ProductModelType.FATI.code) {
+                    fatiModelConfig.add(e);
+                } else if (indexRule == fatiyali && type == CommonEnum.ProductModelType.FATI_YALI.code) {
+                    fatiYaliModelConfig.add(e);
+                } else if (indexRule == fazuo && type == CommonEnum.ProductModelType.FAZUO.code) {
+                    fazuoModelConfig.add(e);
+                } else if (indexRule == faban && type == CommonEnum.ProductModelType.FABAN.code) {
+                    fabanModelConfig.add(e);
+                }
+            });
+        }
+
+        // 获取符合阀体的列表(D270-0050-01-00Qa-aF05-01-001)
+        List<String> fatiCollect = new ArrayList<>();
+        // 获取符合阀体压力的列表
+        List<String> fatiYalicollect = new ArrayList<>();
+        // 获取符合阀座的列表(D270-0050-02-E0-01)
+        List<String> fazuoCollect = new ArrayList<>();
+        // 获取符合阀板的列表(D270-0050-03-Hc-02-00)
+        List<String> fabanCollect = new ArrayList<>();
+        // 获取符合阀杆的列表
+        List<String> fagancollect = new ArrayList<>();
 
         // 根据型号和规格，获取图号列表
         List<Material> listByModelAndSpec = materialService.getListByModelAndSpec(smallModel, specifications);
-        // 获取符合阀板的列表(D270-0050-03-Hc-02-00)
-        List<String> fabanCollect = listByModelAndSpec.stream().filter(e -> {
-            String[] split = e.getGraphNo().split("-");
-            if (split.length > 3) {
-                return split[2].equals("03") && fabanModelConfig.contains(split[3]);
-            }
-            return false;
-        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
-
-        // 获取符合阀座的列表(D270-0050-02-E0-01)
-        List<String> fazuoCollect = listByModelAndSpec.stream().filter(e -> {
-            String[] split = e.getGraphNo().split("-");
-            if (split.length > 3) {
-                return split[2].equals("02") && fazuoModelConfig.contains(split[3]);
-            }
-            return false;
-        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
-        // 获取符合阀体的列表(D270-0050-01-00Qa-aF05-01-001)
-        List<String> fatiCollect = listByModelAndSpec.stream().filter(e -> {
-            String[] split = e.getGraphNo().split("-");
-            if (split.length > 3) {
-                return split[2].equals("01") && fatiModelConfig.contains(split[3].replaceAll("[^0-9]", ""));
-            }
-            return false;
-        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
-        // 获取符合阀体压力的列表
-        List<String> fatiYalicollect = listByModelAndSpec.stream().filter(e -> {
-            String[] split = e.getGraphNo().split("-");
-            if (split.length > 4) {
-                return split[2].equals("01") && fatiYaliModelConfig.contains(split[4].substring(0, 1));
-            }
-            return false;
-        }).map(e -> e.getGraphNo()).collect(Collectors.toList());
+        if (listByModelAndSpec != null && listByModelAndSpec.size() > 0) {
+            listByModelAndSpec.stream().forEach(e -> {
+                String graphNo = e.getGraphNo();
+                String[] split = graphNo.split("-");
+                if (split.length > 2) {
+                    String noIndex = split[2];
+                    if (noIndex == "01") {// 阀体
+                        if (split.length > 3 && fatiModelConfig.contains(split[3].replaceAll("[^0-9]", ""))) {//阀体材质
+                            fatiCollect.add(graphNo);
+                        }
+                        if (split.length > 4 && fatiYaliModelConfig.contains(split[4].substring(0, 1))) {//阀体压力
+                            fatiYalicollect.add(graphNo);
+                        }
+                    } else if (noIndex == "02") {//阀座
+                        if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
+                            fazuoCollect.add(graphNo);
+                        }
+                    } else if (noIndex == "03") {// 阀板
+                        if (split.length > 3 && fabanModelConfig.contains(split[3])) {
+                            fabanCollect.add(graphNo);
+                        }
+                    } else if (noIndex == "04") { // 上阀杆
+                        fagancollect.add(graphNo);
+                    }
+                }
+            });
+        }
 
         materialTypeListDTO.setType(CommonEnum.ProductModelType.FABAN.code);
         materialTypeListDTO.setList(fabanCollect);
@@ -408,12 +466,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         int checkState = 0;
         String checkResult = "";
         int currentUser = getLoginUserId();
-        // 核料
-        List<OrderMaterial> orderMaterialList = new ArrayList<>();
-        // 替换料列表
-        List<OrderMaterial> replaceMaterialList = new ArrayList<>();
-        // 缺料，需要购买的零件列表及数量
-        List<OrderMaterial> needBuyMaterialList = new ArrayList<>();
+
         String orderNo = "";
         try {
             // 获取一个成品所需的零件
@@ -421,71 +474,52 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 orderNo = orderCheckMaterialDTO.getOrderNo();
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
                 Integer materialCount = orderCheckMaterialDTO.getMaterialCount();
-                String replaceMaterialGraphNo = orderCheckMaterialDTO.getReplaceMaterialGraphNo();
                 // 获取零件的库存
                 Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
                 Integer currentQuantity = infoByGraphNo.getCurrentQuantity();
                 // 需要的零件数量
 //                int needCount = productNumber * materialCount;
                 if (currentQuantity >= materialCount) {
-                    String finalOrderNo = orderNo;
-                    // 有料的列表
-                    orderMaterialList.add(new OrderMaterial() {{
-                        setOrderNo(finalOrderNo);
-                        setMaterialGraphNo(materialGraphNo);
-                        setMaterialCount(materialCount);
-                    }});
                     orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
                     orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件余量充足");
                 } else {
-                    // 缺料列表
-                    needBuyMaterialList.add(new OrderMaterial() {{
-                        setMaterialCount(materialCount);
-                        setMaterialGraphNo(replaceMaterialGraphNo);
-                    }});
                     // 缺料查找是否有替换料
+                    String replaceMaterialGraphNo = orderCheckMaterialDTO.getReplaceMaterialGraphNo();
                     if (StringUtils.isNotBlank(replaceMaterialGraphNo)) {
                         Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
-                        if (replaceGraphNoInfo.getCurrentQuantity() >= materialCount) {
-                            replaceMaterialList.add(new OrderMaterial() {{
-                                setMaterialCount(materialCount);
-                                setMaterialGraphNo(replaceMaterialGraphNo);
-                            }});
+                        Integer replaceGraphNoInfoCurrentQuantity = replaceGraphNoInfo.getCurrentQuantity();
+                        if (replaceGraphNoInfoCurrentQuantity >= materialCount) {
                             orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_REPLACE.code);
-                            orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件替换料充足，可走替换料方案");
-                            checkResult += "【{" + materialGraphNo + "}库存不足，替换料{" + replaceMaterialGraphNo + "}库存充足】,";
+                            orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件替换料充足，可走替换料方案");
+                            checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存充足】,";
                             if (checkState != 1) {
                                 checkState = 2;
                             }
                         } else {
                             orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code);
-                            orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件替换料库存不足，主料库存：" + currentQuantity);
-                            checkResult += "【{" + materialGraphNo + "}库存不足，替换料{" + replaceMaterialGraphNo + "}库存不足】,";
+                            orderCheckMaterialDTO.setLackMaterialCount(materialCount - replaceGraphNoInfoCurrentQuantity);
+                            orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件替换料库存不足：" + currentQuantity);
+                            checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存不足】,";
                             checkState = 1;
                         }
                     } else {
+                        // 如果缺料，将可替换料列表返回给前端
+                        String replaceGraphNos = infoByGraphNo.getReplaceGraphNos();
+                        if (StringUtils.isNotBlank(replaceGraphNos)) {
+                            String[] split = replaceGraphNos.split(",");
+                            orderCheckMaterialDTO.setReplaceGraphNoList(Arrays.asList(split));
+                        }
                         // 无料可以替换，需要走采购流程
                         orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code);
+                        orderCheckMaterialDTO.getIsReplace();
+                        // 缺少的料的数量
+                        orderCheckMaterialDTO.setLackMaterialCount(materialCount - currentQuantity);
                         orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件库存：" + currentQuantity);
                         checkResult += "【{" + materialGraphNo + "}库存不足】,";
                         checkState = 1;
                     }
                 }
             }
-            // 如果核料成功，也需要核料点下一步，才往下走
-//            if (checkState == 0) {
-//                if (orderMaterialList != null && orderMaterialList.size() > 0) {
-//                    // 核料成功，插入核料表
-//                    orderMaterialExtendMapper.insertBatchOrderMaterial(orderMaterialList);
-//                    for (OrderMaterial orderMaterial : orderMaterialList) {
-//                        // 更新零件当前库存和锁定库存
-//                        String materialGraphNo = orderMaterial.getMaterialGraphNo();
-//                        int materialCount = orderMaterial.getMaterialCount();
-//                        materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
-//                        materialService.updateLockQuantity(materialGraphNo, materialCount);
-//                    }
-//                }
-//            }
         } catch (Exception e) {
             log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
         } finally {

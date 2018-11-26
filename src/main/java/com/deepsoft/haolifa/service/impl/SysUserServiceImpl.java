@@ -2,7 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.deepsoft.haolifa.dao.redis.RedisDao;
+import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MyUserMapper;

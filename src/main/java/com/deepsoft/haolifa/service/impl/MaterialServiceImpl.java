@@ -194,14 +194,14 @@ public class MaterialServiceImpl implements MaterialService {
         if (StringUtils.isNotBlank(graphNoLike)) {
             criteria.andGraphNoLike("%" + graphNoLike + "%");
         }
-        // 告警状态1（库存数量<预警值）
-        if (status == 1) {
-            criteria.andCurrentQuantityLessThan("safe_quantity");
-        }
-        // 正常状态2（库存数量>预警值）
-        if (status == 2) {
-            criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
-        }
+//        // 告警状态1（库存数量<预警值）
+//        if (status == 1) {
+//            criteria.andCurrentQuantityLessThan("safe_quantity");
+//        }
+//        // 正常状态2（库存数量>预警值）
+//        if (status == 2) {
+//            criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
+//        }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("create_time desc");
         Page<Material> materials = PageHelper.startPage(currentPage, pageSize)

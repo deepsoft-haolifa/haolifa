@@ -23,6 +23,15 @@ public interface OrderProductService {
     ResultBean saveOrderProductInfo(OrderProductDTO order);
 
     /**
+     * 添加订单的技术清单信息（技术员）
+     *
+     * @param orderNo
+     * @param technicalRequire 技术清单信息
+     * @return
+     */
+    int updateTechnicalRequire(String orderNo, String technicalRequire);
+
+    /**
      * 修改订单状态
      *
      * @param orderNo

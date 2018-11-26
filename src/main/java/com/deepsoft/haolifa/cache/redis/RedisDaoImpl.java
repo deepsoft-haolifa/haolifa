@@ -1,6 +1,11 @@
-package com.deepsoft.haolifa.dao.redis;
+package com.deepsoft.haolifa.cache.redis;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.deepsoft.haolifa.cache.CacheKeyManager;
+import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -287,6 +292,7 @@ public class RedisDaoImpl implements RedisDao {
         return TryBase.ofc(RETRY_TIMES, () -> stringRedisTemplate.opsForList().size(key)).get();
     }
 
+
     @Override
     public void sadd(String key, String... values) {
         log.info("getListLen==>key={}; values={}", key, Arrays.asList(values));
@@ -310,6 +316,46 @@ public class RedisDaoImpl implements RedisDao {
                 return list;
             }
         })).get();
+    }
+
+
+    @Override
+    public <T> T queryCache(CacheKeyManager.CacheKeyVo cacheKeyVo, TypeReference<T> clazz, NoCacheLoadCallBack<T> callback) {
+        String key = cacheKeyVo.key;
+        T value = null;
+        if (exists(key)) {
+            String redisValue = get(key);
+            if (StringUtils.isNotBlank(redisValue)) {
+                value = JSON.parseObject(redisValue, clazz);
+            }
+        } else {
+            synchronized (this) {
+                if (exists(key)) {
+                    String redisValue = get(key);
+                    if (StringUtils.isNotBlank(redisValue)) {
+                        value = JSON.parseObject(redisValue, clazz);
+                    }
+                } else {
+                    // 数据库查
+                    try {
+                        value = callback.load();
+                    } catch (Exception e) {
+                        log.error("error occurred==>", e);
+                    }
+                    boolean isValueNull = value == null || (value instanceof Collection && ((Collection) value).isEmpty());
+                    if (!isValueNull) {
+                        // 更新缓存
+                        String valueStr = value instanceof String ? (String) value : JSON.toJSONString(value);
+                        set(key, valueStr);
+                        // 设置到期时间
+                        if (cacheKeyVo.seconds != null && cacheKeyVo.seconds > 0) {
+                            expire(cacheKeyVo.key, cacheKeyVo.seconds.intValue());
+                        }
+                    }
+                }
+            }
+        }
+        return value;
     }
 
 

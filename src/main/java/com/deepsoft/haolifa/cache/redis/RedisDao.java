@@ -1,4 +1,9 @@
-package com.deepsoft.haolifa.dao.redis;
+package com.deepsoft.haolifa.cache.redis;
+
+import com.alibaba.fastjson.TypeReference;
+import com.deepsoft.haolifa.cache.CacheKeyManager;
+import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
+import org.springframework.dao.DataAccessException;
 
 import java.util.List;
 import java.util.Map;
@@ -81,6 +86,8 @@ public interface RedisDao {
     Long listRemove(String key, String value);
 
     Long getListLen(String key);
+
+    <T> T queryCache(CacheKeyManager.CacheKeyVo cacheKeyVo, TypeReference<T> clazz, NoCacheLoadCallBack<T> callback);
 
 
 }
