@@ -317,6 +317,8 @@ DROP TABLE IF EXISTS `order_product`;
 	  `feedback_time_confirm_user` varchar(32) NOT NULL DEFAULT '' COMMENT '反馈确认人',
 	  `purchase_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '采购反馈时间',
 	  `production_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '生产反馈时间',
+	  `assembly_shop` varchar(32) NOT NULL DEFAULT '' COMMENT '装配车间',
+	  `assembly_group` varchar(32) NOT NULL DEFAULT '' COMMENT '装配小组',
 	  `demand_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方名称',
 	  `demand_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方代理人',
 	  `demand_phone` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方电话',
@@ -343,7 +345,8 @@ DROP TABLE IF EXISTS `order_product`;
 	  `packaging_specification` varchar(256) NOT NULL DEFAULT '' COMMENT '包装规范',
 	  `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_order_no` (`order_no`)
+	  UNIQUE KEY `uk_order_no` (`order_no`),
+	  UNIQUE KEY `uk_order_contract_no` (`order_contract_no`),
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
 
 	DROP TABLE IF EXISTS `order_product_associate`;
@@ -375,7 +378,7 @@ DROP TABLE IF EXISTS `order_product`;
 	  `is_replace` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否可替换零件（0：否，1：是）',
 	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '需要的零件数量',
 	  `lack_material_count` int(11) NOT NULL DEFAULT 0 COMMENT '缺少的零件数量',
-	  `status` int(11) NOT NULL DEFAULT 0 COMMENT '状态（1.核料成功，2.缺料，需要采购）',
+	  `status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态（1.核料成功，2.缺料，需要采购,3.释放料）',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单零件关联表（一个订单需要哪些零件,核料完成之后生成）';
 

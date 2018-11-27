@@ -17,9 +17,9 @@ public class OrderMaterial {
 
     private Integer lackMaterialCount;
 
-    private Integer status;
+    private Byte checkStatus;
 
-    public OrderMaterial(Integer id, Date createTime, String orderNo, String materialGraphNo, Byte isReplace, Integer materialCount, Integer lackMaterialCount, Integer status) {
+    public OrderMaterial(Integer id, Date createTime, String orderNo, String materialGraphNo, Byte isReplace, Integer materialCount, Integer lackMaterialCount, Byte checkStatus) {
         this.id = id;
         this.createTime = createTime;
         this.orderNo = orderNo;
@@ -27,7 +27,7 @@ public class OrderMaterial {
         this.isReplace = isReplace;
         this.materialCount = materialCount;
         this.lackMaterialCount = lackMaterialCount;
-        this.status = status;
+        this.checkStatus = checkStatus;
     }
 
     public OrderMaterial() {
@@ -90,11 +90,11 @@ public class OrderMaterial {
         this.lackMaterialCount = lackMaterialCount;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Byte getCheckStatus() {
+        return checkStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setCheckStatus(Byte checkStatus) {
+        this.checkStatus = checkStatus;
     }
 }

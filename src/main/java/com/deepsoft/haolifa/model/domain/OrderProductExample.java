@@ -1026,6 +1026,146 @@ public class OrderProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andAssemblyShopIsNull() {
+            addCriterion("assembly_shop is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopIsNotNull() {
+            addCriterion("assembly_shop is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopEqualTo(String value) {
+            addCriterion("assembly_shop =", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopNotEqualTo(String value) {
+            addCriterion("assembly_shop <>", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopGreaterThan(String value) {
+            addCriterion("assembly_shop >", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopGreaterThanOrEqualTo(String value) {
+            addCriterion("assembly_shop >=", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopLessThan(String value) {
+            addCriterion("assembly_shop <", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopLessThanOrEqualTo(String value) {
+            addCriterion("assembly_shop <=", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopLike(String value) {
+            addCriterion("assembly_shop like", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopNotLike(String value) {
+            addCriterion("assembly_shop not like", value, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopIn(List<String> values) {
+            addCriterion("assembly_shop in", values, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopNotIn(List<String> values) {
+            addCriterion("assembly_shop not in", values, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopBetween(String value1, String value2) {
+            addCriterion("assembly_shop between", value1, value2, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyShopNotBetween(String value1, String value2) {
+            addCriterion("assembly_shop not between", value1, value2, "assemblyShop");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupIsNull() {
+            addCriterion("assembly_group is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupIsNotNull() {
+            addCriterion("assembly_group is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupEqualTo(String value) {
+            addCriterion("assembly_group =", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupNotEqualTo(String value) {
+            addCriterion("assembly_group <>", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupGreaterThan(String value) {
+            addCriterion("assembly_group >", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupGreaterThanOrEqualTo(String value) {
+            addCriterion("assembly_group >=", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupLessThan(String value) {
+            addCriterion("assembly_group <", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupLessThanOrEqualTo(String value) {
+            addCriterion("assembly_group <=", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupLike(String value) {
+            addCriterion("assembly_group like", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupNotLike(String value) {
+            addCriterion("assembly_group not like", value, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupIn(List<String> values) {
+            addCriterion("assembly_group in", values, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupNotIn(List<String> values) {
+            addCriterion("assembly_group not in", values, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupBetween(String value1, String value2) {
+            addCriterion("assembly_group between", value1, value2, "assemblyGroup");
+            return (Criteria) this;
+        }
+
+        public Criteria andAssemblyGroupNotBetween(String value1, String value2) {
+            addCriterion("assembly_group not between", value1, value2, "assemblyGroup");
+            return (Criteria) this;
+        }
+
         public Criteria andDemandNameIsNull() {
             addCriterion("demand_name is null");
             return (Criteria) this;

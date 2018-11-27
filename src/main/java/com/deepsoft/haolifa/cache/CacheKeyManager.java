@@ -15,6 +15,16 @@ public class CacheKeyManager {
         return new CacheKeyVo("deepsoft:haolifa:cache:orderInfo:" + orderNo, 5L, TimeUnit.DAYS);
     }
 
+    /**
+     * 成品模型规则（解析成品由哪些零件组成的规则）redis
+     *
+     * @return
+     */
+    public static CacheKeyVo cacheKeyProductModelRule() {
+        return new CacheKeyVo("deepsoft:haolifa:cache:productModelRule", 60L, TimeUnit.DAYS);
+    }
+
+
     public static class CacheKeyVo {
         public String key;
         public Long timeOut;

@@ -16,8 +16,6 @@ public class OrderProductDTO {
     private String orderNo;
     @ApiModelProperty(value = "成品合同订单号")
     private String orderContractNo;
-    @ApiModelProperty(value = "订单状态")
-    private Byte orderStatus;
     @ApiModelProperty(value = "订单合同url")
     private String orderContractUrl;
     @ApiModelProperty(value = "工厂反馈完成时间")
@@ -76,7 +74,6 @@ public class OrderProductDTO {
     private String warrantyPeriod;
     @ApiModelProperty(value = "包装规范")
     private String packagingSpecification;
-
     @ApiModelProperty(value = "订单产品列表")
     List<OrderProductAssociate> orderProductAssociates;
 }

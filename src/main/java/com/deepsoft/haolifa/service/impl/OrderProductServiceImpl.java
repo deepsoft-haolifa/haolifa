@@ -6,10 +6,7 @@ import com.deepsoft.haolifa.cache.CacheKeyManager;
 import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.CheckMaterialLogMapper;
-import com.deepsoft.haolifa.dao.repository.MaterialRequisitionMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.dto.OrderMaterialDTO;
 import com.deepsoft.haolifa.model.domain.*;
@@ -47,6 +44,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private MaterialService materialService;
     @Autowired
     private OrderExtendMapper orderMaterialExtendMapper;
+    @Autowired
+    private OrderMaterialMapper orderMaterialMapper;
     @Autowired
     private CheckMaterialLogMapper checkMaterialLogMapper;
     @Autowired
@@ -239,9 +238,29 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
-    public int updateTechnicalRequire(String orderNo, String technicalRequire) {
+    public ResultBean updateOrderInfo(OrderUpdateDTO orderUpdateDTO) {
+        String orderNo = orderUpdateDTO.getOrderNo();
+        if (StringUtils.isBlank(orderNo)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+
         OrderProduct record = new OrderProduct();
-        record.setTechnicalRequire(technicalRequire);
+        if (StringUtils.isNotBlank(orderUpdateDTO.getTechnicalRequire())) {
+            record.setTechnicalRequire(orderUpdateDTO.getTechnicalRequire());
+        }
+        if (StringUtils.isNotBlank(orderUpdateDTO.getPurchaseFeedbackTime())) {
+            record.setPurchaseFeedbackTime(orderUpdateDTO.getPurchaseFeedbackTime());
+        }
+        if (StringUtils.isNotBlank(orderUpdateDTO.getFinishFeedbackTime())) {
+            record.setFinishFeedbackTime(orderUpdateDTO.getFinishFeedbackTime());
+        }
+        if (StringUtils.isNotBlank(orderUpdateDTO.getAssemblyShop())) {
+            record.setAssemblyShop(orderUpdateDTO.getAssemblyShop());
+        }
+        if (StringUtils.isNotBlank(orderUpdateDTO.getAssemblyGroup())) {
+            record.setAssemblyGroup(orderUpdateDTO.getAssemblyGroup());
+        }
+
         OrderProductExample example = new OrderProductExample();
         example.or().andOrderNoEqualTo(orderNo);
         int update = orderProductMapper.updateByExampleSelective(record, example);
@@ -249,7 +268,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             //删除redis值
             redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderNo).key);
         }
-        return update;
+        return ResultBean.success(update);
     }
 
 
@@ -441,14 +460,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             });
         }
 
-        materialTypeListDTO.setType(CommonEnum.ProductModelType.FABAN.code);
-        materialTypeListDTO.setList(fabanCollect);
-        materialTypeListDTO.setType(CommonEnum.ProductModelType.FAZUO.code);
-        materialTypeListDTO.setList(fazuoCollect);
         materialTypeListDTO.setType(CommonEnum.ProductModelType.FATI.code);
         materialTypeListDTO.setList(fatiCollect);
         materialTypeListDTO.setType(CommonEnum.ProductModelType.FATI_YALI.code);
         materialTypeListDTO.setList(fatiYalicollect);
+        materialTypeListDTO.setType(CommonEnum.ProductModelType.FAZUO.code);
+        materialTypeListDTO.setList(fazuoCollect);
+        materialTypeListDTO.setType(CommonEnum.ProductModelType.FABAN.code);
+        materialTypeListDTO.setList(fabanCollect);
+        materialTypeListDTO.setType(CommonEnum.ProductModelType.FAGAN.code);
+        materialTypeListDTO.setList(fagancollect);
+
         return materialTypeListDTO;
     }
 
@@ -489,7 +511,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
                         Integer replaceGraphNoInfoCurrentQuantity = replaceGraphNoInfo.getCurrentQuantity();
                         if (replaceGraphNoInfoCurrentQuantity >= materialCount) {
-                            orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_REPLACE.code);
+                            orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
                             orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件替换料充足，可走替换料方案");
                             checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存充足】,";
                             if (checkState != 1) {
@@ -561,6 +583,34 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         return 0;
     }
+
+    /**
+     * 综合计划【不同意】，将核完的料释放
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int releaseMaterial(String orderNo) {
+        // 获取核料清单
+        List<OrderMaterialDTO> orderMaterialDTOS = listOrderMaterial(orderNo);
+        if (null != orderMaterialDTOS && orderMaterialDTOS.size() > 0) {
+            orderMaterialDTOS.stream().forEach(e -> {
+                // 将核料状态改为【释放料】
+                String materialGraphNo = e.getMaterialGraphNo();
+                orderMaterialMapper.updateByExampleSelective(new OrderMaterial() {{
+                    setCheckStatus(CommonEnum.CheckMaterialStatus.RELEASE.code);
+                }}, new OrderMaterialExample() {{
+                    or().andOrderNoEqualTo(orderNo).andMaterialGraphNoEqualTo(materialGraphNo);
+                }});
+                // 将原料表释放
+                int materialCount = e.getMaterialCount();
+                materialService.updateCurrentQuantity(materialGraphNo, materialCount);
+                materialService.updateLockQuantity(materialGraphNo, (-1) * materialCount);
+            });
+        }
+
+        return 0;
+    }
+
 
     // endregion
 

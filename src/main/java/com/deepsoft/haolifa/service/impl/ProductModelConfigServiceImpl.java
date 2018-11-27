@@ -1,7 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.deepsoft.haolifa.cache.CacheKeyManager;
+import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.ProductModelConfigMapper;
 import com.deepsoft.haolifa.model.domain.ProductModelConfig;
@@ -14,8 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.deepsoft.haolifa.constant.CacheConsts.REDIS_KEY_PRODUCT_MODEL_RULE;
-
 
 @Service
 public class ProductModelConfigServiceImpl extends BaseService implements ProductModelConfigService {
@@ -26,26 +25,19 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
     @Autowired
     private RedisDao redisDao;
 
-    final static String redisKey = REDIS_KEY_PRODUCT_MODEL_RULE;
-
 
     @Override
     public List<ProductModelConfig> getList(int type, String indexRule) {
-        List<ProductModelConfig> productModelConfigs = null;
-        String redisValue = redisDao.get(redisKey);
-        if (StringUtils.isNotBlank(redisValue)) {
-            productModelConfigs = JSONObject.parseObject(redisValue, new TypeReference<List<ProductModelConfig>>() {
-            });
-            if (type > 0 && StringUtils.isNotBlank(indexRule)) {
-                productModelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
+
+        List<ProductModelConfig> productModelConfigs = redisDao.queryCache(CacheKeyManager.cacheKeyProductModelRule(), new TypeReference<List<ProductModelConfig>>() {
+        }, new NoCacheLoadCallBack<List<ProductModelConfig>>() {
+            @Override
+            public List<ProductModelConfig> load() throws Exception {
+                return productModelConfigMapper.selectByExample(new ProductModelConfigExample());
             }
-        } else {// 从数据库中查
-            productModelConfigs = productModelConfigMapper.selectByExample(new ProductModelConfigExample());
-            if (type > 0 && StringUtils.isNotBlank(indexRule)) {
-                productModelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
-            }
-            redisDao.set(redisKey, JSONObject.toJSONString(productModelConfigs));
-            redisDao.expire(redisKey, 3600 * 24 * 30);
+        });
+        if (type > 0 && StringUtils.isNotBlank(indexRule)) {
+            productModelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
         }
         return productModelConfigs;
     }
@@ -54,7 +46,7 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
     public int add(ProductModelConfig model) {
         int insertSelective = productModelConfigMapper.insertSelective(model);
         if (insertSelective > 0) {
-            redisDao.del(redisKey);
+            redisDao.del(CacheKeyManager.cacheKeyProductModelRule().key);
         }
         return insertSelective;
     }
@@ -65,7 +57,7 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
             or().andTypeEqualTo((byte) type).andIndexRuleEqualTo(indexRule);
         }});
         if (delete > 0) {
-            redisDao.del(redisKey);
+            redisDao.del(CacheKeyManager.cacheKeyProductModelRule().key);
         }
         return delete;
     }
@@ -74,7 +66,7 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
     public int update(ProductModelConfig model) {
         int update = productModelConfigMapper.updateByPrimaryKeySelective(model);
         if (update > 0) {
-            redisDao.del(redisKey);
+            redisDao.del(CacheKeyManager.cacheKeyProductModelRule().key);
         }
         return update;
     }

@@ -98,8 +98,21 @@ public class CommonEnum {
         CREATE((byte) 0),
         // 完成
         COMPLETE((byte) 1),
+        // 审核中
+        AuditING((byte) 2),
         // 核料中
-        CHECK_MATERIAL((byte) 2),;
+        CHECK_MATERIAL((byte) 3),
+        // 待领料
+        WAIT_MATERIAL((byte) 4),
+        // 待生产
+        WAIT_PRODUCTION((byte) 5),
+        // 生产中
+        PRODUCTION((byte) 6),
+        // 生产暂停
+        SUSPEND_PRODUCTION((byte) 7),
+        // 质检中
+        TEST((byte) 8),
+        ;
 
         public final byte code;
 
@@ -172,8 +185,10 @@ public class CommonEnum {
         FAZUO((byte) 2),
         // 阀板
         FABAN((byte) 3),
+        // 上阀杆
+        FAGAN((byte) 4),
         // 阀体压力
-        FATI_YALI((byte) 4),;
+        FATI_YALI((byte) 5),;
 
         public final byte code;
 
@@ -191,10 +206,8 @@ public class CommonEnum {
         SUCCESS((byte) 1),
         // 缺料，走采购
         NEED_PURCHASE((byte) 2),
-        // 缺料，可提交可替换料
-        NEED_REPLACE((byte) 3),
-        // 机加工
-        JIJIAGONG((byte) 4),;
+        // 释放料
+        RELEASE((byte) 3),;
 
         public final byte code;
 

@@ -17,6 +17,8 @@
       <arg column="feedback_time_confirm_user" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="purchase_feedback_time" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="production_feedback_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="assembly_shop" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="assembly_group" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_agent_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="demand_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -105,12 +107,12 @@
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, order_no, order_contract_no, 
     order_status, order_contract_url, technical_require, finish_feedback_time, feedback_time_confirm_user, 
-    purchase_feedback_time, production_feedback_time, demand_name, demand_agent_name, 
-    demand_phone, demand_fax, demand_bank_name, demand_bank_card_no, supply_name, supply_agent_name, 
-    supply_phone, supply_fax, supply_bank_name, contract_bank_card_no, delivery_place, 
-    delivery_date, contract_sign_date, total_count, discount_total_price, total_price, 
-    special_require, cargo_information, sign_board, acceptance_criteria, warranty_period, 
-    packaging_specification, remark
+    purchase_feedback_time, production_feedback_time, assembly_shop, assembly_group, 
+    demand_name, demand_agent_name, demand_phone, demand_fax, demand_bank_name, demand_bank_card_no, 
+    supply_name, supply_agent_name, supply_phone, supply_fax, supply_bank_name, contract_bank_card_no, 
+    delivery_place, delivery_date, contract_sign_date, total_count, discount_total_price, 
+    total_price, special_require, cargo_information, sign_board, acceptance_criteria, 
+    warranty_period, packaging_specification, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" resultMap="BaseResultMap">
     select
@@ -151,28 +153,30 @@
       order_status, order_contract_url, technical_require, 
       finish_feedback_time, feedback_time_confirm_user, 
       purchase_feedback_time, production_feedback_time, 
-      demand_name, demand_agent_name, demand_phone, 
-      demand_fax, demand_bank_name, demand_bank_card_no, 
-      supply_name, supply_agent_name, supply_phone, 
-      supply_fax, supply_bank_name, contract_bank_card_no, 
-      delivery_place, delivery_date, contract_sign_date, 
-      total_count, discount_total_price, total_price, 
-      special_require, cargo_information, sign_board, 
-      acceptance_criteria, warranty_period, packaging_specification, 
+      assembly_shop, assembly_group, demand_name, 
+      demand_agent_name, demand_phone, demand_fax, 
+      demand_bank_name, demand_bank_card_no, supply_name, 
+      supply_agent_name, supply_phone, supply_fax, 
+      supply_bank_name, contract_bank_card_no, delivery_place, 
+      delivery_date, contract_sign_date, total_count, 
+      discount_total_price, total_price, special_require, 
+      cargo_information, sign_board, acceptance_criteria, 
+      warranty_period, packaging_specification, 
       remark)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
       #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR}, 
       #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{technicalRequire,jdbcType=VARCHAR}, 
       #{finishFeedbackTime,jdbcType=VARCHAR}, #{feedbackTimeConfirmUser,jdbcType=VARCHAR}, 
       #{purchaseFeedbackTime,jdbcType=VARCHAR}, #{productionFeedbackTime,jdbcType=VARCHAR}, 
-      #{demandName,jdbcType=VARCHAR}, #{demandAgentName,jdbcType=VARCHAR}, #{demandPhone,jdbcType=VARCHAR}, 
-      #{demandFax,jdbcType=VARCHAR}, #{demandBankName,jdbcType=VARCHAR}, #{demandBankCardNo,jdbcType=VARCHAR}, 
-      #{supplyName,jdbcType=VARCHAR}, #{supplyAgentName,jdbcType=VARCHAR}, #{supplyPhone,jdbcType=VARCHAR}, 
-      #{supplyFax,jdbcType=VARCHAR}, #{supplyBankName,jdbcType=VARCHAR}, #{contractBankCardNo,jdbcType=VARCHAR}, 
-      #{deliveryPlace,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=VARCHAR}, #{contractSignDate,jdbcType=VARCHAR}, 
-      #{totalCount,jdbcType=INTEGER}, #{discountTotalPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, 
-      #{specialRequire,jdbcType=VARCHAR}, #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, 
-      #{acceptanceCriteria,jdbcType=VARCHAR}, #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
+      #{assemblyShop,jdbcType=VARCHAR}, #{assemblyGroup,jdbcType=VARCHAR}, #{demandName,jdbcType=VARCHAR}, 
+      #{demandAgentName,jdbcType=VARCHAR}, #{demandPhone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR}, 
+      #{demandBankName,jdbcType=VARCHAR}, #{demandBankCardNo,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR}, 
+      #{supplyAgentName,jdbcType=VARCHAR}, #{supplyPhone,jdbcType=VARCHAR}, #{supplyFax,jdbcType=VARCHAR}, 
+      #{supplyBankName,jdbcType=VARCHAR}, #{contractBankCardNo,jdbcType=VARCHAR}, #{deliveryPlace,jdbcType=VARCHAR}, 
+      #{deliveryDate,jdbcType=VARCHAR}, #{contractSignDate,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, 
+      #{discountTotalPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{specialRequire,jdbcType=VARCHAR}, 
+      #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, #{acceptanceCriteria,jdbcType=VARCHAR}, 
+      #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct">
@@ -219,6 +223,12 @@
       </if>
       <if test="productionFeedbackTime != null">
         production_feedback_time,
+      </if>
+      <if test="assemblyShop != null">
+        assembly_shop,
+      </if>
+      <if test="assemblyGroup != null">
+        assembly_group,
       </if>
       <if test="demandName != null">
         demand_name,
@@ -335,6 +345,12 @@
       </if>
       <if test="productionFeedbackTime != null">
         #{productionFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="assemblyShop != null">
+        #{assemblyShop,jdbcType=VARCHAR},
+      </if>
+      <if test="assemblyGroup != null">
+        #{assemblyGroup,jdbcType=VARCHAR},
       </if>
       <if test="demandName != null">
         #{demandName,jdbcType=VARCHAR},
@@ -464,6 +480,12 @@
       <if test="record.productionFeedbackTime != null">
         production_feedback_time = #{record.productionFeedbackTime,jdbcType=VARCHAR},
       </if>
+      <if test="record.assemblyShop != null">
+        assembly_shop = #{record.assemblyShop,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assemblyGroup != null">
+        assembly_group = #{record.assemblyGroup,jdbcType=VARCHAR},
+      </if>
       <if test="record.demandName != null">
         demand_name = #{record.demandName,jdbcType=VARCHAR},
       </if>
@@ -560,6 +582,8 @@
       feedback_time_confirm_user = #{record.feedbackTimeConfirmUser,jdbcType=VARCHAR},
       purchase_feedback_time = #{record.purchaseFeedbackTime,jdbcType=VARCHAR},
       production_feedback_time = #{record.productionFeedbackTime,jdbcType=VARCHAR},
+      assembly_shop = #{record.assemblyShop,jdbcType=VARCHAR},
+      assembly_group = #{record.assemblyGroup,jdbcType=VARCHAR},
       demand_name = #{record.demandName,jdbcType=VARCHAR},
       demand_agent_name = #{record.demandAgentName,jdbcType=VARCHAR},
       demand_phone = #{record.demandPhone,jdbcType=VARCHAR},
@@ -630,6 +654,12 @@
       </if>
       <if test="productionFeedbackTime != null">
         production_feedback_time = #{productionFeedbackTime,jdbcType=VARCHAR},
+      </if>
+      <if test="assemblyShop != null">
+        assembly_shop = #{assemblyShop,jdbcType=VARCHAR},
+      </if>
+      <if test="assemblyGroup != null">
+        assembly_group = #{assemblyGroup,jdbcType=VARCHAR},
       </if>
       <if test="demandName != null">
         demand_name = #{demandName,jdbcType=VARCHAR},
@@ -724,6 +754,8 @@
       feedback_time_confirm_user = #{feedbackTimeConfirmUser,jdbcType=VARCHAR},
       purchase_feedback_time = #{purchaseFeedbackTime,jdbcType=VARCHAR},
       production_feedback_time = #{productionFeedbackTime,jdbcType=VARCHAR},
+      assembly_shop = #{assemblyShop,jdbcType=VARCHAR},
+      assembly_group = #{assemblyGroup,jdbcType=VARCHAR},
       demand_name = #{demandName,jdbcType=VARCHAR},
       demand_agent_name = #{demandAgentName,jdbcType=VARCHAR},
       demand_phone = #{demandPhone,jdbcType=VARCHAR},

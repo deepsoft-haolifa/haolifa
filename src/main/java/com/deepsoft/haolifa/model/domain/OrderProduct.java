@@ -32,6 +32,10 @@ public class OrderProduct {
 
     private String productionFeedbackTime;
 
+    private String assemblyShop;
+
+    private String assemblyGroup;
+
     private String demandName;
 
     private String demandAgentName;
@@ -82,7 +86,7 @@ public class OrderProduct {
 
     private String remark;
 
-    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String technicalRequire, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String remark) {
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String technicalRequire, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String assemblyShop, String assemblyGroup, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -97,6 +101,8 @@ public class OrderProduct {
         this.feedbackTimeConfirmUser = feedbackTimeConfirmUser;
         this.purchaseFeedbackTime = purchaseFeedbackTime;
         this.productionFeedbackTime = productionFeedbackTime;
+        this.assemblyShop = assemblyShop;
+        this.assemblyGroup = assemblyGroup;
         this.demandName = demandName;
         this.demandAgentName = demandAgentName;
         this.demandPhone = demandPhone;
@@ -238,6 +244,22 @@ public class OrderProduct {
 
     public void setProductionFeedbackTime(String productionFeedbackTime) {
         this.productionFeedbackTime = productionFeedbackTime == null ? null : productionFeedbackTime.trim();
+    }
+
+    public String getAssemblyShop() {
+        return assemblyShop;
+    }
+
+    public void setAssemblyShop(String assemblyShop) {
+        this.assemblyShop = assemblyShop == null ? null : assemblyShop.trim();
+    }
+
+    public String getAssemblyGroup() {
+        return assemblyGroup;
+    }
+
+    public void setAssemblyGroup(String assemblyGroup) {
+        this.assemblyGroup = assemblyGroup == null ? null : assemblyGroup.trim();
     }
 
     public String getDemandName() {

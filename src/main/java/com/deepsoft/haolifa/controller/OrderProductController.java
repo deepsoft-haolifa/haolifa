@@ -1,9 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
-import com.deepsoft.haolifa.model.dto.MaterialRequisitionDTO;
-import com.deepsoft.haolifa.model.dto.OrderCheckMaterialDTO;
-import com.deepsoft.haolifa.model.dto.OrderProductDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.OrderProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -33,6 +30,18 @@ public class OrderProductController {
     @PostMapping("/save")
     public ResultBean save(@RequestBody OrderProductDTO orderProduct) {
         return orderProductService.saveOrderProductInfo(orderProduct);
+    }
+
+    @ApiOperation("成品订单信息更新")
+    @PostMapping("/updateInfo")
+    public ResultBean updateInfo(@RequestBody OrderUpdateDTO orderUpdateDTO) {
+        return orderProductService.updateOrderInfo(orderUpdateDTO);
+    }
+
+    @ApiOperation("成品订单状态更新")
+    @PostMapping("/updateStatus")
+    public ResultBean updateStatus(@RequestBody OrderStatusDTO orderStatusDTO) {
+        return ResultBean.success(orderProductService.updateOrderProductStatus(orderStatusDTO.getOrderNo(), orderStatusDTO.getStatus()));
     }
 
     @ApiOperation("获取成品订单详情")

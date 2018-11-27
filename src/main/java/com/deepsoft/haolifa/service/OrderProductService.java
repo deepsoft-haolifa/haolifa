@@ -23,13 +23,12 @@ public interface OrderProductService {
     ResultBean saveOrderProductInfo(OrderProductDTO order);
 
     /**
-     * 添加订单的技术清单信息（技术员）
+     * 更新订单相关信息
      *
-     * @param orderNo
-     * @param technicalRequire 技术清单信息
+     * @param orderUpdateDTO
      * @return
      */
-    int updateTechnicalRequire(String orderNo, String technicalRequire);
+    ResultBean updateOrderInfo(OrderUpdateDTO orderUpdateDTO);
 
     /**
      * 修改订单状态
@@ -86,6 +85,13 @@ public interface OrderProductService {
      */
     int checkPass(List<OrderCheckMaterialDTO> orderCheckMaterialDTOS);
 
+    /**
+     * 根据订单号，将核完的料释放
+     *
+     * @param orderNo
+     * @return
+     */
+    int releaseMaterial(String orderNo);
 
     /**
      * 获取订单的零件列表
@@ -103,7 +109,6 @@ public interface OrderProductService {
 
     /**
      * 获取领料单详情
-     *
      */
-    MaterialRequisitionDTO infoMaterialRequisition(String orderNo,String receiveNo);
+    MaterialRequisitionDTO infoMaterialRequisition(String orderNo, String receiveNo);
 }
