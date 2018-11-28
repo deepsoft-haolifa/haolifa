@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class DeliveryRecord {
@@ -11,13 +12,31 @@ public class DeliveryRecord {
 
     private Integer createUserId;
 
+    private String deliveryUrl;
+
+    private Byte deliveryClassify;
+
     private String deliveryNo;
 
-    private String orderNo;
+    private String contractOrderNo;
+
+    private Date deliveryTime;
+
+    private String operationNo;
 
     private String customerNo;
 
-    private String deliveryTime;
+    private Integer productCount;
+
+    private String packingMode;
+
+    private Integer pieceCount;
+
+    private String transportCompany;
+
+    private String courierNo;
+
+    private String collectProvice;
 
     private String collectAddress;
 
@@ -25,53 +44,44 @@ public class DeliveryRecord {
 
     private String collectPhone;
 
-    private String productNo;
+    private BigDecimal weightPiece;
 
-    private String productName;
+    private BigDecimal pricePiece;
 
-    private String productModel;
+    private BigDecimal deliveryFee;
 
-    private String lable;
+    private BigDecimal totalFee;
 
-    private String specifications;
-
-    private String productColor;
-
-    private Integer productNumber;
-
-    private String productRemark;
-
-    private String transportType;
-
-    private String freight;
-
-    private String isDelivery;
+    private String settlementWay;
 
     private String remark;
 
-    public DeliveryRecord(Integer id, Date createTime, Date updateTime, Integer createUserId, String deliveryNo, String orderNo, String customerNo, String deliveryTime, String collectAddress, String collectName, String collectPhone, String productNo, String productName, String productModel, String lable, String specifications, String productColor, Integer productNumber, String productRemark, String transportType, String freight, String isDelivery, String remark) {
+    public DeliveryRecord(Integer id, Date createTime, Date updateTime, Integer createUserId, String deliveryUrl, Byte deliveryClassify, String deliveryNo, String contractOrderNo, Date deliveryTime, String operationNo, String customerNo, Integer productCount, String packingMode, Integer pieceCount, String transportCompany, String courierNo, String collectProvice, String collectAddress, String collectName, String collectPhone, BigDecimal weightPiece, BigDecimal pricePiece, BigDecimal deliveryFee, BigDecimal totalFee, String settlementWay, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.deliveryUrl = deliveryUrl;
+        this.deliveryClassify = deliveryClassify;
         this.deliveryNo = deliveryNo;
-        this.orderNo = orderNo;
-        this.customerNo = customerNo;
+        this.contractOrderNo = contractOrderNo;
         this.deliveryTime = deliveryTime;
+        this.operationNo = operationNo;
+        this.customerNo = customerNo;
+        this.productCount = productCount;
+        this.packingMode = packingMode;
+        this.pieceCount = pieceCount;
+        this.transportCompany = transportCompany;
+        this.courierNo = courierNo;
+        this.collectProvice = collectProvice;
         this.collectAddress = collectAddress;
         this.collectName = collectName;
         this.collectPhone = collectPhone;
-        this.productNo = productNo;
-        this.productName = productName;
-        this.productModel = productModel;
-        this.lable = lable;
-        this.specifications = specifications;
-        this.productColor = productColor;
-        this.productNumber = productNumber;
-        this.productRemark = productRemark;
-        this.transportType = transportType;
-        this.freight = freight;
-        this.isDelivery = isDelivery;
+        this.weightPiece = weightPiece;
+        this.pricePiece = pricePiece;
+        this.deliveryFee = deliveryFee;
+        this.totalFee = totalFee;
+        this.settlementWay = settlementWay;
         this.remark = remark;
     }
 
@@ -111,6 +121,22 @@ public class DeliveryRecord {
         this.createUserId = createUserId;
     }
 
+    public String getDeliveryUrl() {
+        return deliveryUrl;
+    }
+
+    public void setDeliveryUrl(String deliveryUrl) {
+        this.deliveryUrl = deliveryUrl == null ? null : deliveryUrl.trim();
+    }
+
+    public Byte getDeliveryClassify() {
+        return deliveryClassify;
+    }
+
+    public void setDeliveryClassify(Byte deliveryClassify) {
+        this.deliveryClassify = deliveryClassify;
+    }
+
     public String getDeliveryNo() {
         return deliveryNo;
     }
@@ -119,12 +145,28 @@ public class DeliveryRecord {
         this.deliveryNo = deliveryNo == null ? null : deliveryNo.trim();
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getContractOrderNo() {
+        return contractOrderNo;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
+    public void setContractOrderNo(String contractOrderNo) {
+        this.contractOrderNo = contractOrderNo == null ? null : contractOrderNo.trim();
+    }
+
+    public Date getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(Date deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
+    public String getOperationNo() {
+        return operationNo;
+    }
+
+    public void setOperationNo(String operationNo) {
+        this.operationNo = operationNo == null ? null : operationNo.trim();
     }
 
     public String getCustomerNo() {
@@ -135,12 +177,52 @@ public class DeliveryRecord {
         this.customerNo = customerNo == null ? null : customerNo.trim();
     }
 
-    public String getDeliveryTime() {
-        return deliveryTime;
+    public Integer getProductCount() {
+        return productCount;
     }
 
-    public void setDeliveryTime(String deliveryTime) {
-        this.deliveryTime = deliveryTime == null ? null : deliveryTime.trim();
+    public void setProductCount(Integer productCount) {
+        this.productCount = productCount;
+    }
+
+    public String getPackingMode() {
+        return packingMode;
+    }
+
+    public void setPackingMode(String packingMode) {
+        this.packingMode = packingMode == null ? null : packingMode.trim();
+    }
+
+    public Integer getPieceCount() {
+        return pieceCount;
+    }
+
+    public void setPieceCount(Integer pieceCount) {
+        this.pieceCount = pieceCount;
+    }
+
+    public String getTransportCompany() {
+        return transportCompany;
+    }
+
+    public void setTransportCompany(String transportCompany) {
+        this.transportCompany = transportCompany == null ? null : transportCompany.trim();
+    }
+
+    public String getCourierNo() {
+        return courierNo;
+    }
+
+    public void setCourierNo(String courierNo) {
+        this.courierNo = courierNo == null ? null : courierNo.trim();
+    }
+
+    public String getCollectProvice() {
+        return collectProvice;
+    }
+
+    public void setCollectProvice(String collectProvice) {
+        this.collectProvice = collectProvice == null ? null : collectProvice.trim();
     }
 
     public String getCollectAddress() {
@@ -167,92 +249,44 @@ public class DeliveryRecord {
         this.collectPhone = collectPhone == null ? null : collectPhone.trim();
     }
 
-    public String getProductNo() {
-        return productNo;
+    public BigDecimal getWeightPiece() {
+        return weightPiece;
     }
 
-    public void setProductNo(String productNo) {
-        this.productNo = productNo == null ? null : productNo.trim();
+    public void setWeightPiece(BigDecimal weightPiece) {
+        this.weightPiece = weightPiece;
     }
 
-    public String getProductName() {
-        return productName;
+    public BigDecimal getPricePiece() {
+        return pricePiece;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
+    public void setPricePiece(BigDecimal pricePiece) {
+        this.pricePiece = pricePiece;
     }
 
-    public String getProductModel() {
-        return productModel;
+    public BigDecimal getDeliveryFee() {
+        return deliveryFee;
     }
 
-    public void setProductModel(String productModel) {
-        this.productModel = productModel == null ? null : productModel.trim();
+    public void setDeliveryFee(BigDecimal deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
-    public String getLable() {
-        return lable;
+    public BigDecimal getTotalFee() {
+        return totalFee;
     }
 
-    public void setLable(String lable) {
-        this.lable = lable == null ? null : lable.trim();
+    public void setTotalFee(BigDecimal totalFee) {
+        this.totalFee = totalFee;
     }
 
-    public String getSpecifications() {
-        return specifications;
+    public String getSettlementWay() {
+        return settlementWay;
     }
 
-    public void setSpecifications(String specifications) {
-        this.specifications = specifications == null ? null : specifications.trim();
-    }
-
-    public String getProductColor() {
-        return productColor;
-    }
-
-    public void setProductColor(String productColor) {
-        this.productColor = productColor == null ? null : productColor.trim();
-    }
-
-    public Integer getProductNumber() {
-        return productNumber;
-    }
-
-    public void setProductNumber(Integer productNumber) {
-        this.productNumber = productNumber;
-    }
-
-    public String getProductRemark() {
-        return productRemark;
-    }
-
-    public void setProductRemark(String productRemark) {
-        this.productRemark = productRemark == null ? null : productRemark.trim();
-    }
-
-    public String getTransportType() {
-        return transportType;
-    }
-
-    public void setTransportType(String transportType) {
-        this.transportType = transportType == null ? null : transportType.trim();
-    }
-
-    public String getFreight() {
-        return freight;
-    }
-
-    public void setFreight(String freight) {
-        this.freight = freight == null ? null : freight.trim();
-    }
-
-    public String getIsDelivery() {
-        return isDelivery;
-    }
-
-    public void setIsDelivery(String isDelivery) {
-        this.isDelivery = isDelivery == null ? null : isDelivery.trim();
+    public void setSettlementWay(String settlementWay) {
+        this.settlementWay = settlementWay == null ? null : settlementWay.trim();
     }
 
     public String getRemark() {

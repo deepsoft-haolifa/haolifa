@@ -2,15 +2,15 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.DeliveryRecordMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
-import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.DeliveryRecordDTO;
-import com.deepsoft.haolifa.model.dto.OrderProductAssociateDTO;
-import com.deepsoft.haolifa.model.dto.OrderProductDTO;
+import com.deepsoft.haolifa.model.domain.DeliveryRecord;
+import com.deepsoft.haolifa.model.domain.DeliveryRecordExample;
+import com.deepsoft.haolifa.model.dto.DeliveryClassifyDTO;
+import com.deepsoft.haolifa.model.dto.DeliveryRecordConditionDTO;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.DeliveryRecordService;
-import com.deepsoft.haolifa.service.OrderProductService;
-import com.deepsoft.haolifa.util.RandomUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -18,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -28,24 +28,13 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
 
     @Autowired
     private DeliveryRecordMapper deliveryRecordMapper;
-    @Autowired
-    private OrderProductAssociateMapper orderProductAssociateMapper;
-    @Autowired
-    private OrderProductService orderProductService;
 
     @Override
-    public ResultBean save(DeliveryRecordDTO model) {
-        DeliveryRecord deliveryRecord = new DeliveryRecord();
-        BeanUtils.copyProperties(model, model);
-        deliveryRecord.setCreateUserId(getLoginUserId());
-        deliveryRecord.setDeliveryNo("dr_" + RandomUtils.orderNoStr());
-        int insert = deliveryRecordMapper.insertSelective(deliveryRecord);
+    public ResultBean save(DeliveryRecord model) {
+        model.setCreateUserId(getLoginUserId());
+        int insert = deliveryRecordMapper.insertSelective(model);
         if (insert > 0) {
-            Map<String, Object> result = new HashMap<>(3);
-            result.put("formId", deliveryRecord.getId());
-            result.put("formNo", deliveryRecord.getOrderNo());
-            result.put("formType", CommonEnum.FormType.DELIVER_TYPE.code);
-            return ResultBean.success(result);
+            return ResultBean.success(insert);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
         }
@@ -53,65 +42,81 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
     }
 
     @Override
-    public DeliveryRecordDTO getInfo(String deliveryNo, String orderNo) {
-        DeliveryRecordDTO deliveryRecordDTO = new DeliveryRecordDTO();
-        if (StringUtils.isAnyBlank(deliveryNo, orderNo)) {
+    public DeliveryRecord getInfo(int id) {
+        if (id <= 0) {
             log.error("get delivery record param error");
             return null;
         }
-        //从订单产品关联表读取信息
-        List<OrderProductAssociate> orderProductAssociates = orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
-            or().andOrderNoEqualTo(orderNo);
-        }});
-        List<OrderProductAssociateDTO> list = new ArrayList<>();
-        orderProductAssociates.stream().forEach(e -> {
-            OrderProductAssociateDTO orderProductAssociateDTO = new OrderProductAssociateDTO();
-            BeanUtils.copyProperties(e, orderProductAssociateDTO);
-            list.add(orderProductAssociateDTO);
-        });
-
-        DeliveryRecordExample example = new DeliveryRecordExample();
-        DeliveryRecordExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(deliveryNo)) {
-            criteria.andDeliveryNoEqualTo(deliveryNo);
-        }
-        if (StringUtils.isNotBlank(orderNo)) {
-            criteria.andOrderNoEqualTo(orderNo);
-        }
-        List<DeliveryRecord> deliveryRecords = deliveryRecordMapper.selectByExample(example);
-        if (deliveryRecords.size() > 0) {
-            DeliveryRecord deliveryRecord = deliveryRecords.get(0);
-
-            deliveryRecordDTO.setProductList(list);
-            BeanUtils.copyProperties(deliveryRecord, deliveryRecordDTO);
-        } else {
-            // 如果发货记录表没有，根据订单no从订单表中查询记录
-            if (StringUtils.isNotBlank(orderNo)) {
-                OrderProductDTO orderProductInfo = orderProductService.getOrderProductInfo(orderNo);
-                BeanUtils.copyProperties(orderProductInfo, deliveryRecordDTO);
-                deliveryRecordDTO.setProductList(list);
-                // 需要解析下订单表的发货信息
-                deliveryRecordDTO.setCollectAddress("");
-                deliveryRecordDTO.setCollectPhone("");
-                deliveryRecordDTO.setCollectName("");
-            }
-        }
-        return deliveryRecordDTO;
+        return deliveryRecordMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public ResultBean delete(Integer id) {
-        return null;
+        if (id <= 0) {
+            log.error("delete delivery record param error");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        return ResultBean.success(deliveryRecordMapper.deleteByPrimaryKey(id));
     }
 
     @Override
-    public ResultBean update(DeliveryRecordDTO model) {
-        return null;
+    public ResultBean update(DeliveryRecord model) {
+        return ResultBean.success(deliveryRecordMapper.updateByPrimaryKeySelective(model));
     }
 
     @Override
-    public ResultBean getList(DeliveryRecordDTO modelList) {
-        return null;
+    public ResultBean pageInfo(DeliveryRecordConditionDTO conditionDTO) {
+        DeliveryRecordExample example = new DeliveryRecordExample();
+        DeliveryRecordExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(conditionDTO.getContractOrderNo())) {
+            criteria.andContractOrderNoLike("%" + conditionDTO.getContractOrderNo() + "%");
+        }
+        if (StringUtils.isNotBlank(conditionDTO.getCourierNo())) {
+            criteria.andCourierNoLike("%" + conditionDTO.getCourierNo() + "%");
+        }
+        if (StringUtils.isNotBlank(conditionDTO.getCustomerNo())) {
+            criteria.andCustomerNoLike("%" + conditionDTO.getCustomerNo() + "%");
+        }
+        if (StringUtils.isNotBlank(conditionDTO.getTransportCompany())) {
+            criteria.andTransportCompanyLike("%" + conditionDTO.getTransportCompany() + "%");
+        }
+        if (conditionDTO.getDeliveryClassify() > 0) {
+            criteria.andDeliveryClassifyEqualTo(conditionDTO.getDeliveryClassify());
+        }
+        Date startDeliveryTime = conditionDTO.getStartDeliveryTime();
+        Date endDeliveryTime = conditionDTO.getEndDeliveryTime();
+        if (startDeliveryTime != null && endDeliveryTime != null) {
+            criteria.andDeliveryTimeBetween(startDeliveryTime, endDeliveryTime);
+        }
+        if (startDeliveryTime != null && endDeliveryTime == null) {
+            criteria.andDeliveryTimeGreaterThanOrEqualTo(startDeliveryTime);
+        }
+        if (startDeliveryTime == null && endDeliveryTime != null) {
+            criteria.andDeliveryTimeLessThanOrEqualTo(endDeliveryTime);
+        }
+        example.setOrderByClause("id desc");
+        Page<DeliveryRecord> deliveryRecordPage = PageHelper.startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
+                .doSelectPage(() -> deliveryRecordMapper.selectByExample(example));
+
+        PageDTO<DeliveryRecord> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(deliveryRecordPage, pageDTO);
+        pageDTO.setList(deliveryRecordPage);
+        return ResultBean.success(pageDTO);
+    }
+
+
+    @Override
+    public List<DeliveryClassifyDTO> getClassifyList() {
+        List<DeliveryClassifyDTO> list = new ArrayList<>();
+        CommonEnum.DeliveryClassify[] values = CommonEnum.DeliveryClassify.values();
+        Arrays.asList(values).forEach(e -> {
+            DeliveryClassifyDTO deliveryClassifyDTO = new DeliveryClassifyDTO() {{
+                setCode(e.code);
+                setName(e.msg);
+            }};
+            list.add(deliveryClassifyDTO);
+        });
+        return list;
     }
 
 }

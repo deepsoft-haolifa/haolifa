@@ -1,7 +1,12 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.DeliveryRecord;
+import com.deepsoft.haolifa.model.dto.DeliveryClassifyDTO;
+import com.deepsoft.haolifa.model.dto.DeliveryRecordConditionDTO;
 import com.deepsoft.haolifa.model.dto.DeliveryRecordDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+
+import java.util.List;
 
 public interface DeliveryRecordService {
     /**
@@ -10,16 +15,15 @@ public interface DeliveryRecordService {
      * @param model
      * @return
      */
-    ResultBean save(DeliveryRecordDTO model);
+    ResultBean save(DeliveryRecord model);
 
     /**
      * 获取发货单信息
      *
-     * @param deliveryNo 发货单号
-     * @param orderNo    订单号
+     * @param id
      * @return
      */
-    DeliveryRecordDTO getInfo(String deliveryNo, String orderNo);
+    DeliveryRecord getInfo(int id);
 
     /**
      * 删除发货单
@@ -35,14 +39,21 @@ public interface DeliveryRecordService {
      * @param model
      * @return
      */
-    ResultBean update(DeliveryRecordDTO model);
+    ResultBean update(DeliveryRecord model);
 
     /**
      * 获取发货单列表
      *
-     * @param modelList
      * @return
      */
-    ResultBean getList(DeliveryRecordDTO modelList);
+    ResultBean pageInfo(DeliveryRecordConditionDTO conditionDTO);
+
+
+    /**
+     * 获取发货类型列表
+     *
+     * @return
+     */
+    List<DeliveryClassifyDTO> getClassifyList();
 
 }

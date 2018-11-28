@@ -111,15 +111,13 @@ public class CommonEnum {
         // 生产暂停
         SUSPEND_PRODUCTION((byte) 7),
         // 质检中
-        TEST((byte) 8),
-        ;
+        TEST((byte) 8),;
 
         public final byte code;
 
         OrderStatus(byte code) {
             this.code = code;
         }
-
     }
 
     /**
@@ -213,6 +211,27 @@ public class CommonEnum {
 
         CheckMaterialStatus(byte code) {
             this.code = code;
+        }
+    }
+
+    /**
+     * 核料状态
+     */
+    public enum DeliveryClassify {
+        ORDER((byte) 1, "销售订单"),
+        // 缺料，走采购
+        SH_ORDER((byte) 2, "售后订单"),
+        // 释放料
+        WDH((byte) 3, "外调货"),
+        TYX((byte) 4, "调压箱"),
+        QI_TA((byte) 5, "其他"),;
+
+        public final byte code;
+        public final String msg;
+
+        DeliveryClassify(byte code, String msg) {
+            this.code = code;
+            this.msg = msg;
         }
     }
 }

@@ -59,6 +59,12 @@ public class MaterialRequestDTO {
 
     @ApiModelProperty(value = "当前库存数量")
     private Integer currentQuantity;
+
+    @ApiModelProperty(value = "图纸Url")
+    private String graphUrl;
+    @ApiModelProperty(value = "可替换的零件，逗号分隔")
+        private String replaceGraphNos;
+
     @ApiModelProperty(value = "备注")
     private String remark;
 }

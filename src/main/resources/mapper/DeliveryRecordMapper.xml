@@ -7,24 +7,27 @@
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="delivery_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="delivery_classify" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="delivery_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="contract_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="delivery_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="operation_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="customer_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="delivery_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="packing_mode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="piece_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="transport_company" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="courier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="collect_provice" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="collect_address" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="collect_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="collect_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="lable" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_color" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="product_remark" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="transport_type" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="freight" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="is_delivery" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="weight_piece" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="price_piece" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="delivery_fee" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="total_fee" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="settlement_way" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
@@ -87,10 +90,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user_id, delivery_no, order_no, customer_no, 
-    delivery_time, collect_address, collect_name, collect_phone, product_no, product_name, 
-    product_model, lable, specifications, product_color, product_number, product_remark, 
-    transport_type, freight, is_delivery, remark
+    id, create_time, update_time, create_user_id, delivery_url, delivery_classify, delivery_no, 
+    contract_order_no, delivery_time, operation_no, customer_no, product_count, packing_mode, 
+    piece_count, transport_company, courier_no, collect_provice, collect_address, collect_name, 
+    collect_phone, weight_piece, price_piece, delivery_fee, total_fee, settlement_way, 
+    remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.DeliveryRecordExample" resultMap="BaseResultMap">
     select
@@ -127,20 +131,22 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into delivery_record (create_time, update_time, create_user_id, 
-      delivery_no, order_no, customer_no, 
-      delivery_time, collect_address, collect_name, 
-      collect_phone, product_no, product_name, 
-      product_model, lable, specifications, 
-      product_color, product_number, product_remark, 
-      transport_type, freight, is_delivery, 
+      delivery_url, delivery_classify, delivery_no, 
+      contract_order_no, delivery_time, operation_no, 
+      customer_no, product_count, packing_mode, 
+      piece_count, transport_company, courier_no, 
+      collect_provice, collect_address, collect_name, 
+      collect_phone, weight_piece, price_piece, 
+      delivery_fee, total_fee, settlement_way, 
       remark)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{deliveryNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
-      #{deliveryTime,jdbcType=VARCHAR}, #{collectAddress,jdbcType=VARCHAR}, #{collectName,jdbcType=VARCHAR}, 
-      #{collectPhone,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
-      #{productModel,jdbcType=VARCHAR}, #{lable,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
-      #{productColor,jdbcType=VARCHAR}, #{productNumber,jdbcType=INTEGER}, #{productRemark,jdbcType=VARCHAR}, 
-      #{transportType,jdbcType=VARCHAR}, #{freight,jdbcType=VARCHAR}, #{isDelivery,jdbcType=VARCHAR}, 
+      #{deliveryUrl,jdbcType=VARCHAR}, #{deliveryClassify,jdbcType=TINYINT}, #{deliveryNo,jdbcType=VARCHAR}, 
+      #{contractOrderNo,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=TIMESTAMP}, #{operationNo,jdbcType=VARCHAR}, 
+      #{customerNo,jdbcType=VARCHAR}, #{productCount,jdbcType=INTEGER}, #{packingMode,jdbcType=VARCHAR}, 
+      #{pieceCount,jdbcType=INTEGER}, #{transportCompany,jdbcType=VARCHAR}, #{courierNo,jdbcType=VARCHAR}, 
+      #{collectProvice,jdbcType=VARCHAR}, #{collectAddress,jdbcType=VARCHAR}, #{collectName,jdbcType=VARCHAR}, 
+      #{collectPhone,jdbcType=VARCHAR}, #{weightPiece,jdbcType=DECIMAL}, #{pricePiece,jdbcType=DECIMAL}, 
+      #{deliveryFee,jdbcType=DECIMAL}, #{totalFee,jdbcType=DECIMAL}, #{settlementWay,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.DeliveryRecord">
@@ -158,17 +164,44 @@
       <if test="createUserId != null">
         create_user_id,
       </if>
+      <if test="deliveryUrl != null">
+        delivery_url,
+      </if>
+      <if test="deliveryClassify != null">
+        delivery_classify,
+      </if>
       <if test="deliveryNo != null">
         delivery_no,
       </if>
-      <if test="orderNo != null">
-        order_no,
+      <if test="contractOrderNo != null">
+        contract_order_no,
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time,
+      </if>
+      <if test="operationNo != null">
+        operation_no,
       </if>
       <if test="customerNo != null">
         customer_no,
       </if>
-      <if test="deliveryTime != null">
-        delivery_time,
+      <if test="productCount != null">
+        product_count,
+      </if>
+      <if test="packingMode != null">
+        packing_mode,
+      </if>
+      <if test="pieceCount != null">
+        piece_count,
+      </if>
+      <if test="transportCompany != null">
+        transport_company,
+      </if>
+      <if test="courierNo != null">
+        courier_no,
+      </if>
+      <if test="collectProvice != null">
+        collect_provice,
       </if>
       <if test="collectAddress != null">
         collect_address,
@@ -179,38 +212,20 @@
       <if test="collectPhone != null">
         collect_phone,
       </if>
-      <if test="productNo != null">
-        product_no,
+      <if test="weightPiece != null">
+        weight_piece,
       </if>
-      <if test="productName != null">
-        product_name,
+      <if test="pricePiece != null">
+        price_piece,
       </if>
-      <if test="productModel != null">
-        product_model,
+      <if test="deliveryFee != null">
+        delivery_fee,
       </if>
-      <if test="lable != null">
-        lable,
+      <if test="totalFee != null">
+        total_fee,
       </if>
-      <if test="specifications != null">
-        specifications,
-      </if>
-      <if test="productColor != null">
-        product_color,
-      </if>
-      <if test="productNumber != null">
-        product_number,
-      </if>
-      <if test="productRemark != null">
-        product_remark,
-      </if>
-      <if test="transportType != null">
-        transport_type,
-      </if>
-      <if test="freight != null">
-        freight,
-      </if>
-      <if test="isDelivery != null">
-        is_delivery,
+      <if test="settlementWay != null">
+        settlement_way,
       </if>
       <if test="remark != null">
         remark,
@@ -226,17 +241,44 @@
       <if test="createUserId != null">
         #{createUserId,jdbcType=INTEGER},
       </if>
+      <if test="deliveryUrl != null">
+        #{deliveryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryClassify != null">
+        #{deliveryClassify,jdbcType=TINYINT},
+      </if>
       <if test="deliveryNo != null">
         #{deliveryNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderNo != null">
-        #{orderNo,jdbcType=VARCHAR},
+      <if test="contractOrderNo != null">
+        #{contractOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationNo != null">
+        #{operationNo,jdbcType=VARCHAR},
       </if>
       <if test="customerNo != null">
         #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryTime != null">
-        #{deliveryTime,jdbcType=VARCHAR},
+      <if test="productCount != null">
+        #{productCount,jdbcType=INTEGER},
+      </if>
+      <if test="packingMode != null">
+        #{packingMode,jdbcType=VARCHAR},
+      </if>
+      <if test="pieceCount != null">
+        #{pieceCount,jdbcType=INTEGER},
+      </if>
+      <if test="transportCompany != null">
+        #{transportCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="courierNo != null">
+        #{courierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="collectProvice != null">
+        #{collectProvice,jdbcType=VARCHAR},
       </if>
       <if test="collectAddress != null">
         #{collectAddress,jdbcType=VARCHAR},
@@ -247,38 +289,20 @@
       <if test="collectPhone != null">
         #{collectPhone,jdbcType=VARCHAR},
       </if>
-      <if test="productNo != null">
-        #{productNo,jdbcType=VARCHAR},
+      <if test="weightPiece != null">
+        #{weightPiece,jdbcType=DECIMAL},
       </if>
-      <if test="productName != null">
-        #{productName,jdbcType=VARCHAR},
+      <if test="pricePiece != null">
+        #{pricePiece,jdbcType=DECIMAL},
       </if>
-      <if test="productModel != null">
-        #{productModel,jdbcType=VARCHAR},
+      <if test="deliveryFee != null">
+        #{deliveryFee,jdbcType=DECIMAL},
       </if>
-      <if test="lable != null">
-        #{lable,jdbcType=VARCHAR},
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=DECIMAL},
       </if>
-      <if test="specifications != null">
-        #{specifications,jdbcType=VARCHAR},
-      </if>
-      <if test="productColor != null">
-        #{productColor,jdbcType=VARCHAR},
-      </if>
-      <if test="productNumber != null">
-        #{productNumber,jdbcType=INTEGER},
-      </if>
-      <if test="productRemark != null">
-        #{productRemark,jdbcType=VARCHAR},
-      </if>
-      <if test="transportType != null">
-        #{transportType,jdbcType=VARCHAR},
-      </if>
-      <if test="freight != null">
-        #{freight,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelivery != null">
-        #{isDelivery,jdbcType=VARCHAR},
+      <if test="settlementWay != null">
+        #{settlementWay,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -306,17 +330,44 @@
       <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
+      <if test="record.deliveryUrl != null">
+        delivery_url = #{record.deliveryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryClassify != null">
+        delivery_classify = #{record.deliveryClassify,jdbcType=TINYINT},
+      </if>
       <if test="record.deliveryNo != null">
         delivery_no = #{record.deliveryNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.orderNo != null">
-        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      <if test="record.contractOrderNo != null">
+        contract_order_no = #{record.contractOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryTime != null">
+        delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operationNo != null">
+        operation_no = #{record.operationNo,jdbcType=VARCHAR},
       </if>
       <if test="record.customerNo != null">
         customer_no = #{record.customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.deliveryTime != null">
-        delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
+      <if test="record.productCount != null">
+        product_count = #{record.productCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.packingMode != null">
+        packing_mode = #{record.packingMode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pieceCount != null">
+        piece_count = #{record.pieceCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.transportCompany != null">
+        transport_company = #{record.transportCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="record.courierNo != null">
+        courier_no = #{record.courierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.collectProvice != null">
+        collect_provice = #{record.collectProvice,jdbcType=VARCHAR},
       </if>
       <if test="record.collectAddress != null">
         collect_address = #{record.collectAddress,jdbcType=VARCHAR},
@@ -327,38 +378,20 @@
       <if test="record.collectPhone != null">
         collect_phone = #{record.collectPhone,jdbcType=VARCHAR},
       </if>
-      <if test="record.productNo != null">
-        product_no = #{record.productNo,jdbcType=VARCHAR},
+      <if test="record.weightPiece != null">
+        weight_piece = #{record.weightPiece,jdbcType=DECIMAL},
       </if>
-      <if test="record.productName != null">
-        product_name = #{record.productName,jdbcType=VARCHAR},
+      <if test="record.pricePiece != null">
+        price_piece = #{record.pricePiece,jdbcType=DECIMAL},
       </if>
-      <if test="record.productModel != null">
-        product_model = #{record.productModel,jdbcType=VARCHAR},
+      <if test="record.deliveryFee != null">
+        delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
       </if>
-      <if test="record.lable != null">
-        lable = #{record.lable,jdbcType=VARCHAR},
+      <if test="record.totalFee != null">
+        total_fee = #{record.totalFee,jdbcType=DECIMAL},
       </if>
-      <if test="record.specifications != null">
-        specifications = #{record.specifications,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productColor != null">
-        product_color = #{record.productColor,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productNumber != null">
-        product_number = #{record.productNumber,jdbcType=INTEGER},
-      </if>
-      <if test="record.productRemark != null">
-        product_remark = #{record.productRemark,jdbcType=VARCHAR},
-      </if>
-      <if test="record.transportType != null">
-        transport_type = #{record.transportType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.freight != null">
-        freight = #{record.freight,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isDelivery != null">
-        is_delivery = #{record.isDelivery,jdbcType=VARCHAR},
+      <if test="record.settlementWay != null">
+        settlement_way = #{record.settlementWay,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -374,24 +407,27 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      delivery_url = #{record.deliveryUrl,jdbcType=VARCHAR},
+      delivery_classify = #{record.deliveryClassify,jdbcType=TINYINT},
       delivery_no = #{record.deliveryNo,jdbcType=VARCHAR},
-      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      contract_order_no = #{record.contractOrderNo,jdbcType=VARCHAR},
+      delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP},
+      operation_no = #{record.operationNo,jdbcType=VARCHAR},
       customer_no = #{record.customerNo,jdbcType=VARCHAR},
-      delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
+      product_count = #{record.productCount,jdbcType=INTEGER},
+      packing_mode = #{record.packingMode,jdbcType=VARCHAR},
+      piece_count = #{record.pieceCount,jdbcType=INTEGER},
+      transport_company = #{record.transportCompany,jdbcType=VARCHAR},
+      courier_no = #{record.courierNo,jdbcType=VARCHAR},
+      collect_provice = #{record.collectProvice,jdbcType=VARCHAR},
       collect_address = #{record.collectAddress,jdbcType=VARCHAR},
       collect_name = #{record.collectName,jdbcType=VARCHAR},
       collect_phone = #{record.collectPhone,jdbcType=VARCHAR},
-      product_no = #{record.productNo,jdbcType=VARCHAR},
-      product_name = #{record.productName,jdbcType=VARCHAR},
-      product_model = #{record.productModel,jdbcType=VARCHAR},
-      lable = #{record.lable,jdbcType=VARCHAR},
-      specifications = #{record.specifications,jdbcType=VARCHAR},
-      product_color = #{record.productColor,jdbcType=VARCHAR},
-      product_number = #{record.productNumber,jdbcType=INTEGER},
-      product_remark = #{record.productRemark,jdbcType=VARCHAR},
-      transport_type = #{record.transportType,jdbcType=VARCHAR},
-      freight = #{record.freight,jdbcType=VARCHAR},
-      is_delivery = #{record.isDelivery,jdbcType=VARCHAR},
+      weight_piece = #{record.weightPiece,jdbcType=DECIMAL},
+      price_piece = #{record.pricePiece,jdbcType=DECIMAL},
+      delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
+      total_fee = #{record.totalFee,jdbcType=DECIMAL},
+      settlement_way = #{record.settlementWay,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -409,17 +445,44 @@
       <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
+      <if test="deliveryUrl != null">
+        delivery_url = #{deliveryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryClassify != null">
+        delivery_classify = #{deliveryClassify,jdbcType=TINYINT},
+      </if>
       <if test="deliveryNo != null">
         delivery_no = #{deliveryNo,jdbcType=VARCHAR},
       </if>
-      <if test="orderNo != null">
-        order_no = #{orderNo,jdbcType=VARCHAR},
+      <if test="contractOrderNo != null">
+        contract_order_no = #{contractOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationNo != null">
+        operation_no = #{operationNo,jdbcType=VARCHAR},
       </if>
       <if test="customerNo != null">
         customer_no = #{customerNo,jdbcType=VARCHAR},
       </if>
-      <if test="deliveryTime != null">
-        delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      <if test="productCount != null">
+        product_count = #{productCount,jdbcType=INTEGER},
+      </if>
+      <if test="packingMode != null">
+        packing_mode = #{packingMode,jdbcType=VARCHAR},
+      </if>
+      <if test="pieceCount != null">
+        piece_count = #{pieceCount,jdbcType=INTEGER},
+      </if>
+      <if test="transportCompany != null">
+        transport_company = #{transportCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="courierNo != null">
+        courier_no = #{courierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="collectProvice != null">
+        collect_provice = #{collectProvice,jdbcType=VARCHAR},
       </if>
       <if test="collectAddress != null">
         collect_address = #{collectAddress,jdbcType=VARCHAR},
@@ -430,38 +493,20 @@
       <if test="collectPhone != null">
         collect_phone = #{collectPhone,jdbcType=VARCHAR},
       </if>
-      <if test="productNo != null">
-        product_no = #{productNo,jdbcType=VARCHAR},
+      <if test="weightPiece != null">
+        weight_piece = #{weightPiece,jdbcType=DECIMAL},
       </if>
-      <if test="productName != null">
-        product_name = #{productName,jdbcType=VARCHAR},
+      <if test="pricePiece != null">
+        price_piece = #{pricePiece,jdbcType=DECIMAL},
       </if>
-      <if test="productModel != null">
-        product_model = #{productModel,jdbcType=VARCHAR},
+      <if test="deliveryFee != null">
+        delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
       </if>
-      <if test="lable != null">
-        lable = #{lable,jdbcType=VARCHAR},
+      <if test="totalFee != null">
+        total_fee = #{totalFee,jdbcType=DECIMAL},
       </if>
-      <if test="specifications != null">
-        specifications = #{specifications,jdbcType=VARCHAR},
-      </if>
-      <if test="productColor != null">
-        product_color = #{productColor,jdbcType=VARCHAR},
-      </if>
-      <if test="productNumber != null">
-        product_number = #{productNumber,jdbcType=INTEGER},
-      </if>
-      <if test="productRemark != null">
-        product_remark = #{productRemark,jdbcType=VARCHAR},
-      </if>
-      <if test="transportType != null">
-        transport_type = #{transportType,jdbcType=VARCHAR},
-      </if>
-      <if test="freight != null">
-        freight = #{freight,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelivery != null">
-        is_delivery = #{isDelivery,jdbcType=VARCHAR},
+      <if test="settlementWay != null">
+        settlement_way = #{settlementWay,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -474,24 +519,27 @@
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
+      delivery_url = #{deliveryUrl,jdbcType=VARCHAR},
+      delivery_classify = #{deliveryClassify,jdbcType=TINYINT},
       delivery_no = #{deliveryNo,jdbcType=VARCHAR},
-      order_no = #{orderNo,jdbcType=VARCHAR},
+      contract_order_no = #{contractOrderNo,jdbcType=VARCHAR},
+      delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      operation_no = #{operationNo,jdbcType=VARCHAR},
       customer_no = #{customerNo,jdbcType=VARCHAR},
-      delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+      product_count = #{productCount,jdbcType=INTEGER},
+      packing_mode = #{packingMode,jdbcType=VARCHAR},
+      piece_count = #{pieceCount,jdbcType=INTEGER},
+      transport_company = #{transportCompany,jdbcType=VARCHAR},
+      courier_no = #{courierNo,jdbcType=VARCHAR},
+      collect_provice = #{collectProvice,jdbcType=VARCHAR},
       collect_address = #{collectAddress,jdbcType=VARCHAR},
       collect_name = #{collectName,jdbcType=VARCHAR},
       collect_phone = #{collectPhone,jdbcType=VARCHAR},
-      product_no = #{productNo,jdbcType=VARCHAR},
-      product_name = #{productName,jdbcType=VARCHAR},
-      product_model = #{productModel,jdbcType=VARCHAR},
-      lable = #{lable,jdbcType=VARCHAR},
-      specifications = #{specifications,jdbcType=VARCHAR},
-      product_color = #{productColor,jdbcType=VARCHAR},
-      product_number = #{productNumber,jdbcType=INTEGER},
-      product_remark = #{productRemark,jdbcType=VARCHAR},
-      transport_type = #{transportType,jdbcType=VARCHAR},
-      freight = #{freight,jdbcType=VARCHAR},
-      is_delivery = #{isDelivery,jdbcType=VARCHAR},
+      weight_piece = #{weightPiece,jdbcType=DECIMAL},
+      price_piece = #{pricePiece,jdbcType=DECIMAL},
+      delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+      total_fee = #{totalFee,jdbcType=DECIMAL},
+      settlement_way = #{settlementWay,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
