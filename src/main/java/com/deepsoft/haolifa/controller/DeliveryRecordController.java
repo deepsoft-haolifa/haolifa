@@ -1,12 +1,12 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.model.domain.DeliveryNotice;
 import com.deepsoft.haolifa.model.domain.DeliveryRecord;
+import com.deepsoft.haolifa.model.dto.DeliveryNoticeAuditDTO;
+import com.deepsoft.haolifa.model.dto.DeliveryNoticeConditionDTO;
 import com.deepsoft.haolifa.model.dto.DeliveryRecordConditionDTO;
-import com.deepsoft.haolifa.model.dto.DeliveryRecordDTO;
-import com.deepsoft.haolifa.model.dto.InvoiceDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.service.DeliveryRecordService;
-import com.deepsoft.haolifa.service.InvoiceService;
+import com.deepsoft.haolifa.service.DeliveryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,35 +17,60 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/delivery")
 public class DeliveryRecordController {
     @Autowired
-    DeliveryRecordService deliveryRecordService;
+    DeliveryService deliveryService;
 
-    @ApiOperation("添加发货单")
+
+    @ApiOperation("上传发货通知单")
+    @PostMapping("/saveNotice")
+    public ResultBean saveNotice(@RequestBody DeliveryNotice model) {
+        return deliveryService.saveNotice(model);
+    }
+
+
+    @ApiOperation("发货通知单详情")
+    @PostMapping("/noticeInfo/{id}")
+    public ResultBean noticeInfo(@PathVariable("id") int id) {
+        return ResultBean.success(deliveryService.noticeInfo(id));
+    }
+    @ApiOperation("财务审核发货通知单")
+    @PostMapping("/auditNotice")
+    public ResultBean auditNotice(@RequestBody DeliveryNoticeAuditDTO model) {
+        return deliveryService.auditNotice(model);
+    }
+    @ApiOperation("发货通知单列表")
+    @PostMapping("/noticeList")
+    public ResultBean noticeList(@RequestBody DeliveryNoticeConditionDTO model) {
+        return deliveryService.pageNotices(model);
+    }
+
+
+    @ApiOperation("添加发货单记录")
     @PostMapping("/save")
     public ResultBean save(@RequestBody DeliveryRecord model) {
-        return deliveryRecordService.save(model);
+        return deliveryService.save(model);
     }
 
-    @ApiOperation("获取发货单详情")
+    @ApiOperation("获取发货单记录详情")
     @PostMapping("/getInfo/{id}")
     public ResultBean getInfo(@PathVariable int id) {
-        return ResultBean.success(deliveryRecordService.getInfo(id));
+        return ResultBean.success(deliveryService.getInfo(id));
     }
 
-    @ApiOperation("更新发货单详情")
+    @ApiOperation("更新发货单记录")
     @PostMapping("/update")
     public ResultBean getInfo(@RequestBody DeliveryRecord model) {
-        return deliveryRecordService.update(model);
+        return deliveryService.update(model);
     }
 
-    @ApiOperation("获取发货单列表")
+    @ApiOperation("获取发货单记录列表")
     @PostMapping("/pageList")
     public ResultBean pageList(@RequestBody DeliveryRecordConditionDTO model) {
-        return deliveryRecordService.pageInfo(model);
+        return deliveryService.pageInfo(model);
     }
 
     @ApiOperation("获取发货类型")
     @GetMapping("/getClassifyList")
     public ResultBean getClassifyList() {
-        return ResultBean.success(deliveryRecordService.getClassifyList());
+        return ResultBean.success(deliveryService.getClassifyList());
     }
 }

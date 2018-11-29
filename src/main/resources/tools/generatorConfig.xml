@@ -139,6 +139,9 @@
        <table tableName="delivery_record" domainObjectName="DeliveryRecord">
                  <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
        </table>
+        <table tableName="delivery_notice" domainObjectName="DeliveryNotice">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
         <!--<table tableName="order_product_associate" domainObjectName="OrderProductAssociate">-->
             <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--</table>-->

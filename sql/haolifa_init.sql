@@ -463,7 +463,7 @@ DROP TABLE IF EXISTS `order_product`;
 	  UNIQUE KEY `uk_multi` (`index_rule`,`type`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品型号规则配置表';
 
-	
+
 DROP TABLE IF EXISTS `Invoice`;
 CREATE TABLE `invoice` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -796,9 +796,8 @@ CREATE TABLE `delivery_record` (
 	`create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	`update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
 	`create_user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建者id',
-	`delivery_url` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '发货单Url',
 	`delivery_classify` tinyint(4) unsigned NOT NULL DEFAULT 0 COMMENT '发货分类（1.销售订单；2.售后订单；3.外调货；4.调压箱；5.其他）',
-	`delivery_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '发货号',
+	`delivery_notice_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '发货通知单号',
 	`contract_order_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '合同订单号',
 	`delivery_time` TIMESTAMP DEFAULT NULL COMMENT '发货日期/到货日期',
 	`operation_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '运营单号',
@@ -820,3 +819,19 @@ CREATE TABLE `delivery_record` (
 	`remark` VARCHAR (256) NOT NULL DEFAULT '' COMMENT '备注',
 	PRIMARY KEY (`id`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8 COMMENT = '发货记录表单';
+
+
+DROP TABLE IF EXISTS `delivery_notice`;
+CREATE TABLE `delivery_notice` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	`create_user_id` INT (11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id',
+	`delivery_url` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '发货通知单Url',
+  `delivery_no` varchar(64) NOT NULL DEFAULT '' COMMENT '发货通知单号',
+  `audit_user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '审核人',
+  `audit_info` varchar(1024) NOT NULL DEFAULT '' COMMENT '审核备注',
+  `audit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审批日期',
+  `audit_result` tinyint(4) NOT NULL DEFAULT 0  COMMENT '审核结果： 0 未审核 1审核不通过 2 审核通过',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='发货通知单';

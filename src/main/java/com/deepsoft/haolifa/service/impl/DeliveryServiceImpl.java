@@ -1,14 +1,15 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.DeliveryNoticeMapper;
 import com.deepsoft.haolifa.dao.repository.DeliveryRecordMapper;
+import com.deepsoft.haolifa.model.domain.DeliveryNotice;
+import com.deepsoft.haolifa.model.domain.DeliveryNoticeExample;
 import com.deepsoft.haolifa.model.domain.DeliveryRecord;
 import com.deepsoft.haolifa.model.domain.DeliveryRecordExample;
-import com.deepsoft.haolifa.model.dto.DeliveryClassifyDTO;
-import com.deepsoft.haolifa.model.dto.DeliveryRecordConditionDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.service.DeliveryRecordService;
+import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.service.DeliveryService;
+import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +25,80 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRecordService {
+public class DeliveryServiceImpl extends BaseService implements DeliveryService {
 
     @Autowired
     private DeliveryRecordMapper deliveryRecordMapper;
+    @Autowired
+    private DeliveryNoticeMapper deliveryNoticeMapper;
+
+    @Override
+    public ResultBean saveNotice(DeliveryNotice model) {
+        model.setCreateUserId(getLoginUserId());
+        if (StringUtils.isBlank(model.getDeliveryNo())) {
+            model.setDeliveryNo("dn_" + RandomUtils.orderNoStr());
+        }
+        int insert = deliveryNoticeMapper.insertSelective(model);
+        if (insert > 0) {
+            return ResultBean.success(insert);
+        } else {
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
+    }
+
+    @Override
+    public DeliveryNotice noticeInfo(int id) {
+        return deliveryNoticeMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public ResultBean pageNotices(DeliveryNoticeConditionDTO conditionDTO) {
+        DeliveryNoticeExample example = new DeliveryNoticeExample();
+        DeliveryNoticeExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(conditionDTO.getDeliveryNo())) {
+            criteria.andDeliveryNoEqualTo("%" + conditionDTO.getDeliveryNo() + "%");
+        }
+
+//        Date startDeliveryTime = conditionDTO.getStartDeliveryTime();
+//        Date endDeliveryTime = conditionDTO.getEndDeliveryTime();
+//        if (startDeliveryTime != null && endDeliveryTime != null) {
+//            criteria.andDeliveryTimeBetween(startDeliveryTime, endDeliveryTime);
+//        }
+//        if (startDeliveryTime != null && endDeliveryTime == null) {
+//            criteria.andDeliveryTimeGreaterThanOrEqualTo(startDeliveryTime);
+//        }
+//        if (startDeliveryTime == null && endDeliveryTime != null) {
+//            criteria.andDeliveryTimeLessThanOrEqualTo(endDeliveryTime);
+//        }
+        example.setOrderByClause("id desc");
+        Page<DeliveryNotice> deliveryRecordPage = PageHelper.startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
+                .doSelectPage(() -> deliveryNoticeMapper.selectByExample(example));
+
+        PageDTO<DeliveryNotice> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(deliveryRecordPage, pageDTO);
+        pageDTO.setList(deliveryRecordPage);
+        return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean auditNotice(DeliveryNoticeAuditDTO model) {
+        if (StringUtils.isBlank(model.getDeliveryNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        int update = deliveryNoticeMapper.updateByExampleSelective(new DeliveryNotice() {{
+            setAuditInfo(model.getAuditInfo());
+            setAuditResult(model.getAuditResult());
+            setAuditTime(new Date());
+            setAuditUserId(getLoginUserId());
+        }}, new DeliveryNoticeExample() {{
+            or().andDeliveryNoEqualTo(model.getDeliveryNo());
+        }});
+        if (update > 0) {
+            return ResultBean.success(update);
+        } else {
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
+    }
 
     @Override
     public ResultBean save(DeliveryRecord model) {
@@ -97,6 +168,7 @@ public class DeliveryRecordServiceImpl extends BaseService implements DeliveryRe
         example.setOrderByClause("id desc");
         Page<DeliveryRecord> deliveryRecordPage = PageHelper.startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
                 .doSelectPage(() -> deliveryRecordMapper.selectByExample(example));
+
 
         PageDTO<DeliveryRecord> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(deliveryRecordPage, pageDTO);

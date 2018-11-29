@@ -12,11 +12,9 @@ public class DeliveryRecord {
 
     private Integer createUserId;
 
-    private String deliveryUrl;
-
     private Byte deliveryClassify;
 
-    private String deliveryNo;
+    private String deliveryNoticeNo;
 
     private String contractOrderNo;
 
@@ -56,14 +54,13 @@ public class DeliveryRecord {
 
     private String remark;
 
-    public DeliveryRecord(Integer id, Date createTime, Date updateTime, Integer createUserId, String deliveryUrl, Byte deliveryClassify, String deliveryNo, String contractOrderNo, Date deliveryTime, String operationNo, String customerNo, Integer productCount, String packingMode, Integer pieceCount, String transportCompany, String courierNo, String collectProvice, String collectAddress, String collectName, String collectPhone, BigDecimal weightPiece, BigDecimal pricePiece, BigDecimal deliveryFee, BigDecimal totalFee, String settlementWay, String remark) {
+    public DeliveryRecord(Integer id, Date createTime, Date updateTime, Integer createUserId, Byte deliveryClassify, String deliveryNoticeNo, String contractOrderNo, Date deliveryTime, String operationNo, String customerNo, Integer productCount, String packingMode, Integer pieceCount, String transportCompany, String courierNo, String collectProvice, String collectAddress, String collectName, String collectPhone, BigDecimal weightPiece, BigDecimal pricePiece, BigDecimal deliveryFee, BigDecimal totalFee, String settlementWay, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
-        this.deliveryUrl = deliveryUrl;
         this.deliveryClassify = deliveryClassify;
-        this.deliveryNo = deliveryNo;
+        this.deliveryNoticeNo = deliveryNoticeNo;
         this.contractOrderNo = contractOrderNo;
         this.deliveryTime = deliveryTime;
         this.operationNo = operationNo;
@@ -121,14 +118,6 @@ public class DeliveryRecord {
         this.createUserId = createUserId;
     }
 
-    public String getDeliveryUrl() {
-        return deliveryUrl;
-    }
-
-    public void setDeliveryUrl(String deliveryUrl) {
-        this.deliveryUrl = deliveryUrl == null ? null : deliveryUrl.trim();
-    }
-
     public Byte getDeliveryClassify() {
         return deliveryClassify;
     }
@@ -137,12 +126,12 @@ public class DeliveryRecord {
         this.deliveryClassify = deliveryClassify;
     }
 
-    public String getDeliveryNo() {
-        return deliveryNo;
+    public String getDeliveryNoticeNo() {
+        return deliveryNoticeNo;
     }
 
-    public void setDeliveryNo(String deliveryNo) {
-        this.deliveryNo = deliveryNo == null ? null : deliveryNo.trim();
+    public void setDeliveryNoticeNo(String deliveryNoticeNo) {
+        this.deliveryNoticeNo = deliveryNoticeNo == null ? null : deliveryNoticeNo.trim();
     }
 
     public String getContractOrderNo() {

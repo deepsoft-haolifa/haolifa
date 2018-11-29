@@ -10,7 +10,7 @@ import java.util.Date;
 public class DeliveryRecordConditionDTO {
 
     @ApiModelProperty(value = "页码，从1开始")
-    private Integer pageNum = 0;
+    private Integer pageNum = 1;
     @ApiModelProperty(value = "页面大小")
     private Integer pageSize = 20;
 
