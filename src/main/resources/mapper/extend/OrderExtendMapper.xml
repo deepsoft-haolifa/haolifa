@@ -3,7 +3,8 @@
 <mapper namespace="com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper">
     <insert id="insertBatchOrderMaterial" parameterType="java.util.List">
         insert into order_material
-        (order_no, material_graph_no,replace_material_graph_no is_replace,material_count,lack_material_count,check_status)
+        (order_no, material_graph_no,replace_material_graph_no
+        is_replace,material_count,lack_material_count,check_status)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -18,25 +19,76 @@
         </foreach>
     </insert>
 
-    <insert id="insertBatchOrderProductAssociate" parameterType="java.util.List">
-        insert into order_product_associate
-        (order_no, product_name,
-        specifications,product_model,product_number,price,total_price,material_description,product_remark)
-        values
-        <foreach collection="list" item="item" index="index" separator=",">
-            (
-            #{item.orderNo},
-            #{item.productName},
-            #{item.specifications},
-            #{item.productModel},
-            #{item.productNumber},
-            #{item.price},
-            #{item.totalPrice},
-            #{item.materialDescription},
-            #{item.productRemark}
-            )
-        </foreach>
-    </insert>
+    <!--<insert id="insertBatchOrderProductAssociate" parameterType="java.util.List">-->
+        <!--insert into order_product_associate-->
+        <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+            <!--<if test="orderNo != null">-->
+                <!--order_no,-->
+            <!--</if>-->
+            <!--<if test="productName != null">-->
+                <!--product_name,-->
+            <!--</if>-->
+            <!--<if test="specifications != null">-->
+                <!--specifications,-->
+            <!--</if>-->
+            <!--<if test="productModel != null">-->
+                <!--product_model,-->
+            <!--</if>-->
+            <!--<if test="productNumber != null">-->
+                <!--product_number,-->
+            <!--</if>-->
+            <!--<if test="price != null">-->
+                <!--price,-->
+            <!--</if>-->
+            <!--<if test="totalPrice != null">-->
+                <!--total_price,-->
+            <!--</if>-->
+            <!--<if test="materialDescription != null">-->
+                <!--material_description,-->
+            <!--</if>-->
+            <!--<if test="productRemark != null">-->
+                <!--product_remark,-->
+            <!--</if>-->
+            <!--<if test="productColor != null">-->
+                <!--#{item.productColor},-->
+            <!--</if>-->
+        <!--</trim>-->
+        <!--values-->
+        <!--<foreach collection="list" item="item" index="index" separator=",">-->
+            <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+                <!--<if test="orderNo != null">-->
+                    <!--#{item.orderNo},-->
+                <!--</if>-->
+                <!--<if test="productName != null">-->
+                    <!--#{item.productName},-->
+                <!--</if>-->
+                <!--<if test="specifications != null">-->
+                    <!--#{item.specifications},-->
+                <!--</if>-->
+                <!--<if test="productModel != null">-->
+                    <!--#{item.productModel},-->
+                <!--</if>-->
+                <!--<if test="productNumber != null">-->
+                    <!--#{item.productNumber},-->
+                <!--</if>-->
+                <!--<if test="price != null">-->
+                    <!--#{item.price},-->
+                <!--</if>-->
+                <!--<if test="totalPrice != null">-->
+                    <!--#{item.totalPrice},-->
+                <!--</if>-->
+                <!--<if test="materialDescription != null">-->
+                    <!--#{item.materialDescription},-->
+                <!--</if>-->
+                <!--<if test="productRemark != null">-->
+                    <!--#{item.productRemark},-->
+                <!--</if>-->
+                <!--<if test="productColor != null">-->
+                    <!--#{item.productColor},-->
+                <!--</if>-->
+            <!--</trim>-->
+        <!--</foreach>-->
+    <!--</insert>-->
 
     <select id="listOrderMaterial" resultType="com.deepsoft.haolifa.model.dto.OrderMaterialDTO">
         SELECT

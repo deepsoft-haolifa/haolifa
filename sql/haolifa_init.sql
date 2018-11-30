@@ -828,10 +828,11 @@ CREATE TABLE `delivery_notice` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 	`create_user_id` INT (11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id',
 	`delivery_url` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '发货通知单Url',
+	`contract_order_no` VARCHAR (64) NOT NULL DEFAULT '' COMMENT '合同订单号',
   `delivery_no` varchar(64) NOT NULL DEFAULT '' COMMENT '发货通知单号',
   `audit_user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '审核人',
   `audit_info` varchar(1024) NOT NULL DEFAULT '' COMMENT '审核备注',
-  `audit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审批日期',
+  `audit_time` timestamp  DEFAULT NULL  COMMENT '审批日期',
   `audit_result` tinyint(4) NOT NULL DEFAULT 0  COMMENT '审核结果： 0 未审核 1审核不通过 2 审核通过',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='发货通知单';

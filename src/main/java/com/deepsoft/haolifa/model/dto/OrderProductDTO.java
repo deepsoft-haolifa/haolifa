@@ -14,7 +14,7 @@ public class OrderProductDTO {
     private Integer id;
     @ApiModelProperty(value = "订单编号")
     private String orderNo;
-    @ApiModelProperty(value = "成品合同订单号")
+    @ApiModelProperty(value = "成品合同订单号(上传的订单上面的)")
     private String orderContractNo;
     @ApiModelProperty(value = "订单合同url")
     private String orderContractUrl;

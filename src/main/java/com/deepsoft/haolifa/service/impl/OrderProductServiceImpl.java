@@ -18,6 +18,7 @@ import com.deepsoft.haolifa.service.ProductModelConfigService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -216,6 +217,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean saveOrderProductInfo(OrderProductDTO orderProductDTO) {
         OrderProduct orderProduct = new OrderProduct();
         String orderNo = orderProductDTO.getOrderContractNo();
@@ -231,11 +233,16 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         int insert = orderProductMapper.insertSelective(orderProduct);
         if (insert > 0) {
             // 批量插入订单产品关联表
-            orderExtendMapper.insertBatchOrderProduct(orderProductDTO.getOrderProductAssociates());
+            List<OrderProductAssociate> list = orderProductDTO.getOrderProductAssociates();
+            list.stream().forEach(e -> {
+                e.setOrderNo(orderNo);
+                orderProductAssociateMapper.insertSelective(e);
+            });
         }
         log.info("save orderProduct info end|orderNo:{},result:{}", orderNo, insert);
         return ResultBean.success(insert);
     }
+
 
     @Override
     public ResultBean updateOrderInfo(OrderUpdateDTO orderUpdateDTO) {
@@ -295,13 +302,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
             @Override
             public OrderProductDTO load() throws Exception {
-                OrderProductDTO orderProductDTO = new OrderProductDTO();
+                OrderProductDTO orderProductDTO = null;
                 OrderProductExample example = new OrderProductExample();
                 example.or().andOrderNoEqualTo(orderNo);
                 List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
                 if (orderProducts.size() > 0) {
+                    orderProductDTO = new OrderProductDTO();
                     OrderProduct orderProduct = orderProducts.get(0);
-                    BeanUtils.copyProperties(orderProductDTO, orderProduct);
+                    BeanUtils.copyProperties(orderProduct, orderProductDTO);
                     // 获取订单关联成品列表
                     List<OrderProductAssociate> orderProductAssociates = orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
                         or().andOrderNoEqualTo(orderNo);

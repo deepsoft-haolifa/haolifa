@@ -415,6 +415,76 @@ public class DeliveryNoticeExample {
             return (Criteria) this;
         }
 
+        public Criteria andContractOrderNoIsNull() {
+            addCriterion("contract_order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoIsNotNull() {
+            addCriterion("contract_order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoEqualTo(String value) {
+            addCriterion("contract_order_no =", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoNotEqualTo(String value) {
+            addCriterion("contract_order_no <>", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoGreaterThan(String value) {
+            addCriterion("contract_order_no >", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("contract_order_no >=", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoLessThan(String value) {
+            addCriterion("contract_order_no <", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("contract_order_no <=", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoLike(String value) {
+            addCriterion("contract_order_no like", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoNotLike(String value) {
+            addCriterion("contract_order_no not like", value, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoIn(List<String> values) {
+            addCriterion("contract_order_no in", values, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoNotIn(List<String> values) {
+            addCriterion("contract_order_no not in", values, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoBetween(String value1, String value2) {
+            addCriterion("contract_order_no between", value1, value2, "contractOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractOrderNoNotBetween(String value1, String value2) {
+            addCriterion("contract_order_no not between", value1, value2, "contractOrderNo");
+            return (Criteria) this;
+        }
+
         public Criteria andDeliveryNoIsNull() {
             addCriterion("delivery_no is null");
             return (Criteria) this;

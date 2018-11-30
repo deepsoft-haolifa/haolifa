@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = {"发货单"})
 @RestController
 @RequestMapping("/delivery")
-public class DeliveryRecordController {
+public class DeliveryController {
     @Autowired
     DeliveryService deliveryService;
 
@@ -28,7 +28,7 @@ public class DeliveryRecordController {
 
 
     @ApiOperation("发货通知单详情")
-    @PostMapping("/noticeInfo/{id}")
+    @GetMapping("/noticeInfo/{id}")
     public ResultBean noticeInfo(@PathVariable("id") int id) {
         return ResultBean.success(deliveryService.noticeInfo(id));
     }
@@ -44,25 +44,27 @@ public class DeliveryRecordController {
     }
 
 
-    @ApiOperation("添加发货单记录")
+
+
+    @ApiOperation("添加发货记录")
     @PostMapping("/save")
     public ResultBean save(@RequestBody DeliveryRecord model) {
         return deliveryService.save(model);
     }
 
-    @ApiOperation("获取发货单记录详情")
+    @ApiOperation("获取发货记录详情")
     @PostMapping("/getInfo/{id}")
     public ResultBean getInfo(@PathVariable int id) {
         return ResultBean.success(deliveryService.getInfo(id));
     }
 
-    @ApiOperation("更新发货单记录")
+    @ApiOperation("更新发货记录")
     @PostMapping("/update")
     public ResultBean getInfo(@RequestBody DeliveryRecord model) {
         return deliveryService.update(model);
     }
 
-    @ApiOperation("获取发货单记录列表")
+    @ApiOperation("获取发货记录列表")
     @PostMapping("/pageList")
     public ResultBean pageList(@RequestBody DeliveryRecordConditionDTO model) {
         return deliveryService.pageInfo(model);

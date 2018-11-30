@@ -13,6 +13,8 @@ public class DeliveryNotice {
 
     private String deliveryUrl;
 
+    private String contractOrderNo;
+
     private String deliveryNo;
 
     private Integer auditUserId;
@@ -23,12 +25,13 @@ public class DeliveryNotice {
 
     private Byte auditResult;
 
-    public DeliveryNotice(Integer id, Date createTime, Date updateTime, Integer createUserId, String deliveryUrl, String deliveryNo, Integer auditUserId, String auditInfo, Date auditTime, Byte auditResult) {
+    public DeliveryNotice(Integer id, Date createTime, Date updateTime, Integer createUserId, String deliveryUrl, String contractOrderNo, String deliveryNo, Integer auditUserId, String auditInfo, Date auditTime, Byte auditResult) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
         this.deliveryUrl = deliveryUrl;
+        this.contractOrderNo = contractOrderNo;
         this.deliveryNo = deliveryNo;
         this.auditUserId = auditUserId;
         this.auditInfo = auditInfo;
@@ -78,6 +81,14 @@ public class DeliveryNotice {
 
     public void setDeliveryUrl(String deliveryUrl) {
         this.deliveryUrl = deliveryUrl == null ? null : deliveryUrl.trim();
+    }
+
+    public String getContractOrderNo() {
+        return contractOrderNo;
+    }
+
+    public void setContractOrderNo(String contractOrderNo) {
+        this.contractOrderNo = contractOrderNo == null ? null : contractOrderNo.trim();
     }
 
     public String getDeliveryNo() {

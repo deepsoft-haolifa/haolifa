@@ -8,6 +8,7 @@
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="delivery_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="contract_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="delivery_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="audit_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="audit_info" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -74,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user_id, delivery_url, delivery_no, audit_user_id, 
-    audit_info, audit_time, audit_result
+    id, create_time, update_time, create_user_id, delivery_url, contract_order_no, delivery_no, 
+    audit_user_id, audit_info, audit_time, audit_result
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.DeliveryNoticeExample" resultMap="BaseResultMap">
     select
@@ -112,13 +113,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into delivery_notice (create_time, update_time, create_user_id, 
-      delivery_url, delivery_no, audit_user_id, 
-      audit_info, audit_time, audit_result
-      )
+      delivery_url, contract_order_no, delivery_no, 
+      audit_user_id, audit_info, audit_time, 
+      audit_result)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{deliveryUrl,jdbcType=VARCHAR}, #{deliveryNo,jdbcType=VARCHAR}, #{auditUserId,jdbcType=INTEGER}, 
-      #{auditInfo,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, #{auditResult,jdbcType=TINYINT}
-      )
+      #{deliveryUrl,jdbcType=VARCHAR}, #{contractOrderNo,jdbcType=VARCHAR}, #{deliveryNo,jdbcType=VARCHAR}, 
+      #{auditUserId,jdbcType=INTEGER}, #{auditInfo,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{auditResult,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.DeliveryNotice">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -137,6 +138,9 @@
       </if>
       <if test="deliveryUrl != null">
         delivery_url,
+      </if>
+      <if test="contractOrderNo != null">
+        contract_order_no,
       </if>
       <if test="deliveryNo != null">
         delivery_no,
@@ -166,6 +170,9 @@
       </if>
       <if test="deliveryUrl != null">
         #{deliveryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="contractOrderNo != null">
+        #{contractOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="deliveryNo != null">
         #{deliveryNo,jdbcType=VARCHAR},
@@ -208,6 +215,9 @@
       <if test="record.deliveryUrl != null">
         delivery_url = #{record.deliveryUrl,jdbcType=VARCHAR},
       </if>
+      <if test="record.contractOrderNo != null">
+        contract_order_no = #{record.contractOrderNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.deliveryNo != null">
         delivery_no = #{record.deliveryNo,jdbcType=VARCHAR},
       </if>
@@ -235,6 +245,7 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
       delivery_url = #{record.deliveryUrl,jdbcType=VARCHAR},
+      contract_order_no = #{record.contractOrderNo,jdbcType=VARCHAR},
       delivery_no = #{record.deliveryNo,jdbcType=VARCHAR},
       audit_user_id = #{record.auditUserId,jdbcType=INTEGER},
       audit_info = #{record.auditInfo,jdbcType=VARCHAR},
@@ -258,6 +269,9 @@
       </if>
       <if test="deliveryUrl != null">
         delivery_url = #{deliveryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="contractOrderNo != null">
+        contract_order_no = #{contractOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="deliveryNo != null">
         delivery_no = #{deliveryNo,jdbcType=VARCHAR},
@@ -283,6 +297,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       delivery_url = #{deliveryUrl,jdbcType=VARCHAR},
+      contract_order_no = #{contractOrderNo,jdbcType=VARCHAR},
       delivery_no = #{deliveryNo,jdbcType=VARCHAR},
       audit_user_id = #{auditUserId,jdbcType=INTEGER},
       audit_info = #{auditInfo,jdbcType=VARCHAR},

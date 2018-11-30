@@ -41,7 +41,28 @@ public interface DeliveryService {
     ResultBean auditNotice(DeliveryNoticeAuditDTO model);
 
     /**
-     * 添加发货单记录
+     * 添加发货单记录 {
+     *   "collectAddress": "蚌埠市",
+     *   "collectName": "李学芸",
+     *   "collectPhone": "15955216981",
+     *   "collectProvice": "安徽省",
+     *   "contractOrderNo": "HS1809039",
+     *   "courierNo": "11073759583",
+     *   "customerNo": "J119",
+     *   "deliveryClassify": 1,
+     *   "deliveryNoticeNo": "string",
+     *   "deliveryTime": "2018-11-30",
+     *   "operationNo": "HS",
+     *   "packingMode": "木纸",
+     *   "pieceCount": 2,
+     *   "pricePiece": 1.5,
+     *   "productCount":130,
+     *   "remark": "备注",
+     *   "settlementWay": "付费送货",
+     *   "totalFee":230,
+     *   "transportCompany": "百世物流",
+     *   "weightPiece": 153
+     * }
      *
      * @param model
      * @return

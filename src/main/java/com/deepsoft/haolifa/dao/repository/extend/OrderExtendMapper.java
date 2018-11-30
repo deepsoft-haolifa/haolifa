@@ -21,7 +21,7 @@ public interface OrderExtendMapper {
      *
      * @param list
      */
-    void insertBatchOrderProduct(@Param("list") List<OrderProductAssociate> list);
+//    void insertBatchOrderProductAssociate(@Param("list") List<OrderProductAssociate> list);
 
 
     /**

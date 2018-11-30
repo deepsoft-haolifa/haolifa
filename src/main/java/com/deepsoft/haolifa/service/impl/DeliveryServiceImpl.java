@@ -35,9 +35,7 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
     @Override
     public ResultBean saveNotice(DeliveryNotice model) {
         model.setCreateUserId(getLoginUserId());
-        if (StringUtils.isBlank(model.getDeliveryNo())) {
-            model.setDeliveryNo("dn_" + RandomUtils.orderNoStr());
-        }
+        model.setDeliveryNo("dn_" + RandomUtils.orderNoStr());
         int insert = deliveryNoticeMapper.insertSelective(model);
         if (insert > 0) {
             return ResultBean.success(insert);
@@ -56,7 +54,10 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
         DeliveryNoticeExample example = new DeliveryNoticeExample();
         DeliveryNoticeExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(conditionDTO.getDeliveryNo())) {
-            criteria.andDeliveryNoEqualTo("%" + conditionDTO.getDeliveryNo() + "%");
+            criteria.andDeliveryNoLike("%" + conditionDTO.getDeliveryNo() + "%");
+        }
+        if (StringUtils.isNotBlank(conditionDTO.getContractOrderNo())) {
+            criteria.andContractOrderNoLike("%" + conditionDTO.getContractOrderNo() + "%");
         }
 
 //        Date startDeliveryTime = conditionDTO.getStartDeliveryTime();

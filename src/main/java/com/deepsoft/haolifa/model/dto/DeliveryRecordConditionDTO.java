@@ -24,8 +24,8 @@ public class DeliveryRecordConditionDTO {
     private String customerNo;
     @ApiModelProperty(value = "发货分类")
     private Byte deliveryClassify = 0;
-    @ApiModelProperty(value = "开始日期")
+    @ApiModelProperty(value = "开始日期(yyyy-MM-dd HH:mm:ss)")
     private Date startDeliveryTime;
-    @ApiModelProperty(value = "结束日期")
+    @ApiModelProperty(value = "结束日期(yyyy-MM-dd HH:mm:ss)")
     private Date endDeliveryTime;
 }

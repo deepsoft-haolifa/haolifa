@@ -18,4 +18,6 @@ public class DeliveryNoticeConditionDTO {
 
     @ApiModelProperty(value = "发货通知单号")
     private String deliveryNo;
+    @ApiModelProperty(value = "订单号")
+    private String contractOrderNo;
 }
