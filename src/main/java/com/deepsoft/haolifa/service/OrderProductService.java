@@ -16,6 +16,37 @@ public interface OrderProductService {
 
     /**
      * 添加order信息
+     * {
+     *   "orderContractNo": "HX1811001-XXX-H-ST",
+     *   "orderContractUrl": "http://12dfsadflsd.xls",
+     *   "orderProductAssociates": [
+     *     {
+     *       "materialDescription": "球铁体，304SS板，EPDM座，2Cr13轴，常温，水，RAL5010高光，配国产220V普通开关型无源触点电执行器",
+     *       "productModel": "270D97A1XP-16Q",
+     *       "productName": "无头蝶阀",
+     *       "productNumber": 1,
+     *       "productRemark": "线下执行",
+     *       "specifications": "DN65"
+     *     },
+     * {
+     *       "materialDescription": "球铁体，304SS板，EPDM座，2Cr13轴，常温，水，RAL5010高光，配国产220V普通开关型无源触点电执行器",
+     *       "productModel": "270D97A1XP-16Q",
+     *       "productName": "无头蝶阀",
+     *       "productNumber": 2,
+     *       "productRemark": "线下执行",
+     *       "specifications": "DN100"
+     *     },
+     * {
+     *       "materialDescription": "球铁体，304SS板，EPDM座，2Cr13轴，常温，水，RAL5010高光，配国产220V普通开关型无源触点电执行器",
+     *       "productModel": "270D37A1XH-16Q",
+     *       "productName": "蜗轮蝶阀",
+     *       "productNumber": 5,
+     *       "productRemark": "线下执行",
+     *       "specifications": "DN100"
+     *     }
+     *   ]
+     *
+     * }
      *
      * @param order
      * @return
