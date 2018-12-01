@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.InspectItemMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.InspectItem">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="purchase_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="inspect_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="specification" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="purchase_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="delivery_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="qualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="deal_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="requirements" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="unit" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, purchase_no, inspect_id, material_graph_no, material_name, specification, purchase_number, 
+    delivery_number, unqualified_number, qualified_number, deal_type, requirements, unit, 
+    remark
+  </sql>
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectItemExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from inspect_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from inspect_item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from inspect_item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectItemExample">
+    delete from inspect_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.InspectItem">
+    insert into inspect_item (id, purchase_no, inspect_id, 
+      material_graph_no, material_name, specification, 
+      purchase_number, delivery_number, unqualified_number, 
+      qualified_number, deal_type, requirements, 
+      unit, remark)
+    values (#{id,jdbcType=INTEGER}, #{purchaseNo,jdbcType=VARCHAR}, #{inspectId,jdbcType=INTEGER}, 
+      #{materialGraphNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, 
+      #{purchaseNumber,jdbcType=INTEGER}, #{deliveryNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
+      #{qualifiedNumber,jdbcType=INTEGER}, #{dealType,jdbcType=TINYINT}, #{requirements,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectItem">
+    insert into inspect_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="purchaseNo != null">
+        purchase_no,
+      </if>
+      <if test="inspectId != null">
+        inspect_id,
+      </if>
+      <if test="materialGraphNo != null">
+        material_graph_no,
+      </if>
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="specification != null">
+        specification,
+      </if>
+      <if test="purchaseNumber != null">
+        purchase_number,
+      </if>
+      <if test="deliveryNumber != null">
+        delivery_number,
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number,
+      </if>
+      <if test="qualifiedNumber != null">
+        qualified_number,
+      </if>
+      <if test="dealType != null">
+        deal_type,
+      </if>
+      <if test="requirements != null">
+        requirements,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseNo != null">
+        #{purchaseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectId != null">
+        #{inspectId,jdbcType=INTEGER},
+      </if>
+      <if test="materialGraphNo != null">
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null">
+        #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNumber != null">
+        #{purchaseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryNumber != null">
+        #{deliveryNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null">
+        #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="dealType != null">
+        #{dealType,jdbcType=TINYINT},
+      </if>
+      <if test="requirements != null">
+        #{requirements,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectItemExample" resultType="java.lang.Long">
+    select count(*) from inspect_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update inspect_item
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.purchaseNo != null">
+        purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inspectId != null">
+        inspect_id = #{record.inspectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.materialGraphNo != null">
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialName != null">
+        material_name = #{record.materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specification != null">
+        specification = #{record.specification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseNumber != null">
+        purchase_number = #{record.purchaseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.deliveryNumber != null">
+        delivery_number = #{record.deliveryNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unqualifiedNumber != null">
+        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.qualifiedNumber != null">
+        qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.dealType != null">
+        deal_type = #{record.dealType,jdbcType=TINYINT},
+      </if>
+      <if test="record.requirements != null">
+        requirements = #{record.requirements,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update inspect_item
+    set id = #{record.id,jdbcType=INTEGER},
+      purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
+      inspect_id = #{record.inspectId,jdbcType=INTEGER},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
+      specification = #{record.specification,jdbcType=VARCHAR},
+      purchase_number = #{record.purchaseNumber,jdbcType=INTEGER},
+      delivery_number = #{record.deliveryNumber,jdbcType=INTEGER},
+      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      deal_type = #{record.dealType,jdbcType=TINYINT},
+      requirements = #{record.requirements,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.InspectItem">
+    update inspect_item
+    <set>
+      <if test="purchaseNo != null">
+        purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectId != null">
+        inspect_id = #{inspectId,jdbcType=INTEGER},
+      </if>
+      <if test="materialGraphNo != null">
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="specification != null">
+        specification = #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNumber != null">
+        purchase_number = #{purchaseNumber,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryNumber != null">
+        delivery_number = #{deliveryNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null">
+        qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="dealType != null">
+        deal_type = #{dealType,jdbcType=TINYINT},
+      </if>
+      <if test="requirements != null">
+        requirements = #{requirements,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.InspectItem">
+    update inspect_item
+    set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      inspect_id = #{inspectId,jdbcType=INTEGER},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
+      specification = #{specification,jdbcType=VARCHAR},
+      purchase_number = #{purchaseNumber,jdbcType=INTEGER},
+      delivery_number = #{deliveryNumber,jdbcType=INTEGER},
+      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      deal_type = #{dealType,jdbcType=TINYINT},
+      requirements = #{requirements,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -234,4 +234,22 @@ public class CommonEnum {
             this.msg = msg;
         }
     }
+
+    public enum InspectStatus {
+        SAVE((byte) 1),
+        WAIT_INSPECT((byte) 2),
+        INSPECTED((byte)3),
+        STOCK_PENDING((byte)4),
+        STOCKED((byte)5)
+        ;
+
+        public final byte code;
+
+        InspectStatus(byte code) {
+            this.code = code;
+        }
+
+
+
+    }
 }

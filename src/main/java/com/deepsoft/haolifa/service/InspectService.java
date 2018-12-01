@@ -1,7 +1,11 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.InspectDTO;
+import com.deepsoft.haolifa.model.dto.InspectItemDTO;
+import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
 import com.deepsoft.haolifa.model.dto.InspectListDTO;
+import com.deepsoft.haolifa.model.dto.InspectResDTO;
+import com.deepsoft.haolifa.model.dto.InspectUpdateDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
 import java.util.List;
@@ -9,46 +13,69 @@ import java.util.List;
 public interface InspectService {
     /**
      * 创建送检单
-     * @param modelList
+     * @param model
      * @return
      */
-    ResultBean save(List<InspectDTO> modelList);
+    ResultBean save(InspectDTO model);
 
     /**
      * 删除送检信息
-     * @param inspectNo
-     * @param materialGraphNo
-     * @param productModel
+     * @param inspectId
      * @return
      */
-    ResultBean delete(String inspectNo, String materialGraphNo, String productModel);
+    ResultBean delete(Integer inspectId);
 
     /**
      * 更新送检单
+     * @param inspectId
      * @param model
      * @return
      */
-    ResultBean update(InspectDTO model);
+    ResultBean update(int inspectId,InspectUpdateDTO model);
 
     /**
      * 获取详情
-     * @param inspectNo
+     * @param inspectId
      * @return
      */
-    ResultBean getInfo(String inspectNo);
+    ResultBean getInfo(int inspectId);
 
     /**
      * 查询列表
-     * @param model
+     * @param pageNum
+     * @param pageSize
      * @return
      */
-    ResultBean getList(InspectListDTO model);
+    ResultBean getList(int type,int pageNum, int pageSize);
 
     /**
      * 更新状态
-     * @param inspectNo
+     * @param inspectId
      * @param status
      * @return
      */
-    ResultBean updateStatus(String inspectNo, Integer status);
+    ResultBean updateStatus(int inspectId, Integer status);
+
+    /**
+     * 删除质检单项
+     * @param itemId
+     * @return
+     */
+    ResultBean deleteItem(int itemId);
+
+    /**
+     * 更新送检单项
+     * @param itemId
+     * @param model
+     * @return
+     */
+    ResultBean updateItem(int itemId, InspectItemUpdateDTO model);
+
+    /**
+     * 添加质检结果
+     * @param itemId
+     * @param model
+     * @return
+     */
+    ResultBean inspectRes(int itemId, InspectResDTO model);
 }

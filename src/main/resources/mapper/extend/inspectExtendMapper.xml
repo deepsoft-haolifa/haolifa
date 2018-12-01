@@ -79,7 +79,7 @@
         </foreach>
     </insert>
 
-    <select id="selectInspectDistinctList" parameterType="com.deepsoft.haolifa.model.dto.InspectDTO" resultType="Map">
+    <select id="selectInspectDistinctList" parameterType="com.deepsoft.haolifa.model.dto.InspectItemDTO" resultType="Map">
         select distinct
         order_no orderNo,
         `type`,

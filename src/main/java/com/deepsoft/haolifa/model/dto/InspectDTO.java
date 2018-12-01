@@ -1,22 +1,23 @@
 package com.deepsoft.haolifa.model.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.models.auth.In;
+import java.util.List;
 import lombok.Data;
 
+@ApiModel("送检单")
 @Data
 public class InspectDTO {
 
-    @ApiModelProperty(required = true,value = "关联单号（采购单、订单、机加委托单）")
-    private String orderNo;
-    @ApiModelProperty(value = "送检单号")
-    private String inspectNo;
-    @ApiModelProperty(required = true,value = "orderNo类型：0 采购单 1 机加委托订单号 2 生产订单号",allowableValues = "0,1,2")
-    private Integer type;
-    @ApiModelProperty(value = "物料（原料）图号 type=0,1 必填")
-    private String materialGraphNo;
-    @ApiModelProperty(value = "产品型号 type = 2 必填")
-    private String productModel;
-    @ApiModelProperty(required = true,value = "产品数量")
-    private Integer number;
-}
+  @ApiModelProperty(required = true,value = "操作：1 保存 2 保存并发起",allowableValues = "1,2")
+  private Integer status;
+
+  @ApiModelProperty(required = true,value = "到货日期(yyyy-MM-dd)")
+  private String arrivalTime;
+
+  @ApiModelProperty(required = true,value = "供应商名称")
+  private String supplierName;
+
+  @ApiModelProperty(required = true,value = "送检列表")
+  private List<InspectItemDTO> items;
+ }

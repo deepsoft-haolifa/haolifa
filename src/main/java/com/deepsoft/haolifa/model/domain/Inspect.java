@@ -5,19 +5,9 @@ import java.util.Date;
 public class Inspect {
     private Integer id;
 
-    private String orderNo;
-
-    private Byte type;
-
-    private Byte status;
-
     private String inspectNo;
 
-    private String materialGraphNo;
-
-    private String productModel;
-
-    private Integer number;
+    private Byte status;
 
     private Date createTime;
 
@@ -25,18 +15,19 @@ public class Inspect {
 
     private Integer createUserId;
 
-    public Inspect(Integer id, String orderNo, Byte type, Byte status, String inspectNo, String materialGraphNo, String productModel, Integer number, Date createTime, Date updateTime, Integer createUserId) {
+    private Date arrivalTime;
+
+    private String supplierName;
+
+    public Inspect(Integer id, String inspectNo, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName) {
         this.id = id;
-        this.orderNo = orderNo;
-        this.type = type;
-        this.status = status;
         this.inspectNo = inspectNo;
-        this.materialGraphNo = materialGraphNo;
-        this.productModel = productModel;
-        this.number = number;
+        this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.arrivalTime = arrivalTime;
+        this.supplierName = supplierName;
     }
 
     public Inspect() {
@@ -51,30 +42,6 @@ public class Inspect {
         this.id = id;
     }
 
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
-    }
-
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
     public String getInspectNo() {
         return inspectNo;
     }
@@ -83,28 +50,12 @@ public class Inspect {
         this.inspectNo = inspectNo == null ? null : inspectNo.trim();
     }
 
-    public String getMaterialGraphNo() {
-        return materialGraphNo;
+    public Byte getStatus() {
+        return status;
     }
 
-    public void setMaterialGraphNo(String materialGraphNo) {
-        this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
-    }
-
-    public String getProductModel() {
-        return productModel;
-    }
-
-    public void setProductModel(String productModel) {
-        this.productModel = productModel == null ? null : productModel.trim();
-    }
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public Date getCreateTime() {
@@ -129,5 +80,21 @@ public class Inspect {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public Date getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(Date arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
     }
 }

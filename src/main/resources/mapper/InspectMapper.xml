@@ -4,16 +4,13 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Inspect">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="inspect_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="arrival_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="supplier_name" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -75,8 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_no, type, status, inspect_no, material_graph_no, product_model, number, 
-    create_time, update_time, create_user_id
+    id, inspect_no, status, create_time, update_time, create_user_id, arrival_time, supplier_name
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectExample" resultMap="BaseResultMap">
     select
@@ -112,14 +108,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into inspect (order_no, type, status, 
-      inspect_no, material_graph_no, product_model, 
-      number, create_time, update_time, 
-      create_user_id)
-    values (#{orderNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
-      #{number,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER})
+    insert into inspect (inspect_no, status, create_time, 
+      update_time, create_user_id, arrival_time, 
+      supplier_name)
+    values (#{inspectNo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{arrivalTime,jdbcType=TIMESTAMP}, 
+      #{supplierName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Inspect">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -127,26 +121,11 @@
     </selectKey>
     insert into inspect
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="orderNo != null">
-        order_no,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
       <if test="inspectNo != null">
         inspect_no,
       </if>
-      <if test="materialGraphNo != null">
-        material_graph_no,
-      </if>
-      <if test="productModel != null">
-        product_model,
-      </if>
-      <if test="number != null">
-        number,
+      <if test="status != null">
+        status,
       </if>
       <if test="createTime != null">
         create_time,
@@ -157,28 +136,19 @@
       <if test="createUserId != null">
         create_user_id,
       </if>
+      <if test="arrivalTime != null">
+        arrival_time,
+      </if>
+      <if test="supplierName != null">
+        supplier_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="orderNo != null">
-        #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=TINYINT},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
       <if test="inspectNo != null">
         #{inspectNo,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
-        #{materialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="productModel != null">
-        #{productModel,jdbcType=VARCHAR},
-      </if>
-      <if test="number != null">
-        #{number,jdbcType=INTEGER},
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -188,6 +158,12 @@
       </if>
       <if test="createUserId != null">
         #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="arrivalTime != null">
+        #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierName != null">
+        #{supplierName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -203,26 +179,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.orderNo != null">
-        order_no = #{record.orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=TINYINT},
-      </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=TINYINT},
-      </if>
       <if test="record.inspectNo != null">
         inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialGraphNo != null">
-        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.productModel != null">
-        product_model = #{record.productModel,jdbcType=VARCHAR},
-      </if>
-      <if test="record.number != null">
-        number = #{record.number,jdbcType=INTEGER},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -233,6 +194,12 @@
       <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
+      <if test="record.arrivalTime != null">
+        arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.supplierName != null">
+        supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -241,16 +208,13 @@
   <update id="updateByExample" parameterType="map">
     update inspect
     set id = #{record.id,jdbcType=INTEGER},
-      order_no = #{record.orderNo,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=TINYINT},
-      status = #{record.status,jdbcType=TINYINT},
       inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
-      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
-      product_model = #{record.productModel,jdbcType=VARCHAR},
-      number = #{record.number,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{record.createUserId,jdbcType=INTEGER}
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
+      supplier_name = #{record.supplierName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -258,26 +222,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Inspect">
     update inspect
     <set>
-      <if test="orderNo != null">
-        order_no = #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=TINYINT},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=TINYINT},
-      </if>
       <if test="inspectNo != null">
         inspect_no = #{inspectNo,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
-        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="productModel != null">
-        product_model = #{productModel,jdbcType=VARCHAR},
-      </if>
-      <if test="number != null">
-        number = #{number,jdbcType=INTEGER},
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -288,21 +237,24 @@
       <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
+      <if test="arrivalTime != null">
+        arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierName != null">
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Inspect">
     update inspect
-    set order_no = #{orderNo,jdbcType=VARCHAR},
-      type = #{type,jdbcType=TINYINT},
+    set inspect_no = #{inspectNo,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
-      inspect_no = #{inspectNo,jdbcType=VARCHAR},
-      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
-      product_model = #{productModel,jdbcType=VARCHAR},
-      number = #{number,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{createUserId,jdbcType=INTEGER}
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      supplier_name = #{supplierName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
