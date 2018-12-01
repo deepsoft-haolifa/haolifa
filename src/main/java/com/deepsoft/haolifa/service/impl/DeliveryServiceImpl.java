@@ -34,11 +34,16 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
 
     @Override
     public ResultBean saveNotice(DeliveryNotice model) {
-        model.setCreateUserId(getLoginUserId());
-        model.setDeliveryNo("dn_" + RandomUtils.orderNoStr());
-        int insert = deliveryNoticeMapper.insertSelective(model);
-        if (insert > 0) {
-            return ResultBean.success(insert);
+        int insertUpdate = 0;
+        if (model.getId() != null && model.getId() > 0) {
+            insertUpdate = deliveryNoticeMapper.updateByPrimaryKeySelective(model);
+        } else {
+            model.setCreateUserId(getLoginUserId());
+            model.setDeliveryNo("dn_" + RandomUtils.orderNoStr());
+            insertUpdate = deliveryNoticeMapper.insertSelective(model);
+        }
+        if (insertUpdate > 0) {
+            return ResultBean.success(insertUpdate);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
         }
