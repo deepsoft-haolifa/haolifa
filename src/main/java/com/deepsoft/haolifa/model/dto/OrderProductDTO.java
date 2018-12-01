@@ -76,4 +76,14 @@ public class OrderProductDTO {
     private String packagingSpecification;
     @ApiModelProperty(value = "订单产品列表")
     List<OrderProductAssociate> orderProductAssociates;
+
+    @ApiModelProperty(value = "技术清单")
+    private String technicalRequire;
+
+    @ApiModelProperty(value = "装配车间")
+    private String assemblyShop;
+
+    @ApiModelProperty(value = "装配小组")
+    private String assemblyGroup;
+
 }

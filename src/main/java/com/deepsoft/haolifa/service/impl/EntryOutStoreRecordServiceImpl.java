@@ -1,7 +1,5 @@
 package com.deepsoft.haolifa.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.deepsoft.haolifa.constant.CacheConsts;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
@@ -10,7 +8,6 @@ import com.deepsoft.haolifa.model.domain.EntryOutStoreRecordExample;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.redis.RedisLockMaterial;
 import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
@@ -27,8 +24,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Slf4j
@@ -160,8 +155,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         final String materialGraphNo = model.getMaterialGraphNo();
         final Integer quantity = model.getQuantity();
         // todo 根据orderNo获取核料时候，锁定原料的数量和库位（从redis中）
-        String lockMaterial = redisDao.get(CacheConsts.REDIS_KEY_LOCK_MATERIAL + orderNo);
-        List<RedisLockMaterial> redisLockMaterials = JSONObject.parseArray(lockMaterial, RedisLockMaterial.class);
+//        String lockMaterial = redisDao.get(CacheConsts.REDIS_KEY_LOCK_MATERIAL + orderNo);
+//        List<RedisLockMaterial> redisLockMaterials = JSONObject.parseArray(lockMaterial, RedisLockMaterial.class);
 
         EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
             setOperationType(operationType);

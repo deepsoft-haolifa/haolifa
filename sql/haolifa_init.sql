@@ -459,8 +459,7 @@ DROP TABLE IF EXISTS `order_product`;
 	  `material_graph_no_indexof` varchar(36) NOT NULL DEFAULT '' COMMENT '零件图号中对应的位置',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '类型（1.阀体；2.阀座；3：阀板；4.阀体压力）',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注描述',
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_multi` (`index_rule`,`type`)
+	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品型号规则配置表';
 
 
