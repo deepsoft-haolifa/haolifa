@@ -4,14 +4,17 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.ApplyBuy">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="apply_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="apply_buy_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="product_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="target_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="purchase_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="arrival_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="deal_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -73,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, flow_id, apply_no, product_order_no, target_time, is_delete, create_time, update_time, 
-    create_user_id
+    id, apply_buy_no, product_order_no, purchase_number, arrival_time, create_time, update_time, 
+    create_user_id, material_graph_no, material_name, status, deal_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuyExample" resultMap="BaseResultMap">
     select
@@ -107,36 +110,34 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into apply_buy (flow_id, apply_no, product_order_no, 
-      target_time, is_delete, create_time, 
-      update_time, create_user_id)
-    values (#{flowId,jdbcType=INTEGER}, #{applyNo,jdbcType=VARCHAR}, #{productOrderNo,jdbcType=VARCHAR}, 
-      #{targetTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER})
+    insert into apply_buy (id, apply_buy_no, product_order_no, 
+      purchase_number, arrival_time, create_time, 
+      update_time, create_user_id, material_graph_no, 
+      material_name, status, deal_user_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{applyBuyNo,jdbcType=VARCHAR}, #{productOrderNo,jdbcType=VARCHAR}, 
+      #{purchaseNumber,jdbcType=INTEGER}, #{arrivalTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{materialName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{dealUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into apply_buy
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="flowId != null">
-        flow_id,
+      <if test="id != null">
+        id,
       </if>
-      <if test="applyNo != null">
-        apply_no,
+      <if test="applyBuyNo != null">
+        apply_buy_no,
       </if>
       <if test="productOrderNo != null">
         product_order_no,
       </if>
-      <if test="targetTime != null">
-        target_time,
+      <if test="purchaseNumber != null">
+        purchase_number,
       </if>
-      <if test="isDelete != null">
-        is_delete,
+      <if test="arrivalTime != null">
+        arrival_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -147,22 +148,34 @@
       <if test="createUserId != null">
         create_user_id,
       </if>
+      <if test="materialGraphNo != null">
+        material_graph_no,
+      </if>
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="dealUserId != null">
+        deal_user_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="flowId != null">
-        #{flowId,jdbcType=INTEGER},
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
       </if>
-      <if test="applyNo != null">
-        #{applyNo,jdbcType=VARCHAR},
+      <if test="applyBuyNo != null">
+        #{applyBuyNo,jdbcType=VARCHAR},
       </if>
       <if test="productOrderNo != null">
         #{productOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="targetTime != null">
-        #{targetTime,jdbcType=TIMESTAMP},
+      <if test="purchaseNumber != null">
+        #{purchaseNumber,jdbcType=INTEGER},
       </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=TINYINT},
+      <if test="arrivalTime != null">
+        #{arrivalTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -172,6 +185,18 @@
       </if>
       <if test="createUserId != null">
         #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="materialGraphNo != null">
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="dealUserId != null">
+        #{dealUserId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -187,20 +212,17 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.flowId != null">
-        flow_id = #{record.flowId,jdbcType=INTEGER},
-      </if>
-      <if test="record.applyNo != null">
-        apply_no = #{record.applyNo,jdbcType=VARCHAR},
+      <if test="record.applyBuyNo != null">
+        apply_buy_no = #{record.applyBuyNo,jdbcType=VARCHAR},
       </if>
       <if test="record.productOrderNo != null">
         product_order_no = #{record.productOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.targetTime != null">
-        target_time = #{record.targetTime,jdbcType=TIMESTAMP},
+      <if test="record.purchaseNumber != null">
+        purchase_number = #{record.purchaseNumber,jdbcType=INTEGER},
       </if>
-      <if test="record.isDelete != null">
-        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      <if test="record.arrivalTime != null">
+        arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -211,6 +233,18 @@
       <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
+      <if test="record.materialGraphNo != null">
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialName != null">
+        material_name = #{record.materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.dealUserId != null">
+        deal_user_id = #{record.dealUserId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -219,14 +253,17 @@
   <update id="updateByExample" parameterType="map">
     update apply_buy
     set id = #{record.id,jdbcType=INTEGER},
-      flow_id = #{record.flowId,jdbcType=INTEGER},
-      apply_no = #{record.applyNo,jdbcType=VARCHAR},
+      apply_buy_no = #{record.applyBuyNo,jdbcType=VARCHAR},
       product_order_no = #{record.productOrderNo,jdbcType=VARCHAR},
-      target_time = #{record.targetTime,jdbcType=TIMESTAMP},
-      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      purchase_number = #{record.purchaseNumber,jdbcType=INTEGER},
+      arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{record.createUserId,jdbcType=INTEGER}
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      deal_user_id = #{record.dealUserId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -234,20 +271,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
     update apply_buy
     <set>
-      <if test="flowId != null">
-        flow_id = #{flowId,jdbcType=INTEGER},
-      </if>
-      <if test="applyNo != null">
-        apply_no = #{applyNo,jdbcType=VARCHAR},
+      <if test="applyBuyNo != null">
+        apply_buy_no = #{applyBuyNo,jdbcType=VARCHAR},
       </if>
       <if test="productOrderNo != null">
         product_order_no = #{productOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="targetTime != null">
-        target_time = #{targetTime,jdbcType=TIMESTAMP},
+      <if test="purchaseNumber != null">
+        purchase_number = #{purchaseNumber,jdbcType=INTEGER},
       </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=TINYINT},
+      <if test="arrivalTime != null">
+        arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -258,19 +292,34 @@
       <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
+      <if test="materialGraphNo != null">
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="dealUserId != null">
+        deal_user_id = #{dealUserId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.ApplyBuy">
     update apply_buy
-    set flow_id = #{flowId,jdbcType=INTEGER},
-      apply_no = #{applyNo,jdbcType=VARCHAR},
+    set apply_buy_no = #{applyBuyNo,jdbcType=VARCHAR},
       product_order_no = #{productOrderNo,jdbcType=VARCHAR},
-      target_time = #{targetTime,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=TINYINT},
+      purchase_number = #{purchaseNumber,jdbcType=INTEGER},
+      arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{createUserId,jdbcType=INTEGER}
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      deal_user_id = #{dealUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

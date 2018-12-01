@@ -22,16 +22,35 @@ public interface ApplyBuyService {
 
     /**
      * 获取请购详情
-     * @param applyBuyId
+     * @param formNo
      * @return
      */
-    ResultBean getInfo(Integer applyBuyId);
+    ResultBean getInfo(String formNo);
 
     /**
      * 删除请购单单项
-     * @param applyBuyNo
-     * @param materialGraphNo
+     * @param itemId
      * @return
      */
-    ResultBean deleteItem(String applyBuyNo, String materialGraphNo);
+    ResultBean deleteItem(int itemId);
+
+    /**
+     * 填写采购完成日期
+     * @param itemId
+     * @param arrivalTime
+     * @return
+     */
+    ResultBean updateArrivalTime(int itemId, String arrivalTime);
+
+    /**
+     * 更新待采购单项状态
+     * @param itemId
+     * @return
+     */
+    ResultBean updateStatus(int itemId);
+
+    /**
+     * 列表
+     */
+    ResultBean list(int pageNum, int pageSize, int status);
 }

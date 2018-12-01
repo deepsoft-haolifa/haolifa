@@ -7,8 +7,6 @@ public class PurchaseOrderItem {
 
     private String purchaseOrderNo;
 
-    private String applyNo;
-
     private String materialName;
 
     private String materialGraphNo;
@@ -27,14 +25,9 @@ public class PurchaseOrderItem {
 
     private String remark;
 
-    private String purpose;
-
-    private Double valuation;
-
-    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String applyNo, String materialName, String materialGraphNo, String specification, String material, String unit, Integer number, BigDecimal unitWeight, BigDecimal unitPrice, String remark, String purpose, Double valuation) {
+    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String materialName, String materialGraphNo, String specification, String material, String unit, Integer number, BigDecimal unitWeight, BigDecimal unitPrice, String remark) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
-        this.applyNo = applyNo;
         this.materialName = materialName;
         this.materialGraphNo = materialGraphNo;
         this.specification = specification;
@@ -44,8 +37,6 @@ public class PurchaseOrderItem {
         this.unitWeight = unitWeight;
         this.unitPrice = unitPrice;
         this.remark = remark;
-        this.purpose = purpose;
-        this.valuation = valuation;
     }
 
     public PurchaseOrderItem() {
@@ -66,14 +57,6 @@ public class PurchaseOrderItem {
 
     public void setPurchaseOrderNo(String purchaseOrderNo) {
         this.purchaseOrderNo = purchaseOrderNo == null ? null : purchaseOrderNo.trim();
-    }
-
-    public String getApplyNo() {
-        return applyNo;
-    }
-
-    public void setApplyNo(String applyNo) {
-        this.applyNo = applyNo == null ? null : applyNo.trim();
     }
 
     public String getMaterialName() {
@@ -146,21 +129,5 @@ public class PurchaseOrderItem {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getPurpose() {
-        return purpose;
-    }
-
-    public void setPurpose(String purpose) {
-        this.purpose = purpose == null ? null : purpose.trim();
-    }
-
-    public Double getValuation() {
-        return valuation;
-    }
-
-    public void setValuation(Double valuation) {
-        this.valuation = valuation;
     }
 }

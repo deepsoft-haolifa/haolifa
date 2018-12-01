@@ -38,8 +38,6 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     private PurchaseOrderItemMapper purchaseOrderItemMapper;
     @Autowired
     private PurchaseOrderItemExtendMapper itemExtendMapper;
-    @Autowired
-    private ProductPurchaseRecordMapper productPurchaseRecordMapper;
 
     @Override
     public ResultBean save(PurchaseOrderDTO model) {
@@ -82,12 +80,6 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
         purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
         purchaseOrderItemMapper.deleteByExample(purchaseOrderItemExample);
-        // TODO 是否删除record表记录
-        ProductPurchaseRecord productPurchaseRecord = new ProductPurchaseRecord();
-        productPurchaseRecord.setPurchaseOrderNo("");
-        ProductPurchaseRecordExample productPurchaseRecordExample = new ProductPurchaseRecordExample();
-        productPurchaseRecordExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
-        productPurchaseRecordMapper.updateByExampleSelective(productPurchaseRecord, productPurchaseRecordExample);
         return ResultBean.success(1);
     }
 

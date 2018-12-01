@@ -1,15 +1,29 @@
 package com.deepsoft.haolifa.model.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
 import lombok.Data;
 
 @Data
 public class ApplyBuyListDTO {
 
-    @ApiModelProperty(required = true,value = "页码")
-    private Integer pageNum;
-    @ApiModelProperty(required = true,value = "显示数量")
-    private Integer pageSize;
-    @ApiModelProperty(value = "请购单号")
-    private String applyBuyNo;
+    private Integer id;
+
+    private String productOrderNo;
+
+    private Integer purchaseNumber;
+
+    private Date arrivalTime;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    private String materialGraphNo;
+
+    private String materialName;
+
+    private Byte status;
+
+    private String dealUserName;
 }

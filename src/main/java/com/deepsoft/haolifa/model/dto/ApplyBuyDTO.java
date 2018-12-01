@@ -10,11 +10,8 @@ import java.util.List;
 @ApiModel
 public class ApplyBuyDTO {
 
-    @ApiModelProperty(value = "生产订单编号")
+    @ApiModelProperty(required = true, value = "生产订单编号")
     private String productOrderNo;
-
-    @ApiModelProperty(value = "预期完成时间",required = true)
-    private String targetDate;
 
     @ApiModelProperty(required = true,value = "采购物料单项；至少一项")
     private List<ApplyBuyItem> itemList;

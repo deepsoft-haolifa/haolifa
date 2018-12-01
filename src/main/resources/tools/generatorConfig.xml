@@ -171,13 +171,7 @@
 
         <!--<table tableName="order_review" domainObjectName="OrderReview"></table>-->
 
-        <!--<table tableName="apply_buy" domainObjectName="ApplyBuy">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="product_purchase_record" domainObjectName="ProductPurchaseRecord"></table>-->
-
-        <!--<table tableName="purchase_plan" domainObjectName="PurchasePlan"></table>-->
+        <table tableName="apply_buy" domainObjectName="ApplyBuy"></table>
 
         <!--<table tableName="entrust" domainObjectName="Entrust">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->

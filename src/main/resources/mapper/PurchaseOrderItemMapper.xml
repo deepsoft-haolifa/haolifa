@@ -5,7 +5,6 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="purchase_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="apply_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="specification" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -15,8 +14,6 @@
       <arg column="unit_weight" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="unit_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="purpose" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="valuation" javaType="java.lang.Double" jdbcType="DOUBLE" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -78,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, purchase_order_no, apply_no, material_name, material_graph_no, specification, 
-    material, unit, number, unit_weight, unit_price, remark, purpose, valuation
+    id, purchase_order_no, material_name, material_graph_no, specification, material, 
+    unit, number, unit_weight, unit_price, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItemExample" resultMap="BaseResultMap">
     select
@@ -112,16 +109,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItem">
-    insert into purchase_order_item (id, purchase_order_no, apply_no, 
-      material_name, material_graph_no, specification, 
-      material, unit, number, 
-      unit_weight, unit_price, remark, 
-      purpose, valuation)
-    values (#{id,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, #{applyNo,jdbcType=VARCHAR}, 
-      #{materialName,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, 
-      #{material,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
-      #{unitWeight,jdbcType=DECIMAL}, #{unitPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
-      #{purpose,jdbcType=VARCHAR}, #{valuation,jdbcType=DOUBLE})
+    insert into purchase_order_item (id, purchase_order_no, material_name, 
+      material_graph_no, specification, material, 
+      unit, number, unit_weight, 
+      unit_price, remark)
+    values (#{id,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
+      #{materialGraphNo,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{unitWeight,jdbcType=DECIMAL}, 
+      #{unitPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItem">
     insert into purchase_order_item
@@ -131,9 +126,6 @@
       </if>
       <if test="purchaseOrderNo != null">
         purchase_order_no,
-      </if>
-      <if test="applyNo != null">
-        apply_no,
       </if>
       <if test="materialName != null">
         material_name,
@@ -162,12 +154,6 @@
       <if test="remark != null">
         remark,
       </if>
-      <if test="purpose != null">
-        purpose,
-      </if>
-      <if test="valuation != null">
-        valuation,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -175,9 +161,6 @@
       </if>
       <if test="purchaseOrderNo != null">
         #{purchaseOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="applyNo != null">
-        #{applyNo,jdbcType=VARCHAR},
       </if>
       <if test="materialName != null">
         #{materialName,jdbcType=VARCHAR},
@@ -206,12 +189,6 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="purpose != null">
-        #{purpose,jdbcType=VARCHAR},
-      </if>
-      <if test="valuation != null">
-        #{valuation,jdbcType=DOUBLE},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItemExample" resultType="java.lang.Long">
@@ -228,9 +205,6 @@
       </if>
       <if test="record.purchaseOrderNo != null">
         purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.applyNo != null">
-        apply_no = #{record.applyNo,jdbcType=VARCHAR},
       </if>
       <if test="record.materialName != null">
         material_name = #{record.materialName,jdbcType=VARCHAR},
@@ -259,12 +233,6 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.purpose != null">
-        purpose = #{record.purpose,jdbcType=VARCHAR},
-      </if>
-      <if test="record.valuation != null">
-        valuation = #{record.valuation,jdbcType=DOUBLE},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -274,7 +242,6 @@
     update purchase_order_item
     set id = #{record.id,jdbcType=INTEGER},
       purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
-      apply_no = #{record.applyNo,jdbcType=VARCHAR},
       material_name = #{record.materialName,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       specification = #{record.specification,jdbcType=VARCHAR},
@@ -283,9 +250,7 @@
       number = #{record.number,jdbcType=INTEGER},
       unit_weight = #{record.unitWeight,jdbcType=DECIMAL},
       unit_price = #{record.unitPrice,jdbcType=DECIMAL},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      purpose = #{record.purpose,jdbcType=VARCHAR},
-      valuation = #{record.valuation,jdbcType=DOUBLE}
+      remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -295,9 +260,6 @@
     <set>
       <if test="purchaseOrderNo != null">
         purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="applyNo != null">
-        apply_no = #{applyNo,jdbcType=VARCHAR},
       </if>
       <if test="materialName != null">
         material_name = #{materialName,jdbcType=VARCHAR},
@@ -326,19 +288,12 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="purpose != null">
-        purpose = #{purpose,jdbcType=VARCHAR},
-      </if>
-      <if test="valuation != null">
-        valuation = #{valuation,jdbcType=DOUBLE},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItem">
     update purchase_order_item
     set purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
-      apply_no = #{applyNo,jdbcType=VARCHAR},
       material_name = #{materialName,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       specification = #{specification,jdbcType=VARCHAR},
@@ -347,9 +302,7 @@
       number = #{number,jdbcType=INTEGER},
       unit_weight = #{unitWeight,jdbcType=DECIMAL},
       unit_price = #{unitPrice,jdbcType=DECIMAL},
-      remark = #{remark,jdbcType=VARCHAR},
-      purpose = #{purpose,jdbcType=VARCHAR},
-      valuation = #{valuation,jdbcType=DOUBLE}
+      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

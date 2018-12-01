@@ -5,15 +5,13 @@ import java.util.Date;
 public class ApplyBuy {
     private Integer id;
 
-    private Integer flowId;
-
-    private String applyNo;
+    private String applyBuyNo;
 
     private String productOrderNo;
 
-    private Date targetTime;
+    private Integer purchaseNumber;
 
-    private Byte isDelete;
+    private Date arrivalTime;
 
     private Date createTime;
 
@@ -21,16 +19,27 @@ public class ApplyBuy {
 
     private Integer createUserId;
 
-    public ApplyBuy(Integer id, Integer flowId, String applyNo, String productOrderNo, Date targetTime, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    private String materialGraphNo;
+
+    private String materialName;
+
+    private Byte status;
+
+    private Integer dealUserId;
+
+    public ApplyBuy(Integer id, String applyBuyNo, String productOrderNo, Integer purchaseNumber, Date arrivalTime, Date createTime, Date updateTime, Integer createUserId, String materialGraphNo, String materialName, Byte status, Integer dealUserId) {
         this.id = id;
-        this.flowId = flowId;
-        this.applyNo = applyNo;
+        this.applyBuyNo = applyBuyNo;
         this.productOrderNo = productOrderNo;
-        this.targetTime = targetTime;
-        this.isDelete = isDelete;
+        this.purchaseNumber = purchaseNumber;
+        this.arrivalTime = arrivalTime;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.materialGraphNo = materialGraphNo;
+        this.materialName = materialName;
+        this.status = status;
+        this.dealUserId = dealUserId;
     }
 
     public ApplyBuy() {
@@ -45,20 +54,12 @@ public class ApplyBuy {
         this.id = id;
     }
 
-    public Integer getFlowId() {
-        return flowId;
+    public String getApplyBuyNo() {
+        return applyBuyNo;
     }
 
-    public void setFlowId(Integer flowId) {
-        this.flowId = flowId;
-    }
-
-    public String getApplyNo() {
-        return applyNo;
-    }
-
-    public void setApplyNo(String applyNo) {
-        this.applyNo = applyNo == null ? null : applyNo.trim();
+    public void setApplyBuyNo(String applyBuyNo) {
+        this.applyBuyNo = applyBuyNo == null ? null : applyBuyNo.trim();
     }
 
     public String getProductOrderNo() {
@@ -69,20 +70,20 @@ public class ApplyBuy {
         this.productOrderNo = productOrderNo == null ? null : productOrderNo.trim();
     }
 
-    public Date getTargetTime() {
-        return targetTime;
+    public Integer getPurchaseNumber() {
+        return purchaseNumber;
     }
 
-    public void setTargetTime(Date targetTime) {
-        this.targetTime = targetTime;
+    public void setPurchaseNumber(Integer purchaseNumber) {
+        this.purchaseNumber = purchaseNumber;
     }
 
-    public Byte getIsDelete() {
-        return isDelete;
+    public Date getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setIsDelete(Byte isDelete) {
-        this.isDelete = isDelete;
+    public void setArrivalTime(Date arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public Date getCreateTime() {
@@ -107,5 +108,37 @@ public class ApplyBuy {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getMaterialGraphNo() {
+        return materialGraphNo;
+    }
+
+    public void setMaterialGraphNo(String materialGraphNo) {
+        this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName == null ? null : materialName.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Integer getDealUserId() {
+        return dealUserId;
+    }
+
+    public void setDealUserId(Integer dealUserId) {
+        this.dealUserId = dealUserId;
     }
 }
