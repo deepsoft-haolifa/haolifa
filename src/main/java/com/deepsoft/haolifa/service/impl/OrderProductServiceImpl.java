@@ -314,9 +314,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     List<OrderProductAssociate> orderProductAssociates = orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
                         or().andOrderNoEqualTo(orderNo);
                     }});
-                    List<OrderProductAssociate> orderProductAssociateDTOS = new ArrayList<>();
-                    BeanUtils.copyProperties(orderProductAssociateDTOS, orderProductAssociates);
-                    orderProductDTO.setOrderProductAssociates(orderProductAssociateDTOS);
+                    orderProductDTO.setOrderProductAssociates(orderProductAssociates);
                 }
                 return orderProductDTO;
             }
@@ -415,13 +413,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             modelConfigs.stream().forEach(e -> {
                 final String indexRule = e.getIndexRule();
                 final Byte type = e.getType();
-                if (indexRule == fati && type == CommonEnum.ProductModelType.FATI.code) {
+                if (indexRule.equals(fati)&& type == CommonEnum.ProductModelType.FATI.code) {
                     fatiModelConfig.add(e);
-                } else if (indexRule == fatiyali && type == CommonEnum.ProductModelType.FATI_YALI.code) {
+                } else if (indexRule.equals(fatiyali)  && type == CommonEnum.ProductModelType.FATI_YALI.code) {
                     fatiYaliModelConfig.add(e);
-                } else if (indexRule == fazuo && type == CommonEnum.ProductModelType.FAZUO.code) {
+                } else if (indexRule.equals(fazuo)  && type == CommonEnum.ProductModelType.FAZUO.code) {
                     fazuoModelConfig.add(e);
-                } else if (indexRule == faban && type == CommonEnum.ProductModelType.FABAN.code) {
+                } else if (indexRule.equals(faban)  && type == CommonEnum.ProductModelType.FABAN.code) {
                     fabanModelConfig.add(e);
                 }
             });
@@ -446,22 +444,22 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 String[] split = graphNo.split("-");
                 if (split.length > 2) {
                     String noIndex = split[2];
-                    if (noIndex == "01") {// 阀体
+                    if ("01".equals(noIndex)) {// 阀体
                         if (split.length > 3 && fatiModelConfig.contains(split[3].replaceAll("[^0-9]", ""))) {//阀体材质
                             fatiCollect.add(graphNo);
                         }
                         if (split.length > 4 && fatiYaliModelConfig.contains(split[4].substring(0, 1))) {//阀体压力
                             fatiYalicollect.add(graphNo);
                         }
-                    } else if (noIndex == "02") {//阀座
+                    } else if ("02".equals(noIndex)) {//阀座
                         if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
                             fazuoCollect.add(graphNo);
                         }
-                    } else if (noIndex == "03") {// 阀板
+                    } else if ("03".equals(noIndex)) {// 阀板
                         if (split.length > 3 && fabanModelConfig.contains(split[3])) {
                             fabanCollect.add(graphNo);
                         }
-                    } else if (noIndex == "04") { // 上阀杆
+                    } else if ("04".equals(noIndex)) { // 上阀杆
                         fagancollect.add(graphNo);
                     }
                 }

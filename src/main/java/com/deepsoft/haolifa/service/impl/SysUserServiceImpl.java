@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.cache.CacheKeyManager;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
@@ -17,7 +18,6 @@ import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.PermissionService;
 import com.deepsoft.haolifa.service.RoleService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.util.RedisKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +76,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public SysUser getSysUser(Integer userId) {
-        String userKey = RedisKeyUtil.getUserKey(userId);
+        String userKey = CacheKeyManager.cacheKeyUserCache(userId).key;
         //暂时不用缓存
         redisDao.del(userKey);
         String userCacheStr = redisDao.get(userKey);
@@ -130,7 +130,7 @@ public class SysUserServiceImpl implements SysUserService {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
         int count = userMapper.updateByPrimaryKeySelective(sysUser);
-        String userKey = RedisKeyUtil.getUserKey(user.getId());
+        String userKey =CacheKeyManager.cacheKeyUserCache(user.getId()).key;
         //暂时不用缓存
         redisDao.del(userKey);
         return count;

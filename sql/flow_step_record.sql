@@ -70,4 +70,35 @@ INSERT INTO `flow_step` VALUES ('25', NOW(),  NOW(), '1', '4', '67', '32', '79',
 INSERT INTO `flow_step` VALUES ('26', NOW(),  NOW(), '1', '4', '76', '31', '78', '0');
 
 
-
+-- 产品核料配置
+-- ----------------------------
+-- Records of product_model_config
+-- ----------------------------
+INSERT INTO `product_model_config` VALUES ('1', '2018-12-01 09:35:59', 'Q', 'Qa', '', '1', '');
+INSERT INTO `product_model_config` VALUES ('2', '2018-12-01 09:36:05', 'Q', 'Qb', '', '1', '');
+INSERT INTO `product_model_config` VALUES ('3', '2018-12-01 09:36:10', 'Q', 'Qc', '', '1', '');
+INSERT INTO `product_model_config` VALUES ('4', '2018-12-01 09:36:38', 'Z', 'Za', '', '1', '');
+INSERT INTO `product_model_config` VALUES ('5', '2018-12-01 09:36:47', 'Z', 'Zb', '', '1', '');
+INSERT INTO `product_model_config` VALUES ('6', '2018-12-01 09:36:55', 'Z', 'Zc', '', '1', '');
+INSERT INTO `product_model_config` VALUES ('7', '2018-12-01 09:37:52', 'X', 'E0', '', '2', '');
+INSERT INTO `product_model_config` VALUES ('8', '2018-12-01 09:38:01', 'X', 'E1', '', '2', '');
+INSERT INTO `product_model_config` VALUES ('9', '2018-12-01 09:38:07', 'X', 'E2', '', '2', '');
+INSERT INTO `product_model_config` VALUES ('10', '2018-12-01 09:38:16', 'X', 'E3', '', '2', '');
+INSERT INTO `product_model_config` VALUES ('11', '2018-12-01 09:38:32', 'X', 'Na', '', '2', '');
+INSERT INTO `product_model_config` VALUES ('12', '2018-12-01 09:38:37', 'X', 'Nb', '', '2', '');
+INSERT INTO `product_model_config` VALUES ('13', '2018-12-01 09:38:49', 'F', 'Fa', '', '2', '');
+INSERT INTO `product_model_config` VALUES ('14', '2018-12-01 09:39:33', 'P', 'Hc', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('15', '2018-12-01 09:39:41', 'R', 'Hd', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('16', '2018-12-01 09:39:48', 'L', 'He', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('17', '2018-12-01 09:39:58', 'H', 'Hf', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('18', '2018-12-01 09:40:05', 'H', 'Hg', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('19', '2018-12-01 09:40:08', 'H', 'Hh', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('20', '2018-12-01 09:40:32', 'N', 'QN', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('21', '2018-12-01 09:40:41', 'D', 'QD', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('22', '2018-12-01 09:40:49', 'T', 'Ta', '', '3', '');
+INSERT INTO `product_model_config` VALUES ('23', '2018-12-01 09:42:22', '10', 'a', '', '4', '');
+INSERT INTO `product_model_config` VALUES ('24', '2018-12-01 09:42:39', '10', 'b', '', '4', '');
+INSERT INTO `product_model_config` VALUES ('25', '2018-12-01 09:42:43', '10', 'd', '', '4', '');
+INSERT INTO `product_model_config` VALUES ('26', '2018-12-01 09:42:48', '16', 'a', '', '4', '');
+INSERT INTO `product_model_config` VALUES ('27', '2018-12-01 09:42:51', '16', 'b', '', '4', '');
+INSERT INTO `product_model_config` VALUES ('28', '2018-12-01 09:42:56', '16', 'e', '', '4', '');

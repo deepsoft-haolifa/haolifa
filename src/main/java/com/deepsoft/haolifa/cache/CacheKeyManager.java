@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CacheKeyManager {
     /**
-     * order cache
+     * 订单缓存
      *
      * @return
      */
@@ -22,6 +22,13 @@ public class CacheKeyManager {
      */
     public static CacheKeyVo cacheKeyProductModelRule() {
         return new CacheKeyVo("deepsoft:haolifa:cache:productModelRule", 60L, TimeUnit.DAYS);
+    }
+
+    /**
+     * 用户缓存
+     */
+    public static CacheKeyVo cacheKeyUserCache(int userId) {
+        return new CacheKeyVo("deepsoft:haolifa:cache:user:", 60L, TimeUnit.DAYS);
     }
 
 
