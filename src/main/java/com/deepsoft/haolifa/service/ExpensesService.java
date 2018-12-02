@@ -5,11 +5,13 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 
 public interface ExpensesService {
 
-    ResultBean save(ExpensesDTO model);
+  ResultBean save(ExpensesDTO model);
 
-    ResultBean delete(Integer id);
+  ResultBean delete(Integer id);
 
-    ResultBean update(ExpensesDTO model);
+  ResultBean update(ExpensesDTO model);
 
-    ResultBean getList(Integer pageNum, Integer pageSize);
+  ResultBean getList(Integer pageNum, Integer pageSize);
+
+  ResultBean classify();
 }

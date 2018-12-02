@@ -12,4 +12,9 @@ public class InvoiceListDTO {
     private Integer pageSize;
     @ApiModelProperty(value = "订单编号")
     private String orderNo;
+    @ApiModelProperty(value = "发票状态：0 全部 待开票 1 2 已开票")
+    private Integer status;
+    @ApiModelProperty(value = "发票类型：类型：0 全部 1 开出（生产） 2 开入（采购）")
+    private Integer type;
+
 }

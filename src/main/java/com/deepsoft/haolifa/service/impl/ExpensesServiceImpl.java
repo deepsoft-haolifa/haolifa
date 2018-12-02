@@ -1,8 +1,10 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.ExpensesClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
 import com.deepsoft.haolifa.model.domain.Expenses;
+import com.deepsoft.haolifa.model.domain.ExpensesClassifyExample;
 import com.deepsoft.haolifa.model.domain.ExpensesExample;
 import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -22,6 +24,9 @@ import java.math.BigDecimal;
 public class ExpensesServiceImpl extends BaseService implements ExpensesService {
     @Autowired
     private ExpensesMapper expensesMapper;
+
+    @Autowired
+    private ExpensesClassifyMapper classifyMapper;
 
 
     @Override
@@ -62,5 +67,10 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         BeanUtils.copyProperties(page,pageDTO);
         pageDTO.setList(page.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean classify() {
+        return ResultBean.success(classifyMapper.selectByExample(new ExpensesClassifyExample()));
     }
 }

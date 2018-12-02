@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
 import com.deepsoft.haolifa.model.domain.Invoice;
 import com.deepsoft.haolifa.model.domain.InvoiceExample;
+import com.deepsoft.haolifa.model.dto.InvoiceCreateDTO;
 import com.deepsoft.haolifa.model.dto.InvoiceDTO;
 import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -26,78 +27,106 @@ import java.util.Map;
 @Service
 public class InvoiceServiceImpl extends BaseService implements InvoiceService {
 
-    @Autowired
-    InvoiceMapper invoiceMapper;
+  @Autowired
+  InvoiceMapper invoiceMapper;
 
-    @Override
-    public ResultBean save(InvoiceDTO model) {
-        if (StringUtils.isAnyEmpty(model.getOrderNo(),model.getCompany(),model.getLinkman(),model.getMialingAddress())
-                || model.getTotalAmount() == null || model.getTotalAmount() == 0
-                || (model.getType() == 1 && StringUtils.isEmpty(model.getInvoiceNo()))) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
-        Invoice invoice = new Invoice();
-        BeanUtils.copyProperties(model, invoice);
-        invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
-        invoice.setCreateUserId(getLoginUserId());
-        invoiceMapper.insertSelective(invoice);
-        Map<String,Object> result = new HashMap<>(8);
-        result.put("formId",invoice.getId());
-        result.put("formNo",invoice.getInvoiceNo());
-        result.put("formType",CommonEnum.FormType.INVOICE_TYPE.code);
-        return ResultBean.success(result);
+  @Override
+  public ResultBean save(InvoiceCreateDTO model) {
+    if (validateIsEmpty(model)) {
+      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
     }
+    Invoice invoice = new Invoice();
+    invoice.setStatus(model.getStatus().byteValue());
+    invoice.setType(model.getType().byteValue());
+    invoice.setOrderNo(model.getOrderNo());
+    invoice.setRemark(model.getRemark());
+    invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
+    invoice.setCreateUserId(getLoginUserId());
+    invoiceMapper.insertSelective(invoice);
+    Map<String, Object> result = new HashMap<>(8);
+    result.put("formId", invoice.getId());
+    result.put("formNo", invoice.getInvoiceNo());
+    result.put("formType", CommonEnum.FormType.INVOICE_TYPE.code);
+    return ResultBean.success(result);
+  }
 
-    @Override
-    public ResultBean delete(Integer id) {
-        invoiceMapper.deleteByPrimaryKey(id);
-        return ResultBean.success(1);
+  private boolean validateIsEmpty(InvoiceCreateDTO model) {
+    if (StringUtils.isEmpty(model.getOrderNo())) {
+      return true;
     }
-
-    @Override
-    public ResultBean update(InvoiceDTO model) {
-        Invoice invoice = new Invoice();
-        BeanUtils.copyProperties(model, invoice);
-        invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
-        int update = invoiceMapper.updateByPrimaryKeySelective(invoice);
-        return ResultBean.success(update);
+    if (model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+      return true;
     }
-
-    @Override
-    public ResultBean updateInvoiceNo(Integer id, String invoiceNo) {
-        Invoice invoice = new Invoice();
-        invoice.setInvoiceNo(invoiceNo);
-        invoice.setId(id);
-        invoiceMapper.updateByPrimaryKeySelective(invoice);
-        return ResultBean.success(1);
+    if (model.getStatus() == null) {
+      return true;
     }
-
-    @Override
-    public ResultBean getList(InvoiceListDTO modelList) {
-        if (modelList.getPageNum() == null || modelList.getPageNum() == 0) {
-            modelList.setPageNum(1);
-        }
-        if (modelList.getPageSize() == null || modelList.getPageSize() == 0) {
-            modelList.setPageSize(10);
-        }
-        InvoiceExample invoiceExample = new InvoiceExample();
-        InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
-        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-
-        if (StringUtils.isNotEmpty(modelList.getOrderNo())) {
-            criteria.andOrderNoLike("%" + modelList.getOrderNo() + "%");
-        }
-        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize())
-                .doSelectPage(() -> invoiceMapper.selectByExample(invoiceExample));
-        PageDTO<Invoice> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(pageData, pageDTO);
-        pageDTO.setList(pageData.getResult());
-        return ResultBean.success(pageDTO);
+    if (model.getType() == null) {
+      return true;
     }
+    return false;
 
-    @Override
-    public ResultBean info(Integer id) {
-        return ResultBean.success(invoiceMapper.selectByPrimaryKey(id));
+  }
+
+  @Override
+  public ResultBean delete(int id) {
+    invoiceMapper.deleteByPrimaryKey(id);
+    return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean update(InvoiceDTO model) {
+    Invoice invoice = new Invoice();
+    BeanUtils.copyProperties(model, invoice);
+    invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
+    int update = invoiceMapper.updateByPrimaryKeySelective(invoice);
+    return ResultBean.success(update);
+  }
+
+  @Override
+  public ResultBean updateInvoiceNo(Integer id, String invoiceNo) {
+    Invoice invoice = new Invoice();
+    invoice.setInvoiceNo(invoiceNo);
+    invoice.setId(id);
+    invoice.setStatus((byte)2);// 已开票
+    invoiceMapper.updateByPrimaryKeySelective(invoice);
+    return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean getList(int origin, InvoiceListDTO modelList) {
+    if (modelList.getPageNum() == null || modelList.getPageNum() == 0) {
+      modelList.setPageNum(1);
     }
+    if (modelList.getPageSize() == null || modelList.getPageSize() == 0) {
+      modelList.setPageSize(10);
+    }
+    InvoiceExample invoiceExample = new InvoiceExample();
+    InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
+    criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+    if(origin == 0) {
+//      经管申请
+      criteria.andCreateUserIdEqualTo(getLoginUserId());
+    }
+    if (StringUtils.isNotEmpty(modelList.getOrderNo())) {
+      criteria.andOrderNoLike("%" + modelList.getOrderNo() + "%");
+    }
+    if (modelList.getStatus() !=0) {
+      criteria.andStatusEqualTo(modelList.getStatus().byteValue());
+    }
+    if(modelList.getType() != 0) {
+      criteria.andTypeEqualTo(modelList.getType().byteValue());
+    }
+    criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+    Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize())
+        .doSelectPage(() -> invoiceMapper.selectByExample(invoiceExample));
+    PageDTO<Invoice> pageDTO = new PageDTO<>();
+    BeanUtils.copyProperties(pageData, pageDTO);
+    pageDTO.setList(pageData.getResult());
+    return ResultBean.success(pageDTO);
+  }
+
+  @Override
+  public ResultBean info(Integer id) {
+    return ResultBean.success(invoiceMapper.selectByPrimaryKey(id));
+  }
 }

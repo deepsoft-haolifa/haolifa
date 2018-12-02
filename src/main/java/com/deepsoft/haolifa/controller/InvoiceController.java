@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
+import com.deepsoft.haolifa.model.dto.InvoiceCreateDTO;
 import com.deepsoft.haolifa.model.dto.InvoiceDTO;
 import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -17,24 +18,16 @@ public class InvoiceController {
     @Autowired
     InvoiceService invoiceService;
 
-    @ApiOperation("添加发票记录")
+    @ApiOperation("申请 or 添加发票记录")
     @PostMapping("save")
-    public ResultBean save(@RequestBody InvoiceDTO model) {
-
+    public ResultBean save(@RequestBody InvoiceCreateDTO model) {
         return invoiceService.save(model);
     }
 
-
     @ApiOperation("删除发票记录")
-    @GetMapping("delete/{id}")
-    public ResultBean delete(@PathVariable("id") Integer id) {
+    @GetMapping("delete/{invoiceId}")
+    public ResultBean delete(@PathVariable("invoiceId") int id) {
         return invoiceService.delete(id);
-    }
-
-    @ApiOperation("更新发票记录")
-    @PostMapping("update")
-    public ResultBean update(@RequestBody InvoiceDTO model) {
-        return invoiceService.update(model);
     }
 
     @ApiOperation("流程中财务审批完成-填写发票编号")
@@ -51,9 +44,9 @@ public class InvoiceController {
 
 
     @ApiOperation("查询发票记录列表")
-    @PostMapping("list")
-    public ResultBean getList(@RequestBody InvoiceListDTO modelList) {
-        return invoiceService.getList(modelList);
+    @PostMapping("list/{origin}")
+    public ResultBean getList(@ApiParam("来源 0 经管 1 财务") @PathVariable("origin") int origin, @RequestBody InvoiceListDTO modelList) {
+        return invoiceService.getList(origin,modelList);
     }
 
 

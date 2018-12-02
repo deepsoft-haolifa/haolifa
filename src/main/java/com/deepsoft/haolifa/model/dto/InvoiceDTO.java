@@ -18,12 +18,4 @@ public class InvoiceDTO {
     private String invoiceNo;
     @ApiModelProperty(required = true,value = "合同金额")
     private Double totalAmount;
-    @ApiModelProperty(required = true,value = "单位")
-    private String company;
-    @ApiModelProperty(required = true,value = "联系人")
-    private String linkman;
-    @ApiModelProperty(required = true,value = "邮寄地址")
-    private String mialingAddress;
-    @ApiModelProperty(value = "明细")
-    private String details;
 }

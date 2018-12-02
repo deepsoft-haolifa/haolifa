@@ -1,267 +1,270 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
-        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
-        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <!-- 配置生成器 -->
 <generatorConfiguration>
 
-    <!--id:必选，上下文id，用于在生成错误时提示-->
-    <context id="mysql" targetRuntime="MyBatis3">
+  <!--id:必选，上下文id，用于在生成错误时提示-->
+  <context id="mysql" targetRuntime="MyBatis3">
 
-        <!-- 生成的Java文件的编码 -->
-        <property name="javaFileEncoding" value="UTF-8"/>
+    <!-- 生成的Java文件的编码 -->
+    <property name="javaFileEncoding" value="UTF-8"/>
 
-        <!-- 对注释进行控制 -->
-        <commentGenerator>
-            <!-- suppressDate是去掉生成日期那行注释 -->
-            <property name="suppressDate" value="true"/>
-            <!-- suppressAllComments是去掉所有的注解 -->
-            <property name="suppressAllComments" value="true"/>
-        </commentGenerator>
+    <!-- 对注释进行控制 -->
+    <commentGenerator>
+      <!-- suppressDate是去掉生成日期那行注释 -->
+      <property name="suppressDate" value="true"/>
+      <!-- suppressAllComments是去掉所有的注解 -->
+      <property name="suppressAllComments" value="true"/>
+    </commentGenerator>
 
-        <!--jdbc的数据库连接 -->
-        <jdbcConnection
-                driverClass="com.mysql.jdbc.Driver"
-                connectionURL="jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true"
-                userId="haolifa"
-                password="haolifa3306">
-        </jdbcConnection>
+    <!--jdbc的数据库连接 -->
+    <jdbcConnection
+      driverClass="com.mysql.jdbc.Driver"
+      connectionURL="jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true"
+      userId="haolifa"
+      password="haolifa3306">
+    </jdbcConnection>
 
-        <!-- java类型处理器
-        用于处理DB中的类型到Java中的类型，默认使用JavaTypeResolverDefaultImpl；
-        注意一点，默认会先尝试使用Integer，Long，Short等来对应DECIMAL和 NUMERIC数据类型；
-        -->
-        <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
-            <!--
-                true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
-                false：默认,
-                    scale>0;length>18：使用BigDecimal;
-                    scale=0;length[10,18]：使用Long；
-                    scale=0;length[5,9]：使用Integer；
-                    scale=0;length<5：使用Short；
-             -->
-            <property name="forceBigDecimals" value="true"/>
-        </javaTypeResolver>
-
-
-        <!-- java模型创建器，是必须要的元素
-            负责：1，key类（见context的defaultModelType）；2，java类；3，查询类
-            targetPackage：生成的类要放的包，真实的包受enableSubPackages属性控制；
-            targetProject：目标项目，指定一个存在的目录下，生成的内容会放到指定目录中，如果目录不存在，MBG不会自动建目录
-         -->
-        <javaModelGenerator targetPackage="com.deepsoft.haolifa.model.domain" targetProject="src/main/java">
-            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
-            <property name="enableSubPackages" value="true"/>
-            <!-- 是否对model添加 构造函数 -->
-            <property name="constructorBased" value="true"/>
-            <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
-            <property name="trimStrings" value="true"/>
-            <!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 -->
-            <property name="immutable" value="false"/>
-        </javaModelGenerator>
-
-        <!-- 生成SQL map的XML文件生成器，
-            注意，在Mybatis3之后，我们可以使用mapper.xml文件+Mapper接口（或者不用mapper接口），
-                或者只使用Mapper接口+Annotation，
-                所以，如果 javaClientGenerator配置中配置了需要生成XML的话，这个元素就必须配置
-            targetPackage/targetProject:同javaModelGenerator
-         -->
-        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
-            <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
-            <property name="enableSubPackages" value="true"/>
-        </sqlMapGenerator>
+    <!-- java类型处理器
+    用于处理DB中的类型到Java中的类型，默认使用JavaTypeResolverDefaultImpl；
+    注意一点，默认会先尝试使用Integer，Long，Short等来对应DECIMAL和 NUMERIC数据类型；
+    -->
+    <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
+      <!--
+          true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
+          false：默认,
+              scale>0;length>18：使用BigDecimal;
+              scale=0;length[10,18]：使用Long；
+              scale=0;length[5,9]：使用Integer；
+              scale=0;length<5：使用Short；
+       -->
+      <property name="forceBigDecimals" value="true"/>
+    </javaTypeResolver>
 
 
-        <!-- 对于mybatis来说，即生成Mapper接口，注意，如果没有配置该元素，那么默认不会生成Mapper接口
-            targetPackage/targetProject:同javaModelGenerator
-            type：选择怎么生成mapper接口（在MyBatis3/MyBatis3Simple下）：
-                1，ANNOTATEDMAPPER：会生成使用Mapper接口+Annotation的方式创建（SQL生成在annotation中），不会生成对应的XML；
-                2，MIXEDMAPPER：使用混合配置，会生成Mapper接口，并适当添加合适的Annotation，但是XML会生成在XML中；
-                3，XMLMAPPER：会生成Mapper接口，接口完全依赖XML；
-            注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER
-        -->
-        <javaClientGenerator targetPackage="com.deepsoft.haolifa.dao.repository" type="XMLMAPPER" targetProject="src/main/java">
-            <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
-            <property name="enableSubPackages" value="true"/>
-        </javaClientGenerator>
+    <!-- java模型创建器，是必须要的元素
+        负责：1，key类（见context的defaultModelType）；2，java类；3，查询类
+        targetPackage：生成的类要放的包，真实的包受enableSubPackages属性控制；
+        targetProject：目标项目，指定一个存在的目录下，生成的内容会放到指定目录中，如果目录不存在，MBG不会自动建目录
+     -->
+    <javaModelGenerator targetPackage="com.deepsoft.haolifa.model.domain" targetProject="src/main/java">
+      <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+      <property name="enableSubPackages" value="true"/>
+      <!-- 是否对model添加 构造函数 -->
+      <property name="constructorBased" value="true"/>
+      <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
+      <property name="trimStrings" value="true"/>
+      <!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 -->
+      <property name="immutable" value="false"/>
+    </javaModelGenerator>
 
-        <!--<table tableName="flow" domainObjectName="Flow"></table>-->
-
-        <!--<table tableName="step" domainObjectName="Step"></table>-->
-
-        <!--<table tableName="flow_step" domainObjectName="FlowStep"></table>-->
-
-
-        <!--<table tableName="flow_history" domainObjectName="FlowHistory"></table>-->
-
-        <!--<table tableName="flow_instance" domainObjectName="FlowInstance">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
-
-        <!--<table tableName="sys_permission" domainObjectName="SysPermission"></table>-->
-
-        <!--<table tableName="sys_permission_role" domainObjectName="SysPermissionRole"></table>-->
-
-        <!--<table tableName="sys_role" domainObjectName="SysRole"></table>-->
-
-        <!--<table tableName="sys_department_user" domainObjectName="SysDepartmentUser"></table>-->
-
-        <!--<table tableName="sys_role_user" domainObjectName="SysRoleUser"></table>-->
-
-        <!--<table tableName="sys_user" domainObjectName="SysUser"></table>-->
-
-        <!--<table tableName="material" domainObjectName="Material"></table>-->
-
-        <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
-
-        <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="material_requisition" domainObjectName="MaterialRequisition">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="check_material_log" domainObjectName="CheckMaterialLog"></table>-->
+    <!-- 生成SQL map的XML文件生成器，
+        注意，在Mybatis3之后，我们可以使用mapper.xml文件+Mapper接口（或者不用mapper接口），
+            或者只使用Mapper接口+Annotation，
+            所以，如果 javaClientGenerator配置中配置了需要生成XML的话，这个元素就必须配置
+        targetPackage/targetProject:同javaModelGenerator
+     -->
+    <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+      <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
+      <property name="enableSubPackages" value="true"/>
+    </sqlMapGenerator>
 
 
-        <!--<table tableName="material_receive_record" domainObjectName="MaterialReceiveRecord"></table>-->
+    <!-- 对于mybatis来说，即生成Mapper接口，注意，如果没有配置该元素，那么默认不会生成Mapper接口
+        targetPackage/targetProject:同javaModelGenerator
+        type：选择怎么生成mapper接口（在MyBatis3/MyBatis3Simple下）：
+            1，ANNOTATEDMAPPER：会生成使用Mapper接口+Annotation的方式创建（SQL生成在annotation中），不会生成对应的XML；
+            2，MIXEDMAPPER：使用混合配置，会生成Mapper接口，并适当添加合适的Annotation，但是XML会生成在XML中；
+            3，XMLMAPPER：会生成Mapper接口，接口完全依赖XML；
+        注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER
+    -->
+    <javaClientGenerator targetPackage="com.deepsoft.haolifa.dao.repository" type="XMLMAPPER"
+      targetProject="src/main/java">
+      <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
+      <property name="enableSubPackages" value="true"/>
+    </javaClientGenerator>
 
-        <!--<table tableName="product" domainObjectName="Product"></table>-->
+    <!--<table tableName="flow" domainObjectName="Flow"></table>-->
 
-        <!--<table tableName="product_material" domainObjectName="ProductMaterial">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>-->
-       <!--<table tableName="delivery_record" domainObjectName="DeliveryRecord">-->
-                 <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-       <!--</table>-->
-        <!--<table tableName="delivery_notice" domainObjectName="DeliveryNotice">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="order_product_associate" domainObjectName="OrderProductAssociate">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="product_model_config" domainObjectName="ProductModelConfig">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
+    <!--<table tableName="step" domainObjectName="Step"></table>-->
 
-        <!--<table tableName="product" domainObjectName="Product">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="product_material" domainObjectName="ProductMaterial">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="stock" domainObjectName="Stock"></table>-->
-
-        <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->
-
-        <!--<table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>-->
-
-        <!--<table tableName="entry_out_store_record" domainObjectName="EntryOutStoreRecord"></table>-->
-
-        <!--<table tableName="order_review" domainObjectName="OrderReview"></table>-->
-
-        <table tableName="apply_buy" domainObjectName="ApplyBuy"></table>
-
-        <!--<table tableName="entrust" domainObjectName="Entrust">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="invoice" domainObjectName="Invoice">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="expenses" domainObjectName="Expenses">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="contract" domainObjectName="Contract">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="inspect" domainObjectName="Inspect">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-        <!--<table tableName="inspect_item" domainObjectName="InspectItem">-->
-        <!--</table>-->
-
-        <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
-
-        <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->
-
-        <!--<table tableName="supplier" domainObjectName="Supplier"></table>-->
-
-        <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
-
-        <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">-->
-            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-        <!--</table>-->
-
-        <!--<table tableName="equipment" domainObjectName="Equipment"></table>-->
-
-        <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
-        <!--<table tableName="sys_message" domainObjectName="SysMessage"></table>-->
+    <!--<table tableName="flow_step" domainObjectName="FlowStep"></table>-->
 
 
-        <!-- 选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素
-            tableName（必要）：要生成对象的表名；
-            domainObjectName 给表对应的 model 起名字
-            注意：大小写敏感问题。
-         -->
+    <!--<table tableName="flow_history" domainObjectName="FlowHistory"></table>-->
+
+    <!--<table tableName="flow_instance" domainObjectName="FlowInstance">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
+
+    <!--<table tableName="sys_permission" domainObjectName="SysPermission"></table>-->
+
+    <!--<table tableName="sys_permission_role" domainObjectName="SysPermissionRole"></table>-->
+
+    <!--<table tableName="sys_role" domainObjectName="SysRole"></table>-->
+
+    <!--<table tableName="sys_department_user" domainObjectName="SysDepartmentUser"></table>-->
+
+    <!--<table tableName="sys_role_user" domainObjectName="SysRoleUser"></table>-->
+
+    <!--<table tableName="sys_user" domainObjectName="SysUser"></table>-->
+
+    <!--<table tableName="material" domainObjectName="Material"></table>-->
+
+    <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
+
+    <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="material_requisition" domainObjectName="MaterialRequisition">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="check_material_log" domainObjectName="CheckMaterialLog"></table>-->
 
 
-            <!--用来修改表中某个列的属性,一个table元素中可以有多个columnOverride元素哈.
-                property属性来指定列要生成的属性名称.
-             -->
-            <!--<columnOverride column="username" property="userName" />-->
+    <!--<table tableName="material_receive_record" domainObjectName="MaterialReceiveRecord"></table>-->
 
-        <!--<table tableName="Sys_User" domainObjectName="SysUser"-->
-               <!--enableCountByExample="true" enableUpdateByExample="true"-->
-               <!--enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
-             <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
-         <!--</table>-->
+    <!--<table tableName="product" domainObjectName="Product"></table>-->
 
-       <!-- <table tableName="Sys_Role" domainObjectName="Role"
-               enableCountByExample="true" enableUpdateByExample="true"
-               enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
+    <!--<table tableName="product_material" domainObjectName="ProductMaterial">
+        <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+    </table>-->
+    <!--<table tableName="delivery_record" domainObjectName="DeliveryRecord">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="delivery_notice" domainObjectName="DeliveryNotice">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="order_product_associate" domainObjectName="OrderProductAssociate">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="product_model_config" domainObjectName="ProductModelConfig">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
 
-        <table tableName="Sys_permission" domainObjectName="Permission"
-               enableCountByExample="true" enableUpdateByExample="true"
-               enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
+    <!--<table tableName="product" domainObjectName="Product">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="product_material" domainObjectName="ProductMaterial">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="stock" domainObjectName="Stock"></table>-->
+
+    <!--<table tableName="store_room" domainObjectName="StoreRoom"></table>-->
+
+    <!--<table tableName="store_room_rack" domainObjectName="StoreRoomRack"></table>-->
+
+    <!--<table tableName="entry_out_store_record" domainObjectName="EntryOutStoreRecord"></table>-->
+
+    <!--<table tableName="order_review" domainObjectName="OrderReview"></table>-->
+
+    <!--<table tableName="apply_buy" domainObjectName="ApplyBuy"></table>-->
+
+    <!--<table tableName="entrust" domainObjectName="Entrust">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="invoice" domainObjectName="Invoice">
+      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
+    <!--<table tableName="expenses" domainObjectName="Expenses">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="expenses_classify" domainObjectName="ExpensesClassify"></table>-->
+    <!--<table tableName="payment_management" domainObjectName="PaymentManagement"></table>-->
+    <!--<table tableName="contract" domainObjectName="Contract">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="inspect" domainObjectName="Inspect">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="inspect_item" domainObjectName="InspectItem">-->
+    <!--</table>-->
+
+    <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
+
+    <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->
+
+    <!--<table tableName="supplier" domainObjectName="Supplier"></table>-->
+
+    <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
+
+    <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="equipment" domainObjectName="Equipment"></table>-->
+
+    <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
+    <!--<table tableName="sys_message" domainObjectName="SysMessage"></table>-->
 
 
-        <table tableName="Sys_role_user" domainObjectName="RoleUserRelation"
-               enableCountByExample="true" enableUpdateByExample="true"
-               enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>
+    <!-- 选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素
+        tableName（必要）：要生成对象的表名；
+        domainObjectName 给表对应的 model 起名字
+        注意：大小写敏感问题。
+     -->
 
-        <table tableName="Sys_permission_role" domainObjectName="PermissionRoleRelation"
-               enableCountByExample="true" enableUpdateByExample="true"
-               enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
-            <generatedKey column="id" sqlStatement="JDBC"/>
-        </table>-->
 
-    </context>
+    <!--用来修改表中某个列的属性,一个table元素中可以有多个columnOverride元素哈.
+        property属性来指定列要生成的属性名称.
+     -->
+    <!--<columnOverride column="username" property="userName" />-->
+
+    <!--<table tableName="Sys_User" domainObjectName="SysUser"-->
+    <!--enableCountByExample="true" enableUpdateByExample="true"-->
+    <!--enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+    <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
+    <!--</table>-->
+
+    <!-- <table tableName="Sys_Role" domainObjectName="Role"
+            enableCountByExample="true" enableUpdateByExample="true"
+            enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+         <generatedKey column="id" sqlStatement="JDBC"/>
+     </table>
+
+     <table tableName="Sys_permission" domainObjectName="Permission"
+            enableCountByExample="true" enableUpdateByExample="true"
+            enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+         <generatedKey column="id" sqlStatement="JDBC"/>
+     </table>
+
+
+     <table tableName="Sys_role_user" domainObjectName="RoleUserRelation"
+            enableCountByExample="true" enableUpdateByExample="true"
+            enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+         <generatedKey column="id" sqlStatement="JDBC"/>
+     </table>
+
+     <table tableName="Sys_permission_role" domainObjectName="PermissionRoleRelation"
+            enableCountByExample="true" enableUpdateByExample="true"
+            enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+         <generatedKey column="id" sqlStatement="JDBC"/>
+     </table>-->
+
+  </context>
 
 </generatorConfiguration>

@@ -24,7 +24,6 @@ public class ExpensesController {
         return expensesService.save(model);
     }
 
-
     @ApiOperation("删除费用记录")
     @GetMapping("delete/{id}")
     public ResultBean delete(@PathVariable("id") Integer id) {
@@ -44,5 +43,11 @@ public class ExpensesController {
                               @RequestParam(defaultValue = "10") Integer pageSize) {
         return expensesService.getList(pageNum, pageSize);
     }
+
+   @ApiOperation("费用类别")
+    @GetMapping("/classify")
+    public ResultBean classify() {
+        return expensesService.classify();
+   }
 
 }

@@ -6,21 +6,17 @@ import java.util.Date;
 public class Invoice {
     private Integer id;
 
-    private Integer flowId;
-
     private String orderNo;
 
     private String invoiceNo;
 
     private BigDecimal totalAmount;
 
-    private String company;
+    private String remark;
 
-    private String linkman;
+    private Byte type;
 
-    private String mialingAddress;
-
-    private String details;
+    private Byte status;
 
     private Byte isDelete;
 
@@ -30,16 +26,14 @@ public class Invoice {
 
     private Integer createUserId;
 
-    public Invoice(Integer id, Integer flowId, String orderNo, String invoiceNo, BigDecimal totalAmount, String company, String linkman, String mialingAddress, String details, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public Invoice(Integer id, String orderNo, String invoiceNo, BigDecimal totalAmount, String remark, Byte type, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
-        this.flowId = flowId;
         this.orderNo = orderNo;
         this.invoiceNo = invoiceNo;
         this.totalAmount = totalAmount;
-        this.company = company;
-        this.linkman = linkman;
-        this.mialingAddress = mialingAddress;
-        this.details = details;
+        this.remark = remark;
+        this.type = type;
+        this.status = status;
         this.isDelete = isDelete;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -56,14 +50,6 @@ public class Invoice {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getFlowId() {
-        return flowId;
-    }
-
-    public void setFlowId(Integer flowId) {
-        this.flowId = flowId;
     }
 
     public String getOrderNo() {
@@ -90,36 +76,28 @@ public class Invoice {
         this.totalAmount = totalAmount;
     }
 
-    public String getCompany() {
-        return company;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setCompany(String company) {
-        this.company = company == null ? null : company.trim();
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
-    public String getLinkman() {
-        return linkman;
+    public Byte getType() {
+        return type;
     }
 
-    public void setLinkman(String linkman) {
-        this.linkman = linkman == null ? null : linkman.trim();
+    public void setType(Byte type) {
+        this.type = type;
     }
 
-    public String getMialingAddress() {
-        return mialingAddress;
+    public Byte getStatus() {
+        return status;
     }
 
-    public void setMialingAddress(String mialingAddress) {
-        this.mialingAddress = mialingAddress == null ? null : mialingAddress.trim();
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details == null ? null : details.trim();
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 
     public Byte getIsDelete() {
