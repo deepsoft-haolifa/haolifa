@@ -3,8 +3,8 @@ package com.deepsoft.haolifa.controller;
 import com.deepsoft.haolifa.model.domain.DeliveryNotice;
 import com.deepsoft.haolifa.model.domain.DeliveryRecord;
 import com.deepsoft.haolifa.model.dto.DeliveryNoticeAuditDTO;
-import com.deepsoft.haolifa.model.dto.DeliveryNoticeConditionDTO;
-import com.deepsoft.haolifa.model.dto.DeliveryRecordConditionDTO;
+import com.deepsoft.haolifa.model.dto.condition.DeliveryNoticeConditionDTO;
+import com.deepsoft.haolifa.model.dto.condition.DeliveryRecordConditionDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.DeliveryService;
 import io.swagger.annotations.Api;
@@ -42,7 +42,6 @@ public class DeliveryController {
     public ResultBean noticeList(@RequestBody DeliveryNoticeConditionDTO model) {
         return deliveryService.pageNotices(model);
     }
-
 
 
 

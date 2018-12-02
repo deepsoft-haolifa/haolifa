@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.dto.condition.OrderConditionDTO;
 
 import java.util.List;
 
@@ -91,7 +92,7 @@ public interface OrderProductService {
      *
      * @return
      */
-    ResultBean pageOrderProduct(Integer currentPage, Integer pageSize, String orderNo, int orderStatus);
+    ResultBean pageOrderProduct(OrderConditionDTO model);
 
     /**
      * 获取核料订单产品列表(包含需要选择的阀体，阀座等)
@@ -99,7 +100,7 @@ public interface OrderProductService {
      * @param orderNo
      * @return
      */
-    List<MaterialTypeListDTO> getCheckOrderProductList(String orderNo);
+    List<ProductCheckMaterialListDTO> getCheckOrderProductList(String orderNo);
 
     /**
      * 核料（将前端提交过来的零件，进行核料）

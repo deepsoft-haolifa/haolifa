@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto;
+package com.deepsoft.haolifa.model.dto.condition;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

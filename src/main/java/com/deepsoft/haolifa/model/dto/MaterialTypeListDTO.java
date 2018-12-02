@@ -14,12 +14,7 @@ import java.util.List;
 @Data
 public class MaterialTypeListDTO {
 
-    @ApiModelProperty(value = "成品型号")
-    private String productModel;
-    @ApiModelProperty(value = "规格")
-    private String specifications;
-    @ApiModelProperty(value = "成品数量")
-    private Integer productNumber;
+
     @ApiModelProperty(value = "核料原料类型：（1.阀体；2.阀座；3：阀板；4.阀杆,5.阀体压力）")
     private Byte type;
     @ApiModelProperty(value = "零件图号数组集合")

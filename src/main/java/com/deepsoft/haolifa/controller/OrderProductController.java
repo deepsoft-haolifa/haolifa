@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.condition.OrderConditionDTO;
 import com.deepsoft.haolifa.service.OrderProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,12 +20,12 @@ public class OrderProductController {
     @Autowired
     private OrderProductService orderProductService;
 
-    @ApiOperation("成品excel上传接口")
-    @PostMapping("/uploadExcel")
-    @ApiImplicitParam(name = "base64Source", value = "上传excel文件的base64编码", dataType = "String", required = true)
-    public ResultBean uploadOrderProductExcel(@RequestParam String base64Source) {
-        return orderProductService.uploadOrderProductExcel(base64Source);
-    }
+//    @ApiOperation("成品excel上传接口")
+//    @PostMapping("/uploadExcel")
+//    @ApiImplicitParam(name = "base64Source", value = "上传excel文件的base64编码", dataType = "String", required = true)
+//    public ResultBean uploadOrderProductExcel(@RequestParam String base64Source) {
+//        return orderProductService.uploadOrderProductExcel(base64Source);
+//    }
 
     @ApiOperation("成品订单信息添加")
     @PostMapping("/save")
@@ -53,18 +54,9 @@ public class OrderProductController {
 
 
     @ApiOperation("获取成品订单分页列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "订单状态", name = "orderStatus", dataType = "int", paramType = "query")
-    })
-    @GetMapping("/pageInfo")
-    public ResultBean pageInfoClassify(@RequestParam(defaultValue = "1") Integer currentPage,
-                                       @RequestParam(defaultValue = "20") Integer pageSize,
-                                       @RequestParam(required = false) String orderNo,
-                                       @RequestParam(required = false) int orderStatus) {
-        return orderProductService.pageOrderProduct(currentPage, pageSize, orderNo, orderStatus);
+    @PostMapping("/pageInfo")
+    public ResultBean pageInfoClassify(@RequestBody OrderConditionDTO model) {
+        return orderProductService.pageOrderProduct(model);
     }
 
     @ApiOperation("核料时的零件选择")

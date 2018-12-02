@@ -8,6 +8,8 @@ import com.deepsoft.haolifa.model.domain.DeliveryNoticeExample;
 import com.deepsoft.haolifa.model.domain.DeliveryRecord;
 import com.deepsoft.haolifa.model.domain.DeliveryRecordExample;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.condition.DeliveryNoticeConditionDTO;
+import com.deepsoft.haolifa.model.dto.condition.DeliveryRecordConditionDTO;
 import com.deepsoft.haolifa.service.DeliveryService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
