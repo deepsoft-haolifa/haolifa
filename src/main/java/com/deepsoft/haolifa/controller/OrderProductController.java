@@ -66,13 +66,19 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.getCheckOrderProductList(orderNo));
     }
 
-    @ApiOperation("核料")
-    @PostMapping("/check-material/")
-    public ResultBean checkMaterial(@RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
-        return ResultBean.success(orderProductService.checkMaterial(orderCheckMaterialDTOS));
+    @ApiOperation("核料（生成核料清单）")
+    @PostMapping("/check-material/{orderNo}")
+    public ResultBean checkMaterial(@PathVariable("orderNo") String orderNo, @RequestBody List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList) {
+        return ResultBean.success(orderProductService.checkMaterial(orderNo, productCheckMaterialListDTOList));
     }
 
-    @ApiOperation("核料成功")
+    @ApiOperation("替换料核料")
+    @PostMapping("/check-replace-material/{orderNo}")
+    public ResultBean checkReplaceMaterial(@PathVariable("orderNo") String orderNo, @RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+        return ResultBean.success(orderProductService.checkReplaceMaterial(orderNo, orderCheckMaterialDTOS));
+    }
+
+    @ApiOperation("核料成功(核料清单保存数据库)")
     @PostMapping("/pass-check-material/")
     public ResultBean passCheckMaterial(@RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
         return ResultBean.success(orderProductService.checkPass(orderCheckMaterialDTOS));

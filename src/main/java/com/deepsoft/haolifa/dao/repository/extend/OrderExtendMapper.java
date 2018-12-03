@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.dao.repository.extend;
 
+import com.deepsoft.haolifa.model.domain.CheckMaterialLog;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import com.deepsoft.haolifa.model.dto.OrderCheckMaterialDTO;
 import com.deepsoft.haolifa.model.dto.OrderMaterialDTO;
@@ -30,5 +31,12 @@ public interface OrderExtendMapper {
      * @param orderNo
      */
     List<OrderMaterialDTO> listOrderMaterial(@Param("orderNo") String orderNo);
+
+
+    /**
+     * 批量插入核料日志表(核料清单)
+     *
+     */
+   void insertBatchCheckLog(@Param("list") List<CheckMaterialLog> list);
 
 }

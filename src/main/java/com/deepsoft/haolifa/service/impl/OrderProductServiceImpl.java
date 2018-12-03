@@ -29,9 +29,7 @@ import org.springframework.core.annotation.OrderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -336,7 +334,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         OrderProductExample example = new OrderProductExample();
         OrderProductExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(model.getOrderNo())) {
-            criteria.andOrderNoLike("%"+model.getOrderNo()+"%");
+            criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
         }
         if (model.getOrderStatus() > 0) {
             criteria.andOrderStatusEqualTo(model.getOrderStatus());
@@ -485,74 +483,131 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
 
     /**
-     * 核料，核心逻辑（根据前端表单传来的数据）
+     * 第一次核料，核心逻辑（根据前端表单传来的数据）
      *
-     * @param orderCheckMaterialDTOS
+     * @param productCheckMaterialListDTOList
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public List<OrderCheckMaterialDTO> checkMaterial(List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+    public List<OrderCheckMaterialDTO> checkMaterial(String orderNo, List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList) {
+        List<OrderCheckMaterialDTO> orderCheckMaterialDTOS = new ArrayList<>();
+        List<CheckMaterialLog> checkMaterialLogs = new ArrayList<>();
+        // 核料总状态（0.全部成功；1.只要有一个零件是失败的,就是失败的）
+        int currentUser = getLoginUserId();
+        try {
+            Map<String, Integer> materialsMap = new HashMap<>();
+            // 将订单中所有产品需要的零件合并起来
+            productCheckMaterialListDTOList.stream().forEach(e -> {
+                Integer productNumber = e.getProductNumber();
+                List<MaterialTypeListDTO> listDTOS = e.getListDTOS();
+                listDTOS.stream().forEach(a -> {
+                    List<String> list = a.getList();
+                    list.stream().forEach(b -> {
+                        if (materialsMap.containsKey(b)) {
+                            materialsMap.put(b, materialsMap.get(b) + productNumber);
+                        } else {
+                            materialsMap.put(b, productNumber);
+                        }
+                    });
+                });
+            });
+            // 循环所需的原料，进行核料
+            Iterator<Map.Entry<String, Integer>> entryIterator = materialsMap.entrySet().iterator();
+            while (entryIterator.hasNext()) {
+                int checkState = 0;
+                String checkResult = "";
+                OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                Map.Entry<String, Integer> next = entryIterator.next();
+                String materialGraphNo = next.getKey();
+                Integer materialCount = next.getValue();
+                // 获取零件的库存
+                Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
+                Integer currentQuantity = infoByGraphNo.getCurrentQuantity();
+                if (currentQuantity >= materialCount) {
+                    orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
+                    orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件余量充足");
+                    checkResult = "核料成功，该零件余量充足";
+                } else {
+                    // 如果缺料，将可替换料列表返回给前端
+                    String replaceGraphNos = infoByGraphNo.getReplaceGraphNos();
+                    if (StringUtils.isNotBlank(replaceGraphNos)) {
+                        String[] split = replaceGraphNos.split(",");
+                        orderCheckMaterialDTO.setReplaceGraphNoList(Arrays.asList(split));
+                        orderCheckMaterialDTO.setIsReplace(CommonEnum.Consts.YES.code);
+                    }
+                    // 无料可以替换，需要走采购流程
+                    orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code);
+                    // 缺少的料的数量
+                    orderCheckMaterialDTO.setLackMaterialCount(materialCount - currentQuantity);
+                    orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件库存：" + currentQuantity);
+                    checkResult = "库存不足";
+                    checkState = 1;
+                }
+                orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
+                orderCheckMaterialDTO.setMaterialCount(materialCount);
+                orderCheckMaterialDTO.setOrderNo(orderNo);
+                orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
+
+                // 添加核料日志记录
+                int finalCheckState = checkState;
+                String finalCheckResult = checkResult;
+                checkMaterialLogs.add(new CheckMaterialLog() {
+                    {
+                        setMaterialGraphNo(materialGraphNo);
+                        setCurrentMaterialCount(currentQuantity);
+                        setNeedMaterialCount(materialCount);
+                        setCheckUserId(currentUser);
+                        setOrderNo(orderNo);
+                        setCheckResult(finalCheckResult);
+                        setCheckState(String.valueOf(finalCheckState));
+                    }
+                });
+            }
+            // 批量插入审核日志
+            orderExtendMapper.insertBatchCheckLog(checkMaterialLogs);
+        } catch (Exception e) {
+            log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
+        }
+        return orderCheckMaterialDTOS;
+    }
+
+
+    /**
+     * 替换料核料
+     *
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public List<OrderCheckMaterialDTO> checkReplaceMaterial(String
+                                                                    orderNo, List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
         // 核料总状态（0.全部成功；1.只要有一个零件是失败的；2.有替换料的零件，其余全成功）
         int checkState = 0;
         String checkResult = "";
         int currentUser = getLoginUserId();
-
-        String orderNo = "";
         try {
-            // 获取一个成品所需的零件
+            // 循环所需的原料，进行核料
             for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
-                orderNo = orderCheckMaterialDTO.getOrderNo();
-                String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
-                Integer materialCount = orderCheckMaterialDTO.getMaterialCount();
-                // 获取零件的库存
-                Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
-                Integer currentQuantity = infoByGraphNo.getCurrentQuantity();
-                // 需要的零件数量
-//                int needCount = productNumber * materialCount;
-                if (currentQuantity >= materialCount) {
-                    orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-                    orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件余量充足");
-                } else {
-                    // 缺料查找是否有替换料
-                    String replaceMaterialGraphNo = orderCheckMaterialDTO.getReplaceMaterialGraphNo();
-                    if (StringUtils.isNotBlank(replaceMaterialGraphNo)) {
-                        Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
-                        Integer replaceGraphNoInfoCurrentQuantity = replaceGraphNoInfo.getCurrentQuantity();
-                        if (replaceGraphNoInfoCurrentQuantity >= materialCount) {
-                            orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-                            orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件替换料充足，可走替换料方案");
-                            checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存充足】,";
-                            if (checkState != 1) {
-                                checkState = 2;
-                            }
-                        } else {
-                            orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code);
-                            orderCheckMaterialDTO.setLackMaterialCount(materialCount - replaceGraphNoInfoCurrentQuantity);
-                            orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件替换料库存不足：" + currentQuantity);
-                            checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存不足】,";
-                            checkState = 1;
+                String replaceMaterialGraphNo = orderCheckMaterialDTO.getReplaceMaterialGraphNo();
+                if (StringUtils.isNotBlank(replaceMaterialGraphNo)) {
+                    Integer materialCount = orderCheckMaterialDTO.getMaterialCount();
+                    // 获取替换料零件的库存
+                    Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
+                    Integer replaceGraphNoInfoCurrentQuantity = replaceGraphNoInfo.getCurrentQuantity();
+                    if (replaceGraphNoInfoCurrentQuantity >= materialCount) {
+                        orderCheckMaterialDTO.setIsReplace(CommonEnum.Consts.YES.code);
+                        orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
+                        orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件替换料充足，可走替换料方案");
+                        checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存充足】,";
+                        if (checkState != 1) {
+                            checkState = 2;
                         }
-                    } else {
-                        // 如果缺料，将可替换料列表返回给前端
-                        String replaceGraphNos = infoByGraphNo.getReplaceGraphNos();
-                        if (StringUtils.isNotBlank(replaceGraphNos)) {
-                            String[] split = replaceGraphNos.split(",");
-                            orderCheckMaterialDTO.setReplaceGraphNoList(Arrays.asList(split));
-                        }
-                        // 无料可以替换，需要走采购流程
-                        orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code);
-                        orderCheckMaterialDTO.getIsReplace();
-                        // 缺少的料的数量
-                        orderCheckMaterialDTO.setLackMaterialCount(materialCount - currentQuantity);
-                        orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件库存：" + currentQuantity);
-                        checkResult += "【{" + materialGraphNo + "}库存不足】,";
-                        checkState = 1;
                     }
                 }
             }
         } catch (Exception e) {
-            log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
+            log.error("替换料核料过程中出现的异常，orderNo:{}", orderNo, e);
         } finally {
             // 添加核料日志记录
             int finalCheckState = checkState;
@@ -568,6 +623,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         return orderCheckMaterialDTOS;
     }
+
 
     /**
      * 核料通过,锁定零件（核料员点击下一步）

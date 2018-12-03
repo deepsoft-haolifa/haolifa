@@ -29,7 +29,7 @@ public class OrderCheckMaterialDTO {
     @ApiModelProperty(value = "是否是替换零件（0：否，1：是）")
     private Byte isReplace;
 
-    @ApiModelProperty(value = "需要的零件数量")
+    @ApiModelProperty(value = "需要的零件数量(产品数量*1)")
     private Integer materialCount;
 
     @ApiModelProperty(value = "缺少的零件数量")

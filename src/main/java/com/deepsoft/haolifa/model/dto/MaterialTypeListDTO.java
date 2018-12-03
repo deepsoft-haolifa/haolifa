@@ -17,6 +17,6 @@ public class MaterialTypeListDTO {
 
     @ApiModelProperty(value = "核料原料类型：（1.阀体；2.阀座；3：阀板；4.阀杆,5.阀体压力）")
     private Byte type;
-    @ApiModelProperty(value = "零件图号数组集合")
+    @ApiModelProperty(value = "零件图号数组集合,数组元素是零件图号")
     private List<String> list;
 }

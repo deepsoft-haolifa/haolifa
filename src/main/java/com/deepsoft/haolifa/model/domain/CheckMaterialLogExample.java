@@ -225,66 +225,6 @@ public class CheckMaterialLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeIsNull() {
-            addCriterion("update_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeIsNotNull() {
-            addCriterion("update_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeEqualTo(Date value) {
-            addCriterion("update_time =", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeNotEqualTo(Date value) {
-            addCriterion("update_time <>", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeGreaterThan(Date value) {
-            addCriterion("update_time >", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("update_time >=", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeLessThan(Date value) {
-            addCriterion("update_time <", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("update_time <=", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeIn(List<Date> values) {
-            addCriterion("update_time in", values, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeNotIn(List<Date> values) {
-            addCriterion("update_time not in", values, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
-            addCriterion("update_time between", value1, value2, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("update_time not between", value1, value2, "updateTime");
-            return (Criteria) this;
-        }
-
         public Criteria andCheckUserIdIsNull() {
             addCriterion("check_user_id is null");
             return (Criteria) this;
@@ -415,73 +355,193 @@ public class CheckMaterialLogExample {
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultIsNull() {
-            addCriterion("check_result is null");
+        public Criteria andMaterialGraphNoIsNull() {
+            addCriterion("material_graph_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultIsNotNull() {
-            addCriterion("check_result is not null");
+        public Criteria andMaterialGraphNoIsNotNull() {
+            addCriterion("material_graph_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultEqualTo(String value) {
-            addCriterion("check_result =", value, "checkResult");
+        public Criteria andMaterialGraphNoEqualTo(String value) {
+            addCriterion("material_graph_no =", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultNotEqualTo(String value) {
-            addCriterion("check_result <>", value, "checkResult");
+        public Criteria andMaterialGraphNoNotEqualTo(String value) {
+            addCriterion("material_graph_no <>", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultGreaterThan(String value) {
-            addCriterion("check_result >", value, "checkResult");
+        public Criteria andMaterialGraphNoGreaterThan(String value) {
+            addCriterion("material_graph_no >", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultGreaterThanOrEqualTo(String value) {
-            addCriterion("check_result >=", value, "checkResult");
+        public Criteria andMaterialGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("material_graph_no >=", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultLessThan(String value) {
-            addCriterion("check_result <", value, "checkResult");
+        public Criteria andMaterialGraphNoLessThan(String value) {
+            addCriterion("material_graph_no <", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultLessThanOrEqualTo(String value) {
-            addCriterion("check_result <=", value, "checkResult");
+        public Criteria andMaterialGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("material_graph_no <=", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultLike(String value) {
-            addCriterion("check_result like", value, "checkResult");
+        public Criteria andMaterialGraphNoLike(String value) {
+            addCriterion("material_graph_no like", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultNotLike(String value) {
-            addCriterion("check_result not like", value, "checkResult");
+        public Criteria andMaterialGraphNoNotLike(String value) {
+            addCriterion("material_graph_no not like", value, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultIn(List<String> values) {
-            addCriterion("check_result in", values, "checkResult");
+        public Criteria andMaterialGraphNoIn(List<String> values) {
+            addCriterion("material_graph_no in", values, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultNotIn(List<String> values) {
-            addCriterion("check_result not in", values, "checkResult");
+        public Criteria andMaterialGraphNoNotIn(List<String> values) {
+            addCriterion("material_graph_no not in", values, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultBetween(String value1, String value2) {
-            addCriterion("check_result between", value1, value2, "checkResult");
+        public Criteria andMaterialGraphNoBetween(String value1, String value2) {
+            addCriterion("material_graph_no between", value1, value2, "materialGraphNo");
             return (Criteria) this;
         }
 
-        public Criteria andCheckResultNotBetween(String value1, String value2) {
-            addCriterion("check_result not between", value1, value2, "checkResult");
+        public Criteria andMaterialGraphNoNotBetween(String value1, String value2) {
+            addCriterion("material_graph_no not between", value1, value2, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountIsNull() {
+            addCriterion("current_material_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountIsNotNull() {
+            addCriterion("current_material_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountEqualTo(Integer value) {
+            addCriterion("current_material_count =", value, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountNotEqualTo(Integer value) {
+            addCriterion("current_material_count <>", value, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountGreaterThan(Integer value) {
+            addCriterion("current_material_count >", value, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("current_material_count >=", value, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountLessThan(Integer value) {
+            addCriterion("current_material_count <", value, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountLessThanOrEqualTo(Integer value) {
+            addCriterion("current_material_count <=", value, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountIn(List<Integer> values) {
+            addCriterion("current_material_count in", values, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountNotIn(List<Integer> values) {
+            addCriterion("current_material_count not in", values, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountBetween(Integer value1, Integer value2) {
+            addCriterion("current_material_count between", value1, value2, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrentMaterialCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("current_material_count not between", value1, value2, "currentMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountIsNull() {
+            addCriterion("need_material_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountIsNotNull() {
+            addCriterion("need_material_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountEqualTo(Integer value) {
+            addCriterion("need_material_count =", value, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountNotEqualTo(Integer value) {
+            addCriterion("need_material_count <>", value, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountGreaterThan(Integer value) {
+            addCriterion("need_material_count >", value, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("need_material_count >=", value, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountLessThan(Integer value) {
+            addCriterion("need_material_count <", value, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountLessThanOrEqualTo(Integer value) {
+            addCriterion("need_material_count <=", value, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountIn(List<Integer> values) {
+            addCriterion("need_material_count in", values, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountNotIn(List<Integer> values) {
+            addCriterion("need_material_count not in", values, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountBetween(Integer value1, Integer value2) {
+            addCriterion("need_material_count between", value1, value2, "needMaterialCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNeedMaterialCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("need_material_count not between", value1, value2, "needMaterialCount");
             return (Criteria) this;
         }
 
@@ -552,6 +612,76 @@ public class CheckMaterialLogExample {
 
         public Criteria andCheckStateNotBetween(String value1, String value2) {
             addCriterion("check_state not between", value1, value2, "checkState");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultIsNull() {
+            addCriterion("check_result is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultIsNotNull() {
+            addCriterion("check_result is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultEqualTo(String value) {
+            addCriterion("check_result =", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultNotEqualTo(String value) {
+            addCriterion("check_result <>", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultGreaterThan(String value) {
+            addCriterion("check_result >", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultGreaterThanOrEqualTo(String value) {
+            addCriterion("check_result >=", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultLessThan(String value) {
+            addCriterion("check_result <", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultLessThanOrEqualTo(String value) {
+            addCriterion("check_result <=", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultLike(String value) {
+            addCriterion("check_result like", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultNotLike(String value) {
+            addCriterion("check_result not like", value, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultIn(List<String> values) {
+            addCriterion("check_result in", values, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultNotIn(List<String> values) {
+            addCriterion("check_result not in", values, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultBetween(String value1, String value2) {
+            addCriterion("check_result between", value1, value2, "checkResult");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckResultNotBetween(String value1, String value2) {
+            addCriterion("check_result not between", value1, value2, "checkResult");
             return (Criteria) this;
         }
     }

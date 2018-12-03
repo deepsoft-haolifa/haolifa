@@ -386,12 +386,15 @@ DROP TABLE IF EXISTS `order_product`;
 	CREATE TABLE `check_material_log` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 	  `check_user_id` int(11) NOT NULL COMMENT '核料人',
 	  `order_no` varchar(64) NOT NULL COMMENT '订单号',
-	  `check_result` varchar(64) NOT NULL DEFAULT '' COMMENT '核料结果',
+	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件号',
+	  `current_material_count` int(11) NOT NULL DEFAULT 0 COMMENT '当前零件库存',
+	  `need_material_count` int(11) NOT NULL DEFAULT 0 COMMENT '需要的零件库存',
 	  `check_state` varchar(64) NOT NULL DEFAULT '' COMMENT '核料状态',
-	  PRIMARY KEY (`id`)
+	  `check_result` varchar(64) NOT NULL DEFAULT '' COMMENT '核料结果',
+	  PRIMARY KEY (`id`),
+	  INDEX idx_order_no(`order_no`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='核料日志记录表';
 
 

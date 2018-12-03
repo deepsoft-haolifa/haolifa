@@ -5,11 +5,13 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="check_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="check_result" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="current_material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="need_material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="check_state" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="check_result" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -71,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, check_user_id, order_no, check_result, check_state
+    id, create_time, check_user_id, order_no, material_graph_no, current_material_count, 
+    need_material_count, check_state, check_result
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLogExample" resultMap="BaseResultMap">
     select
@@ -104,12 +107,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLog">
-    insert into check_material_log (id, create_time, update_time, 
-      check_user_id, order_no, check_result, 
-      check_state)
-    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{checkUserId,jdbcType=INTEGER}, #{orderNo,jdbcType=CHAR}, #{checkResult,jdbcType=VARCHAR}, 
-      #{checkState,jdbcType=VARCHAR})
+    insert into check_material_log (id, create_time, check_user_id, 
+      order_no, material_graph_no, current_material_count, 
+      need_material_count, check_state, check_result
+      )
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{checkUserId,jdbcType=INTEGER}, 
+      #{orderNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{currentMaterialCount,jdbcType=INTEGER}, 
+      #{needMaterialCount,jdbcType=INTEGER}, #{checkState,jdbcType=VARCHAR}, #{checkResult,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLog">
     insert into check_material_log
@@ -120,20 +125,26 @@
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
       <if test="checkUserId != null">
         check_user_id,
       </if>
       <if test="orderNo != null">
         order_no,
       </if>
-      <if test="checkResult != null">
-        check_result,
+      <if test="materialGraphNo != null">
+        material_graph_no,
+      </if>
+      <if test="currentMaterialCount != null">
+        current_material_count,
+      </if>
+      <if test="needMaterialCount != null">
+        need_material_count,
       </if>
       <if test="checkState != null">
         check_state,
+      </if>
+      <if test="checkResult != null">
+        check_result,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -143,20 +154,26 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="checkUserId != null">
         #{checkUserId,jdbcType=INTEGER},
       </if>
       <if test="orderNo != null">
-        #{orderNo,jdbcType=CHAR},
+        #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="checkResult != null">
-        #{checkResult,jdbcType=VARCHAR},
+      <if test="materialGraphNo != null">
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="currentMaterialCount != null">
+        #{currentMaterialCount,jdbcType=INTEGER},
+      </if>
+      <if test="needMaterialCount != null">
+        #{needMaterialCount,jdbcType=INTEGER},
       </if>
       <if test="checkState != null">
         #{checkState,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null">
+        #{checkResult,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -175,20 +192,26 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.checkUserId != null">
         check_user_id = #{record.checkUserId,jdbcType=INTEGER},
       </if>
       <if test="record.orderNo != null">
-        order_no = #{record.orderNo,jdbcType=CHAR},
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.checkResult != null">
-        check_result = #{record.checkResult,jdbcType=VARCHAR},
+      <if test="record.materialGraphNo != null">
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currentMaterialCount != null">
+        current_material_count = #{record.currentMaterialCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.needMaterialCount != null">
+        need_material_count = #{record.needMaterialCount,jdbcType=INTEGER},
       </if>
       <if test="record.checkState != null">
         check_state = #{record.checkState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkResult != null">
+        check_result = #{record.checkResult,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -199,11 +222,13 @@
     update check_material_log
     set id = #{record.id,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       check_user_id = #{record.checkUserId,jdbcType=INTEGER},
-      order_no = #{record.orderNo,jdbcType=CHAR},
-      check_result = #{record.checkResult,jdbcType=VARCHAR},
-      check_state = #{record.checkState,jdbcType=VARCHAR}
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      current_material_count = #{record.currentMaterialCount,jdbcType=INTEGER},
+      need_material_count = #{record.needMaterialCount,jdbcType=INTEGER},
+      check_state = #{record.checkState,jdbcType=VARCHAR},
+      check_result = #{record.checkResult,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -214,20 +239,26 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="checkUserId != null">
         check_user_id = #{checkUserId,jdbcType=INTEGER},
       </if>
       <if test="orderNo != null">
-        order_no = #{orderNo,jdbcType=CHAR},
+        order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="checkResult != null">
-        check_result = #{checkResult,jdbcType=VARCHAR},
+      <if test="materialGraphNo != null">
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="currentMaterialCount != null">
+        current_material_count = #{currentMaterialCount,jdbcType=INTEGER},
+      </if>
+      <if test="needMaterialCount != null">
+        need_material_count = #{needMaterialCount,jdbcType=INTEGER},
       </if>
       <if test="checkState != null">
         check_state = #{checkState,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null">
+        check_result = #{checkResult,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -235,11 +266,13 @@
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLog">
     update check_material_log
     set create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
       check_user_id = #{checkUserId,jdbcType=INTEGER},
-      order_no = #{orderNo,jdbcType=CHAR},
-      check_result = #{checkResult,jdbcType=VARCHAR},
-      check_state = #{checkState,jdbcType=VARCHAR}
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      current_material_count = #{currentMaterialCount,jdbcType=INTEGER},
+      need_material_count = #{needMaterialCount,jdbcType=INTEGER},
+      check_state = #{checkState,jdbcType=VARCHAR},
+      check_result = #{checkResult,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
