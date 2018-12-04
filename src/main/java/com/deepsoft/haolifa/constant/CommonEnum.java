@@ -186,7 +186,10 @@ public class CommonEnum {
         // 上阀杆
         FAGAN((byte) 4),
         // 阀体压力
-        FATI_YALI((byte) 5),;
+        FATI_YALI((byte) 5),
+        // 通用零件
+        TONG_YONG((byte) 6),
+       ;
 
         public final byte code;
 
@@ -238,17 +241,15 @@ public class CommonEnum {
     public enum InspectStatus {
         SAVE((byte) 1),
         WAIT_INSPECT((byte) 2),
-        INSPECTED((byte)3),
-        STOCK_PENDING((byte)4),
-        STOCKED((byte)5)
-        ;
+        INSPECTED((byte) 3),
+        STOCK_PENDING((byte) 4),
+        STOCKED((byte) 5);
 
         public final byte code;
 
         InspectStatus(byte code) {
             this.code = code;
         }
-
 
 
     }

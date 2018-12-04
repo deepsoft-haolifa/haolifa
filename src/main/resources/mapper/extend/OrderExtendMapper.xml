@@ -3,17 +3,16 @@
 <mapper namespace="com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper">
     <insert id="insertBatchOrderMaterial" parameterType="java.util.List">
         insert into order_material
-        (order_no, material_graph_no,replace_material_graph_no
+        (order_no, material_graph_no,
         is_replace,material_count,lack_material_count,check_status)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.orderNo},
             #{item.materialGraphNo},
-            #{item.replaceMaterialGraphNo},
             #{item.isReplace},
             #{item.materialCount},
-            #{item.lackMaterialCount}
+            #{item.lackMaterialCount},
             #{item.checkStatus}
             )
         </foreach>

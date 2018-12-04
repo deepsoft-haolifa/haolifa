@@ -430,7 +430,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 获取符合阀板的列表(D270-0050-03-Hc-02-00)
         List<String> fabanCollect = new ArrayList<>();
         // 获取符合阀杆的列表
-        List<String> fagancollect = new ArrayList<>();
+        List<String> faganCollect = new ArrayList<>();
+        // 获取通用零件列表的列表
+        List<String> tongyongCollect = new ArrayList<>();
 
         // 根据型号和规格，获取图号列表
         List<Material> listByModelAndSpec = materialService.getListByModelAndSpec(smallModel, specifications);
@@ -456,9 +458,16 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             fabanCollect.add(graphNo);
                         }
                     } else if ("04".equals(noIndex)) { // 上阀杆
-                        fagancollect.add(graphNo);
+                        faganCollect.add(graphNo);
                     }
                 }
+
+                // 获取通用零件列表
+                //  获取零件分类
+//                Integer materialClassifyId = e.getMaterialClassifyId();
+//                if (materialClassifyId == 5) {
+//                    tongyongCollect.add(graphNo);
+//                }
             });
         }
         List<MaterialTypeListDTO> listDTOS = new ArrayList<>();
@@ -476,8 +485,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }});
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.FAGAN.code);
-            setList(fagancollect);
+            setList(faganCollect);
         }});
+        listDTOS.add(new MaterialTypeListDTO() {{
+            setType(CommonEnum.ProductModelType.TONG_YONG.code);
+            setList(tongyongCollect);
+        }});
+
+        //根据规格和型号获取通用零件
         return listDTOS;
     }
 
@@ -496,27 +511,61 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 核料总状态（0.全部成功；1.只要有一个零件是失败的,就是失败的）
         int currentUser = getLoginUserId();
         try {
+            // 需要核料的零件
             Map<String, Integer> materialsMap = new HashMap<>();
+            //通用零件特殊处理，不参与实际核料，直接库存充足
+            Map<String, Integer> tongyongMaterialsMap = new HashMap<>();
+
             // 将订单中所有产品需要的零件合并起来
             productCheckMaterialListDTOList.stream().forEach(e -> {
                 Integer productNumber = e.getProductNumber();
                 List<MaterialTypeListDTO> listDTOS = e.getListDTOS();
                 listDTOS.stream().forEach(a -> {
-                    List<String> list = a.getList();
-                    list.stream().forEach(b -> {
-                        if (materialsMap.containsKey(b)) {
-                            materialsMap.put(b, materialsMap.get(b) + productNumber);
-                        } else {
-                            materialsMap.put(b, productNumber);
-                        }
-                    });
+                    // 通用料
+                    if (a.getType() == CommonEnum.ProductModelType.TONG_YONG.code) {
+                        List<String> list = a.getList();
+                        list.stream().forEach(b -> {
+                            if (tongyongMaterialsMap.containsKey(b)) {
+                                tongyongMaterialsMap.put(b, tongyongMaterialsMap.get(b) + productNumber);
+                            } else {
+                                tongyongMaterialsMap.put(b, productNumber);
+                            }
+                        });
+                    } else {
+                        List<String> list = a.getList();
+                        list.stream().forEach(b -> {
+                            if (materialsMap.containsKey(b)) {
+                                materialsMap.put(b, materialsMap.get(b) + productNumber);
+                            } else {
+                                materialsMap.put(b, productNumber);
+                            }
+                        });
+                    }
                 });
             });
+
+            // 循环通用零件，直接成功
+            Iterator<Map.Entry<String, Integer>> tongyongIterator = tongyongMaterialsMap.entrySet().iterator();
+            while (tongyongIterator.hasNext()) {
+                OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                Map.Entry<String, Integer> next = tongyongIterator.next();
+                String materialGraphNo = next.getKey();
+                Integer materialCount = next.getValue();
+                orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
+                orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件余量充足");
+                orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
+                orderCheckMaterialDTO.setMaterialCount(materialCount);
+                orderCheckMaterialDTO.setOrderNo(orderNo);
+                orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
+            }
+
             // 循环所需的原料，进行核料
             Iterator<Map.Entry<String, Integer>> entryIterator = materialsMap.entrySet().iterator();
             while (entryIterator.hasNext()) {
-                int checkState = 0;
+                Byte checkState = 0, isReplace = 0;
+                int lackMaterialCount = 0;
                 String checkResult = "";
+                List<String> replaceList = new ArrayList<>();
                 OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
                 Map.Entry<String, Integer> next = entryIterator.next();
                 String materialGraphNo = next.getKey();
@@ -525,25 +574,27 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
                 Integer currentQuantity = infoByGraphNo.getCurrentQuantity();
                 if (currentQuantity >= materialCount) {
-                    orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-                    orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件余量充足");
+                    checkState = CommonEnum.CheckMaterialStatus.SUCCESS.code;
                     checkResult = "核料成功，该零件余量充足";
                 } else {
                     // 如果缺料，将可替换料列表返回给前端
                     String replaceGraphNos = infoByGraphNo.getReplaceGraphNos();
                     if (StringUtils.isNotBlank(replaceGraphNos)) {
                         String[] split = replaceGraphNos.split(",");
-                        orderCheckMaterialDTO.setReplaceGraphNoList(Arrays.asList(split));
-                        orderCheckMaterialDTO.setIsReplace(CommonEnum.Consts.YES.code);
+                        replaceList=Arrays.asList(split);
+                        isReplace = CommonEnum.Consts.YES.code;
                     }
                     // 无料可以替换，需要走采购流程
-                    orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code);
+                    checkState = CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code;
                     // 缺少的料的数量
-                    orderCheckMaterialDTO.setLackMaterialCount(materialCount - currentQuantity);
-                    orderCheckMaterialDTO.setCheckResultMsg("核料失败，该零件库存：" + currentQuantity);
+                    lackMaterialCount = (materialCount - currentQuantity);
                     checkResult = "库存不足";
-                    checkState = 1;
                 }
+                orderCheckMaterialDTO.setReplaceGraphNoList(replaceList);
+                orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
+                orderCheckMaterialDTO.setIsReplace(isReplace);
+                orderCheckMaterialDTO.setCheckStatus(checkState);
+                orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                 orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
                 orderCheckMaterialDTO.setMaterialCount(materialCount);
                 orderCheckMaterialDTO.setOrderNo(orderNo);
@@ -637,6 +688,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (orderCheckMaterialDTOS != null && orderCheckMaterialDTOS.size() > 0) {
             // 核料成功，插入核料表
             orderMaterialExtendMapper.insertBatchOrderMaterial(orderCheckMaterialDTOS);
+
+
             for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
                 // 更新零件当前库存和锁定库存
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
