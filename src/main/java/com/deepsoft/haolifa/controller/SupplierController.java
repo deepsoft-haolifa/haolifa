@@ -78,4 +78,9 @@ public class SupplierController {
         return supplierService.getList(model);
     }
 
+    @GetMapping("/list-all/{name}")
+    @ApiOperation("查询供应商列表（通过名字）")
+    public ResultBean listByName(@ApiParam("供应商名称") @PathVariable("name") String name) {
+        return supplierService.listByName(name);
+    }
 }

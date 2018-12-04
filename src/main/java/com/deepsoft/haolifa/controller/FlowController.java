@@ -48,4 +48,15 @@ public class FlowController {
     return flowService.allotPersons(model);
   }
 
+  @ApiOperation("获取角色列表")
+  @GetMapping("/roles")
+  public ResultBean roles() {
+    return flowService.roles();
+  }
+
+  @ApiOperation("获取某一角色下用户列表")
+  @GetMapping("/users/{roleId}")
+  public ResultBean users(@ApiParam("角色id") @PathVariable("roleId") int roleId) {
+    return flowService.users(roleId);
+  }
 }

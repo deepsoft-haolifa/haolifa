@@ -13,4 +13,8 @@ public interface FlowService {
   ResultBean allotRoles(AllotRolesDTO model);
 
   ResultBean allotPersons(AllotPersonsDTO model);
+
+  ResultBean roles();
+
+  ResultBean users(int roleId);
 }

@@ -1,14 +1,22 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.Consts;
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.FlowMapper;
 import com.deepsoft.haolifa.dao.repository.FlowStepMapper;
 import com.deepsoft.haolifa.dao.repository.StepMapper;
 import com.deepsoft.haolifa.dao.repository.SysRoleMapper;
+import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.model.domain.Flow;
 import com.deepsoft.haolifa.model.domain.FlowExample;
 import com.deepsoft.haolifa.model.domain.FlowStep;
 import com.deepsoft.haolifa.model.domain.FlowStepExample;
+import com.deepsoft.haolifa.model.domain.SysRole;
+import com.deepsoft.haolifa.model.domain.SysRoleExample;
+import com.deepsoft.haolifa.model.domain.SysRoleUser;
+import com.deepsoft.haolifa.model.domain.SysRoleUserExample;
 import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.domain.SysUserExample;
 import com.deepsoft.haolifa.model.dto.AllotPersonsDTO;
@@ -19,6 +27,7 @@ import com.deepsoft.haolifa.service.FlowService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +49,9 @@ public class FlowServiceImpl implements FlowService {
 
   @Autowired
   private SysUserMapper sysUserMapper;
+  @Autowired
+  private SysRoleUserMapper roleUserMapper;
+
 
   @Override
   public ResultBean list() {
@@ -58,7 +70,7 @@ public class FlowServiceImpl implements FlowService {
       FlowStep flowStep = flowSteps.get(i);
       BeanUtils.copyProperties(flowStep, flowStepListDTO);
       flowStepListDTO.setStepName(stepMapper.selectByPrimaryKey(flowStep.getStepId()).getName());
-      if(flowStep.getRoleId() != 0) {
+      if (flowStep.getRoleId() != 0) {
         flowStepListDTO.setRoleName(sysRoleMapper.selectByPrimaryKey(flowStep.getRoleId()).getRoleName());
       }
       SysUserExample sysUserExample = new SysUserExample();
@@ -67,7 +79,7 @@ public class FlowServiceImpl implements FlowService {
       if (userIds != null || userIds.size() > 0) {
         sysUserExample.or().andIdCardIn(userIds);
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
-        for (SysUser su: sysUsers) {
+        for (SysUser su : sysUsers) {
           stringBuilder.append(su.getRealName()).append(",");
         }
         stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(","));
@@ -97,5 +109,25 @@ public class FlowServiceImpl implements FlowService {
     example.or().andFlowIdEqualTo(model.getFlowId()).andStepIdEqualTo(model.getStepId());
     flowStepMapper.updateByExampleSelective(flowStep, example);
     return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean roles() {
+    SysRoleExample example = new SysRoleExample();
+    example.createCriteria().andIsDeleteEqualTo(Consts.NO.code);
+    List<SysRole> sysRoles = sysRoleMapper.selectByExample(example);
+    return ResultBean.success(sysRoles);
+  }
+
+  @Override
+  public ResultBean users(int roleId) {
+    SysRoleUserExample example = new SysRoleUserExample();
+    example.createCriteria().andSysRoleIdEqualTo(roleId);
+    List<SysRoleUser> roleUsers = roleUserMapper.selectByExample(example);
+    List<Integer> userIds = roleUsers.parallelStream().map(r -> r.getSysUserId()).collect(Collectors.toList());
+    SysUserExample userExample = new SysUserExample();
+    userExample.createCriteria().andIdIn(userIds);
+    List<SysUser> sysUsers = sysUserMapper.selectByExample(userExample);
+    return ResultBean.success(sysUsers);
   }
 }
