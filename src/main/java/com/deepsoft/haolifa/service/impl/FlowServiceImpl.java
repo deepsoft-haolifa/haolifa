@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,18 +74,21 @@ public class FlowServiceImpl implements FlowService {
       if (flowStep.getRoleId() != 0) {
         flowStepListDTO.setRoleName(sysRoleMapper.selectByPrimaryKey(flowStep.getRoleId()).getRoleName());
       }
-      SysUserExample sysUserExample = new SysUserExample();
-      List<String> userIds = Arrays.asList(flowStep.getUserId().split(","));
-      StringBuilder stringBuilder = new StringBuilder("");
-      if (userIds != null || userIds.size() > 0) {
-        sysUserExample.or().andIdCardIn(userIds);
+      String userIdStr = "";
+      if (StringUtils.isNotEmpty(flowStep.getUserId())) {
+        SysUserExample sysUserExample = new SysUserExample();
+        String[] userIds = flowStep.getUserId().split(",");
+        List<Integer> userIdsList = Arrays.stream(userIds).map(t -> Integer.parseInt(t)).collect(Collectors.toList());
+        StringBuilder stringBuilder = new StringBuilder("");
+        sysUserExample.or().andIdIn(userIdsList);
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
         for (SysUser su : sysUsers) {
           stringBuilder.append(su.getRealName()).append(",");
         }
-        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(","));
+        userIdStr = stringBuilder.toString();
+        userIdStr = userIdStr.substring(0, userIdStr.length() - 1);
       }
-      flowStepListDTO.setUserNames(stringBuilder.toString());
+      flowStepListDTO.setUserNames(userIdStr);
       flowStepListDTOS.add(flowStepListDTO);
     }
     return ResultBean.success(flowStepListDTOS);
