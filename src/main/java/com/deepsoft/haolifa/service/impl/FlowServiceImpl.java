@@ -72,7 +72,7 @@ public class FlowServiceImpl implements FlowService {
       BeanUtils.copyProperties(flowStep, flowStepListDTO);
       flowStepListDTO.setStepName(stepMapper.selectByPrimaryKey(flowStep.getStepId()).getName());
       if (flowStep.getRoleId() != 0) {
-        flowStepListDTO.setRoleName(sysRoleMapper.selectByPrimaryKey(flowStep.getRoleId()).getRoleName());
+        flowStepListDTO.setRoleName(sysRoleMapper.selectByPrimaryKey(flowStep.getRoleId()).getDescription());
       }
       String userIdStr = "";
       if (StringUtils.isNotEmpty(flowStep.getUserId())) {
