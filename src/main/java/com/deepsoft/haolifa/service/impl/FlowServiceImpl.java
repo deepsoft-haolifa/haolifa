@@ -128,6 +128,9 @@ public class FlowServiceImpl implements FlowService {
     SysRoleUserExample example = new SysRoleUserExample();
     example.createCriteria().andSysRoleIdEqualTo(roleId);
     List<SysRoleUser> roleUsers = roleUserMapper.selectByExample(example);
+    if(roleUsers.size() == 0) {
+      return ResultBean.success(new ArrayList<>());
+    }
     List<Integer> userIds = roleUsers.parallelStream().map(r -> r.getSysUserId()).collect(Collectors.toList());
     SysUserExample userExample = new SysUserExample();
     userExample.createCriteria().andIdIn(userIds);
