@@ -66,7 +66,7 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.getCheckOrderProductList(orderNo));
     }
 
-    @ApiOperation("核料（生成核料清单）")
+    @ApiOperation("核料（生成初步核料清单）")
     @PostMapping("/check-material/{orderNo}")
     public ResultBean checkMaterial(@PathVariable("orderNo") String orderNo, @RequestBody List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList) {
         return ResultBean.success(orderProductService.checkMaterial(orderNo, productCheckMaterialListDTOList));
@@ -83,22 +83,34 @@ public class OrderProductController {
     public ResultBean passCheckMaterial(@RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
         return ResultBean.success(orderProductService.checkPass(orderCheckMaterialDTOS));
     }
-
-
-    @ApiOperation("生成领料单")
-    @PostMapping("/material-requisition/save")
-    public ResultBean saveMaterialRequisition(@RequestBody MaterialRequisitionDTO model) {
-        return ResultBean.success(orderProductService.saveMaterialRequisition(model));
+    @ApiOperation("释放锁住的零件（综合计划不同意）")
+    @PostMapping("/release-material/{orderNo}")
+    public ResultBean releaseMaterial(@PathVariable("orderNo") String orderNo) {
+        return ResultBean.success(orderProductService.releaseMaterial(orderNo));
     }
 
-    @ApiOperation("获取领料单详情")
-    @GetMapping("/material-requisition/info")
-    @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "领料单号", name = "receiveNo", dataType = "string", paramType = "query")
-    })
-    public ResultBean infoMaterialRequisition(String orderNo, String receiveNo) {
-        return ResultBean.success(orderProductService.infoMaterialRequisition(orderNo, receiveNo));
+    @ApiOperation("获取核料清单")
+    @GetMapping("/order-material/{orderNo}")
+    public ResultBean getOrderMaterialDetail(@PathVariable("orderNo") String orderNo) {
+        return ResultBean.success(orderProductService.listOrderMaterial(orderNo));
     }
+
+
+
+//    @ApiOperation("生成领料单")
+//    @PostMapping("/material-requisition/save")
+//    public ResultBean saveMaterialRequisition(@RequestBody MaterialRequisitionDTO model) {
+//        return ResultBean.success(orderProductService.saveMaterialRequisition(model));
+//    }
+//
+//    @ApiOperation("获取领料单详情")
+//    @GetMapping("/material-requisition/info")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(required = true, value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
+//            @ApiImplicitParam(value = "领料单号", name = "receiveNo", dataType = "string", paramType = "query")
+//    })
+//    public ResultBean infoMaterialRequisition(String orderNo, String receiveNo) {
+//        return ResultBean.success(orderProductService.infoMaterialRequisition(orderNo, receiveNo));
+//    }
 
 }

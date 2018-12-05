@@ -29,7 +29,8 @@
         o.is_replace AS isReplace,
         o.order_no As orderNo,
         o.material_graph_no As materialGraphNo,
-        o.lack_material_count As lackMaterialCount
+        o.lack_material_count As lackMaterialCount,
+        o.check_status as checkStatus
         FROM
         `order_material` o
         LEFT JOIN material m ON o.material_graph_no = m.graph_no

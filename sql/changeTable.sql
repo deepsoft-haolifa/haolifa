@@ -1,3 +1,5 @@
+更换零件列表
+订单号   零件图号   零件名称   单位   数量    更换原因   责任人
 
 	DROP TABLE IF EXISTS `order_product`;
 	CREATE TABLE `order_product` (

@@ -688,8 +688,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (orderCheckMaterialDTOS != null && orderCheckMaterialDTOS.size() > 0) {
             // 核料成功，插入核料表
             orderMaterialExtendMapper.insertBatchOrderMaterial(orderCheckMaterialDTOS);
-
-
             for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
                 // 更新零件当前库存和锁定库存
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();

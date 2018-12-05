@@ -26,6 +26,9 @@ public class OrderMaterialDTO {
     @ApiModelProperty(value = "零件数量")
     private Integer materialCount;
 
+    @ApiModelProperty(value = "核料状态（1成功；2.缺料，需要采购；3.已经释放料）")
+    private Integer checkStatus;
+
     @ApiModelProperty(value = "缺少的零件数量")
     private Integer lackMaterialCount;
 
