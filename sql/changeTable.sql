@@ -1,5 +1,22 @@
-更换零件列表
-订单号   零件图号   零件名称   单位   数量    更换原因   责任人
+  DROP TABLE IF EXISTS `replace_material`;
+	CREATE TABLE `replace_material` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `order_no` varchar(64) NOT NULL DEFAULT ''  COMMENT '订单编号',
+	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
+	  `material_unit` varchar(64) NOT NULL DEFAULT '' COMMENT '单位(如：根，个)',
+	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '数量',
+	  `replace_reason` varchar(128) NOT NULL DEFAULT '' COMMENT '更换原因',
+	  `responsible_person` varchar(32) NOT NULL DEFAULT '' COMMENT '责任人',
+	  `audit_user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '技术审核人',
+    `audit_info` varchar(1024) NOT NULL DEFAULT '' COMMENT '技术审核备注',
+    `audit_time` timestamp  DEFAULT NULL  COMMENT '技术审批日期',
+    `audit_result` tinyint(4) NOT NULL DEFAULT 0  COMMENT '技术审核结果： 0 未审核 1审核不通过 2 审核通过',
+	  `remark` varchar(1024) NOT NULL DEFAULT '' COMMENT '备注',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='更换零件表（车间主任中间要求替换料）';
+
 
 	DROP TABLE IF EXISTS `order_product`;
 	CREATE TABLE `order_product` (
