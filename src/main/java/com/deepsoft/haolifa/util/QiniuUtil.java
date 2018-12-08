@@ -46,25 +46,25 @@ public class QiniuUtil {
     }
 
     public static String uploadFile(String base64Str, String originFileName) {
-        if (StringUtils.isNullOrEmpty(originFileName)) {
-            originFileName = "tmp";
-        }
         // 将base64,之前的内容替换，只获取base64内容
         String indexStr = "base64,";
         int in = base64Str.lastIndexOf(indexStr) + indexStr.length();
         String replaceStr = base64Str.substring(0, in);
-        // 根据base64内容决定文件后缀
-        String ext = "";
-        if (replaceStr.contains("excel")) {
-            ext = ".xlsx";
-        } else if (replaceStr.contains("image")) {
-            ext = ".jpg";
-        } else if (replaceStr.contains("document")) {
-            ext = ".doc";
-        }
+//        // 根据base64内容决定文件后缀
+//        String ext = "";
+//        if (replaceStr.contains("excel")) {
+//            ext = ".xlsx";
+//        } else if (replaceStr.contains("image")) {
+//            ext = ".jpg";
+//        } else if (replaceStr.contains("document")) {
+//            ext = ".doc";
+//        }
         String source = base64Str.replaceAll(replaceStr, "");
         byte[] bytes = Base64.decodeBytes(source);
-        return uploadFile(bytes, originFileName + "_" + System.currentTimeMillis() + ext);
+
+        return uploadFile(bytes, System.currentTimeMillis() + "_" + originFileName);
+
+//        return uploadFile(bytes, originFileName + "_" + System.currentTimeMillis() + ext);
     }
 
     public static String uploadFile(InputStream inputStream, String originFileName) {
