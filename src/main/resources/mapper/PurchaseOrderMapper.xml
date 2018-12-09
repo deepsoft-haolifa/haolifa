@@ -24,6 +24,9 @@
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="wreck_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="wreck_reason" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -88,7 +91,7 @@
     id, flow_id, purchase_order_no, supplier_no, supplier_name, demander, supplier_linkman, 
     demander_linkman, supplier_addr, demander_addr, suppiler_phone, demander_phone, delivery_time, 
     operator_user_name, operate_time, supplier_confirmer, confirm_time, create_time, 
-    update_time, is_delete, create_user_id
+    update_time, is_delete, create_user_id, wreck_amount, wreck_reason, status
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" resultMap="BaseResultMap">
     select
@@ -130,14 +133,16 @@
       suppiler_phone, demander_phone, delivery_time, 
       operator_user_name, operate_time, supplier_confirmer, 
       confirm_time, create_time, update_time, 
-      is_delete, create_user_id)
+      is_delete, create_user_id, wreck_amount, 
+      wreck_reason, status)
     values (#{flowId,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, 
       #{supplierName,jdbcType=VARCHAR}, #{demander,jdbcType=VARCHAR}, #{supplierLinkman,jdbcType=VARCHAR}, 
       #{demanderLinkman,jdbcType=VARCHAR}, #{supplierAddr,jdbcType=VARCHAR}, #{demanderAddr,jdbcType=VARCHAR}, 
       #{suppilerPhone,jdbcType=VARCHAR}, #{demanderPhone,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=TIMESTAMP}, 
       #{operatorUserName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{supplierConfirmer,jdbcType=VARCHAR}, 
       #{confirmTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER})
+      #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, #{wreckAmount,jdbcType=DECIMAL}, 
+      #{wreckReason,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -205,6 +210,15 @@
       <if test="createUserId != null">
         create_user_id,
       </if>
+      <if test="wreckAmount != null">
+        wreck_amount,
+      </if>
+      <if test="wreckReason != null">
+        wreck_reason,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="flowId != null">
@@ -266,6 +280,15 @@
       </if>
       <if test="createUserId != null">
         #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="wreckAmount != null">
+        #{wreckAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="wreckReason != null">
+        #{wreckReason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -341,6 +364,15 @@
       <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
+      <if test="record.wreckAmount != null">
+        wreck_amount = #{record.wreckAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.wreckReason != null">
+        wreck_reason = #{record.wreckReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -368,7 +400,10 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
-      create_user_id = #{record.createUserId,jdbcType=INTEGER}
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      wreck_amount = #{record.wreckAmount,jdbcType=DECIMAL},
+      wreck_reason = #{record.wreckReason,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -436,6 +471,15 @@
       <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
+      <if test="wreckAmount != null">
+        wreck_amount = #{wreckAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="wreckReason != null">
+        wreck_reason = #{wreckReason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -460,7 +504,10 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT},
-      create_user_id = #{createUserId,jdbcType=INTEGER}
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      wreck_amount = #{wreckAmount,jdbcType=DECIMAL},
+      wreck_reason = #{wreckReason,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

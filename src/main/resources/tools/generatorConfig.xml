@@ -127,7 +127,7 @@
     <!--<table tableName="material_requisition" domainObjectName="MaterialRequisition">-->
     <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
     <!--</table>-->
-    <table tableName="replace_material_list" domainObjectName="ReplaceMaterialList"></table>
+    <!--<table tableName="replace_material_list" domainObjectName="ReplaceMaterialList"></table>-->
 
 
     <!--<table tableName="material_receive_record" domainObjectName="MaterialReceiveRecord"></table>-->
@@ -200,9 +200,9 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">-->
-    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+    <table tableName="purchase_order" domainObjectName="PurchaseOrder">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>
 
     <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 

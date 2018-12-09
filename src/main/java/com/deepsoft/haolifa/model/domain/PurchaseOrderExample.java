@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1482,6 +1483,196 @@ public class PurchaseOrderExample {
 
         public Criteria andCreateUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("create_user_id not between", value1, value2, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountIsNull() {
+            addCriterion("wreck_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountIsNotNull() {
+            addCriterion("wreck_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountEqualTo(BigDecimal value) {
+            addCriterion("wreck_amount =", value, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountNotEqualTo(BigDecimal value) {
+            addCriterion("wreck_amount <>", value, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountGreaterThan(BigDecimal value) {
+            addCriterion("wreck_amount >", value, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("wreck_amount >=", value, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountLessThan(BigDecimal value) {
+            addCriterion("wreck_amount <", value, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("wreck_amount <=", value, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountIn(List<BigDecimal> values) {
+            addCriterion("wreck_amount in", values, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountNotIn(List<BigDecimal> values) {
+            addCriterion("wreck_amount not in", values, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("wreck_amount between", value1, value2, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("wreck_amount not between", value1, value2, "wreckAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonIsNull() {
+            addCriterion("wreck_reason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonIsNotNull() {
+            addCriterion("wreck_reason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonEqualTo(String value) {
+            addCriterion("wreck_reason =", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonNotEqualTo(String value) {
+            addCriterion("wreck_reason <>", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonGreaterThan(String value) {
+            addCriterion("wreck_reason >", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("wreck_reason >=", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonLessThan(String value) {
+            addCriterion("wreck_reason <", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonLessThanOrEqualTo(String value) {
+            addCriterion("wreck_reason <=", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonLike(String value) {
+            addCriterion("wreck_reason like", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonNotLike(String value) {
+            addCriterion("wreck_reason not like", value, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonIn(List<String> values) {
+            addCriterion("wreck_reason in", values, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonNotIn(List<String> values) {
+            addCriterion("wreck_reason not in", values, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonBetween(String value1, String value2) {
+            addCriterion("wreck_reason between", value1, value2, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andWreckReasonNotBetween(String value1, String value2) {
+            addCriterion("wreck_reason not between", value1, value2, "wreckReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Byte value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Byte value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Byte value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Byte value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Byte> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Byte> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

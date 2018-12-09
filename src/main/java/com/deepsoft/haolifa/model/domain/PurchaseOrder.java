@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PurchaseOrder {
@@ -45,7 +46,13 @@ public class PurchaseOrder {
 
     private Integer createUserId;
 
-    public PurchaseOrder(Integer id, Integer flowId, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
+    private BigDecimal wreckAmount;
+
+    private String wreckReason;
+
+    private Byte status;
+
+    public PurchaseOrder(Integer id, Integer flowId, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status) {
         this.id = id;
         this.flowId = flowId;
         this.purchaseOrderNo = purchaseOrderNo;
@@ -67,6 +74,9 @@ public class PurchaseOrder {
         this.updateTime = updateTime;
         this.isDelete = isDelete;
         this.createUserId = createUserId;
+        this.wreckAmount = wreckAmount;
+        this.wreckReason = wreckReason;
+        this.status = status;
     }
 
     public PurchaseOrder() {
@@ -239,5 +249,29 @@ public class PurchaseOrder {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public BigDecimal getWreckAmount() {
+        return wreckAmount;
+    }
+
+    public void setWreckAmount(BigDecimal wreckAmount) {
+        this.wreckAmount = wreckAmount;
+    }
+
+    public String getWreckReason() {
+        return wreckReason;
+    }
+
+    public void setWreckReason(String wreckReason) {
+        this.wreckReason = wreckReason == null ? null : wreckReason.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

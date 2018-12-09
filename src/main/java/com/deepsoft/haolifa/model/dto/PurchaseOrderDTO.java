@@ -9,7 +9,8 @@ import java.util.List;
 
 @Data
 public class PurchaseOrderDTO {
-
+    @ApiModelProperty(required = true,value = "采购订单编号")
+    private String orderNo;
     @ApiModelProperty(required = true,value = "供应商编号")
     private String supplierNo;
     @ApiModelProperty(required = true,value = "供应商名称")
