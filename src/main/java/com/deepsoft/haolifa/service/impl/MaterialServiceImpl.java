@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.domain.MaterialClassify;
 import com.deepsoft.haolifa.model.domain.MaterialClassifyExample;
 import com.deepsoft.haolifa.model.domain.MaterialExample;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.material.MaterialConditionDTO;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -179,14 +180,14 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike, int status) {
+    public ResultBean pageInfo(Integer currentPage, Integer pageSize, Integer classifyId, String nameLike, String graphNoLike, int status) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
 
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(classifyNameLike)) {
-            criteria.andMaterialClassifyNameLike("%" + classifyNameLike + "%");
+        if (classifyId > 0) {
+            criteria.andMaterialClassifyIdEqualTo(classifyId);
         }
         if (StringUtils.isNotBlank(nameLike)) {
             criteria.andNameLike("%" + nameLike + "%");
@@ -203,7 +204,7 @@ public class MaterialServiceImpl implements MaterialService {
 //            criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
 //        }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        example.setOrderByClause("create_time desc");
+        example.setOrderByClause("id desc");
         Page<Material> materials = PageHelper.startPage(currentPage, pageSize)
                 .doSelectPage(() -> materialMapper.selectByExample(example));
 
@@ -249,6 +250,31 @@ public class MaterialServiceImpl implements MaterialService {
         }
         List<Material> materials = materialMapper.selectByExample(example);
         return materials;
+    }
+
+    @Override
+    public ResultBean getMaterialAlarmList(MaterialConditionDTO model) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (null != model.getClassifyId() && model.getClassifyId() > 0) {
+            criteria.andMaterialClassifyIdEqualTo(model.getClassifyId());
+        }
+        if (StringUtils.isNotBlank(model.getGraphNo())) {
+            criteria.andGraphNoLike("%" + model.getGraphNo() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getMaterialName())) {
+            criteria.andNameLike("%" + model.getMaterialName() + "%");
+        }
+        criteria.andCurrentQuantityLessThanOrEqualTo("safe_quantity");
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        example.setOrderByClause("id desc");
+        Page<Material> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+                .doSelectPage(() -> materialMapper.selectByExample(example));
+
+        PageDTO<Material> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(materials, pageDTO);
+        pageDTO.setList(materials);
+        return ResultBean.success(pageDTO);
     }
 
     /**

@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.domain.MaterialClassify;
 import com.deepsoft.haolifa.model.dto.MaterialClassifyRequestDTO;
 import com.deepsoft.haolifa.model.dto.MaterialRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.material.MaterialConditionDTO;
 
 import java.util.List;
 
@@ -101,14 +102,14 @@ public interface MaterialService {
     /**
      * 获取零件分页列表
      *
-     * @param currentPage      页码
-     * @param pageSize         页数
-     * @param classifyNameLike 分类名称
-     * @param nameLike         名称
-     * @param graphNoLike      图号
+     * @param currentPage 页码
+     * @param pageSize    页数
+     * @param classifyId  分类Id
+     * @param nameLike    名称
+     * @param graphNoLike 图号
      * @return
      */
-    ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike, int status);
+    ResultBean pageInfo(Integer currentPage, Integer pageSize, Integer classifyId, String nameLike, String graphNoLike, int status);
 
     /**
      * 更新零件当前数量
@@ -139,9 +140,14 @@ public interface MaterialService {
     /**
      * 根据型号和规格获取列表
      *
-     * @param model 型号
+     * @param model          型号
      * @param specifications 规格
      */
-    List<Material> getListByModelAndSpec(String model,String specifications);
+    List<Material> getListByModelAndSpec(String model, String specifications);
+
+    /**
+     * 库存告警列表
+     */
+    ResultBean getMaterialAlarmList(MaterialConditionDTO model);
 
 }
