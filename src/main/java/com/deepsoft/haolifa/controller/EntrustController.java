@@ -49,7 +49,7 @@ public class EntrustController {
         return entrustService.getList(model);
     }
 
-    @ApiOperation("更新机加委托申请单状态")
+    @ApiOperation("更新机加委托申请单状态(发起、开始处理、处理完成)")
     @GetMapping("updateStatus/{entrustNo}/{status}")
     public ResultBean updateStatus(@PathVariable("entrustNo") String entrustNo,@PathVariable("status")Integer status){
         return entrustService.updateStatus(entrustNo,status);
