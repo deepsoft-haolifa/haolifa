@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto;
+package com.deepsoft.haolifa.model.dto.order;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

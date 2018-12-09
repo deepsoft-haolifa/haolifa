@@ -1,8 +1,7 @@
 package com.deepsoft.haolifa;
 
 import com.alibaba.fastjson.JSONObject;
-import com.deepsoft.haolifa.model.domain.OrderProduct;
-import com.deepsoft.haolifa.model.dto.OrderProductDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.util.Base64Utils;

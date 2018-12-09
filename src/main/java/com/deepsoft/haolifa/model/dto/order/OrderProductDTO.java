@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto;
+package com.deepsoft.haolifa.model.dto.order;
 
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import io.swagger.annotations.ApiModelProperty;

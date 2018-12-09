@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto.condition;
+package com.deepsoft.haolifa.model.dto.delivery;
 
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.models.auth.In;

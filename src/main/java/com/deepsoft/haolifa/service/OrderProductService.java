@@ -1,8 +1,8 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
-import com.deepsoft.haolifa.model.dto.condition.OrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.order.*;
 
 import java.util.List;
 
@@ -108,7 +108,7 @@ public interface OrderProductService {
      * @param productCheckMaterialListDTOList
      * @return
      */
-    List<OrderCheckMaterialDTO> checkMaterial(String orderNo,List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList);
+    List<OrderCheckMaterialDTO> checkMaterial(String orderNo, List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList);
 
     /**
      * 替换料再次核料
@@ -140,15 +140,4 @@ public interface OrderProductService {
      */
     List<OrderMaterialDTO> listOrderMaterial(String orderNo);
 
-    /**
-     * 生成领料单
-     *
-     * @param model
-     */
-    MaterialRequisitionDTO saveMaterialRequisition(MaterialRequisitionDTO model);
-
-    /**
-     * 获取领料单详情
-     */
-    MaterialRequisitionDTO infoMaterialRequisition(String orderNo, String receiveNo);
 }

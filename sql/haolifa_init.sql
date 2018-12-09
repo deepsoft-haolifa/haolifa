@@ -840,11 +840,13 @@ CREATE TABLE `delivery_notice` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='发货通知单';
 
-  DROP TABLE IF EXISTS `replace_material_list`;
-	CREATE TABLE `replace_material_list` (
+	DROP TABLE IF EXISTS `replace_material`;
+	CREATE TABLE `replace_material` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user_id` INT (11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id',
+	  `replace_material_no` varchar(64) NOT NULL DEFAULT ''  COMMENT '更换单号（自动生成）',
 	  `order_no` varchar(64) NOT NULL DEFAULT ''  COMMENT '订单编号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',

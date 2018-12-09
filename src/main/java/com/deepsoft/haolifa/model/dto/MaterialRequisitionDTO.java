@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto;
 
+import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

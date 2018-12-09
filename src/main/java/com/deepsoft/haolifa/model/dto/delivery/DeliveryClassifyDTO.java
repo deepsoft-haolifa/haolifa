@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto;
+package com.deepsoft.haolifa.model.dto.delivery;
 
 import lombok.Data;
 
