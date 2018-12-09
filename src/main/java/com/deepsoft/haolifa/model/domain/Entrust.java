@@ -5,7 +5,7 @@ import java.util.Date;
 public class Entrust {
     private Integer id;
 
-    private String purchaseOrderNo;
+    private String materialGraphName;
 
     private String entrustNo;
 
@@ -25,9 +25,9 @@ public class Entrust {
 
     private Integer createUserId;
 
-    public Entrust(Integer id, String purchaseOrderNo, String entrustNo, String materialGraphNo, Integer number, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public Entrust(Integer id, String materialGraphName, String entrustNo, String materialGraphNo, Integer number, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
-        this.purchaseOrderNo = purchaseOrderNo;
+        this.materialGraphName = materialGraphName;
         this.entrustNo = entrustNo;
         this.materialGraphNo = materialGraphNo;
         this.number = number;
@@ -51,12 +51,12 @@ public class Entrust {
         this.id = id;
     }
 
-    public String getPurchaseOrderNo() {
-        return purchaseOrderNo;
+    public String getMaterialGraphName() {
+        return materialGraphName;
     }
 
-    public void setPurchaseOrderNo(String purchaseOrderNo) {
-        this.purchaseOrderNo = purchaseOrderNo == null ? null : purchaseOrderNo.trim();
+    public void setMaterialGraphName(String materialGraphName) {
+        this.materialGraphName = materialGraphName == null ? null : materialGraphName.trim();
     }
 
     public String getEntrustNo() {

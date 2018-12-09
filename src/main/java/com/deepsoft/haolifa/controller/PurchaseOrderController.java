@@ -56,8 +56,7 @@ public class PurchaseOrderController {
   @ApiOperation("查询采购订单列表")
   @GetMapping("list")
   public ResultBean list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
-      @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize, String orderNo, int createUserId,
-      @ApiParam("订单状态") int status) {
+      @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize, String orderNo, int createUserId, int status) {
     return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId,status);
   }
 

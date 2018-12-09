@@ -31,10 +31,6 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
 
     @Override
     public ResultBean save(EntrustDTO model) {
-        if (StringUtils.isAnyEmpty(model.getEntrustPerson(), model.getMaterialGraphNo(), model.getPurchaseOrderNo())
-                || model.getNumber() == null || model.getNumber() <= 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
         String entrustNo = "en_" + RandomUtils.orderNoStr();
         Entrust entrust = new Entrust();
         BeanUtils.copyProperties(model, entrust);
@@ -59,14 +55,11 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     }
 
     @Override
-    public ResultBean update(EntrustDTO model) {
-        if (StringUtils.isEmpty(model.getEntrustNo()) || model.getNumber()== null || model.getNumber() ==0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-        }
+    public ResultBean update(String entrustNo,EntrustDTO model) {
         Entrust entrust = new Entrust();
         BeanUtils.copyProperties(model, entrust);
         EntrustExample entrustExample = new EntrustExample();
-        entrustExample.or().andEntrustNoEqualTo(model.getEntrustNo());
+        entrustExample.or().andEntrustNoEqualTo(entrustNo);
         entrustMapper.updateByExampleSelective(entrust, entrustExample);
         return ResultBean.success(1);
     }
@@ -92,9 +85,6 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         }
         EntrustExample entrustExample = new EntrustExample();
         EntrustExample.Criteria criteria = entrustExample.createCriteria();
-        if (StringUtils.isNotEmpty(model.getPurchaseOrderNo())) {
-            criteria.andPurchaseOrderNoLike("%" + model.getPurchaseOrderNo() + "%");
-        }
         if (StringUtils.isNotEmpty(model.getEntrustNo())) {
             criteria.andEntrustNoLike("%" + model.getEntrustNo() + "%");
         }

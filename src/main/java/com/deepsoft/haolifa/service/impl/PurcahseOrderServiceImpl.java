@@ -150,6 +150,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         if(createUserId != 0) {
             criteria.andCreateUserIdEqualTo(createUserId);
         }
+        if(status != 0) {
+            criteria.andStatusEqualTo((byte)status);
+        }
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(pageNum, pageSize)
             .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
         PageDTO<PurchaseOrder> purchaseOrderPageDTO = new PageDTO<>();

@@ -6,14 +6,13 @@ import lombok.Data;
 @Data
 public class EntrustDTO {
 
-    private String entrustNo;
-    @ApiModelProperty(required = true,value = "采购订单号")
-    private String purchaseOrderNo;
     @ApiModelProperty(required = true,value = "物料图号")
     private String materialGraphNo;
+    @ApiModelProperty(required = true,value = "物料名称")
+    private String materialGraphName;
     @ApiModelProperty(required = true,value = "委托数量")
     private Integer number;
-    @ApiModelProperty(required = true,value = "委托人")
-    private String entrustPerson;
+    @ApiModelProperty(required = true,value = "执行操作：1 保存 2 保存并发起",allowableValues = "1,2")
+    private Integer actionType;
 
 }

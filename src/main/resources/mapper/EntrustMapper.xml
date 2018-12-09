@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Entrust">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="purchase_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_graph_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="entrust_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="number" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, purchase_order_no, entrust_no, material_graph_no, number, status, entrust_person, 
+    id, material_graph_name, entrust_no, material_graph_no, number, status, entrust_person, 
     is_delete, create_time, update_time, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" resultMap="BaseResultMap">
@@ -112,11 +112,11 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into entrust (purchase_order_no, entrust_no, material_graph_no, 
+    insert into entrust (material_graph_name, entrust_no, material_graph_no, 
       number, status, entrust_person, 
       is_delete, create_time, update_time, 
       create_user_id)
-    values (#{purchaseOrderNo,jdbcType=VARCHAR}, #{entrustNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
+    values (#{materialGraphName,jdbcType=VARCHAR}, #{entrustNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
       #{number,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{entrustPerson,jdbcType=VARCHAR}, 
       #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER})
@@ -127,8 +127,8 @@
     </selectKey>
     insert into entrust
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="purchaseOrderNo != null">
-        purchase_order_no,
+      <if test="materialGraphName != null">
+        material_graph_name,
       </if>
       <if test="entrustNo != null">
         entrust_no,
@@ -159,8 +159,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="purchaseOrderNo != null">
-        #{purchaseOrderNo,jdbcType=VARCHAR},
+      <if test="materialGraphName != null">
+        #{materialGraphName,jdbcType=VARCHAR},
       </if>
       <if test="entrustNo != null">
         #{entrustNo,jdbcType=VARCHAR},
@@ -203,8 +203,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.purchaseOrderNo != null">
-        purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
+      <if test="record.materialGraphName != null">
+        material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
       </if>
       <if test="record.entrustNo != null">
         entrust_no = #{record.entrustNo,jdbcType=VARCHAR},
@@ -241,7 +241,7 @@
   <update id="updateByExample" parameterType="map">
     update entrust
     set id = #{record.id,jdbcType=INTEGER},
-      purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
+      material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
       entrust_no = #{record.entrustNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       number = #{record.number,jdbcType=INTEGER},
@@ -258,8 +258,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Entrust">
     update entrust
     <set>
-      <if test="purchaseOrderNo != null">
-        purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
+      <if test="materialGraphName != null">
+        material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
       </if>
       <if test="entrustNo != null">
         entrust_no = #{entrustNo,jdbcType=VARCHAR},
@@ -293,7 +293,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Entrust">
     update entrust
-    set purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
+    set material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
       entrust_no = #{entrustNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       number = #{number,jdbcType=INTEGER},

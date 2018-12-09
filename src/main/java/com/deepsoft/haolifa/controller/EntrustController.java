@@ -31,9 +31,9 @@ public class EntrustController {
     }
 
     @ApiOperation("修改机加委托申请")
-    @PostMapping("update")
-    public ResultBean update(@RequestBody EntrustDTO model){
-        return entrustService.update(model);
+    @PostMapping("update/{entrustNo}")
+    public ResultBean update(@PathVariable("entrustNo")String entrustNo,@RequestBody EntrustDTO model){
+        return entrustService.update(entrustNo,model);
     }
 
 

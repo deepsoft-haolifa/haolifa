@@ -24,7 +24,7 @@ public interface EntrustService {
      * @param model
      * @return
      */
-    ResultBean update(EntrustDTO model);
+    ResultBean update(String entrustNo,EntrustDTO model);
 
     /**
      * 查询详情

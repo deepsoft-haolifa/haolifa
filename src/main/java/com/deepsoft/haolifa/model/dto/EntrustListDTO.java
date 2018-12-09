@@ -13,6 +13,4 @@ public class EntrustListDTO {
     private Integer status;
     @ApiModelProperty(required = true, value = "机加委托单号")
     private String entrustNo;
-    @ApiModelProperty(required = true, value = "采购单号")
-    private String purchaseOrderNo;
 }

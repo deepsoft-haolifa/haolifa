@@ -165,73 +165,73 @@ public class EntrustExample {
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoIsNull() {
-            addCriterion("purchase_order_no is null");
+        public Criteria andMaterialGraphNameIsNull() {
+            addCriterion("material_graph_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoIsNotNull() {
-            addCriterion("purchase_order_no is not null");
+        public Criteria andMaterialGraphNameIsNotNull() {
+            addCriterion("material_graph_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoEqualTo(String value) {
-            addCriterion("purchase_order_no =", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameEqualTo(String value) {
+            addCriterion("material_graph_name =", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoNotEqualTo(String value) {
-            addCriterion("purchase_order_no <>", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameNotEqualTo(String value) {
+            addCriterion("material_graph_name <>", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoGreaterThan(String value) {
-            addCriterion("purchase_order_no >", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameGreaterThan(String value) {
+            addCriterion("material_graph_name >", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoGreaterThanOrEqualTo(String value) {
-            addCriterion("purchase_order_no >=", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameGreaterThanOrEqualTo(String value) {
+            addCriterion("material_graph_name >=", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoLessThan(String value) {
-            addCriterion("purchase_order_no <", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameLessThan(String value) {
+            addCriterion("material_graph_name <", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoLessThanOrEqualTo(String value) {
-            addCriterion("purchase_order_no <=", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameLessThanOrEqualTo(String value) {
+            addCriterion("material_graph_name <=", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoLike(String value) {
-            addCriterion("purchase_order_no like", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameLike(String value) {
+            addCriterion("material_graph_name like", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoNotLike(String value) {
-            addCriterion("purchase_order_no not like", value, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameNotLike(String value) {
+            addCriterion("material_graph_name not like", value, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoIn(List<String> values) {
-            addCriterion("purchase_order_no in", values, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameIn(List<String> values) {
+            addCriterion("material_graph_name in", values, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoNotIn(List<String> values) {
-            addCriterion("purchase_order_no not in", values, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameNotIn(List<String> values) {
+            addCriterion("material_graph_name not in", values, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoBetween(String value1, String value2) {
-            addCriterion("purchase_order_no between", value1, value2, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameBetween(String value1, String value2) {
+            addCriterion("material_graph_name between", value1, value2, "materialGraphName");
             return (Criteria) this;
         }
 
-        public Criteria andPurchaseOrderNoNotBetween(String value1, String value2) {
-            addCriterion("purchase_order_no not between", value1, value2, "purchaseOrderNo");
+        public Criteria andMaterialGraphNameNotBetween(String value1, String value2) {
+            addCriterion("material_graph_name not between", value1, value2, "materialGraphName");
             return (Criteria) this;
         }
 
