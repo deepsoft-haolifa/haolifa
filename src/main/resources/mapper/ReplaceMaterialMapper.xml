@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.ReplaceMaterialListMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.ReplaceMaterialList">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.ReplaceMaterialMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.ReplaceMaterial">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="replace_material_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -79,17 +81,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, order_no, material_graph_no, material_name, material_unit, 
-    material_count, replace_reason, responsible_person, audit_user_id, audit_info, audit_time, 
-    audit_result, remark
+    id, create_time, update_time, create_user_id, replace_material_no, order_no, material_graph_no, 
+    material_name, material_unit, material_count, replace_reason, responsible_person, 
+    audit_user_id, audit_info, audit_time, audit_result, remark
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialListExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from replace_material_list
+    from replace_material
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -100,35 +102,35 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from replace_material_list
+    from replace_material
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from replace_material_list
+    delete from replace_material
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialListExample">
-    delete from replace_material_list
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialExample">
+    delete from replace_material
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialList">
-    insert into replace_material_list (id, create_time, update_time, 
-      order_no, material_graph_no, material_name, 
-      material_unit, material_count, replace_reason, 
-      responsible_person, audit_user_id, audit_info, 
-      audit_time, audit_result, remark
-      )
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterial">
+    insert into replace_material (id, create_time, update_time, 
+      create_user_id, replace_material_no, order_no, 
+      material_graph_no, material_name, material_unit, 
+      material_count, replace_reason, responsible_person, 
+      audit_user_id, audit_info, audit_time, 
+      audit_result, remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{orderNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
-      #{materialUnit,jdbcType=VARCHAR}, #{materialCount,jdbcType=INTEGER}, #{replaceReason,jdbcType=VARCHAR}, 
-      #{responsiblePerson,jdbcType=VARCHAR}, #{auditUserId,jdbcType=INTEGER}, #{auditInfo,jdbcType=VARCHAR}, 
-      #{auditTime,jdbcType=TIMESTAMP}, #{auditResult,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}
-      )
+      #{createUserId,jdbcType=INTEGER}, #{replaceMaterialNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{materialGraphNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{materialUnit,jdbcType=VARCHAR}, 
+      #{materialCount,jdbcType=INTEGER}, #{replaceReason,jdbcType=VARCHAR}, #{responsiblePerson,jdbcType=VARCHAR}, 
+      #{auditUserId,jdbcType=INTEGER}, #{auditInfo,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{auditResult,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialList">
-    insert into replace_material_list
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterial">
+    insert into replace_material
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -138,6 +140,12 @@
       </if>
       <if test="updateTime != null">
         update_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="replaceMaterialNo != null">
+        replace_material_no,
       </if>
       <if test="orderNo != null">
         order_no,
@@ -186,6 +194,12 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="replaceMaterialNo != null">
+        #{replaceMaterialNo,jdbcType=VARCHAR},
+      </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
       </if>
@@ -224,14 +238,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialListExample" resultType="java.lang.Long">
-    select count(*) from replace_material_list
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialExample" resultType="java.lang.Long">
+    select count(*) from replace_material
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update replace_material_list
+    update replace_material
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -241,6 +255,12 @@
       </if>
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.replaceMaterialNo != null">
+        replace_material_no = #{record.replaceMaterialNo,jdbcType=VARCHAR},
       </if>
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=VARCHAR},
@@ -284,10 +304,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update replace_material_list
+    update replace_material
     set id = #{record.id,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      replace_material_no = #{record.replaceMaterialNo,jdbcType=VARCHAR},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       material_name = #{record.materialName,jdbcType=VARCHAR},
@@ -304,14 +326,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialList">
-    update replace_material_list
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterial">
+    update replace_material
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="replaceMaterialNo != null">
+        replace_material_no = #{replaceMaterialNo,jdbcType=VARCHAR},
       </if>
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
@@ -352,10 +380,12 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterialList">
-    update replace_material_list
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.ReplaceMaterial">
+    update replace_material
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      replace_material_no = #{replaceMaterialNo,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       material_name = #{materialName,jdbcType=VARCHAR},

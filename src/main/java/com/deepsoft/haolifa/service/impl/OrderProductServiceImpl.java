@@ -8,29 +8,24 @@ import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
-import com.deepsoft.haolifa.model.dto.OrderMaterialDTO;
+import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.*;
-import com.deepsoft.haolifa.model.dto.condition.OrderConditionDTO;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.OrderProductService;
-import com.deepsoft.haolifa.service.ProductMaterialService;
 import com.deepsoft.haolifa.service.ProductModelConfigService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.core.annotation.OrderUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -736,44 +731,5 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             return orderExtendMapper.listOrderMaterial(orderNo);
         }
         return null;
-    }
-
-    @Override
-    public MaterialRequisitionDTO saveMaterialRequisition(MaterialRequisitionDTO model) {
-        MaterialRequisitionDTO materialRequisitionDTO = new MaterialRequisitionDTO();
-        MaterialRequisition record = new MaterialRequisition();
-        BeanUtils.copyProperties(model, record);
-        record.setCreateUser(getLoginUserId());
-        record.setReceiveNo("mr_" + RandomUtils.orderNoStr());
-        int insertSelective = materialRequisitionMapper.insertSelective(record);
-        if (insertSelective > 0) {
-            BeanUtils.copyProperties(model, materialRequisitionDTO);
-            List<OrderMaterialDTO> orderMaterialDTOS = listOrderMaterial(model.getOrderNo());
-            materialRequisitionDTO.setListOrderMaterial(orderMaterialDTOS);
-            return materialRequisitionDTO;
-        }
-        return null;
-    }
-
-    @Override
-    public MaterialRequisitionDTO infoMaterialRequisition(String orderNo, String receiveNo) {
-        MaterialRequisitionDTO materialRequisitionDTO = new MaterialRequisitionDTO();
-        MaterialRequisitionExample example = new MaterialRequisitionExample();
-        MaterialRequisitionExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(orderNo)) {
-            criteria.andOrderNoEqualTo(orderNo);
-        }
-        if (StringUtils.isNotBlank(receiveNo)) {
-            criteria.andReceiveNoEqualTo(receiveNo);
-        }
-        List<MaterialRequisition> materialRequisitions = materialRequisitionMapper.selectByExample(example);
-        if (materialRequisitions.size() > 0) {
-            MaterialRequisition materialRequisition = materialRequisitions.get(0);
-            // 转换实体
-            BeanUtils.copyProperties(materialRequisition, materialRequisitionDTO);
-            List<OrderMaterialDTO> orderMaterialDTOS = listOrderMaterial(orderNo);
-            materialRequisitionDTO.setListOrderMaterial(orderMaterialDTOS);
-        }
-        return materialRequisitionDTO;
     }
 }

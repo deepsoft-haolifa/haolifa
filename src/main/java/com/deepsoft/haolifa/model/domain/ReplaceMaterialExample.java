@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReplaceMaterialListExample {
+public class ReplaceMaterialExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ReplaceMaterialListExample() {
+    public ReplaceMaterialExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -282,6 +282,136 @@ public class ReplaceMaterialListExample {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdIsNull() {
+            addCriterion("create_user_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdIsNotNull() {
+            addCriterion("create_user_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdEqualTo(Integer value) {
+            addCriterion("create_user_id =", value, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdNotEqualTo(Integer value) {
+            addCriterion("create_user_id <>", value, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdGreaterThan(Integer value) {
+            addCriterion("create_user_id >", value, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("create_user_id >=", value, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdLessThan(Integer value) {
+            addCriterion("create_user_id <", value, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("create_user_id <=", value, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdIn(List<Integer> values) {
+            addCriterion("create_user_id in", values, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdNotIn(List<Integer> values) {
+            addCriterion("create_user_id not in", values, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("create_user_id between", value1, value2, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("create_user_id not between", value1, value2, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoIsNull() {
+            addCriterion("replace_material_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoIsNotNull() {
+            addCriterion("replace_material_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoEqualTo(String value) {
+            addCriterion("replace_material_no =", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoNotEqualTo(String value) {
+            addCriterion("replace_material_no <>", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoGreaterThan(String value) {
+            addCriterion("replace_material_no >", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoGreaterThanOrEqualTo(String value) {
+            addCriterion("replace_material_no >=", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoLessThan(String value) {
+            addCriterion("replace_material_no <", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoLessThanOrEqualTo(String value) {
+            addCriterion("replace_material_no <=", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoLike(String value) {
+            addCriterion("replace_material_no like", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoNotLike(String value) {
+            addCriterion("replace_material_no not like", value, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoIn(List<String> values) {
+            addCriterion("replace_material_no in", values, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoNotIn(List<String> values) {
+            addCriterion("replace_material_no not in", values, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoBetween(String value1, String value2) {
+            addCriterion("replace_material_no between", value1, value2, "replaceMaterialNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNoNotBetween(String value1, String value2) {
+            addCriterion("replace_material_no not between", value1, value2, "replaceMaterialNo");
             return (Criteria) this;
         }
 

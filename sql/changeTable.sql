@@ -2,6 +2,7 @@
 	CREATE TABLE `replace_material` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `replace_material_no` varchar(64) NOT NULL DEFAULT ''  COMMENT '更换单号（自动生成）',
 	  `order_no` varchar(64) NOT NULL DEFAULT ''  COMMENT '订单编号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',

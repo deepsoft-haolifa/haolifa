@@ -1,9 +1,8 @@
 package com.deepsoft.haolifa.dao.repository.extend;
 
 import com.deepsoft.haolifa.model.domain.CheckMaterialLog;
-import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
-import com.deepsoft.haolifa.model.dto.OrderCheckMaterialDTO;
-import com.deepsoft.haolifa.model.dto.OrderMaterialDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderCheckMaterialDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

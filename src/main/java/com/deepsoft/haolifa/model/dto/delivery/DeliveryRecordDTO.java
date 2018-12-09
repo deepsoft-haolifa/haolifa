@@ -1,5 +1,6 @@
-package com.deepsoft.haolifa.model.dto;
+package com.deepsoft.haolifa.model.dto.delivery;
 
+import com.deepsoft.haolifa.model.dto.order.OrderProductAssociateDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

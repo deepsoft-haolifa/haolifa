@@ -2,12 +2,16 @@ package com.deepsoft.haolifa.model.domain;
 
 import java.util.Date;
 
-public class ReplaceMaterialList {
+public class ReplaceMaterial {
     private Integer id;
 
     private Date createTime;
 
     private Date updateTime;
+
+    private Integer createUserId;
+
+    private String replaceMaterialNo;
 
     private String orderNo;
 
@@ -33,10 +37,12 @@ public class ReplaceMaterialList {
 
     private String remark;
 
-    public ReplaceMaterialList(Integer id, Date createTime, Date updateTime, String orderNo, String materialGraphNo, String materialName, String materialUnit, Integer materialCount, String replaceReason, String responsiblePerson, Integer auditUserId, String auditInfo, Date auditTime, Byte auditResult, String remark) {
+    public ReplaceMaterial(Integer id, Date createTime, Date updateTime, Integer createUserId, String replaceMaterialNo, String orderNo, String materialGraphNo, String materialName, String materialUnit, Integer materialCount, String replaceReason, String responsiblePerson, Integer auditUserId, String auditInfo, Date auditTime, Byte auditResult, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.createUserId = createUserId;
+        this.replaceMaterialNo = replaceMaterialNo;
         this.orderNo = orderNo;
         this.materialGraphNo = materialGraphNo;
         this.materialName = materialName;
@@ -51,7 +57,7 @@ public class ReplaceMaterialList {
         this.remark = remark;
     }
 
-    public ReplaceMaterialList() {
+    public ReplaceMaterial() {
         super();
     }
 
@@ -77,6 +83,22 @@ public class ReplaceMaterialList {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Integer createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getReplaceMaterialNo() {
+        return replaceMaterialNo;
+    }
+
+    public void setReplaceMaterialNo(String replaceMaterialNo) {
+        this.replaceMaterialNo = replaceMaterialNo == null ? null : replaceMaterialNo.trim();
     }
 
     public String getOrderNo() {
