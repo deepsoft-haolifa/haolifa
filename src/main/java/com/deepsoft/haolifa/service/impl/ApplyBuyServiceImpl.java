@@ -119,7 +119,9 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
   @Override
   public ResultBean list(int pageNum, int pageSize, int status) {
     ApplyBuyExample example = new ApplyBuyExample();
-    example.or().andStatusEqualTo((byte) status);
+    if (status != 2) {
+      example.or().andStatusEqualTo((byte) status);
+    }
     Page pageData = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> applyBuyMapper.selectByExample(example));
     List<ApplyBuy> applyBuyList = pageData.getResult();
     List<ApplyBuyListDTO> listDTOS = new ArrayList<>();

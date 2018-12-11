@@ -120,13 +120,8 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
   }
 
   @Override
-  public ResultBean listByName(String name) {
-    if (StringUtils.isEmpty(name)) {
-      ResultBean.success(new ArrayList<>());
-    }
-    SupplierExample example = new SupplierExample();
-    example.or().andSuppilerNameLike("%" + name + "%");
-    List<Supplier> suppliers = supplierMapper.selectByExample(example);
+  public ResultBean listByName() {
+    List<Supplier> suppliers = supplierMapper.selectByExample(new SupplierExample());
     return ResultBean.success(suppliers);
   }
 }

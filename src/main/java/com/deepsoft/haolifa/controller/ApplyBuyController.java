@@ -60,7 +60,7 @@ public class ApplyBuyController {
   @GetMapping("list")
   public ResultBean list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
       @ApiParam("展示数量") @RequestParam(defaultValue = "10") int pageSize,
-      @ApiParam("查询条件：1 已处理 0 未处理（默认）") @RequestParam(defaultValue = "0") int status) {
+      @ApiParam("查询条件：2 全部 1 已处理 0 未处理（默认）") @RequestParam(defaultValue = "0") int status) {
         return applyBuyService.list(pageNum,pageSize,status);
   }
 

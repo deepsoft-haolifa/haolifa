@@ -33,8 +33,7 @@ public interface SupplierService {
 
   /**
    * 通过名称查询
-   * @param name
    * @return
    */
-  ResultBean listByName(String name);
+  ResultBean listByName();
 }
