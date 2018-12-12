@@ -41,6 +41,7 @@ public class CommonEnum {
         PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0"),
 
         PURCHASE_NO_NOT_EXIST("3001", "采购单不存在"),
+        PURCHASE_NO_EXIST("3002", "订单已存在"),
 
         RESOURCE_NOT_EXIST("3404", "资源不存在"),
 

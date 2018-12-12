@@ -9,6 +9,8 @@ import java.util.List;
 
 @Data
 public class PurchaseOrderDTO {
+    @ApiModelProperty("唯一标示")
+    private Integer id;
     @ApiModelProperty(required = true,value = "采购订单编号")
     private String orderNo;
     @ApiModelProperty(required = true,value = "供应商编号")
@@ -36,9 +38,11 @@ public class PurchaseOrderDTO {
     @ApiModelProperty(value = "经办时间")
     private String operateTime;
     @ApiModelProperty(required = true,value = "供方确认人")
-    private String SupplierConfirmer;
+    private String supplierConfirmer;
     @ApiModelProperty(required = true,value = "确认时间")
     private String confirmTime;
+    @ApiModelProperty(required = true,value = "付款方式")
+    private String payType;
 
     @ApiModelProperty(required = true,value = "采购单项")
     private List<PurchaseOrderItem> itemList;
