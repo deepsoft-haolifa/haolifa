@@ -12,9 +12,6 @@
                 <if test="item.purchaseOrderNo != null">
                     purchase_order_no,
                 </if>
-                <if test="item.applyNo != null">
-                    apply_no,
-                </if>
                 <if test="item.materialName != null">
                     material_name,
                 </if>
@@ -42,12 +39,6 @@
                 <if test="item.remark != null">
                     remark,
                 </if>
-                <if test="item.purpose != null">
-                    purpose,
-                </if>
-                <if test="item.valuation != null">
-                    valuation,
-                </if>
             </trim>
             <trim prefix="values (" suffix=")" suffixOverrides=",">
                 <if test="item.id != null">
@@ -55,9 +46,6 @@
                 </if>
                 <if test="item.purchaseOrderNo != null">
                     #{item.purchaseOrderNo,jdbcType=VARCHAR},
-                </if>
-                <if test="item.applyNo != null">
-                    #{item.applyNo,jdbcType=VARCHAR},
                 </if>
                 <if test="item.materialName != null">
                     #{item.materialName,jdbcType=VARCHAR},
@@ -85,12 +73,6 @@
                 </if>
                 <if test="item.remark != null">
                     #{item.remark,jdbcType=VARCHAR},
-                </if>
-                <if test="item.purpose != null">
-                    #{item.purpose,jdbcType=VARCHAR},
-                </if>
-                <if test="item.valuation != null">
-                    #{item.valuation,jdbcType=DOUBLE},
                 </if>
             </trim>
         </foreach>
