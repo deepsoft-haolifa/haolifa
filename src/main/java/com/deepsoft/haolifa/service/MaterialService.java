@@ -109,7 +109,7 @@ public interface MaterialService {
      * @param graphNoLike 图号
      * @return
      */
-    ResultBean pageInfo(Integer currentPage, Integer pageSize, Integer classifyId, String nameLike, String graphNoLike, int status);
+    ResultBean pageInfo(Integer currentPage, Integer pageSize, int classifyId, String nameLike, String graphNoLike, int status);
 
     /**
      * 更新零件当前数量

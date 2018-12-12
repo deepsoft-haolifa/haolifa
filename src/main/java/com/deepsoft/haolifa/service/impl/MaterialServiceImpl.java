@@ -180,7 +180,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public ResultBean pageInfo(Integer currentPage, Integer pageSize, Integer classifyId, String nameLike, String graphNoLike, int status) {
+    public ResultBean pageInfo(Integer currentPage, Integer pageSize, int classifyId, String nameLike, String graphNoLike, int status) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
 

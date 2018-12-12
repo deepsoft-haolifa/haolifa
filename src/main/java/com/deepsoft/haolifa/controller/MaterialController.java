@@ -115,7 +115,7 @@ public class MaterialController {
     @GetMapping("/pageInfo")
     public ResultBean pageInfo(@RequestParam(defaultValue = "1") Integer currentPage,
                                @RequestParam(defaultValue = "20") Integer pageSize,
-                               @RequestParam(required = false) Integer classifyId,
+                               @RequestParam(required = false, defaultValue = "0") int classifyId,
                                @RequestParam(required = false) String nameLike,
                                @RequestParam(required = false) String graphNoLike,
                                @RequestParam(defaultValue = "0") Integer status) {
