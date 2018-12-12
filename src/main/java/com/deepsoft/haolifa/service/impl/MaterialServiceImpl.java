@@ -253,6 +253,22 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public List<Material> getTongyongListByModelAndSpec(String model, String specifications) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model)) {
+            criteria.andModelLike("%" + model + "%");
+        }
+        if (StringUtils.isNotBlank(specifications)) {
+            criteria.andSpecificationsLike("%" + specifications + "%");
+        }
+        criteria.andMaterialClassifyIdEqualTo(5);
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
+
+    @Override
     public ResultBean getMaterialAlarmList(MaterialConditionDTO model) {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();

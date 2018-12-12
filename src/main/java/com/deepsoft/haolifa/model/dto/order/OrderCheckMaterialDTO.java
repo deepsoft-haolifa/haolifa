@@ -22,7 +22,8 @@ public class OrderCheckMaterialDTO {
 
     @ApiModelProperty(value = "零件号")
     private String materialGraphNo;
-
+    @ApiModelProperty(value = "零件名称")
+    private String materialName;
     @ApiModelProperty(value = "替换前零件号")
     private String replaceMaterialGraphNo;
 

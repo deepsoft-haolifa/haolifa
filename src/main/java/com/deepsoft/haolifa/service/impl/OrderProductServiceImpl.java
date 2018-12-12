@@ -8,10 +8,13 @@ import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
+import com.deepsoft.haolifa.model.dto.ApplyBuyDTO;
+import com.deepsoft.haolifa.model.dto.ApplyBuyItem;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.ProductModelConfigService;
@@ -50,7 +53,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private ProductModelConfigService productModelConfigService;
     @Autowired
-    private MaterialRequisitionMapper materialRequisitionMapper;
+    private ApplyBuyService applyBuyService;
 
     @Override
     public ResultBean uploadOrderProductExcel(String base64Source) {
@@ -456,13 +459,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         faganCollect.add(graphNo);
                     }
                 }
-
-                // 获取通用零件列表
-                //  获取零件分类
-//                Integer materialClassifyId = e.getMaterialClassifyId();
-//                if (materialClassifyId == 5) {
-//                    tongyongCollect.add(graphNo);
-//                }
             });
         }
         List<MaterialTypeListDTO> listDTOS = new ArrayList<>();
@@ -482,12 +478,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             setType(CommonEnum.ProductModelType.FAGAN.code);
             setList(faganCollect);
         }});
+
+        // 根据型号和规格，获取通用图号列表(一个通用图号对应多个型号和规格)
+        List<Material> tongyongList = materialService.getTongyongListByModelAndSpec(smallModel, specifications);
+        tongyongList.stream().forEach(e -> {
+            tongyongCollect.add(e.getGraphNo());
+        });
+
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.TONG_YONG.code);
             setList(tongyongCollect);
         }});
-
-        //根据规格和型号获取通用零件
         return listDTOS;
     }
 
@@ -576,7 +577,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     String replaceGraphNos = infoByGraphNo.getReplaceGraphNos();
                     if (StringUtils.isNotBlank(replaceGraphNos)) {
                         String[] split = replaceGraphNos.split(",");
-                        replaceList=Arrays.asList(split);
+                        replaceList = Arrays.asList(split);
                         isReplace = CommonEnum.Consts.YES.code;
                     }
                     // 无料可以替换，需要走采购流程
@@ -591,6 +592,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 orderCheckMaterialDTO.setCheckStatus(checkState);
                 orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                 orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
+                orderCheckMaterialDTO.setMaterialName(infoByGraphNo.getName());
                 orderCheckMaterialDTO.setMaterialCount(materialCount);
                 orderCheckMaterialDTO.setOrderNo(orderNo);
                 orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -681,15 +683,43 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     public int checkPass(List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
         //  如果核料成功，也需要核料点下一步，才往下走
         if (orderCheckMaterialDTOS != null && orderCheckMaterialDTOS.size() > 0) {
-            // 核料成功，插入核料表
-            orderMaterialExtendMapper.insertBatchOrderMaterial(orderCheckMaterialDTOS);
             for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
-                // 更新零件当前库存和锁定库存
+                // 核料成功，插入核料表
+                OrderMaterial orderMaterial = new OrderMaterial();
+                BeanUtils.copyProperties(orderCheckMaterialDTO, orderMaterial);
+                orderMaterialMapper.insertSelective(orderMaterial);
+
+                String orderNo = orderCheckMaterialDTO.getOrderNo();
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
+                String materialName = orderCheckMaterialDTO.getMaterialName();
+                int lackMaterialCount = orderCheckMaterialDTO.getLackMaterialCount();
                 int materialCount = orderCheckMaterialDTO.getMaterialCount();
-                materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
-                materialService.updateLockQuantity(materialGraphNo, materialCount);
+                // 缺料的零件，发起请购，不缺料的零件减少库存
+                if (orderCheckMaterialDTO.getCheckStatus() == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
+                    ApplyBuyDTO applyBuyDTO = new ApplyBuyDTO() {{
+                        setProductOrderNo(orderNo);
+                        List<ApplyBuyItem> list = new ArrayList<>();
+                        ApplyBuyItem applyBuyItem = new ApplyBuyItem() {{
+                            setMaterialGraphNo(materialGraphNo);
+                            setMaterialName(materialName);
+                            setPurchaseNumber(lackMaterialCount);
+                        }};
+                        list.add(applyBuyItem);
+                        setItemList(list);
+                    }};
+                    applyBuyService.save(applyBuyDTO);
+                }
+                // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
+                if (lackMaterialCount > 0) {
+                    int lockCount = materialCount - lackMaterialCount;
+                    materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
+                    materialService.updateLockQuantity(materialGraphNo, lockCount);
+                } else {
+                    materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
+                    materialService.updateLockQuantity(materialGraphNo, materialCount);
+                }
             }
+
             return 1;
         }
         return 0;

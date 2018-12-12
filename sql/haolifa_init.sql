@@ -375,6 +375,7 @@ DROP TABLE IF EXISTS `order_product`;
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	  `order_no` varchar(64) NOT NULL COMMENT '订单编号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
 	  `is_replace` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否可替换零件（0：否，1：是）',
 	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '需要的零件数量',
 	  `lack_material_count` int(11) NOT NULL DEFAULT 0 COMMENT '缺少的零件数量',

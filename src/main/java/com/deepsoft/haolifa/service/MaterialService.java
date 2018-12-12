@@ -144,6 +144,13 @@ public interface MaterialService {
      * @param specifications 规格
      */
     List<Material> getListByModelAndSpec(String model, String specifications);
+    /**
+     * 根据型号和规格获取通用零件列表（因为通用零件可以多个型号，多个规格）
+     *
+     * @param model          型号
+     * @param specifications 规格
+     */
+    List<Material> getTongyongListByModelAndSpec(String model, String specifications);
 
     /**
      * 库存告警列表
