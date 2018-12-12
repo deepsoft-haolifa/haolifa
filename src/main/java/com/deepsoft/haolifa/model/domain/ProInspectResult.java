@@ -11,6 +11,8 @@ public class ProInspectResult {
 
     private String productModel;
 
+    private String productSpecifications;
+
     private String testingUnit;
 
     private String testingProcess;
@@ -41,15 +43,14 @@ public class ProInspectResult {
 
     private Date updateTime;
 
-    private Byte isDelete;
-
     private Integer createUserId;
 
-    public ProInspectResult(Integer id, String inspectNo, String orderNo, String productModel, String testingUnit, String testingProcess, Integer testingNumber, Integer unqualifiedNumber, String testingPerson, String technicalRequirements, String testingResult, String inspector, Date inspecteTime, String reason, String responsibleDepartment, String departmentLeader, Date responsibleAnalyzeTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
+    public ProInspectResult(Integer id, String inspectNo, String orderNo, String productModel, String productSpecifications, String testingUnit, String testingProcess, Integer testingNumber, Integer unqualifiedNumber, String testingPerson, String technicalRequirements, String testingResult, String inspector, Date inspecteTime, String reason, String responsibleDepartment, String departmentLeader, Date responsibleAnalyzeTime, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.inspectNo = inspectNo;
         this.orderNo = orderNo;
         this.productModel = productModel;
+        this.productSpecifications = productSpecifications;
         this.testingUnit = testingUnit;
         this.testingProcess = testingProcess;
         this.testingNumber = testingNumber;
@@ -65,7 +66,6 @@ public class ProInspectResult {
         this.responsibleAnalyzeTime = responsibleAnalyzeTime;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.isDelete = isDelete;
         this.createUserId = createUserId;
     }
 
@@ -103,6 +103,14 @@ public class ProInspectResult {
 
     public void setProductModel(String productModel) {
         this.productModel = productModel == null ? null : productModel.trim();
+    }
+
+    public String getProductSpecifications() {
+        return productSpecifications;
+    }
+
+    public void setProductSpecifications(String productSpecifications) {
+        this.productSpecifications = productSpecifications == null ? null : productSpecifications.trim();
     }
 
     public String getTestingUnit() {
@@ -223,14 +231,6 @@ public class ProInspectResult {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public Byte getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Byte isDelete) {
-        this.isDelete = isDelete;
     }
 
     public Integer getCreateUserId() {

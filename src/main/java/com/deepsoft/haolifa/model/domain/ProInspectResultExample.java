@@ -375,6 +375,76 @@ public class ProInspectResultExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductSpecificationsIsNull() {
+            addCriterion("product_specifications is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsIsNotNull() {
+            addCriterion("product_specifications is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsEqualTo(String value) {
+            addCriterion("product_specifications =", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotEqualTo(String value) {
+            addCriterion("product_specifications <>", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsGreaterThan(String value) {
+            addCriterion("product_specifications >", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsGreaterThanOrEqualTo(String value) {
+            addCriterion("product_specifications >=", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsLessThan(String value) {
+            addCriterion("product_specifications <", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsLessThanOrEqualTo(String value) {
+            addCriterion("product_specifications <=", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsLike(String value) {
+            addCriterion("product_specifications like", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotLike(String value) {
+            addCriterion("product_specifications not like", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsIn(List<String> values) {
+            addCriterion("product_specifications in", values, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotIn(List<String> values) {
+            addCriterion("product_specifications not in", values, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsBetween(String value1, String value2) {
+            addCriterion("product_specifications between", value1, value2, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotBetween(String value1, String value2) {
+            addCriterion("product_specifications not between", value1, value2, "productSpecifications");
+            return (Criteria) this;
+        }
+
         public Criteria andTestingUnitIsNull() {
             addCriterion("testing_unit is null");
             return (Criteria) this;
@@ -1362,66 +1432,6 @@ public class ProInspectResultExample {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteIsNull() {
-            addCriterion("is_delete is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteIsNotNull() {
-            addCriterion("is_delete is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteEqualTo(Byte value) {
-            addCriterion("is_delete =", value, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteNotEqualTo(Byte value) {
-            addCriterion("is_delete <>", value, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteGreaterThan(Byte value) {
-            addCriterion("is_delete >", value, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteGreaterThanOrEqualTo(Byte value) {
-            addCriterion("is_delete >=", value, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteLessThan(Byte value) {
-            addCriterion("is_delete <", value, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteLessThanOrEqualTo(Byte value) {
-            addCriterion("is_delete <=", value, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteIn(List<Byte> values) {
-            addCriterion("is_delete in", values, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteNotIn(List<Byte> values) {
-            addCriterion("is_delete not in", values, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteBetween(Byte value1, Byte value2) {
-            addCriterion("is_delete between", value1, value2, "isDelete");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeleteNotBetween(Byte value1, Byte value2) {
-            addCriterion("is_delete not between", value1, value2, "isDelete");
             return (Criteria) this;
         }
 

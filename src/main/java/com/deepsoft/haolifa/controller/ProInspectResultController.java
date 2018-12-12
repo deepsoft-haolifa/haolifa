@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.dto.MaterialInspectResListDTO;
 import com.deepsoft.haolifa.model.dto.ProInspectResDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -47,17 +48,15 @@ public class ProInspectResultController {
         return proInspectResultService.getList(model);
     }
 
-    @ApiOperation("发起审批(流程初始化)--接口未实现")
-    @GetMapping("initiateApproval/{id}")
-    public ResultBean initiateApproval(@PathVariable("id") Integer id){
-        return null;
+    @ApiOperation("成品不合格原因列表")
+    @GetMapping("reasonList")
+    public ResultBean reasonList(){
+        String[] split = Constant.INSPECT_UNQUALIFIED_REASON.split(",");
+        return ResultBean.success(split);
     }
 
-    @ApiOperation("撤销审批--接口未实现")
-    @GetMapping("cancelApproval/{id}")
-    public ResultBean cancelApproval(@PathVariable("id") String id){
-        return null;
-    }
+
+
 
 
 

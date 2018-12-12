@@ -637,9 +637,10 @@ CREATE TABLE `material_inspect_result` (
 DROP TABLE IF EXISTS `pro_inspect_result`;
 CREATE TABLE `pro_inspect_result` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `inspect_no` varchar(20) NOT NULL DEFAULT '' COMMENT '送检单号',
+  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '送检单号',
   `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '生产订单编号',
   `product_model` varchar(64) NOT NULL COMMENT '成品型号',
+  `product_specifications` varchar(64) NOT NULL COMMENT '成品规格',
   `testing_unit` varchar(255) NOT NULL DEFAULT '' COMMENT '检测单位',
   `testing_process` varchar(255) NOT NULL DEFAULT '' COMMENT '检测工序',
   `testing_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
@@ -655,7 +656,6 @@ CREATE TABLE `pro_inspect_result` (
   `responsible_analyze_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '责任认定日期',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
-  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0 未删除 1 已删除',
   `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程/业务表单-成品质检不合格通知表';

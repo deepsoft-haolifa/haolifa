@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ProInspectResDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.ProInspectResultService;
+import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class ProInspectResultServiceImpl extends BaseService implements ProInspe
         ProInspectResult proInspectResult = new ProInspectResult();
         BeanUtils.copyProperties(model, proInspectResult);
         proInspectResult.setCreateUserId(getLoginUserId());
+        proInspectResult.setInspectNo("pis_" + RandomUtils.orderNoStr());
         int insert = proInspectResultMapper.insertSelective(proInspectResult);
         // 看接口入参怎么设计
         return ResultBean.success(insert);
@@ -69,7 +71,7 @@ public class ProInspectResultServiceImpl extends BaseService implements ProInspe
             model.setPageSize(10);
         }
         ProInspectResultExample example = new ProInspectResultExample();
-        if (!StringUtils.isNotEmpty(model.getInspectNo())) {
+        if (StringUtils.isNotBlank(model.getInspectNo())) {
             example.or().andInspectNoLike("%" + model.getInspectNo() + "%");
         }
         Page<ProInspectResult> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {
