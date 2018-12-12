@@ -694,7 +694,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 String materialName = orderCheckMaterialDTO.getMaterialName();
                 int lackMaterialCount = orderCheckMaterialDTO.getLackMaterialCount();
                 int materialCount = orderCheckMaterialDTO.getMaterialCount();
-                // 缺料的零件，发起请购，不缺料的零件减少库存
+                // 缺料的零件，发起请购
                 if (orderCheckMaterialDTO.getCheckStatus() == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
                     ApplyBuyDTO applyBuyDTO = new ApplyBuyDTO() {{
                         setProductOrderNo(orderNo);
