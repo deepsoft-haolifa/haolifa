@@ -215,9 +215,9 @@
 
     <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
 
-    <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">-->
-    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+    <table tableName="pro_inspect_result" domainObjectName="ProInspectResult">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>
 
     <!--<table tableName="equipment" domainObjectName="Equipment"></table>-->
 
