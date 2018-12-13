@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -82,6 +83,7 @@ public class OrderProductController {
     public ResultBean passCheckMaterial(@RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
         return ResultBean.success(orderProductService.checkPass(orderCheckMaterialDTOS));
     }
+
     @ApiOperation("释放锁住的零件（综合计划不同意）")
     @PostMapping("/release-material/{orderNo}")
     public ResultBean releaseMaterial(@PathVariable("orderNo") String orderNo) {
@@ -94,7 +96,12 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.listOrderMaterial(orderNo));
     }
 
-
+    @ApiOperation("获取订单号列表")
+    @GetMapping("/order-no-list/{orderStatus}")
+    @ApiImplicitParam(name = "orderStatus", value = Constant.ORDER_STATUS_DESC, dataType = "int", paramType = "path", required = true)
+    public ResultBean getOrderMaterialDetail(@PathVariable("orderStatus") byte orderStatus) {
+        return ResultBean.success(orderProductService.listOrderNo(orderStatus));
+    }
 
 //    @ApiOperation("生成领料单")
 //    @PostMapping("/material-requisition/save")

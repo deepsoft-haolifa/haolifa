@@ -400,20 +400,20 @@ DROP TABLE IF EXISTS `order_product`;
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='核料日志记录表';
 
 
-  DROP TABLE IF EXISTS `material_requisition`;
-	CREATE TABLE `material_requisition` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `receive_no` char(36) NOT NULL COMMENT '领料单号',
-	  `order_no` varchar(64) NOT NULL default '' COMMENT '订单号',
-	  `receive_department` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
-	  `receive_user_id` varchar(36) NOT NULL DEFAULT '' COMMENT '领料用户Id',
-	  `receive_user_name` varchar(36) NOT NULL DEFAULT '' COMMENT '领料用户姓名',
-	  `order_material_id` int(11) NOT NULL DEFAULT 0 COMMENT '订单零件关联表ID',
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_receive_no` (`receive_no`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料单表';
+--   DROP TABLE IF EXISTS `material_requisition`;
+-- 	CREATE TABLE `material_requisition` (
+-- 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+-- 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+-- 	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+-- 	  `receive_no` char(36) NOT NULL COMMENT '领料单号',
+-- 	  `order_no` varchar(64) NOT NULL default '' COMMENT '订单号',
+-- 	  `receive_department` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
+-- 	  `receive_user_id` varchar(36) NOT NULL DEFAULT '' COMMENT '领料用户Id',
+-- 	  `receive_user_name` varchar(36) NOT NULL DEFAULT '' COMMENT '领料用户姓名',
+-- 	  `order_material_id` int(11) NOT NULL DEFAULT 0 COMMENT '订单零件关联表ID',
+-- 	  PRIMARY KEY (`id`),
+-- 	  UNIQUE KEY `uk_receive_no` (`receive_no`)
+-- 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料单表';
 
 
 	DROP TABLE IF EXISTS `product`;
@@ -629,7 +629,7 @@ CREATE TABLE `material_inspect_result` (
   `handling_result` varchar(4) NOT NULL DEFAULT '' COMMENT '处理结果： 退货（报废） 让步接受 返工（机加委托）json格式字符串（几种处理结果可能都有）',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0 未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程/业务表单-送检反馈信息表';
@@ -638,15 +638,15 @@ CREATE TABLE `material_inspect_result` (
 DROP TABLE IF EXISTS `pro_inspect_result`;
 CREATE TABLE `pro_inspect_result` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '送检单号',
-  `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '生产订单编号',
-  `product_model` varchar(64) NOT NULL COMMENT '成品型号',
-  `product_specifications` varchar(64) NOT NULL COMMENT '成品规格',
+  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '质检单号',
+  `order_no` varchar(36) NOT NULL DEFAULT '' COMMENT '生产订单编号',
+  `testing_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
+  `qualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '合格总数',
+  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格总数',
+  `storage_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1.待入库，2.入库完成',
+  `testing_person` varchar(255) NOT NULL DEFAULT '' COMMENT '操作人',
   `testing_unit` varchar(255) NOT NULL DEFAULT '' COMMENT '检测单位',
   `testing_process` varchar(255) NOT NULL DEFAULT '' COMMENT '检测工序',
-  `testing_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
-  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数',
-  `testing_person` varchar(255) NOT NULL DEFAULT '' COMMENT '操作人',
   `technical_requirements` varchar(255) NOT NULL DEFAULT '' COMMENT '技术要求',
   `testing_result` varchar(255) NOT NULL DEFAULT '' COMMENT '检测结果',
   `inspector` varchar(255) NOT NULL DEFAULT '' COMMENT '检验员',
@@ -656,10 +656,29 @@ CREATE TABLE `pro_inspect_result` (
   `department_leader` varchar(30) NOT NULL DEFAULT '' COMMENT '责任认定部门负责人',
   `responsible_analyze_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '责任认定日期',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程/业务表单-成品质检不合格通知表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品质检单';
+
+
+DROP TABLE IF EXISTS `pro_inspect_unqualified`;
+CREATE TABLE `pro_inspect_unqualified` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '质检单号',
+  `order_no` varchar(36) NOT NULL DEFAULT '' COMMENT '生产订单编号',
+  `product_model` varchar(64) NOT NULL COMMENT '成品型号',
+  `product_specifications` varchar(64) NOT NULL COMMENT '成品规格',
+  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数',
+  `reason` varchar(128) NOT NULL DEFAULT '' COMMENT '不合格原因',
+  `testing_person` varchar(32) NOT NULL DEFAULT '' COMMENT '操作人',
+  `inspector` varchar(32) NOT NULL DEFAULT '' COMMENT '检验员',
+  `inspecte_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '检验日期',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品质检不合格记录';
 
 
 DROP TABLE IF EXISTS `entrust`;

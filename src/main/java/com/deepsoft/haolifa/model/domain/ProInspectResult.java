@@ -9,19 +9,19 @@ public class ProInspectResult {
 
     private String orderNo;
 
-    private String productModel;
+    private Integer testingNumber;
 
-    private String productSpecifications;
+    private Integer qualifiedNumber;
+
+    private Integer unqualifiedNumber;
+
+    private Byte storageStatus;
+
+    private String testingPerson;
 
     private String testingUnit;
 
     private String testingProcess;
-
-    private Integer testingNumber;
-
-    private Integer unqualifiedNumber;
-
-    private String testingPerson;
 
     private String technicalRequirements;
 
@@ -45,17 +45,17 @@ public class ProInspectResult {
 
     private Integer createUserId;
 
-    public ProInspectResult(Integer id, String inspectNo, String orderNo, String productModel, String productSpecifications, String testingUnit, String testingProcess, Integer testingNumber, Integer unqualifiedNumber, String testingPerson, String technicalRequirements, String testingResult, String inspector, Date inspecteTime, String reason, String responsibleDepartment, String departmentLeader, Date responsibleAnalyzeTime, Date createTime, Date updateTime, Integer createUserId) {
+    public ProInspectResult(Integer id, String inspectNo, String orderNo, Integer testingNumber, Integer qualifiedNumber, Integer unqualifiedNumber, Byte storageStatus, String testingPerson, String testingUnit, String testingProcess, String technicalRequirements, String testingResult, String inspector, Date inspecteTime, String reason, String responsibleDepartment, String departmentLeader, Date responsibleAnalyzeTime, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.inspectNo = inspectNo;
         this.orderNo = orderNo;
-        this.productModel = productModel;
-        this.productSpecifications = productSpecifications;
+        this.testingNumber = testingNumber;
+        this.qualifiedNumber = qualifiedNumber;
+        this.unqualifiedNumber = unqualifiedNumber;
+        this.storageStatus = storageStatus;
+        this.testingPerson = testingPerson;
         this.testingUnit = testingUnit;
         this.testingProcess = testingProcess;
-        this.testingNumber = testingNumber;
-        this.unqualifiedNumber = unqualifiedNumber;
-        this.testingPerson = testingPerson;
         this.technicalRequirements = technicalRequirements;
         this.testingResult = testingResult;
         this.inspector = inspector;
@@ -97,20 +97,44 @@ public class ProInspectResult {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
-    public String getProductModel() {
-        return productModel;
+    public Integer getTestingNumber() {
+        return testingNumber;
     }
 
-    public void setProductModel(String productModel) {
-        this.productModel = productModel == null ? null : productModel.trim();
+    public void setTestingNumber(Integer testingNumber) {
+        this.testingNumber = testingNumber;
     }
 
-    public String getProductSpecifications() {
-        return productSpecifications;
+    public Integer getQualifiedNumber() {
+        return qualifiedNumber;
     }
 
-    public void setProductSpecifications(String productSpecifications) {
-        this.productSpecifications = productSpecifications == null ? null : productSpecifications.trim();
+    public void setQualifiedNumber(Integer qualifiedNumber) {
+        this.qualifiedNumber = qualifiedNumber;
+    }
+
+    public Integer getUnqualifiedNumber() {
+        return unqualifiedNumber;
+    }
+
+    public void setUnqualifiedNumber(Integer unqualifiedNumber) {
+        this.unqualifiedNumber = unqualifiedNumber;
+    }
+
+    public Byte getStorageStatus() {
+        return storageStatus;
+    }
+
+    public void setStorageStatus(Byte storageStatus) {
+        this.storageStatus = storageStatus;
+    }
+
+    public String getTestingPerson() {
+        return testingPerson;
+    }
+
+    public void setTestingPerson(String testingPerson) {
+        this.testingPerson = testingPerson == null ? null : testingPerson.trim();
     }
 
     public String getTestingUnit() {
@@ -127,30 +151,6 @@ public class ProInspectResult {
 
     public void setTestingProcess(String testingProcess) {
         this.testingProcess = testingProcess == null ? null : testingProcess.trim();
-    }
-
-    public Integer getTestingNumber() {
-        return testingNumber;
-    }
-
-    public void setTestingNumber(Integer testingNumber) {
-        this.testingNumber = testingNumber;
-    }
-
-    public Integer getUnqualifiedNumber() {
-        return unqualifiedNumber;
-    }
-
-    public void setUnqualifiedNumber(Integer unqualifiedNumber) {
-        this.unqualifiedNumber = unqualifiedNumber;
-    }
-
-    public String getTestingPerson() {
-        return testingPerson;
-    }
-
-    public void setTestingPerson(String testingPerson) {
-        this.testingPerson = testingPerson == null ? null : testingPerson.trim();
     }
 
     public String getTechnicalRequirements() {

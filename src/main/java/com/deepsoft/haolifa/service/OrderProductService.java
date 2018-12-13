@@ -140,4 +140,11 @@ public interface OrderProductService {
      */
     List<OrderMaterialDTO> listOrderMaterial(String orderNo);
 
+    /**
+     * 根据状态获取订单No列表
+     *
+     * @param orderStatus
+     */
+    List<String> listOrderNo(byte orderStatus);
+
 }

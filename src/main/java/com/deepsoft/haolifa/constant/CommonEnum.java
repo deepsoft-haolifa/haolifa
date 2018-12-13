@@ -95,30 +95,38 @@ public class CommonEnum {
      * 订单状态
      */
     public enum OrderStatus {
-        // 创建
-        CREATE((byte) 0),
-        // 完成
-        COMPLETE((byte) 1),
-        // 审核中
-        AuditING((byte) 2),
-        // 核料中
-        CHECK_MATERIAL((byte) 3),
-        // 待领料
-        WAIT_MATERIAL((byte) 4),
-        // 待生产
-        WAIT_PRODUCTION((byte) 5),
-        // 生产中
-        PRODUCTION((byte) 6),
-        // 生产暂停
-        SUSPEND_PRODUCTION((byte) 7),
-        // 质检中
-        TEST((byte) 8),;
+        CREATE((byte) 0, "创建"),
+        COMPLETE((byte) 1, "完成"),
+        AuditING((byte) 2, "审批中"),
+        CHECK_MATERIAL((byte) 3, "核料中"),
+        WAIT_MATERIAL((byte) 4, "待领料"),
+        WAIT_PRODUCTION((byte) 5, "待生产"),
+        PRODUCTION((byte) 6, "生产中"),
+        SUSPEND_PRODUCTION((byte) 7, "生产暂停"),
+        PRODUCTION_FINISH((byte) 8, "生产完成"),
+        TEST((byte) 9, "质检完成"),;
 
         public final byte code;
+        public final String desc;
 
-        OrderStatus(byte code) {
+        OrderStatus(byte code, String desc) {
             this.code = code;
+            this.desc = desc;
         }
+
+        public static String getCodeAndDesc() {
+            StringBuilder codeAndDesc = new StringBuilder();
+            OrderStatus[] orderStatus = OrderStatus.values();
+            for (OrderStatus e : orderStatus) {
+                codeAndDesc.append(e.code).append(":").append(e.desc).append(";");
+            }
+            return codeAndDesc.toString();
+        }
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(OrderStatus.getCodeAndDesc());
     }
 
     /**
@@ -189,8 +197,7 @@ public class CommonEnum {
         // 阀体压力
         FATI_YALI((byte) 5),
         // 通用零件
-        TONG_YONG((byte) 6),
-       ;
+        TONG_YONG((byte) 6),;
 
         public final byte code;
 

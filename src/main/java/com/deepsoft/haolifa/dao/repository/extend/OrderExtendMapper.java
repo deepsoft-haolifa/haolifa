@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.domain.CheckMaterialLog;
 import com.deepsoft.haolifa.model.dto.order.OrderCheckMaterialDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -36,6 +37,15 @@ public interface OrderExtendMapper {
      * 批量插入核料日志表(核料清单)
      *
      */
-   void insertBatchCheckLog(@Param("list") List<CheckMaterialLog> list);
+    void insertBatchCheckLog(@Param("list") List<CheckMaterialLog> list);
+
+
+
+    /**
+     * 根据订单状态获取订单号列表
+     *
+     */
+    @Select("SELECT order_no FROM `order_product` WHERE order_status=#{orderStatus}")
+    List<String> listOrderNo(@Param("orderStatus") byte orderStatus);
 
 }
