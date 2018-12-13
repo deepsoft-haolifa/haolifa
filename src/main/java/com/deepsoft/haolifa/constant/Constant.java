@@ -14,6 +14,6 @@ public class Constant {
     /**
      * 订单状态描述
      */
-    public static final String ORDER_STATUS_DESC = "0:创建;1:完成;2:审批中;3:核料中;4:待领料;5:待生产;6:生产中;7:生产暂停;8:生产完成;9:质检完成;";
+    public static final String ORDER_STATUS_DESC = "0:创建;1:审批中;2:核料中;3:待生产;4:待领料;5:生产中;6:生产暂停;7:生产完成;8:质检中;9:已入库;10：申请发货；11：已发货;";
 
 }
