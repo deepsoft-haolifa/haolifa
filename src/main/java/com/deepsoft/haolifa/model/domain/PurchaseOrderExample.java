@@ -166,66 +166,6 @@ public class PurchaseOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andFlowIdIsNull() {
-            addCriterion("flow_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdIsNotNull() {
-            addCriterion("flow_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdEqualTo(Integer value) {
-            addCriterion("flow_id =", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotEqualTo(Integer value) {
-            addCriterion("flow_id <>", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdGreaterThan(Integer value) {
-            addCriterion("flow_id >", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("flow_id >=", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdLessThan(Integer value) {
-            addCriterion("flow_id <", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdLessThanOrEqualTo(Integer value) {
-            addCriterion("flow_id <=", value, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdIn(List<Integer> values) {
-            addCriterion("flow_id in", values, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotIn(List<Integer> values) {
-            addCriterion("flow_id not in", values, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdBetween(Integer value1, Integer value2) {
-            addCriterion("flow_id between", value1, value2, "flowId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFlowIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("flow_id not between", value1, value2, "flowId");
-            return (Criteria) this;
-        }
-
         public Criteria andPurchaseOrderNoIsNull() {
             addCriterion("purchase_order_no is null");
             return (Criteria) this;
@@ -1673,6 +1613,76 @@ public class PurchaseOrderExample {
 
         public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIsNull() {
+            addCriterion("pay_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIsNotNull() {
+            addCriterion("pay_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeEqualTo(String value) {
+            addCriterion("pay_type =", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotEqualTo(String value) {
+            addCriterion("pay_type <>", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThan(String value) {
+            addCriterion("pay_type >", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("pay_type >=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThan(String value) {
+            addCriterion("pay_type <", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThanOrEqualTo(String value) {
+            addCriterion("pay_type <=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLike(String value) {
+            addCriterion("pay_type like", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotLike(String value) {
+            addCriterion("pay_type not like", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIn(List<String> values) {
+            addCriterion("pay_type in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotIn(List<String> values) {
+            addCriterion("pay_type not in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeBetween(String value1, String value2) {
+            addCriterion("pay_type between", value1, value2, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotBetween(String value1, String value2) {
+            addCriterion("pay_type not between", value1, value2, "payType");
             return (Criteria) this;
         }
     }

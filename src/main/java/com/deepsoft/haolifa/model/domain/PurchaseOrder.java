@@ -6,8 +6,6 @@ import java.util.Date;
 public class PurchaseOrder {
     private Integer id;
 
-    private Integer flowId;
-
     private String purchaseOrderNo;
 
     private String supplierNo;
@@ -52,9 +50,10 @@ public class PurchaseOrder {
 
     private Byte status;
 
-    public PurchaseOrder(Integer id, Integer flowId, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status) {
+    private String payType;
+
+    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType) {
         this.id = id;
-        this.flowId = flowId;
         this.purchaseOrderNo = purchaseOrderNo;
         this.supplierNo = supplierNo;
         this.supplierName = supplierName;
@@ -77,6 +76,7 @@ public class PurchaseOrder {
         this.wreckAmount = wreckAmount;
         this.wreckReason = wreckReason;
         this.status = status;
+        this.payType = payType;
     }
 
     public PurchaseOrder() {
@@ -89,14 +89,6 @@ public class PurchaseOrder {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getFlowId() {
-        return flowId;
-    }
-
-    public void setFlowId(Integer flowId) {
-        this.flowId = flowId;
     }
 
     public String getPurchaseOrderNo() {
@@ -273,5 +265,13 @@ public class PurchaseOrder {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType == null ? null : payType.trim();
     }
 }
