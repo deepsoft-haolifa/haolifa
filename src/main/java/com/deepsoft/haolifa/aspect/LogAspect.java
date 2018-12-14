@@ -4,18 +4,17 @@ package com.deepsoft.haolifa.aspect;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.deepsoft.haolifa.annotation.LogNotPrint;
 import com.deepsoft.haolifa.model.dto.AspectLogDTO;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.ThrowsAdvice;
+import org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.*;
 import org.springframework.web.servlet.HandlerMapping;
@@ -24,12 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.util.*;
 
-
 /**
- * @ClassName: LogInterceptor
- * @Description: TODO ()
- * @Author: JuPeng
- * @date: 15:14 2018/3/21 0021
+ * log 日志打印
  */
 
 @Aspect
@@ -41,7 +36,6 @@ public class LogAspect implements ThrowsAdvice {
     public void webLog() {
     }
 
-
     @AfterThrowing(pointcut = "webLog()", throwing = "ex")
     public void ExceptionHandlingAdvice(JoinPoint jp, Exception ex) {
         if (!(ex instanceof BaseException)) {
@@ -52,20 +46,27 @@ public class LogAspect implements ThrowsAdvice {
 
     @Around("webLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        //获取必要的参数
-        String methodType = joinPoint.getSignature().getName();
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String requestBody = charReader(request);
-        Map requestMap = getRequestMap(request, requestBody);
-        Date start = new Date();
         Object result = null;
-
         //执行方法
         result = joinPoint.proceed();
-
-        //写api调用日志
-        writeApiLog(methodType, requestMap, result, start);
-
+        // 判断类上的注解
+        if (!joinPoint.getTarget().getClass().isAnnotationPresent(LogNotPrint.class)) {
+            // 判断方法上的注解
+            Class<?>[] parameterTypes = new Class[joinPoint.getArgs().length];
+            for (int i = 0; i < joinPoint.getArgs().length; i++) {
+                parameterTypes[i] = joinPoint.getArgs()[i].getClass();
+            }
+            if (!joinPoint.getTarget().getClass().getDeclaredMethod(joinPoint.getSignature().getName(), parameterTypes).isAnnotationPresent(LogNotPrint.class)) {
+                //获取必要的参数
+                String methodType = joinPoint.getSignature().getName();
+                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+                String requestBody = charReader(request);
+                Map requestMap = getRequestMap(request, requestBody);
+                Date start = new Date();
+                //写api调用日志
+                writeApiLog(methodType, requestMap, result, start);
+            }
+        }
         return result;
     }
 
