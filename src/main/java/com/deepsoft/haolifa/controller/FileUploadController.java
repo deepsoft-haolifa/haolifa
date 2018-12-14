@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.annotation.LogNotPrint;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -22,6 +23,7 @@ public class FileUploadController {
     @ApiOperation("base64文件上传接口，返回文件url")
     @PostMapping("/uploadFileBase64")
     @ResponseBody
+    @LogNotPrint
     public ResultBean uploadFileBase64(@RequestBody FileUploadDTO fileUploadDTO) {
         if (StringUtils.isAnyBlank(fileUploadDTO.getBase64Source(), fileUploadDTO.getFileName())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
