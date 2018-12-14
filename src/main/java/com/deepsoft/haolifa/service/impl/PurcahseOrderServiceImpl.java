@@ -10,6 +10,8 @@ import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderCompleteDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
+import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
+import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.FlowInstanceService;
@@ -138,15 +140,37 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(id);
         if (purchaseOrder == null)
             return ResultBean.success(CommonEnum.ResponseEnum.PURCHASE_NO_NOT_EXIST);
+        PurchaseOrderExDTO purchaseOrderExDTO = new PurchaseOrderExDTO();
+        BeanUtils.copyProperties(purchaseOrder,purchaseOrderExDTO);
         PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
         purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrder.getPurchaseOrderNo());
         List<PurchaseOrderItem> purchaseOrderItemList = purchaseOrderItemMapper.selectByExample(purchaseOrderItemExample);
         if (purchaseOrderItemList == null) {
             purchaseOrderItemList = new ArrayList<>();
         }
+        List<PurchaseOrderItemExDTO> exDTOS = new ArrayList<>();
+        double orderTotalAmount = 0;
+        int orderTotalNumber = 0;
+        double orderTotalWeight = 0;
+        for (int i = 0; i < purchaseOrderItemList.size(); i++) {
+            PurchaseOrderItem item = purchaseOrderItemList.get(i);
+            PurchaseOrderItemExDTO itemExDTO = new PurchaseOrderItemExDTO();
+            BeanUtils.copyProperties(item,itemExDTO);
+            double tempAmount = item.getUnitPrice().multiply(new BigDecimal(item.getNumber())).doubleValue();
+            double tempWeight = item.getUnitWeight().multiply(new BigDecimal(item.getNumber())).doubleValue();
+            itemExDTO.setTotalAmount(tempAmount);
+            itemExDTO.setTotalWeight(tempWeight);
+            orderTotalAmount += tempAmount;
+            orderTotalWeight += tempWeight;
+            orderTotalNumber += item.getNumber();
+            exDTOS.add(itemExDTO);
+        }
+        purchaseOrderExDTO.setTotalAmount(orderTotalAmount);
+        purchaseOrderExDTO.setTotalWeight(orderTotalWeight);
+        purchaseOrderExDTO.setOrderNumber(orderTotalNumber);
         Map<String, Object> result = new HashMap<>(2);
-        result.put("order", purchaseOrder);
-        result.put("items", purchaseOrderItemList);
+        result.put("order", purchaseOrderExDTO);
+        result.put("items", exDTOS);
         return ResultBean.success(result);
     }
 
