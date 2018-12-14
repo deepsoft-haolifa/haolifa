@@ -51,6 +51,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     BeanUtils.copyProperties(model, inspect);
     inspect.setCreateUserId(createUserId);
     inspect.setInspectNo(inspectNo);
+    inspect.setStatus(model.getStatus().byteValue());
     if (StringUtils.isNotEmpty(model.getArrivalTime())) {
       inspect.setArrivalTime(
           DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime()));

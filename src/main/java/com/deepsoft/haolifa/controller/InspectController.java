@@ -65,7 +65,7 @@ public class InspectController {
   }
 
   @ApiOperation("查询送检单列表(采购员、质检员、库管员)")
-  @PostMapping("purchase-list/{type}")
+  @GetMapping("purchase-list/{type}")
   public ResultBean purchaseList(@ApiParam("查询类型 0 采购员 1 质检员 2 库管员") @PathVariable("type") int type,
       @ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
       @ApiParam("展示数量") @RequestParam(defaultValue = "10") int pageSize) {
