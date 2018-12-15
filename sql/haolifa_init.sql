@@ -17,7 +17,7 @@ CREATE TABLE `flow` (
   `create_user_id` int(11) NOT NULL COMMENT '创建用户',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '流程名字',
   `description` varchar(256) NOT NULL DEFAULT '' COMMENT '流程描述',
-  PRIMARY KEY (`id`)
+  `flow` ADD COLUMN `role_id` INT(11) unsigned NOT NULL DEFAULT 0 COMMENT '发起流程的角色id',  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程配置表（用来配置系统中用到的流程）';
 
 DROP TABLE IF EXISTS `flow_step`;
@@ -882,3 +882,14 @@ CREATE TABLE `delivery_notice` (
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='更换零件表（车间主任中间要求替换料）';
 
+DROP TABLE IF EXISTS `sys_message`;
+CREATE TABLE `sys_message` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `content` TEXT NOT NULL COMMENT '内容',
+  `type` TINYINT(4) NOT NULL COMMENT '类型：1-新闻，2-消息',
+  `show_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '展示时间',
+  `create_user` INT(11) NOT NULL COMMENT '创建者',
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='消息/新闻表';
