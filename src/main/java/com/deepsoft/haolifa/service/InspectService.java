@@ -51,11 +51,11 @@ public interface InspectService {
 
     /**
      * 更新状态
-     * @param inspectNo
+     * @param inspectId
      * @param status
      * @return
      */
-    ResultBean updateStatus(String inspectNo, Integer status);
+    ResultBean updateStatus(Integer inspectId, Integer status);
 
     /**
      * 删除质检单项

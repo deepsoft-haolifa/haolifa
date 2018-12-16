@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/export")
-@Api(tags = "excel导出")
+//@RestController
+//@RequestMapping("/export")
+//@Api(tags = "excel导出")
 public class ExportExcelController {
 
   @Autowired
@@ -41,6 +41,7 @@ public class ExportExcelController {
     PurchaseOrderExDTO orderExDTO = (PurchaseOrderExDTO) result.get("order");
     List<PurchaseOrderItemExDTO> itemExDTO = (List<PurchaseOrderItemExDTO>) result.get("items");
     response.setHeader("Content-Disposition", "attachment;filename=采购订单.xls");
+    response.setContentType("application/vnd.ms-excel;");
     Workbook workbook = new HSSFWorkbook();
     Sheet sheet = workbook.createSheet("采购订单");
 
@@ -59,6 +60,6 @@ public class ExportExcelController {
       row.createCell(1);
       row.createCell(1);
     }
-    ((HSSFWorkbook) workbook).write(response.getOutputStream());
+    workbook.write(response.getOutputStream());
   }
 }

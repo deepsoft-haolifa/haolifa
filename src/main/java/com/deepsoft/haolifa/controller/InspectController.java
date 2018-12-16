@@ -61,10 +61,10 @@ public class InspectController {
   }
 
   @ApiOperation("更新送检单状态")
-  @PostMapping("updateStatus/{inspectNo}")
-  public ResultBean updateStatus(@ApiParam("送检单id")@PathVariable("inspectNo") String inspectNo,
+  @PostMapping("updateStatus/{inspectId}")
+  public ResultBean updateStatus(@ApiParam("送检单id")@PathVariable("inspectId") Integer inspectId,
       @ApiParam("发起质检：2 质检完成：3,发起入库：4 入库完成: 5")@RequestParam Integer status) {
-    return inspectService.updateStatus(inspectNo, status);
+    return inspectService.updateStatus(inspectId, status);
   }
 
   @ApiOperation("添加质检记录")

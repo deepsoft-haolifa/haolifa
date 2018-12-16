@@ -23,6 +23,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map.Entry;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -149,20 +150,35 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   }
 
   @Override
-  public ResultBean updateStatus(String inspectNo, Integer status) {
+  public ResultBean updateStatus(Integer inspectId, Integer status) {
     Inspect inspect = new Inspect();
+    inspect.setId(inspectId);
     inspect.setStatus(status.byteValue());
-    InspectExample example = new InspectExample();
-    example.or().andInspectNoEqualTo(inspectNo);
-    inspectMapper.updateByExampleSelective(inspect,example);
-    if(status == 2 || status == 3) {
-      // 更新单项合格与不合格数量 Todo 合格率 or 合格数
+    inspectMapper.updateByPrimaryKeySelective(inspect);
+    Inspect inspect1 = inspectMapper.selectByPrimaryKey(inspectId);
+    if (status == 2 || status == 3) {
+      // 更新单项合格与不合格数量
       InspectHistoryExample historyExample = new InspectHistoryExample();
-      historyExample.or().andInspectNoEqualTo(inspectNo);
+      historyExample.or().andInspectNoEqualTo(inspect1.getInspectNo());
       List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
-//      for (int i = 0; i < histories.size(); i++) {
-//
-//      }
+      Map<String, InspectItem> updateItem = new HashMap<>();
+      for (int i = 0; i < histories.size(); i++) {
+        InspectHistory history = histories.get(i);
+        if (updateItem.containsKey(history.getMaterialGraphNo())) {
+          InspectItem item = updateItem.get(history.getMaterialGraphNo());
+          item.setUnqualifiedNumber(item.getUnqualifiedNumber() + history.getUnqualifiedNumber());
+          updateItem.put(history.getMaterialGraphNo(), item);
+        } else {
+          InspectItem item = new InspectItem();
+          item.setUnqualifiedNumber(history.getUnqualifiedNumber());
+          updateItem.put(history.getMaterialGraphNo(), item);
+        }
+      }
+      for (Entry en : updateItem.entrySet()) {
+        InspectItemExample itemExample = new InspectItemExample();
+        itemExample.or().andInspectIdEqualTo(inspectId).andMaterialGraphNoEqualTo(en.getKey().toString());
+        inspectItemMapper.updateByExampleSelective((InspectItem) en.getValue(),itemExample);
+      }
     }
     return ResultBean.success(1);
   }
