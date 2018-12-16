@@ -1,18 +1,19 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
+import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.InspectItemMapper;
 import com.deepsoft.haolifa.dao.repository.InspectMapper;
-import com.deepsoft.haolifa.dao.repository.extend.InspectExtendMapper;
 import com.deepsoft.haolifa.model.domain.Inspect;
 import com.deepsoft.haolifa.model.domain.InspectExample;
+import com.deepsoft.haolifa.model.domain.InspectHistory;
+import com.deepsoft.haolifa.model.domain.InspectHistoryExample;
 import com.deepsoft.haolifa.model.domain.InspectItem;
 import com.deepsoft.haolifa.model.domain.InspectItemExample;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
 import com.deepsoft.haolifa.model.dto.InspectResDTO;
-import com.deepsoft.haolifa.model.dto.InspectUpdateDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.InspectService;
@@ -41,7 +42,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   @Autowired
   InspectItemMapper inspectItemMapper;
   @Autowired
-  InspectExtendMapper inspectExtendMapper;
+  InspectHistoryMapper historyMapper;
 
   @Override
   public ResultBean save(InspectDTO model) {
@@ -92,7 +93,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   }
 
   @Override
-  public ResultBean update(int inspectId, InspectUpdateDTO model) {
+  public ResultBean update(int inspectId, InspectDTO model) {
     Inspect inspect = new Inspect();
     inspect.setId(inspectId);
     inspect.setSupplierName(model.getSupplierName());
@@ -102,6 +103,14 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       inspect.setArrivalTime(arrivalTime);
     }
     inspectMapper.updateByPrimaryKeySelective(inspect);
+    List<InspectItemDTO> items = model.getItems();
+    if (items != null && items.size() > 0) {
+      for (int i = 0; i < items.size(); i++) {
+        InspectItem inspectItem = new InspectItem();
+        BeanUtils.copyProperties(items.get(i), inspectItem);
+        inspectItemMapper.updateByPrimaryKeySelective(inspectItem);
+      }
+    }
     return ResultBean.success(1);
   }
 
@@ -140,11 +149,21 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   }
 
   @Override
-  public ResultBean updateStatus(int inspectId, Integer status) {
+  public ResultBean updateStatus(String inspectNo, Integer status) {
     Inspect inspect = new Inspect();
-    inspect.setId(inspectId);
     inspect.setStatus(status.byteValue());
-    inspectMapper.updateByPrimaryKeySelective(inspect);
+    InspectExample example = new InspectExample();
+    example.or().andInspectNoEqualTo(inspectNo);
+    inspectMapper.updateByExampleSelective(inspect,example);
+    if(status == 2 || status == 3) {
+      // 更新单项合格与不合格数量 Todo 合格率 or 合格数
+      InspectHistoryExample historyExample = new InspectHistoryExample();
+      historyExample.or().andInspectNoEqualTo(inspectNo);
+      List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
+//      for (int i = 0; i < histories.size(); i++) {
+//
+//      }
+    }
     return ResultBean.success(1);
   }
 
@@ -154,8 +173,27 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     inspectItem.setId(itemId);
     inspectItem.setQualifiedNumber(model.getQualifiedNumber());
     inspectItem.setUnqualifiedNumber(model.getUnqualifiedNumber());
-    inspectItem.setDealType((byte)model.getDealType());
     inspectItemMapper.updateByPrimaryKeySelective(inspectItem);
     return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean historySave(InspectHistory model) {
+    historyMapper.insertSelective(model);
+    return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean historyDelete(Integer id) {
+    historyMapper.deleteByPrimaryKey(id);
+    return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean historyList(String inspectNo) {
+    InspectHistoryExample historyExample = new InspectHistoryExample();
+    historyExample.or().andInspectNoEqualTo(inspectNo);
+    List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
+    return ResultBean.success(histories);
   }
 }

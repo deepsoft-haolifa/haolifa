@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.InspectHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.InspectHistory">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="inspect_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_graph_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="test_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="qualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="handling_suggestion" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, inspect_no, material_graph_no, material_graph_name, test_number, qualified_number, 
+    unqualified_number, handling_suggestion, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from inspect_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from inspect_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from inspect_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample">
+    delete from inspect_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+    insert into inspect_history (id, inspect_no, material_graph_no, 
+      material_graph_name, test_number, qualified_number, 
+      unqualified_number, handling_suggestion, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{materialGraphName,jdbcType=VARCHAR}, #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
+      #{unqualifiedNumber,jdbcType=INTEGER}, #{handlingSuggestion,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+    insert into inspect_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="inspectNo != null">
+        inspect_no,
+      </if>
+      <if test="materialGraphNo != null">
+        material_graph_no,
+      </if>
+      <if test="materialGraphName != null">
+        material_graph_name,
+      </if>
+      <if test="testNumber != null">
+        test_number,
+      </if>
+      <if test="qualifiedNumber != null">
+        qualified_number,
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number,
+      </if>
+      <if test="handlingSuggestion != null">
+        handling_suggestion,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="inspectNo != null">
+        #{inspectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphNo != null">
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null">
+        #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="testNumber != null">
+        #{testNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null">
+        #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="handlingSuggestion != null">
+        #{handlingSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultType="java.lang.Long">
+    select count(*) from inspect_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update inspect_history
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.inspectNo != null">
+        inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGraphNo != null">
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGraphName != null">
+        material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testNumber != null">
+        test_number = #{record.testNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.qualifiedNumber != null">
+        qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unqualifiedNumber != null">
+        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.handlingSuggestion != null">
+        handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update inspect_history
+    set id = #{record.id,jdbcType=INTEGER},
+      inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      test_number = #{record.testNumber,jdbcType=INTEGER},
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+    update inspect_history
+    <set>
+      <if test="inspectNo != null">
+        inspect_no = #{inspectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphNo != null">
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null">
+        material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="testNumber != null">
+        test_number = #{testNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null">
+        qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="handlingSuggestion != null">
+        handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+    update inspect_history
+    set inspect_no = #{inspectNo,jdbcType=VARCHAR},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      test_number = #{testNumber,jdbcType=INTEGER},
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

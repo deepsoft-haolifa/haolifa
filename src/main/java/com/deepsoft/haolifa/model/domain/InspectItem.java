@@ -21,15 +21,13 @@ public class InspectItem {
 
     private Integer qualifiedNumber;
 
-    private Byte dealType;
-
     private String requirements;
 
     private String unit;
 
     private String remark;
 
-    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, Byte dealType, String requirements, String unit, String remark) {
+    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, String requirements, String unit, String remark) {
         this.id = id;
         this.purchaseNo = purchaseNo;
         this.inspectId = inspectId;
@@ -40,7 +38,6 @@ public class InspectItem {
         this.deliveryNumber = deliveryNumber;
         this.unqualifiedNumber = unqualifiedNumber;
         this.qualifiedNumber = qualifiedNumber;
-        this.dealType = dealType;
         this.requirements = requirements;
         this.unit = unit;
         this.remark = remark;
@@ -128,14 +125,6 @@ public class InspectItem {
 
     public void setQualifiedNumber(Integer qualifiedNumber) {
         this.qualifiedNumber = qualifiedNumber;
-    }
-
-    public Byte getDealType() {
-        return dealType;
-    }
-
-    public void setDealType(Byte dealType) {
-        this.dealType = dealType;
     }
 
     public String getRequirements() {

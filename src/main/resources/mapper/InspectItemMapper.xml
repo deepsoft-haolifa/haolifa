@@ -13,7 +13,6 @@
       <arg column="delivery_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="qualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="deal_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="requirements" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="unit" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -79,8 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, purchase_no, inspect_id, material_graph_no, material_name, specification, purchase_number, 
-    delivery_number, unqualified_number, qualified_number, deal_type, requirements, unit, 
-    remark
+    delivery_number, unqualified_number, qualified_number, requirements, unit, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectItemExample" resultMap="BaseResultMap">
     select
@@ -116,13 +114,13 @@
     insert into inspect_item (id, purchase_no, inspect_id, 
       material_graph_no, material_name, specification, 
       purchase_number, delivery_number, unqualified_number, 
-      qualified_number, deal_type, requirements, 
-      unit, remark)
+      qualified_number, requirements, unit, 
+      remark)
     values (#{id,jdbcType=INTEGER}, #{purchaseNo,jdbcType=VARCHAR}, #{inspectId,jdbcType=INTEGER}, 
       #{materialGraphNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, 
       #{purchaseNumber,jdbcType=INTEGER}, #{deliveryNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
-      #{qualifiedNumber,jdbcType=INTEGER}, #{dealType,jdbcType=TINYINT}, #{requirements,jdbcType=VARCHAR}, 
-      #{unit,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+      #{qualifiedNumber,jdbcType=INTEGER}, #{requirements,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectItem">
     insert into inspect_item
@@ -156,9 +154,6 @@
       </if>
       <if test="qualifiedNumber != null">
         qualified_number,
-      </if>
-      <if test="dealType != null">
-        deal_type,
       </if>
       <if test="requirements != null">
         requirements,
@@ -200,9 +195,6 @@
       </if>
       <if test="qualifiedNumber != null">
         #{qualifiedNumber,jdbcType=INTEGER},
-      </if>
-      <if test="dealType != null">
-        #{dealType,jdbcType=TINYINT},
       </if>
       <if test="requirements != null">
         #{requirements,jdbcType=VARCHAR},
@@ -254,9 +246,6 @@
       <if test="record.qualifiedNumber != null">
         qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="record.dealType != null">
-        deal_type = #{record.dealType,jdbcType=TINYINT},
-      </if>
       <if test="record.requirements != null">
         requirements = #{record.requirements,jdbcType=VARCHAR},
       </if>
@@ -283,7 +272,6 @@
       delivery_number = #{record.deliveryNumber,jdbcType=INTEGER},
       unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
       qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
-      deal_type = #{record.dealType,jdbcType=TINYINT},
       requirements = #{record.requirements,jdbcType=VARCHAR},
       unit = #{record.unit,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR}
@@ -321,9 +309,6 @@
       <if test="qualifiedNumber != null">
         qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="dealType != null">
-        deal_type = #{dealType,jdbcType=TINYINT},
-      </if>
       <if test="requirements != null">
         requirements = #{requirements,jdbcType=VARCHAR},
       </if>
@@ -347,7 +332,6 @@
       delivery_number = #{deliveryNumber,jdbcType=INTEGER},
       unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
       qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
-      deal_type = #{dealType,jdbcType=TINYINT},
       requirements = #{requirements,jdbcType=VARCHAR},
       unit = #{unit,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
