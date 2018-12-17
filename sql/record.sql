@@ -43,18 +43,15 @@
 -- 80	财务主管
 -- 82	TEST
 
--- 生产流程
-INSERT INTO `flow_step` VALUES ('7', NOW(),  NOW(), '1', '1', '50', '31', '78', '0');
-INSERT INTO `flow_step` VALUES ('8', NOW(),  NOW(), '1', '1', '51', '28', '75', '1');
-INSERT INTO `flow_step` VALUES ('9', NOW(),  NOW(), '1', '1', '52', '19', '4', '2');
-INSERT INTO `flow_step` VALUES ('10', NOW(),  NOW(), '1', '1', '53', '21', '9', '3');
-INSERT INTO `flow_step` VALUES ('11', NOW(),  NOW(), '1', '1', '54', '21', '9', '4');
-INSERT INTO `flow_step` VALUES ('12', NOW(),  NOW(), '1', '1', '55', '21', '9', '5');
-INSERT INTO `flow_step` VALUES ('13', NOW(),  NOW(), '1', '1', '56', '19', '4', '6');
-INSERT INTO `flow_step` VALUES ('14', NOW(),  NOW(), '1', '1', '57', '26', '73', '7');
-INSERT INTO `flow_step` VALUES ('15', NOW(),  NOW(), '1', '1', '58', '25', '72', '8');
-INSERT INTO `flow_step` VALUES ('16', NOW(),  NOW(), '1', '1', '74', '22', '68', '9');
-INSERT INTO `flow_step` VALUES ('17', NOW(),  NOW(), '1', '1', '59', '27', '74', '19');
+INSERT INTO `flow_step` VALUES ('7', NOW(),  NOW(), '1', '1', '50', '40', '84', '0','0','0','');
+INSERT INTO `flow_step` VALUES ('8', NOW(),  NOW(), '1', '1', '51', '28', '75', '7','0','0','');
+INSERT INTO `flow_step` VALUES ('9', NOW(),  NOW(), '1', '1', '52', '19', '4', '8','0','0','');
+INSERT INTO `flow_step` VALUES ('10', NOW(),  NOW(), '1', '1', '53', '22', '68', '9','11','12','');
+INSERT INTO `flow_step` VALUES ('11', NOW(),  NOW(), '1', '1', '54', '24', '71', '10','0','0','');
+INSERT INTO `flow_step` VALUES ('12', NOW(),  NOW(), '1', '1', '55', '41', '85', '10','0','0','');
+INSERT INTO `flow_step` VALUES ('13', NOW(),  NOW(), '1', '1', '56', '26', '73', '12','0','0','');
+INSERT INTO `flow_step` VALUES ('14', NOW(),  NOW(), '1', '1', '57', '27', '74', '13','0','0','');
+
 
 -- 成品质检流程
 INSERT INTO `flow_step` VALUES ('18', NOW(),  NOW(), '1', '8', '60', '27', '74', '0');

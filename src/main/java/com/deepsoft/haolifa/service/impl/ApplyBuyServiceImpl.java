@@ -6,7 +6,6 @@ import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ApplyBuyMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
 import com.deepsoft.haolifa.dao.repository.PurchaseOrderItemMapper;
-import com.deepsoft.haolifa.dao.repository.extend.ApplyBuyExtendMapper;
 import com.deepsoft.haolifa.dao.repository.extend.PurchaseOrderItemExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
@@ -33,8 +32,6 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
   ApplyBuyMapper applyBuyMapper;
   @Autowired
   PurchaseOrderItemExtendMapper ItemExtendMapper;
-  @Autowired
-  ApplyBuyExtendMapper applyBuyExtendMapper;
   @Autowired
   MaterialMapper materialMapper;
 

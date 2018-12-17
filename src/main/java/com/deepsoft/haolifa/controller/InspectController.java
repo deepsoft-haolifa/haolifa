@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
+import com.deepsoft.haolifa.model.domain.InspectHistory;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
@@ -34,54 +35,54 @@ public class InspectController {
 
   @ApiOperation("删除送检单")
   @GetMapping("delete/{inspectId}")
-  public ResultBean delete(@ApiParam("送检单id") @PathVariable("inspectId") int inspectId) {
+  public ResultBean delete(@ApiParam("送检单id") @PathVariable("inspectId") Integer inspectId) {
     return inspectService.delete(inspectId);
-  }
-
-  @ApiOperation("删除送检单单项")
-  @GetMapping("deleteItem/{itemId}")
-  public ResultBean deleteItem(@ApiParam("送检单单项id") @PathVariable("itemId") int itemId) {
-    return inspectService.deleteItem(itemId);
   }
 
   @ApiOperation("更新送检单")
   @PostMapping("update/{inspectId}")
-  public ResultBean update(@ApiParam("送检单id")@PathVariable("inspectId") int inspectId,
-      @RequestBody InspectUpdateDTO model) {
+  public ResultBean update(@ApiParam("送检单id")@PathVariable("inspectId") Integer inspectId,
+      @RequestBody InspectDTO model) {
     return inspectService.update(inspectId,model);
-  }
-
-  @ApiOperation("更新送检单单项")
-  @PostMapping("updateItem/{itemId}")
-  public ResultBean updateItem(@ApiParam("送检单id")@PathVariable("itemId") int itemId,
-      @RequestBody InspectItemUpdateDTO model) {
-    return inspectService.updateItem(itemId,model);
   }
 
   @ApiOperation("查询送检单详情")
   @GetMapping("info/{inspectId}")
-  public ResultBean getInfo(@PathVariable("inspectId") int inspectId) {
+  public ResultBean getInfo(@PathVariable("inspectId") Integer inspectId) {
     return inspectService.getInfo(inspectId);
   }
 
   @ApiOperation("查询送检单列表(采购员、质检员、库管员)")
-  @PostMapping("purchase-list/{type}")
-  public ResultBean purchaseList(@ApiParam("查询类型 0 采购员 1 质检员 2 库管员") @PathVariable("type") int type,
-      @ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
-      @ApiParam("展示数量") @RequestParam(defaultValue = "10") int pageSize) {
+  @GetMapping("purchase-list/{type}")
+  public ResultBean purchaseList(@ApiParam("查询类型 0 采购员 1 质检员 2 库管员") @PathVariable("type") Integer type,
+      @ApiParam("页码") @RequestParam(defaultValue = "1") Integer pageNum,
+      @ApiParam("展示数量") @RequestParam(defaultValue = "10") Integer pageSize) {
     return inspectService.getList(type,pageNum,pageSize);
   }
 
   @ApiOperation("更新送检单状态")
   @PostMapping("updateStatus/{inspectId}")
-  public ResultBean updateStatus(@ApiParam("送检单id")@PathVariable("inspectId") int inspectId,
+  public ResultBean updateStatus(@ApiParam("送检单id")@PathVariable("inspectId") Integer inspectId,
       @ApiParam("发起质检：2 质检完成：3,发起入库：4 入库完成: 5")@RequestParam Integer status) {
     return inspectService.updateStatus(inspectId, status);
   }
 
-  @ApiOperation("更新质检结果")
-  @PostMapping("inspect-res/{itemId}")
-  public ResultBean inspectRes(@ApiParam("单项Id") @PathVariable("itemId") int itemId,@RequestBody InspectResDTO model) {
-    return inspectService.inspectRes(itemId,model);
+  @ApiOperation("添加质检记录")
+  @PostMapping("history/save")
+  public ResultBean historySave(@RequestBody InspectHistory model) {
+    return inspectService.historySave(model);
   }
+
+  @ApiOperation("删除质检记录")
+  @GetMapping("history/delete/{id}")
+  public ResultBean historyDelete(@PathVariable("id") Integer id) {
+    return inspectService.historyDelete(id);
+  }
+
+  @ApiOperation("质检记录列表")
+  @GetMapping("history/list/{inspectNo}")
+  public ResultBean historyList(@PathVariable("inspectNo") String inspectNo) {
+    return inspectService.historyList(inspectNo);
+  }
+
 }

@@ -744,66 +744,6 @@ public class InspectItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andDealTypeIsNull() {
-            addCriterion("deal_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeIsNotNull() {
-            addCriterion("deal_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeEqualTo(Byte value) {
-            addCriterion("deal_type =", value, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeNotEqualTo(Byte value) {
-            addCriterion("deal_type <>", value, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeGreaterThan(Byte value) {
-            addCriterion("deal_type >", value, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("deal_type >=", value, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeLessThan(Byte value) {
-            addCriterion("deal_type <", value, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("deal_type <=", value, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeIn(List<Byte> values) {
-            addCriterion("deal_type in", values, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeNotIn(List<Byte> values) {
-            addCriterion("deal_type not in", values, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeBetween(Byte value1, Byte value2) {
-            addCriterion("deal_type between", value1, value2, "dealType");
-            return (Criteria) this;
-        }
-
-        public Criteria andDealTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("deal_type not between", value1, value2, "dealType");
-            return (Criteria) this;
-        }
-
         public Criteria andRequirementsIsNull() {
             addCriterion("requirements is null");
             return (Criteria) this;

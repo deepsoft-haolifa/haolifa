@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.InspectHistory;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
@@ -31,7 +32,7 @@ public interface InspectService {
      * @param model
      * @return
      */
-    ResultBean update(int inspectId,InspectUpdateDTO model);
+    ResultBean update(int inspectId,InspectDTO model);
 
     /**
      * 获取详情
@@ -54,7 +55,7 @@ public interface InspectService {
      * @param status
      * @return
      */
-    ResultBean updateStatus(int inspectId, Integer status);
+    ResultBean updateStatus(Integer inspectId, Integer status);
 
     /**
      * 删除质检单项
@@ -78,4 +79,26 @@ public interface InspectService {
      * @return
      */
     ResultBean inspectRes(int itemId, InspectResDTO model);
+
+    /**
+     * 质检记录保存
+     * @param model
+     * @return
+     */
+    ResultBean historySave(InspectHistory model);
+
+    /**
+     * 质检记录删除
+     * @param id
+     * @return
+     */
+    ResultBean historyDelete(Integer id);
+
+
+    /**
+     * 质检记录列表
+     * @param inspectNo
+     * @return
+     */
+    ResultBean historyList(String inspectNo);
 }

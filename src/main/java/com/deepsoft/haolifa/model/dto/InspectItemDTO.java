@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class InspectItemDTO {
 
+    private Integer id;
+
     @ApiModelProperty(required = true,value = "采购合同编号")
     private String purchaseNo;
     @ApiModelProperty(value = "物料（原料）图号")
