@@ -14,6 +14,9 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
 
+/**
+ * 将controller 返回的json串，null类型转为""
+ */
 @Configuration
 public class JacksonConfig {
     @Bean
