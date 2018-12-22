@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.order;
 
+import com.deepsoft.haolifa.constant.Constant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -13,6 +14,6 @@ public class OrderConditionDTO {
 
     @ApiModelProperty(value = "订单号")
     private String orderNo;
-    @ApiModelProperty(value = "订单状态")
+    @ApiModelProperty(value = Constant.ORDER_STATUS_DESC, name = "订单状态")
     private byte orderStatus;
 }
