@@ -46,8 +46,8 @@ public class ExportExcelController {
     Map result = (Map<String, Object>) resultBean.getResult();
     PurchaseOrderExDTO orderExDTO = (PurchaseOrderExDTO) result.get("order");
     List<PurchaseOrderItemExDTO> itemExDTO = (List<PurchaseOrderItemExDTO>) result.get("items");
-    response.setHeader("Content-Disposition", "attachment;filename=order.xls");
-    response.setContentType("application/vnd.ms-excel");
+    response.setHeader("Content-Disposition", "attachment;filename=采购订单.xls");
+    response.setContentType("application/octet-stream;");
     Workbook workbook = new HSSFWorkbook();
     Sheet sheet = workbook.createSheet("采购订单");
 

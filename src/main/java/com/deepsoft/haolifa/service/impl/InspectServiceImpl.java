@@ -125,17 +125,22 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   }
 
   @Override
-  public ResultBean getList(int type, int pageNum, int pageSize) {
+  public ResultBean getList(int type, int pageNum, int pageSize,String inspectNo) {
     InspectExample example = new InspectExample();
+    InspectExample.Criteria criteria = example.createCriteria();
     if (type == 0) {
-      example.or().andCreateUserIdEqualTo(getLoginUserId());
+      criteria.andCreateUserIdEqualTo(getLoginUserId());
     }
     if (type == 1) {
-      example.or().andStatusNotIn(Arrays.asList(InspectStatus.SAVE.code));
+      criteria.andStatusNotIn(Arrays.asList(InspectStatus.SAVE.code));
     }
     if (type == 2) {
-      example.or().andStatusIn(Arrays.asList(InspectStatus.STOCK_PENDING.code, InspectStatus.STOCKED.code));
+      criteria.andStatusIn(Arrays.asList(InspectStatus.STOCK_PENDING.code, InspectStatus.STOCKED.code));
     }
+    if(StringUtils.isNotEmpty(inspectNo)) {
+      criteria.andInspectNoLike("%"+inspectNo+"%");
+    }
+
     Page pageData = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> inspectMapper.selectByExample(example));
     PageDTO pageDTO = new PageDTO();
     BeanUtils.copyProperties(pageData, pageDTO);

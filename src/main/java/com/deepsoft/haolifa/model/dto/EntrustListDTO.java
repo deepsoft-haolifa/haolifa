@@ -9,7 +9,7 @@ public class EntrustListDTO {
     private Integer pageNum;
     @ApiModelProperty(required = true, value = "显示数量")
     private Integer pageSize;
-    @ApiModelProperty(required = true, value = "申请单状态: 0 未提交 1 待处理 2 处理中 3 已完成", allowableValues = "0,1,2,3")
+    @ApiModelProperty(required = true, value = "申请单状态: 0 未提交 1 审批中 2 待处理 3 已完成 4 审批不通过 5 全部", allowableValues = "0,1,2,3，4,5")
     private Integer status;
     @ApiModelProperty(required = true, value = "机加委托单号")
     private String entrustNo;

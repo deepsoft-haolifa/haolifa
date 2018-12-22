@@ -106,7 +106,8 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     if (StringUtils.isNotEmpty(model.getEntrustNo())) {
       criteria.andEntrustNoLike("%" + model.getEntrustNo() + "%");
     }
-    if (null != model.getStatus()) {
+    // 5 不区分状态查询
+    if (null != model.getStatus() && 5 != model.getStatus()) {
       criteria.andStatusEqualTo(model.getStatus().byteValue());
     }
     Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->

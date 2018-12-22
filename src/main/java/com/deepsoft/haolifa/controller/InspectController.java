@@ -56,8 +56,9 @@ public class InspectController {
   @GetMapping("purchase-list/{type}")
   public ResultBean purchaseList(@ApiParam("查询类型 0 采购员 1 质检员 2 库管员") @PathVariable("type") Integer type,
       @ApiParam("页码") @RequestParam(defaultValue = "1") Integer pageNum,
-      @ApiParam("展示数量") @RequestParam(defaultValue = "10") Integer pageSize) {
-    return inspectService.getList(type,pageNum,pageSize);
+      @ApiParam("展示数量") @RequestParam(defaultValue = "10") Integer pageSize,
+      @ApiParam("送检单单号") String inspectNo) {
+    return inspectService.getList(type,pageNum,pageSize,inspectNo);
   }
 
   @ApiOperation("更新送检单状态")

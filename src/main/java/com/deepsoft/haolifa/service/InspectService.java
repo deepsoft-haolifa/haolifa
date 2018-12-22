@@ -47,7 +47,7 @@ public interface InspectService {
      * @param pageSize
      * @return
      */
-    ResultBean getList(int type,int pageNum, int pageSize);
+    ResultBean getList(int type,int pageNum, int pageSize,String inspectNo);
 
     /**
      * 更新状态

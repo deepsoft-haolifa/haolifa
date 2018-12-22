@@ -263,4 +263,20 @@ public class CommonEnum {
 
 
     }
+
+    public enum EntrustStatus {
+        NO_COMMIT_0((byte)0),
+        AUDITING_1((byte) 1),
+        DEALING_2((byte) 2),
+        HANDLED_3((byte) 3),
+        AUDIT_NO_PASS_4((byte) 4);
+
+        public final byte code;
+
+        EntrustStatus(byte code) {
+            this.code = code;
+        }
+
+
+    }
 }
