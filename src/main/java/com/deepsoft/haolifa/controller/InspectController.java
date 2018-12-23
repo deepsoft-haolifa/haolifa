@@ -94,4 +94,10 @@ public class InspectController {
     return inspectService.historyList(pageNum,pageSize,status);
   }
 
+  @ApiOperation("更新质检记录状态")
+  @PutMapping("updateHistoryStatus/{historyId}")
+  public ResultBean updateHistoryStatus(@ApiParam("记录标示") @PathVariable("historyId") Integer historyId) {
+    return inspectService.updateHistoryStatus(historyId);
+  }
+
 }

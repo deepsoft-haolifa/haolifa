@@ -233,4 +233,13 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     pageDTO.setList(histories.getResult());
     return ResultBean.success(pageDTO);
   }
+
+  @Override
+  public ResultBean updateHistoryStatus(Integer historyId) {
+    InspectHistory inspectHistory = new InspectHistory();
+    inspectHistory.setId(historyId);
+    inspectHistory.setStatus(InspectHistoryStatus.BEEN_STORE_2.code);
+    historyMapper.updateByPrimaryKey(inspectHistory);
+    return ResultBean.success(1);
+  }
 }
