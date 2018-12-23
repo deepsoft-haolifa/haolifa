@@ -34,7 +34,7 @@ public class DeliveryRecord {
 
     private String courierNo;
 
-    private String collectProvice;
+    private String collectProvince;
 
     private String collectAddress;
 
@@ -54,7 +54,7 @@ public class DeliveryRecord {
 
     private String remark;
 
-    public DeliveryRecord(Integer id, Date createTime, Date updateTime, Integer createUserId, Byte deliveryClassify, String deliveryNoticeNo, String contractOrderNo, Date deliveryTime, String operationNo, String customerNo, Integer productCount, String packingMode, Integer pieceCount, String transportCompany, String courierNo, String collectProvice, String collectAddress, String collectName, String collectPhone, BigDecimal weightPiece, BigDecimal pricePiece, BigDecimal deliveryFee, BigDecimal totalFee, String settlementWay, String remark) {
+    public DeliveryRecord(Integer id, Date createTime, Date updateTime, Integer createUserId, Byte deliveryClassify, String deliveryNoticeNo, String contractOrderNo, Date deliveryTime, String operationNo, String customerNo, Integer productCount, String packingMode, Integer pieceCount, String transportCompany, String courierNo, String collectProvince, String collectAddress, String collectName, String collectPhone, BigDecimal weightPiece, BigDecimal pricePiece, BigDecimal deliveryFee, BigDecimal totalFee, String settlementWay, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -70,7 +70,7 @@ public class DeliveryRecord {
         this.pieceCount = pieceCount;
         this.transportCompany = transportCompany;
         this.courierNo = courierNo;
-        this.collectProvice = collectProvice;
+        this.collectProvince = collectProvince;
         this.collectAddress = collectAddress;
         this.collectName = collectName;
         this.collectPhone = collectPhone;
@@ -206,12 +206,12 @@ public class DeliveryRecord {
         this.courierNo = courierNo == null ? null : courierNo.trim();
     }
 
-    public String getCollectProvice() {
-        return collectProvice;
+    public String getCollectProvince() {
+        return collectProvince;
     }
 
-    public void setCollectProvice(String collectProvice) {
-        this.collectProvice = collectProvice == null ? null : collectProvice.trim();
+    public void setCollectProvince(String collectProvince) {
+        this.collectProvince = collectProvince == null ? null : collectProvince.trim();
     }
 
     public String getCollectAddress() {

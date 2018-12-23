@@ -1076,73 +1076,73 @@ public class DeliveryRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceIsNull() {
-            addCriterion("collect_provice is null");
+        public Criteria andCollectProvinceIsNull() {
+            addCriterion("collect_province is null");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceIsNotNull() {
-            addCriterion("collect_provice is not null");
+        public Criteria andCollectProvinceIsNotNull() {
+            addCriterion("collect_province is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceEqualTo(String value) {
-            addCriterion("collect_provice =", value, "collectProvice");
+        public Criteria andCollectProvinceEqualTo(String value) {
+            addCriterion("collect_province =", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceNotEqualTo(String value) {
-            addCriterion("collect_provice <>", value, "collectProvice");
+        public Criteria andCollectProvinceNotEqualTo(String value) {
+            addCriterion("collect_province <>", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceGreaterThan(String value) {
-            addCriterion("collect_provice >", value, "collectProvice");
+        public Criteria andCollectProvinceGreaterThan(String value) {
+            addCriterion("collect_province >", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceGreaterThanOrEqualTo(String value) {
-            addCriterion("collect_provice >=", value, "collectProvice");
+        public Criteria andCollectProvinceGreaterThanOrEqualTo(String value) {
+            addCriterion("collect_province >=", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceLessThan(String value) {
-            addCriterion("collect_provice <", value, "collectProvice");
+        public Criteria andCollectProvinceLessThan(String value) {
+            addCriterion("collect_province <", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceLessThanOrEqualTo(String value) {
-            addCriterion("collect_provice <=", value, "collectProvice");
+        public Criteria andCollectProvinceLessThanOrEqualTo(String value) {
+            addCriterion("collect_province <=", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceLike(String value) {
-            addCriterion("collect_provice like", value, "collectProvice");
+        public Criteria andCollectProvinceLike(String value) {
+            addCriterion("collect_province like", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceNotLike(String value) {
-            addCriterion("collect_provice not like", value, "collectProvice");
+        public Criteria andCollectProvinceNotLike(String value) {
+            addCriterion("collect_province not like", value, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceIn(List<String> values) {
-            addCriterion("collect_provice in", values, "collectProvice");
+        public Criteria andCollectProvinceIn(List<String> values) {
+            addCriterion("collect_province in", values, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceNotIn(List<String> values) {
-            addCriterion("collect_provice not in", values, "collectProvice");
+        public Criteria andCollectProvinceNotIn(List<String> values) {
+            addCriterion("collect_province not in", values, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceBetween(String value1, String value2) {
-            addCriterion("collect_provice between", value1, value2, "collectProvice");
+        public Criteria andCollectProvinceBetween(String value1, String value2) {
+            addCriterion("collect_province between", value1, value2, "collectProvince");
             return (Criteria) this;
         }
 
-        public Criteria andCollectProviceNotBetween(String value1, String value2) {
-            addCriterion("collect_provice not between", value1, value2, "collectProvice");
+        public Criteria andCollectProvinceNotBetween(String value1, String value2) {
+            addCriterion("collect_province not between", value1, value2, "collectProvince");
             return (Criteria) this;
         }
 
