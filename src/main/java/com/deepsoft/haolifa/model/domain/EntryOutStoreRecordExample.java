@@ -686,6 +686,146 @@ public class EntryOutStoreRecordExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductModelIsNull() {
+            addCriterion("product_model is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIsNotNull() {
+            addCriterion("product_model is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelEqualTo(String value) {
+            addCriterion("product_model =", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotEqualTo(String value) {
+            addCriterion("product_model <>", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelGreaterThan(String value) {
+            addCriterion("product_model >", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelGreaterThanOrEqualTo(String value) {
+            addCriterion("product_model >=", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelLessThan(String value) {
+            addCriterion("product_model <", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelLessThanOrEqualTo(String value) {
+            addCriterion("product_model <=", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelLike(String value) {
+            addCriterion("product_model like", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotLike(String value) {
+            addCriterion("product_model not like", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIn(List<String> values) {
+            addCriterion("product_model in", values, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotIn(List<String> values) {
+            addCriterion("product_model not in", values, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelBetween(String value1, String value2) {
+            addCriterion("product_model between", value1, value2, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotBetween(String value1, String value2) {
+            addCriterion("product_model not between", value1, value2, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsIsNull() {
+            addCriterion("product_specifications is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsIsNotNull() {
+            addCriterion("product_specifications is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsEqualTo(String value) {
+            addCriterion("product_specifications =", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotEqualTo(String value) {
+            addCriterion("product_specifications <>", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsGreaterThan(String value) {
+            addCriterion("product_specifications >", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsGreaterThanOrEqualTo(String value) {
+            addCriterion("product_specifications >=", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsLessThan(String value) {
+            addCriterion("product_specifications <", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsLessThanOrEqualTo(String value) {
+            addCriterion("product_specifications <=", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsLike(String value) {
+            addCriterion("product_specifications like", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotLike(String value) {
+            addCriterion("product_specifications not like", value, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsIn(List<String> values) {
+            addCriterion("product_specifications in", values, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotIn(List<String> values) {
+            addCriterion("product_specifications not in", values, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsBetween(String value1, String value2) {
+            addCriterion("product_specifications between", value1, value2, "productSpecifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSpecificationsNotBetween(String value1, String value2) {
+            addCriterion("product_specifications not between", value1, value2, "productSpecifications");
+            return (Criteria) this;
+        }
+
         public Criteria andMaterialGraphNoIsNull() {
             addCriterion("material_graph_no is null");
             return (Criteria) this;

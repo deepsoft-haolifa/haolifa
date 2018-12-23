@@ -22,6 +22,10 @@ public class EntryOutStoreRecord {
 
     private String productNo;
 
+    private String productModel;
+
+    private String productSpecifications;
+
     private String materialGraphNo;
 
     private Byte operationType;
@@ -48,7 +52,7 @@ public class EntryOutStoreRecord {
 
     private String remark;
 
-    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String rackNo, String orderNo, String productNo, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
+    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String rackNo, String orderNo, String productNo, String productModel, String productSpecifications, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -58,6 +62,8 @@ public class EntryOutStoreRecord {
         this.rackNo = rackNo;
         this.orderNo = orderNo;
         this.productNo = productNo;
+        this.productModel = productModel;
+        this.productSpecifications = productSpecifications;
         this.materialGraphNo = materialGraphNo;
         this.operationType = operationType;
         this.type = type;
@@ -147,6 +153,22 @@ public class EntryOutStoreRecord {
 
     public void setProductNo(String productNo) {
         this.productNo = productNo == null ? null : productNo.trim();
+    }
+
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel == null ? null : productModel.trim();
+    }
+
+    public String getProductSpecifications() {
+        return productSpecifications;
+    }
+
+    public void setProductSpecifications(String productSpecifications) {
+        this.productSpecifications = productSpecifications == null ? null : productSpecifications.trim();
     }
 
     public String getMaterialGraphNo() {

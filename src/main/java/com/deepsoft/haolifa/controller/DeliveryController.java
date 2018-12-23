@@ -52,7 +52,7 @@ public class DeliveryController {
     }
 
     @ApiOperation("获取发货记录详情")
-    @PostMapping("/getInfo/{id}")
+    @GetMapping("/getInfo/{id}")
     public ResultBean getInfo(@PathVariable int id) {
         return ResultBean.success(deliveryService.getInfo(id));
     }

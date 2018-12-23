@@ -11,7 +11,9 @@
       <arg column="record_id" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="rack_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="product_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="operation_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
@@ -87,8 +89,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, record_id, rack_no, order_no, 
-    product_no, material_graph_no, operation_type, type, quantity, amount, product_department, 
-    customer_no, customer_name, supplier, receive_department, price, status, remark
+    product_no, product_model, product_specifications, material_graph_no, operation_type, 
+    type, quantity, amount, product_department, customer_no, customer_name, supplier, 
+    receive_department, price, status, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.EntryOutStoreRecordExample" resultMap="BaseResultMap">
     select
@@ -124,19 +127,21 @@
     insert into entry_out_store_record (id, create_time, update_time, 
       create_user, update_user, record_id, 
       rack_no, order_no, product_no, 
-      material_graph_no, operation_type, type, 
-      quantity, amount, product_department, 
-      customer_no, customer_name, supplier, 
-      receive_department, price, status, 
-      remark)
+      product_model, product_specifications, material_graph_no, 
+      operation_type, type, quantity, 
+      amount, product_department, customer_no, 
+      customer_name, supplier, receive_department, 
+      price, status, remark
+      )
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{recordId,jdbcType=CHAR}, 
-      #{rackNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=CHAR}, 
-      #{materialGraphNo,jdbcType=VARCHAR}, #{operationType,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, 
-      #{quantity,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{productDepartment,jdbcType=VARCHAR}, 
-      #{customerNo,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR}, 
-      #{receiveDepartment,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
-      #{remark,jdbcType=VARCHAR})
+      #{rackNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
+      #{productModel,jdbcType=VARCHAR}, #{productSpecifications,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{operationType,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{quantity,jdbcType=INTEGER}, 
+      #{amount,jdbcType=DECIMAL}, #{productDepartment,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
+      #{customerName,jdbcType=VARCHAR}, #{supplier,jdbcType=VARCHAR}, #{receiveDepartment,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.EntryOutStoreRecord">
     insert into entry_out_store_record
@@ -167,6 +172,12 @@
       </if>
       <if test="productNo != null">
         product_no,
+      </if>
+      <if test="productModel != null">
+        product_model,
+      </if>
+      <if test="productSpecifications != null">
+        product_specifications,
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
@@ -234,7 +245,13 @@
         #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="productNo != null">
-        #{productNo,jdbcType=CHAR},
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productModel != null">
+        #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null">
+        #{productSpecifications,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
@@ -311,7 +328,13 @@
         order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
       <if test="record.productNo != null">
-        product_no = #{record.productNo,jdbcType=CHAR},
+        product_no = #{record.productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productModel != null">
+        product_model = #{record.productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productSpecifications != null">
+        product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
       </if>
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
@@ -367,7 +390,9 @@
       record_id = #{record.recordId,jdbcType=CHAR},
       rack_no = #{record.rackNo,jdbcType=VARCHAR},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
-      product_no = #{record.productNo,jdbcType=CHAR},
+      product_no = #{record.productNo,jdbcType=VARCHAR},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       operation_type = #{record.operationType,jdbcType=TINYINT},
       type = #{record.type,jdbcType=TINYINT},
@@ -410,7 +435,13 @@
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
       <if test="productNo != null">
-        product_no = #{productNo,jdbcType=CHAR},
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productModel != null">
+        product_model = #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null">
+        product_specifications = #{productSpecifications,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
@@ -463,7 +494,9 @@
       record_id = #{recordId,jdbcType=CHAR},
       rack_no = #{rackNo,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},
-      product_no = #{productNo,jdbcType=CHAR},
+      product_no = #{productNo,jdbcType=VARCHAR},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      product_specifications = #{productSpecifications,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       operation_type = #{operationType,jdbcType=TINYINT},
       type = #{type,jdbcType=TINYINT},

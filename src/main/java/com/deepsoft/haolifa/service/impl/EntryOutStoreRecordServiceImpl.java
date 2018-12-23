@@ -62,6 +62,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setRoomNo(model.getRoomNo());
                 setRackNo(model.getRackNo());
                 setProductNo(model.getProductNo());
+                setProductModel(model.getProductModel());
+                setProductSpecifications(model.getProductSpecifications());
                 setOperationType(operationType);
                 setType(storageType);
                 setQuantity(model.getQuantity());
@@ -100,6 +102,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setRoomNo(model.getRoomNo());
                 setRackNo(model.getRackNo());
                 setProductNo(model.getProductNo());
+                setProductModel(model.getProductModel());
+                setProductSpecifications(model.getProductSpecifications());
                 setOperationType(operationType);
                 setType(storageType);
                 setQuantity(model.getQuantity());

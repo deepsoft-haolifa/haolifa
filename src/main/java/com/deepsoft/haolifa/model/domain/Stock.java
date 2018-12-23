@@ -19,6 +19,10 @@ public class Stock {
 
     private String productNo;
 
+    private String productModel;
+
+    private String productSpecifications;
+
     private String materialGraphNo;
 
     private Byte type;
@@ -29,7 +33,7 @@ public class Stock {
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String productModel, String productSpecifications, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -38,6 +42,8 @@ public class Stock {
         this.roomNo = roomNo;
         this.rackNo = rackNo;
         this.productNo = productNo;
+        this.productModel = productModel;
+        this.productSpecifications = productSpecifications;
         this.materialGraphNo = materialGraphNo;
         this.type = type;
         this.quantity = quantity;
@@ -111,6 +117,22 @@ public class Stock {
 
     public void setProductNo(String productNo) {
         this.productNo = productNo == null ? null : productNo.trim();
+    }
+
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel == null ? null : productModel.trim();
+    }
+
+    public String getProductSpecifications() {
+        return productSpecifications;
+    }
+
+    public void setProductSpecifications(String productSpecifications) {
+        this.productSpecifications = productSpecifications == null ? null : productSpecifications.trim();
     }
 
     public String getMaterialGraphNo() {

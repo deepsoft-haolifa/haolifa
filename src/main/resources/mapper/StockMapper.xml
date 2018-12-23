@@ -11,6 +11,8 @@
       <arg column="room_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="rack_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="product_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -78,7 +80,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, room_no, rack_no, product_no, 
-    material_graph_no, type, quantity, is_delete, remark
+    product_model, product_specifications, material_graph_no, type, quantity, is_delete, 
+    remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StockExample" resultMap="BaseResultMap">
     select
@@ -113,12 +116,14 @@
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Stock">
     insert into stock (id, create_time, update_time, 
       create_user, update_user, room_no, 
-      rack_no, product_no, material_graph_no, 
+      rack_no, product_no, product_model, 
+      product_specifications, material_graph_no, 
       type, quantity, is_delete, 
       remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{roomNo,jdbcType=VARCHAR}, 
-      #{rackNo,jdbcType=VARCHAR}, #{productNo,jdbcType=CHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{rackNo,jdbcType=VARCHAR}, #{productNo,jdbcType=CHAR}, #{productModel,jdbcType=VARCHAR}, 
+      #{productSpecifications,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
       #{type,jdbcType=TINYINT}, #{quantity,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
@@ -148,6 +153,12 @@
       </if>
       <if test="productNo != null">
         product_no,
+      </if>
+      <if test="productModel != null">
+        product_model,
+      </if>
+      <if test="productSpecifications != null">
+        product_specifications,
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
@@ -189,6 +200,12 @@
       </if>
       <if test="productNo != null">
         #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="productModel != null">
+        #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null">
+        #{productSpecifications,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
@@ -240,6 +257,12 @@
       <if test="record.productNo != null">
         product_no = #{record.productNo,jdbcType=CHAR},
       </if>
+      <if test="record.productModel != null">
+        product_model = #{record.productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productSpecifications != null">
+        product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
+      </if>
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       </if>
@@ -270,6 +293,8 @@
       room_no = #{record.roomNo,jdbcType=VARCHAR},
       rack_no = #{record.rackNo,jdbcType=VARCHAR},
       product_no = #{record.productNo,jdbcType=CHAR},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
       quantity = #{record.quantity,jdbcType=INTEGER},
@@ -303,6 +328,12 @@
       <if test="productNo != null">
         product_no = #{productNo,jdbcType=CHAR},
       </if>
+      <if test="productModel != null">
+        product_model = #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null">
+        product_specifications = #{productSpecifications,jdbcType=VARCHAR},
+      </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       </if>
@@ -330,6 +361,8 @@
       room_no = #{roomNo,jdbcType=VARCHAR},
       rack_no = #{rackNo,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=CHAR},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      product_specifications = #{productSpecifications,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
       quantity = #{quantity,jdbcType=INTEGER},
