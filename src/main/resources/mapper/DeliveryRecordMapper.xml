@@ -18,7 +18,7 @@
       <arg column="piece_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="transport_company" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="courier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="collect_provice" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="collect_province" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="collect_address" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="collect_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="collect_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -91,7 +91,7 @@
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user_id, delivery_classify, delivery_notice_no, 
     contract_order_no, delivery_time, operation_no, customer_no, product_count, packing_mode, 
-    piece_count, transport_company, courier_no, collect_provice, collect_address, collect_name, 
+    piece_count, transport_company, courier_no, collect_province, collect_address, collect_name, 
     collect_phone, weight_piece, price_piece, delivery_fee, total_fee, settlement_way, 
     remark
   </sql>
@@ -133,7 +133,7 @@
       delivery_classify, delivery_notice_no, contract_order_no, 
       delivery_time, operation_no, customer_no, 
       product_count, packing_mode, piece_count, 
-      transport_company, courier_no, collect_provice, 
+      transport_company, courier_no, collect_province, 
       collect_address, collect_name, collect_phone, 
       weight_piece, price_piece, delivery_fee, 
       total_fee, settlement_way, remark
@@ -142,7 +142,7 @@
       #{deliveryClassify,jdbcType=TINYINT}, #{deliveryNoticeNo,jdbcType=VARCHAR}, #{contractOrderNo,jdbcType=VARCHAR}, 
       #{deliveryTime,jdbcType=TIMESTAMP}, #{operationNo,jdbcType=VARCHAR}, #{customerNo,jdbcType=VARCHAR}, 
       #{productCount,jdbcType=INTEGER}, #{packingMode,jdbcType=VARCHAR}, #{pieceCount,jdbcType=INTEGER}, 
-      #{transportCompany,jdbcType=VARCHAR}, #{courierNo,jdbcType=VARCHAR}, #{collectProvice,jdbcType=VARCHAR}, 
+      #{transportCompany,jdbcType=VARCHAR}, #{courierNo,jdbcType=VARCHAR}, #{collectProvince,jdbcType=VARCHAR}, 
       #{collectAddress,jdbcType=VARCHAR}, #{collectName,jdbcType=VARCHAR}, #{collectPhone,jdbcType=VARCHAR}, 
       #{weightPiece,jdbcType=DECIMAL}, #{pricePiece,jdbcType=DECIMAL}, #{deliveryFee,jdbcType=DECIMAL}, 
       #{totalFee,jdbcType=DECIMAL}, #{settlementWay,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
@@ -196,8 +196,8 @@
       <if test="courierNo != null">
         courier_no,
       </if>
-      <if test="collectProvice != null">
-        collect_provice,
+      <if test="collectProvince != null">
+        collect_province,
       </if>
       <if test="collectAddress != null">
         collect_address,
@@ -270,8 +270,8 @@
       <if test="courierNo != null">
         #{courierNo,jdbcType=VARCHAR},
       </if>
-      <if test="collectProvice != null">
-        #{collectProvice,jdbcType=VARCHAR},
+      <if test="collectProvince != null">
+        #{collectProvince,jdbcType=VARCHAR},
       </if>
       <if test="collectAddress != null">
         #{collectAddress,jdbcType=VARCHAR},
@@ -356,8 +356,8 @@
       <if test="record.courierNo != null">
         courier_no = #{record.courierNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.collectProvice != null">
-        collect_provice = #{record.collectProvice,jdbcType=VARCHAR},
+      <if test="record.collectProvince != null">
+        collect_province = #{record.collectProvince,jdbcType=VARCHAR},
       </if>
       <if test="record.collectAddress != null">
         collect_address = #{record.collectAddress,jdbcType=VARCHAR},
@@ -408,7 +408,7 @@
       piece_count = #{record.pieceCount,jdbcType=INTEGER},
       transport_company = #{record.transportCompany,jdbcType=VARCHAR},
       courier_no = #{record.courierNo,jdbcType=VARCHAR},
-      collect_provice = #{record.collectProvice,jdbcType=VARCHAR},
+      collect_province = #{record.collectProvince,jdbcType=VARCHAR},
       collect_address = #{record.collectAddress,jdbcType=VARCHAR},
       collect_name = #{record.collectName,jdbcType=VARCHAR},
       collect_phone = #{record.collectPhone,jdbcType=VARCHAR},
@@ -467,8 +467,8 @@
       <if test="courierNo != null">
         courier_no = #{courierNo,jdbcType=VARCHAR},
       </if>
-      <if test="collectProvice != null">
-        collect_provice = #{collectProvice,jdbcType=VARCHAR},
+      <if test="collectProvince != null">
+        collect_province = #{collectProvince,jdbcType=VARCHAR},
       </if>
       <if test="collectAddress != null">
         collect_address = #{collectAddress,jdbcType=VARCHAR},
@@ -516,7 +516,7 @@
       piece_count = #{pieceCount,jdbcType=INTEGER},
       transport_company = #{transportCompany,jdbcType=VARCHAR},
       courier_no = #{courierNo,jdbcType=VARCHAR},
-      collect_provice = #{collectProvice,jdbcType=VARCHAR},
+      collect_province = #{collectProvince,jdbcType=VARCHAR},
       collect_address = #{collectAddress,jdbcType=VARCHAR},
       collect_name = #{collectName,jdbcType=VARCHAR},
       collect_phone = #{collectPhone,jdbcType=VARCHAR},
