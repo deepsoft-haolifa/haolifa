@@ -107,7 +107,7 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
     }
 
     @Override
-    public List<StoreRoomRackListDTO> getListByStormNo(String roomNo) {
+    public List<StoreRoomRackListDTO> getListByRoomNo(String roomNo) {
         StoreRoomRackExample example = new StoreRoomRackExample();
         StoreRoomRackExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(roomNo)) {

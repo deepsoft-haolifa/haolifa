@@ -45,10 +45,10 @@ public interface StoreRoomRackService {
     /**
      * 根据库房No获取库位列表
      *
-     * @param stormNo
+     * @param roomNo
      * @return
      */
-    List<StoreRoomRackListDTO> getListByStormNo(String stormNo);
+    List<StoreRoomRackListDTO> getListByRoomNo(String roomNo);
 
     /**
      * 获取库房货位列表

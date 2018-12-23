@@ -106,10 +106,10 @@ public class StoreRoomController {
     }
 
     @ApiOperation("库位列表（根据库房No）")
-    @GetMapping("/rack/list/{stormNo}")
-    @ApiImplicitParam(name = "stormNo", value = "库房No", dataType = "String", paramType = "path", required = true)
-    public ResultBean getListByStormNo(@PathVariable String stormNo) {
-        return new ResultBean(storeRoomRackService.getListByStormNo(stormNo));
+    @GetMapping("/rack/list/{roomNo}")
+    @ApiImplicitParam(name = "roomNo", value = "库房No", dataType = "String", paramType = "path", required = true)
+    public ResultBean getListByStormNo(@PathVariable String roomNo) {
+        return new ResultBean(storeRoomRackService.getListByRoomNo(roomNo));
     }
 
 
