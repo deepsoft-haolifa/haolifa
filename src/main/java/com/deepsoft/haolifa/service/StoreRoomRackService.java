@@ -4,6 +4,8 @@ import com.deepsoft.haolifa.model.domain.StoreRoomRack;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.StoreRoomRackRequestDTO;
 
+import java.util.List;
+
 public interface StoreRoomRackService {
 
     /**
@@ -38,6 +40,14 @@ public interface StoreRoomRackService {
      * @return
      */
     StoreRoomRack getInfo(int id);
+
+    /**
+     * 根据库房No获取库位列表
+     *
+     * @param stormNo
+     * @return
+     */
+    List<StoreRoomRack> getListByStormNo(String stormNo);
 
     /**
      * 获取库房货位列表

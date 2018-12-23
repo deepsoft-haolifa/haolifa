@@ -22,7 +22,7 @@ public class EntryMaterialStorageDTO extends BaseStorageDTO{
     private BigDecimal price;
 
 
-    @ApiModelProperty(value = "供应商",required = true)
+    @ApiModelProperty(value = "供应商")
     private String supplier;
 
 }

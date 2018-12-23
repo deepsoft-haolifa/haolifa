@@ -105,6 +105,16 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
     }
 
     @Override
+    public List<StoreRoomRack> getListByStormNo(String stormNo) {
+        StoreRoomRackExample example = new StoreRoomRackExample();
+        StoreRoomRackExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(stormNo)) {
+            criteria.andStoreRoomNoEqualTo(stormNo);
+        }
+        return  storeRoomRackMapper.selectByExample(example);
+    }
+
+    @Override
     public ResultBean pageRackInfo(Integer currentPage, Integer pageSize, String roomNo, String rackNameLike) {
         currentPage = currentPage == null ? 1 : currentPage;
         pageSize = pageSize == null ? 20 : pageSize;

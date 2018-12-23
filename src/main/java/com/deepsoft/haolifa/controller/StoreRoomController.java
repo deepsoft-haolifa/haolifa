@@ -100,12 +100,20 @@ public class StoreRoomController {
     @ApiOperation("获取库房库位详情")
     @DeleteMapping("/rack/getInfo/{id}")
     @ApiImplicitParam(name = "id", value = "库房货位id", dataType = "int", paramType = "path", required = true)
-    public ResultBean getInfoRack(@PathVariable int id) {
+    public ResultBean getListRack(@PathVariable int id) {
         return new ResultBean(storeRoomRackService.getInfo(id));
     }
 
+    @ApiOperation("库位列表（根据库房No）")
+    @GetMapping("/rack/list/{stormNo}")
+    @ApiImplicitParam(name = "stormNo", value = "库房No", dataType = "String", paramType = "path", required = true)
+    public ResultBean getListByStormNo(@PathVariable String stormNo) {
+        return new ResultBean(storeRoomRackService.getListByStormNo(stormNo));
+    }
 
-    @ApiOperation("获取库房库位分页列表")
+
+
+    @ApiOperation("获取库位分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
             @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
