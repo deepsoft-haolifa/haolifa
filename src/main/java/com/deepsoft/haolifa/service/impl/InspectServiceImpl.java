@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
 import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.InspectItemMapper;
@@ -125,7 +126,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   }
 
   @Override
-  public ResultBean getList(int type, int pageNum, int pageSize,String inspectNo) {
+  public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo) {
     InspectExample example = new InspectExample();
     InspectExample.Criteria criteria = example.createCriteria();
     if (type == 0) {
@@ -137,8 +138,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     if (type == 2) {
       criteria.andStatusIn(Arrays.asList(InspectStatus.STOCK_PENDING.code, InspectStatus.STOCKED.code));
     }
-    if(StringUtils.isNotEmpty(inspectNo)) {
-      criteria.andInspectNoLike("%"+inspectNo+"%");
+    if (StringUtils.isNotEmpty(inspectNo)) {
+      criteria.andInspectNoLike("%" + inspectNo + "%");
     }
 
     Page pageData = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> inspectMapper.selectByExample(example));
@@ -182,7 +183,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       for (Entry en : updateItem.entrySet()) {
         InspectItemExample itemExample = new InspectItemExample();
         itemExample.or().andInspectIdEqualTo(inspectId).andMaterialGraphNoEqualTo(en.getKey().toString());
-        inspectItemMapper.updateByExampleSelective((InspectItem) en.getValue(),itemExample);
+        inspectItemMapper.updateByExampleSelective((InspectItem) en.getValue(), itemExample);
       }
     }
     return ResultBean.success(1);
@@ -216,5 +217,20 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     historyExample.or().andInspectNoEqualTo(inspectNo);
     List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
     return ResultBean.success(histories);
+  }
+
+  @Override
+  public ResultBean historyList(Integer pageNum, Integer pageSize, Integer status) {
+    InspectHistoryExample example = new InspectHistoryExample();
+    if (InspectHistoryStatus.BEEN_STORE_2.code == status
+        || InspectHistoryStatus.WAITING_STORE_1.code == status) {
+      example.or().andStatusEqualTo(status.byteValue());
+    }
+    Page<InspectHistory> histories = PageHelper.startPage(pageNum, pageSize)
+        .doSelectPage(() -> historyMapper.selectByExample(example));
+    PageDTO pageDTO = new PageDTO();
+    BeanUtils.copyProperties(histories, pageDTO);
+    pageDTO.setList(histories.getResult());
+    return ResultBean.success(pageDTO);
   }
 }

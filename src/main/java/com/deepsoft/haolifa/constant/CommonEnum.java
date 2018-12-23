@@ -279,4 +279,15 @@ public class CommonEnum {
 
 
     }
+
+    public enum InspectHistoryStatus {
+
+        WAITING_STORE_1((byte)1),
+        BEEN_STORE_2((byte)2);
+        public final byte code;
+
+        InspectHistoryStatus(byte code) {
+            this.code = code;
+        }
+    }
 }

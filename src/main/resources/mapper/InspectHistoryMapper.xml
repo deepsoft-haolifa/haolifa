@@ -12,6 +12,7 @@
       <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="handling_suggestion" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, inspect_no, material_graph_no, material_graph_name, test_number, qualified_number, 
-    unqualified_number, handling_suggestion, remark
+    unqualified_number, handling_suggestion, remark, status
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultMap="BaseResultMap">
     select
@@ -110,11 +111,11 @@
     insert into inspect_history (id, inspect_no, material_graph_no, 
       material_graph_name, test_number, qualified_number, 
       unqualified_number, handling_suggestion, 
-      remark)
+      remark, status)
     values (#{id,jdbcType=INTEGER}, #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
       #{materialGraphName,jdbcType=VARCHAR}, #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
       #{unqualifiedNumber,jdbcType=INTEGER}, #{handlingSuggestion,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR})
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
     insert into inspect_history
@@ -146,6 +147,9 @@
       <if test="remark != null">
         remark,
       </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -174,6 +178,9 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -213,6 +220,9 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -228,7 +238,8 @@
       qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
       handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=VARCHAR}
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -260,6 +271,9 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -272,7 +286,8 @@
       qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
       handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

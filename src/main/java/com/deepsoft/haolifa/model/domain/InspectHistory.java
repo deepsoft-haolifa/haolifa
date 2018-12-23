@@ -19,7 +19,9 @@ public class InspectHistory {
 
     private String remark;
 
-    public InspectHistory(Integer id, String inspectNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark) {
+    private Byte status;
+
+    public InspectHistory(Integer id, String inspectNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status) {
         this.id = id;
         this.inspectNo = inspectNo;
         this.materialGraphNo = materialGraphNo;
@@ -29,6 +31,7 @@ public class InspectHistory {
         this.unqualifiedNumber = unqualifiedNumber;
         this.handlingSuggestion = handlingSuggestion;
         this.remark = remark;
+        this.status = status;
     }
 
     public InspectHistory() {
@@ -105,5 +108,13 @@ public class InspectHistory {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }
