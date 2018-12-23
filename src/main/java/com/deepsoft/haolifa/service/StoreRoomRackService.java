@@ -2,7 +2,8 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.StoreRoomRack;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StoreRoomRackRequestDTO;
+import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRackListDTO;
+import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRackRequestDTO;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public interface StoreRoomRackService {
      * @param stormNo
      * @return
      */
-    List<StoreRoomRack> getListByStormNo(String stormNo);
+    List<StoreRoomRackListDTO> getListByStormNo(String stormNo);
 
     /**
      * 获取库房货位列表

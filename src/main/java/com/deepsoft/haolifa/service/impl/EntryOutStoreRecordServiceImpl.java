@@ -59,8 +59,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
-                setStoreRoomId(model.getStoreRoomId());
-                setStoreRoomRackNo(model.getStoreRoomRackNo());
+                setRoomNo(model.getRoomNo());
+                setRackNo(model.getRackNo());
                 setProductNo(model.getProductNo());
                 setOperationType(operationType);
                 setType(storageType);
@@ -97,8 +97,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
-                setStoreRoomId(model.getStoreRoomId());
-                setStoreRoomRackNo(model.getStoreRoomRackNo());
+                setRoomNo(model.getRoomNo());
+                setRackNo(model.getRackNo());
                 setProductNo(model.getProductNo());
                 setOperationType(operationType);
                 setType(storageType);
@@ -130,8 +130,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
-                setStoreRoomId(model.getStoreRoomId());
-                setStoreRoomRackNo(model.getStoreRoomRackNo());
+                setRoomNo(model.getRoomNo());
+                setRackNo(model.getRackNo());
                 setMaterialGraphNo(materialGraphNo);
                 setOperationType(operationType);
                 setType(storageType);
@@ -169,8 +169,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
-                setStoreRoomId(model.getStoreRoomId());
-                setStoreRoomRackNo(model.getStoreRoomRackNo());
+                setRoomNo(model.getRoomNo());
+                setRackNo(model.getRackNo());
                 setMaterialGraphNo(materialGraphNo);
                 setOperationType(operationType);
                 setType(storageType);

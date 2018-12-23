@@ -159,13 +159,6 @@ CREATE TABLE `flow_history` (
 	  UNIQUE KEY `uk_username` (`username`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
-
-
-
-
-
-
-
 	DROP TABLE IF EXISTS `stock`;
 	CREATE TABLE `stock` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -173,10 +166,8 @@ CREATE TABLE `flow_history` (
 	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 	  `create_user` int(11) NOT NULL COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `stock_id` char(36) NOT NULL DEFAULT '' COMMENT '库存业务Id',
-	  `store_room_id` int(11) NOT NULL DEFAULT 0  COMMENT '库房ID',
-	  `store_room_rack_id` int(11) NOT NULL DEFAULT 0  COMMENT '库房货位ID',
-	  `store_room_rack_no` varchar(32) NOT NULL DEFAULT '' COMMENT '冗余货号（如：1号成品库 1101 1102 1103  1201 1202 1301 1302），通过这个就能确定是哪个库，哪个货架，哪个货位',
+	  `room_no` varchar(32) NOT NULL DEFAULT ''  COMMENT '库房No',
+	  `rack_no` varchar(32) NOT NULL DEFAULT '' COMMENT '冗余货号（如：1号成品库 1101 1102 1103  1201 1202 1301 1302），通过这个就能确定是哪个库，哪个货架，哪个货位',
 	  `product_no` char(36) NOT NULL DEFAULT '' COMMENT '成品编号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '库存类型：1.成品；2：零件;',
@@ -215,7 +206,7 @@ CREATE TABLE `flow_history` (
 	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 	  `create_user` int(11) NOT NULL COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `store_room_no` varchar(32) NOT NULL DEFAULT '' COMMENT '库房编号',
+	  `room_no` varchar(32) NOT NULL DEFAULT '' COMMENT '库房编号',
 	  `rack_name` varchar(32) NOT NULL DEFAULT '' COMMENT '库位名称',
 	  `rack_no` varchar(32) NOT NULL DEFAULT '' COMMENT '库号（如：1号成品库 1101 1102 1103  1201 1202 1301 1302），通过这个就能确定是哪个库，哪个货架，哪个货位',
 	  `status` tinyInt(4) NOT NULL DEFAULT 0 COMMENT '状态',
@@ -234,6 +225,7 @@ CREATE TABLE `flow_history` (
 	  `create_user` int(11) NOT NULL COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `record_id` char(36) NOT NULL DEFAULT '' COMMENT '业务字段Id',
+	  `rack_no` varchar(32) NOT NULL DEFAULT '' COMMENT '库号',
 	  `order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单号',
 	  `product_no` char(36) NOT NULL DEFAULT '' COMMENT '成品编号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
@@ -241,7 +233,6 @@ CREATE TABLE `flow_history` (
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出入库类型：1.成品；2：零件;',
 	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '出库，入库的数量',
 	  `amount` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '出库，入库金额',
-	  `store_room_rack_id` int(11) NOT NULL DEFAULT 0 COMMENT '库房货架业务ID，从哪个货架出库，或者入库哪个货架',
 	  `product_department` varchar(36) NOT NULL DEFAULT '' COMMENT '生产部门（成品入库时候有）',
 	  `customer_no` varchar(36) NOT NULL DEFAULT '' COMMENT '客户代号（成品出库时候有）',
 	  `customer_name` varchar(36) NOT NULL DEFAULT '' COMMENT '客户名称（成品出库时候有）',

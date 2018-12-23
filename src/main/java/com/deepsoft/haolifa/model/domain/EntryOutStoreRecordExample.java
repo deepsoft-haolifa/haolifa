@@ -476,6 +476,76 @@ public class EntryOutStoreRecordExample {
             return (Criteria) this;
         }
 
+        public Criteria andRackNoIsNull() {
+            addCriterion("rack_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoIsNotNull() {
+            addCriterion("rack_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoEqualTo(String value) {
+            addCriterion("rack_no =", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoNotEqualTo(String value) {
+            addCriterion("rack_no <>", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoGreaterThan(String value) {
+            addCriterion("rack_no >", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoGreaterThanOrEqualTo(String value) {
+            addCriterion("rack_no >=", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoLessThan(String value) {
+            addCriterion("rack_no <", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoLessThanOrEqualTo(String value) {
+            addCriterion("rack_no <=", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoLike(String value) {
+            addCriterion("rack_no like", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoNotLike(String value) {
+            addCriterion("rack_no not like", value, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoIn(List<String> values) {
+            addCriterion("rack_no in", values, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoNotIn(List<String> values) {
+            addCriterion("rack_no not in", values, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoBetween(String value1, String value2) {
+            addCriterion("rack_no between", value1, value2, "rackNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRackNoNotBetween(String value1, String value2) {
+            addCriterion("rack_no not between", value1, value2, "rackNo");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoIsNull() {
             addCriterion("order_no is null");
             return (Criteria) this;
@@ -923,66 +993,6 @@ public class EntryOutStoreRecordExample {
 
         public Criteria andAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("amount not between", value1, value2, "amount");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdIsNull() {
-            addCriterion("store_room_rack_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdIsNotNull() {
-            addCriterion("store_room_rack_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdEqualTo(Integer value) {
-            addCriterion("store_room_rack_id =", value, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdNotEqualTo(Integer value) {
-            addCriterion("store_room_rack_id <>", value, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdGreaterThan(Integer value) {
-            addCriterion("store_room_rack_id >", value, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("store_room_rack_id >=", value, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdLessThan(Integer value) {
-            addCriterion("store_room_rack_id <", value, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdLessThanOrEqualTo(Integer value) {
-            addCriterion("store_room_rack_id <=", value, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdIn(List<Integer> values) {
-            addCriterion("store_room_rack_id in", values, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdNotIn(List<Integer> values) {
-            addCriterion("store_room_rack_id not in", values, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdBetween(Integer value1, Integer value2) {
-            addCriterion("store_room_rack_id between", value1, value2, "storeRoomRackId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStoreRoomRackIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("store_room_rack_id not between", value1, value2, "storeRoomRackId");
             return (Criteria) this;
         }
 

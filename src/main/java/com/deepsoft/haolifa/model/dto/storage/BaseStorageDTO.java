@@ -6,14 +6,11 @@ import lombok.Data;
 @Data
 public class BaseStorageDTO {
 
-    @ApiModelProperty(value = "库房Id")
-    private Integer storeRoomId;
-
-    @ApiModelProperty(value = "库房货位Id")
-    private Integer storeRoomRackId;
+    @ApiModelProperty(value = "库房No")
+    private String roomNo;
 
     @ApiModelProperty(value = "库房货位号")
-    private String storeRoomRackNo;
+    private String rackNo;
 
     @ApiModelProperty(value = "订单号")
     private String orderNo;

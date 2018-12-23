@@ -16,6 +16,8 @@ public class EntryOutStoreRecord {
 
     private String recordId;
 
+    private String rackNo;
+
     private String orderNo;
 
     private String productNo;
@@ -29,8 +31,6 @@ public class EntryOutStoreRecord {
     private Integer quantity;
 
     private BigDecimal amount;
-
-    private Integer storeRoomRackId;
 
     private String productDepartment;
 
@@ -48,13 +48,14 @@ public class EntryOutStoreRecord {
 
     private String remark;
 
-    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String orderNo, String productNo, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, Integer storeRoomRackId, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
+    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String rackNo, String orderNo, String productNo, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.recordId = recordId;
+        this.rackNo = rackNo;
         this.orderNo = orderNo;
         this.productNo = productNo;
         this.materialGraphNo = materialGraphNo;
@@ -62,7 +63,6 @@ public class EntryOutStoreRecord {
         this.type = type;
         this.quantity = quantity;
         this.amount = amount;
-        this.storeRoomRackId = storeRoomRackId;
         this.productDepartment = productDepartment;
         this.customerNo = customerNo;
         this.customerName = customerName;
@@ -125,6 +125,14 @@ public class EntryOutStoreRecord {
         this.recordId = recordId == null ? null : recordId.trim();
     }
 
+    public String getRackNo() {
+        return rackNo;
+    }
+
+    public void setRackNo(String rackNo) {
+        this.rackNo = rackNo == null ? null : rackNo.trim();
+    }
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -179,14 +187,6 @@ public class EntryOutStoreRecord {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public Integer getStoreRoomRackId() {
-        return storeRoomRackId;
-    }
-
-    public void setStoreRoomRackId(Integer storeRoomRackId) {
-        this.storeRoomRackId = storeRoomRackId;
     }
 
     public String getProductDepartment() {

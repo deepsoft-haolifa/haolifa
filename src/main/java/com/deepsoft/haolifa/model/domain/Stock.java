@@ -13,13 +13,9 @@ public class Stock {
 
     private Integer updateUser;
 
-    private String stockId;
+    private String roomNo;
 
-    private Integer storeRoomId;
-
-    private Integer storeRoomRackId;
-
-    private String storeRoomRackNo;
+    private String rackNo;
 
     private String productNo;
 
@@ -33,16 +29,14 @@ public class Stock {
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, Integer storeRoomId, Integer storeRoomRackId, String storeRoomRackNo, String productNo, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
-        this.stockId = stockId;
-        this.storeRoomId = storeRoomId;
-        this.storeRoomRackId = storeRoomRackId;
-        this.storeRoomRackNo = storeRoomRackNo;
+        this.roomNo = roomNo;
+        this.rackNo = rackNo;
         this.productNo = productNo;
         this.materialGraphNo = materialGraphNo;
         this.type = type;
@@ -95,36 +89,20 @@ public class Stock {
         this.updateUser = updateUser;
     }
 
-    public String getStockId() {
-        return stockId;
+    public String getRoomNo() {
+        return roomNo;
     }
 
-    public void setStockId(String stockId) {
-        this.stockId = stockId == null ? null : stockId.trim();
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo == null ? null : roomNo.trim();
     }
 
-    public Integer getStoreRoomId() {
-        return storeRoomId;
+    public String getRackNo() {
+        return rackNo;
     }
 
-    public void setStoreRoomId(Integer storeRoomId) {
-        this.storeRoomId = storeRoomId;
-    }
-
-    public Integer getStoreRoomRackId() {
-        return storeRoomRackId;
-    }
-
-    public void setStoreRoomRackId(Integer storeRoomRackId) {
-        this.storeRoomRackId = storeRoomRackId;
-    }
-
-    public String getStoreRoomRackNo() {
-        return storeRoomRackNo;
-    }
-
-    public void setStoreRoomRackNo(String storeRoomRackNo) {
-        this.storeRoomRackNo = storeRoomRackNo == null ? null : storeRoomRackNo.trim();
+    public void setRackNo(String rackNo) {
+        this.rackNo = rackNo == null ? null : rackNo.trim();
     }
 
     public String getProductNo() {

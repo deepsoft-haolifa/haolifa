@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto;
+package com.deepsoft.haolifa.model.dto.stormRoom;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,7 +15,7 @@ public class StoreRoomRackRequestDTO {
     private Integer id;
 
     @ApiModelProperty(value = "库房号", required = true)
-    private String storeRoomNo;
+    private String roomNo;
     @ApiModelProperty(value = "库位编号（全局唯一）", required = true)
     private String rackNo;
     @ApiModelProperty(value = "库位名称")

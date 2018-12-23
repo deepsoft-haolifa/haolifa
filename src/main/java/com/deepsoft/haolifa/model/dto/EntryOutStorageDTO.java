@@ -10,18 +10,16 @@ import java.math.BigDecimal;
 @Data
 public class EntryOutStorageDTO {
 
+
     /**
-     * 库房Id
+     * 库房No
      */
-    private Integer storeRoomId;
-    /**
-     * 库房货位Id
-     */
-    private Integer storeRoomRackId;
+    private String roomNo;
+
     /**
      * 库房货位号
      */
-    private String storeRoomRackNo;
+    private String rackNo;
 
     /**
      * 成品号

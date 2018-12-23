@@ -32,8 +32,8 @@ public class StockServiceImpl extends BaseService implements StockService {
         Stock stock = null;
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
-        criteria.andStoreRoomIdEqualTo(model.getStoreRoomId())
-                .andStoreRoomRackNoEqualTo(model.getStoreRoomRackNo());
+        criteria.andRoomNoEqualTo(model.getRoomNo())
+                .andRackNoEqualTo(model.getRackNo());
         if (StringUtils.isNotBlank(model.getProductNo())) {
             criteria.andProductNoEqualTo(model.getProductNo());
         }
@@ -60,7 +60,6 @@ public class StockServiceImpl extends BaseService implements StockService {
             stock = new Stock();
             BeanUtils.copyProperties(model, stock);
             stock.setCreateUser(getLoginUserId());
-            stock.setStockId(RandomUtils.uuidStr());
             int insert = stockMapper.insertSelective(stock);
             if (insert > 0) {
                 result = true;
