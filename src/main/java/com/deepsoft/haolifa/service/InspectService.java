@@ -78,4 +78,11 @@ public interface InspectService {
    * 分页
    */
   ResultBean historyList(Integer pageNum, Integer pageSize,Integer status);
+
+  /**
+   * 入库完成
+   * @param historyId
+   * @return
+   */
+  ResultBean updateHistoryStatus(Integer historyId);
 }
