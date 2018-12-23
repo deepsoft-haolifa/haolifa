@@ -103,11 +103,11 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.listOrderNo(orderStatus));
     }
 
-//    @ApiOperation("生成领料单")
-//    @PostMapping("/material-requisition/save")
-//    public ResultBean saveMaterialRequisition(@RequestBody MaterialRequisitionDTO model) {
-//        return ResultBean.success(orderProductService.saveMaterialRequisition(model));
-//    }
+    @ApiOperation("获取订单的产品列表（只包含产品）")
+    @GetMapping("/product-list/{orderNo}")
+    public ResultBean productList(@PathVariable String orderNo) {
+        return ResultBean.success(orderProductService.getOrderProductList(orderNo));
+    }
 //
 //    @ApiOperation("获取领料单详情")
 //    @GetMapping("/material-requisition/info")
