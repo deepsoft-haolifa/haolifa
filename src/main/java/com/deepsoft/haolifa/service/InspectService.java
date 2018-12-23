@@ -12,93 +12,70 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import java.util.List;
 
 public interface InspectService {
-    /**
-     * 创建送检单
-     * @param model
-     * @return
-     */
-    ResultBean save(InspectDTO model);
 
-    /**
-     * 删除送检信息
-     * @param inspectId
-     * @return
-     */
-    ResultBean delete(Integer inspectId);
+  /**
+   * 创建送检单
+   */
+  ResultBean save(InspectDTO model);
 
-    /**
-     * 更新送检单
-     * @param inspectId
-     * @param model
-     * @return
-     */
-    ResultBean update(int inspectId,InspectDTO model);
+  /**
+   * 删除送检信息
+   */
+  ResultBean delete(Integer inspectId);
 
-    /**
-     * 获取详情
-     * @param inspectId
-     * @return
-     */
-    ResultBean getInfo(int inspectId);
+  /**
+   * 更新送检单
+   */
+  ResultBean update(int inspectId, InspectDTO model);
 
-    /**
-     * 查询列表
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    ResultBean getList(int type,int pageNum, int pageSize,String inspectNo);
+  /**
+   * 获取详情
+   */
+  ResultBean getInfo(int inspectId);
 
-    /**
-     * 更新状态
-     * @param inspectId
-     * @param status
-     * @return
-     */
-    ResultBean updateStatus(Integer inspectId, Integer status);
+  /**
+   * 查询列表
+   */
+  ResultBean getList(int type, int pageNum, int pageSize, String inspectNo);
 
-    /**
-     * 删除质检单项
-     * @param itemId
-     * @return
-     */
-    ResultBean deleteItem(int itemId);
+  /**
+   * 更新状态
+   */
+  ResultBean updateStatus(Integer inspectId, Integer status);
 
-    /**
-     * 更新送检单项
-     * @param itemId
-     * @param model
-     * @return
-     */
-    ResultBean updateItem(int itemId, InspectItemUpdateDTO model);
+  /**
+   * 删除质检单项
+   */
+  ResultBean deleteItem(int itemId);
 
-    /**
-     * 添加质检结果
-     * @param itemId
-     * @param model
-     * @return
-     */
-    ResultBean inspectRes(int itemId, InspectResDTO model);
+  /**
+   * 更新送检单项
+   */
+  ResultBean updateItem(int itemId, InspectItemUpdateDTO model);
 
-    /**
-     * 质检记录保存
-     * @param model
-     * @return
-     */
-    ResultBean historySave(InspectHistory model);
+  /**
+   * 添加质检结果
+   */
+  ResultBean inspectRes(int itemId, InspectResDTO model);
 
-    /**
-     * 质检记录删除
-     * @param id
-     * @return
-     */
-    ResultBean historyDelete(Integer id);
+  /**
+   * 质检记录保存
+   */
+  ResultBean historySave(InspectHistory model);
+
+  /**
+   * 质检记录删除
+   */
+  ResultBean historyDelete(Integer id);
 
 
-    /**
-     * 质检记录列表
-     * @param inspectNo
-     * @return
-     */
-    ResultBean historyList(String inspectNo);
+  /**
+   * 质检记录列表
+   */
+  ResultBean historyList(String inspectNo);
+
+  /**
+   * 分页
+   */
+  ResultBean historyList(Integer pageNum, Integer pageSize,Integer status);
 }

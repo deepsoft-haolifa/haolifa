@@ -86,4 +86,12 @@ public class InspectController {
     return inspectService.historyList(inspectNo);
   }
 
+  @ApiOperation("质检记录列表-分页")
+  @GetMapping("history/page-list")
+  public ResultBean historyList(@ApiParam("页码") @RequestParam(defaultValue = "1") Integer pageNum,
+      @ApiParam("展示数量") @RequestParam(defaultValue = "10") Integer pageSize,
+      @ApiParam("搜索条件：状态 0 全部 1 待入库 2 已入库") Integer status) {
+    return inspectService.historyList(pageNum,pageSize,status);
+  }
+
 }
