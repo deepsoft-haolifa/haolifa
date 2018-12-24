@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -108,6 +109,7 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
 
     @Override
     public List<StoreRoomRackListDTO> getListByRoomNo(String roomNo) {
+        List<StoreRoomRackListDTO> list = new ArrayList<>();
         StoreRoomRackExample example = new StoreRoomRackExample();
         StoreRoomRackExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(roomNo)) {
@@ -115,9 +117,9 @@ public class StoreRoomRackServiceImpl implements StoreRoomRackService {
         }
         List<StoreRoomRack> storeRoomRacks = storeRoomRackMapper.selectByExample(example);
         if (storeRoomRacks.size() > 0) {
-            return JSON.parseArray(JSON.toJSONString(storeRoomRacks), StoreRoomRackListDTO.class);
+            list = JSON.parseArray(JSON.toJSONString(storeRoomRacks), StoreRoomRackListDTO.class);
         }
-        return null;
+        return list;
     }
 
     @Override
