@@ -38,7 +38,7 @@ public class ReplaceMaterialController {
     }
 
     @ApiOperation("删除(只有状态为未审核状态才能删除)")
-    @GetMapping("/del/{id}")
+    @DeleteMapping("/del/{id}")
     public ResultBean del(@PathVariable("id") int id) {
         return replaceMaterialService.delete(id);
     }
