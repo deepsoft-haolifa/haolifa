@@ -249,7 +249,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         flowInstanceDTO.setSummary("采购审批");
         flowInstanceDTO.setFormType(3);
         flowInstanceDTO.setFormNo(orderNo);
-        flowInstanceDTO.setFlowId(purchaseOrder.getId());
+        flowInstanceDTO.setFormId(purchaseOrder.getId());
         flowInstanceService.create(flowInstanceDTO);
         return ResultBean.success(1);
     }

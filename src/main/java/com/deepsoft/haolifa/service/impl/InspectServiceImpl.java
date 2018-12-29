@@ -239,7 +239,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     InspectHistory inspectHistory = new InspectHistory();
     inspectHistory.setId(historyId);
     inspectHistory.setStatus(InspectHistoryStatus.BEEN_STORE_2.code);
-    historyMapper.updateByPrimaryKey(inspectHistory);
+    historyMapper.updateByPrimaryKeySelective(inspectHistory);
     return ResultBean.success(1);
   }
 }
