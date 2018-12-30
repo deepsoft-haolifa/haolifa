@@ -13,6 +13,10 @@ public class InstanceRecordDTO {
 
     private HistoryInfo dealStep;
 
+    private String summary;
+
+    private String formNo;
+
     private String initUserName;
 
     private Integer initUserId;
