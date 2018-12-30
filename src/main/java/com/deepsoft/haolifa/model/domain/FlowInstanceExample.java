@@ -305,6 +305,66 @@ public class FlowInstanceExample {
             return (Criteria) this;
         }
 
+        public Criteria andFormIdIsNull() {
+            addCriterion("form_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdIsNotNull() {
+            addCriterion("form_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdEqualTo(Integer value) {
+            addCriterion("form_id =", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdNotEqualTo(Integer value) {
+            addCriterion("form_id <>", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdGreaterThan(Integer value) {
+            addCriterion("form_id >", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("form_id >=", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdLessThan(Integer value) {
+            addCriterion("form_id <", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdLessThanOrEqualTo(Integer value) {
+            addCriterion("form_id <=", value, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdIn(List<Integer> values) {
+            addCriterion("form_id in", values, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdNotIn(List<Integer> values) {
+            addCriterion("form_id not in", values, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdBetween(Integer value1, Integer value2) {
+            addCriterion("form_id between", value1, value2, "formId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("form_id not between", value1, value2, "formId");
+            return (Criteria) this;
+        }
+
         public Criteria andFlowIdIsNull() {
             addCriterion("flow_id is null");
             return (Criteria) this;

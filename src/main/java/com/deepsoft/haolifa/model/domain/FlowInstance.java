@@ -9,6 +9,8 @@ public class FlowInstance {
 
     private String formNo;
 
+    private Integer formId;
+
     private Integer flowId;
 
     private Integer currentStepId;
@@ -27,10 +29,11 @@ public class FlowInstance {
 
     private Date updateTime;
 
-    public FlowInstance(Integer id, String summary, String formNo, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
+    public FlowInstance(Integer id, String summary, String formNo, Integer formId, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
         this.id = id;
         this.summary = summary;
         this.formNo = formNo;
+        this.formId = formId;
         this.flowId = flowId;
         this.currentStepId = currentStepId;
         this.userId = userId;
@@ -68,6 +71,14 @@ public class FlowInstance {
 
     public void setFormNo(String formNo) {
         this.formNo = formNo == null ? null : formNo.trim();
+    }
+
+    public Integer getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Integer formId) {
+        this.formId = formId;
     }
 
     public Integer getFlowId() {

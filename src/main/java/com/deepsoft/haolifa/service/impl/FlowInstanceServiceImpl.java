@@ -67,6 +67,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         flowInstance.setRoleId(currentStep.getRoleId());
         flowInstance.setCurrentStepId(currentStep.getStepId());
         flowInstance.setFormNo(model.getFormNo());// 流程初始化关联的主表单编号（采购单、生产订单、发票编号、机加工等）
+        flowInstance.setFormId(model.getFormId());
         instanceMapper.insertSelective(flowInstance);
         // 添加初始化流程实例历史（默认第一条已处理）
         FlowHistory flowHistory = new FlowHistory();

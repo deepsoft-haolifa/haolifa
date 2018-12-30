@@ -6,6 +6,7 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="summary" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="form_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="form_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="current_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -76,8 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, summary, form_no, flow_id, current_step_id, user_id, role_id, is_over, is_back, 
-    create_user_id, create_time, update_time
+    id, summary, form_no, form_id, flow_id, current_step_id, user_id, role_id, is_over, 
+    is_back, create_user_id, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowInstanceExample" resultMap="BaseResultMap">
     select
@@ -113,14 +114,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into flow_instance (summary, form_no, flow_id, 
-      current_step_id, user_id, role_id, 
-      is_over, is_back, create_user_id, 
-      create_time, update_time)
-    values (#{summary,jdbcType=VARCHAR}, #{formNo,jdbcType=VARCHAR}, #{flowId,jdbcType=INTEGER}, 
-      #{currentStepId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, 
-      #{isOver,jdbcType=TINYINT}, #{isBack,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into flow_instance (summary, form_no, form_id, 
+      flow_id, current_step_id, user_id, 
+      role_id, is_over, is_back, 
+      create_user_id, create_time, update_time
+      )
+    values (#{summary,jdbcType=VARCHAR}, #{formNo,jdbcType=VARCHAR}, #{formId,jdbcType=INTEGER}, 
+      #{flowId,jdbcType=INTEGER}, #{currentStepId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
+      #{roleId,jdbcType=INTEGER}, #{isOver,jdbcType=TINYINT}, #{isBack,jdbcType=TINYINT}, 
+      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowInstance">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -133,6 +136,9 @@
       </if>
       <if test="formNo != null">
         form_no,
+      </if>
+      <if test="formId != null">
+        form_id,
       </if>
       <if test="flowId != null">
         flow_id,
@@ -168,6 +174,9 @@
       </if>
       <if test="formNo != null">
         #{formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="formId != null">
+        #{formId,jdbcType=INTEGER},
       </if>
       <if test="flowId != null">
         #{flowId,jdbcType=INTEGER},
@@ -216,6 +225,9 @@
       <if test="record.formNo != null">
         form_no = #{record.formNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.formId != null">
+        form_id = #{record.formId,jdbcType=INTEGER},
+      </if>
       <if test="record.flowId != null">
         flow_id = #{record.flowId,jdbcType=INTEGER},
       </if>
@@ -253,6 +265,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       summary = #{record.summary,jdbcType=VARCHAR},
       form_no = #{record.formNo,jdbcType=VARCHAR},
+      form_id = #{record.formId,jdbcType=INTEGER},
       flow_id = #{record.flowId,jdbcType=INTEGER},
       current_step_id = #{record.currentStepId,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=VARCHAR},
@@ -274,6 +287,9 @@
       </if>
       <if test="formNo != null">
         form_no = #{formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="formId != null">
+        form_id = #{formId,jdbcType=INTEGER},
       </if>
       <if test="flowId != null">
         flow_id = #{flowId,jdbcType=INTEGER},
@@ -309,6 +325,7 @@
     update flow_instance
     set summary = #{summary,jdbcType=VARCHAR},
       form_no = #{formNo,jdbcType=VARCHAR},
+      form_id = #{formId,jdbcType=INTEGER},
       flow_id = #{flowId,jdbcType=INTEGER},
       current_step_id = #{currentStepId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=VARCHAR},
