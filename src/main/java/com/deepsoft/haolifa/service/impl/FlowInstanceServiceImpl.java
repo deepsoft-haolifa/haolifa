@@ -235,6 +235,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         instanceRecordDTO.setCreateTime(flowInstance.getCreateTime());
         instanceRecordDTO.setSummary(flowInstance.getSummary());
         instanceRecordDTO.setFormNo(flowInstance.getFormNo());
+        instanceRecordDTO.setFormId(flowInstance.getFormId());
         return ResultBean.success(instanceRecordDTO);
     }
 

@@ -17,6 +17,8 @@ public class InstanceRecordDTO {
 
     private String formNo;
 
+    private Integer formId;
+
     private String initUserName;
 
     private Integer initUserId;

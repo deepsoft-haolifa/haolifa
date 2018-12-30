@@ -39,6 +39,7 @@
 			fi.id,
 			fi.summary,
 			fi.form_no formNo,
+			fi.form_id formId,
 			fi.flow_id flowId,
 			fi.current_step_id currentStepId,
 			fi.user_id userId,
