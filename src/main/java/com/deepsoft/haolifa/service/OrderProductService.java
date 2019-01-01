@@ -145,6 +145,6 @@ public interface OrderProductService {
      *
      * @param orderStatus
      */
-    List<String> listOrderNo(byte orderStatus);
+    List<String> listOrderNo(String orderStatus);
 
 }

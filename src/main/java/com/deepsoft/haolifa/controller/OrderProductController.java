@@ -98,8 +98,8 @@ public class OrderProductController {
 
     @ApiOperation("获取订单号列表")
     @GetMapping("/order-no-list/{orderStatus}")
-    @ApiImplicitParam(name = "orderStatus", value = Constant.ORDER_STATUS_DESC, dataType = "int", paramType = "path", required = true)
-    public ResultBean getOrderMaterialDetail(@PathVariable("orderStatus") byte orderStatus) {
+    @ApiImplicitParam(name = "orderStatus", value = Constant.ORDER_STATUS_DESC, dataType = "String", paramType = "path", required = true)
+    public ResultBean orderNoList(@PathVariable("orderStatus") String orderStatus) {
         return ResultBean.success(orderProductService.listOrderNo(orderStatus));
     }
 

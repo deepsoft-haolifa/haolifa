@@ -45,7 +45,7 @@ public interface OrderExtendMapper {
      * 根据订单状态获取订单号列表
      *
      */
-    @Select("SELECT order_no FROM `order_product` WHERE order_status=#{orderStatus}")
-    List<String> listOrderNo(@Param("orderStatus") byte orderStatus);
+    @Select("SELECT order_no FROM `order_product` WHERE order_status in (#{orderStatus})")
+    List<String> listOrderNo(@Param("orderStatus") String orderStatus);
 
 }

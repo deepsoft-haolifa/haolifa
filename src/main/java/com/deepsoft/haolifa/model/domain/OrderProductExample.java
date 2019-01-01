@@ -676,6 +676,76 @@ public class OrderProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderContractExtendUrlIsNull() {
+            addCriterion("order_contract_extend_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlIsNotNull() {
+            addCriterion("order_contract_extend_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlEqualTo(String value) {
+            addCriterion("order_contract_extend_url =", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlNotEqualTo(String value) {
+            addCriterion("order_contract_extend_url <>", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlGreaterThan(String value) {
+            addCriterion("order_contract_extend_url >", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("order_contract_extend_url >=", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlLessThan(String value) {
+            addCriterion("order_contract_extend_url <", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlLessThanOrEqualTo(String value) {
+            addCriterion("order_contract_extend_url <=", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlLike(String value) {
+            addCriterion("order_contract_extend_url like", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlNotLike(String value) {
+            addCriterion("order_contract_extend_url not like", value, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlIn(List<String> values) {
+            addCriterion("order_contract_extend_url in", values, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlNotIn(List<String> values) {
+            addCriterion("order_contract_extend_url not in", values, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlBetween(String value1, String value2) {
+            addCriterion("order_contract_extend_url between", value1, value2, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderContractExtendUrlNotBetween(String value1, String value2) {
+            addCriterion("order_contract_extend_url not between", value1, value2, "orderContractExtendUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andTechnicalRequireIsNull() {
             addCriterion("technical_require is null");
             return (Criteria) this;

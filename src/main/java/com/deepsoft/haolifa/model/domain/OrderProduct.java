@@ -22,6 +22,8 @@ public class OrderProduct {
 
     private String orderContractUrl;
 
+    private String orderContractExtendUrl;
+
     private String technicalRequire;
 
     private String finishFeedbackTime;
@@ -86,7 +88,7 @@ public class OrderProduct {
 
     private String remark;
 
-    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String technicalRequire, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String assemblyShop, String assemblyGroup, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String remark) {
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String orderContractExtendUrl, String technicalRequire, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String assemblyShop, String assemblyGroup, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -96,6 +98,7 @@ public class OrderProduct {
         this.orderContractNo = orderContractNo;
         this.orderStatus = orderStatus;
         this.orderContractUrl = orderContractUrl;
+        this.orderContractExtendUrl = orderContractExtendUrl;
         this.technicalRequire = technicalRequire;
         this.finishFeedbackTime = finishFeedbackTime;
         this.feedbackTimeConfirmUser = feedbackTimeConfirmUser;
@@ -204,6 +207,14 @@ public class OrderProduct {
 
     public void setOrderContractUrl(String orderContractUrl) {
         this.orderContractUrl = orderContractUrl == null ? null : orderContractUrl.trim();
+    }
+
+    public String getOrderContractExtendUrl() {
+        return orderContractExtendUrl;
+    }
+
+    public void setOrderContractExtendUrl(String orderContractExtendUrl) {
+        this.orderContractExtendUrl = orderContractExtendUrl == null ? null : orderContractExtendUrl.trim();
     }
 
     public String getTechnicalRequire() {

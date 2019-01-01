@@ -764,7 +764,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
-    public List<String> listOrderNo(byte orderStatus) {
+    public List<String> listOrderNo(String orderStatus) {
         return orderExtendMapper.listOrderNo(orderStatus);
     }
 }

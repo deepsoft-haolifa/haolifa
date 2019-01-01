@@ -307,6 +307,7 @@ DROP TABLE IF EXISTS `order_product`;
 	  `order_contract_no` varchar (128) NOT NULL DEFAULT '' COMMENT '合同编号',
 	  `order_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '订单状态',
 	  `order_contract_url` varchar(64) NOT NULL DEFAULT '' COMMENT '订单合同url',
+	  `order_contract_extend_url` varchar(64) NOT NULL DEFAULT '' COMMENT '订单合同url（价格隐藏）',
 	  `technical_require` varchar(1024) NOT NULL DEFAULT '' COMMENT '技术清单要求（技术员填写）',
 	  `finish_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '工厂反馈完成时间',
 	  `feedback_time_confirm_user` varchar(32) NOT NULL DEFAULT '' COMMENT '反馈确认人',
@@ -463,7 +464,7 @@ DROP TABLE IF EXISTS `order_product`;
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品型号规则配置表';
 
 
-DROP TABLE IF EXISTS `Invoice`;
+DROP TABLE IF EXISTS `invoice`;
 CREATE TABLE `invoice` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',

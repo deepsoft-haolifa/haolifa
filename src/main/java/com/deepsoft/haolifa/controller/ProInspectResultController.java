@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"成品质检"})
+@Api(tags = {"成品质检/压力测试质检"})
 @RestController
 @RequestMapping("pro-inspect-res")
 public class ProInspectResultController {
@@ -69,5 +69,10 @@ public class ProInspectResultController {
         return ResultBean.success(split);
     }
 
-
+    @ApiOperation("压力测试不合格原因列表")
+    @GetMapping("pressure_reasonList")
+    public ResultBean pressureReasonList() {
+        String[] split = Constant.PRESSURE_UNQUALIFIED_REASON.split(",");
+        return ResultBean.success(split);
+    }
 }
