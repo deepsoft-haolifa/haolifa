@@ -16,9 +16,9 @@ public class OrderProductServiceTest extends BaseApplicationTests {
 
     @Test
     public void uploadOrderExcelTest() {
-        String fileBase64Str = Base64Utils.encryptToBase64("d:\\123.xls");
+        String fileBase64Str = Base64Utils.encryptToBase64("d:\\123.xlsx");
         System.out.println(fileBase64Str);
-        ResultBean resultBean = orderService.uploadOrderProductExcel(fileBase64Str);
+        ResultBean resultBean = orderService.uploadOrderProduct(fileBase64Str,"HX1812029-X417-H-ST)-线上");
         OrderProductDTO order = JSONObject.parseObject(JSONObject.toJSONString(resultBean.getResult()), OrderProductDTO.class);
         orderService.saveOrderProductInfo(order);
     }

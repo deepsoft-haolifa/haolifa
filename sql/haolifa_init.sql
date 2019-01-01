@@ -171,6 +171,7 @@ CREATE TABLE `flow_history` (
 	  `product_no` char(36) NOT NULL DEFAULT '' COMMENT '成品编号',
 	  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
     `product_specifications` varchar(64) DEFAULT '' NOT NULL COMMENT '成品规格',
+	  `material_batch_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件批次号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '库存类型：1.成品；2：零件;',
 	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '库存数量(编码时候考虑并发)',
@@ -232,6 +233,7 @@ CREATE TABLE `flow_history` (
 	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品编号',
 	  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
     `product_specifications` varchar(64) DEFAULT '' NOT NULL COMMENT '成品规格',
+    `material_batch_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件批次号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `operation_type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '操作类型：1.出库；2：入库;',
 	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出入库类型：1.成品；2：零件;',
@@ -889,3 +891,15 @@ CREATE TABLE `sys_message` (
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='消息/新闻表';
+
+DROP TABLE IF EXISTS `file_record`;
+CREATE TABLE `file_record` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(64) NOT NULL DEFAULT '' COMMENT '文件名称',
+  `file_url` varchar(64) NOT NULL DEFAULT '' COMMENT '文件url',
+  `type` TINYINT(4) NOT NULL COMMENT '类型：1-零件图纸，2-成品图纸',
+  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '文件备注',
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='文件记录列表（图纸管理）';

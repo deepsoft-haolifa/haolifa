@@ -25,4 +25,7 @@ public class EntryMaterialStorageDTO extends BaseStorageDTO{
     @ApiModelProperty(value = "供应商")
     private String supplier;
 
+
+    @ApiModelProperty(value = "零件批次号")
+    private String materialBatchNo;
 }

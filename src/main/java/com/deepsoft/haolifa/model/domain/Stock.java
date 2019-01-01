@@ -23,6 +23,8 @@ public class Stock {
 
     private String productSpecifications;
 
+    private String materialBatchNo;
+
     private String materialGraphNo;
 
     private Byte type;
@@ -33,7 +35,7 @@ public class Stock {
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String productModel, String productSpecifications, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String productModel, String productSpecifications, String materialBatchNo, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -44,6 +46,7 @@ public class Stock {
         this.productNo = productNo;
         this.productModel = productModel;
         this.productSpecifications = productSpecifications;
+        this.materialBatchNo = materialBatchNo;
         this.materialGraphNo = materialGraphNo;
         this.type = type;
         this.quantity = quantity;
@@ -133,6 +136,14 @@ public class Stock {
 
     public void setProductSpecifications(String productSpecifications) {
         this.productSpecifications = productSpecifications == null ? null : productSpecifications.trim();
+    }
+
+    public String getMaterialBatchNo() {
+        return materialBatchNo;
+    }
+
+    public void setMaterialBatchNo(String materialBatchNo) {
+        this.materialBatchNo = materialBatchNo == null ? null : materialBatchNo.trim();
     }
 
     public String getMaterialGraphNo() {

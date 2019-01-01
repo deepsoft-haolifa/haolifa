@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.constant.Constant;
+import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -20,12 +21,11 @@ public class OrderProductController {
     @Autowired
     private OrderProductService orderProductService;
 
-//    @ApiOperation("成品excel上传接口")
-//    @PostMapping("/uploadExcel")
-//    @ApiImplicitParam(name = "base64Source", value = "上传excel文件的base64编码", dataType = "String", required = true)
-//    public ResultBean uploadOrderProductExcel(@RequestParam String base64Source) {
-//        return orderProductService.uploadOrderProductExcel(base64Source);
-//    }
+    @ApiOperation("平台订单文件上传接口")
+    @PostMapping("/uploadContract")
+    public ResultBean uploadOrderProductExcel(@RequestBody FileUploadDTO fileUploadDTO) {
+        return orderProductService.uploadOrderProduct(fileUploadDTO);
+    }
 
     @ApiOperation("成品订单信息添加")
     @PostMapping("/save")

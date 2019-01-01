@@ -755,6 +755,76 @@ public class StockExample {
             return (Criteria) this;
         }
 
+        public Criteria andMaterialBatchNoIsNull() {
+            addCriterion("material_batch_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoIsNotNull() {
+            addCriterion("material_batch_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoEqualTo(String value) {
+            addCriterion("material_batch_no =", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoNotEqualTo(String value) {
+            addCriterion("material_batch_no <>", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoGreaterThan(String value) {
+            addCriterion("material_batch_no >", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoGreaterThanOrEqualTo(String value) {
+            addCriterion("material_batch_no >=", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoLessThan(String value) {
+            addCriterion("material_batch_no <", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoLessThanOrEqualTo(String value) {
+            addCriterion("material_batch_no <=", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoLike(String value) {
+            addCriterion("material_batch_no like", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoNotLike(String value) {
+            addCriterion("material_batch_no not like", value, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoIn(List<String> values) {
+            addCriterion("material_batch_no in", values, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoNotIn(List<String> values) {
+            addCriterion("material_batch_no not in", values, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoBetween(String value1, String value2) {
+            addCriterion("material_batch_no between", value1, value2, "materialBatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialBatchNoNotBetween(String value1, String value2) {
+            addCriterion("material_batch_no not between", value1, value2, "materialBatchNo");
+            return (Criteria) this;
+        }
+
         public Criteria andMaterialGraphNoIsNull() {
             addCriterion("material_graph_no is null");
             return (Criteria) this;

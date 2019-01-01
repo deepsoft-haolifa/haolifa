@@ -26,6 +26,8 @@ public class EntryOutStoreRecord {
 
     private String productSpecifications;
 
+    private String materialBatchNo;
+
     private String materialGraphNo;
 
     private Byte operationType;
@@ -52,7 +54,7 @@ public class EntryOutStoreRecord {
 
     private String remark;
 
-    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String rackNo, String orderNo, String productNo, String productModel, String productSpecifications, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
+    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String rackNo, String orderNo, String productNo, String productModel, String productSpecifications, String materialBatchNo, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -64,6 +66,7 @@ public class EntryOutStoreRecord {
         this.productNo = productNo;
         this.productModel = productModel;
         this.productSpecifications = productSpecifications;
+        this.materialBatchNo = materialBatchNo;
         this.materialGraphNo = materialGraphNo;
         this.operationType = operationType;
         this.type = type;
@@ -169,6 +172,14 @@ public class EntryOutStoreRecord {
 
     public void setProductSpecifications(String productSpecifications) {
         this.productSpecifications = productSpecifications == null ? null : productSpecifications.trim();
+    }
+
+    public String getMaterialBatchNo() {
+        return materialBatchNo;
+    }
+
+    public void setMaterialBatchNo(String materialBatchNo) {
+        this.materialBatchNo = materialBatchNo == null ? null : materialBatchNo.trim();
     }
 
     public String getMaterialGraphNo() {

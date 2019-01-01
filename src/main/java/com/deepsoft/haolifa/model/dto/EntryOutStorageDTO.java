@@ -37,6 +37,10 @@ public class EntryOutStorageDTO {
     private String productSpecifications;
 
     /**
+     * 零件批次号
+     */
+    private String materialBatchNo;
+    /**
      * 零件号
      */
     private String materialGraphNo;

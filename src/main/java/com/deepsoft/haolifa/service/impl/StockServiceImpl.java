@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.StockMapper;
 import com.deepsoft.haolifa.model.domain.Stock;
 import com.deepsoft.haolifa.model.domain.StockExample;
@@ -34,6 +35,11 @@ public class StockServiceImpl extends BaseService implements StockService {
         StockExample.Criteria criteria = example.createCriteria();
         criteria.andRoomNoEqualTo(model.getRoomNo())
                 .andRackNoEqualTo(model.getRackNo());
+        // 零件才有批次号的概念
+        if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
+            criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
+
+        }
         if (StringUtils.isNotBlank(model.getProductNo())) {
             criteria.andProductNoEqualTo(model.getProductNo());
         }

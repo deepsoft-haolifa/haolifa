@@ -136,6 +136,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
                 setRoomNo(model.getRoomNo());
                 setRackNo(model.getRackNo());
+                setMaterialBatchNo(model.getMaterialBatchNo());
                 setMaterialGraphNo(materialGraphNo);
                 setOperationType(operationType);
                 setType(storageType);
@@ -175,6 +176,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
                 setRoomNo(model.getRoomNo());
                 setRackNo(model.getRackNo());
+                setMaterialBatchNo(model.getMaterialBatchNo());
                 setMaterialGraphNo(materialGraphNo);
                 setOperationType(operationType);
                 setType(storageType);

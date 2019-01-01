@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
 
@@ -10,10 +11,9 @@ public interface OrderProductService {
     /**
      * 上传订单excel
      *
-     * @param base64Source base64 excel
      * @return
      */
-    ResultBean uploadOrderProductExcel(String base64Source);
+    ResultBean uploadOrderProduct(FileUploadDTO fileUploadDTO);
 
     /**
      * 添加order信息
