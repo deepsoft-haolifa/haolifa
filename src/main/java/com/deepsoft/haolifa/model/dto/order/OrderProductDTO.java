@@ -18,6 +18,8 @@ public class OrderProductDTO {
     private String orderContractNo;
     @ApiModelProperty(value = "订单合同url")
     private String orderContractUrl;
+    @ApiModelProperty(value = "订单备份合同url（无价格的文件Url）")
+    private String orderContractExtendUrl;
     @ApiModelProperty(value = "工厂反馈完成时间")
     private String finishFeedbackTime;
     @ApiModelProperty(value = "反馈确认人")

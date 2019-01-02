@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -93,6 +94,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean uploadOrderProduct(FileUploadDTO fileUploadDTO) {
         String base64Source = fileUploadDTO.getBase64Source();
         String fileName = fileUploadDTO.getFileName();
@@ -134,6 +136,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     }
                 }
             }
+            // 判断订单号在系统中是否存在
+            OrderProductExample orderProductExample = new OrderProductExample();
+            OrderProductExample.Criteria criteria = orderProductExample.createCriteria();
+            criteria.andOrderContractNoEqualTo(orderContractNo);
+            long countByExample = orderProductMapper.countByExample(orderProductExample);
+            if (countByExample > 0) {
+                throw new BaseException(CommonEnum.ResponseEnum.ORDER_NO_EXISTS);
+            }
 
             // 获取订单产品列表
             List<OrderProductAssociate> orderProductAssociates = new ArrayList<>();
@@ -152,7 +162,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     }
                 }
             }
-            for (int i = 10; i < lastRowNum; i++) {
+            for (int i = 9; i < lastRowNum; i++) {
                 OrderProductAssociate orderProductAssociate = new OrderProductAssociate();
                 Row row = sheet.getRow(i);
                 if (null != row) {
@@ -179,7 +189,20 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderProductAssociate.setProductColor(getCellValue(cell5));
                     // 第六列，数量
                     Cell cell6 = row.getCell(6);
-                    orderProductAssociate.setProductNumber(Integer.valueOf(getCellValue(cell6)));
+                    String cellValue6 = getCellValue(cell6);
+                    orderProductAssociate.setProductNumber(Integer.valueOf(cellValue6));
+                    // 第7列，单价
+                    Cell cell7 = row.getCell(7);
+                    String cellValue7 = getCellValue(cell7);
+                    if (StringUtils.isNotBlank(cellValue7)) {
+                        orderProductAssociate.setPrice(new BigDecimal(cellValue7));
+                    }
+                    // 第8列，合计
+                    Cell cell8 = row.getCell(8);
+                    String cellValue8 = getCellValue(cell8);
+                    if (StringUtils.isNotBlank(cellValue8)) {
+                        orderProductAssociate.setTotalPrice(new BigDecimal(cellValue8));
+                    }
                     // 第9列，材质
                     Cell cell9 = row.getCell(9);
                     orderProductAssociate.setMaterialDescription(getCellValue(cell9));
@@ -187,14 +210,33 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     Cell cell10 = row.getCell(10);
                     orderProductAssociate.setProductRemark(getCellValue(cell10));
 
+                    // 将价格隐藏
+                    cell7.setCellValue("");
+                    cell8.setCellValue("");
                     orderProductAssociates.add(orderProductAssociate);
+                }
+            }
+            // 将后面合计的价格隐藏
+            for (int i = lastRowNum; i < lastRowNum + 3; i++) {
+                Row row = sheet.getRow(i);
+                if (null != row) {
+                    Cell cell7 = row.getCell(7);
+                    cell7.setCellValue("");
+                    Cell cell8 = row.getCell(8);
+                    cell8.setCellValue("");
                 }
             }
             OrderProductDTO orderProductDTO = new OrderProductDTO();
             orderProductDTO.setOrderContractNo(orderContractNo);
             orderProductDTO.setOrderProductAssociates(orderProductAssociates);
+            //将合同上传到7牛文件服务器
             String fileUrl = QiniuUtil.uploadFile(base64Source, fileName);
             orderProductDTO.setOrderContractUrl(fileUrl);
+            // 将价格隐藏的合同上传到服务器
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            String extendFileUrl = QiniuUtil.uploadFile(outputStream.toByteArray(), System.currentTimeMillis() + "-noPrice-" + fileName);
+            orderProductDTO.setOrderContractExtendUrl(extendFileUrl);
             saveOrderProductInfo(orderProductDTO);
         } catch (Exception e) {
             e.printStackTrace();

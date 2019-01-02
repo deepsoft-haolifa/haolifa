@@ -48,8 +48,10 @@ public class QiniuUtil {
     public static String uploadFile(String base64Str, String originFileName) {
         // 将base64,之前的内容替换，只获取base64内容
         String indexStr = "base64,";
-        int in = base64Str.lastIndexOf(indexStr) + indexStr.length();
-        String replaceStr = base64Str.substring(0, in);
+        int lastIndexOf = base64Str.lastIndexOf(indexStr);
+        if (lastIndexOf > 0) {
+            int in = lastIndexOf + indexStr.length();
+            String replaceStr = base64Str.substring(0, in);
 //        // 根据base64内容决定文件后缀
 //        String ext = "";
 //        if (replaceStr.contains("excel")) {
@@ -59,8 +61,9 @@ public class QiniuUtil {
 //        } else if (replaceStr.contains("document")) {
 //            ext = ".doc";
 //        }
-        String source = base64Str.replaceAll(replaceStr, "");
-        byte[] bytes = Base64.decodeBytes(source);
+            base64Str = base64Str.replaceAll(replaceStr, "");
+        }
+        byte[] bytes = Base64.decodeBytes(base64Str);
 
         return uploadFile(bytes, System.currentTimeMillis() + "_" + originFileName);
 

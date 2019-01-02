@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa;
 
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -17,9 +18,9 @@ public class OrderProductServiceTest extends BaseApplicationTests {
     @Test
     public void uploadOrderExcelTest() {
         String fileBase64Str = Base64Utils.encryptToBase64("d:\\123.xlsx");
-        System.out.println(fileBase64Str);
-        ResultBean resultBean = orderService.uploadOrderProduct(fileBase64Str,"HX1812029-X417-H-ST)-线上");
-        OrderProductDTO order = JSONObject.parseObject(JSONObject.toJSONString(resultBean.getResult()), OrderProductDTO.class);
-        orderService.saveOrderProductInfo(order);
+        FileUploadDTO fileUploadDTO=new FileUploadDTO();
+        fileUploadDTO.setBase64Source(fileBase64Str);
+        fileUploadDTO.setFileName("HX1812029-X417-H-ST.xlsx");
+        ResultBean resultBean = orderService.uploadOrderProduct(fileUploadDTO);
     }
 }

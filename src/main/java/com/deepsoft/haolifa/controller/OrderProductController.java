@@ -21,9 +21,9 @@ public class OrderProductController {
     @Autowired
     private OrderProductService orderProductService;
 
-    @ApiOperation("平台订单文件上传接口")
+    @ApiOperation("平台订单文件上传接口（只能是Excel）")
     @PostMapping("/uploadContract")
-    public ResultBean uploadOrderProductExcel(@RequestBody FileUploadDTO fileUploadDTO) {
+    public ResultBean uploadContract(@RequestBody FileUploadDTO fileUploadDTO) {
         return orderProductService.uploadOrderProduct(fileUploadDTO);
     }
 
