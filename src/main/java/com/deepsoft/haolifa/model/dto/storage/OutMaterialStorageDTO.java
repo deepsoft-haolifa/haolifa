@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 出库零件实体
@@ -23,6 +24,6 @@ public class OutMaterialStorageDTO extends BaseStorageDTO{
     @ApiModelProperty(value = "领料部门")
     private String receiveDepartment;
 
-    @ApiModelProperty(value = "零件批次号,如果选择多个批次号，以逗号分隔")
+    @ApiModelProperty(value = "零件批次号")
     private String materialBatchNo;
 }

@@ -1,11 +1,14 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.StockMapper;
 import com.deepsoft.haolifa.model.domain.Stock;
 import com.deepsoft.haolifa.model.domain.StockExample;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.storage.MaterialBatchNoDTO;
 import com.deepsoft.haolifa.service.StockService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +75,26 @@ public class StockServiceImpl extends BaseService implements StockService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<MaterialBatchNoDTO> listMaterialBatchNos(String roomNo, String rackNo, String materialGraphNo) {
+        StockExample example = new StockExample();
+        StockExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(roomNo)) {
+            criteria.andRoomNoEqualTo(roomNo);
+        }
+        if (StringUtils.isNotBlank(rackNo)) {
+            criteria.andRackNoEqualTo(rackNo);
+        }
+        if (StringUtils.isNotBlank(materialGraphNo)) {
+            criteria.andMaterialBatchNoEqualTo(materialGraphNo);
+        }
+        List<Stock> stocks = stockMapper.selectByExample(example);
+        if (stocks.size() > 0) {
+            return JSON.parseArray(JSON.toJSONString(stocks), MaterialBatchNoDTO.class);
+        }
+        return null;
     }
 
 

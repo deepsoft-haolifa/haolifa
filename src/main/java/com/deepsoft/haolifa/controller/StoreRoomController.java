@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRackRequestDTO;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRequestDTO;
 import com.deepsoft.haolifa.service.EntryOutStoreRecordService;
+import com.deepsoft.haolifa.service.StockService;
 import com.deepsoft.haolifa.service.StoreRoomRackService;
 import com.deepsoft.haolifa.service.StoreRoomService;
 import io.swagger.annotations.*;
@@ -27,6 +28,8 @@ public class StoreRoomController {
     private StoreRoomRackService storeRoomRackService;
     @Autowired
     private EntryOutStoreRecordService entryOutStoreRecordService;
+    @Autowired
+    private StockService stockService;
 
     @ApiOperation("新增库房信息")
     @PostMapping("/save")
@@ -113,7 +116,6 @@ public class StoreRoomController {
     }
 
 
-
     @ApiOperation("获取库位分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
@@ -127,6 +129,17 @@ public class StoreRoomController {
                                    @RequestParam(required = false) String roomNo,
                                    @RequestParam(required = false) String rackNameLike) {
         return storeRoomRackService.pageRackInfo(currentPage, pageSize, roomNo, rackNameLike);
+    }
+
+    @ApiOperation("批次号列表（根据库房，库位，零件图号），用于零件出库选择批次号")
+    @GetMapping("/material-batch-nos/{roomNo}/{rackNo}/{materialGraphNo}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roomNo", value = "库房No", dataType = "String", paramType = "path", required = true),
+            @ApiImplicitParam(name = "rackNo", value = "库位No", dataType = "String", paramType = "path", required = true),
+            @ApiImplicitParam(name = "materialGraphNo", value = "零件图号", dataType = "String", paramType = "path", required = true)
+    })
+    public ResultBean getMaterialBatchNos(@PathVariable String roomNo, @PathVariable String rackNo, @PathVariable String materialGraphNo) {
+        return new ResultBean(stockService.listMaterialBatchNos(roomNo, rackNo, materialGraphNo));
     }
 
 

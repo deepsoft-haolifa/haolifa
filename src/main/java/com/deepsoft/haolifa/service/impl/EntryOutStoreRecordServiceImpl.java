@@ -159,10 +159,6 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         final String orderNo = model.getOrderNo();
         final String materialGraphNo = model.getMaterialGraphNo();
         final Integer quantity = model.getQuantity();
-        // todo 根据orderNo获取核料时候，锁定原料的数量和库位（从redis中）
-//        String lockMaterial = redisDao.get(CacheConsts.REDIS_KEY_LOCK_MATERIAL + orderNo);
-//        List<RedisLockMaterial> redisLockMaterials = JSONObject.parseArray(lockMaterial, RedisLockMaterial.class);
-
         EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
             setOperationType(operationType);
             setType(storageType);
