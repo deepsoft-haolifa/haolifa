@@ -3,7 +3,11 @@ package com.deepsoft.haolifa.model.domain;
 public class InspectHistory {
     private Integer id;
 
+    private String purchaseNo;
+
     private String inspectNo;
+
+    private String batchNumber;
 
     private String materialGraphNo;
 
@@ -21,9 +25,13 @@ public class InspectHistory {
 
     private Byte status;
 
-    public InspectHistory(Integer id, String inspectNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status) {
+    private Byte type;
+
+    public InspectHistory(Integer id, String purchaseNo, String inspectNo, String batchNumber, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status, Byte type) {
         this.id = id;
+        this.purchaseNo = purchaseNo;
         this.inspectNo = inspectNo;
+        this.batchNumber = batchNumber;
         this.materialGraphNo = materialGraphNo;
         this.materialGraphName = materialGraphName;
         this.testNumber = testNumber;
@@ -32,6 +40,7 @@ public class InspectHistory {
         this.handlingSuggestion = handlingSuggestion;
         this.remark = remark;
         this.status = status;
+        this.type = type;
     }
 
     public InspectHistory() {
@@ -46,12 +55,28 @@ public class InspectHistory {
         this.id = id;
     }
 
+    public String getPurchaseNo() {
+        return purchaseNo;
+    }
+
+    public void setPurchaseNo(String purchaseNo) {
+        this.purchaseNo = purchaseNo == null ? null : purchaseNo.trim();
+    }
+
     public String getInspectNo() {
         return inspectNo;
     }
 
     public void setInspectNo(String inspectNo) {
         this.inspectNo = inspectNo == null ? null : inspectNo.trim();
+    }
+
+    public String getBatchNumber() {
+        return batchNumber;
+    }
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber == null ? null : batchNumber.trim();
     }
 
     public String getMaterialGraphNo() {
@@ -116,5 +141,13 @@ public class InspectHistory {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 }

@@ -60,4 +60,11 @@ public interface PurcahseOrderService {
    * @return
    */
   ResultBean approve(String orderNo);
+
+  /**
+   * 生成送检单
+   * @param formId
+   * @return
+   */
+  ResultBean createInspect(Integer formId);
 }

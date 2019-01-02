@@ -235,6 +235,146 @@ public class InspectExample {
             return (Criteria) this;
         }
 
+        public Criteria andPurchaseNoIsNull() {
+            addCriterion("purchase_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIsNotNull() {
+            addCriterion("purchase_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoEqualTo(String value) {
+            addCriterion("purchase_no =", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotEqualTo(String value) {
+            addCriterion("purchase_no <>", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThan(String value) {
+            addCriterion("purchase_no >", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThanOrEqualTo(String value) {
+            addCriterion("purchase_no >=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThan(String value) {
+            addCriterion("purchase_no <", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThanOrEqualTo(String value) {
+            addCriterion("purchase_no <=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLike(String value) {
+            addCriterion("purchase_no like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotLike(String value) {
+            addCriterion("purchase_no not like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIn(List<String> values) {
+            addCriterion("purchase_no in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotIn(List<String> values) {
+            addCriterion("purchase_no not in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoBetween(String value1, String value2) {
+            addCriterion("purchase_no between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotBetween(String value1, String value2) {
+            addCriterion("purchase_no not between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIsNull() {
+            addCriterion("batch_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIsNotNull() {
+            addCriterion("batch_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberEqualTo(String value) {
+            addCriterion("batch_number =", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotEqualTo(String value) {
+            addCriterion("batch_number <>", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberGreaterThan(String value) {
+            addCriterion("batch_number >", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("batch_number >=", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLessThan(String value) {
+            addCriterion("batch_number <", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLessThanOrEqualTo(String value) {
+            addCriterion("batch_number <=", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLike(String value) {
+            addCriterion("batch_number like", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotLike(String value) {
+            addCriterion("batch_number not like", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIn(List<String> values) {
+            addCriterion("batch_number in", values, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotIn(List<String> values) {
+            addCriterion("batch_number not in", values, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberBetween(String value1, String value2) {
+            addCriterion("batch_number between", value1, value2, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotBetween(String value1, String value2) {
+            addCriterion("batch_number not between", value1, value2, "batchNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -602,6 +742,76 @@ public class InspectExample {
 
         public Criteria andSupplierNameNotBetween(String value1, String value2) {
             addCriterion("supplier_name not between", value1, value2, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsIsNull() {
+            addCriterion("blueprints is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsIsNotNull() {
+            addCriterion("blueprints is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsEqualTo(String value) {
+            addCriterion("blueprints =", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsNotEqualTo(String value) {
+            addCriterion("blueprints <>", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsGreaterThan(String value) {
+            addCriterion("blueprints >", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsGreaterThanOrEqualTo(String value) {
+            addCriterion("blueprints >=", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsLessThan(String value) {
+            addCriterion("blueprints <", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsLessThanOrEqualTo(String value) {
+            addCriterion("blueprints <=", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsLike(String value) {
+            addCriterion("blueprints like", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsNotLike(String value) {
+            addCriterion("blueprints not like", value, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsIn(List<String> values) {
+            addCriterion("blueprints in", values, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsNotIn(List<String> values) {
+            addCriterion("blueprints not in", values, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsBetween(String value1, String value2) {
+            addCriterion("blueprints between", value1, value2, "blueprints");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlueprintsNotBetween(String value1, String value2) {
+            addCriterion("blueprints not between", value1, value2, "blueprints");
             return (Criteria) this;
         }
     }

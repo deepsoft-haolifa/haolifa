@@ -104,6 +104,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
           .parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime());
       inspect.setArrivalTime(arrivalTime);
     }
+    inspect.setBatchNumber(model.getBatchNumber());
+    inspect.setBlueprints(model.getBlueprints());
     inspectMapper.updateByPrimaryKeySelective(inspect);
     List<InspectItemDTO> items = model.getItems();
     if (items != null && items.size() > 0) {

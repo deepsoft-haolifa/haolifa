@@ -7,9 +7,19 @@ public class Entrust {
 
     private String materialGraphName;
 
+    private String purchaseNo;
+
     private String entrustNo;
 
     private String materialGraphNo;
+
+    private Byte workshopType;
+
+    private String supplierName;
+
+    private String supplierNo;
+
+    private String batchNumber;
 
     private Integer number;
 
@@ -25,11 +35,16 @@ public class Entrust {
 
     private Integer createUserId;
 
-    public Entrust(Integer id, String materialGraphName, String entrustNo, String materialGraphNo, Integer number, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.materialGraphName = materialGraphName;
+        this.purchaseNo = purchaseNo;
         this.entrustNo = entrustNo;
         this.materialGraphNo = materialGraphNo;
+        this.workshopType = workshopType;
+        this.supplierName = supplierName;
+        this.supplierNo = supplierNo;
+        this.batchNumber = batchNumber;
         this.number = number;
         this.status = status;
         this.entrustPerson = entrustPerson;
@@ -59,6 +74,14 @@ public class Entrust {
         this.materialGraphName = materialGraphName == null ? null : materialGraphName.trim();
     }
 
+    public String getPurchaseNo() {
+        return purchaseNo;
+    }
+
+    public void setPurchaseNo(String purchaseNo) {
+        this.purchaseNo = purchaseNo == null ? null : purchaseNo.trim();
+    }
+
     public String getEntrustNo() {
         return entrustNo;
     }
@@ -73,6 +96,38 @@ public class Entrust {
 
     public void setMaterialGraphNo(String materialGraphNo) {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public Byte getWorkshopType() {
+        return workshopType;
+    }
+
+    public void setWorkshopType(Byte workshopType) {
+        this.workshopType = workshopType;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public String getSupplierNo() {
+        return supplierNo;
+    }
+
+    public void setSupplierNo(String supplierNo) {
+        this.supplierNo = supplierNo == null ? null : supplierNo.trim();
+    }
+
+    public String getBatchNumber() {
+        return batchNumber;
+    }
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber == null ? null : batchNumber.trim();
     }
 
     public Integer getNumber() {

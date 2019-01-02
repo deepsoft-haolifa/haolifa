@@ -7,6 +7,10 @@ public class Inspect {
 
     private String inspectNo;
 
+    private String purchaseNo;
+
+    private String batchNumber;
+
     private Byte status;
 
     private Date createTime;
@@ -19,15 +23,20 @@ public class Inspect {
 
     private String supplierName;
 
-    public Inspect(Integer id, String inspectNo, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName) {
+    private String blueprints;
+
+    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String blueprints) {
         this.id = id;
         this.inspectNo = inspectNo;
+        this.purchaseNo = purchaseNo;
+        this.batchNumber = batchNumber;
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
         this.arrivalTime = arrivalTime;
         this.supplierName = supplierName;
+        this.blueprints = blueprints;
     }
 
     public Inspect() {
@@ -48,6 +57,22 @@ public class Inspect {
 
     public void setInspectNo(String inspectNo) {
         this.inspectNo = inspectNo == null ? null : inspectNo.trim();
+    }
+
+    public String getPurchaseNo() {
+        return purchaseNo;
+    }
+
+    public void setPurchaseNo(String purchaseNo) {
+        this.purchaseNo = purchaseNo == null ? null : purchaseNo.trim();
+    }
+
+    public String getBatchNumber() {
+        return batchNumber;
+    }
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber == null ? null : batchNumber.trim();
     }
 
     public Byte getStatus() {
@@ -96,5 +121,13 @@ public class Inspect {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public String getBlueprints() {
+        return blueprints;
+    }
+
+    public void setBlueprints(String blueprints) {
+        this.blueprints = blueprints == null ? null : blueprints.trim();
     }
 }

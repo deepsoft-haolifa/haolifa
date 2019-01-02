@@ -18,6 +18,15 @@ public class InspectDTO {
   @ApiModelProperty(required = true,value = "供应商名称")
   private String supplierName;
 
+  @ApiModelProperty(required = true,value = "采购合同编号")
+  private String purchaseNo;
+
+  @ApiModelProperty(required = true,value = "批次号")
+  private String batchNumber;
+
+  @ApiModelProperty(value = "质量保证书附件,多个逗号隔开")
+  private String blueprints;
+
   @ApiModelProperty(required = true,value = "送检列表")
   private List<InspectItemDTO> items;
  }

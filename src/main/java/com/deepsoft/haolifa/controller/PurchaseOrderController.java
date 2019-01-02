@@ -71,4 +71,10 @@ public class PurchaseOrderController {
   public ResultBean approve(@ApiParam("订单号") @PathVariable("orderNo") String orderNo) {
     return purcahseOrderService.approve(orderNo);
   }
+
+  @ApiOperation("生成报检单")
+  @GetMapping("createInspect/{formId}")
+  public ResultBean createInspect(@PathVariable("formId") Integer formId) {
+    return purcahseOrderService.createInspect(formId);
+  }
 }

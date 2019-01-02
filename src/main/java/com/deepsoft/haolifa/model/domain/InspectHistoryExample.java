@@ -164,6 +164,76 @@ public class InspectHistoryExample {
             return (Criteria) this;
         }
 
+        public Criteria andPurchaseNoIsNull() {
+            addCriterion("purchase_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIsNotNull() {
+            addCriterion("purchase_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoEqualTo(String value) {
+            addCriterion("purchase_no =", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotEqualTo(String value) {
+            addCriterion("purchase_no <>", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThan(String value) {
+            addCriterion("purchase_no >", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThanOrEqualTo(String value) {
+            addCriterion("purchase_no >=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThan(String value) {
+            addCriterion("purchase_no <", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThanOrEqualTo(String value) {
+            addCriterion("purchase_no <=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLike(String value) {
+            addCriterion("purchase_no like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotLike(String value) {
+            addCriterion("purchase_no not like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIn(List<String> values) {
+            addCriterion("purchase_no in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotIn(List<String> values) {
+            addCriterion("purchase_no not in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoBetween(String value1, String value2) {
+            addCriterion("purchase_no between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotBetween(String value1, String value2) {
+            addCriterion("purchase_no not between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
         public Criteria andInspectNoIsNull() {
             addCriterion("inspect_no is null");
             return (Criteria) this;
@@ -231,6 +301,76 @@ public class InspectHistoryExample {
 
         public Criteria andInspectNoNotBetween(String value1, String value2) {
             addCriterion("inspect_no not between", value1, value2, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIsNull() {
+            addCriterion("batch_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIsNotNull() {
+            addCriterion("batch_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberEqualTo(String value) {
+            addCriterion("batch_number =", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotEqualTo(String value) {
+            addCriterion("batch_number <>", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberGreaterThan(String value) {
+            addCriterion("batch_number >", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("batch_number >=", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLessThan(String value) {
+            addCriterion("batch_number <", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLessThanOrEqualTo(String value) {
+            addCriterion("batch_number <=", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLike(String value) {
+            addCriterion("batch_number like", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotLike(String value) {
+            addCriterion("batch_number not like", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIn(List<String> values) {
+            addCriterion("batch_number in", values, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotIn(List<String> values) {
+            addCriterion("batch_number not in", values, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberBetween(String value1, String value2) {
+            addCriterion("batch_number between", value1, value2, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotBetween(String value1, String value2) {
+            addCriterion("batch_number not between", value1, value2, "batchNumber");
             return (Criteria) this;
         }
 
@@ -751,6 +891,66 @@ public class InspectHistoryExample {
 
         public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(Byte value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(Byte value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(Byte value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(Byte value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<Byte> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<Byte> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(Byte value1, Byte value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("type not between", value1, value2, "type");
             return (Criteria) this;
         }
     }

@@ -21,6 +21,7 @@ import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
 import javax.print.DocFlavor.STRING;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +49,12 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 
     @Autowired
     private FlowInstanceService flowInstanceService;
+
+    @Autowired
+    private InspectMapper inspectMapper;
+
+    @Autowired
+    private  InspectItemMapper inspectItemMapper;
 
     @Override
     public ResultBean save(PurchaseOrderDTO model) {
@@ -251,6 +258,44 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         flowInstanceDTO.setFormNo(orderNo);
         flowInstanceDTO.setFormId(purchaseOrder.getId());
         flowInstanceService.create(flowInstanceDTO);
+        return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean createInspect(Integer formId) {
+        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(formId);
+        PurchaseOrderExDTO purchaseOrderExDTO = new PurchaseOrderExDTO();
+        BeanUtils.copyProperties(purchaseOrder,purchaseOrderExDTO);
+        PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
+        purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrder.getPurchaseOrderNo());
+        List<PurchaseOrderItem> purchaseOrderItemList = purchaseOrderItemMapper.selectByExample(purchaseOrderItemExample);
+
+        int createUserId = getLoginUserId();
+        String inspectNo = "in_" + RandomUtils.orderNoStr();
+        Inspect inspect = new Inspect();
+        inspect.setCreateUserId(createUserId);
+        inspect.setInspectNo(inspectNo);
+        inspect.setSupplierName(purchaseOrder.getSupplierName());
+        inspect.setPurchaseNo(purchaseOrder.getPurchaseOrderNo());
+        inspect.setBatchNumber(String.valueOf(System.currentTimeMillis()));
+        inspect.setStatus((byte)1);
+        inspect.setArrivalTime(new Date());
+        inspectMapper.insertSelective(inspect);
+        if (purchaseOrderItemList != null && purchaseOrderItemList.size() > 0) {
+            for (int i = 0; i < purchaseOrderItemList.size(); i++) {
+                InspectItem inspectItem = new InspectItem();
+                PurchaseOrderItem orderItem = purchaseOrderItemList.get(i);
+                inspectItem.setInspectId(inspect.getId());
+                inspectItem.setPurchaseNumber(orderItem.getNumber());
+                inspectItem.setPurchaseNo(purchaseOrder.getPurchaseOrderNo());
+                inspectItem.setMaterialGraphNo(orderItem.getMaterialGraphNo());
+                inspectItem.setMaterialName(orderItem.getMaterialName());
+                inspectItem.setRequirements(orderItem.getMaterial());
+                inspectItem.setUnit(orderItem.getUnit());
+                inspectItem.setInspectId(inspect.getId());
+                inspectItemMapper.insertSelective(inspectItem);
+            }
+        }
         return ResultBean.success(1);
     }
 }

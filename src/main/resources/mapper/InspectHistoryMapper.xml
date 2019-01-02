@@ -4,7 +4,9 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.InspectHistory">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="purchase_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="inspect_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="batch_number" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="test_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -13,6 +15,7 @@
       <arg column="handling_suggestion" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,8 +77,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, inspect_no, material_graph_no, material_graph_name, test_number, qualified_number, 
-    unqualified_number, handling_suggestion, remark, status
+    id, purchase_no, inspect_no, batch_number, material_graph_no, material_graph_name, 
+    test_number, qualified_number, unqualified_number, handling_suggestion, remark, status, 
+    type
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultMap="BaseResultMap">
     select
@@ -108,14 +112,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
-    insert into inspect_history (id, inspect_no, material_graph_no, 
-      material_graph_name, test_number, qualified_number, 
-      unqualified_number, handling_suggestion, 
-      remark, status)
-    values (#{id,jdbcType=INTEGER}, #{inspectNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
-      #{materialGraphName,jdbcType=VARCHAR}, #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
-      #{unqualifiedNumber,jdbcType=INTEGER}, #{handlingSuggestion,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT})
+    insert into inspect_history (id, purchase_no, inspect_no, 
+      batch_number, material_graph_no, material_graph_name, 
+      test_number, qualified_number, unqualified_number, 
+      handling_suggestion, remark, status, 
+      type)
+    values (#{id,jdbcType=INTEGER}, #{purchaseNo,jdbcType=VARCHAR}, #{inspectNo,jdbcType=VARCHAR}, 
+      #{batchNumber,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
+      #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
+      #{handlingSuggestion,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{type,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
     insert into inspect_history
@@ -123,8 +129,14 @@
       <if test="id != null">
         id,
       </if>
+      <if test="purchaseNo != null">
+        purchase_no,
+      </if>
       <if test="inspectNo != null">
         inspect_no,
+      </if>
+      <if test="batchNumber != null">
+        batch_number,
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
@@ -150,13 +162,22 @@
       <if test="status != null">
         status,
       </if>
+      <if test="type != null">
+        type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="purchaseNo != null">
+        #{purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="inspectNo != null">
         #{inspectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null">
+        #{batchNumber,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
@@ -182,6 +203,9 @@
       <if test="status != null">
         #{status,jdbcType=TINYINT},
       </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultType="java.lang.Long">
@@ -196,8 +220,14 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.purchaseNo != null">
+        purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.inspectNo != null">
         inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batchNumber != null">
+        batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       </if>
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
@@ -223,6 +253,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -231,7 +264,9 @@
   <update id="updateByExample" parameterType="map">
     update inspect_history
     set id = #{record.id,jdbcType=INTEGER},
+      purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
+      batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
       test_number = #{record.testNumber,jdbcType=INTEGER},
@@ -239,7 +274,8 @@
       unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
       handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=TINYINT}
+      status = #{record.status,jdbcType=TINYINT},
+      type = #{record.type,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -247,8 +283,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
     update inspect_history
     <set>
+      <if test="purchaseNo != null">
+        purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="inspectNo != null">
         inspect_no = #{inspectNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null">
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
@@ -274,12 +316,17 @@
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
     update inspect_history
-    set inspect_no = #{inspectNo,jdbcType=VARCHAR},
+    set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      inspect_no = #{inspectNo,jdbcType=VARCHAR},
+      batch_number = #{batchNumber,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
       test_number = #{testNumber,jdbcType=INTEGER},
@@ -287,7 +334,8 @@
       unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
       handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT}
+      status = #{status,jdbcType=TINYINT},
+      type = #{type,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

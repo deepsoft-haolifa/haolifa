@@ -235,6 +235,76 @@ public class EntrustExample {
             return (Criteria) this;
         }
 
+        public Criteria andPurchaseNoIsNull() {
+            addCriterion("purchase_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIsNotNull() {
+            addCriterion("purchase_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoEqualTo(String value) {
+            addCriterion("purchase_no =", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotEqualTo(String value) {
+            addCriterion("purchase_no <>", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThan(String value) {
+            addCriterion("purchase_no >", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThanOrEqualTo(String value) {
+            addCriterion("purchase_no >=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThan(String value) {
+            addCriterion("purchase_no <", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThanOrEqualTo(String value) {
+            addCriterion("purchase_no <=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLike(String value) {
+            addCriterion("purchase_no like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotLike(String value) {
+            addCriterion("purchase_no not like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIn(List<String> values) {
+            addCriterion("purchase_no in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotIn(List<String> values) {
+            addCriterion("purchase_no not in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoBetween(String value1, String value2) {
+            addCriterion("purchase_no between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotBetween(String value1, String value2) {
+            addCriterion("purchase_no not between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
         public Criteria andEntrustNoIsNull() {
             addCriterion("entrust_no is null");
             return (Criteria) this;
@@ -372,6 +442,276 @@ public class EntrustExample {
 
         public Criteria andMaterialGraphNoNotBetween(String value1, String value2) {
             addCriterion("material_graph_no not between", value1, value2, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeIsNull() {
+            addCriterion("workShop_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeIsNotNull() {
+            addCriterion("workShop_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeEqualTo(Byte value) {
+            addCriterion("workShop_type =", value, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeNotEqualTo(Byte value) {
+            addCriterion("workShop_type <>", value, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeGreaterThan(Byte value) {
+            addCriterion("workShop_type >", value, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("workShop_type >=", value, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeLessThan(Byte value) {
+            addCriterion("workShop_type <", value, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("workShop_type <=", value, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeIn(List<Byte> values) {
+            addCriterion("workShop_type in", values, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeNotIn(List<Byte> values) {
+            addCriterion("workShop_type not in", values, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeBetween(Byte value1, Byte value2) {
+            addCriterion("workShop_type between", value1, value2, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkshopTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("workShop_type not between", value1, value2, "workshopType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameIsNull() {
+            addCriterion("supplier_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameIsNotNull() {
+            addCriterion("supplier_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameEqualTo(String value) {
+            addCriterion("supplier_name =", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameNotEqualTo(String value) {
+            addCriterion("supplier_name <>", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameGreaterThan(String value) {
+            addCriterion("supplier_name >", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameGreaterThanOrEqualTo(String value) {
+            addCriterion("supplier_name >=", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameLessThan(String value) {
+            addCriterion("supplier_name <", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameLessThanOrEqualTo(String value) {
+            addCriterion("supplier_name <=", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameLike(String value) {
+            addCriterion("supplier_name like", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameNotLike(String value) {
+            addCriterion("supplier_name not like", value, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameIn(List<String> values) {
+            addCriterion("supplier_name in", values, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameNotIn(List<String> values) {
+            addCriterion("supplier_name not in", values, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameBetween(String value1, String value2) {
+            addCriterion("supplier_name between", value1, value2, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNameNotBetween(String value1, String value2) {
+            addCriterion("supplier_name not between", value1, value2, "supplierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoIsNull() {
+            addCriterion("supplier_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoIsNotNull() {
+            addCriterion("supplier_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoEqualTo(String value) {
+            addCriterion("supplier_no =", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoNotEqualTo(String value) {
+            addCriterion("supplier_no <>", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoGreaterThan(String value) {
+            addCriterion("supplier_no >", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoGreaterThanOrEqualTo(String value) {
+            addCriterion("supplier_no >=", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoLessThan(String value) {
+            addCriterion("supplier_no <", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoLessThanOrEqualTo(String value) {
+            addCriterion("supplier_no <=", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoLike(String value) {
+            addCriterion("supplier_no like", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoNotLike(String value) {
+            addCriterion("supplier_no not like", value, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoIn(List<String> values) {
+            addCriterion("supplier_no in", values, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoNotIn(List<String> values) {
+            addCriterion("supplier_no not in", values, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoBetween(String value1, String value2) {
+            addCriterion("supplier_no between", value1, value2, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierNoNotBetween(String value1, String value2) {
+            addCriterion("supplier_no not between", value1, value2, "supplierNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIsNull() {
+            addCriterion("batch_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIsNotNull() {
+            addCriterion("batch_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberEqualTo(String value) {
+            addCriterion("batch_number =", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotEqualTo(String value) {
+            addCriterion("batch_number <>", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberGreaterThan(String value) {
+            addCriterion("batch_number >", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("batch_number >=", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLessThan(String value) {
+            addCriterion("batch_number <", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLessThanOrEqualTo(String value) {
+            addCriterion("batch_number <=", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberLike(String value) {
+            addCriterion("batch_number like", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotLike(String value) {
+            addCriterion("batch_number not like", value, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberIn(List<String> values) {
+            addCriterion("batch_number in", values, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotIn(List<String> values) {
+            addCriterion("batch_number not in", values, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberBetween(String value1, String value2) {
+            addCriterion("batch_number between", value1, value2, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBatchNumberNotBetween(String value1, String value2) {
+            addCriterion("batch_number not between", value1, value2, "batchNumber");
             return (Criteria) this;
         }
 
