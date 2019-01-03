@@ -67,6 +67,20 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public MessageVO messageInfo(Integer id) {
+        if (id == null) {
+            throw new BaseException("id 不能为空");
+        }
+        SysMessage sysMessage = sysMessageMapper.selectByPrimaryKey(id);
+        if (sysMessage != null) {
+            MessageVO messageVO = new MessageVO();
+            BeanUtils.copyProperties(sysMessage, messageVO);
+            return messageVO;
+        }
+        return null;
+    }
+
+    @Override
     public int deleteMessage(Integer id) {
         return sysMessageMapper.deleteByPrimaryKey(id);
     }

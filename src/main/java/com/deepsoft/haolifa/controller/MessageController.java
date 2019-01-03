@@ -17,7 +17,7 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("/{messageType}")
+    @GetMapping("/pageInfo/{messageType}")
     @ApiImplicitParam(name = "messageType", value = "1:新闻，2：消息", dataType = "Byte", required = true)
     @ApiOperation("获取新闻/消息列表")
     public ResultBean getMessages(@PathVariable("messageType") Byte messageType,
@@ -26,19 +26,25 @@ public class MessageController {
         return ResultBean.success(messageService.getMessagesByType(messageType, pageNum, pageSize));
     }
 
-    @PostMapping("")
+    @PostMapping("/add")
     @ApiOperation("添加新闻/消息")
     public ResultBean addMessage(@RequestBody MessageVO messageVO) {
         return ResultBean.success(messageService.insertMessage(messageVO));
     }
 
-    @PutMapping("")
+    @PutMapping("/update")
     @ApiOperation("修改新闻/消息")
     public ResultBean modifyMessage(@RequestBody MessageVO messageVO) {
         return ResultBean.success(messageService.updateMessage(messageVO));
     }
+    @GetMapping("/info/{id}")
+    @ApiOperation("获取新闻/消息详情")
+    @ApiImplicitParam(name = "id", value = "主键id", dataType = "int", paramType = "path", required = true)
+    public ResultBean messageInfo(@PathVariable("id") Integer id) {
+        return ResultBean.success(messageService.messageInfo(id));
+    }
 
-    @DeleteMapping("")
+    @DeleteMapping("/delete")
     @ApiOperation("删除新闻/消息")
     public ResultBean deleteMessage(@RequestParam("id") Integer id) {
         return ResultBean.success(messageService.deleteMessage(id));

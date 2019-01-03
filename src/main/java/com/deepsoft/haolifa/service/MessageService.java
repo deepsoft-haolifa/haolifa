@@ -13,6 +13,8 @@ public interface MessageService {
 
     int updateMessage(MessageVO messageVO);
 
+    MessageVO messageInfo(Integer id);
+
     int deleteMessage(Integer id);
 
 }
