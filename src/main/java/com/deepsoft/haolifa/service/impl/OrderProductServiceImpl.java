@@ -391,11 +391,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             or().andOrderNoEqualTo(orderNo);
         }});
         for (OrderProductAssociate orderProductAssociate : orderProductAssociates) {
+            String productNo = orderProductAssociate.getProductNo();
             String productModel = orderProductAssociate.getProductModel();
             String specifications = orderProductAssociate.getSpecifications();
             ProductCheckMaterialListDTO productCheckMaterialListDTO = new ProductCheckMaterialListDTO();
             // 根据型号和规格获取可选零件列表（核料用）
             List<MaterialTypeListDTO> materials = getTypeMaterials(productModel, specifications);
+            productCheckMaterialListDTO.setProductNo(productNo);
             productCheckMaterialListDTO.setProductModel(productModel);
             productCheckMaterialListDTO.setSpecifications(specifications);
             productCheckMaterialListDTO.setProductNumber(orderProductAssociate.getProductNumber());

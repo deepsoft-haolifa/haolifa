@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
 import com.deepsoft.haolifa.model.domain.EntryOutStoreRecord;
 import com.deepsoft.haolifa.model.domain.EntryOutStoreRecordExample;
+import com.deepsoft.haolifa.model.domain.Stock;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -69,7 +70,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setQuantity(model.getQuantity());
             }};
             // 增加库存
-            boolean result = stockService.addReduceStock(entryOutStorageDTO);
+            boolean result = stockService.addStock(entryOutStorageDTO);
             log.info("EntryOutStoreRecordServiceImpl entryProduct add stock result:{}", result);
         }
         return insert;
@@ -109,7 +110,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setQuantity(model.getQuantity());
             }};
             // 减少库存
-            stockService.addReduceStock(entryOutStorageDTO);
+            stockService.reduceStock(entryOutStorageDTO);
         }
         return insert;
     }
@@ -122,6 +123,10 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
         String orderNo = model.getOrderNo();
         final String materialGraphNo = model.getMaterialGraphNo();
+        // 如果不传入批次号，就给个默认批次号
+        if (StringUtils.isBlank(model.getMaterialBatchNo())) {
+            model.setMaterialBatchNo("默认批次号");
+        }
         final Integer quantity = model.getQuantity();
         EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
             setOperationType(operationType);
@@ -143,7 +148,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setQuantity(quantity);
             }};
             // 增加库存
-            stockService.addReduceStock(entryOutStorageDTO);
+            stockService.addStock(entryOutStorageDTO);
             // 更新零件的当前库存量
             materialService.updateCurrentQuantity(materialGraphNo, quantity);
         }
@@ -158,7 +163,25 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
         final String orderNo = model.getOrderNo();
         final String materialGraphNo = model.getMaterialGraphNo();
+        final String materialBatchNo = model.getMaterialBatchNo();
+        final String roomNo = model.getRoomNo();
+        final String rackNo = model.getRackNo();
+        if (StringUtils.isBlank(materialBatchNo)) {
+            model.setMaterialBatchNo("默认批次号");
+        }
         final Integer quantity = model.getQuantity();
+        // 判断库房是否有这么多数量
+        Stock stock = stockService.infoStocks(roomNo, rackNo, materialGraphNo, materialBatchNo);
+        if (stock == null) {
+            log.error("not stock record by roomNo:{},rackNo:{},materialGraphNo:{},materialBatchNo:{}", roomNo, rackNo, materialGraphNo, materialBatchNo);
+            return 0;
+        }
+        if (stock.getQuantity() < Math.abs(quantity)) {
+            log.warn("not enough quantity  by roomNo:{},rackNo:{},materialGraphNo:{},materialBatchNo:{}", roomNo, rackNo, materialGraphNo, materialBatchNo);
+            return 0;
+        }
+
+        // 插入出入库记录表
         EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
             setOperationType(operationType);
             setType(storageType);
@@ -166,13 +189,13 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
-        // 插入出入库记录表
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
+
         if (insert > 0) {
             EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
-                setRoomNo(model.getRoomNo());
-                setRackNo(model.getRackNo());
-                setMaterialBatchNo(model.getMaterialBatchNo());
+                setRoomNo(roomNo);
+                setRackNo(rackNo);
+                setMaterialBatchNo(materialBatchNo);
                 setMaterialGraphNo(materialGraphNo);
                 setOperationType(operationType);
                 setType(storageType);
@@ -181,7 +204,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
 
             }};
             // 减少库存
-            stockService.addReduceStock(entryOutStorageDTO);
+            stockService.reduceStock(entryOutStorageDTO);
             // 更新零件的当前库存量
             materialService.updateCurrentQuantity(materialGraphNo, quantity);
         }

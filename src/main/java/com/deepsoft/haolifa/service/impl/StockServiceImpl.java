@@ -30,7 +30,53 @@ public class StockServiceImpl extends BaseService implements StockService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addReduceStock(EntryOutStorageDTO model) {
+    public boolean addStock(EntryOutStorageDTO model) {
+        log.info("StockServiceImpl addReduceStock:{}", model.toString());
+        boolean result = false;
+        Stock stock = null;
+        StockExample example = new StockExample();
+        StockExample.Criteria criteria = example.createCriteria();
+        criteria.andRoomNoEqualTo(model.getRoomNo()).andRackNoEqualTo(model.getRackNo());
+        // 零件才有批次号的概念
+        if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
+            if (StringUtils.isBlank(model.getMaterialBatchNo())) {
+                model.setMaterialBatchNo("默认批次号");
+            }
+            criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
+        }
+        if (StringUtils.isNotBlank(model.getProductNo())) {
+            criteria.andProductNoEqualTo(model.getProductNo());
+        }
+        if (StringUtils.isNotBlank(model.getMaterialGraphNo())) {
+            criteria.andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
+        }
+        List<Stock> stocks = stockMapper.selectByExample(example);
+        if (stocks.size() > 0) {
+            stock = stocks.get(0);
+            //更新库存数量
+            if (null != model.getQuantity() && model.getQuantity() != 0) {
+                stock.setQuantity(stock.getQuantity() + model.getQuantity());
+            }
+            stock.setUpdateTime(new Date());
+            int update = stockMapper.updateByExampleSelective(stock, example);
+            if (update > 0) {
+                result = true;
+            }
+        } else {
+            stock = new Stock();
+            BeanUtils.copyProperties(model, stock);
+            stock.setCreateUser(getLoginUserId());
+            int insert = stockMapper.insertSelective(stock);
+            if (insert > 0) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean reduceStock(EntryOutStorageDTO model) {
         log.info("StockServiceImpl addReduceStock:{}", model.toString());
         boolean result = false;
         Stock stock = null;
@@ -40,8 +86,10 @@ public class StockServiceImpl extends BaseService implements StockService {
                 .andRackNoEqualTo(model.getRackNo());
         // 零件才有批次号的概念
         if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
+            if (StringUtils.isBlank(model.getMaterialBatchNo())) {
+                model.setMaterialBatchNo("默认批次号");
+            }
             criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
-
         }
         if (StringUtils.isNotBlank(model.getProductNo())) {
             criteria.andProductNoEqualTo(model.getProductNo());
@@ -88,11 +136,35 @@ public class StockServiceImpl extends BaseService implements StockService {
             criteria.andRackNoEqualTo(rackNo);
         }
         if (StringUtils.isNotBlank(materialGraphNo)) {
-            criteria.andMaterialBatchNoEqualTo(materialGraphNo);
+            criteria.andMaterialGraphNoEqualTo(materialGraphNo);
         }
+        criteria.andQuantityGreaterThan(0);
         List<Stock> stocks = stockMapper.selectByExample(example);
         if (stocks.size() > 0) {
             return JSON.parseArray(JSON.toJSONString(stocks), MaterialBatchNoDTO.class);
+        }
+        return null;
+    }
+
+    @Override
+    public Stock infoStocks(String roomNo, String rackNo, String materialGraphNo, String materialBatchNo) {
+        StockExample example = new StockExample();
+        StockExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(roomNo)) {
+            criteria.andRoomNoEqualTo(roomNo);
+        }
+        if (StringUtils.isNotBlank(rackNo)) {
+            criteria.andRackNoEqualTo(rackNo);
+        }
+        if (StringUtils.isNotBlank(materialGraphNo)) {
+            criteria.andMaterialGraphNoEqualTo(materialGraphNo);
+        }
+        if (StringUtils.isNotBlank(materialBatchNo)) {
+            criteria.andMaterialBatchNoEqualTo(materialBatchNo);
+        }
+        List<Stock> stocks = stockMapper.selectByExample(example);
+        if (stocks.size() == 1) {
+            return stocks.get(0);
         }
         return null;
     }

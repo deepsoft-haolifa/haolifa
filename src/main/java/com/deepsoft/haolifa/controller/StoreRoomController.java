@@ -167,7 +167,12 @@ public class StoreRoomController {
         if (StringUtils.isAnyBlank(model.getMaterialGraphNo())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        return ResultBean.success(entryOutStoreRecordService.entryMaterial(model));
+        int result = entryOutStoreRecordService.entryMaterial(model);
+        if (result > 0) {
+            return ResultBean.success(result);
+        } else {
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
     }
 
     @ApiOperation("零件出库")
@@ -176,7 +181,12 @@ public class StoreRoomController {
         if (StringUtils.isAnyBlank(model.getMaterialGraphNo())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        return ResultBean.success(entryOutStoreRecordService.outMaterial(model));
+        int result = entryOutStoreRecordService.outMaterial(model);
+        if (result > 0) {
+            return ResultBean.success(result);
+        } else {
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
     }
 
 
