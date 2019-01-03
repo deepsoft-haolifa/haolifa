@@ -37,6 +37,9 @@ public class MessageServiceImpl implements MessageService {
                 setId(m.getId());
                 setShowTime(m.getShowTime());
                 setContent(m.getContent());
+                setTitle(m.getTitle());
+                setType(m.getType());
+                setCreateTime(m.getCreateTime());
             }};
         }).collect(Collectors.toList());
         PageDTO<MessageVO> messageDTOs = new PageDTO<>();
@@ -55,7 +58,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public int updateMessage(MessageVO messageVO) {
-        if(messageVO.getId() == null){
+        if (messageVO.getId() == null) {
             throw new BaseException("id 不能为空");
         }
         SysMessage sysMessage = new SysMessage();

@@ -10,9 +10,9 @@ import java.util.Date;
 @Data
 public class MessageVO {
 
-    @ApiModelProperty(value = "信息id", required = false)
+    @ApiModelProperty(value = "信息id")
     private Integer id;
-    @ApiModelProperty(value = "展示日期", required = true)
+    @ApiModelProperty(value = "展示日期")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date showTime;
@@ -22,5 +22,8 @@ public class MessageVO {
     private String content;
     @ApiModelProperty(value = "类型：1-新闻，2-消息", required = true)
     private Byte type;
-
+    @ApiModelProperty(value = "添加时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 }

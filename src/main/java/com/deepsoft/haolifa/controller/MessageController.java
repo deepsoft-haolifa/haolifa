@@ -18,34 +18,29 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping("/{messageType}")
-    @ApiImplicitParam(name = "messageType", value = "'news':新闻，'notice'：消息", dataType = "string", required = true)
+    @ApiImplicitParam(name = "messageType", value = "1:新闻，2：消息", dataType = "Byte", required = true)
     @ApiOperation("获取新闻/消息列表")
-    public ResultBean getMessages(@PathVariable("messageType") String messageType,
+    public ResultBean getMessages(@PathVariable("messageType") Byte messageType,
                                   @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize ){
-        switch (messageType){
-            case "news": return ResultBean.success(messageService.getMessagesByType((byte)1, pageNum, pageSize));
-            case "notice": return ResultBean.success(messageService.getMessagesByType((byte)1, pageNum, pageSize));
-            default: return ResultBean.success("不支持的类型");
-        }
-
+                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ResultBean.success(messageService.getMessagesByType(messageType, pageNum, pageSize));
     }
 
     @PostMapping("")
     @ApiOperation("添加新闻/消息")
-    public ResultBean addMessage(@RequestBody MessageVO messageVO){
+    public ResultBean addMessage(@RequestBody MessageVO messageVO) {
         return ResultBean.success(messageService.insertMessage(messageVO));
     }
 
     @PutMapping("")
     @ApiOperation("修改新闻/消息")
-    public ResultBean modifyMessage(@RequestBody MessageVO messageVO){
+    public ResultBean modifyMessage(@RequestBody MessageVO messageVO) {
         return ResultBean.success(messageService.updateMessage(messageVO));
     }
 
     @DeleteMapping("")
     @ApiOperation("删除新闻/消息")
-    public ResultBean deleteMessage(@RequestParam("id")Integer id){
+    public ResultBean deleteMessage(@RequestParam("id") Integer id) {
         return ResultBean.success(messageService.deleteMessage(id));
     }
 
