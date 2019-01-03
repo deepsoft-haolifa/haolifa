@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.dao.repository.extend;
 
+import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
@@ -9,11 +10,18 @@ import org.apache.ibatis.annotations.Update;
  **/
 public interface StockExtendMapper {
 
-    @Update("UPDATE stock SET quantity=quantity+#{quantity} where room_no='' and rack_no='' and material_graph_no='' and material_batch_no=''")
-    int addQuantity(@Param("graphNo") String graphNo, @Param("quantity") int quantity);
+    @Update("UPDATE stock SET quantity=quantity+#{quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and material_graph_no=#{materialGraphNo} and material_batch_no=#{materialBatchNo}")
+    int addMaterialQuantity(@Param("roomNo") String roomNo, @Param("rackNo") String rackNo, @Param("materialGraphNo") String materialGraphNo, @Param("materialBatchNo") String materialBatchNo, @Param("quantity") int quantity);
 
-    @Update("update material set lock_quantity=lock_quantity+#{quantity} where graph_no=#{graphNo}")
-    int reduceQuantity(@Param("graphNo") String graphNo, @Param("quantity") int quantity);
+    @Update("UPDATE stock SET quantity=quantity+#{quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and material_graph_no=#{materialGraphNo} and material_batch_no=#{materialBatchNo} and quantity>=abs(#{quantity})")
+    int reduceMaterialQuantity(@Param("roomNo") String roomNo, @Param("rackNo") String rackNo, @Param("materialGraphNo") String materialGraphNo, @Param("materialBatchNo") String materialBatchNo, @Param("quantity") int quantity);
+
+    @Update("UPDATE stock SET quantity=quantity+#{#model.quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and product_no=#{productNo}")
+    int addProductQuantity(@Param("roomNo") String roomNo, @Param("rackNo") String rackNo, @Param("productNo") String productNo, @Param("quantity") int quantity);
+
+    @Update("UPDATE stock SET quantity=quantity+#{quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and product_no=#{productNo} and quantity>=abs(#{quantity})")
+    int reduceProductQuantity(@Param("roomNo") String roomNo, @Param("rackNo") String rackNo, @Param("productNo") String productNo, @Param("quantity") int quantity);
+
 }
 
 

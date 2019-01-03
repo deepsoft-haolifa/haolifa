@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.StockMapper;
+import com.deepsoft.haolifa.dao.repository.extend.StockExtendMapper;
 import com.deepsoft.haolifa.model.domain.Stock;
 import com.deepsoft.haolifa.model.domain.StockExample;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
@@ -27,11 +28,13 @@ public class StockServiceImpl extends BaseService implements StockService {
 
     @Autowired
     private StockMapper stockMapper;
+    @Autowired
+    private StockExtendMapper stockExtendMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean addStock(EntryOutStorageDTO model) {
-        log.info("StockServiceImpl addReduceStock:{}", model.toString());
+        log.info("StockServiceImpl addStock:{}", model.toString());
         boolean result = false;
         Stock stock = null;
         StockExample example = new StockExample();
@@ -51,14 +54,14 @@ public class StockServiceImpl extends BaseService implements StockService {
             criteria.andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
         }
         List<Stock> stocks = stockMapper.selectByExample(example);
+        // 如果有记录，更新
         if (stocks.size() > 0) {
-            stock = stocks.get(0);
-            //更新库存数量
-            if (null != model.getQuantity() && model.getQuantity() != 0) {
-                stock.setQuantity(stock.getQuantity() + model.getQuantity());
+            int update = 0;
+            if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
+                update = stockExtendMapper.addMaterialQuantity(model.getRoomNo(), model.getRackNo(), model.getMaterialGraphNo(), model.getMaterialBatchNo(), model.getQuantity());
+            } else {
+                update = stockExtendMapper.addProductQuantity(model.getRoomNo(), model.getRackNo(), model.getProductNo(), model.getQuantity());
             }
-            stock.setUpdateTime(new Date());
-            int update = stockMapper.updateByExampleSelective(stock, example);
             if (update > 0) {
                 result = true;
             }
@@ -77,7 +80,7 @@ public class StockServiceImpl extends BaseService implements StockService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean reduceStock(EntryOutStorageDTO model) {
-        log.info("StockServiceImpl addReduceStock:{}", model.toString());
+        log.info("StockServiceImpl reduceStock:{}", model.toString());
         boolean result = false;
         Stock stock = null;
         StockExample example = new StockExample();
@@ -99,26 +102,13 @@ public class StockServiceImpl extends BaseService implements StockService {
         }
         List<Stock> stocks = stockMapper.selectByExample(example);
         if (stocks.size() > 0) {
-            stock = stocks.get(0);
-            //更新库存数量
-            if (null != model.getQuantity() && model.getQuantity() != 0) {
-                stock.setQuantity(stock.getQuantity() + model.getQuantity());
+            int update = 0;
+            if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
+                update = stockExtendMapper.reduceMaterialQuantity(model.getRoomNo(), model.getRackNo(), model.getMaterialGraphNo(), model.getMaterialBatchNo(), model.getQuantity());
+            } else {
+                update = stockExtendMapper.reduceProductQuantity(model.getRoomNo(), model.getRackNo(), model.getProductNo(), model.getQuantity());
             }
-//            // 更新锁定数量
-//            if (null != model.getLockQuantity() && model.getLockQuantity() != 0) {
-//                stock.setLockQuantity(stock.getLockQuantity() + model.getLockQuantity());
-//            }
-            stock.setUpdateTime(new Date());
-            int update = stockMapper.updateByExampleSelective(stock, example);
             if (update > 0) {
-                result = true;
-            }
-        } else {
-            stock = new Stock();
-            BeanUtils.copyProperties(model, stock);
-            stock.setCreateUser(getLoginUserId());
-            int insert = stockMapper.insertSelective(stock);
-            if (insert > 0) {
                 result = true;
             }
         }
