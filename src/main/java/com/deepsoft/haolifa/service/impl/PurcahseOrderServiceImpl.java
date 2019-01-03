@@ -296,6 +296,6 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                 inspectItemMapper.insertSelective(inspectItem);
             }
         }
-        return ResultBean.success(1);
+        return ResultBean.success(inspect.getId());
     }
 }
