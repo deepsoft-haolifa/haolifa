@@ -18,6 +18,10 @@ public interface DepartmentService {
 
     DepartmentDTO selectDepartmentById(Integer id);
 
+
     List<RoleDTO> selectRolesByDepartmentId(Integer id);
+
+
+
 
 }

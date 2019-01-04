@@ -6,13 +6,14 @@ import lombok.Data;
 @Data
 public class DepartmentDTO {
 
-    @ApiModelProperty(value="部门id",required=false)
+    @ApiModelProperty(value = "部门id", required = false)
     private Integer id;
-    @ApiModelProperty(value="部门名称",required=true)
+    @ApiModelProperty(value = "部门代号")
+    private String deptNo;
+    @ApiModelProperty(value = "部门名称", required = true)
     private String deptName;
-    @ApiModelProperty(value="部门描述",required=true)
+    @ApiModelProperty(value = "部门描述", required = true)
     private String description;
-    @ApiModelProperty(value="部门父id，默认为0",required=false)
+    @ApiModelProperty(value = "部门父id，默认为0", required = false)
     private Integer pid;
-
 }

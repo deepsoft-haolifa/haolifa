@@ -74,6 +74,7 @@ CREATE TABLE `flow_history` (
 	DROP TABLE IF EXISTS `sys_department`;
 	CREATE TABLE `sys_department` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	  `dept_no` varchar(20) NOT NULL COMMENT '部门代号',
 	  `dept_name` varchar(20) NOT NULL COMMENT '部门名',
 	  `description` varchar(64) NOT NULL DEFAULT '' COMMENT '描述',
 	  `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '父部门id',
@@ -116,6 +117,7 @@ CREATE TABLE `flow_history` (
 	CREATE TABLE `sys_role` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	  `dept_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '部门id',
+	  `role_no` varchar(20) NOT NULL COMMENT '角色代号',
 	  `role_name` varchar(20) NOT NULL COMMENT '角色名',
 	  `description` varchar(64) NOT NULL DEFAULT '' COMMENT '描述',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',

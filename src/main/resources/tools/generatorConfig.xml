@@ -99,13 +99,13 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
+    <table tableName="sys_department" domainObjectName="SysDepartment"></table>
 
     <!--<table tableName="sys_permission" domainObjectName="SysPermission"></table>-->
 
     <!--<table tableName="sys_permission_role" domainObjectName="SysPermissionRole"></table>-->
 
-    <!--<table tableName="sys_role" domainObjectName="SysRole"></table>-->
+    <table tableName="sys_role" domainObjectName="SysRole"></table>
 
     <!--<table tableName="sys_department_user" domainObjectName="SysDepartmentUser"></table>-->
 
