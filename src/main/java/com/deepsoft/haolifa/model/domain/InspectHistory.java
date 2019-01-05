@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
+
 public class InspectHistory {
     private Integer id;
 
@@ -21,13 +23,19 @@ public class InspectHistory {
 
     private String handlingSuggestion;
 
+    private BigDecimal purchasePrice;
+
     private String remark;
 
     private Byte status;
 
     private Byte type;
 
-    public InspectHistory(Integer id, String purchaseNo, String inspectNo, String batchNumber, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status, Byte type) {
+    private String supplierName;
+
+    private String supplierNo;
+
+    public InspectHistory(Integer id, String purchaseNo, String inspectNo, String batchNumber, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, BigDecimal purchasePrice, String remark, Byte status, Byte type, String supplierName, String supplierNo) {
         this.id = id;
         this.purchaseNo = purchaseNo;
         this.inspectNo = inspectNo;
@@ -38,9 +46,12 @@ public class InspectHistory {
         this.qualifiedNumber = qualifiedNumber;
         this.unqualifiedNumber = unqualifiedNumber;
         this.handlingSuggestion = handlingSuggestion;
+        this.purchasePrice = purchasePrice;
         this.remark = remark;
         this.status = status;
         this.type = type;
+        this.supplierName = supplierName;
+        this.supplierNo = supplierNo;
     }
 
     public InspectHistory() {
@@ -127,6 +138,14 @@ public class InspectHistory {
         this.handlingSuggestion = handlingSuggestion == null ? null : handlingSuggestion.trim();
     }
 
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -149,5 +168,21 @@ public class InspectHistory {
 
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public String getSupplierNo() {
+        return supplierNo;
+    }
+
+    public void setSupplierNo(String supplierNo) {
+        this.supplierNo = supplierNo == null ? null : supplierNo.trim();
     }
 }

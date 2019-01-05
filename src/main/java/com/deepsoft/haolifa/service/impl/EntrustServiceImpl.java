@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.model.domain.Entrust;
 import com.deepsoft.haolifa.model.domain.EntrustExample;
+import com.deepsoft.haolifa.model.dto.AllotEntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustListDTO;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
@@ -140,6 +141,15 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
       flowInstanceDTO.setSummary("机加工审批");
       flowInstanceService.create(flowInstanceDTO);
     }
+    return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean allotEntrust(AllotEntrustDTO allotEntrustDTO) {
+    Entrust entrust = new Entrust();
+    BeanUtils.copyProperties(allotEntrustDTO, entrust);
+    entrust.setWorkshopType(allotEntrustDTO.getWorkShopType().byteValue());
+    entrustMapper.updateByPrimaryKeySelective(entrust);
     return ResultBean.success(1);
   }
 }

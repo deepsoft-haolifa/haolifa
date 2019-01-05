@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
+
 public class InspectItem {
     private Integer id;
 
@@ -21,13 +23,15 @@ public class InspectItem {
 
     private Integer qualifiedNumber;
 
+    private BigDecimal purchasePrice;
+
     private String requirements;
 
     private String unit;
 
     private String remark;
 
-    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, String requirements, String unit, String remark) {
+    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, BigDecimal purchasePrice, String requirements, String unit, String remark) {
         this.id = id;
         this.purchaseNo = purchaseNo;
         this.inspectId = inspectId;
@@ -38,6 +42,7 @@ public class InspectItem {
         this.deliveryNumber = deliveryNumber;
         this.unqualifiedNumber = unqualifiedNumber;
         this.qualifiedNumber = qualifiedNumber;
+        this.purchasePrice = purchasePrice;
         this.requirements = requirements;
         this.unit = unit;
         this.remark = remark;
@@ -125,6 +130,14 @@ public class InspectItem {
 
     public void setQualifiedNumber(Integer qualifiedNumber) {
         this.qualifiedNumber = qualifiedNumber;
+    }
+
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
     public String getRequirements() {

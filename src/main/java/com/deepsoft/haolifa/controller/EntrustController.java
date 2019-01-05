@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
+import com.deepsoft.haolifa.model.dto.AllotEntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -53,6 +54,12 @@ public class EntrustController {
     @GetMapping("updateStatus/{entrustNo}/{status}")
     public ResultBean updateStatus(@PathVariable("entrustNo") String entrustNo,@PathVariable("status")Integer status){
         return entrustService.updateStatus(entrustNo,status);
+    }
+
+    @ApiOperation("分配机加工车间")
+    @PostMapping("/allotEntrust")
+    public ResultBean allotEntrust(@RequestBody AllotEntrustDTO allotEntrustDTO){
+        return entrustService.allotEntrust(allotEntrustDTO);
     }
 
 }

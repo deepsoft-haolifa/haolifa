@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Entrust {
@@ -23,6 +24,8 @@ public class Entrust {
 
     private Integer number;
 
+    private BigDecimal purchasePrice;
+
     private Byte status;
 
     private String entrustPerson;
@@ -35,7 +38,7 @@ public class Entrust {
 
     private Integer createUserId;
 
-    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.materialGraphName = materialGraphName;
         this.purchaseNo = purchaseNo;
@@ -46,6 +49,7 @@ public class Entrust {
         this.supplierNo = supplierNo;
         this.batchNumber = batchNumber;
         this.number = number;
+        this.purchasePrice = purchasePrice;
         this.status = status;
         this.entrustPerson = entrustPerson;
         this.isDelete = isDelete;
@@ -136,6 +140,14 @@ public class Entrust {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
     public Byte getStatus() {

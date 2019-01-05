@@ -13,9 +13,12 @@
       <arg column="qualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="handling_suggestion" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="purchase_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="supplier_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supplier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -78,8 +81,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, purchase_no, inspect_no, batch_number, material_graph_no, material_graph_name, 
-    test_number, qualified_number, unqualified_number, handling_suggestion, remark, status, 
-    type
+    test_number, qualified_number, unqualified_number, handling_suggestion, purchase_price, 
+    remark, status, type, supplier_name, supplier_no
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultMap="BaseResultMap">
     select
@@ -115,13 +118,15 @@
     insert into inspect_history (id, purchase_no, inspect_no, 
       batch_number, material_graph_no, material_graph_name, 
       test_number, qualified_number, unqualified_number, 
-      handling_suggestion, remark, status, 
-      type)
+      handling_suggestion, purchase_price, remark, 
+      status, type, supplier_name, 
+      supplier_no)
     values (#{id,jdbcType=INTEGER}, #{purchaseNo,jdbcType=VARCHAR}, #{inspectNo,jdbcType=VARCHAR}, 
       #{batchNumber,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
       #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
-      #{handlingSuggestion,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{type,jdbcType=TINYINT})
+      #{handlingSuggestion,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{supplierName,jdbcType=VARCHAR}, 
+      #{supplierNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
     insert into inspect_history
@@ -156,6 +161,9 @@
       <if test="handlingSuggestion != null">
         handling_suggestion,
       </if>
+      <if test="purchasePrice != null">
+        purchase_price,
+      </if>
       <if test="remark != null">
         remark,
       </if>
@@ -164,6 +172,12 @@
       </if>
       <if test="type != null">
         type,
+      </if>
+      <if test="supplierName != null">
+        supplier_name,
+      </if>
+      <if test="supplierNo != null">
+        supplier_no,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -197,6 +211,9 @@
       <if test="handlingSuggestion != null">
         #{handlingSuggestion,jdbcType=VARCHAR},
       </if>
+      <if test="purchasePrice != null">
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -205,6 +222,12 @@
       </if>
       <if test="type != null">
         #{type,jdbcType=TINYINT},
+      </if>
+      <if test="supplierName != null">
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -247,6 +270,9 @@
       <if test="record.handlingSuggestion != null">
         handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
       </if>
+      <if test="record.purchasePrice != null">
+        purchase_price = #{record.purchasePrice,jdbcType=DECIMAL},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -255,6 +281,12 @@
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.supplierName != null">
+        supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierNo != null">
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -273,9 +305,12 @@
       qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
       handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
+      purchase_price = #{record.purchasePrice,jdbcType=DECIMAL},
       remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
-      type = #{record.type,jdbcType=TINYINT}
+      type = #{record.type,jdbcType=TINYINT},
+      supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -310,6 +345,9 @@
       <if test="handlingSuggestion != null">
         handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
       </if>
+      <if test="purchasePrice != null">
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -318,6 +356,12 @@
       </if>
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="supplierName != null">
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -333,9 +377,12 @@
       qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
       handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
-      type = #{type,jdbcType=TINYINT}
+      type = #{type,jdbcType=TINYINT},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

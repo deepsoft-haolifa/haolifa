@@ -13,6 +13,7 @@
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="arrival_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="supplier_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supplier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="blueprints" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
@@ -76,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, inspect_no, purchase_no, batch_number, status, create_time, update_time, create_user_id, 
-    arrival_time, supplier_name, blueprints
+    arrival_time, supplier_name, supplier_no, blueprints
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectExample" resultMap="BaseResultMap">
     select
@@ -115,11 +116,11 @@
     insert into inspect (inspect_no, purchase_no, batch_number, 
       status, create_time, update_time, 
       create_user_id, arrival_time, supplier_name, 
-      blueprints)
+      supplier_no, blueprints)
     values (#{inspectNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{arrivalTime,jdbcType=TIMESTAMP}, #{supplierName,jdbcType=VARCHAR}, 
-      #{blueprints,jdbcType=VARCHAR})
+      #{supplierNo,jdbcType=VARCHAR}, #{blueprints,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Inspect">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -154,6 +155,9 @@
       <if test="supplierName != null">
         supplier_name,
       </if>
+      <if test="supplierNo != null">
+        supplier_no,
+      </if>
       <if test="blueprints != null">
         blueprints,
       </if>
@@ -185,6 +189,9 @@
       </if>
       <if test="supplierName != null">
         #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="blueprints != null">
         #{blueprints,jdbcType=VARCHAR},
@@ -230,6 +237,9 @@
       <if test="record.supplierName != null">
         supplier_name = #{record.supplierName,jdbcType=VARCHAR},
       </if>
+      <if test="record.supplierNo != null">
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.blueprints != null">
         blueprints = #{record.blueprints,jdbcType=VARCHAR},
       </if>
@@ -250,6 +260,7 @@
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
       arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
       supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       blueprints = #{record.blueprints,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -285,6 +296,9 @@
       <if test="supplierName != null">
         supplier_name = #{supplierName,jdbcType=VARCHAR},
       </if>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      </if>
       <if test="blueprints != null">
         blueprints = #{blueprints,jdbcType=VARCHAR},
       </if>
@@ -302,6 +316,7 @@
       create_user_id = #{createUserId,jdbcType=INTEGER},
       arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
       supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       blueprints = #{blueprints,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

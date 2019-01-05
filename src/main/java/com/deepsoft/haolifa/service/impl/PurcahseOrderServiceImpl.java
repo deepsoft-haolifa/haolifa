@@ -275,6 +275,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         Inspect inspect = new Inspect();
         inspect.setCreateUserId(createUserId);
         inspect.setInspectNo(inspectNo);
+        inspect.setSupplierNo(purchaseOrder.getSupplierNo());
         inspect.setSupplierName(purchaseOrder.getSupplierName());
         inspect.setPurchaseNo(purchaseOrder.getPurchaseOrderNo());
         inspect.setBatchNumber(String.valueOf(System.currentTimeMillis()));
@@ -292,6 +293,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                 inspectItem.setMaterialName(orderItem.getMaterialName());
                 inspectItem.setRequirements(orderItem.getMaterial());
                 inspectItem.setUnit(orderItem.getUnit());
+                inspectItem.setPurchasePrice(orderItem.getUnitPrice());
                 inspectItem.setInspectId(inspect.getId());
                 inspectItemMapper.insertSelective(inspectItem);
             }
