@@ -16,6 +16,8 @@
       <arg column="purchase_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="requirements" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="unit" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supplier_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supplier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
@@ -80,7 +82,7 @@
   <sql id="Base_Column_List">
     id, purchase_no, inspect_id, material_graph_no, material_name, specification, purchase_number, 
     delivery_number, unqualified_number, qualified_number, purchase_price, requirements, 
-    unit, remark
+    unit, supplier_name, supplier_no, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectItemExample" resultMap="BaseResultMap">
     select
@@ -117,12 +119,14 @@
       material_graph_no, material_name, specification, 
       purchase_number, delivery_number, unqualified_number, 
       qualified_number, purchase_price, requirements, 
-      unit, remark)
+      unit, supplier_name, supplier_no, 
+      remark)
     values (#{id,jdbcType=INTEGER}, #{purchaseNo,jdbcType=VARCHAR}, #{inspectId,jdbcType=INTEGER}, 
       #{materialGraphNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, 
       #{purchaseNumber,jdbcType=INTEGER}, #{deliveryNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
       #{qualifiedNumber,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, #{requirements,jdbcType=VARCHAR}, 
-      #{unit,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+      #{unit,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectItem">
     insert into inspect_item
@@ -165,6 +169,12 @@
       </if>
       <if test="unit != null">
         unit,
+      </if>
+      <if test="supplierName != null">
+        supplier_name,
+      </if>
+      <if test="supplierNo != null">
+        supplier_no,
       </if>
       <if test="remark != null">
         remark,
@@ -209,6 +219,12 @@
       </if>
       <if test="unit != null">
         #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierName != null">
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -263,6 +279,12 @@
       <if test="record.unit != null">
         unit = #{record.unit,jdbcType=VARCHAR},
       </if>
+      <if test="record.supplierName != null">
+        supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierNo != null">
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -286,6 +308,8 @@
       purchase_price = #{record.purchasePrice,jdbcType=DECIMAL},
       requirements = #{record.requirements,jdbcType=VARCHAR},
       unit = #{record.unit,jdbcType=VARCHAR},
+      supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -330,6 +354,12 @@
       <if test="unit != null">
         unit = #{unit,jdbcType=VARCHAR},
       </if>
+      <if test="supplierName != null">
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -350,6 +380,8 @@
       purchase_price = #{purchasePrice,jdbcType=DECIMAL},
       requirements = #{requirements,jdbcType=VARCHAR},
       unit = #{unit,jdbcType=VARCHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -196,10 +196,10 @@
     <table tableName="inspect" domainObjectName="Inspect">
     <generatedKey column="id" sqlStatement="MySql" identity="true"/>
     </table>
-    <!--<table tableName="inspect_item" domainObjectName="InspectItem">-->
-    <!--</table>-->
-    <table tableName="inspect_history" domainObjectName="InspectHistory">
+    <table tableName="inspect_item" domainObjectName="InspectItem">
     </table>
+    <!--<table tableName="inspect_history" domainObjectName="InspectHistory">-->
+    <!--</table>-->
 
 
     <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult">-->

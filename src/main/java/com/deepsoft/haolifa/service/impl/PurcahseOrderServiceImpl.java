@@ -293,6 +293,8 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                 inspectItem.setMaterialName(orderItem.getMaterialName());
                 inspectItem.setRequirements(orderItem.getMaterial());
                 inspectItem.setUnit(orderItem.getUnit());
+                inspectItem.setSupplierName(purchaseOrder.getSupplierName());
+                inspectItem.setSupplierNo(purchaseOrder.getSupplierNo());
                 inspectItem.setPurchasePrice(orderItem.getUnitPrice());
                 inspectItem.setInspectId(inspect.getId());
                 inspectItemMapper.insertSelective(inspectItem);
