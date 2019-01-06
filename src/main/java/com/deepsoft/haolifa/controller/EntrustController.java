@@ -50,13 +50,13 @@ public class EntrustController {
         return entrustService.getList(model);
     }
 
-    @ApiOperation("更新机加委托申请单状态(发起、开始处理、处理完成)")
+    @ApiOperation("更新机加委托申请单状态(发起、开始处理、生产完成、质检完成)")
     @GetMapping("updateStatus/{entrustNo}/{status}")
     public ResultBean updateStatus(@PathVariable("entrustNo") String entrustNo,@PathVariable("status")Integer status){
         return entrustService.updateStatus(entrustNo,status);
     }
 
-    @ApiOperation("分配机加工车间")
+    @ApiOperation("分配机加工车间,并更新审核状态为审核通过")
     @PostMapping("/allotEntrust")
     public ResultBean allotEntrust(@RequestBody AllotEntrustDTO allotEntrustDTO){
         return entrustService.allotEntrust(allotEntrustDTO);

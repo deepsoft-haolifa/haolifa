@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.Consts;
+import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.model.domain.Entrust;
 import com.deepsoft.haolifa.model.domain.EntrustExample;
@@ -15,6 +17,7 @@ import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -107,8 +110,26 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     if (StringUtils.isNotEmpty(model.getEntrustNo())) {
       criteria.andEntrustNoLike("%" + model.getEntrustNo() + "%");
     }
-    // 5 不区分状态查询
-    if (null != model.getStatus() && 5 != model.getStatus()) {
+    if (model.getType() == 1) {
+      // 调度
+      criteria.andStatusNotEqualTo(EntrustStatus.NO_COMMIT_0.code);
+    }
+    if (model.getType() == 2) {
+      // 车间
+      List<Byte> statusList = Arrays
+          .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_4.code);
+      criteria.andStatusNotIn(statusList);
+      criteria.andWorkshopTypeEqualTo((byte) 1);// 内部车间
+    }
+    if (model.getType() == 3) {
+      // 质检
+      List<Byte> statusList = Arrays
+          .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_4.code,
+              EntrustStatus.AUDIT_PASS_WAITING_2.code);
+      criteria.andStatusNotIn(statusList);
+      criteria.andWorkshopTypeEqualTo((byte) 1);// 内部车间
+    }
+    if(model.getStatus() != 6) {
       criteria.andStatusEqualTo(model.getStatus().byteValue());
     }
     Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->
@@ -129,18 +150,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     entrust.setStatus(status.byteValue());
     EntrustExample entrustExample = new EntrustExample();
     entrustExample.or().andEntrustNoEqualTo(entrustNo);
-    List<Entrust> existEntrust = entrustMapper.selectByExample(entrustExample);
-
     entrustMapper.updateByExampleSelective(entrust, entrustExample);
-    if (status == 1 && existEntrust != null && existEntrust.size() > 0) {
-      FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
-      flowInstanceDTO.setFlowId(6);
-      flowInstanceDTO.setFormType(9);
-      flowInstanceDTO.setFormNo(entrustNo);
-      flowInstanceDTO.setFormId(existEntrust.get(0).getId());
-      flowInstanceDTO.setSummary("机加工审批");
-      flowInstanceService.create(flowInstanceDTO);
-    }
     return ResultBean.success(1);
   }
 
@@ -149,6 +159,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     Entrust entrust = new Entrust();
     BeanUtils.copyProperties(allotEntrustDTO, entrust);
     entrust.setWorkshopType(allotEntrustDTO.getWorkShopType().byteValue());
+    entrust.setStatus(EntrustStatus.AUDIT_PASS_WAITING_2.code);
     entrustMapper.updateByPrimaryKeySelective(entrust);
     return ResultBean.success(1);
   }
