@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.material.MaterialResultDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.service.MaterialService;
@@ -25,9 +26,6 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -309,6 +307,26 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         return ResultBean.success(update);
     }
 
+    @Override
+    public ResultBean deleteOrderInfo(int id) {
+        if (id > 0) {
+            OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(id);
+            if (orderProduct != null) {
+                Byte orderStatus = orderProduct.getOrderStatus();
+                if (orderStatus != CommonEnum.OrderStatus.CREATE.code) {
+                    return ResultBean.error(CommonEnum.ResponseEnum.ORDER_STATUS_NOT_DELETE);
+                }
+            }
+            int delete = orderProductMapper.deleteByPrimaryKey(id);
+            if (delete > 0) {
+                return ResultBean.success(delete);
+            } else {
+                return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+            }
+        }
+        return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+    }
+
 
     @Override
     public int updateOrderProductStatus(String orderNo, byte status) {
@@ -396,7 +414,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             String specifications = orderProductAssociate.getSpecifications();
             ProductCheckMaterialListDTO productCheckMaterialListDTO = new ProductCheckMaterialListDTO();
             // 根据型号和规格获取可选零件列表（核料用）
-            List<MaterialTypeListDTO> materials = getTypeMaterials(productModel, specifications);
+            List<MaterialTypeListDTO> materials = getTypeMaterials(productNo, productModel, specifications);
             productCheckMaterialListDTO.setProductNo(productNo);
             productCheckMaterialListDTO.setProductModel(productModel);
             productCheckMaterialListDTO.setSpecifications(specifications);
@@ -410,25 +428,39 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     /**
      * 根据型号和规格获取原料（阀体，阀板，阀座,阀杆）
      *
+     * @param productNo
      * @param productModel
      * @param specifications
      * @return
      */
-    public List<MaterialTypeListDTO> getTypeMaterials(String productModel, String specifications) {
+    public List<MaterialTypeListDTO> getTypeMaterials(String productNo, String productModel, String specifications) {
         // 1.获取规格,截取数字，保留四位数，前面补0（DN65=>0065）
         String spec = String.format("%04d", Integer.parseInt(specifications.replaceAll("[^0-9]", "")));
         // 成品型号示例（270DD7A1XH-16Q）
-        // 2.获取型号的数据（270）
-        String smallModel = "D" + productModel.substring(0, 3);
-        int lastIndexOf = productModel.lastIndexOf("-");
-        // 3.获取阀板材质(-前一位)
-        String faban = productModel.substring(lastIndexOf - 1, lastIndexOf);
-        // 4.获取阀座材质(-前两位)
-        String fazuo = productModel.substring(lastIndexOf - 2, lastIndexOf - 1);
-        // 5.获取阀体材质(最后一位)
-        String fati = productModel.substring(productModel.length() - 1);
-        // 6.获取阀体压力(-后两位)
-        String fatiyali = productModel.substring(lastIndexOf + 1, lastIndexOf + 3);
+        // 2.获取型号的数据（D270）
+        String smallModel = productModel.substring(0, 4);
+        int lastIndexOf = productNo.lastIndexOf("-");
+        int indexOf = productNo.indexOf("-");
+        // 获取产品类型（D：蝶阀；H：止回阀；）
+        String productType = productModel.substring(0, 1);
+
+        // 产品号（D  Sb 7A 1 X3 N-10 Q-DN50 或者 H 77 X3 R-10 Q-DN50）
+        productNo = productNo.replaceAll(" ", "");
+        String fati = "", fatiyali = "", faban = "", fazuo = "";
+        String fatiGroup = productNo.substring(indexOf + 1, lastIndexOf);
+        fatiyali = fatiGroup.substring(0, 2);
+        fati = fatiGroup.substring(2, fatiGroup.length());
+
+        String fabanRule = productNo.substring(indexOf - 1, indexOf);
+        // 判断- 前一位，是否是a,b,d,L。如果是，说明阀板是两位英文，否则是一位
+        String[] fabanRules = new String[]{"a", "b", "d", "L"};
+        if (Arrays.asList(fabanRules).contains(fabanRule)) {
+            fazuo = productNo.substring(indexOf - 2, indexOf);
+            faban = productNo.substring(indexOf - 4, indexOf - 2);
+        } else {
+            fazuo = productNo.substring(indexOf - 1, indexOf);
+            faban = productNo.substring(indexOf - 3, indexOf - 1);
+        }
 
         // 获取阀体规则
         List<String> fatiModelConfig = new ArrayList<>();
@@ -440,59 +472,84 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<String> fabanModelConfig = new ArrayList<>();
 
         // 获取全部规则列表
-        List<ProductModelConfig> modelConfigs = productModelConfigService.getList(0, "");
+        List<ProductModelConfig> modelConfigs = productModelConfigService.getList("", "");
         if (modelConfigs != null && modelConfigs.size() > 0) {
-            modelConfigs.stream().forEach(e -> {
+            for (ProductModelConfig e : modelConfigs) {
                 final String indexRule = e.getIndexRule();
-                final Byte type = e.getType();
-                if (indexRule.equals(fati) && type == CommonEnum.ProductModelType.FATI.code) {
+                final String materialType = e.getMaterialType();
+                final String productTypeRule = e.getProductType();
+                if (indexRule.equals(fati) && materialType.equals("fati") && productTypeRule.equals(productType)) {
                     fatiModelConfig.add(e.getMaterialGraphNoStr());
-                } else if (indexRule.equals(fatiyali) && type == CommonEnum.ProductModelType.FATI_YALI.code) {
+                } else if (indexRule.equals(fatiyali) && materialType.equals("fatiyali") && productTypeRule.equals(productType)) {
                     fatiYaliModelConfig.add(e.getMaterialGraphNoStr());
-                } else if (indexRule.equals(fazuo) && type == CommonEnum.ProductModelType.FAZUO.code) {
+                } else if (indexRule.equals(fazuo) && materialType.equals("fazuo") && productTypeRule.equals(productType)) {
                     fazuoModelConfig.add(e.getMaterialGraphNoStr());
-                } else if (indexRule.equals(faban) && type == CommonEnum.ProductModelType.FABAN.code) {
+                } else if (indexRule.equals(faban) && materialType.equals("faban") && productTypeRule.equals(productType)) {
                     fabanModelConfig.add(e.getMaterialGraphNoStr());
                 }
-            });
+            }
+
         }
 
         // 获取符合阀体的列表(D270-0050-01-00Qa-aF05-01-001)
-        List<String> fatiCollect = new ArrayList<>();
+        List<MaterialResultDTO> fatiCollect = new ArrayList<>();
         // 获取符合阀座的列表(D270-0050-02-E0-01)
-        List<String> fazuoCollect = new ArrayList<>();
+        List<MaterialResultDTO> fazuoCollect = new ArrayList<>();
         // 获取符合阀板的列表(D270-0050-03-Hc-02-00)
-        List<String> fabanCollect = new ArrayList<>();
+        List<MaterialResultDTO> fabanCollect = new ArrayList<>();
         // 获取符合阀杆的列表
-        List<String> faganCollect = new ArrayList<>();
+        List<MaterialResultDTO> faganCollect = new ArrayList<>();
         // 获取通用零件列表的列表
-        List<String> tongyongCollect = new ArrayList<>();
+        List<MaterialResultDTO> tongyongCollect = new ArrayList<>();
 
         // 根据型号和规格，获取图号列表
         List<Material> listByModelAndSpec = materialService.getListByModelAndSpec(smallModel, specifications);
         if (listByModelAndSpec != null && listByModelAndSpec.size() > 0) {
             listByModelAndSpec.stream().forEach(e -> {
                 String graphNo = e.getGraphNo();
+                String name = e.getName();
+                Integer currentQuantity = e.getCurrentQuantity();
+                MaterialResultDTO materialResultDTO = new MaterialResultDTO();
+                materialResultDTO.setCurrentQuantity(currentQuantity);
+                materialResultDTO.setMaterialName(name);
+                materialResultDTO.setGraphNo(graphNo);
+                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
+
                 String[] split = graphNo.split("-");
                 if (split.length > 2) {
                     String noIndex = split[2];
                     if ("01".equals(noIndex)) {// 阀体
                         if (split.length > 4) {
                             //阀体材质,阀体压力 都满足
-                            if (fatiModelConfig.contains(split[3].replaceAll("[0-9]", "")) && fatiYaliModelConfig.contains(split[4].substring(0, 1))) {
-                                fatiCollect.add(graphNo);
+                            if (fatiModelConfig.size() > 0) {
+                                if (fatiModelConfig.contains(split[3].replaceAll("[0-9]", "")) && fatiYaliModelConfig.contains(split[4].substring(0, 1))) {
+                                    fatiCollect.add(materialResultDTO);
+                                }
+                            } else {
+                                fatiCollect.add(materialResultDTO);
                             }
                         }
                     } else if ("02".equals(noIndex)) {//阀座
-                        if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
-                            fazuoCollect.add(graphNo);
+                        // 止回阀没有阀座
+                        if (!productType.equals(CommonEnum.ProductType.H.code)) {
+                            if (fazuoModelConfig.size() > 0) {
+                                if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
+                                    fazuoCollect.add(materialResultDTO);
+                                }
+                            } else {
+                                fazuoCollect.add(materialResultDTO);
+                            }
                         }
                     } else if ("03".equals(noIndex)) {// 阀板
-                        if (split.length > 3 && fabanModelConfig.contains(split[3])) {
-                            fabanCollect.add(graphNo);
+                        if (fabanModelConfig.size() > 0) {
+                            if (split.length > 3 && fabanModelConfig.contains(split[3])) {
+                                fabanCollect.add(materialResultDTO);
+                            }
+                        } else {
+                            fabanCollect.add(materialResultDTO);
                         }
                     } else if ("04".equals(noIndex)) { // 上阀杆
-                        faganCollect.add(graphNo);
+                        faganCollect.add(materialResultDTO);
                     }
                 }
             });
@@ -518,7 +575,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 根据型号和规格，获取通用图号列表(一个通用图号对应多个型号和规格)
         List<Material> tongyongList = materialService.getTongyongListByModelAndSpec(smallModel, specifications);
         tongyongList.stream().forEach(e -> {
-            tongyongCollect.add(e.getGraphNo());
+            MaterialResultDTO materialResultDTO = new MaterialResultDTO();
+            materialResultDTO.setCurrentQuantity(e.getCurrentQuantity());
+            materialResultDTO.setMaterialName(e.getName());
+            materialResultDTO.setGraphNo(e.getGraphNo());
+            materialResultDTO.setSupportQuantity(e.getSupportQuantity());
+            tongyongCollect.add(materialResultDTO);
         });
 
         listDTOS.add(new MaterialTypeListDTO() {{
@@ -555,21 +617,25 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 listDTOS.stream().forEach(a -> {
                     // 通用料
                     if (a.getType() == CommonEnum.ProductModelType.TONG_YONG.code) {
-                        List<String> list = a.getList();
+                        List<MaterialResultDTO> list = a.getList();
                         list.stream().forEach(b -> {
-                            if (tongyongMaterialsMap.containsKey(b)) {
-                                tongyongMaterialsMap.put(b, tongyongMaterialsMap.get(b) + productNumber);
+                            int materialCount = productNumber * b.getSupportQuantity();
+                            String graphNo = b.getGraphNo();
+                            if (tongyongMaterialsMap.containsKey(graphNo)) {
+                                tongyongMaterialsMap.put(graphNo, tongyongMaterialsMap.get(graphNo) + materialCount);
                             } else {
-                                tongyongMaterialsMap.put(b, productNumber);
+                                tongyongMaterialsMap.put(graphNo, materialCount);
                             }
                         });
                     } else {
-                        List<String> list = a.getList();
+                        List<MaterialResultDTO> list = a.getList();
                         list.stream().forEach(b -> {
-                            if (materialsMap.containsKey(b)) {
-                                materialsMap.put(b, materialsMap.get(b) + productNumber);
+                            String graphNo = b.getGraphNo();
+                            int materialCount = productNumber * b.getSupportQuantity();
+                            if (materialsMap.containsKey(graphNo)) {
+                                materialsMap.put(graphNo, materialsMap.get(b) + materialCount);
                             } else {
-                                materialsMap.put(b, productNumber);
+                                materialsMap.put(graphNo, materialCount);
                             }
                         });
                     }

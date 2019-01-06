@@ -279,6 +279,7 @@ CREATE TABLE `flow_history` (
 	  `safety_factor` varchar(16) NOT NULL DEFAULT '' COMMENT '存库安全系数',
 	  `current_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '目前库存量（每次出库，入库的时候实时更新）',
 	  `lock_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '锁定数量（核料成功锁定，零件出库的时候释放）',
+	  `support_quantity` int(11) NOT NULL DEFAULT 1 COMMENT '配套数量（核料时用到，一个产品需要多少个零件）',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),
@@ -462,7 +463,8 @@ DROP TABLE IF EXISTS `order_product`;
 	  `index_rule` varchar(36) NOT NULL DEFAULT '' COMMENT '索引规则（例如：Q/P/X）',
 	  `material_graph_no_str` varchar(36) NOT NULL DEFAULT '' COMMENT '零件图号中对应的单词（例如：Qa/Qb/Qc）',
 	  `material_graph_no_indexof` varchar(36) NOT NULL DEFAULT '' COMMENT '零件图号中对应的位置',
-	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '类型（1.阀体；2.阀座；3：阀板；4.阀体压力）',
+	  `material_type` varchar(36) NOT NULL DEFAULT '' COMMENT '类型（fati.阀体；fazuo.阀座；faban：阀板；fatiyali.阀体压力）',
+	  `product_type` varchar(36) NOT NULL DEFAULT '' COMMENT '产品类型（D：蝶阀，H：止回阀）',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注描述',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品型号规则配置表';

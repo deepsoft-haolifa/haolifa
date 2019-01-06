@@ -13,17 +13,20 @@ public class ProductModelConfig {
 
     private String materialGraphNoIndexof;
 
-    private Byte type;
+    private String materialType;
+
+    private String productType;
 
     private String remark;
 
-    public ProductModelConfig(Integer id, Date createTime, String indexRule, String materialGraphNoStr, String materialGraphNoIndexof, Byte type, String remark) {
+    public ProductModelConfig(Integer id, Date createTime, String indexRule, String materialGraphNoStr, String materialGraphNoIndexof, String materialType, String productType, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.indexRule = indexRule;
         this.materialGraphNoStr = materialGraphNoStr;
         this.materialGraphNoIndexof = materialGraphNoIndexof;
-        this.type = type;
+        this.materialType = materialType;
+        this.productType = productType;
         this.remark = remark;
     }
 
@@ -71,12 +74,20 @@ public class ProductModelConfig {
         this.materialGraphNoIndexof = materialGraphNoIndexof == null ? null : materialGraphNoIndexof.trim();
     }
 
-    public Byte getType() {
-        return type;
+    public String getMaterialType() {
+        return materialType;
     }
 
-    public void setType(Byte type) {
-        this.type = type;
+    public void setMaterialType(String materialType) {
+        this.materialType = materialType == null ? null : materialType.trim();
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType == null ? null : productType.trim();
     }
 
     public String getRemark() {

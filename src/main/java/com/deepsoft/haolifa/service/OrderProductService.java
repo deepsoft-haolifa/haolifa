@@ -61,7 +61,13 @@ public interface OrderProductService {
      * @return
      */
     ResultBean updateOrderInfo(OrderUpdateDTO orderUpdateDTO);
-
+    /**
+     * 删除订单信息
+     *
+     * @param id
+     * @return
+     */
+    ResultBean deleteOrderInfo(int id);
     /**
      * 修改订单状态
      *

@@ -435,63 +435,143 @@ public class ProductModelConfigExample {
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNull() {
-            addCriterion("type is null");
+        public Criteria andMaterialTypeIsNull() {
+            addCriterion("material_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIsNotNull() {
-            addCriterion("type is not null");
+        public Criteria andMaterialTypeIsNotNull() {
+            addCriterion("material_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeEqualTo(Byte value) {
-            addCriterion("type =", value, "type");
+        public Criteria andMaterialTypeEqualTo(String value) {
+            addCriterion("material_type =", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotEqualTo(Byte value) {
-            addCriterion("type <>", value, "type");
+        public Criteria andMaterialTypeNotEqualTo(String value) {
+            addCriterion("material_type <>", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThan(Byte value) {
-            addCriterion("type >", value, "type");
+        public Criteria andMaterialTypeGreaterThan(String value) {
+            addCriterion("material_type >", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("type >=", value, "type");
+        public Criteria andMaterialTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("material_type >=", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThan(Byte value) {
-            addCriterion("type <", value, "type");
+        public Criteria andMaterialTypeLessThan(String value) {
+            addCriterion("material_type <", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("type <=", value, "type");
+        public Criteria andMaterialTypeLessThanOrEqualTo(String value) {
+            addCriterion("material_type <=", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIn(List<Byte> values) {
-            addCriterion("type in", values, "type");
+        public Criteria andMaterialTypeLike(String value) {
+            addCriterion("material_type like", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotIn(List<Byte> values) {
-            addCriterion("type not in", values, "type");
+        public Criteria andMaterialTypeNotLike(String value) {
+            addCriterion("material_type not like", value, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeBetween(Byte value1, Byte value2) {
-            addCriterion("type between", value1, value2, "type");
+        public Criteria andMaterialTypeIn(List<String> values) {
+            addCriterion("material_type in", values, "materialType");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("type not between", value1, value2, "type");
+        public Criteria andMaterialTypeNotIn(List<String> values) {
+            addCriterion("material_type not in", values, "materialType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialTypeBetween(String value1, String value2) {
+            addCriterion("material_type between", value1, value2, "materialType");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialTypeNotBetween(String value1, String value2) {
+            addCriterion("material_type not between", value1, value2, "materialType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeIsNull() {
+            addCriterion("product_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeIsNotNull() {
+            addCriterion("product_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeEqualTo(String value) {
+            addCriterion("product_type =", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeNotEqualTo(String value) {
+            addCriterion("product_type <>", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeGreaterThan(String value) {
+            addCriterion("product_type >", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("product_type >=", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeLessThan(String value) {
+            addCriterion("product_type <", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeLessThanOrEqualTo(String value) {
+            addCriterion("product_type <=", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeLike(String value) {
+            addCriterion("product_type like", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeNotLike(String value) {
+            addCriterion("product_type not like", value, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeIn(List<String> values) {
+            addCriterion("product_type in", values, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeNotIn(List<String> values) {
+            addCriterion("product_type not in", values, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeBetween(String value1, String value2) {
+            addCriterion("product_type between", value1, value2, "productType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductTypeNotBetween(String value1, String value2) {
+            addCriterion("product_type not between", value1, value2, "productType");
             return (Criteria) this;
         }
 

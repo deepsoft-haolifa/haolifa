@@ -1676,6 +1676,66 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andSupportQuantityIsNull() {
+            addCriterion("support_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityIsNotNull() {
+            addCriterion("support_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityEqualTo(Integer value) {
+            addCriterion("support_quantity =", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityNotEqualTo(Integer value) {
+            addCriterion("support_quantity <>", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityGreaterThan(Integer value) {
+            addCriterion("support_quantity >", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("support_quantity >=", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityLessThan(Integer value) {
+            addCriterion("support_quantity <", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("support_quantity <=", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityIn(List<Integer> values) {
+            addCriterion("support_quantity in", values, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityNotIn(List<Integer> values) {
+            addCriterion("support_quantity not in", values, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("support_quantity between", value1, value2, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("support_quantity not between", value1, value2, "supportQuantity");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDeleteIsNull() {
             addCriterion("is_delete is null");
             return (Criteria) this;

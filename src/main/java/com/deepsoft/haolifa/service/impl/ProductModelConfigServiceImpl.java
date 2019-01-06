@@ -27,7 +27,7 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
 
 
     @Override
-    public List<ProductModelConfig> getList(int type, String indexRule) {
+    public List<ProductModelConfig> getList(String type, String indexRule) {
 
         List<ProductModelConfig> productModelConfigs = redisDao.queryCache(CacheKeyManager.cacheKeyProductModelRule(), new TypeReference<List<ProductModelConfig>>() {
         }, new NoCacheLoadCallBack<List<ProductModelConfig>>() {
@@ -36,8 +36,8 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
                 return productModelConfigMapper.selectByExample(new ProductModelConfigExample());
             }
         });
-        if (type > 0 && StringUtils.isNotBlank(indexRule)) {
-            productModelConfigs = productModelConfigs.stream().filter(e -> e.getType() == type).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
+        if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(indexRule)) {
+            productModelConfigs = productModelConfigs.stream().filter(e -> e.getMaterialType().equals(type)).filter(e -> e.getIndexRule() == indexRule).collect(Collectors.toList());
         }
         return productModelConfigs;
     }
@@ -52,9 +52,9 @@ public class ProductModelConfigServiceImpl extends BaseService implements Produc
     }
 
     @Override
-    public int delete(int type, String indexRule) {
+    public int delete(String type, String indexRule) {
         int delete = productModelConfigMapper.deleteByExample(new ProductModelConfigExample() {{
-            or().andTypeEqualTo((byte) type).andIndexRuleEqualTo(indexRule);
+            or().andMaterialTypeEqualTo(type).andIndexRuleEqualTo(indexRule);
         }});
         if (delete > 0) {
             redisDao.del(CacheKeyManager.cacheKeyProductModelRule().key);

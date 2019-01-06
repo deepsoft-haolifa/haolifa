@@ -71,31 +71,66 @@ INSERT INTO `flow_step` VALUES ('26', NOW(),  NOW(), '1', '4', '76', '31', '78',
 -- ----------------------------
 -- Records of product_model_config
 -- ----------------------------
-INSERT INTO `product_model_config` VALUES ('1', '2018-12-01 09:35:59', 'Q', 'Qa', '', '1', '');
-INSERT INTO `product_model_config` VALUES ('2', '2018-12-01 09:36:05', 'Q', 'Qb', '', '1', '');
-INSERT INTO `product_model_config` VALUES ('3', '2018-12-01 09:36:10', 'Q', 'Qc', '', '1', '');
-INSERT INTO `product_model_config` VALUES ('4', '2018-12-01 09:36:38', 'Z', 'Za', '', '1', '');
-INSERT INTO `product_model_config` VALUES ('5', '2018-12-01 09:36:47', 'Z', 'Zb', '', '1', '');
-INSERT INTO `product_model_config` VALUES ('6', '2018-12-01 09:36:55', 'Z', 'Zc', '', '1', '');
-INSERT INTO `product_model_config` VALUES ('7', '2018-12-01 09:37:52', 'X', 'E0', '', '2', '');
-INSERT INTO `product_model_config` VALUES ('8', '2018-12-01 09:38:01', 'X', 'E1', '', '2', '');
-INSERT INTO `product_model_config` VALUES ('9', '2018-12-01 09:38:07', 'X', 'E2', '', '2', '');
-INSERT INTO `product_model_config` VALUES ('10', '2018-12-01 09:38:16', 'X', 'E3', '', '2', '');
-INSERT INTO `product_model_config` VALUES ('11', '2018-12-01 09:38:32', 'X', 'Na', '', '2', '');
-INSERT INTO `product_model_config` VALUES ('12', '2018-12-01 09:38:37', 'X', 'Nb', '', '2', '');
-INSERT INTO `product_model_config` VALUES ('13', '2018-12-01 09:38:49', 'F', 'Fa', '', '2', '');
-INSERT INTO `product_model_config` VALUES ('14', '2018-12-01 09:39:33', 'P', 'Hc', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('15', '2018-12-01 09:39:41', 'R', 'Hd', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('16', '2018-12-01 09:39:48', 'L', 'He', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('17', '2018-12-01 09:39:58', 'H', 'Hf', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('18', '2018-12-01 09:40:05', 'H', 'Hg', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('19', '2018-12-01 09:40:08', 'H', 'Hh', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('20', '2018-12-01 09:40:32', 'N', 'QN', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('21', '2018-12-01 09:40:41', 'D', 'QD', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('22', '2018-12-01 09:40:49', 'T', 'Ta', '', '3', '');
-INSERT INTO `product_model_config` VALUES ('23', '2018-12-01 09:42:22', '10', 'a', '', '4', '');
-INSERT INTO `product_model_config` VALUES ('24', '2018-12-01 09:42:39', '10', 'b', '', '4', '');
-INSERT INTO `product_model_config` VALUES ('25', '2018-12-01 09:42:43', '10', 'd', '', '4', '');
-INSERT INTO `product_model_config` VALUES ('26', '2018-12-01 09:42:48', '16', 'a', '', '4', '');
-INSERT INTO `product_model_config` VALUES ('27', '2018-12-01 09:42:51', '16', 'b', '', '4', '');
-INSERT INTO `product_model_config` VALUES ('28', '2018-12-01 09:42:56', '16', 'e', '', '4', '');
+-- 蝶阀核料规则配置
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Q', 'Qa', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Q', 'Qb', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Q', 'Qc', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Z', 'Za', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('C', 'Ca', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('L', 'La', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('P', 'Hc', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('R', 'Hd', '', 'fati', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('RL', 'He', '', 'fati', 'D', '');
+
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'a', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'b', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'c', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'd', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'a', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'b', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'c', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'e', '', 'fatiyali', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('25', 'f', '', 'fatiyali', 'D', '');
+
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X3', 'Ea', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X3', 'E0', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X6', 'Ed', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X6', 'E0', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X9', 'Eb', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X9', 'E0', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('XF', 'Ec', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('XF', 'E0', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X5', 'Na', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('F4', 'Fa', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X7', 'Xa', '', 'fazuo', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('X8', 'Xb', '', 'fazuo', 'D', '');
+
+
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('P', 'Hc', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('R', 'Hd', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('RL', 'He', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Hb', 'Hf', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Ha', 'Hg', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Hd', 'Hh', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('N', 'QN', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('D', 'QD', '', 'faban', 'D', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('T', 'Ta', '', 'faban', 'D', '');
+
+-- 止回阀规则
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Q', '00Qa', '', 'fati', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Q', 'QaEa', '', 'fati', 'H', '');
+
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'a', '', 'fatiyali', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'b', '', 'fatiyali', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'c', '', 'fatiyali', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'd', '', 'fatiyali', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'a', '', 'fatiyali', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'b', '', 'fatiyali', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'c', '', 'fatiyali', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'e', '', 'fatiyali', 'H', '');
+
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('P', 'Hc', '', 'faban', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('R', 'Hd', '', 'faban', 'H', '');
+INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('RL', 'He', '', 'faban', 'H', '');
+
+

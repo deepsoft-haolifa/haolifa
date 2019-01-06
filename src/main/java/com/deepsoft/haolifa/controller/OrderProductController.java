@@ -33,6 +33,13 @@ public class OrderProductController {
         return orderProductService.saveOrderProductInfo(orderProduct);
     }
 
+    @ApiOperation("成品订单信息删除")
+    @DeleteMapping("/delete/{id}")
+    @ApiImplicitParam(name = "id", value = "订单id", dataType = "int", paramType = "path", required = true)
+    public ResultBean delete(@PathVariable int id) {
+        return orderProductService.deleteOrderInfo(id);
+    }
+
     @ApiOperation("成品订单信息更新")
     @PostMapping("/updateInfo")
     public ResultBean updateInfo(@RequestBody OrderUpdateDTO orderUpdateDTO) {

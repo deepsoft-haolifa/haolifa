@@ -29,6 +29,8 @@ public class CommonEnum {
         LOGIN_ERROR("1001", "登陆错误"),
         //生产订单重复
         ORDER_NO_EXISTS("1002", "订单号已经存在，不能重复上传"),
+        // 订单状态已经发起审批，不能删除
+        ORDER_STATUS_NOT_DELETE("1003", "订单状态已经发起审批，不能删除"),
 
         // 库房货位已经存在
         STORE_ROOM_NO_EXISTS("2001", "库房号已经存在"),
@@ -50,7 +52,9 @@ public class CommonEnum {
         STEP_INCONFORMITY("4001", "处理节点与当前节点不一致"),
         STEP_BACK_ERROR("4002", "无可退回节点"),
         FLOW_IS_OVER("4003", "流程已结束"),
-        BACK_STEP_NOT_EXIST("4004", "未指定退回节点");
+        BACK_STEP_NOT_EXIST("4004", "未指定退回节点"),
+
+        FILE_NAME_EXIST("5001", "上传的文件名已经存在，请换个名称上传");
 
         public final String code;
 
@@ -189,21 +193,35 @@ public class CommonEnum {
     public enum ProductModelType {
 
         // 阀体
-        FATI((byte) 1),
+        FATI("fati"),
         // 阀座
-        FAZUO((byte) 2),
+        FAZUO("fazuo"),
         // 阀板
-        FABAN((byte) 3),
+        FABAN("faban"),
         // 上阀杆
-        FAGAN((byte) 4),
+        FAGAN("fagan"),
         // 阀体压力
-        FATI_YALI((byte) 5),
+        FATI_YALI("fatiyali"),
         // 通用零件
-        TONG_YONG((byte) 6),;
+        TONG_YONG("tongyong"),;
 
-        public final byte code;
+        public final String code;
 
-        ProductModelType(byte code) {
+        ProductModelType(String code) {
+            this.code = code;
+        }
+    }
+    /**
+     * 产品类型配置
+     */
+    public enum ProductType {
+        // 蝶阀
+        D("D"),
+        // 止回阀
+        H("H"),;
+        public final String code;
+
+        ProductType(String code) {
             this.code = code;
         }
     }

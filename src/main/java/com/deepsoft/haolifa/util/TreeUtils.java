@@ -77,7 +77,9 @@ public class TreeUtils {
         list.add(child2);
         List<BaseTreeGrid> treelist = formatTree(list, false);
         String json = JSONArray.toJSONString(treelist);
+        String json1 = JSONArray.toJSONString(list);
         System.out.println(json);
+        System.out.println(json1);
     }
 
 
