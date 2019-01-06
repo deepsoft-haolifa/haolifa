@@ -462,7 +462,8 @@ DROP TABLE IF EXISTS `order_product`;
 	  `index_rule` varchar(36) NOT NULL DEFAULT '' COMMENT '索引规则（例如：Q/P/X）',
 	  `material_graph_no_str` varchar(36) NOT NULL DEFAULT '' COMMENT '零件图号中对应的单词（例如：Qa/Qb/Qc）',
 	  `material_graph_no_indexof` varchar(36) NOT NULL DEFAULT '' COMMENT '零件图号中对应的位置',
-	  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '类型（1.阀体；2.阀座；3：阀板；4.阀体压力）',
+	  `material_type` varchar(36) NOT NULL DEFAULT '' COMMENT '类型（fati.阀体；fazuo.阀座；faban：阀板；fatiyali.阀体压力）',
+	  `product_type` varchar(36) NOT NULL DEFAULT '' COMMENT '产品类型（D：蝶阀，H：止回阀）',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注描述',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品型号规则配置表';

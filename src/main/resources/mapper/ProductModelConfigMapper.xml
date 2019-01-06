@@ -8,7 +8,8 @@
       <arg column="index_rule" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no_str" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no_indexof" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="material_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_type" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, index_rule, material_graph_no_str, material_graph_no_indexof, type, 
-    remark
+    id, create_time, index_rule, material_graph_no_str, material_graph_no_indexof, material_type, 
+    product_type, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.ProductModelConfigExample" resultMap="BaseResultMap">
     select
@@ -109,11 +110,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into product_model_config (create_time, index_rule, material_graph_no_str, 
-      material_graph_no_indexof, type, remark
-      )
+      material_graph_no_indexof, material_type, product_type, 
+      remark)
     values (#{createTime,jdbcType=TIMESTAMP}, #{indexRule,jdbcType=VARCHAR}, #{materialGraphNoStr,jdbcType=VARCHAR}, 
-      #{materialGraphNoIndexof,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}
-      )
+      #{materialGraphNoIndexof,jdbcType=VARCHAR}, #{materialType,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ProductModelConfig">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -133,8 +134,11 @@
       <if test="materialGraphNoIndexof != null">
         material_graph_no_indexof,
       </if>
-      <if test="type != null">
-        type,
+      <if test="materialType != null">
+        material_type,
+      </if>
+      <if test="productType != null">
+        product_type,
       </if>
       <if test="remark != null">
         remark,
@@ -153,8 +157,11 @@
       <if test="materialGraphNoIndexof != null">
         #{materialGraphNoIndexof,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=TINYINT},
+      <if test="materialType != null">
+        #{materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null">
+        #{productType,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -185,8 +192,11 @@
       <if test="record.materialGraphNoIndexof != null">
         material_graph_no_indexof = #{record.materialGraphNoIndexof,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=TINYINT},
+      <if test="record.materialType != null">
+        material_type = #{record.materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productType != null">
+        product_type = #{record.productType,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -203,7 +213,8 @@
       index_rule = #{record.indexRule,jdbcType=VARCHAR},
       material_graph_no_str = #{record.materialGraphNoStr,jdbcType=VARCHAR},
       material_graph_no_indexof = #{record.materialGraphNoIndexof,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=TINYINT},
+      material_type = #{record.materialType,jdbcType=VARCHAR},
+      product_type = #{record.productType,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -224,8 +235,11 @@
       <if test="materialGraphNoIndexof != null">
         material_graph_no_indexof = #{materialGraphNoIndexof,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        type = #{type,jdbcType=TINYINT},
+      <if test="materialType != null">
+        material_type = #{materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null">
+        product_type = #{productType,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -239,7 +253,8 @@
       index_rule = #{indexRule,jdbcType=VARCHAR},
       material_graph_no_str = #{materialGraphNoStr,jdbcType=VARCHAR},
       material_graph_no_indexof = #{materialGraphNoIndexof,jdbcType=VARCHAR},
-      type = #{type,jdbcType=TINYINT},
+      material_type = #{materialType,jdbcType=VARCHAR},
+      product_type = #{productType,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

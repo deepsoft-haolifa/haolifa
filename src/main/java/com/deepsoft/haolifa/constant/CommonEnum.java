@@ -191,21 +191,35 @@ public class CommonEnum {
     public enum ProductModelType {
 
         // 阀体
-        FATI((byte) 1),
+        FATI("fati"),
         // 阀座
-        FAZUO((byte) 2),
+        FAZUO("fazuo"),
         // 阀板
-        FABAN((byte) 3),
+        FABAN("faban"),
         // 上阀杆
-        FAGAN((byte) 4),
+        FAGAN("fagan"),
         // 阀体压力
-        FATI_YALI((byte) 5),
+        FATI_YALI("fatiyali"),
         // 通用零件
-        TONG_YONG((byte) 6),;
+        TONG_YONG("tongyong"),;
 
-        public final byte code;
+        public final String code;
 
-        ProductModelType(byte code) {
+        ProductModelType(String code) {
+            this.code = code;
+        }
+    }
+    /**
+     * 产品类型配置
+     */
+    public enum ProductType {
+        // 蝶阀
+        D("D"),
+        // 止回阀
+        H("H"),;
+        public final String code;
+
+        ProductType(String code) {
             this.code = code;
         }
     }

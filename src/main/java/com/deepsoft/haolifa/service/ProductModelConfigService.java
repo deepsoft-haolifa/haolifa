@@ -13,7 +13,7 @@ public interface ProductModelConfigService {
      * @param indexRule
      * @return
      */
-    List<ProductModelConfig> getList(int type, String indexRule);
+    List<ProductModelConfig> getList(String type, String indexRule);
 
     /**
      * 新增成品模型规则
@@ -29,7 +29,7 @@ public interface ProductModelConfigService {
      * @param indexRule
      * @return
      */
-    int delete(int type, String indexRule);
+    int delete(String type, String indexRule);
 
     /**
      * 更新成品模型规则
