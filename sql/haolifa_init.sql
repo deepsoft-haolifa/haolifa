@@ -279,6 +279,7 @@ CREATE TABLE `flow_history` (
 	  `safety_factor` varchar(16) NOT NULL DEFAULT '' COMMENT '存库安全系数',
 	  `current_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '目前库存量（每次出库，入库的时候实时更新）',
 	  `lock_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '锁定数量（核料成功锁定，零件出库的时候释放）',
+	  `support_quantity` int(11) NOT NULL DEFAULT 1 COMMENT '配套数量（核料时用到，一个产品需要多少个零件）',
 	  `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0不删除，1删除',
 	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`),

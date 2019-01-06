@@ -307,6 +307,26 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         return ResultBean.success(update);
     }
 
+    @Override
+    public ResultBean deleteOrderInfo(int id) {
+        if (id > 0) {
+            OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(id);
+            if (orderProduct != null) {
+                Byte orderStatus = orderProduct.getOrderStatus();
+                if (orderStatus != CommonEnum.OrderStatus.CREATE.code) {
+                    return ResultBean.error(CommonEnum.ResponseEnum.ORDER_STATUS_NOT_DELETE);
+                }
+            }
+            int delete = orderProductMapper.deleteByPrimaryKey(id);
+            if (delete > 0) {
+                return ResultBean.success(delete);
+            } else {
+                return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+            }
+        }
+        return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+    }
+
 
     @Override
     public int updateOrderProductStatus(String orderNo, byte status) {
@@ -493,6 +513,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 materialResultDTO.setCurrentQuantity(currentQuantity);
                 materialResultDTO.setMaterialName(name);
                 materialResultDTO.setGraphNo(graphNo);
+                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
 
                 String[] split = graphNo.split("-");
                 if (split.length > 2) {
@@ -510,7 +531,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         }
                     } else if ("02".equals(noIndex)) {//阀座
                         // 止回阀没有阀座
-                        if(!productType.equals(CommonEnum.ProductType.H.code)){
+                        if (!productType.equals(CommonEnum.ProductType.H.code)) {
                             if (fazuoModelConfig.size() > 0) {
                                 if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
                                     fazuoCollect.add(materialResultDTO);
@@ -558,6 +579,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             materialResultDTO.setCurrentQuantity(e.getCurrentQuantity());
             materialResultDTO.setMaterialName(e.getName());
             materialResultDTO.setGraphNo(e.getGraphNo());
+            materialResultDTO.setSupportQuantity(e.getSupportQuantity());
             tongyongCollect.add(materialResultDTO);
         });
 
@@ -597,21 +619,23 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     if (a.getType() == CommonEnum.ProductModelType.TONG_YONG.code) {
                         List<MaterialResultDTO> list = a.getList();
                         list.stream().forEach(b -> {
+                            int materialCount = productNumber * b.getSupportQuantity();
                             String graphNo = b.getGraphNo();
                             if (tongyongMaterialsMap.containsKey(graphNo)) {
-                                tongyongMaterialsMap.put(graphNo, tongyongMaterialsMap.get(graphNo) + productNumber);
+                                tongyongMaterialsMap.put(graphNo, tongyongMaterialsMap.get(graphNo) + materialCount);
                             } else {
-                                tongyongMaterialsMap.put(graphNo, productNumber);
+                                tongyongMaterialsMap.put(graphNo, materialCount);
                             }
                         });
                     } else {
                         List<MaterialResultDTO> list = a.getList();
                         list.stream().forEach(b -> {
                             String graphNo = b.getGraphNo();
+                            int materialCount = productNumber * b.getSupportQuantity();
                             if (materialsMap.containsKey(graphNo)) {
-                                materialsMap.put(graphNo, materialsMap.get(b) + productNumber);
+                                materialsMap.put(graphNo, materialsMap.get(b) + materialCount);
                             } else {
-                                materialsMap.put(graphNo, productNumber);
+                                materialsMap.put(graphNo, materialCount);
                             }
                         });
                     }

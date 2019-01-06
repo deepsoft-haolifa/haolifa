@@ -29,6 +29,8 @@ public class CommonEnum {
         LOGIN_ERROR("1001", "登陆错误"),
         //生产订单重复
         ORDER_NO_EXISTS("1002", "订单号已经存在，不能重复上传"),
+        // 订单状态已经发起审批，不能删除
+        ORDER_STATUS_NOT_DELETE("1003", "订单状态已经发起审批，不能删除"),
 
         // 库房货位已经存在
         STORE_ROOM_NO_EXISTS("2001", "库房号已经存在"),
