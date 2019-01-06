@@ -52,22 +52,48 @@ public class QiniuUtil {
         if (lastIndexOf > 0) {
             int in = lastIndexOf + indexStr.length();
             String replaceStr = base64Str.substring(0, in);
-//        // 根据base64内容决定文件后缀
-//        String ext = "";
-//        if (replaceStr.contains("excel")) {
-//            ext = ".xlsx";
-//        } else if (replaceStr.contains("image")) {
-//            ext = ".jpg";
-//        } else if (replaceStr.contains("document")) {
-//            ext = ".doc";
-//        }
+
             base64Str = base64Str.replaceAll(replaceStr, "");
         }
         byte[] bytes = Base64.decodeBytes(base64Str);
 
         return uploadFile(bytes, System.currentTimeMillis() + "_" + originFileName);
 
-//        return uploadFile(bytes, originFileName + "_" + System.currentTimeMillis() + ext);
+    }
+
+    /**
+     * 上传文件，base64
+     *
+     * @param base64Str
+     * @param originFileName
+     * @param suffix         文件名是否需要填充后缀
+     * @return
+     */
+    public static String uploadFile(String base64Str, String originFileName, boolean suffix) {
+        // 将base64,之前的内容替换，只获取base64内容
+        String indexStr = "base64,";
+        int lastIndexOf = base64Str.lastIndexOf(indexStr);
+        if (lastIndexOf > 0) {
+            int in = lastIndexOf + indexStr.length();
+            String replaceStr = base64Str.substring(0, in);
+            if (suffix) {
+                // 根据base64内容决定文件后缀
+                String ext = "";
+                if (replaceStr.contains("excel")) {
+                    ext = ".xlsx";
+                } else if (replaceStr.contains("image")) {
+                    ext = ".jpg";
+                } else if (replaceStr.contains("document")) {
+                    ext = ".doc";
+                } else if (replaceStr.contains("pdf")) {
+                    ext = ".pdf";
+                }
+                originFileName = originFileName + ext;
+                base64Str = base64Str.replaceAll(replaceStr, "");
+            }
+        }
+        byte[] bytes = Base64.decodeBytes(base64Str);
+        return uploadFile(bytes, System.currentTimeMillis() + "_" + originFileName);
     }
 
     public static String uploadFile(InputStream inputStream, String originFileName) {
