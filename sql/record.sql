@@ -119,7 +119,6 @@ INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_s
 -- 止回阀规则
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Q', '00Qa', '', 'fati', 'H', '');
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('Q', 'QaEa', '', 'fati', 'H', '');
-
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'a', '', 'fatiyali', 'H', '');
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'b', '', 'fatiyali', 'H', '');
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('10', 'c', '', 'fatiyali', 'H', '');
@@ -128,9 +127,76 @@ INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_s
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'b', '', 'fatiyali', 'H', '');
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'c', '', 'fatiyali', 'H', '');
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('16', 'e', '', 'fatiyali', 'H', '');
-
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('P', 'Hc', '', 'faban', 'H', '');
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('R', 'Hd', '', 'faban', 'H', '');
 INSERT INTO `haolifa`.`product_model_config` (`index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES ('RL', 'He', '', 'faban', 'H', '');
+-- 部门数据
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('01', '总经理办公室', '', '0');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('02', '经营管理部', '', '0');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('03', '生产制造部', '', '0');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('04', '技术管理中心', '', '0');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('05', '质量管理中心', '', '0');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('06', '采购管理部', '', '0');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('07', '财务管理部', '', '0');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('0301', '阀门装配车间', '', '3');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('0302', '机加工车间', '', '3');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('0303', '自控设备车间', '', '3');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('0304', '半成品库房', '', '3');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('0305', '配套库房', '', '3');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('0306', '毛坯库房', '', '3');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('0401', '产品研发实验室', '', '4');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('030101', '装配一组', '', '8');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('030102', '装配二组', '', '8');
+INSERT INTO `haolifa`.`sys_department` ( `dept_no`, `dept_name`, `description`, `pid`) VALUES ('030103', '装配三组', '', '8');
+
+-- 角色数据
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (0, '00', 'ROLE_ADMIN', '系统管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (0, '01', 'ROLE_ZJL', '总经理');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (2, '0101', 'ROLE_JGFZ', '经管副总');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (2, '0102', 'ROLE_SCFZ', '生产副总');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (2, '0103', 'ROLE_ZG', '总工');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (3, '010101', 'ROLE_JYGLBJL', '经营管理部经理');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (3, '010102', 'ROLE_ZLGLBJL', '质量管理部经理');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (4, '010201', 'ROLE_SCZZBJL', '生产制造部经理');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (4, '010202', 'ROLE_CGGLBJL', '采购管理部经理');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (5, '010301', 'ROLE_JSGLZXJL', '技术管理中心经理');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (5, '010302', 'ROLE_JSGLZXFJL', '技术管理中心副经理');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (0, '010401', 'ROLE_ZJLBGSZR', '总经理办公室主任');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (0, '010501', 'ROLE_CWGLZXFZR', '财务管理中心负责人');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (6, '01010101', 'ROLE_JGGLY', '价格管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (6, '01010102', 'ROLE_ZHJHY', '综合计划员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (6, '01010103', 'ROLE_HTGLY', '合同管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (6, '01010104', 'ROLE_FHY', '发货员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010201', 'ROLE_TXWH', '体系维护');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010202', 'ROLE_CPZLJD', '产品质量监督');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010203', 'ROLE_SHGLY', '售后管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010204', 'ROLE_JHJYY', '进货检验员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010205', 'ROLE_JJJYY', '机加检验员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010206', 'ROLE_YLCSY', '压力测试员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010207', 'ROLE_CPJYY', '成品检验员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (7, '01010208', 'ROLE_ZKSBJYY', '自控设备检验员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (8, '01020101', 'ROLE_SCJJDD', '生产计划调度');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (8, '01020101', 'ROLE_FMZPCJZR', '阀门装配车间主任');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (8, '01020101', 'ROLE_JJGCJZR', '机加工车间主任');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (8, '01020101', 'ROLE_KFZG', '库房主管');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (8, '01020101', 'ROLE_ZKSBCJZR', '自控设备车间主任');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (9, '01020201', 'ROLE_CGZG', '采购主管');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (9, '01020202', 'ROLE_CGY', '采购员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (10, '01030101', 'ROLE_DDSHJSY', '订单审核技术员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (10, '01030102', 'ROLE_XCJSGCS', '现场技术工程师');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (10, '01030103', 'ROLE_SJS', '设计师');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (10, '01030104', 'ROLE_SYSGLY', '实验室管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (10, '01030105', 'ROLE_JSWJGLY', '技术文件管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (12, '01040101', 'ROLE_RLZYYLY', '人力资源管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (12, '01040102', 'ROLE_CZSWGLY', '行政事务管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (12, '01040103', 'ROLE_ZJLMS', '总经理秘书');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (12, '01040104', 'ROLE_AQSCJDGLY', '安全生产监督管理员');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (13, '01050101', 'ROLE_ZGKJ', '主管会计');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (13, '01050102', 'ROLE_XSKJ', '销售会计');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (13, '01050103', 'ROLE_CGKJ', '采购会计');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (13, '01050104', 'ROLE_CLKJ', '材料会计');
+INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) VALUES (13, '01050105', 'ROLE_CN', '出纳');
+
+
 
 

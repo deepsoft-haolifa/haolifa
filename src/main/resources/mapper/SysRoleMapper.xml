@@ -5,6 +5,8 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="dept_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="role_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="role_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
@@ -71,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, dept_id, role_name, description, is_delete, create_time, update_time
+    id, dept_id, pid, role_no, role_name, description, is_delete, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.SysRoleExample" resultMap="BaseResultMap">
     select
@@ -104,12 +106,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SysRole">
-    insert into sys_role (id, dept_id, role_name, 
-      description, is_delete, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into sys_role (id, dept_id, pid, 
+      role_no, role_name, description, 
+      is_delete, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, 
+      #{roleNo,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SysRole">
     insert into sys_role
@@ -119,6 +123,12 @@
       </if>
       <if test="deptId != null">
         dept_id,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="roleNo != null">
+        role_no,
       </if>
       <if test="roleName != null">
         role_name,
@@ -142,6 +152,12 @@
       </if>
       <if test="deptId != null">
         #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="roleNo != null">
+        #{roleNo,jdbcType=VARCHAR},
       </if>
       <if test="roleName != null">
         #{roleName,jdbcType=VARCHAR},
@@ -175,6 +191,12 @@
       <if test="record.deptId != null">
         dept_id = #{record.deptId,jdbcType=INTEGER},
       </if>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.roleNo != null">
+        role_no = #{record.roleNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.roleName != null">
         role_name = #{record.roleName,jdbcType=VARCHAR},
       </if>
@@ -199,6 +221,8 @@
     update sys_role
     set id = #{record.id,jdbcType=INTEGER},
       dept_id = #{record.deptId,jdbcType=INTEGER},
+      pid = #{record.pid,jdbcType=INTEGER},
+      role_no = #{record.roleNo,jdbcType=VARCHAR},
       role_name = #{record.roleName,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
@@ -213,6 +237,12 @@
     <set>
       <if test="deptId != null">
         dept_id = #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="roleNo != null">
+        role_no = #{roleNo,jdbcType=VARCHAR},
       </if>
       <if test="roleName != null">
         role_name = #{roleName,jdbcType=VARCHAR},
@@ -235,6 +265,8 @@
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SysRole">
     update sys_role
     set dept_id = #{deptId,jdbcType=INTEGER},
+      pid = #{pid,jdbcType=INTEGER},
+      role_no = #{roleNo,jdbcType=VARCHAR},
       role_name = #{roleName,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=TINYINT},

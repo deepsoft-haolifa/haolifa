@@ -46,5 +46,10 @@ public class DepartmentController {
         return ResultBean.success(departmentService.deleteDepartment(id));
     }
 
+    @ApiOperation("获取部门树状结构")
+    @GetMapping("/departmentTree")
+    public ResultBean departmentTree(){
+        return ResultBean.success(departmentService.departmentTree());
+    }
 
 }

@@ -63,4 +63,11 @@ public class MenuController {
         return ResultBean.success(menuService.updateMenu(menuVO));
     }
 
+
+    @ApiOperation("获取菜单树状结构")
+    @GetMapping("/menuTree")
+    public ResultBean menuTree(){
+        return ResultBean.success(menuService.menuTree());
+    }
+
 }

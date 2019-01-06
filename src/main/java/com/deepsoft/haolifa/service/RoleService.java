@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.RoleDTO;
+import com.deepsoft.haolifa.model.dto.sys.DepartmentTree;
 import com.deepsoft.haolifa.model.vo.UserPageVO;
 
 import java.util.List;
@@ -19,4 +20,5 @@ public interface RoleService {
 
     List<UserPageVO> getBuyers();
 
+    List<DepartmentTree> roleTree();
 }

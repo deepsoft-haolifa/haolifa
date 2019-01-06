@@ -15,72 +15,64 @@ import java.util.List;
 public class TreeUtils {
 
 
+
     /**
-     * 格式化list为树形list
-     *
-     * @param list
-     * @param falg true 表示全部展开，其他 表示不展开
+     * 解析树形数据
+     * @param topId
+     * @param entityList
      * @return
      */
-    public static <T  extends BaseTreeGrid> List<T> formatTree(List<T> list, Boolean flag) {
+    public static <E extends TreeEntity<E>> List<E> getTreeList(String topId, List<E> entityList) {
+        List<E> resultList=new ArrayList<>();
 
-        List<T> nodeList = new ArrayList<T>();
-        for (T node1 : list) {
-            boolean mark = false;
-            for (T node2 : list) {
-                if (node1.getPid() != null && node1.getPid().equals(node2.getId())) {
-                    node2.setLeaf(false);
-                    mark = true;
-                    if (node2.getChildren() == null) {
-                        node2.setChildren(new ArrayList<BaseTreeGrid>());
-                    }
-                    node2.getChildren().add(node1);
-                    if (flag) {
-                        //默认已经全部展开
-                    } else {
-                        node2.setExpanded(false);
-                    }
-                    break;
-                }
-            }
-            if (!mark) {
-                nodeList.add(node1);
-                if (flag) {
-                    //默认已经全部展开
-                } else {
-                    node1.setExpanded(false);
-                }
+        //获取顶层元素集合
+        String parentId;
+        for (E entity : entityList) {
+            parentId=entity.getParentId();
+            if(parentId==null||topId.equals(parentId)){
+                resultList.add(entity);
             }
         }
-        return nodeList;
+
+        //获取每个顶层元素的子数据集合
+        for (E entity : resultList) {
+            entity.setChildList(getSubList(entity.getId(),entityList));
+        }
+
+        return resultList;
     }
 
-    public static void main(String[] args) {
-        List<BaseTreeGrid> list = new ArrayList<BaseTreeGrid>();
-        BaseTreeGrid root1 = new BaseTreeGrid();
-        root1.setId(1);
-        BaseTreeGrid child1 = new BaseTreeGrid();
-        child1.setId(11);
-        child1.setPid(1);
-        BaseTreeGrid child11 = new BaseTreeGrid();
-        child11.setId(111);
-        child11.setPid(11);
-        BaseTreeGrid root2 = new BaseTreeGrid();
-        root2.setId(2);
-        BaseTreeGrid child2 = new BaseTreeGrid();
-        child2.setId(21);
-        child2.setPid(2);
-        list.add(root1);
-        list.add(child1);
-        list.add(child11);
-        list.add(root2);
-        list.add(child2);
-        List<BaseTreeGrid> treelist = formatTree(list, false);
-        String json = JSONArray.toJSONString(treelist);
-        String json1 = JSONArray.toJSONString(list);
-        System.out.println(json);
-        System.out.println(json1);
+    /**
+     * 获取子数据集合
+     * @param id
+     * @param entityList
+     * @return
+     */
+    private  static  <E extends TreeEntity<E>>  List<E> getSubList(String id, List<E> entityList) {
+        List<E> childList=new ArrayList<>();
+        String parentId;
+
+        //子集的直接子对象
+        for (E entity : entityList) {
+            parentId=entity.getParentId();
+            if(id.equals(parentId)){
+                childList.add(entity);
+            }
+        }
+
+        //子集的间接子对象
+        for (E entity : childList) {
+            entity.setChildList(getSubList(entity.getId(), entityList));
+        }
+
+        //递归退出条件
+        if(childList.size()==0){
+            return null;
+        }
+
+        return childList;
     }
+
 
 
 }

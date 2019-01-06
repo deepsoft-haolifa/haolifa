@@ -61,4 +61,11 @@ public class RoleController {
         return ResultBean.success(menuService.insertRoleMenu(id, menuIds));
     }
 
+
+    @ApiOperation("角色树状结构")
+    @PostMapping("/roleTree")
+    public ResultBean roleTree(){
+        return ResultBean.success(roleService.roleTree());
+    }
+
 }

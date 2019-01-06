@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.dto.sys.DepartmentTree;
 import com.deepsoft.haolifa.model.vo.MenuVO;
 import com.deepsoft.haolifa.model.vo.QuickStartVO;
 
@@ -21,4 +22,5 @@ public interface MenuService {
 
     int insertRoleMenu(Integer roleId, Integer[] menuIds);
 
+    List<DepartmentTree> menuTree();
 }

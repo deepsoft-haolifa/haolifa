@@ -225,6 +225,136 @@ public class SysRoleExample {
             return (Criteria) this;
         }
 
+        public Criteria andPidIsNull() {
+            addCriterion("pid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidIsNotNull() {
+            addCriterion("pid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidEqualTo(Integer value) {
+            addCriterion("pid =", value, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidNotEqualTo(Integer value) {
+            addCriterion("pid <>", value, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidGreaterThan(Integer value) {
+            addCriterion("pid >", value, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("pid >=", value, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidLessThan(Integer value) {
+            addCriterion("pid <", value, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidLessThanOrEqualTo(Integer value) {
+            addCriterion("pid <=", value, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidIn(List<Integer> values) {
+            addCriterion("pid in", values, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidNotIn(List<Integer> values) {
+            addCriterion("pid not in", values, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidBetween(Integer value1, Integer value2) {
+            addCriterion("pid between", value1, value2, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPidNotBetween(Integer value1, Integer value2) {
+            addCriterion("pid not between", value1, value2, "pid");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoIsNull() {
+            addCriterion("role_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoIsNotNull() {
+            addCriterion("role_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoEqualTo(String value) {
+            addCriterion("role_no =", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoNotEqualTo(String value) {
+            addCriterion("role_no <>", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoGreaterThan(String value) {
+            addCriterion("role_no >", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoGreaterThanOrEqualTo(String value) {
+            addCriterion("role_no >=", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoLessThan(String value) {
+            addCriterion("role_no <", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoLessThanOrEqualTo(String value) {
+            addCriterion("role_no <=", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoLike(String value) {
+            addCriterion("role_no like", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoNotLike(String value) {
+            addCriterion("role_no not like", value, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoIn(List<String> values) {
+            addCriterion("role_no in", values, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoNotIn(List<String> values) {
+            addCriterion("role_no not in", values, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoBetween(String value1, String value2) {
+            addCriterion("role_no between", value1, value2, "roleNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleNoNotBetween(String value1, String value2) {
+            addCriterion("role_no not between", value1, value2, "roleNo");
+            return (Criteria) this;
+        }
+
         public Criteria andRoleNameIsNull() {
             addCriterion("role_name is null");
             return (Criteria) this;

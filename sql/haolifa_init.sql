@@ -117,6 +117,7 @@ CREATE TABLE `flow_history` (
 	CREATE TABLE `sys_role` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	  `dept_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '部门id',
+	  `pid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '父角色id',
 	  `role_no` varchar(20) NOT NULL COMMENT '角色代号',
 	  `role_name` varchar(20) NOT NULL COMMENT '角色名',
 	  `description` varchar(64) NOT NULL DEFAULT '' COMMENT '描述',

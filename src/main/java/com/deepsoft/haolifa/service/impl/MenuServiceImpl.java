@@ -6,14 +6,17 @@ import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
 import com.deepsoft.haolifa.model.domain.SysPermission;
 import com.deepsoft.haolifa.model.domain.SysPermissionExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
+import com.deepsoft.haolifa.model.dto.sys.DepartmentTree;
 import com.deepsoft.haolifa.model.vo.MenuVO;
 import com.deepsoft.haolifa.service.MenuService;
+import com.deepsoft.haolifa.util.TreeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,5 +87,23 @@ public class MenuServiceImpl implements MenuService {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         return myPermissionMapper.inserRoleMenu(roleId, menuIds);
+    }
+
+    @Override
+    public List<DepartmentTree> menuTree() {
+        SysPermissionExample sysPermissionExample = new SysPermissionExample();
+        SysPermissionExample.Criteria criteria = sysPermissionExample.createCriteria();
+        criteria.andPermNameEqualTo("m");
+        List<SysPermission> sysPermissions = sysPermissionMapper.selectByExample(sysPermissionExample);
+        List<DepartmentTree> departmentTrees = new ArrayList<>();
+        sysPermissions.stream().forEach(e -> {
+            DepartmentTree departmentTree = new DepartmentTree();
+            departmentTree.setId(String.valueOf(e.getId()));
+            departmentTree.setName(e.getDescription());
+            departmentTree.setParentId(String.valueOf(e.getPid()));
+            departmentTrees.add(departmentTree);
+
+        });
+        return TreeUtils.getTreeList("0", departmentTrees);
     }
 }
