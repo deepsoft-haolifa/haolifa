@@ -29,9 +29,13 @@ public class InspectItem {
 
     private String unit;
 
+    private String supplierName;
+
+    private String supplierNo;
+
     private String remark;
 
-    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, BigDecimal purchasePrice, String requirements, String unit, String remark) {
+    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, BigDecimal purchasePrice, String requirements, String unit, String supplierName, String supplierNo, String remark) {
         this.id = id;
         this.purchaseNo = purchaseNo;
         this.inspectId = inspectId;
@@ -45,6 +49,8 @@ public class InspectItem {
         this.purchasePrice = purchasePrice;
         this.requirements = requirements;
         this.unit = unit;
+        this.supplierName = supplierName;
+        this.supplierNo = supplierNo;
         this.remark = remark;
     }
 
@@ -154,6 +160,22 @@ public class InspectItem {
 
     public void setUnit(String unit) {
         this.unit = unit == null ? null : unit.trim();
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public String getSupplierNo() {
+        return supplierNo;
+    }
+
+    public void setSupplierNo(String supplierNo) {
+        this.supplierNo = supplierNo == null ? null : supplierNo.trim();
     }
 
     public String getRemark() {

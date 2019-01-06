@@ -19,4 +19,5 @@ public class EntrustDTO {
     @ApiModelProperty(required = true,value = "执行操作：1 保存 2 保存并发起",allowableValues = "1,2")
     private Integer actionType;
 
+
 }
