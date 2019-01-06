@@ -308,6 +308,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean deleteOrderInfo(int id) {
         if (id > 0) {
             OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(id);
@@ -319,6 +320,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             }
             int delete = orderProductMapper.deleteByPrimaryKey(id);
             if (delete > 0) {
+                // 刪除订单管理的产品
+                OrderProductAssociateExample example = new OrderProductAssociateExample();
+                example.or().andOrderNoEqualTo(orderProduct.getOrderNo());
+                orderProductAssociateMapper.deleteByExample(example);
+
                 return ResultBean.success(delete);
             } else {
                 return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
