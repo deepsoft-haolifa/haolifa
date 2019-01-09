@@ -193,11 +193,11 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <table tableName="inspect" domainObjectName="Inspect">
-    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-    </table>
-    <table tableName="inspect_item" domainObjectName="InspectItem">
-    </table>
+    <!--<table tableName="inspect" domainObjectName="Inspect">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+    <!--<table tableName="inspect_item" domainObjectName="InspectItem">-->
+    <!--</table>-->
     <!--<table tableName="inspect_history" domainObjectName="InspectHistory">-->
     <!--</table>-->
 
@@ -212,7 +212,7 @@
 
     <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 
-    <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->
+    <table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>
 
     <!--<table tableName="supplier" domainObjectName="Supplier"></table>-->
 

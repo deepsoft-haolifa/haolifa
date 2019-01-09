@@ -16,6 +16,7 @@
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="accessory" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, summary, form_no, form_id, flow_id, current_step_id, user_id, role_id, is_over, 
-    is_back, create_user_id, create_time, update_time
+    is_back, create_user_id, create_time, update_time, accessory
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowInstanceExample" resultMap="BaseResultMap">
     select
@@ -117,13 +118,13 @@
     insert into flow_instance (summary, form_no, form_id, 
       flow_id, current_step_id, user_id, 
       role_id, is_over, is_back, 
-      create_user_id, create_time, update_time
-      )
+      create_user_id, create_time, update_time, 
+      accessory)
     values (#{summary,jdbcType=VARCHAR}, #{formNo,jdbcType=VARCHAR}, #{formId,jdbcType=INTEGER}, 
       #{flowId,jdbcType=INTEGER}, #{currentStepId,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
       #{roleId,jdbcType=INTEGER}, #{isOver,jdbcType=TINYINT}, #{isBack,jdbcType=TINYINT}, 
-      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{accessory,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowInstance">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -167,6 +168,9 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="accessory != null">
+        accessory,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="summary != null">
@@ -204,6 +208,9 @@
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accessory != null">
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -255,6 +262,9 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.accessory != null">
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -274,7 +284,8 @@
       is_back = #{record.isBack,jdbcType=TINYINT},
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -318,6 +329,9 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="accessory != null">
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -334,7 +348,8 @@
       is_back = #{isBack,jdbcType=TINYINT},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

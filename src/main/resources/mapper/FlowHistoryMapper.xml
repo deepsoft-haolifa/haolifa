@@ -16,6 +16,7 @@
       <arg column="form_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="form_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="form_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accessory" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, update_time, instance_id, step_id, audit_user_id, audit_info, allot_user_id, 
-    audit_time, audit_result, form_type, form_id, form_no
+    audit_time, audit_result, form_type, form_id, form_no, accessory
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowHistoryExample" resultMap="BaseResultMap">
     select
@@ -115,12 +116,12 @@
       instance_id, step_id, audit_user_id, 
       audit_info, allot_user_id, audit_time, 
       audit_result, form_type, form_id, 
-      form_no)
+      form_no, accessory)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{instanceId,jdbcType=INTEGER}, #{stepId,jdbcType=INTEGER}, #{auditUserId,jdbcType=INTEGER}, 
       #{auditInfo,jdbcType=VARCHAR}, #{allotUserId,jdbcType=INTEGER}, #{auditTime,jdbcType=TIMESTAMP}, 
       #{auditResult,jdbcType=TINYINT}, #{formType,jdbcType=TINYINT}, #{formId,jdbcType=INTEGER}, 
-      #{formNo,jdbcType=VARCHAR})
+      #{formNo,jdbcType=VARCHAR}, #{accessory,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
     insert into flow_history
@@ -164,6 +165,9 @@
       <if test="formNo != null">
         form_no,
       </if>
+      <if test="accessory != null">
+        accessory,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -204,6 +208,9 @@
       </if>
       <if test="formNo != null">
         #{formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accessory != null">
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -255,6 +262,9 @@
       <if test="record.formNo != null">
         form_no = #{record.formNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.accessory != null">
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -274,7 +284,8 @@
       audit_result = #{record.auditResult,jdbcType=TINYINT},
       form_type = #{record.formType,jdbcType=TINYINT},
       form_id = #{record.formId,jdbcType=INTEGER},
-      form_no = #{record.formNo,jdbcType=VARCHAR}
+      form_no = #{record.formNo,jdbcType=VARCHAR},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -318,6 +329,9 @@
       <if test="formNo != null">
         form_no = #{formNo,jdbcType=VARCHAR},
       </if>
+      <if test="accessory != null">
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -334,7 +348,8 @@
       audit_result = #{auditResult,jdbcType=TINYINT},
       form_type = #{formType,jdbcType=TINYINT},
       form_id = #{formId,jdbcType=INTEGER},
-      form_no = #{formNo,jdbcType=VARCHAR}
+      form_no = #{formNo,jdbcType=VARCHAR},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

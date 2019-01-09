@@ -36,4 +36,6 @@ public interface SupplierService {
    * @return
    */
   ResultBean listByName();
+
+  ResultBean approve(String supplierNo);
 }

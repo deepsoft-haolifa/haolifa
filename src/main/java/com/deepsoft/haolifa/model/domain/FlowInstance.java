@@ -29,7 +29,9 @@ public class FlowInstance {
 
     private Date updateTime;
 
-    public FlowInstance(Integer id, String summary, String formNo, Integer formId, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime) {
+    private String accessory;
+
+    public FlowInstance(Integer id, String summary, String formNo, Integer formId, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime, String accessory) {
         this.id = id;
         this.summary = summary;
         this.formNo = formNo;
@@ -43,6 +45,7 @@ public class FlowInstance {
         this.createUserId = createUserId;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.accessory = accessory;
     }
 
     public FlowInstance() {
@@ -151,5 +154,13 @@ public class FlowInstance {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
     }
 }

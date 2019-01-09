@@ -29,7 +29,9 @@ public class FlowHistory {
 
     private String formNo;
 
-    public FlowHistory(Integer id, Date createTime, Date updateTime, Integer instanceId, Integer stepId, Integer auditUserId, String auditInfo, Integer allotUserId, Date auditTime, Byte auditResult, Byte formType, Integer formId, String formNo) {
+    private String accessory;
+
+    public FlowHistory(Integer id, Date createTime, Date updateTime, Integer instanceId, Integer stepId, Integer auditUserId, String auditInfo, Integer allotUserId, Date auditTime, Byte auditResult, Byte formType, Integer formId, String formNo, String accessory) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -43,6 +45,7 @@ public class FlowHistory {
         this.formType = formType;
         this.formId = formId;
         this.formNo = formNo;
+        this.accessory = accessory;
     }
 
     public FlowHistory() {
@@ -151,5 +154,13 @@ public class FlowHistory {
 
     public void setFormNo(String formNo) {
         this.formNo = formNo == null ? null : formNo.trim();
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
     }
 }

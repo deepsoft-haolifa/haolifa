@@ -27,4 +27,6 @@ public class InstanceRecordDTO {
 
     private Integer instanceId;
 
+    private List<Accessory> accessories;
+
 }

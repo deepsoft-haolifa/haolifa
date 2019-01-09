@@ -2,18 +2,23 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.SupplierEvaluationRecordMapper;
 import com.deepsoft.haolifa.dao.repository.SupplierMapper;
 import com.deepsoft.haolifa.model.domain.Supplier;
+import com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord;
 import com.deepsoft.haolifa.model.domain.SupplierExample;
+import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierListDTO;
 import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
+import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SupplierService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +35,10 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
 
   @Autowired
   SupplierMapper supplierMapper;
+  @Autowired
+  SupplierEvaluationRecordMapper evaluationRecordMapper;
+  @Autowired
+  FlowInstanceService instanceService;
 
   @Override
   public ResultBean saveInfo(SupplierRequestDTO model) {
@@ -123,6 +132,32 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
   public ResultBean listByName() {
     List<Supplier> suppliers = supplierMapper.selectByExample(new SupplierExample());
     return ResultBean.success(suppliers);
+  }
+
+  @Override
+  public ResultBean approve(String supplierNo) {
+    Supplier supplier = new Supplier();
+    supplier.setIsQualified((byte) 3);// 评定中
+    SupplierExample example = new SupplierExample();
+    example.createCriteria().andSuppilerNoEqualTo(supplierNo);
+    supplierMapper.updateByExampleSelective(supplier, example);
+    // 添加记录
+    SupplierEvaluationRecord evaluationRecord = new SupplierEvaluationRecord();
+    evaluationRecord.setCreateData(new Date());
+    evaluationRecord.setAuditResult((byte) 0);
+    evaluationRecord.setSupplierFile("");
+    evaluationRecord.setAccessory("");
+    evaluationRecord.setSupplierNo(supplierNo);
+    evaluationRecordMapper.insertSelective(evaluationRecord);
+    // 添加流程
+    FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
+    flowInstanceDTO.setFormId(0);
+    flowInstanceDTO.setFlowId(3);
+    flowInstanceDTO.setFormNo(supplierNo);
+    flowInstanceDTO.setFormType(9);
+    flowInstanceDTO.setSummary("供应商合格审批");
+    instanceService.create(flowInstanceDTO);
+    return ResultBean.success(1);
   }
 }
 

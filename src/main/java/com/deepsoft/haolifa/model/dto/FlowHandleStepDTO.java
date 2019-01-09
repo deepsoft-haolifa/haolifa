@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.model.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -32,4 +33,7 @@ public class FlowHandleStepDTO {
 
     @ApiModelProperty(required = true,value = "节点条件判断：true ：条件为真 or false：条件为假;默认为true")
     private Boolean condition;
+
+    @ApiModelProperty(value = "附件信息")
+    private List<Accessory> accessorys;
 }

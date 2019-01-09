@@ -23,6 +23,9 @@ public class HistoryInfo {
     private String auditUserName;
     private Integer auditUserId;
     private Date createTime;
+    private String accessory;
+
+    private List<Accessory> accessories;
 
     private List<Map<String,Integer>> forms;
 

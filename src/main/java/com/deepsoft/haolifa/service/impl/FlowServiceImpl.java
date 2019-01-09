@@ -72,7 +72,9 @@ public class FlowServiceImpl implements FlowService {
       BeanUtils.copyProperties(flowStep, flowStepListDTO);
       flowStepListDTO.setStepName(stepMapper.selectByPrimaryKey(flowStep.getStepId()).getName());
       if (flowStep.getRoleId() != 0) {
-        flowStepListDTO.setRoleName(sysRoleMapper.selectByPrimaryKey(flowStep.getRoleId()).getDescription());
+        SysRole sysRole = sysRoleMapper.selectByPrimaryKey(flowStep.getRoleId());
+        String roleDesc = sysRole == null ? "" : sysRole.getDescription();
+        flowStepListDTO.setRoleName(roleDesc);
       }
       String userIdStr = "";
       if (StringUtils.isNotEmpty(flowStep.getUserId())) {
@@ -86,7 +88,9 @@ public class FlowServiceImpl implements FlowService {
           stringBuilder.append(su.getRealName()).append(",");
         }
         userIdStr = stringBuilder.toString();
-        userIdStr = userIdStr.substring(0, userIdStr.length() - 1);
+        if (userIdStr.length() > 0) {
+          userIdStr = userIdStr.substring(0, userIdStr.length() - 1);
+        }
       }
       flowStepListDTO.setUserNames(userIdStr);
       flowStepListDTOS.add(flowStepListDTO);
@@ -128,7 +132,7 @@ public class FlowServiceImpl implements FlowService {
     SysRoleUserExample example = new SysRoleUserExample();
     example.createCriteria().andSysRoleIdEqualTo(roleId);
     List<SysRoleUser> roleUsers = roleUserMapper.selectByExample(example);
-    if(roleUsers.size() == 0) {
+    if (roleUsers.size() == 0) {
       return ResultBean.success(new ArrayList<>());
     }
     List<Integer> userIds = roleUsers.parallelStream().map(r -> r.getSysUserId()).collect(Collectors.toList());

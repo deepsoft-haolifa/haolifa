@@ -83,4 +83,11 @@ public class SupplierController {
     public ResultBean listByName() {
         return supplierService.listByName();
     }
+
+    @PostMapping("/approve/{supplierNo}")
+    @ApiOperation("发起合格审批")
+    public ResultBean approve(@PathVariable("supplierNo") String supplierNo) {
+        return supplierService.approve(supplierNo);
+    }
+
 }
