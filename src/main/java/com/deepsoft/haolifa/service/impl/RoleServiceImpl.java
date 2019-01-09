@@ -92,6 +92,7 @@ public class RoleServiceImpl implements RoleService {
         sysRoles.stream().forEach(e -> {
             DepartmentTree departmentTree = new DepartmentTree();
             departmentTree.setId(String.valueOf(e.getId()));
+            departmentTree.setNo(String.valueOf(e.getRoleNo()));
             departmentTree.setName(e.getDescription());
             departmentTree.setParentId(String.valueOf(e.getPid()));
             departmentTrees.add(departmentTree);

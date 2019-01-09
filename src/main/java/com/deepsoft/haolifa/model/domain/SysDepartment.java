@@ -5,6 +5,8 @@ import java.util.Date;
 public class SysDepartment {
     private Integer id;
 
+    private String deptNo;
+
     private String deptName;
 
     private String description;
@@ -17,8 +19,9 @@ public class SysDepartment {
 
     private Date updateTime;
 
-    public SysDepartment(Integer id, String deptName, String description, Integer pid, Byte isDelete, Date createTime, Date updateTime) {
+    public SysDepartment(Integer id, String deptNo, String deptName, String description, Integer pid, Byte isDelete, Date createTime, Date updateTime) {
         this.id = id;
+        this.deptNo = deptNo;
         this.deptName = deptName;
         this.description = description;
         this.pid = pid;
@@ -37,6 +40,14 @@ public class SysDepartment {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDeptNo() {
+        return deptNo;
+    }
+
+    public void setDeptNo(String deptNo) {
+        this.deptNo = deptNo == null ? null : deptNo.trim();
     }
 
     public String getDeptName() {

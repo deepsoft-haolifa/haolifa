@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SysDepartment">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="dept_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="dept_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, dept_name, description, pid, is_delete, create_time, update_time
+    id, dept_no, dept_name, description, pid, is_delete, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.SysDepartmentExample" resultMap="BaseResultMap">
     select
@@ -104,18 +105,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SysDepartment">
-    insert into sys_department (id, dept_name, description, 
-      pid, is_delete, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{deptName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{pid,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into sys_department (id, dept_no, dept_name, 
+      description, pid, is_delete, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{deptNo,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SysDepartment">
     insert into sys_department
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="deptNo != null">
+        dept_no,
       </if>
       <if test="deptName != null">
         dept_name,
@@ -139,6 +143,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
+      </if>
+      <if test="deptNo != null">
+        #{deptNo,jdbcType=VARCHAR},
       </if>
       <if test="deptName != null">
         #{deptName,jdbcType=VARCHAR},
@@ -172,6 +179,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.deptNo != null">
+        dept_no = #{record.deptNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.deptName != null">
         dept_name = #{record.deptName,jdbcType=VARCHAR},
       </if>
@@ -198,6 +208,7 @@
   <update id="updateByExample" parameterType="map">
     update sys_department
     set id = #{record.id,jdbcType=INTEGER},
+      dept_no = #{record.deptNo,jdbcType=VARCHAR},
       dept_name = #{record.deptName,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       pid = #{record.pid,jdbcType=INTEGER},
@@ -211,6 +222,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SysDepartment">
     update sys_department
     <set>
+      <if test="deptNo != null">
+        dept_no = #{deptNo,jdbcType=VARCHAR},
+      </if>
       <if test="deptName != null">
         dept_name = #{deptName,jdbcType=VARCHAR},
       </if>
@@ -234,7 +248,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SysDepartment">
     update sys_department
-    set dept_name = #{deptName,jdbcType=VARCHAR},
+    set dept_no = #{deptNo,jdbcType=VARCHAR},
+      dept_name = #{deptName,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       pid = #{pid,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=TINYINT},

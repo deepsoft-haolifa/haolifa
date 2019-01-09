@@ -165,6 +165,76 @@ public class SysDepartmentExample {
             return (Criteria) this;
         }
 
+        public Criteria andDeptNoIsNull() {
+            addCriterion("dept_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoIsNotNull() {
+            addCriterion("dept_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoEqualTo(String value) {
+            addCriterion("dept_no =", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoNotEqualTo(String value) {
+            addCriterion("dept_no <>", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoGreaterThan(String value) {
+            addCriterion("dept_no >", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoGreaterThanOrEqualTo(String value) {
+            addCriterion("dept_no >=", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoLessThan(String value) {
+            addCriterion("dept_no <", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoLessThanOrEqualTo(String value) {
+            addCriterion("dept_no <=", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoLike(String value) {
+            addCriterion("dept_no like", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoNotLike(String value) {
+            addCriterion("dept_no not like", value, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoIn(List<String> values) {
+            addCriterion("dept_no in", values, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoNotIn(List<String> values) {
+            addCriterion("dept_no not in", values, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoBetween(String value1, String value2) {
+            addCriterion("dept_no between", value1, value2, "deptNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeptNoNotBetween(String value1, String value2) {
+            addCriterion("dept_no not between", value1, value2, "deptNo");
+            return (Criteria) this;
+        }
+
         public Criteria andDeptNameIsNull() {
             addCriterion("dept_name is null");
             return (Criteria) this;

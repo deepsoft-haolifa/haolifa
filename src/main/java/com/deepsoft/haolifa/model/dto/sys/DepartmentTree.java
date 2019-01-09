@@ -10,6 +10,8 @@ public class DepartmentTree implements TreeEntity<DepartmentTree> {
     public String id;
     public String name;
     public String parentId;
+    public String no;
+    public String description;
     public List<DepartmentTree> childList;
 
 }
