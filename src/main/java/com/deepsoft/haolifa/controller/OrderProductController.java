@@ -53,9 +53,9 @@ public class OrderProductController {
     }
 
     @ApiOperation("获取成品订单详情")
-    @GetMapping("/details/{orderNo}")
-    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "path", required = true)
-    public ResultBean details(@PathVariable String orderNo) {
+    @GetMapping("/details")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean details(String orderNo) {
         return ResultBean.success(orderProductService.getOrderProductInfo(orderNo));
     }
 
@@ -67,39 +67,43 @@ public class OrderProductController {
     }
 
     @ApiOperation("核料时的零件选择")
-    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "path", required = true)
-    @GetMapping("/pre-check-material/{orderNo}")
-    public ResultBean preCheckMaterial(@PathVariable String orderNo) {
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    @GetMapping("/pre-check-material")
+    public ResultBean preCheckMaterial(String orderNo) {
         return ResultBean.success(orderProductService.getCheckOrderProductList(orderNo));
     }
 
     @ApiOperation("核料（生成初步核料清单）")
-    @PostMapping("/check-material/{orderNo}")
-    public ResultBean checkMaterial(@PathVariable("orderNo") String orderNo, @RequestBody List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList) {
+    @PostMapping("/check-material")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean checkMaterial(String orderNo, @RequestBody List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList) {
         return ResultBean.success(orderProductService.checkMaterial(orderNo, productCheckMaterialListDTOList));
     }
 
     @ApiOperation("替换料核料")
-    @PostMapping("/check-replace-material/{orderNo}")
-    public ResultBean checkReplaceMaterial(@PathVariable("orderNo") String orderNo, @RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+    @PostMapping("/check-replace-material")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean checkReplaceMaterial(String orderNo, @RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
         return ResultBean.success(orderProductService.checkReplaceMaterial(orderNo, orderCheckMaterialDTOS));
     }
 
     @ApiOperation("核料成功(核料清单保存数据库)")
-    @PostMapping("/pass-check-material/")
+    @PostMapping("/pass-check-material")
     public ResultBean passCheckMaterial(@RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
         return ResultBean.success(orderProductService.checkPass(orderCheckMaterialDTOS));
     }
 
     @ApiOperation("释放锁住的零件（综合计划不同意）")
-    @PostMapping("/release-material/{orderNo}")
-    public ResultBean releaseMaterial(@PathVariable("orderNo") String orderNo) {
+    @PostMapping("/release-material/")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean releaseMaterial(String orderNo) {
         return ResultBean.success(orderProductService.releaseMaterial(orderNo));
     }
 
     @ApiOperation("获取核料清单")
-    @GetMapping("/order-material/{orderNo}")
-    public ResultBean getOrderMaterialDetail(@PathVariable("orderNo") String orderNo) {
+    @GetMapping("/order-material")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean getOrderMaterialDetail(String orderNo) {
         return ResultBean.success(orderProductService.listOrderMaterial(orderNo));
     }
 
@@ -111,8 +115,9 @@ public class OrderProductController {
     }
 
     @ApiOperation("获取订单的产品列表（只包含产品）")
-    @GetMapping("/product-list/{orderNo}")
-    public ResultBean productList(@PathVariable String orderNo) {
+    @GetMapping("/product-list")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean productList(String orderNo) {
         return ResultBean.success(orderProductService.getOrderProductList(orderNo));
     }
 //
