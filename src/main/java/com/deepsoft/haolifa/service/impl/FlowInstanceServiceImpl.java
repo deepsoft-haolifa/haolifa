@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.FlowHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
@@ -94,6 +95,11 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     //2、一致：判断审核结果：0 审核不通过 1 通过 2 退回
     // 审核通过：添加历史记录，并更新下一节点信息；终止添加记录，更新实例记录is_over；退回：添加审核记录,更新实例节点状态
     FlowInstance flowInstance = instanceMapper.selectByPrimaryKey(model.getId());
+    List<Accessory> accessorys = new ArrayList<>();
+    if (StringUtils.isNotEmpty(flowInstance.getAccessory())) {
+      accessorys = JSON.parseArray(flowInstance.getAccessory(), Accessory.class);
+    }
+    accessorys.addAll(model.getAccessorys());
     if (flowInstance.getCurrentStepId() != model.getStepId()) {
       return ResultBean.error(CommonEnum.ResponseEnum.STEP_INCONFORMITY);
     }
@@ -112,6 +118,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     flowHistory.setAllotUserId(model.getAllotUserId() == null ? 0 : model.getAllotUserId());
     flowHistory.setInstanceId(model.getId());
     flowHistory.setStepId(model.getStepId());
+    flowHistory.setAccessory(JSON.toJSONString(model.getAccessorys()));
     // 更新实例
     FlowInstance updateInstance = new FlowInstance();
     updateInstance.setId(model.getId());
@@ -192,7 +199,6 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     HistoryInfo historyInfo = new HistoryInfo();
     historyInfo.setInstanceId(instanceId);
     List<HistoryInfo> historyInfos = instanceHistoryMapper.selectInstanceHistory(historyInfo);
-
     // 2、返回当前要处理的节点
     FlowInstanceWrapper flowInstance = instanceHistoryMapper.selectByPrimaryKey(instanceId);
     // 3、获取FlowStep详情
@@ -248,6 +254,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     instanceRecordDTO.setSummary(flowInstance.getSummary());
     instanceRecordDTO.setFormNo(flowInstance.getFormNo());
     instanceRecordDTO.setFormId(flowInstance.getFormId());
+    instanceRecordDTO.setAccessories(flowInstance.getAccessory().isEmpty() ? new ArrayList<>()
+        : JSON.parseArray(flowInstance.getAccessory(), Accessory.class));
     return ResultBean.success(instanceRecordDTO);
   }
 
@@ -272,8 +280,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       result.add(back);
       preStepId = back.getPrevStepId();
     }
-    if(result.size() > 0) {
-      result.remove(result.size()-1);
+    if (result.size() > 0) {
+      result.remove(result.size() - 1);
     }
     return ResultBean.success(result);
   }

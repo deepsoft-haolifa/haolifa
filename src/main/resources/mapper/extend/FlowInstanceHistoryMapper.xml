@@ -16,6 +16,7 @@
         fh.form_id formId,
         fh.form_no formNo,
         fh.create_time createTime,
+        fh.accessory accessory,
         s.`name` stepName,
         s.description description,
         su.real_name userName
@@ -47,6 +48,7 @@
 			fi.is_over isOver,
 			fi.is_back isBack,
 			fi.create_user_id createUserId,
+			fi.accessory accessory,
 			fi.create_time createTime,
 			fi.update_time updateTime,
 			su.real_name initUserName,
