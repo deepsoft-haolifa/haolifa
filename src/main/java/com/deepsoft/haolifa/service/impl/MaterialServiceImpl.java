@@ -120,7 +120,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public ResultBean save(MaterialRequestDTO model) {
-        CustomUser customUser = sysUserService.selectLoginUser();
+        CustomUser customUser = null;
         int createUser = customUser != null ? customUser.getId() : 1;
         Material record = new Material();
         // 判断图号是否已经存在
