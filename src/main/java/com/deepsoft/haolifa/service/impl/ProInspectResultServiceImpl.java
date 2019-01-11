@@ -139,6 +139,9 @@ public class ProInspectResultServiceImpl extends BaseService implements ProInspe
         if (model.getStorageStatus() > 0) {
             criteria.andStorageStatusEqualTo(model.getStorageStatus());
         }
+        if (StringUtils.isNotBlank(model.getOrderNo())) {
+            criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
+        }
         example.setOrderByClause("id desc");
         Page<ProInspectResult> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {
             proInspectResultMapper.selectByExample(example);
