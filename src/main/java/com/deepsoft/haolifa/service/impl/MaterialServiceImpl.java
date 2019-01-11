@@ -239,7 +239,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<Material> getListByModelAndSpec(String model, String specifications) {
+    public List<Material> getListBySingleModelAndSpec(int classifyId, String model, String specifications) {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(model)) {
@@ -248,12 +248,15 @@ public class MaterialServiceImpl implements MaterialService {
         if (StringUtils.isNotBlank(specifications)) {
             criteria.andSpecificationsEqualTo(specifications);
         }
+        if (classifyId > 0) {
+            criteria.andMaterialClassifyIdEqualTo(classifyId);
+        }
         List<Material> materials = materialMapper.selectByExample(example);
         return materials;
     }
 
     @Override
-    public List<Material> getTongyongListByModelAndSpec(String model, String specifications) {
+    public List<Material> getListByMultiModelAndSpec(int classifyId, String model, String specifications) {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(model)) {
@@ -261,6 +264,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         if (StringUtils.isNotBlank(specifications)) {
             criteria.andSpecificationsLike("%" + specifications + "%");
+        }
+        if (classifyId > 0) {
+            criteria.andMaterialClassifyIdEqualTo(classifyId);
         }
         criteria.andMaterialClassifyIdEqualTo(5);
         List<Material> materials = materialMapper.selectByExample(example);

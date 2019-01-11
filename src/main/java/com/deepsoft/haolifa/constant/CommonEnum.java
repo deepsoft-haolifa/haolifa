@@ -193,24 +193,28 @@ public class CommonEnum {
     public enum ProductModelType {
 
         // 阀体
-        FATI("fati"),
+        FATI("fati", 1),
         // 阀座
-        FAZUO("fazuo"),
+        FAZUO("fazuo", 2),
         // 阀板
-        FABAN("faban"),
+        FABAN("faban", 3),
         // 上阀杆
-        FAGAN("fagan"),
+        FAGAN("fagan", 4),
         // 阀体压力
-        FATI_YALI("fatiyali"),
+        FATI_YALI("fatiyali", 0),
         // 通用零件
-        TONG_YONG("tongyong"),;
+        TONG_YONG("tongyong", 5),;
 
         public final String code;
 
-        ProductModelType(String code) {
+        public final int classifyId;
+
+        ProductModelType(String code, int classifyId) {
             this.code = code;
+            this.classifyId = classifyId;
         }
     }
+
     /**
      * 产品类型配置
      */
@@ -283,7 +287,7 @@ public class CommonEnum {
     }
 
     public enum EntrustStatus {
-        NO_COMMIT_0((byte)0),
+        NO_COMMIT_0((byte) 0),
         AUDITING_1((byte) 1),
         AUDIT_PASS_WAITING_2((byte) 2),
         DEALING_2((byte) 3),
@@ -301,8 +305,8 @@ public class CommonEnum {
 
     public enum InspectHistoryStatus {
 
-        WAITING_STORE_1((byte)1),
-        BEEN_STORE_2((byte)2);
+        WAITING_STORE_1((byte) 1),
+        BEEN_STORE_2((byte) 2);
         public final byte code;
 
         InspectHistoryStatus(byte code) {

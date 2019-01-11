@@ -509,9 +509,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<MaterialResultDTO> tongyongCollect = new ArrayList<>();
 
         // 根据型号和规格，获取图号列表
-        List<Material> listByModelAndSpec = materialService.getListByModelAndSpec(smallModel, specifications);
-        if (listByModelAndSpec != null && listByModelAndSpec.size() > 0) {
-            listByModelAndSpec.stream().forEach(e -> {
+        // 阀体图号列表
+        List<Material> fatiMaterialList = materialService.getListBySingleModelAndSpec(CommonEnum.ProductModelType.FATI.classifyId, smallModel, specifications);
+        if (fatiMaterialList != null && fatiMaterialList.size() > 0) {
+            fatiMaterialList.stream().forEach(e -> {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
                 Integer currentQuantity = e.getCurrentQuantity();
@@ -523,43 +524,100 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
                 String[] split = graphNo.split("-");
                 if (split.length > 2) {
-                    String noIndex = split[2];
-                    if ("01".equals(noIndex)) {// 阀体
-                        if (split.length > 4) {
-                            //阀体材质,阀体压力 都满足
-                            if (fatiModelConfig.size() > 0) {
-                                if (fatiModelConfig.contains(split[3].replaceAll("[0-9]", "")) && fatiYaliModelConfig.contains(split[4].substring(0, 1))) {
-                                    fatiCollect.add(materialResultDTO);
-                                }
-                            } else {
+                    if (split.length > 4) {
+                        //阀体材质,阀体压力 都满足
+                        if (fatiModelConfig.size() > 0) {
+                            if (fatiModelConfig.contains(split[3].replaceAll("[0-9]", "")) && fatiYaliModelConfig.contains(split[4].substring(0, 1))) {
                                 fatiCollect.add(materialResultDTO);
                             }
-                        }
-                    } else if ("02".equals(noIndex)) {//阀座
-                        // 止回阀没有阀座
-                        if (!productType.equals(CommonEnum.ProductType.H.code)) {
-                            if (fazuoModelConfig.size() > 0) {
-                                if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
-                                    fazuoCollect.add(materialResultDTO);
-                                }
-                            } else {
-                                fazuoCollect.add(materialResultDTO);
-                            }
-                        }
-                    } else if ("03".equals(noIndex)) {// 阀板
-                        if (fabanModelConfig.size() > 0) {
-                            if (split.length > 3 && fabanModelConfig.contains(split[3])) {
-                                fabanCollect.add(materialResultDTO);
-                            }
                         } else {
-                            fabanCollect.add(materialResultDTO);
+                            fatiCollect.add(materialResultDTO);
                         }
-                    } else if ("04".equals(noIndex)) { // 上阀杆
-                        faganCollect.add(materialResultDTO);
                     }
                 }
             });
         }
+
+        // 阀座图号列表
+        List<Material> fazuoMaterialList = materialService.getListByMultiModelAndSpec(CommonEnum.ProductModelType.FAZUO.classifyId, smallModel, specifications);
+        if (fazuoMaterialList != null && fazuoMaterialList.size() > 0) {
+            fazuoMaterialList.stream().forEach(e -> {
+                String graphNo = e.getGraphNo();
+                String name = e.getName();
+                Integer currentQuantity = e.getCurrentQuantity();
+                MaterialResultDTO materialResultDTO = new MaterialResultDTO();
+                materialResultDTO.setCurrentQuantity(currentQuantity);
+                materialResultDTO.setMaterialName(name);
+                materialResultDTO.setGraphNo(graphNo);
+                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
+
+                String[] split = graphNo.split("-");
+                // 止回阀没有阀座
+                if (!productType.equals(CommonEnum.ProductType.H.code)) {
+                    if (fazuoModelConfig.size() > 0) {
+                        if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
+                            fazuoCollect.add(materialResultDTO);
+                        }
+                    } else {
+                        fazuoCollect.add(materialResultDTO);
+                    }
+                }
+            });
+        }
+
+        // 阀板图号列表
+        List<Material> fabanMaterialList = materialService.getListByMultiModelAndSpec(CommonEnum.ProductModelType.FABAN.classifyId, smallModel, specifications);
+        if (fabanMaterialList != null && fabanMaterialList.size() > 0) {
+            fabanMaterialList.stream().forEach(e -> {
+                String graphNo = e.getGraphNo();
+                String name = e.getName();
+                Integer currentQuantity = e.getCurrentQuantity();
+                MaterialResultDTO materialResultDTO = new MaterialResultDTO();
+                materialResultDTO.setCurrentQuantity(currentQuantity);
+                materialResultDTO.setMaterialName(name);
+                materialResultDTO.setGraphNo(graphNo);
+                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
+
+                String[] split = graphNo.split("-");
+                if (fabanModelConfig.size() > 0) {
+                    if (split.length > 3 && fabanModelConfig.contains(split[3])) {
+                        fabanCollect.add(materialResultDTO);
+                    }
+                } else {
+                    fabanCollect.add(materialResultDTO);
+                }
+            });
+        }
+
+        // 阀杆图号列表
+        List<Material> faganMaterialList = materialService.getListByMultiModelAndSpec(CommonEnum.ProductModelType.FAGAN.classifyId, smallModel, specifications);
+        if (faganMaterialList != null && faganMaterialList.size() > 0) {
+            faganMaterialList.stream().forEach(e -> {
+                String graphNo = e.getGraphNo();
+                String name = e.getName();
+                Integer currentQuantity = e.getCurrentQuantity();
+                MaterialResultDTO materialResultDTO = new MaterialResultDTO();
+                materialResultDTO.setCurrentQuantity(currentQuantity);
+                materialResultDTO.setMaterialName(name);
+                materialResultDTO.setGraphNo(graphNo);
+                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
+                faganCollect.add(materialResultDTO);
+            });
+        }
+
+        // 根据型号和规格，获取通用图号列表(一个通用图号对应多个型号和规格)
+        List<Material> tongyongList = materialService.getListByMultiModelAndSpec(CommonEnum.ProductModelType.TONG_YONG.classifyId, smallModel, specifications);
+        if (tongyongList != null && tongyongList.size() > 0) {
+            tongyongList.stream().forEach(e -> {
+                MaterialResultDTO materialResultDTO = new MaterialResultDTO();
+                materialResultDTO.setCurrentQuantity(e.getCurrentQuantity());
+                materialResultDTO.setMaterialName(e.getName());
+                materialResultDTO.setGraphNo(e.getGraphNo());
+                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
+                tongyongCollect.add(materialResultDTO);
+            });
+        }
+
         List<MaterialTypeListDTO> listDTOS = new ArrayList<>();
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.FATI.code);
@@ -577,17 +635,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             setType(CommonEnum.ProductModelType.FAGAN.code);
             setList(faganCollect);
         }});
-
-        // 根据型号和规格，获取通用图号列表(一个通用图号对应多个型号和规格)
-        List<Material> tongyongList = materialService.getTongyongListByModelAndSpec(smallModel, specifications);
-        tongyongList.stream().forEach(e -> {
-            MaterialResultDTO materialResultDTO = new MaterialResultDTO();
-            materialResultDTO.setCurrentQuantity(e.getCurrentQuantity());
-            materialResultDTO.setMaterialName(e.getName());
-            materialResultDTO.setGraphNo(e.getGraphNo());
-            materialResultDTO.setSupportQuantity(e.getSupportQuantity());
-            tongyongCollect.add(materialResultDTO);
-        });
 
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.TONG_YONG.code);
@@ -861,7 +908,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
 
-    // endregion
+// endregion
 
     @Override
     public List<OrderMaterialDTO> listOrderMaterial(String orderNo) {
