@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.order;
 
+import com.deepsoft.haolifa.model.dto.material.MaterialResultDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,8 +25,8 @@ public class OrderCheckMaterialDTO {
     private String materialGraphNo;
     @ApiModelProperty(value = "零件名称")
     private String materialName;
-    @ApiModelProperty(value = "替换前零件号")
-    private String replaceMaterialGraphNo;
+//    @ApiModelProperty(value = "替换前零件号")
+//    private String replaceMaterialGraphNo;
 
     @ApiModelProperty(value = "是否是替换零件（0：否，1：是）")
     private Byte isReplace;
@@ -42,5 +43,5 @@ public class OrderCheckMaterialDTO {
     private String checkResultMsg;
 
     @ApiModelProperty(value = "可替换料的列表")
-    private List<String> replaceGraphNoList;
+    private List<MaterialResultDTO> replaceGraphNoList;
 }
