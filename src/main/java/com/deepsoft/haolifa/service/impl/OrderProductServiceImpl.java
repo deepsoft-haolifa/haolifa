@@ -882,7 +882,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // 核料成功，插入核料表
                 OrderMaterial orderMaterial = new OrderMaterial();
                 BeanUtils.copyProperties(orderCheckMaterialDTO, orderMaterial);
-                orderMaterialMapper.insertSelective(orderMaterial);
+                // 判断缺料，是否有可替换料，将替换料插入核料表
+                List<OrderCheckMaterialDTO> replaceGraphNoList = orderCheckMaterialDTO.getReplaceGraphNoList();
+                if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
+                    OrderCheckMaterialDTO orderCheckMaterialDTO1 = replaceGraphNoList.get(0);
+                    String replaceMaterialNo = orderCheckMaterialDTO1.getMaterialGraphNo();
+                    String replaceMaterialName = orderCheckMaterialDTO1.getMaterialName();
+                    orderMaterial.setReplaceMaterialGraphNo(replaceMaterialNo);
+                    orderMaterial.setReplaceMaterialName(replaceMaterialName);
+                }
+                int insert = orderMaterialMapper.insertSelective(orderMaterial);
+                Integer id = orderMaterial.getId();
 
                 String orderNo = orderCheckMaterialDTO.getOrderNo();
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
@@ -892,6 +902,21 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 Byte checkStatus = orderCheckMaterialDTO.getCheckStatus();
                 // 缺料的零件，发起请购
                 if (checkStatus == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
+                    // 判断缺料，是否有可替换料
+                    if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
+                        for (OrderCheckMaterialDTO checkMaterialDTO : replaceGraphNoList) {
+                            // 替换料，发起替换料审批流程
+                            if (checkMaterialDTO.getCheckStatus() == CommonEnum.CheckMaterialStatus.REPLACE.code) {
+                                FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
+                                flowInstanceDTO.setFormId(id);
+                                flowInstanceDTO.setFlowId(4);
+                                flowInstanceDTO.setFormNo(orderNo);
+                                flowInstanceDTO.setFormType(10);
+                                flowInstanceDTO.setSummary("核料过程中-替换料表单");
+                                flowInstanceService.create(flowInstanceDTO);
+                            }
+                        }
+                    }
                     ApplyBuyDTO applyBuyDTO = new ApplyBuyDTO() {{
                         setProductOrderNo(orderNo);
                         List<ApplyBuyItem> list = new ArrayList<>();
@@ -905,16 +930,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     }};
                     applyBuyService.save(applyBuyDTO);
                 }
-                // 替换料，发起替换料审批流程
-                if (checkStatus == CommonEnum.CheckMaterialStatus.REPLACE.code) {
-                    FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
-                    flowInstanceDTO.setFormId(0);
-                    flowInstanceDTO.setFlowId(4);
-                    flowInstanceDTO.setFormNo(orderNo);
-                    flowInstanceDTO.setFormType(10);
-                    flowInstanceDTO.setSummary("核料过程中-替换料表单");
-                    flowInstanceService.create(flowInstanceDTO);
-                }
+
 
                 // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
                 if (lackMaterialCount > 0) {

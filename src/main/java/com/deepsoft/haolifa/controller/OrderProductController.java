@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.service.OrderProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -120,15 +121,24 @@ public class OrderProductController {
     public ResultBean productList(String orderNo) {
         return ResultBean.success(orderProductService.getOrderProductList(orderNo));
     }
-//
-//    @ApiOperation("获取领料单详情")
-//    @GetMapping("/material-requisition/info")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(required = true, value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
-//            @ApiImplicitParam(value = "领料单号", name = "receiveNo", dataType = "string", paramType = "query")
-//    })
-//    public ResultBean infoMaterialRequisition(String orderNo, String receiveNo) {
-//        return ResultBean.success(orderProductService.infoMaterialRequisition(orderNo, receiveNo));
-//    }
+
+    @ApiOperation("替换料列表，根据orderNo【未做】")
+    @GetMapping("/replace-material-list")
+    @ApiImplicitParam(required = true, value = "订单号", name = "orderNo", dataType = "string", paramType = "query")
+    public ResultBean listReplaceMaterial(String orderNo) {
+        return null;
+    }
+
+    @ApiOperation("替换料详情，根据主键【未做】")
+    @GetMapping("/replace-material-detail/{id}")
+    @ApiImplicitParam(required = true, value = "主键", name = "id", dataType = "int", paramType = "path")
+    public ResultBean infoReplaceMaterial(@PathVariable Integer id) {
+        return null;
+    }
+    @ApiOperation("替换料审批完的操作【未做】")
+    @GetMapping("/replace-material-audit")
+    public ResultBean auditReplaceMaterial(@PathVariable Integer id) {
+        return null;
+    }
 
 }

@@ -365,6 +365,216 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andMaterialNameIsNull() {
+            addCriterion("material_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameIsNotNull() {
+            addCriterion("material_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameEqualTo(String value) {
+            addCriterion("material_name =", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameNotEqualTo(String value) {
+            addCriterion("material_name <>", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameGreaterThan(String value) {
+            addCriterion("material_name >", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameGreaterThanOrEqualTo(String value) {
+            addCriterion("material_name >=", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameLessThan(String value) {
+            addCriterion("material_name <", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameLessThanOrEqualTo(String value) {
+            addCriterion("material_name <=", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameLike(String value) {
+            addCriterion("material_name like", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameNotLike(String value) {
+            addCriterion("material_name not like", value, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameIn(List<String> values) {
+            addCriterion("material_name in", values, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameNotIn(List<String> values) {
+            addCriterion("material_name not in", values, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameBetween(String value1, String value2) {
+            addCriterion("material_name between", value1, value2, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialNameNotBetween(String value1, String value2) {
+            addCriterion("material_name not between", value1, value2, "materialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoIsNull() {
+            addCriterion("replace_material_graph_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoIsNotNull() {
+            addCriterion("replace_material_graph_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoEqualTo(String value) {
+            addCriterion("replace_material_graph_no =", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotEqualTo(String value) {
+            addCriterion("replace_material_graph_no <>", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoGreaterThan(String value) {
+            addCriterion("replace_material_graph_no >", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("replace_material_graph_no >=", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoLessThan(String value) {
+            addCriterion("replace_material_graph_no <", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("replace_material_graph_no <=", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoLike(String value) {
+            addCriterion("replace_material_graph_no like", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotLike(String value) {
+            addCriterion("replace_material_graph_no not like", value, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoIn(List<String> values) {
+            addCriterion("replace_material_graph_no in", values, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotIn(List<String> values) {
+            addCriterion("replace_material_graph_no not in", values, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoBetween(String value1, String value2) {
+            addCriterion("replace_material_graph_no between", value1, value2, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialGraphNoNotBetween(String value1, String value2) {
+            addCriterion("replace_material_graph_no not between", value1, value2, "replaceMaterialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameIsNull() {
+            addCriterion("replace_material_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameIsNotNull() {
+            addCriterion("replace_material_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameEqualTo(String value) {
+            addCriterion("replace_material_name =", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameNotEqualTo(String value) {
+            addCriterion("replace_material_name <>", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameGreaterThan(String value) {
+            addCriterion("replace_material_name >", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameGreaterThanOrEqualTo(String value) {
+            addCriterion("replace_material_name >=", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameLessThan(String value) {
+            addCriterion("replace_material_name <", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameLessThanOrEqualTo(String value) {
+            addCriterion("replace_material_name <=", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameLike(String value) {
+            addCriterion("replace_material_name like", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameNotLike(String value) {
+            addCriterion("replace_material_name not like", value, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameIn(List<String> values) {
+            addCriterion("replace_material_name in", values, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameNotIn(List<String> values) {
+            addCriterion("replace_material_name not in", values, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameBetween(String value1, String value2) {
+            addCriterion("replace_material_name between", value1, value2, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceMaterialNameNotBetween(String value1, String value2) {
+            addCriterion("replace_material_name not between", value1, value2, "replaceMaterialName");
+            return (Criteria) this;
+        }
+
         public Criteria andIsReplaceIsNull() {
             addCriterion("is_replace is null");
             return (Criteria) this;

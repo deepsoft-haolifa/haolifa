@@ -121,9 +121,9 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
-    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-    <!--</table>-->
+    <table tableName="order_material" domainObjectName="OrderMaterial">
+    <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+    </table>
     <!--<table tableName="material_requisition" domainObjectName="MaterialRequisition">-->
     <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
     <!--</table>-->
@@ -229,8 +229,8 @@
 
     <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
     <!--<table tableName="sys_message" domainObjectName="SysMessage"></table>-->
-    <table tableName="pressure_inspect_result" domainObjectName="PressureInspectResult"></table>
-    <table tableName="pressure_inspect_unqualified" domainObjectName="PressureInspectUnqualified"></table>
+    <!--<table tableName="pressure_inspect_result" domainObjectName="PressureInspectResult"></table>-->
+    <!--<table tableName="pressure_inspect_unqualified" domainObjectName="PressureInspectUnqualified"></table>-->
 
 
     <!-- 选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素

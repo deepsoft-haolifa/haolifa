@@ -7,6 +7,9 @@
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="replace_material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="replace_material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="is_replace" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="lack_material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -72,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, order_no, material_graph_no, is_replace, material_count, lack_material_count, 
-    check_status
+    id, create_time, order_no, material_graph_no, material_name, replace_material_graph_no, 
+    replace_material_name, is_replace, material_count, lack_material_count, check_status
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterialExample" resultMap="BaseResultMap">
     select
@@ -110,9 +113,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into order_material (create_time, order_no, material_graph_no, 
+      material_name, replace_material_graph_no, replace_material_name, 
       is_replace, material_count, lack_material_count, 
       check_status)
     values (#{createTime,jdbcType=TIMESTAMP}, #{orderNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{materialName,jdbcType=VARCHAR}, #{replaceMaterialGraphNo,jdbcType=VARCHAR}, #{replaceMaterialName,jdbcType=VARCHAR}, 
       #{isReplace,jdbcType=TINYINT}, #{materialCount,jdbcType=INTEGER}, #{lackMaterialCount,jdbcType=INTEGER}, 
       #{checkStatus,jdbcType=TINYINT})
   </insert>
@@ -130,6 +135,15 @@
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
+      </if>
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="replaceMaterialGraphNo != null">
+        replace_material_graph_no,
+      </if>
+      <if test="replaceMaterialName != null">
+        replace_material_name,
       </if>
       <if test="isReplace != null">
         is_replace,
@@ -153,6 +167,15 @@
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceMaterialGraphNo != null">
+        #{replaceMaterialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceMaterialName != null">
+        #{replaceMaterialName,jdbcType=VARCHAR},
       </if>
       <if test="isReplace != null">
         #{isReplace,jdbcType=TINYINT},
@@ -189,6 +212,15 @@
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.materialName != null">
+        material_name = #{record.materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replaceMaterialGraphNo != null">
+        replace_material_graph_no = #{record.replaceMaterialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replaceMaterialName != null">
+        replace_material_name = #{record.replaceMaterialName,jdbcType=VARCHAR},
+      </if>
       <if test="record.isReplace != null">
         is_replace = #{record.isReplace,jdbcType=TINYINT},
       </if>
@@ -212,6 +244,9 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
+      replace_material_graph_no = #{record.replaceMaterialGraphNo,jdbcType=VARCHAR},
+      replace_material_name = #{record.replaceMaterialName,jdbcType=VARCHAR},
       is_replace = #{record.isReplace,jdbcType=TINYINT},
       material_count = #{record.materialCount,jdbcType=INTEGER},
       lack_material_count = #{record.lackMaterialCount,jdbcType=INTEGER},
@@ -231,6 +266,15 @@
       </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceMaterialGraphNo != null">
+        replace_material_graph_no = #{replaceMaterialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceMaterialName != null">
+        replace_material_name = #{replaceMaterialName,jdbcType=VARCHAR},
       </if>
       <if test="isReplace != null">
         is_replace = #{isReplace,jdbcType=TINYINT},
@@ -252,6 +296,9 @@
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       order_no = #{orderNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
+      replace_material_graph_no = #{replaceMaterialGraphNo,jdbcType=VARCHAR},
+      replace_material_name = #{replaceMaterialName,jdbcType=VARCHAR},
       is_replace = #{isReplace,jdbcType=TINYINT},
       material_count = #{materialCount,jdbcType=INTEGER},
       lack_material_count = #{lackMaterialCount,jdbcType=INTEGER},

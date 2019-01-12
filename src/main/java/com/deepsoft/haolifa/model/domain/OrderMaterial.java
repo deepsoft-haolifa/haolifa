@@ -11,6 +11,12 @@ public class OrderMaterial {
 
     private String materialGraphNo;
 
+    private String materialName;
+
+    private String replaceMaterialGraphNo;
+
+    private String replaceMaterialName;
+
     private Byte isReplace;
 
     private Integer materialCount;
@@ -19,11 +25,14 @@ public class OrderMaterial {
 
     private Byte checkStatus;
 
-    public OrderMaterial(Integer id, Date createTime, String orderNo, String materialGraphNo, Byte isReplace, Integer materialCount, Integer lackMaterialCount, Byte checkStatus) {
+    public OrderMaterial(Integer id, Date createTime, String orderNo, String materialGraphNo, String materialName, String replaceMaterialGraphNo, String replaceMaterialName, Byte isReplace, Integer materialCount, Integer lackMaterialCount, Byte checkStatus) {
         this.id = id;
         this.createTime = createTime;
         this.orderNo = orderNo;
         this.materialGraphNo = materialGraphNo;
+        this.materialName = materialName;
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo;
+        this.replaceMaterialName = replaceMaterialName;
         this.isReplace = isReplace;
         this.materialCount = materialCount;
         this.lackMaterialCount = lackMaterialCount;
@@ -64,6 +73,30 @@ public class OrderMaterial {
 
     public void setMaterialGraphNo(String materialGraphNo) {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName == null ? null : materialName.trim();
+    }
+
+    public String getReplaceMaterialGraphNo() {
+        return replaceMaterialGraphNo;
+    }
+
+    public void setReplaceMaterialGraphNo(String replaceMaterialGraphNo) {
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo == null ? null : replaceMaterialGraphNo.trim();
+    }
+
+    public String getReplaceMaterialName() {
+        return replaceMaterialName;
+    }
+
+    public void setReplaceMaterialName(String replaceMaterialName) {
+        this.replaceMaterialName = replaceMaterialName == null ? null : replaceMaterialName.trim();
     }
 
     public Byte getIsReplace() {

@@ -26,7 +26,7 @@ public class OrderMaterialDTO {
     @ApiModelProperty(value = "零件数量")
     private Integer materialCount;
 
-    @ApiModelProperty(value = "核料状态（1成功；2.缺料，需要采购；3.已经释放料）")
+    @ApiModelProperty(value = "核料状态（1成功；2.缺料，需要采购；3.替换 4.释放料）")
     private Integer checkStatus;
 
     @ApiModelProperty(value = "缺少的零件数量")
@@ -52,6 +52,13 @@ public class OrderMaterialDTO {
 
     @ApiModelProperty(value = "备注")
     private String remark;
+
+    @ApiModelProperty(value = "替换料零件名称")
+    private String replaceMaterialName;
+
+    @ApiModelProperty(value = "替换料零件号")
+    private String replaceMaterialGraphNo;
+
 
 
 }

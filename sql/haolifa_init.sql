@@ -378,10 +378,12 @@ DROP TABLE IF EXISTS `order_product`;
 	  `order_no` varchar(64) NOT NULL COMMENT '订单编号',
 	  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
-	  `is_replace` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否可替换零件（0：否，1：是）',
+	  `replace_material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '替换料零件图号',
+	  `replace_material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '替换料零件名称',
+	  `is_replace` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否替换零件（0：否，1：是）',
 	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '需要的零件数量',
 	  `lack_material_count` int(11) NOT NULL DEFAULT 0 COMMENT '缺少的零件数量',
-	  `check_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态（1.核料成功，2.缺料，需要采购,3.释放料,4.领料完成）',
+	  `check_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态（1.核料成功，2.缺料，需要采购,3.替换,4.释放料.5.领料完成）',
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY uk_order_graph(`order_no`,`material_graph_no`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单零件关联表（一个订单需要哪些零件,核料完成之后生成）';
