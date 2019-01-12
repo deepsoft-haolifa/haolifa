@@ -421,10 +421,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             ProductCheckMaterialListDTO productCheckMaterialListDTO = new ProductCheckMaterialListDTO();
             // 根据型号和规格获取可选零件列表（核料用）
             List<MaterialTypeListDTO> materials = getTypeMaterials(productNo, productModel, specifications);
-            productCheckMaterialListDTO.setProductNo(productNo);
-            productCheckMaterialListDTO.setProductModel(productModel);
-            productCheckMaterialListDTO.setSpecifications(specifications);
-            productCheckMaterialListDTO.setProductNumber(orderProductAssociate.getProductNumber());
+            BeanUtils.copyProperties(orderProductAssociate, productCheckMaterialListDTO);
             productCheckMaterialListDTO.setListDTOS(materials);
             list.add(productCheckMaterialListDTO);
         }
@@ -443,12 +440,19 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 1.获取规格,截取数字，保留四位数，前面补0（DN65=>0065）
         String spec = String.format("%04d", Integer.parseInt(specifications.replaceAll("[^0-9]", "")));
         // 成品型号示例（270DD7A1XH-16Q）
-        // 2.获取型号的数据（D270）
-        String smallModel = productModel.substring(0, 4);
         int lastIndexOf = productNo.lastIndexOf("-");
         int indexOf = productNo.indexOf("-");
         // 获取产品类型（D：蝶阀；H：止回阀；）
         String productType = productModel.substring(0, 1);
+        String smallModel = "";
+        if (productType.equals(CommonEnum.ProductType.D.code)) {
+            if (productModel.length() >= 4) {
+                smallModel = productModel.substring(0, 4);
+            }
+        } else {
+            smallModel = "H77";
+        }
+
 
         // 产品号（D  Sb 7A 1 X3 N-10 Q-DN50 或者 H 77 X3 R-10 Q-DN50）
         productNo = productNo.replaceAll(" ", "");
@@ -461,11 +465,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 判断- 前一位，是否是a,b,d,L。如果是，说明阀板是两位英文，否则是一位
         String[] fabanRules = new String[]{"a", "b", "d", "L"};
         if (Arrays.asList(fabanRules).contains(fabanRule)) {
-            fazuo = productNo.substring(indexOf - 2, indexOf);
-            faban = productNo.substring(indexOf - 4, indexOf - 2);
+            faban = productNo.substring(indexOf - 2, indexOf);
+            fazuo = productNo.substring(indexOf - 4, indexOf - 2);
         } else {
-            fazuo = productNo.substring(indexOf - 1, indexOf);
-            faban = productNo.substring(indexOf - 3, indexOf - 1);
+            faban = productNo.substring(indexOf - 1, indexOf);
+            fazuo = productNo.substring(indexOf - 3, indexOf - 1);
         }
 
         // 获取阀体规则

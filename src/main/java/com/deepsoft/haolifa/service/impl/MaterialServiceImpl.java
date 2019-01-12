@@ -268,7 +268,6 @@ public class MaterialServiceImpl implements MaterialService {
         if (classifyId > 0) {
             criteria.andMaterialClassifyIdEqualTo(classifyId);
         }
-        criteria.andMaterialClassifyIdEqualTo(5);
         List<Material> materials = materialMapper.selectByExample(example);
         return materials;
     }

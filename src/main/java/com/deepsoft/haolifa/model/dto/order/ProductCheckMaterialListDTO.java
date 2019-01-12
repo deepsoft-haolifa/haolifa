@@ -18,6 +18,15 @@ public class ProductCheckMaterialListDTO {
     private String specifications;
     @ApiModelProperty(value = "成品数量")
     private Integer productNumber;
+    @ApiModelProperty(value = "标签属性")
+    private String lable;
+    @ApiModelProperty(value = "颜色")
+    private String productColor;
+    @ApiModelProperty(value = "材质")
+    private String materialDescription;
+    @ApiModelProperty(value = "备注")
+    private String productRemark;
+
     @ApiModelProperty(value = "可选零件列表")
     private List<MaterialTypeListDTO> listDTOS;
 }
