@@ -673,7 +673,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 List<MaterialTypeListDTO> listDTOS = e.getListDTOS();
                 listDTOS.stream().forEach(a -> {
                     // 通用料
-                    if (a.getType() == CommonEnum.ProductModelType.TONG_YONG.code) {
+                    if (a.getType().equals(CommonEnum.ProductModelType.TONG_YONG.code) ) {
                         List<MaterialResultDTO> list = a.getList();
                         list.stream().forEach(b -> {
                             int materialCount = productNumber * b.getSupportQuantity();
@@ -690,7 +690,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             String graphNo = b.getGraphNo();
                             int materialCount = productNumber * b.getSupportQuantity();
                             if (materialsMap.containsKey(graphNo)) {
-                                materialsMap.put(graphNo, materialsMap.get(b) + materialCount);
+                                materialsMap.put(graphNo, materialsMap.get(graphNo) + materialCount);
                             } else {
                                 materialsMap.put(graphNo, materialCount);
                             }

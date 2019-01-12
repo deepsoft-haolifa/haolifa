@@ -10,6 +10,8 @@ import java.util.List;
  */
 @Data
 public class ProductCheckMaterialListDTO {
+    @ApiModelProperty(value = "订单关联成品ID")
+    private Integer id;
     @ApiModelProperty(value = "成品号")
     private String productNo;
     @ApiModelProperty(value = "成品型号")
