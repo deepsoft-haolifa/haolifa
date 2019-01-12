@@ -13,12 +13,10 @@ import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.material.MaterialQuantityDTO;
 import com.deepsoft.haolifa.model.dto.material.MaterialResultDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
-import com.deepsoft.haolifa.service.ApplyBuyService;
-import com.deepsoft.haolifa.service.MaterialService;
-import com.deepsoft.haolifa.service.OrderProductService;
-import com.deepsoft.haolifa.service.ProductModelConfigService;
+import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.Base64;
 import com.deepsoft.haolifa.util.QiniuUtil;
 import com.github.pagehelper.Page;
@@ -64,7 +62,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private ProductModelConfigService productModelConfigService;
     @Autowired
     private ApplyBuyService applyBuyService;
-
+    @Autowired
+    private FlowInstanceService flowInstanceService;
 
     private String getCellValue(Cell cell) {
         String cellValue = "";
@@ -663,9 +662,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         int currentUser = getLoginUserId();
         try {
             // 需要核料的零件
-            Map<String, Integer> materialsMap = new HashMap<>();
+            Map<String, MaterialQuantityDTO> materialsMap = new HashMap<>();
             //通用零件特殊处理，不参与实际核料，直接库存充足
-            Map<String, Integer> tongyongMaterialsMap = new HashMap<>();
+            Map<String, MaterialQuantityDTO> tongyongMaterialsMap = new HashMap<>();
 
             // 将订单中所有产品需要的零件合并起来
             productCheckMaterialListDTOList.stream().forEach(e -> {
@@ -679,9 +678,16 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             int materialCount = productNumber * b.getSupportQuantity();
                             String graphNo = b.getGraphNo();
                             if (tongyongMaterialsMap.containsKey(graphNo)) {
-                                tongyongMaterialsMap.put(graphNo, tongyongMaterialsMap.get(graphNo) + materialCount);
+                                MaterialQuantityDTO materialQuantityDTO = tongyongMaterialsMap.get(graphNo);
+                                Integer quantity = materialQuantityDTO.getQuantity();
+                                materialQuantityDTO.setQuantity(quantity + materialCount);
+                                tongyongMaterialsMap.put(graphNo, materialQuantityDTO);
                             } else {
-                                tongyongMaterialsMap.put(graphNo, materialCount);
+                                MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
+                                materialQuantityDTO.setQuantity(materialCount);
+                                materialQuantityDTO.setGraphNo(graphNo);
+                                materialQuantityDTO.setMaterialName(b.getMaterialName());
+                                tongyongMaterialsMap.put(graphNo, materialQuantityDTO);
                             }
                         });
                     } else {
@@ -690,9 +696,16 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             String graphNo = b.getGraphNo();
                             int materialCount = productNumber * b.getSupportQuantity();
                             if (materialsMap.containsKey(graphNo)) {
-                                materialsMap.put(graphNo, materialsMap.get(graphNo) + materialCount);
+                                MaterialQuantityDTO materialQuantityDTO = materialsMap.get(graphNo);
+                                Integer quantity = materialQuantityDTO.getQuantity();
+                                materialQuantityDTO.setQuantity(quantity + materialCount);
+                                materialsMap.put(graphNo, materialQuantityDTO);
                             } else {
-                                materialsMap.put(graphNo, materialCount);
+                                MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
+                                materialQuantityDTO.setQuantity(materialCount);
+                                materialQuantityDTO.setGraphNo(graphNo);
+                                materialQuantityDTO.setMaterialName(b.getMaterialName());
+                                materialsMap.put(graphNo, materialQuantityDTO);
                             }
                         });
                     }
@@ -700,67 +713,74 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             });
 
             // 循环通用零件，直接成功
-            Iterator<Map.Entry<String, Integer>> tongyongIterator = tongyongMaterialsMap.entrySet().iterator();
+            Iterator<Map.Entry<String, MaterialQuantityDTO>> tongyongIterator = tongyongMaterialsMap.entrySet().iterator();
             while (tongyongIterator.hasNext()) {
                 OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
-                Map.Entry<String, Integer> next = tongyongIterator.next();
+                Map.Entry<String, MaterialQuantityDTO> next = tongyongIterator.next();
                 String materialGraphNo = next.getKey();
-                Integer materialCount = next.getValue();
+                MaterialQuantityDTO materialQuantityDTO = next.getValue();
                 orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
                 orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件余量充足");
                 orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
-                orderCheckMaterialDTO.setMaterialCount(materialCount);
+                orderCheckMaterialDTO.setMaterialName(materialQuantityDTO.getMaterialName());
+                orderCheckMaterialDTO.setMaterialCount(materialQuantityDTO.getQuantity());
                 orderCheckMaterialDTO.setOrderNo(orderNo);
                 orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
             }
 
             // 循环所需的原料，进行核料
-            Iterator<Map.Entry<String, Integer>> entryIterator = materialsMap.entrySet().iterator();
+            Iterator<Map.Entry<String, MaterialQuantityDTO>> entryIterator = materialsMap.entrySet().iterator();
             while (entryIterator.hasNext()) {
-                Byte checkState = 0, isReplace = 0;
+                Byte checkStatus = 0;
                 int lackMaterialCount = 0;
                 String checkResult = "";
-                List<MaterialResultDTO> replaceList = new ArrayList<>();
+                // 替换料充足的核料结果
+                List<OrderCheckMaterialDTO> replaceList = new ArrayList<>();
                 OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
-                Map.Entry<String, Integer> next = entryIterator.next();
+                Map.Entry<String, MaterialQuantityDTO> next = entryIterator.next();
                 String materialGraphNo = next.getKey();
-                Integer materialCount = next.getValue();
+                MaterialQuantityDTO materialQuantityDTO = next.getValue();
+                Integer materialCount = materialQuantityDTO.getQuantity();
                 // 获取零件的库存
                 Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
                 Integer currentQuantity = infoByGraphNo.getCurrentQuantity();
                 if (currentQuantity >= materialCount) {
-                    checkState = CommonEnum.CheckMaterialStatus.SUCCESS.code;
+                    checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
                     checkResult = "核料成功，该零件余量充足";
                 } else {
-                    // 如果缺料，将可替换料列表返回给前端
+                    // 如果缺料，将可替换料充足的零件返回给前端
                     String replaceGraphNos = infoByGraphNo.getReplaceGraphNos();
                     if (StringUtils.isNotBlank(replaceGraphNos)) {
                         String[] split = replaceGraphNos.split(",");
                         if (split.length > 0) {
-                            for (String graphNo : split) {
-                                Material byGraphNo = materialService.getInfoByGraphNo(graphNo);
-                                if (byGraphNo != null) {
-                                    MaterialResultDTO materialResultDTO = new MaterialResultDTO();
-                                    materialResultDTO.setCurrentQuantity(byGraphNo.getCurrentQuantity());
-                                    materialResultDTO.setMaterialName(byGraphNo.getName());
-                                    materialResultDTO.setGraphNo(byGraphNo.getGraphNo());
-                                    materialResultDTO.setSupportQuantity(byGraphNo.getSupportQuantity());
-                                    replaceList.add(materialResultDTO);
+                            for (String replaceGraphNo : split) {
+                                Material replaceMaterialInfo = materialService.getInfoByGraphNo(replaceGraphNo);
+                                if (replaceMaterialInfo != null) {
+                                    if (replaceMaterialInfo.getCurrentQuantity() >= materialCount) {
+                                        OrderCheckMaterialDTO replaceOrderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                                        checkStatus = CommonEnum.CheckMaterialStatus.REPLACE.code;
+                                        checkResult = "替换料核料成功，替换料零件余量充足";
+                                        replaceOrderCheckMaterialDTO.setCheckStatus(checkStatus);
+                                        replaceOrderCheckMaterialDTO.setCheckResultMsg(checkResult);
+                                        replaceOrderCheckMaterialDTO.setMaterialGraphNo(replaceGraphNo);
+                                        replaceOrderCheckMaterialDTO.setMaterialName(replaceMaterialInfo.getName());
+                                        replaceOrderCheckMaterialDTO.setMaterialCount(materialCount);
+                                        replaceOrderCheckMaterialDTO.setOrderNo(orderNo);
+                                        replaceList.add(replaceOrderCheckMaterialDTO);
+                                    }
                                 }
                             }
-                            isReplace = CommonEnum.Consts.YES.code;
                         }
                     }
                     // 无料可以替换，需要走采购流程
-                    checkState = CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code;
+                    checkStatus = CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code;
                     // 缺少的料的数量
                     lackMaterialCount = (materialCount - currentQuantity);
                     checkResult = "库存不足";
                 }
                 orderCheckMaterialDTO.setReplaceGraphNoList(replaceList);
                 orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
-                orderCheckMaterialDTO.setIsReplace(isReplace);
-                orderCheckMaterialDTO.setCheckStatus(checkState);
+                orderCheckMaterialDTO.setCheckStatus(checkStatus);
                 orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                 orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
                 orderCheckMaterialDTO.setMaterialName(infoByGraphNo.getName());
@@ -769,7 +789,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
 
                 // 添加核料日志记录
-                int finalCheckState = checkState;
+                int finalCheckState = checkStatus;
                 String finalCheckResult = checkResult;
                 checkMaterialLogs.add(new CheckMaterialLog() {
                     {
@@ -792,59 +812,61 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
 
-    /**
-     * 替换料核料
-     *
-     * @return
-     */
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public List<OrderCheckMaterialDTO> checkReplaceMaterial(String orderNo, List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
-        // 核料总状态（0.全部成功；1.只要有一个零件是失败的；2.有替换料的零件，其余全成功）
-        int checkState = 0;
-        String checkResult = "";
-        int currentUser = getLoginUserId();
-        try {
-            // 循环所需的原料，进行核料
-            for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
-                List<MaterialResultDTO> replaceGraphNoList = orderCheckMaterialDTO.getReplaceGraphNoList();
-                if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
-                    for (MaterialResultDTO materialResultDTO : replaceGraphNoList) {
-                        Integer materialCount = orderCheckMaterialDTO.getMaterialCount();
-                        // 获取替换料零件的库存
-                        String replaceMaterialGraphNo = materialResultDTO.getGraphNo();
-                        Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
-                        Integer replaceGraphNoInfoCurrentQuantity = replaceGraphNoInfo.getCurrentQuantity();
-                        if (replaceGraphNoInfoCurrentQuantity >= materialCount) {
-                            orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-                            orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件替换料充足，可走替换料方案");
-                            checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存充足】,";
-                            if (checkState != 1) {
-                                checkState = 2;
-                            }
-                        }
-                    }
-                }
-                orderCheckMaterialDTO.setIsReplace(CommonEnum.Consts.YES.code);
-            }
-        } catch (Exception e) {
-            log.error("替换料核料过程中出现的异常，orderNo:{}", orderNo, e);
-        } finally {
-            // 添加核料日志记录
-            int finalCheckState = checkState;
-            String finalCheckResult = checkResult;
-            String finalOrderNo = orderNo;
-            CheckMaterialLog checkMaterialLog = new CheckMaterialLog() {{
-                setCheckUserId(currentUser);
-                setOrderNo(finalOrderNo);
-                setCheckResult(finalCheckResult);
-                setCheckState(String.valueOf(finalCheckState));
-            }};
-            checkMaterialLogMapper.insertSelective(checkMaterialLog);
-        }
-        return orderCheckMaterialDTOS;
-    }
-
+    // region 暂时废弃，替换料初步核料会提供
+//
+//    /**
+//     * 替换料核料
+//     *
+//     * @return
+//     */
+//    @Transactional(rollbackFor = Exception.class)
+//    @Override
+//    public List<OrderCheckMaterialDTO> checkReplaceMaterial(String orderNo, List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+//        // 核料总状态（0.全部成功；1.只要有一个零件是失败的；2.有替换料的零件，其余全成功）
+//        int checkState = 0;
+//        String checkResult = "";
+//        int currentUser = getLoginUserId();
+//        try {
+//            // 循环所需的原料，进行核料
+//            for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
+//                List<MaterialResultDTO> replaceGraphNoList = orderCheckMaterialDTO.getReplaceGraphNoList();
+//                if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
+//                    for (MaterialResultDTO materialResultDTO : replaceGraphNoList) {
+//                        Integer materialCount = orderCheckMaterialDTO.getMaterialCount();
+//                        // 获取替换料零件的库存
+//                        String replaceMaterialGraphNo = materialResultDTO.getGraphNo();
+//                        Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
+//                        Integer replaceGraphNoInfoCurrentQuantity = replaceGraphNoInfo.getCurrentQuantity();
+//                        if (replaceGraphNoInfoCurrentQuantity >= materialCount) {
+//                            orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
+//                            orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件替换料充足，可走替换料方案");
+//                            checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存充足】,";
+//                            if (checkState != 1) {
+//                                checkState = 2;
+//                            }
+//                        }
+//                    }
+//                }
+//                orderCheckMaterialDTO.setIsReplace(CommonEnum.Consts.YES.code);
+//            }
+//        } catch (Exception e) {
+//            log.error("替换料核料过程中出现的异常，orderNo:{}", orderNo, e);
+//        } finally {
+//            // 添加核料日志记录
+//            int finalCheckState = checkState;
+//            String finalCheckResult = checkResult;
+//            String finalOrderNo = orderNo;
+//            CheckMaterialLog checkMaterialLog = new CheckMaterialLog() {{
+//                setCheckUserId(currentUser);
+//                setOrderNo(finalOrderNo);
+//                setCheckResult(finalCheckResult);
+//                setCheckState(String.valueOf(finalCheckState));
+//            }};
+//            checkMaterialLogMapper.insertSelective(checkMaterialLog);
+//        }
+//        return orderCheckMaterialDTOS;
+//    }
+// endregion
 
     /**
      * 核料通过,锁定零件（核料员点击下一步）
@@ -867,8 +889,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 String materialName = orderCheckMaterialDTO.getMaterialName();
                 int lackMaterialCount = orderCheckMaterialDTO.getLackMaterialCount();
                 int materialCount = orderCheckMaterialDTO.getMaterialCount();
+                Byte checkStatus = orderCheckMaterialDTO.getCheckStatus();
                 // 缺料的零件，发起请购
-                if (orderCheckMaterialDTO.getCheckStatus() == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
+                if (checkStatus == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
                     ApplyBuyDTO applyBuyDTO = new ApplyBuyDTO() {{
                         setProductOrderNo(orderNo);
                         List<ApplyBuyItem> list = new ArrayList<>();
@@ -882,6 +905,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     }};
                     applyBuyService.save(applyBuyDTO);
                 }
+                // 替换料，发起替换料审批流程
+                if (checkStatus == CommonEnum.CheckMaterialStatus.REPLACE.code) {
+                    FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
+                    flowInstanceDTO.setFormId(0);
+                    flowInstanceDTO.setFlowId(4);
+                    flowInstanceDTO.setFormNo(orderNo);
+                    flowInstanceDTO.setFormType(10);
+                    flowInstanceDTO.setSummary("核料过程中-替换料表单");
+                    flowInstanceService.create(flowInstanceDTO);
+                }
+
                 // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
                 if (lackMaterialCount > 0) {
                     int lockCount = materialCount - lackMaterialCount;

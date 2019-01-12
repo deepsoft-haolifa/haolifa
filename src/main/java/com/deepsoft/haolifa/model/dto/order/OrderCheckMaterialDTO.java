@@ -23,13 +23,12 @@ public class OrderCheckMaterialDTO {
 
     @ApiModelProperty(value = "零件号")
     private String materialGraphNo;
+
     @ApiModelProperty(value = "零件名称")
     private String materialName;
-//    @ApiModelProperty(value = "替换前零件号")
-//    private String replaceMaterialGraphNo;
 
-    @ApiModelProperty(value = "是否是替换零件（0：否，1：是）")
-    private Byte isReplace;
+//    @ApiModelProperty(value = "是否是替换零件（0：否，1：是）")
+//    private Byte isReplace;
 
     @ApiModelProperty(value = "需要的零件数量(产品数量*1)")
     private Integer materialCount;
@@ -37,11 +36,12 @@ public class OrderCheckMaterialDTO {
     @ApiModelProperty(value = "缺少的零件数量")
     private Integer lackMaterialCount;
 
-    @ApiModelProperty(value = "核料状态（1.成功；2.需要采购；3.可替换）")
+    @ApiModelProperty(value = "核料状态（1.成功；2.缺料，需要采购；3.替换）")
     private Byte checkStatus;
+
     @ApiModelProperty(value = "核料结果说明")
     private String checkResultMsg;
 
-    @ApiModelProperty(value = "可替换料的列表")
-    private List<MaterialResultDTO> replaceGraphNoList;
+    @ApiModelProperty(value = "可成功替换料的列表")
+    private List<OrderCheckMaterialDTO> replaceGraphNoList;
 }

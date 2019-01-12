@@ -80,12 +80,12 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.checkMaterial(orderNo, productCheckMaterialListDTOList));
     }
 
-    @ApiOperation("替换料核料")
-    @PostMapping("/check-replace-material")
-    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
-    public ResultBean checkReplaceMaterial(String orderNo, @RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
-        return ResultBean.success(orderProductService.checkReplaceMaterial(orderNo, orderCheckMaterialDTOS));
-    }
+//    @ApiOperation("替换料核料")
+//    @PostMapping("/check-replace-material")
+//    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+//    public ResultBean checkReplaceMaterial(String orderNo, @RequestBody List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+//        return ResultBean.success(orderProductService.checkReplaceMaterial(orderNo, orderCheckMaterialDTOS));
+//    }
 
     @ApiOperation("核料成功(核料清单保存数据库)")
     @PostMapping("/pass-check-material")

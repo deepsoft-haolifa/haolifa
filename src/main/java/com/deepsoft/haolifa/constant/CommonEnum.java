@@ -239,8 +239,10 @@ public class CommonEnum {
         SUCCESS((byte) 1),
         // 缺料，走采购
         NEED_PURCHASE((byte) 2),
+        // 替换料
+        REPLACE((byte) 3),
         // 释放料
-        RELEASE((byte) 3),;
+        RELEASE((byte) 4),;
 
         public final byte code;
 

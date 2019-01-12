@@ -116,13 +116,13 @@ public interface OrderProductService {
      */
     List<OrderCheckMaterialDTO> checkMaterial(String orderNo, List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList);
 
-    /**
-     * 替换料再次核料
-     *
-     * @param orderCheckMaterialDTOS
-     * @return
-     */
-    List<OrderCheckMaterialDTO> checkReplaceMaterial(String orderNo, List<OrderCheckMaterialDTO> orderCheckMaterialDTOS);
+//    /**
+//     * 替换料再次核料
+//     *
+//     * @param orderCheckMaterialDTOS
+//     * @return
+//     */
+//    List<OrderCheckMaterialDTO> checkReplaceMaterial(String orderNo, List<OrderCheckMaterialDTO> orderCheckMaterialDTOS);
 
     /**
      * 核料成功（下一步）
