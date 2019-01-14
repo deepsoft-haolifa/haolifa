@@ -1,8 +1,10 @@
 package com.deepsoft.haolifa.model.dto.order;
 
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.tomcat.util.bcel.Const;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +18,8 @@ public class OrderProductDTO {
     private String orderNo;
     @ApiModelProperty(value = "成品合同订单号(上传的订单上面的)")
     private String orderContractNo;
+    @ApiModelProperty(value = Constant.ORDER_STATUS_DESC)
+    private String orderStatus;
     @ApiModelProperty(value = "订单合同url")
     private String orderContractUrl;
     @ApiModelProperty(value = "订单备份合同url（无价格的文件Url）")
@@ -28,7 +32,7 @@ public class OrderProductDTO {
     private String purchaseFeedbackTime;
     @ApiModelProperty(value = "生产反馈时间")
     private String productionFeedbackTime;
-//    @ApiModelProperty(value = "需求方名称")
+    //    @ApiModelProperty(value = "需求方名称")
 //    private String demandName;
 //    @ApiModelProperty(value = "需求方代理人")
 //    private String demandAgentName;

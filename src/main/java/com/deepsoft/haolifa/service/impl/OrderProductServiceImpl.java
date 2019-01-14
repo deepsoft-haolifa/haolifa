@@ -990,4 +990,19 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     public List<String> listOrderNo(String orderStatus) {
         return orderExtendMapper.listOrderNo(orderStatus);
     }
+
+    @Override
+    public List<OrderMaterial> listReplaceMaterial(String orderNo) {
+        return null;
+    }
+
+    @Override
+    public OrderMaterial infoReplaceMaterial(int id) {
+        return null;
+    }
+
+    @Override
+    public OrderMaterial auditReplaceMaterial(int id) {
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.OrderMaterial;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -152,5 +153,25 @@ public interface OrderProductService {
      * @param orderStatus
      */
     List<String> listOrderNo(String orderStatus);
+
+    /**
+     * 根订单No获取替换料列表
+     *
+     * @param orderNo
+     */
+    List<OrderMaterial> listReplaceMaterial(String orderNo);
+
+    /**
+     * 根据id获取替换料详情
+     *
+     * @param id
+     */
+    OrderMaterial infoReplaceMaterial(int id);
+    /**
+     * 替换料审核完成
+     *
+     * @param id
+     */
+    OrderMaterial auditReplaceMaterial(int id);
 
 }

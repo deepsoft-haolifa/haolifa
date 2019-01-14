@@ -100,17 +100,20 @@ public class CommonEnum {
      */
     public enum OrderStatus {
         CREATE((byte) 0, "创建"),
-        AuditING((byte) 1, "审批中"),
+        AUDIT_ORDER_ING((byte) 1, "审批中"),
         CHECK_MATERIAL((byte) 2, "核料中"),
-        WAIT_PRODUCTION((byte) 3, "待生产"),
-        WAIT_MATERIAL((byte) 4, "待领料"),
-        PRODUCTION((byte) 5, "生产中"),
-        SUSPEND_PRODUCTION((byte) 6, "生产暂停"),
-        PRODUCTION_FINISH((byte) 7, "生产完成"),
-        TEST((byte) 8, "质检中"),
-        STORAGE_FINISH((byte) 9, "已入库"),
-        APPLY_DELIVERY((byte) 10, "申请发货"),
-        DELIVERY_FINISH((byte) 11, "发货完成"),;
+        AUDIT_REPLACE_MATERIAL((byte) 3, "替换料审批中"),
+        CHECK_MATERIAL_COMPLETE((byte) 4, "核料完成"),
+        WAIT_PRODUCTION((byte) 5, "待生产"),
+        WAIT_MATERIAL((byte) 6, "待领料"),
+        PRODUCTION((byte) 7, "生产中"),
+        SUSPEND_PRODUCTION((byte) 8, "生产暂停"),
+        PRODUCTION_FINISH((byte) 9, "生产完成"),
+        TEST((byte) 10, "质检中"),
+        STORAGE_FINISH((byte) 11, "已入库"),
+        APPLY_DELIVERY((byte) 12, "申请发货"),
+        DELIVERY_FINISH((byte) 13, "发货完成"),
+        AUDIT_ORDER_CLOSE((byte) 14, "审核不通过"),;
 
         public final byte code;
         public final String desc;
