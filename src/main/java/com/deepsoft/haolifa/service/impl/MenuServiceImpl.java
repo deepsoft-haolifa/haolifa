@@ -2,9 +2,11 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SysPermissionMapper;
+import com.deepsoft.haolifa.dao.repository.SysPermissionRoleMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
 import com.deepsoft.haolifa.model.domain.SysPermission;
 import com.deepsoft.haolifa.model.domain.SysPermissionExample;
+import com.deepsoft.haolifa.model.domain.SysPermissionRoleExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.sys.DepartmentTree;
 import com.deepsoft.haolifa.model.vo.MenuVO;
@@ -27,6 +29,8 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
     @Autowired
+    private SysPermissionRoleMapper sysPermissionRoleMapper;
+    @Autowired
     private MyPermissionMapper myPermissionMapper;
 
 
@@ -43,8 +47,8 @@ public class MenuServiceImpl implements MenuService {
         return menuVOS.isEmpty() ? null : menuVOS.get(0);
     }
 
-    private List<MenuVO> PermissionToMenuVo(List<SysPermission> permissions, String menuType){
-         return permissions.stream().filter(m ->
+    private List<MenuVO> PermissionToMenuVo(List<SysPermission> permissions, String menuType) {
+        return permissions.stream().filter(m ->
                 m.getPermName().equals(menuType)).map(m -> {
             MenuVO menuVO = new MenuVO();
             BeanUtils.copyProperties(m, menuVO);
@@ -54,7 +58,7 @@ public class MenuServiceImpl implements MenuService {
         }).collect(Collectors.toList());
     }
 
-    public int updateMenu(MenuVO menuVO){
+    public int updateMenu(MenuVO menuVO) {
         SysPermission sysPermission = new SysPermission();
         BeanUtils.copyProperties(menuVO, sysPermission);
         sysPermission.setUrl(menuVO.getCode());
@@ -83,9 +87,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public int insertRoleMenu(Integer roleId, Integer[] menuIds) {
-        if(!ObjectUtils.allNotNull(roleId, menuIds)){
+        if (!ObjectUtils.allNotNull(roleId, menuIds)) {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+        // 现将之前的删除
+        SysPermissionRoleExample example = new SysPermissionRoleExample();
+        example.or().andRoleIdEqualTo(roleId);
+        sysPermissionRoleMapper.deleteByExample(example);
         return myPermissionMapper.inserRoleMenu(roleId, menuIds);
     }
 
