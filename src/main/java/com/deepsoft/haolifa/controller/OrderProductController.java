@@ -122,23 +122,23 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.getOrderProductList(orderNo));
     }
 
-    @ApiOperation("替换料列表，根据orderNo【未做】")
+    @ApiOperation("替换料列表，根据orderNo")
     @GetMapping("/replace-material-list")
     @ApiImplicitParam(required = true, value = "订单号", name = "orderNo", dataType = "string", paramType = "query")
     public ResultBean listReplaceMaterial(String orderNo) {
-        return null;
+        return ResultBean.success(orderProductService.listReplaceMaterial(orderNo));
     }
 
-    @ApiOperation("替换料详情，根据主键【未做】")
+    @ApiOperation("替换料详情，根据主键")
     @GetMapping("/replace-material-detail/{id}")
     @ApiImplicitParam(required = true, value = "主键", name = "id", dataType = "int", paramType = "path")
     public ResultBean infoReplaceMaterial(@PathVariable Integer id) {
-        return null;
+        return ResultBean.success(orderProductService.infoReplaceMaterial(id));
     }
-    @ApiOperation("替换料审批完的操作【未做】")
-    @GetMapping("/replace-material-audit")
+    @ApiOperation("替换料审批完的操作")
+    @PostMapping("/replace-material-audit/{id}")
     public ResultBean auditReplaceMaterial(@PathVariable Integer id) {
-        return null;
+        return ResultBean.success(orderProductService.auditReplaceMaterial(id));
     }
 
 }

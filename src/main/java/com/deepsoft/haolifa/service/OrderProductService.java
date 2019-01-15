@@ -159,19 +159,19 @@ public interface OrderProductService {
      *
      * @param orderNo
      */
-    List<OrderMaterial> listReplaceMaterial(String orderNo);
+    List<OrderMaterialDTO> listReplaceMaterial(String orderNo);
 
     /**
      * 根据id获取替换料详情
      *
      * @param id
      */
-    OrderMaterial infoReplaceMaterial(int id);
+    OrderMaterialDTO infoReplaceMaterial(int id);
     /**
      * 替换料审核完成
      *
      * @param id
      */
-    OrderMaterial auditReplaceMaterial(int id);
+    int auditReplaceMaterial(int id);
 
 }
