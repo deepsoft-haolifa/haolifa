@@ -23,6 +23,7 @@ import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map.Entry;
@@ -68,6 +69,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         InspectItem inspectItem = new InspectItem();
         BeanUtils.copyProperties(items.get(i), inspectItem);
         inspectItem.setInspectId(inspect.getId());
+        inspectItem.setPurchasePrice(new BigDecimal(items.get(i).getPurchasePrice()));
         inspectItemMapper.insertSelective(inspectItem);
       }
     }
@@ -109,12 +111,17 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     inspect.setBatchNumber(model.getBatchNumber());
     inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size()==0?"": JSON.toJSONString(model.getAccessorys()));
     inspectMapper.updateByPrimaryKeySelective(inspect);
+    InspectItemExample itemExample = new InspectItemExample();
+    itemExample.or().andInspectIdEqualTo(inspect.getId());
+    inspectItemMapper.deleteByExample(itemExample);
     List<InspectItemDTO> items = model.getItems();
     if (items != null && items.size() > 0) {
       for (int i = 0; i < items.size(); i++) {
         InspectItem inspectItem = new InspectItem();
         BeanUtils.copyProperties(items.get(i), inspectItem);
-        inspectItemMapper.updateByPrimaryKeySelective(inspectItem);
+        inspectItem.setPurchasePrice(new BigDecimal(items.get(i).getPurchasePrice()));
+        inspectItem.setInspectId(inspect.getId());
+        inspectItemMapper.insertSelective(inspectItem);
       }
     }
     return ResultBean.success(1);
