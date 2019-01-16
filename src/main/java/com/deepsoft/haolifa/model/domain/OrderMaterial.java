@@ -17,7 +17,7 @@ public class OrderMaterial {
 
     private String replaceMaterialName;
 
-    private Byte isReplace;
+    private Byte auditResult;
 
     private Integer materialCount;
 
@@ -25,7 +25,7 @@ public class OrderMaterial {
 
     private Byte checkStatus;
 
-    public OrderMaterial(Integer id, Date createTime, String orderNo, String materialGraphNo, String materialName, String replaceMaterialGraphNo, String replaceMaterialName, Byte isReplace, Integer materialCount, Integer lackMaterialCount, Byte checkStatus) {
+    public OrderMaterial(Integer id, Date createTime, String orderNo, String materialGraphNo, String materialName, String replaceMaterialGraphNo, String replaceMaterialName, Byte auditResult, Integer materialCount, Integer lackMaterialCount, Byte checkStatus) {
         this.id = id;
         this.createTime = createTime;
         this.orderNo = orderNo;
@@ -33,7 +33,7 @@ public class OrderMaterial {
         this.materialName = materialName;
         this.replaceMaterialGraphNo = replaceMaterialGraphNo;
         this.replaceMaterialName = replaceMaterialName;
-        this.isReplace = isReplace;
+        this.auditResult = auditResult;
         this.materialCount = materialCount;
         this.lackMaterialCount = lackMaterialCount;
         this.checkStatus = checkStatus;
@@ -99,12 +99,12 @@ public class OrderMaterial {
         this.replaceMaterialName = replaceMaterialName == null ? null : replaceMaterialName.trim();
     }
 
-    public Byte getIsReplace() {
-        return isReplace;
+    public Byte getAuditResult() {
+        return auditResult;
     }
 
-    public void setIsReplace(Byte isReplace) {
-        this.isReplace = isReplace;
+    public void setAuditResult(Byte auditResult) {
+        this.auditResult = auditResult;
     }
 
     public Integer getMaterialCount() {

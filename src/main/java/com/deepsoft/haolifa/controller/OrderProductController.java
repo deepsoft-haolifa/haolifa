@@ -136,9 +136,9 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.infoReplaceMaterial(id));
     }
     @ApiOperation("替换料审批完的操作")
-    @PostMapping("/replace-material-audit/{id}")
-    public ResultBean auditReplaceMaterial(@PathVariable Integer id) {
-        return ResultBean.success(orderProductService.auditReplaceMaterial(id));
+    @PostMapping("/replace-material-audit/")
+    public ResultBean auditReplaceMaterial(@RequestBody CheckReplaceMaterialAuditDTO model) {
+        return ResultBean.success(orderProductService.auditReplaceMaterial(model));
     }
 
 }

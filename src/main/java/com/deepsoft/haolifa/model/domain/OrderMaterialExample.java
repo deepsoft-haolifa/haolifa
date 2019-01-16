@@ -575,63 +575,63 @@ public class OrderMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceIsNull() {
-            addCriterion("is_replace is null");
+        public Criteria andAuditResultIsNull() {
+            addCriterion("audit_result is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceIsNotNull() {
-            addCriterion("is_replace is not null");
+        public Criteria andAuditResultIsNotNull() {
+            addCriterion("audit_result is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceEqualTo(Byte value) {
-            addCriterion("is_replace =", value, "isReplace");
+        public Criteria andAuditResultEqualTo(Byte value) {
+            addCriterion("audit_result =", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceNotEqualTo(Byte value) {
-            addCriterion("is_replace <>", value, "isReplace");
+        public Criteria andAuditResultNotEqualTo(Byte value) {
+            addCriterion("audit_result <>", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceGreaterThan(Byte value) {
-            addCriterion("is_replace >", value, "isReplace");
+        public Criteria andAuditResultGreaterThan(Byte value) {
+            addCriterion("audit_result >", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceGreaterThanOrEqualTo(Byte value) {
-            addCriterion("is_replace >=", value, "isReplace");
+        public Criteria andAuditResultGreaterThanOrEqualTo(Byte value) {
+            addCriterion("audit_result >=", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceLessThan(Byte value) {
-            addCriterion("is_replace <", value, "isReplace");
+        public Criteria andAuditResultLessThan(Byte value) {
+            addCriterion("audit_result <", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceLessThanOrEqualTo(Byte value) {
-            addCriterion("is_replace <=", value, "isReplace");
+        public Criteria andAuditResultLessThanOrEqualTo(Byte value) {
+            addCriterion("audit_result <=", value, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceIn(List<Byte> values) {
-            addCriterion("is_replace in", values, "isReplace");
+        public Criteria andAuditResultIn(List<Byte> values) {
+            addCriterion("audit_result in", values, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceNotIn(List<Byte> values) {
-            addCriterion("is_replace not in", values, "isReplace");
+        public Criteria andAuditResultNotIn(List<Byte> values) {
+            addCriterion("audit_result not in", values, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceBetween(Byte value1, Byte value2) {
-            addCriterion("is_replace between", value1, value2, "isReplace");
+        public Criteria andAuditResultBetween(Byte value1, Byte value2) {
+            addCriterion("audit_result between", value1, value2, "auditResult");
             return (Criteria) this;
         }
 
-        public Criteria andIsReplaceNotBetween(Byte value1, Byte value2) {
-            addCriterion("is_replace not between", value1, value2, "isReplace");
+        public Criteria andAuditResultNotBetween(Byte value1, Byte value2) {
+            addCriterion("audit_result not between", value1, value2, "auditResult");
             return (Criteria) this;
         }
 

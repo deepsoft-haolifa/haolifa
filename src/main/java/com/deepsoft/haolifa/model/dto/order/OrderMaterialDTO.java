@@ -32,8 +32,8 @@ public class OrderMaterialDTO {
     @ApiModelProperty(value = "缺少的零件数量")
     private Integer lackMaterialCount;
 
-    @ApiModelProperty(value = "是否替换过零件")
-    private Byte isReplace;
+    @ApiModelProperty(value = "替换料审核结果")
+    private Byte auditResult;
 
     @ApiModelProperty(value = "零件名称")
     private String materialName;

@@ -312,7 +312,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(id);
             if (orderProduct != null) {
                 Byte orderStatus = orderProduct.getOrderStatus();
-                if (orderStatus != CommonEnum.OrderStatus.CREATE.code) {
+                if (orderStatus != CommonEnum.OrderStatus.CREATE.code || orderStatus != CommonEnum.OrderStatus.AUDIT_ORDER_CLOSE.code) {
                     return ResultBean.error(CommonEnum.ResponseEnum.ORDER_STATUS_NOT_DELETE);
                 }
             }
@@ -322,7 +322,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 OrderProductAssociateExample example = new OrderProductAssociateExample();
                 example.or().andOrderNoEqualTo(orderProduct.getOrderNo());
                 orderProductAssociateMapper.deleteByExample(example);
-
                 return ResultBean.success(delete);
             } else {
                 return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
@@ -1013,38 +1012,47 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int auditReplaceMaterial(int id) {
+    public int auditReplaceMaterial(CheckReplaceMaterialAuditDTO model) {
         // 替换料审批完成,将替换料换成主料
-        OrderMaterial orderMaterial = orderMaterialMapper.selectByPrimaryKey(id);
+        OrderMaterial orderMaterial = orderMaterialMapper.selectByPrimaryKey(model.getOrderMaterialId());
         String orderNo = orderMaterial.getOrderNo();
         String materialGraphNo = orderMaterial.getMaterialGraphNo();
         String materialName = orderMaterial.getMaterialName();
         String replaceMaterialName = orderMaterial.getReplaceMaterialName();
         String replaceMaterialGraphNo = orderMaterial.getReplaceMaterialGraphNo();
         // 判断信息是否都完全
-        if (StringUtils.isAnyBlank(materialGraphNo, materialName, replaceMaterialGraphNo, replaceMaterialName)) {
-            log.error("auditReplaceMaterial id is not ture");
+        if (StringUtils.isAnyBlank(materialGraphNo, replaceMaterialGraphNo)) {
+            log.error("auditReplaceMaterial graphNo is null");
             return 0;
         }
-        // 更新状态为替换
-        orderMaterial.setCheckStatus(CommonEnum.CheckMaterialStatus.REPLACE.code);
-        orderMaterial.setIsReplace(CommonEnum.Consts.YES.code);
-        orderMaterial.setMaterialName(replaceMaterialName);
-        orderMaterial.setMaterialGraphNo(replaceMaterialGraphNo);
-        orderMaterial.setReplaceMaterialName(materialName);
-        orderMaterial.setReplaceMaterialGraphNo(materialGraphNo);
+
+        Byte auditResult = orderMaterial.getAuditResult();
+        if (auditResult > 0) {
+            log.error("auditReplaceMaterial has audit final status,id:{}", model.getOrderMaterialId());
+            return 0;
+        }
+
+        orderMaterial.setAuditResult(model.getAuditResult());
+        if (model.getAuditResult() == CommonEnum.Consts.AUDIT_PASS.code) {
+            // 更新状态为替换
+            orderMaterial.setCheckStatus(CommonEnum.CheckMaterialStatus.REPLACE.code);
+            orderMaterial.setMaterialName(replaceMaterialName);
+            orderMaterial.setMaterialGraphNo(replaceMaterialGraphNo);
+            orderMaterial.setReplaceMaterialName(materialName);
+            orderMaterial.setReplaceMaterialGraphNo(materialGraphNo);
+        }
         orderMaterialMapper.updateByPrimaryKeySelective(orderMaterial);
 
         // 查看这个订单号的替换料是否都审核完毕
         OrderMaterialExample example = new OrderMaterialExample();
         example.or().andOrderNoEqualTo(orderNo);
         List<OrderMaterial> orderMaterials = orderMaterialMapper.selectByExample(example);
-        // 找出该订单下的替换料是否都审核完成
-        boolean allMatch = orderMaterials.stream().filter(e -> StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())).allMatch(e -> e.getCheckStatus() == CommonEnum.CheckMaterialStatus.REPLACE.code);
+        // 找出该订单下的替换料是否都审核完成(替换料图号不为空，审核状态大于0)
+        boolean allMatch = orderMaterials.stream().filter(e -> StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())).allMatch(e -> e.getAuditResult() > 0);
         if (allMatch) {
             // 都审批完成，将订单状态改为核料完成
             updateOrderProductStatus(orderNo, CommonEnum.OrderStatus.CHECK_MATERIAL_COMPLETE.code);
         }
-        return 1;
+        return 0;
     }
 }

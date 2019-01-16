@@ -10,7 +10,7 @@
       <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="replace_material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="replace_material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="is_replace" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="audit_result" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="lack_material_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="check_status" javaType="java.lang.Byte" jdbcType="TINYINT" />
@@ -76,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, order_no, material_graph_no, material_name, replace_material_graph_no, 
-    replace_material_name, is_replace, material_count, lack_material_count, check_status
+    replace_material_name, audit_result, material_count, lack_material_count, check_status
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterialExample" resultMap="BaseResultMap">
     select
@@ -114,11 +114,11 @@
     </selectKey>
     insert into order_material (create_time, order_no, material_graph_no, 
       material_name, replace_material_graph_no, replace_material_name, 
-      is_replace, material_count, lack_material_count, 
+      audit_result, material_count, lack_material_count, 
       check_status)
     values (#{createTime,jdbcType=TIMESTAMP}, #{orderNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
       #{materialName,jdbcType=VARCHAR}, #{replaceMaterialGraphNo,jdbcType=VARCHAR}, #{replaceMaterialName,jdbcType=VARCHAR}, 
-      #{isReplace,jdbcType=TINYINT}, #{materialCount,jdbcType=INTEGER}, #{lackMaterialCount,jdbcType=INTEGER}, 
+      #{auditResult,jdbcType=TINYINT}, #{materialCount,jdbcType=INTEGER}, #{lackMaterialCount,jdbcType=INTEGER}, 
       #{checkStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderMaterial">
@@ -145,8 +145,8 @@
       <if test="replaceMaterialName != null">
         replace_material_name,
       </if>
-      <if test="isReplace != null">
-        is_replace,
+      <if test="auditResult != null">
+        audit_result,
       </if>
       <if test="materialCount != null">
         material_count,
@@ -177,8 +177,8 @@
       <if test="replaceMaterialName != null">
         #{replaceMaterialName,jdbcType=VARCHAR},
       </if>
-      <if test="isReplace != null">
-        #{isReplace,jdbcType=TINYINT},
+      <if test="auditResult != null">
+        #{auditResult,jdbcType=TINYINT},
       </if>
       <if test="materialCount != null">
         #{materialCount,jdbcType=INTEGER},
@@ -221,8 +221,8 @@
       <if test="record.replaceMaterialName != null">
         replace_material_name = #{record.replaceMaterialName,jdbcType=VARCHAR},
       </if>
-      <if test="record.isReplace != null">
-        is_replace = #{record.isReplace,jdbcType=TINYINT},
+      <if test="record.auditResult != null">
+        audit_result = #{record.auditResult,jdbcType=TINYINT},
       </if>
       <if test="record.materialCount != null">
         material_count = #{record.materialCount,jdbcType=INTEGER},
@@ -247,7 +247,7 @@
       material_name = #{record.materialName,jdbcType=VARCHAR},
       replace_material_graph_no = #{record.replaceMaterialGraphNo,jdbcType=VARCHAR},
       replace_material_name = #{record.replaceMaterialName,jdbcType=VARCHAR},
-      is_replace = #{record.isReplace,jdbcType=TINYINT},
+      audit_result = #{record.auditResult,jdbcType=TINYINT},
       material_count = #{record.materialCount,jdbcType=INTEGER},
       lack_material_count = #{record.lackMaterialCount,jdbcType=INTEGER},
       check_status = #{record.checkStatus,jdbcType=TINYINT}
@@ -276,8 +276,8 @@
       <if test="replaceMaterialName != null">
         replace_material_name = #{replaceMaterialName,jdbcType=VARCHAR},
       </if>
-      <if test="isReplace != null">
-        is_replace = #{isReplace,jdbcType=TINYINT},
+      <if test="auditResult != null">
+        audit_result = #{auditResult,jdbcType=TINYINT},
       </if>
       <if test="materialCount != null">
         material_count = #{materialCount,jdbcType=INTEGER},
@@ -299,7 +299,7 @@
       material_name = #{materialName,jdbcType=VARCHAR},
       replace_material_graph_no = #{replaceMaterialGraphNo,jdbcType=VARCHAR},
       replace_material_name = #{replaceMaterialName,jdbcType=VARCHAR},
-      is_replace = #{isReplace,jdbcType=TINYINT},
+      audit_result = #{auditResult,jdbcType=TINYINT},
       material_count = #{materialCount,jdbcType=INTEGER},
       lack_material_count = #{lackMaterialCount,jdbcType=INTEGER},
       check_status = #{checkStatus,jdbcType=TINYINT}

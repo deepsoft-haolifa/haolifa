@@ -380,7 +380,7 @@ DROP TABLE IF EXISTS `order_product`;
 	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
 	  `replace_material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '替换料零件图号',
 	  `replace_material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '替换料零件名称',
-	  `is_replace` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否替换零件（0：否，1：是）',
+	  `audit_result` tinyint(4) NOT NULL DEFAULT 0 COMMENT '替换料审核结果（1.同意；2.不同意）',
 	  `material_count` int(11) NOT NULL DEFAULT 0 COMMENT '需要的零件数量',
 	  `lack_material_count` int(11) NOT NULL DEFAULT 0 COMMENT '缺少的零件数量',
 	  `check_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '状态（1.核料成功，2.缺料，需要采购,3.替换,4.释放料.5.领料完成）',

@@ -170,8 +170,8 @@ public interface OrderProductService {
     /**
      * 替换料审核完成
      *
-     * @param id
+     * @param model
      */
-    int auditReplaceMaterial(int id);
+    int auditReplaceMaterial(CheckReplaceMaterialAuditDTO model);
 
 }
