@@ -17,6 +17,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,16 +86,20 @@ public class MenuServiceImpl implements MenuService {
         return permissiosByRoleId;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int insertRoleMenu(Integer roleId, Integer[] menuIds) {
-        if (!ObjectUtils.allNotNull(roleId, menuIds)) {
+        if (!ObjectUtils.allNotNull(roleId)) {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         // 现将之前的删除
         SysPermissionRoleExample example = new SysPermissionRoleExample();
         example.or().andRoleIdEqualTo(roleId);
         sysPermissionRoleMapper.deleteByExample(example);
-        return myPermissionMapper.inserRoleMenu(roleId, menuIds);
+        if (menuIds != null && menuIds.length > 0) {
+            myPermissionMapper.inserRoleMenu(roleId, menuIds);
+        }
+        return 1;
     }
 
     @Override
