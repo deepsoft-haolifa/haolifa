@@ -38,4 +38,6 @@ public interface SupplierService {
   ResultBean listByName();
 
   ResultBean approve(String supplierNo);
+
+  void updateSupplierStatus(String supplierNo,Integer status);
 }

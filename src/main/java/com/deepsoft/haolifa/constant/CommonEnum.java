@@ -315,4 +315,18 @@ public class CommonEnum {
             this.code = code;
         }
     }
+
+    public enum SupplierIsQualified {
+
+        WAITING_AUDIT_0((byte)0),
+        QUALIFIED_1((byte)1),
+        NO_QUALIFIED_2((byte)2),
+        AUDITING_3((byte)3);
+
+        public final byte code;
+
+        SupplierIsQualified(byte code) {
+            this.code = code;
+        }
+    }
 }

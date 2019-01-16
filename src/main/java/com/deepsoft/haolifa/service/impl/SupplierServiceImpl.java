@@ -159,5 +159,14 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     instanceService.create(flowInstanceDTO);
     return ResultBean.success(1);
   }
+
+  @Override
+  public void updateSupplierStatus(String supplierNo, Integer status) {
+    SupplierExample example = new SupplierExample();
+    example.createCriteria().andSuppilerNoEqualTo(supplierNo);
+    Supplier supplier = new Supplier();
+    supplier.setIsQualified(status.byteValue());
+    supplierMapper.updateByExampleSelective(supplier, example);
+  }
 }
 

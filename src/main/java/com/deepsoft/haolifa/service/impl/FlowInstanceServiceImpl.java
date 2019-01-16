@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.SupplierIsQualified;
 import com.deepsoft.haolifa.dao.repository.FlowHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
 import com.deepsoft.haolifa.dao.repository.FlowStepMapper;
@@ -11,6 +12,9 @@ import com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.FlowInstanceService;
+import com.deepsoft.haolifa.service.OrderProductService;
+import com.deepsoft.haolifa.service.PurcahseOrderService;
+import com.deepsoft.haolifa.service.SupplierService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,13 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
 
   @Autowired
   private FlowInstanceHistoryMapper instanceHistoryMapper;
+
+  @Autowired
+  private SupplierService supplierService;
+  @Autowired
+  private PurcahseOrderService purcahseOrderService;
+  @Autowired
+  private OrderProductService orderProductService;
 
   @Override
   public ResultBean create(FlowInstanceDTO model) {
@@ -99,7 +110,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     if (StringUtils.isNotEmpty(flowInstance.getAccessory())) {
       accessorys = JSON.parseArray(flowInstance.getAccessory(), Accessory.class);
     }
-    accessorys.addAll(model.getAccessorys());
+    if(model.getAccessorys() != null) {
+      accessorys.addAll(model.getAccessorys());
+    }
     if (flowInstance.getCurrentStepId() != model.getStepId()) {
       return ResultBean.error(CommonEnum.ResponseEnum.STEP_INCONFORMITY);
     }
@@ -129,6 +142,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       flowHistory.setAuditResult(CommonEnum.Consts.AUDIT_NO_PASS.code);
       // is_over 1 结束
       updateInstance.setIsOver(CommonEnum.Consts.YES.code);
+      // 更新 业务表单状态
+      updateFormStatus(flowInstance.getFlowId(), flowInstance.getFormNo(), flowInstance.getFormId(),
+          model.getAuditResult());
     } else {
       if (model.getAuditResult() == 1) {
         // 通过
@@ -138,6 +154,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
             || (!model.getCondition() && currentStep.getConditionFalse() == 0)) {
           // 流程结束
           updateInstance.setIsOver(CommonEnum.Consts.YES.code);
+          // 更新 业务表单状态
+          updateFormStatus(flowInstance.getFlowId(), flowInstance.getFormNo(), flowInstance.getFormId(),
+              model.getAuditResult());
         } else {
           // 流程实例更新
           // 获取孩子节点
@@ -152,8 +171,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                 .selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionTrue());
           }
           updateInstance.setRoleId(nextStep.getRoleId());
-          // 特殊化处理:采购流程最后一个节点指向发起人
-
+          // 指定人 则填写分配的人，若无，则正常
           updateInstance
               .setUserId(model.getAllotUserId() == null ? nextStep.getUserId() : model.getAllotUserId().toString());
 
@@ -190,6 +208,56 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     Map<String, Object> result = new HashMap<>();
     result.put("instanceId", model.getId());
     return ResultBean.success(result);
+  }
+
+  /**
+   * 更新业务审批状态： 生产，采购，替换料，供应商
+   */
+  private void updateFormStatus(Integer flowId, String formNo, Integer formId, Integer auditRes) {
+    switch (flowId) {
+      case 1:
+        // 生产
+        if (auditRes == 1) {
+          // 审核通过
+          orderProductService.updateOrderProductStatus(formNo, (byte)7);
+        } else if (auditRes == 0) {
+          // 审核不通过 todo 待调整状态值
+          orderProductService.updateOrderProductStatus(formNo, (byte)14);
+        }
+        ;
+      case 2:
+        // 采购
+        if (auditRes == 1) {
+          // 审核通过
+          purcahseOrderService.updateOrderStatus(formId, 3);
+        } else if (auditRes == 0) {
+          // 审核不通过
+          purcahseOrderService.updateOrderStatus(formId, 4);
+        }
+        ;
+      case 3:
+        // 供应商审批
+        if (auditRes == 1) {
+          // 审核通过
+          supplierService.updateSupplierStatus(formNo, 1);
+        } else if (auditRes == 0) {
+          // 审核不通过
+          supplierService.updateSupplierStatus(formNo, 2);
+        }
+        ;
+      case 4:
+        // 替换料审批 TODO 替换料状态变更
+        if (auditRes == 1) {
+          // 审核通过
+
+        } else if (auditRes == 0) {
+          // 审核不通过
+
+        }
+        ;
+      default:
+        ;
+    }
   }
 
   @Override

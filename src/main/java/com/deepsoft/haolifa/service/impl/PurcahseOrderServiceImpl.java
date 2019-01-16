@@ -64,6 +64,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         if(orders != null && orders.size()>0) {
             return ResultBean.error(ResponseEnum.PURCHASE_NO_EXIST);
         }
+        model.setId(null);
         PurchaseOrder purchaseOrder = new PurchaseOrder();
         BeanUtils.copyProperties(model, purchaseOrder);
         purchaseOrder.setPurchaseOrderNo(model.getOrderNo());
@@ -301,5 +302,13 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             }
         }
         return ResultBean.success(inspect.getId());
+    }
+
+    @Override
+    public void updateOrderStatus(Integer formId, Integer status) {
+        PurchaseOrder purchaseOrder = new PurchaseOrder();
+        purchaseOrder.setId(formId);
+        purchaseOrder.setStatus(status.byteValue());
+        purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
     }
 }

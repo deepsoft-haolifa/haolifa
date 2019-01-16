@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class PurchaseOrderItem {
-
+    private Integer id;
     @ApiModelProperty(required = true,value = "产品名称")
     private String materialName;
     @ApiModelProperty(required = true,value = "图号")

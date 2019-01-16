@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
 import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
@@ -52,6 +53,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     String inspectNo = "in_" + RandomUtils.orderNoStr();
     Inspect inspect = new Inspect();
     BeanUtils.copyProperties(model, inspect);
+    inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size()==0?"": JSON.toJSONString(model.getAccessorys()));
     inspect.setCreateUserId(createUserId);
     inspect.setInspectNo(inspectNo);
     inspect.setStatus(model.getStatus().byteValue());
@@ -105,7 +107,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       inspect.setArrivalTime(arrivalTime);
     }
     inspect.setBatchNumber(model.getBatchNumber());
-    inspect.setBlueprints(model.getBlueprints());
+    inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size()==0?"": JSON.toJSONString(model.getAccessorys()));
     inspectMapper.updateByPrimaryKeySelective(inspect);
     List<InspectItemDTO> items = model.getItems();
     if (items != null && items.size() > 0) {

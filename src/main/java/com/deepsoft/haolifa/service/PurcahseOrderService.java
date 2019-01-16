@@ -67,4 +67,6 @@ public interface PurcahseOrderService {
    * @return
    */
   ResultBean createInspect(Integer formId);
+
+  void updateOrderStatus(Integer formId, Integer status);
 }
