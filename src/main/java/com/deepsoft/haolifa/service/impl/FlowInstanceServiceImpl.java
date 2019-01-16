@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.dao.repository.StepMapper;
 import com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.order.CheckReplaceMaterialAuditDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
@@ -221,7 +222,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           // 审核通过
           orderProductService.updateOrderProductStatus(formNo, (byte)7);
         } else if (auditRes == 0) {
-          // 审核不通过 todo 待调整状态值
+          // 审核不通过
           orderProductService.updateOrderProductStatus(formNo, (byte)14);
         }
         ;
@@ -246,14 +247,17 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         }
         ;
       case 4:
-        // 替换料审批 TODO 替换料状态变更
+        // 替换料审批
+        CheckReplaceMaterialAuditDTO auditDTO = new CheckReplaceMaterialAuditDTO();
+        auditDTO.setOrderMaterialId(formId);
         if (auditRes == 1) {
           // 审核通过
-
+          auditDTO.setAuditResult((byte) 1);
         } else if (auditRes == 0) {
           // 审核不通过
-
+          auditDTO.setAuditResult((byte) 2);
         }
+        orderProductService.auditReplaceMaterial(auditDTO);
         ;
       default:
         ;

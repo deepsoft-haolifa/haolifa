@@ -32,7 +32,7 @@
                 and fh.step_id =#{stepId}
             </if>
         </where>
-        order by fh.create_time asc
+        order by fh.create_time desc
     </select>
 
     <select id="selectByPrimaryKey" parameterType="int" resultType="com.deepsoft.haolifa.model.domain.FlowInstanceWrapper">
