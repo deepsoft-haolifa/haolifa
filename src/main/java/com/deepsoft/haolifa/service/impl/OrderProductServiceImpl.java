@@ -37,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -48,8 +49,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private RedisDao redisDao;
     @Autowired
     private MaterialService materialService;
-    @Autowired
-    private OrderExtendMapper orderMaterialExtendMapper;
     @Autowired
     private OrderMaterialMapper orderMaterialMapper;
     @Autowired
@@ -876,6 +875,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int checkPass(List<OrderCheckMaterialDTO> orderCheckMaterialDTOS) {
+        String orderNo = "";
+        // 是否有替换料
+        boolean isExistsReplace = false;
         //  如果核料成功，也需要核料点下一步，才往下走
         if (orderCheckMaterialDTOS != null && orderCheckMaterialDTOS.size() > 0) {
             for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
@@ -894,7 +896,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 int insert = orderMaterialMapper.insertSelective(orderMaterial);
                 Integer id = orderMaterial.getId();
 
-                String orderNo = orderCheckMaterialDTO.getOrderNo();
+                orderNo = orderCheckMaterialDTO.getOrderNo();
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
                 String materialName = orderCheckMaterialDTO.getMaterialName();
                 int lackMaterialCount = orderCheckMaterialDTO.getLackMaterialCount();
@@ -903,6 +905,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // 缺料的零件，发起请购
                 if (checkStatus == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
                     // 判断缺料，是否有可替换料
+                    isExistsReplace = true;
                     if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
                         for (OrderCheckMaterialDTO checkMaterialDTO : replaceGraphNoList) {
                             // 替换料，发起替换料审批流程
@@ -917,8 +920,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             }
                         }
                     }
+                    String finalOrderNo = orderNo;
                     ApplyBuyDTO applyBuyDTO = new ApplyBuyDTO() {{
-                        setProductOrderNo(orderNo);
+                        setProductOrderNo(finalOrderNo);
                         List<ApplyBuyItem> list = new ArrayList<>();
                         ApplyBuyItem applyBuyItem = new ApplyBuyItem() {{
                             setMaterialGraphNo(materialGraphNo);
@@ -930,8 +934,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     }};
                     applyBuyService.save(applyBuyDTO);
                 }
-
-
                 // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
                 if (lackMaterialCount > 0) {
                     int lockCount = materialCount - lackMaterialCount;
@@ -942,7 +944,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     materialService.updateLockQuantity(materialGraphNo, materialCount);
                 }
             }
-
+            // 将订单状态改为替换料审核
+            if (StringUtils.isNotBlank(orderNo) && isExistsReplace) {
+                updateOrderProductStatus(orderNo, CommonEnum.OrderStatus.AUDIT_REPLACE_MATERIAL.code);
+            }
             return 1;
         }
         return 0;
@@ -989,5 +994,57 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Override
     public List<String> listOrderNo(String orderStatus) {
         return orderExtendMapper.listOrderNo(orderStatus);
+    }
+
+    @Override
+    public List<OrderMaterialDTO> listReplaceMaterial(String orderNo) {
+        List<OrderMaterialDTO> orderMaterialDTOS = listOrderMaterial(orderNo);
+        return orderMaterialDTOS.stream().filter(e -> StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderMaterialDTO infoReplaceMaterial(int id) {
+        OrderMaterial orderMaterial = orderMaterialMapper.selectByPrimaryKey(id);
+//        Material infoByGraphNo = materialService.getInfoByGraphNo(orderMaterial.getMaterialGraphNo());
+        OrderMaterialDTO orderMaterialDTO = new OrderMaterialDTO();
+        BeanUtils.copyProperties(orderMaterial, orderMaterialDTO);
+        return orderMaterialDTO;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int auditReplaceMaterial(int id) {
+        // 替换料审批完成,将替换料换成主料
+        OrderMaterial orderMaterial = orderMaterialMapper.selectByPrimaryKey(id);
+        String orderNo = orderMaterial.getOrderNo();
+        String materialGraphNo = orderMaterial.getMaterialGraphNo();
+        String materialName = orderMaterial.getMaterialName();
+        String replaceMaterialName = orderMaterial.getReplaceMaterialName();
+        String replaceMaterialGraphNo = orderMaterial.getReplaceMaterialGraphNo();
+        // 判断信息是否都完全
+        if (StringUtils.isAnyBlank(materialGraphNo, materialName, replaceMaterialGraphNo, replaceMaterialName)) {
+            log.error("auditReplaceMaterial id is not ture");
+            return 0;
+        }
+        // 更新状态为替换
+        orderMaterial.setCheckStatus(CommonEnum.CheckMaterialStatus.REPLACE.code);
+        orderMaterial.setIsReplace(CommonEnum.Consts.YES.code);
+        orderMaterial.setMaterialName(replaceMaterialName);
+        orderMaterial.setMaterialGraphNo(replaceMaterialGraphNo);
+        orderMaterial.setReplaceMaterialName(materialName);
+        orderMaterial.setReplaceMaterialGraphNo(materialGraphNo);
+        orderMaterialMapper.updateByPrimaryKeySelective(orderMaterial);
+
+        // 查看这个订单号的替换料是否都审核完毕
+        OrderMaterialExample example = new OrderMaterialExample();
+        example.or().andOrderNoEqualTo(orderNo);
+        List<OrderMaterial> orderMaterials = orderMaterialMapper.selectByExample(example);
+        // 找出该订单下的替换料是否都审核完成
+        boolean allMatch = orderMaterials.stream().filter(e -> StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())).allMatch(e -> e.getCheckStatus() == CommonEnum.CheckMaterialStatus.REPLACE.code);
+        if (allMatch) {
+            // 都审批完成，将订单状态改为核料完成
+            updateOrderProductStatus(orderNo, CommonEnum.OrderStatus.CHECK_MATERIAL_COMPLETE.code);
+        }
+        return 1;
     }
 }
