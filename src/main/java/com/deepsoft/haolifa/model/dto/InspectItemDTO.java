@@ -33,4 +33,6 @@ public class InspectItemDTO {
 
     @ApiModelProperty(required = true,value = "送检数量")
     private Integer deliveryNumber;
+
+    private Double purchasePrice;
 }

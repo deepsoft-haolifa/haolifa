@@ -24,7 +24,7 @@ public class InspectDTO {
   @ApiModelProperty(required = true,value = "批次号")
   private String batchNumber;
 
-  @ApiModelProperty(value = "质量保证书附件,多个逗号隔开")
+  @ApiModelProperty(value = "质量保证书附件")
   private List<Accessory> accessorys;
 
   @ApiModelProperty(required = true,value = "送检列表")
