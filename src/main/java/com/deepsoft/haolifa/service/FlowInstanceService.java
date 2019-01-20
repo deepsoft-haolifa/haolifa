@@ -33,4 +33,6 @@ public interface FlowInstanceService {
      * @return
      */
     ResultBean backSteps(Integer instanceId);
+
+  ResultBean flowProgress(String formNo);
 }

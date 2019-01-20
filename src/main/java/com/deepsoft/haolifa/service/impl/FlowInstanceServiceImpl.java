@@ -206,6 +206,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     historyMapper.insertSelective(flowHistory);
     // 更新实例
     instanceMapper.updateByPrimaryKeySelective(updateInstance);
+
     Map<String, Object> result = new HashMap<>();
     result.put("instanceId", model.getId());
     return ResultBean.success(result);
@@ -224,6 +225,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         } else if (auditRes == 0) {
           // 审核不通过
           orderProductService.updateOrderProductStatus(formNo, (byte)14);
+          orderProductService.releaseMaterial(formNo);
         }
         ;
       case 2:
@@ -356,5 +358,17 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       result.remove(result.size() - 1);
     }
     return ResultBean.success(result);
+  }
+
+  @Override
+  public ResultBean flowProgress(String formNo) {
+    FlowInstanceExample instanceExample = new FlowInstanceExample();
+    instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte)1);
+    List<FlowInstance> flowInstances = instanceMapper.selectByExample(instanceExample);
+    HistoryInfo historyInfo = new HistoryInfo();
+    historyInfo.setInstanceId(flowInstances.get(0).getId());
+    List<HistoryInfo> historyInfos = instanceHistoryMapper.selectInstanceHistory(historyInfo);
+    Collections.reverse(historyInfos);
+    return ResultBean.success(historyInfos);
   }
 }
