@@ -17,4 +17,8 @@ public class MaterialConditionDTO {
 
     @ApiModelProperty(value = "零件分类ID")
     private Integer classifyId;
+    @ApiModelProperty(value = "规格")
+    private String specifications;
+    @ApiModelProperty(value = "型号")
+    private String model;
 }

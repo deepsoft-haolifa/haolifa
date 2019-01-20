@@ -180,20 +180,23 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public ResultBean pageInfo(Integer currentPage, Integer pageSize, int classifyId, String nameLike, String graphNoLike, int status) {
-        currentPage = currentPage == null ? 1 : currentPage;
-        pageSize = pageSize == null ? 20 : pageSize;
-
+    public ResultBean pageInfo(MaterialConditionDTO conditionDTO) {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
-        if (classifyId > 0) {
-            criteria.andMaterialClassifyIdEqualTo(classifyId);
+        if (conditionDTO.getClassifyId() != null && conditionDTO.getClassifyId() > 0) {
+            criteria.andMaterialClassifyIdEqualTo(conditionDTO.getClassifyId());
         }
-        if (StringUtils.isNotBlank(nameLike)) {
-            criteria.andNameLike("%" + nameLike + "%");
+        if (StringUtils.isNotBlank(conditionDTO.getMaterialName())) {
+            criteria.andNameLike("%" + conditionDTO.getMaterialName() + "%");
         }
-        if (StringUtils.isNotBlank(graphNoLike)) {
-            criteria.andGraphNoLike("%" + graphNoLike + "%");
+        if (StringUtils.isNotBlank(conditionDTO.getGraphNo())) {
+            criteria.andGraphNoLike("%" + conditionDTO.getGraphNo() + "%");
+        }
+        if (StringUtils.isNotBlank(conditionDTO.getSpecifications())) {
+            criteria.andSpecificationsLike("%" + conditionDTO.getSpecifications() + "%");
+        }
+        if (StringUtils.isNotBlank(conditionDTO.getModel())) {
+            criteria.andModelLike("%" + conditionDTO.getModel() + "%");
         }
 //        // 告警状态1（库存数量<预警值）
 //        if (status == 1) {
@@ -203,9 +206,8 @@ public class MaterialServiceImpl implements MaterialService {
 //        if (status == 2) {
 //            criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
 //        }
-        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("id desc");
-        Page<Material> materials = PageHelper.startPage(currentPage, pageSize)
+        Page<Material> materials = PageHelper.startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
                 .doSelectPage(() -> materialMapper.selectByExample(example));
 
         PageDTO<Material> pageDTO = new PageDTO<>();

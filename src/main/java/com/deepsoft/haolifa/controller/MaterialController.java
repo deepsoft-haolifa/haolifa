@@ -104,22 +104,9 @@ public class MaterialController {
     }
 
     @ApiOperation("零件分页列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "分类名称", name = "classifyNameLike", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "零件名称", name = "nameLike", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "零件图号", name = "graphNoLike", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "状态(0全部；1告警；2正常)", name = "status", dataType = "int", paramType = "query")
-    })
-    @GetMapping("/pageInfo")
-    public ResultBean pageInfo(@RequestParam(defaultValue = "1") Integer currentPage,
-                               @RequestParam(defaultValue = "20") Integer pageSize,
-                               @RequestParam(required = false, defaultValue = "0") int classifyId,
-                               @RequestParam(required = false) String nameLike,
-                               @RequestParam(required = false) String graphNoLike,
-                               @RequestParam(defaultValue = "0") Integer status) {
-        return materialService.pageInfo(currentPage, pageSize, classifyId, nameLike, graphNoLike, status);
+    @PostMapping("/pageInfo")
+    public ResultBean pageInfo(@RequestBody MaterialConditionDTO conditionDTO) {
+        return materialService.pageInfo( conditionDTO);
     }
 
 
