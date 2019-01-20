@@ -892,15 +892,45 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderMaterial.setReplaceMaterialGraphNo(replaceMaterialNo);
                     orderMaterial.setReplaceMaterialName(replaceMaterialName);
                 }
-                int insert = orderMaterialMapper.insertSelective(orderMaterial);
-                Integer id = orderMaterial.getId();
-
                 orderNo = orderCheckMaterialDTO.getOrderNo();
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
                 String materialName = orderCheckMaterialDTO.getMaterialName();
                 int lackMaterialCount = orderCheckMaterialDTO.getLackMaterialCount();
                 int materialCount = orderCheckMaterialDTO.getMaterialCount();
                 Byte checkStatus = orderCheckMaterialDTO.getCheckStatus();
+                // 根据订单号和零件号查询，是否已经存在记录
+                OrderMaterialExample example = new OrderMaterialExample();
+                example.or().andOrderNoEqualTo(orderNo).andMaterialGraphNoEqualTo(materialGraphNo);
+                List<OrderMaterial> orderMaterials = orderMaterialMapper.selectByExample(example);
+                if (orderMaterials != null && orderMaterials.size() > 0) {
+                    orderMaterialMapper.updateByExample(orderMaterial, example);
+                    OrderMaterial orderMaterialquery = orderMaterials.get(0);
+                    orderMaterial.setId(orderMaterialquery.getId());
+                    // 如果重新核料完成，料的状态是释放，需要重新扣减库存表
+                    if (orderMaterialquery.getCheckStatus() == CommonEnum.CheckMaterialStatus.RELEASE.code) {
+                        if (lackMaterialCount > 0) {
+                            int lockCount = materialCount - lackMaterialCount;
+                            materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
+                            materialService.updateLockQuantity(materialGraphNo, lockCount);
+                        } else {
+                            materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
+                            materialService.updateLockQuantity(materialGraphNo, materialCount);
+                        }
+                    }
+                } else {
+                    int insert = orderMaterialMapper.insertSelective(orderMaterial);
+                    // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
+                    if (lackMaterialCount > 0) {
+                        int lockCount = materialCount - lackMaterialCount;
+                        materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
+                        materialService.updateLockQuantity(materialGraphNo, lockCount);
+                    } else {
+                        materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
+                        materialService.updateLockQuantity(materialGraphNo, materialCount);
+                    }
+                }
+                Integer id = orderMaterial.getId();
+
                 // 缺料的零件，发起请购
                 if (checkStatus == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
                     // 判断缺料，是否有可替换料
@@ -918,30 +948,23 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 flowInstanceService.create(flowInstanceDTO);
                             }
                         }
-                    }
-                    String finalOrderNo = orderNo;
-                    ApplyBuyDTO applyBuyDTO = new ApplyBuyDTO() {{
-                        setProductOrderNo(finalOrderNo);
-                        List<ApplyBuyItem> list = new ArrayList<>();
-                        ApplyBuyItem applyBuyItem = new ApplyBuyItem() {{
-                            setMaterialGraphNo(materialGraphNo);
-                            setMaterialName(materialName);
-                            setPurchaseNumber(lackMaterialCount);
+                    } else {
+                        String finalOrderNo = orderNo;
+                        ApplyBuyDTO applyBuyDTO = new ApplyBuyDTO() {{
+                            setProductOrderNo(finalOrderNo);
+                            List<ApplyBuyItem> list = new ArrayList<>();
+                            ApplyBuyItem applyBuyItem = new ApplyBuyItem() {{
+                                setMaterialGraphNo(materialGraphNo);
+                                setMaterialName(materialName);
+                                setPurchaseNumber(lackMaterialCount);
+                            }};
+                            list.add(applyBuyItem);
+                            setItemList(list);
                         }};
-                        list.add(applyBuyItem);
-                        setItemList(list);
-                    }};
-                    applyBuyService.save(applyBuyDTO);
+                        applyBuyService.save(applyBuyDTO);
+                    }
                 }
-                // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
-                if (lackMaterialCount > 0) {
-                    int lockCount = materialCount - lackMaterialCount;
-                    materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
-                    materialService.updateLockQuantity(materialGraphNo, lockCount);
-                } else {
-                    materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
-                    materialService.updateLockQuantity(materialGraphNo, materialCount);
-                }
+
             }
             // 将订单状态改为替换料审核
             if (StringUtils.isNotBlank(orderNo) && isExistsReplace) {
