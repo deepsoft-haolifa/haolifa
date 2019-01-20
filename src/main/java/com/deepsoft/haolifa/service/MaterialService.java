@@ -102,14 +102,9 @@ public interface MaterialService {
     /**
      * 获取零件分页列表
      *
-     * @param currentPage 页码
-     * @param pageSize    页数
-     * @param classifyId  分类Id
-     * @param nameLike    名称
-     * @param graphNoLike 图号
      * @return
      */
-    ResultBean pageInfo(Integer currentPage, Integer pageSize, int classifyId, String nameLike, String graphNoLike, int status);
+    ResultBean pageInfo(MaterialConditionDTO conditionDTO);
 
     /**
      * 更新零件当前数量
