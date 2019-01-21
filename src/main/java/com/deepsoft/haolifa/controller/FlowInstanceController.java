@@ -42,4 +42,10 @@ public class FlowInstanceController {
         return flowInstanceService.backSteps(instanceId);
     }
 
+    @GetMapping("flow/progress")
+    @ApiOperation("获取流程审批的进度信息")
+    public ResultBean flowProgress(@RequestParam String formNo) {
+        return flowInstanceService.flowProgress(formNo);
+    }
+
 }

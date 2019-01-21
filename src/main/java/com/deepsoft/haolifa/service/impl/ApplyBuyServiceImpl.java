@@ -138,4 +138,11 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
     pageDTO.setList(listDTOS);
     return ResultBean.success(pageDTO);
   }
+
+  @Override
+  public ResultBean list(String orderNo) {
+    ApplyBuyExample applyBuyExample = new ApplyBuyExample();
+    applyBuyExample.or().andProductOrderNoEqualTo(orderNo);
+    return ResultBean.success(applyBuyMapper.selectByExample(applyBuyExample));
+  }
 }

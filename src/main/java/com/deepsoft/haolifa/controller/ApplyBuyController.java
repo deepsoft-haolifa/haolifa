@@ -64,5 +64,11 @@ public class ApplyBuyController {
         return applyBuyService.list(pageNum,pageSize,status);
   }
 
+  @ApiOperation("生产订单关联的待采购列表")
+  @GetMapping("product/list")
+  public ResultBean list(@RequestParam String orderNo) {
+    return applyBuyService.list(orderNo);
+  }
+
 
 }

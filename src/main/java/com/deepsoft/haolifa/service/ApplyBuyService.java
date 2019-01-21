@@ -53,4 +53,11 @@ public interface ApplyBuyService {
      * 列表
      */
     ResultBean list(int pageNum, int pageSize, int status);
+
+    /**
+     * 生产订单 关联的请购列表
+     * @param orderNo
+     * @return
+     */
+  ResultBean list(String orderNo);
 }
