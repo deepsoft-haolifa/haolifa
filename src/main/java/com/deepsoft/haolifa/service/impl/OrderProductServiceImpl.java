@@ -934,8 +934,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // 缺料的零件，发起请购
                 if (checkStatus == CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code) {
                     // 判断缺料，是否有可替换料
-                    isExistsReplace = true;
                     if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
+                        isExistsReplace = true;
                         for (OrderCheckMaterialDTO checkMaterialDTO : replaceGraphNoList) {
                             // 替换料，发起替换料审批流程
                             if (checkMaterialDTO.getCheckStatus() == CommonEnum.CheckMaterialStatus.REPLACE.code) {
@@ -966,9 +966,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 }
 
             }
-            // 将订单状态改为替换料审核
-            if (StringUtils.isNotBlank(orderNo) && isExistsReplace) {
+            // 将订单状态改为替换料审核,如果有替换料
+            if (isExistsReplace) {
                 updateOrderProductStatus(orderNo, CommonEnum.OrderStatus.AUDIT_REPLACE_MATERIAL.code);
+            } else {
+                // 将订单状态改为核料完成
+                updateOrderProductStatus(orderNo, CommonEnum.OrderStatus.CHECK_MATERIAL_COMPLETE.code);
             }
             return 1;
         }

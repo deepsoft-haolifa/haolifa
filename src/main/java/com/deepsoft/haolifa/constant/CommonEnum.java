@@ -1,6 +1,9 @@
 package com.deepsoft.haolifa.constant;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @description: 常规枚举类
  **/
@@ -131,7 +134,6 @@ public class CommonEnum {
             }
             return codeAndDesc.toString();
         }
-
     }
 
     public static void main(String[] args) {
@@ -321,10 +323,10 @@ public class CommonEnum {
 
     public enum SupplierIsQualified {
 
-        WAITING_AUDIT_0((byte)0),
-        QUALIFIED_1((byte)1),
-        NO_QUALIFIED_2((byte)2),
-        AUDITING_3((byte)3);
+        WAITING_AUDIT_0((byte) 0),
+        QUALIFIED_1((byte) 1),
+        NO_QUALIFIED_2((byte) 2),
+        AUDITING_3((byte) 3);
 
         public final byte code;
 

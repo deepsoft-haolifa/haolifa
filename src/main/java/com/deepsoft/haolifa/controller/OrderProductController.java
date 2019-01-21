@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -12,7 +13,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = {"订单成品相关管理"})
 @RestController
@@ -135,10 +139,25 @@ public class OrderProductController {
     public ResultBean infoReplaceMaterial(@PathVariable Integer id) {
         return ResultBean.success(orderProductService.infoReplaceMaterial(id));
     }
+
     @ApiOperation("替换料审批完的操作")
     @PostMapping("/replace-material-audit/")
     public ResultBean auditReplaceMaterial(@RequestBody CheckReplaceMaterialAuditDTO model) {
         return ResultBean.success(orderProductService.auditReplaceMaterial(model));
     }
 
+
+    @ApiOperation("获取订单状态列表")
+    @GetMapping("/order-status-list")
+    public ResultBean orderStatusList() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        CommonEnum.OrderStatus[] orderStatus = CommonEnum.OrderStatus.values();
+        for (CommonEnum.OrderStatus e : orderStatus) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("code", e.code);
+            map.put("desc", e.desc);
+            list.add(map);
+        }
+        return ResultBean.success(list);
+    }
 }
