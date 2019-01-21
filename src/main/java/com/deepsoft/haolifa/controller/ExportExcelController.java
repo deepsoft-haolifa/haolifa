@@ -164,7 +164,7 @@ public class ExportExcelController {
 
     for (int i = 0; i < itemExDTO.size()+1; i++) {
       if(i==0) {
-        Row row = sheet.createRow(rowIdx+i+1);
+        Row row = sheet.createRow(++rowIdx);
         Cell cell1 =  row.createCell(0);
         cell1.setCellValue("序号");
         Cell cell2 =  row.createCell(1);
@@ -190,10 +190,10 @@ public class ExportExcelController {
         Cell cell012 =  row.createCell(11);
         cell012.setCellValue("备注");
       } else {
-        PurchaseOrderItemExDTO itemExDTO1 = itemExDTO.get(i);
-        Row row = sheet.createRow(rowIdx+i+1);
+        PurchaseOrderItemExDTO itemExDTO1 = itemExDTO.get(i-1);
+        Row row = sheet.createRow(++rowIdx);
         Cell cell1 =  row.createCell(0);
-        cell1.setCellValue(i+1);
+        cell1.setCellValue(i);
         Cell cell2 =  row.createCell(1);
         cell2.setCellValue(itemExDTO1.getMaterialName());
         Cell cell3 =  row.createCell(2);

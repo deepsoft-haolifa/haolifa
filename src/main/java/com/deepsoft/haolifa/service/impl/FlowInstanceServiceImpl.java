@@ -227,7 +227,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           orderProductService.updateOrderProductStatus(formNo, (byte)14);
           orderProductService.releaseMaterial(formNo);
         }
-        ;
+        break;
       case 2:
         // 采购
         if (auditRes == 1) {
@@ -237,7 +237,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           // 审核不通过
           purcahseOrderService.updateOrderStatus(formId, 4);
         }
-        ;
+        break;
       case 3:
         // 供应商审批
         if (auditRes == 1) {
@@ -247,7 +247,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           // 审核不通过
           supplierService.updateSupplierStatus(formNo, 2);
         }
-        ;
+        break;
       case 4:
         // 替换料审批
         CheckReplaceMaterialAuditDTO auditDTO = new CheckReplaceMaterialAuditDTO();
@@ -260,7 +260,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           auditDTO.setAuditResult((byte) 2);
         }
         orderProductService.auditReplaceMaterial(auditDTO);
-        ;
+        break;
       default:
         ;
     }
