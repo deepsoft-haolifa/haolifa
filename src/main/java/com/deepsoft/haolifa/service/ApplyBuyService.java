@@ -60,4 +60,8 @@ public interface ApplyBuyService {
      * @return
      */
   ResultBean list(String orderNo);
+
+  ResultBean updateStatusByOrderNo(String orderNo, String arriveTime);
+
+    ResultBean updateStatusByOrderNo(String orderNo, Integer status);
 }

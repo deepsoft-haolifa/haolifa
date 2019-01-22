@@ -49,6 +49,20 @@ public class ApplyBuyController {
     return applyBuyService.updateStatus(itemId);
   }
 
+  @ApiOperation("更新待采购项状态,采购日期,采购员更新")
+  @PostMapping("/updateStatusByOrderNo")
+  public ResultBean updateStatusByOrderNo(@RequestParam String orderNo,@RequestParam String arriveTime) {
+    return applyBuyService.updateStatusByOrderNo(orderNo, arriveTime);
+  }
+
+  @ApiOperation("更新待采购项状态,")
+  @PostMapping("/updateStatusByOrderNo/{status}")
+  public ResultBean updateStatusByOrderNo(@RequestParam String orderNo, @PathVariable("status") Integer status) {
+    return applyBuyService.updateStatusByOrderNo(orderNo, status);
+  }
+
+
+
 
   @ApiOperation("生产订单待采购详情")
   @GetMapping("info/{formNo}")

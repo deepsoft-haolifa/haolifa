@@ -107,7 +107,7 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
   public ResultBean updateStatus(int itemId) {
     ApplyBuy applyBuy = new ApplyBuy();
     applyBuy.setId(itemId);
-    applyBuy.setStatus(Consts.YES.code);
+    applyBuy.setStatus((byte) 3);
     applyBuy.setDealUserId(getLoginUserId());
     applyBuyMapper.updateByPrimaryKeySelective(applyBuy);
     return ResultBean.success(1);
@@ -144,5 +144,26 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
     ApplyBuyExample applyBuyExample = new ApplyBuyExample();
     applyBuyExample.or().andProductOrderNoEqualTo(orderNo);
     return ResultBean.success(applyBuyMapper.selectByExample(applyBuyExample));
+  }
+
+  @Override
+  public ResultBean updateStatusByOrderNo(String orderNo, String arriveTime) {
+    ApplyBuyExample example = new ApplyBuyExample();
+    example.or().andProductOrderNoEqualTo(orderNo);
+    ApplyBuy applyBuy = new ApplyBuy();
+    applyBuy.setStatus((byte) 1);
+    applyBuy.setArrivalTime(DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, arriveTime));
+    applyBuyMapper.updateByExampleSelective(applyBuy, example);
+    return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean updateStatusByOrderNo(String orderNo, Integer status) {
+    ApplyBuyExample example = new ApplyBuyExample();
+    example.or().andProductOrderNoEqualTo(orderNo);
+    ApplyBuy applyBuy = new ApplyBuy();
+    applyBuy.setStatus((byte) 1);
+    applyBuyMapper.updateByExampleSelective(applyBuy, example);
+    return ResultBean.success(1);
   }
 }

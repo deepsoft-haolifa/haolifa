@@ -169,7 +169,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           } else {
             updateInstance.setCurrentStepId(currentStep.getConditionFalse());
             nextStep = instanceHistoryMapper
-                .selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionTrue());
+                .selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionFalse());
           }
           updateInstance.setRoleId(nextStep.getRoleId());
           // 指定人 则填写分配的人，若无，则正常
