@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.dto.delivery.DeliveryRecordConditionDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryClassifyDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeAuditDTO;
 import com.deepsoft.haolifa.service.DeliveryService;
+import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -35,6 +36,8 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
     private DeliveryRecordMapper deliveryRecordMapper;
     @Autowired
     private DeliveryNoticeMapper deliveryNoticeMapper;
+    @Autowired
+    private OrderProductService orderProductService;
 
     @Override
     public ResultBean saveNotice(DeliveryNotice model) {
@@ -47,6 +50,8 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
             insertUpdate = deliveryNoticeMapper.insertSelective(model);
         }
         if (insertUpdate > 0) {
+            // 更改订单状态为申请发货
+            orderProductService.updateOrderProductStatus(model.getContractOrderNo(), CommonEnum.OrderStatus.APPLY_DELIVERY.code);
             return ResultBean.success(insertUpdate);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
@@ -115,6 +120,8 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
         model.setCreateUserId(getLoginUserId());
         int insert = deliveryRecordMapper.insertSelective(model);
         if (insert > 0) {
+           // 更改订单状态为发货完成
+            orderProductService.updateOrderProductStatus(model.getContractOrderNo(), CommonEnum.OrderStatus.DELIVERY_FINISH.code);
             return ResultBean.success(insert);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
