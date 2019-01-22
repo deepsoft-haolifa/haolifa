@@ -4,6 +4,8 @@ import com.deepsoft.haolifa.constant.Constant;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 
 @Data
 public class OrderConditionDTO {
@@ -15,10 +17,10 @@ public class OrderConditionDTO {
     @ApiModelProperty(value = "订单号")
     private String orderNo;
     @ApiModelProperty(value = Constant.ORDER_STATUS_DESC, name = "订单状态")
-    private byte orderStatus;
+    private Byte orderStatus;
 
     @ApiModelProperty(value = Constant.ORDER_STATUS_DESC, name = "订单状态列表(逗号分隔)")
-    private byte[] orderStatusList;
+    private List<Byte> orderStatusList;
 }
 
 

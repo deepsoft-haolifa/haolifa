@@ -22,6 +22,7 @@ import com.deepsoft.haolifa.util.QiniuUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -389,8 +390,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (StringUtils.isNotBlank(model.getOrderNo())) {
             criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
         }
-        if (model.getOrderStatus() > 0) {
+        if (model.getOrderStatus()!=null&&model.getOrderStatus() > -1) {
             criteria.andOrderStatusEqualTo(model.getOrderStatus());
+        }
+        if (model.getOrderStatusList() != null && model.getOrderStatusList().size() > 0) {
+            criteria.andOrderStatusIn(model.getOrderStatusList());
         }
         example.setOrderByClause("id desc");
         Page<OrderProduct> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
