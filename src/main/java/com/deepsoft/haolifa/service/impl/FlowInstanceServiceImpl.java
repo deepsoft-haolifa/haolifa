@@ -363,7 +363,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   @Override
   public ResultBean flowProgress(String formNo) {
     FlowInstanceExample instanceExample = new FlowInstanceExample();
-    instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte)1);
+    instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte)0);
     List<FlowInstance> flowInstances = instanceMapper.selectByExample(instanceExample);
     HistoryInfo historyInfo = new HistoryInfo();
     historyInfo.setInstanceId(flowInstances.get(0).getId());

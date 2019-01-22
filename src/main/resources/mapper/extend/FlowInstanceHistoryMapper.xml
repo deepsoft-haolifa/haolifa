@@ -19,7 +19,7 @@
         fh.accessory accessory,
         s.`name` stepName,
         s.description description,
-        su.real_name userName
+        su.real_name auditUserName
         FROM
         flow_history fh
         LEFT JOIN step s ON s.id = fh.step_id
