@@ -162,7 +162,7 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
     ApplyBuyExample example = new ApplyBuyExample();
     example.or().andProductOrderNoEqualTo(orderNo);
     ApplyBuy applyBuy = new ApplyBuy();
-    applyBuy.setStatus((byte) 1);
+    applyBuy.setStatus(status.byteValue());
     applyBuyMapper.updateByExampleSelective(applyBuy, example);
     return ResultBean.success(1);
   }
