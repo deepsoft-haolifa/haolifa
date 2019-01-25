@@ -907,9 +907,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 example.or().andOrderNoEqualTo(orderNo).andMaterialGraphNoEqualTo(materialGraphNo);
                 List<OrderMaterial> orderMaterials = orderMaterialMapper.selectByExample(example);
                 if (orderMaterials != null && orderMaterials.size() > 0) {
-                    orderMaterialMapper.updateByExample(orderMaterial, example);
                     OrderMaterial orderMaterialquery = orderMaterials.get(0);
                     orderMaterial.setId(orderMaterialquery.getId());
+                    // 重新核料，将数据重新设置更新
+                    orderMaterialMapper.updateByExample(orderMaterial, example);
                     // 如果重新核料完成，料的状态是释放，需要重新扣减库存表
                     if (orderMaterialquery.getCheckStatus() == CommonEnum.CheckMaterialStatus.RELEASE.code) {
                         if (lackMaterialCount > 0) {
