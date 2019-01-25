@@ -390,7 +390,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (StringUtils.isNotBlank(model.getOrderNo())) {
             criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
         }
-        if (model.getOrderStatus()!=null&&model.getOrderStatus() > -1) {
+        if (model.getOrderStatus() != null && model.getOrderStatus() > -1) {
             criteria.andOrderStatusEqualTo(model.getOrderStatus());
         }
         if (model.getOrderStatusList() != null && model.getOrderStatusList().size() > 0) {
@@ -887,11 +887,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // 核料成功，插入核料表
                 OrderMaterial orderMaterial = new OrderMaterial();
                 BeanUtils.copyProperties(orderCheckMaterialDTO, orderMaterial);
+                String replaceMaterialNo = "";
                 // 判断缺料，是否有可替换料，将替换料插入核料表
                 List<OrderCheckMaterialDTO> replaceGraphNoList = orderCheckMaterialDTO.getReplaceGraphNoList();
                 if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
                     OrderCheckMaterialDTO orderCheckMaterialDTO1 = replaceGraphNoList.get(0);
-                    String replaceMaterialNo = orderCheckMaterialDTO1.getMaterialGraphNo();
+                    replaceMaterialNo = orderCheckMaterialDTO1.getMaterialGraphNo();
                     String replaceMaterialName = orderCheckMaterialDTO1.getMaterialName();
                     orderMaterial.setReplaceMaterialGraphNo(replaceMaterialNo);
                     orderMaterial.setReplaceMaterialName(replaceMaterialName);
@@ -914,9 +915,16 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     // 如果重新核料完成，料的状态是释放，需要重新扣减库存表
                     if (orderMaterialQuery.getCheckStatus() == CommonEnum.CheckMaterialStatus.RELEASE.code) {
                         if (lackMaterialCount > 0) {
-                            int lockCount = materialCount - lackMaterialCount;
-                            materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
-                            materialService.updateLockQuantity(materialGraphNo, lockCount);
+                            // 如果有替换料，也需要将替换料锁定（数量是缺少的数量）
+                            if (StringUtils.isNotBlank(replaceMaterialNo)) {
+                                materialService.updateCurrentQuantity(replaceMaterialNo, (-1) * lackMaterialCount);
+                                materialService.updateLockQuantity(replaceMaterialNo, lackMaterialCount);
+                            } else {
+                                // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
+                                int lockCount = materialCount - lackMaterialCount;
+                                materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
+                                materialService.updateLockQuantity(materialGraphNo, lockCount);
+                            }
                         } else {
                             materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
                             materialService.updateLockQuantity(materialGraphNo, materialCount);
@@ -924,11 +932,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     }
                 } else {
                     int insert = orderMaterialMapper.insertSelective(orderMaterial);
-                    // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
                     if (lackMaterialCount > 0) {
-                        int lockCount = materialCount - lackMaterialCount;
-                        materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
-                        materialService.updateLockQuantity(materialGraphNo, lockCount);
+                        // 如果有替换料，也需要将替换料锁定（数量是缺少的数量）
+                        if (StringUtils.isNotBlank(replaceMaterialNo)) {
+                            materialService.updateCurrentQuantity(replaceMaterialNo, (-1) * lackMaterialCount);
+                            materialService.updateLockQuantity(replaceMaterialNo, lackMaterialCount);
+                        } else {
+                            // 如果缺料，将需要的总量减去缺少的量，锁定部分零件。更新零件当前库存和锁定库存
+                            int lockCount = materialCount - lackMaterialCount;
+                            materialService.updateCurrentQuantity(materialGraphNo, (-1) * lockCount);
+                            materialService.updateLockQuantity(materialGraphNo, lockCount);
+                        }
                     } else {
                         materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
                         materialService.updateLockQuantity(materialGraphNo, materialCount);
@@ -995,6 +1009,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             orderMaterialDTOS.stream().forEach(e -> {
                 // 将核料状态改为【释放料】
                 String materialGraphNo = e.getMaterialGraphNo();
+                String replaceMaterialGraphNo = e.getReplaceMaterialGraphNo();
                 orderMaterialMapper.updateByExampleSelective(new OrderMaterial() {{
                     setCheckStatus(CommonEnum.CheckMaterialStatus.RELEASE.code);
                 }}, new OrderMaterialExample() {{
@@ -1002,8 +1017,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 }});
                 // 将原料表释放
                 int materialCount = e.getMaterialCount();
-                materialService.updateCurrentQuantity(materialGraphNo, materialCount);
-                materialService.updateLockQuantity(materialGraphNo, (-1) * materialCount);
+                if (StringUtils.isNotBlank(replaceMaterialGraphNo)) {
+                    materialService.updateCurrentQuantity(replaceMaterialGraphNo, materialCount);
+                    materialService.updateLockQuantity(replaceMaterialGraphNo, (-1) * materialCount);
+                } else {
+                    materialService.updateCurrentQuantity(materialGraphNo, materialCount);
+                    materialService.updateLockQuantity(materialGraphNo, (-1) * materialCount);
+                }
             });
         }
 
