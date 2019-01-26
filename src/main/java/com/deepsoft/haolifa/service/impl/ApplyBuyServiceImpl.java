@@ -116,7 +116,7 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
   @Override
   public ResultBean list(int pageNum, int pageSize, int status) {
     ApplyBuyExample example = new ApplyBuyExample();
-    if (status != 2) {
+    if (status != -1) {
       example.or().andStatusEqualTo((byte) status);
     }
     Page pageData = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> applyBuyMapper.selectByExample(example));
