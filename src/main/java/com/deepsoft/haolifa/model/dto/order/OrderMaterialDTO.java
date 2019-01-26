@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 @ApiModel
 public class OrderMaterialDTO {
 
+    @ApiModelProperty(value = "主键Id")
+    private Integer id;
     @ApiModelProperty(value = "订单编号")
     private String orderNo;
 

@@ -1087,10 +1087,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (model.getAuditResult() == CommonEnum.Consts.AUDIT_PASS.code) {
             // 更新状态为替换
             orderMaterial.setCheckStatus(CommonEnum.CheckMaterialStatus.REPLACE.code);
-            orderMaterial.setMaterialName(replaceMaterialName);
-            orderMaterial.setMaterialGraphNo(replaceMaterialGraphNo);
-            orderMaterial.setReplaceMaterialName(materialName);
-            orderMaterial.setReplaceMaterialGraphNo(materialGraphNo);
+//            orderMaterial.setMaterialName(replaceMaterialName);
+//            orderMaterial.setMaterialGraphNo(replaceMaterialGraphNo);
+//            orderMaterial.setReplaceMaterialName(materialName);
+//            orderMaterial.setReplaceMaterialGraphNo(materialGraphNo);
         }
         orderMaterialMapper.updateByPrimaryKeySelective(orderMaterial);
 
