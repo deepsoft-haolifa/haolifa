@@ -234,9 +234,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             workbook.write(outputStream);
             String extendFileUrl = QiniuUtil.uploadFile(outputStream.toByteArray(), System.currentTimeMillis() + "-noPrice-" + fileName);
             orderProductDTO.setOrderContractExtendUrl(extendFileUrl);
-            saveOrderProductInfo(orderProductDTO);
+            return saveOrderProductInfo(orderProductDTO);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("upload orderProduct excel exception|orderProduct:{}", JSONObject.toJSONString(orderProduct), e);
         }
         log.info("upload orderProduct excel end|orderProduct:{}", JSONObject.toJSONString(orderProduct));
         return ResultBean.success(null);
