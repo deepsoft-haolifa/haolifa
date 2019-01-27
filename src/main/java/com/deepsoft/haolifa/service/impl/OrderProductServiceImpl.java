@@ -313,7 +313,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(id);
             if (orderProduct != null) {
                 Byte orderStatus = orderProduct.getOrderStatus();
-                if (orderStatus != CommonEnum.OrderStatus.CREATE.code || orderStatus != CommonEnum.OrderStatus.AUDIT_ORDER_CLOSE.code) {
+                if (orderStatus != CommonEnum.OrderStatus.CREATE.code && orderStatus != CommonEnum.OrderStatus.AUDIT_ORDER_CLOSE.code) {
                     return ResultBean.error(CommonEnum.ResponseEnum.ORDER_STATUS_NOT_DELETE);
                 }
             }
