@@ -234,9 +234,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             workbook.write(outputStream);
             String extendFileUrl = QiniuUtil.uploadFile(outputStream.toByteArray(), System.currentTimeMillis() + "-noPrice-" + fileName);
             orderProductDTO.setOrderContractExtendUrl(extendFileUrl);
-            saveOrderProductInfo(orderProductDTO);
+            return saveOrderProductInfo(orderProductDTO);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("upload orderProduct excel exception|orderProduct:{}", JSONObject.toJSONString(orderProduct), e);
         }
         log.info("upload orderProduct excel end|orderProduct:{}", JSONObject.toJSONString(orderProduct));
         return ResultBean.success(null);
@@ -313,7 +313,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(id);
             if (orderProduct != null) {
                 Byte orderStatus = orderProduct.getOrderStatus();
-                if (orderStatus != CommonEnum.OrderStatus.CREATE.code || orderStatus != CommonEnum.OrderStatus.AUDIT_ORDER_CLOSE.code) {
+                if (orderStatus != CommonEnum.OrderStatus.CREATE.code && orderStatus != CommonEnum.OrderStatus.AUDIT_ORDER_CLOSE.code) {
                     return ResultBean.error(CommonEnum.ResponseEnum.ORDER_STATUS_NOT_DELETE);
                 }
             }
@@ -1087,10 +1087,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (model.getAuditResult() == CommonEnum.Consts.AUDIT_PASS.code) {
             // 更新状态为替换
             orderMaterial.setCheckStatus(CommonEnum.CheckMaterialStatus.REPLACE.code);
-            orderMaterial.setMaterialName(replaceMaterialName);
-            orderMaterial.setMaterialGraphNo(replaceMaterialGraphNo);
-            orderMaterial.setReplaceMaterialName(materialName);
-            orderMaterial.setReplaceMaterialGraphNo(materialGraphNo);
+//            orderMaterial.setMaterialName(replaceMaterialName);
+//            orderMaterial.setMaterialGraphNo(replaceMaterialGraphNo);
+//            orderMaterial.setReplaceMaterialName(materialName);
+//            orderMaterial.setReplaceMaterialGraphNo(materialGraphNo);
         }
         orderMaterialMapper.updateByPrimaryKeySelective(orderMaterial);
 
