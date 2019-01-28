@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.SupplierIsQualified;
 import com.deepsoft.haolifa.dao.repository.FlowHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
@@ -365,10 +366,37 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     FlowInstanceExample instanceExample = new FlowInstanceExample();
     instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte)0);
     List<FlowInstance> flowInstances = instanceMapper.selectByExample(instanceExample);
-    HistoryInfo historyInfo = new HistoryInfo();
-    historyInfo.setInstanceId(flowInstances.get(0).getId());
-    List<HistoryInfo> historyInfos = instanceHistoryMapper.selectInstanceHistory(historyInfo);
-    Collections.reverse(historyInfos);
-    return ResultBean.success(historyInfos);
+    if(flowInstances == null || flowInstances.size() == 0) {
+      return ResultBean.error(ResponseEnum.FLOW_INSTANCE_NOT_EXIST);
+    }
+    FlowInstance flowInstance = flowInstances.get(0);
+    FlowStepExample flowStepExample = new FlowStepExample();
+    flowStepExample.or().andFlowIdEqualTo(flowInstance.getFlowId());
+    List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
+    int preStepId = 0;
+    int childStepId = 0;
+    List<FlowProcesserDTO> flowProcesserDTOS = new ArrayList<>();
+    for (int i = 0; i < flowSteps.size(); i++) {
+      FlowStep flowStep = flowSteps.get(i);
+      if(childStepId>0 && flowStep.getStepId()==childStepId) {
+        continue;
+      }
+      FlowProcesserDTO processerDTO = new FlowProcesserDTO();
+      processerDTO.setInstanceId(flowInstance.getId());
+      processerDTO.setStepId(flowStep.getStepId());
+      if(flowStep.getPrevStepId() == preStepId) {
+        if(flowStep.getConditionFalse()>0) {
+          FlowProcesserDTO childDto = new FlowProcesserDTO();
+          childDto.setInstanceId(flowInstance.getId());
+          childDto.setStepId(flowStep.getConditionFalse());
+          childStepId = flowStep.getConditionFalse();
+          processerDTO.setChild(Arrays.asList(childDto));
+        }
+        flowProcesserDTOS.add(processerDTO);
+        preStepId = flowStep.getStepId();
+        continue;
+      }
+    }
+    return ResultBean.success(flowProcesserDTOS);
   }
 }

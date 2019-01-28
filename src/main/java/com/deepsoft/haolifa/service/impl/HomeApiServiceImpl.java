@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.dao.repository.SysRoleMapper;
 import com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper;
 import com.deepsoft.haolifa.model.domain.SysRoleExample;
 import com.deepsoft.haolifa.model.dto.CustomUser;
+import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.vo.QuickStartVO;
 import com.deepsoft.haolifa.model.vo.TodoItemVO;
@@ -57,5 +58,11 @@ public class HomeApiServiceImpl implements HomeApiService {
             userId = 0;
         }
         return flowInstanceHistoryMapper.selectToDoItems(userId);
+    }
+
+    @Override
+    public ResultBean getDoneItems() {
+        CustomUser customUser = userService.selectLoginUser();
+        return ResultBean.success(flowInstanceHistoryMapper.selectDoneItems(customUser.getId()));
     }
 }
