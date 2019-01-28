@@ -2,6 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper">
 
+		<select id="selectHistoryDetails" resultType="com.deepsoft.haolifa.model.dto.HistoryInfo">
+			SELECT
+			fh.id historyId,
+			fh.instance_id instanceId,
+			fh.step_id stepId,
+			fh.audit_user_id auditUserId,
+			fh.audit_info auditInfo,
+			fh.allot_user_id allotUserId,
+			fh.audit_result auditResult,
+			fh.form_type formType,
+			fh.form_id formId,
+			fh.form_no formNo,
+			fh.create_time createTime,
+			fh.accessory accessory,
+			s.`name` stepName,
+			s.description description,
+			su.real_name auditUserName
+			FROM
+			flow_history fh
+			LEFT JOIN step s ON s.id = fh.step_id
+			LEFT JOIN sys_user su ON su.id = fh.audit_user_id
+			<where>
+				<if test="instanceId != null and instanceId != ''">
+					and fh.instance_id = #{instanceId}
+				</if>
+				<if test="stepId != null and stepId != ''">
+					and fh.step_id =#{stepId}
+				</if>
+			</where>
+			order by fh.create_time desc
+			limit 1
+		</select>
+
     <select id="selectInstanceHistory" parameterType="com.deepsoft.haolifa.model.dto.HistoryInfo"
             resultType="com.deepsoft.haolifa.model.dto.HistoryInfo">
         SELECT

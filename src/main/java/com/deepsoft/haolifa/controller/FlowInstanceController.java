@@ -43,7 +43,7 @@ public class FlowInstanceController {
     }
 
     @GetMapping("flow/progress")
-    @ApiOperation("获取流程审批的进度信息")
+    @ApiOperation("获取流程审批的进度信息，返回list 是节点审核顺序")
     public ResultBean flowProgress(@RequestParam String formNo) {
         return flowInstanceService.flowProgress(formNo);
     }

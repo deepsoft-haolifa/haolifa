@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.dao.repository.FlowHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
 import com.deepsoft.haolifa.dao.repository.FlowStepMapper;
 import com.deepsoft.haolifa.dao.repository.StepMapper;
+import com.deepsoft.haolifa.dao.repository.SysRoleMapper;
 import com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
@@ -17,6 +18,8 @@ import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SupplierService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   private PurcahseOrderService purcahseOrderService;
   @Autowired
   private OrderProductService orderProductService;
+
+  @Autowired
+  private SysRoleMapper sysRoleMapper;
 
   @Override
   public ResultBean create(FlowInstanceDTO model) {
@@ -374,28 +380,54 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     flowStepExample.or().andFlowIdEqualTo(flowInstance.getFlowId());
     List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
     int preStepId = 0;
-    int childStepId = 0;
+    List<Integer> existStepId = new ArrayList<>();
     List<FlowProcesserDTO> flowProcesserDTOS = new ArrayList<>();
+    Map<Integer,List<FlowStep>> map = flowSteps.stream().collect(Collectors.groupingBy(FlowStep::getStepId));
     for (int i = 0; i < flowSteps.size(); i++) {
       FlowStep flowStep = flowSteps.get(i);
-      if(childStepId>0 && flowStep.getStepId()==childStepId) {
+      if(existStepId.contains(flowStep.getStepId())) {
         continue;
       }
       FlowProcesserDTO processerDTO = new FlowProcesserDTO();
       processerDTO.setInstanceId(flowInstance.getId());
       processerDTO.setStepId(flowStep.getStepId());
+      processerDTO.setAuditResult(4);// 初始化 未审核
+      processerDTO.setRoleId(flowStep.getRoleId());
+      processerDTO.setChild(new ArrayList<>());
+      existStepId.add(flowStep.getStepId());
       if(flowStep.getPrevStepId() == preStepId) {
         if(flowStep.getConditionFalse()>0) {
           FlowProcesserDTO childDto = new FlowProcesserDTO();
           childDto.setInstanceId(flowInstance.getId());
           childDto.setStepId(flowStep.getConditionFalse());
-          childStepId = flowStep.getConditionFalse();
+          childDto.setAuditResult(4);// 初始化 未审核
+          childDto.setRoleId(map.get(flowStep.getConditionFalse()).get(0).getRoleId());
           processerDTO.setChild(Arrays.asList(childDto));
+          existStepId.add(flowStep.getConditionFalse());
         }
         flowProcesserDTOS.add(processerDTO);
         preStepId = flowStep.getStepId();
         continue;
       }
+    }
+    boolean isAudit = true;
+    for (int i = 0; i < flowProcesserDTOS.size(); i++) {
+      FlowProcesserDTO processerDTO = flowProcesserDTOS.get(i);
+      Integer stepId = processerDTO.getStepId();
+      if(stepId == flowInstance.getCurrentStepId()) {
+        isAudit = false;
+      }
+      if(isAudit) {
+        HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, flowInstance.getId());
+        processerDTO.setAuditUserName(historyInfo.getAuditUserName());
+        processerDTO.setAuditResult(historyInfo.getAuditResult());
+      } else {
+        processerDTO.setAuditUserName("");
+      }
+      SysRole sysRole = sysRoleMapper.selectByPrimaryKey(processerDTO.getRoleId());
+      processerDTO.setRoleName(sysRole.getDescription());
+      Step step = stepMapper.selectByPrimaryKey(stepId);
+      processerDTO.setStepName(step.getName());
     }
     return ResultBean.success(flowProcesserDTOS);
   }

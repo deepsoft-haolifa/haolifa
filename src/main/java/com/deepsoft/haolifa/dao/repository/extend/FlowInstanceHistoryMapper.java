@@ -27,4 +27,6 @@ public interface FlowInstanceHistoryMapper {
     FlowStep selectFlowStepByStepId(@Param("flowId") Integer flowId, @Param("stepId") Integer currentStepId);
 
     List<DoneItemVO> selectDoneItems(@Param("userId") Integer userId);
+
+    HistoryInfo selectHistoryDetails(@Param("stepId") Integer stepId, @Param("instanceId") Integer instanceId);
 }
