@@ -6,14 +6,18 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
+import com.deepsoft.haolifa.util.DateFormatterUtils;
+import com.deepsoft.haolifa.util.UpperMoney;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -80,6 +84,8 @@ public class ExportExcelController {
     sheet.setDefaultColumnStyle(11,border);
 
 
+    CellStyle cellStyle=workbook.createCellStyle();
+    cellStyle.setWrapText(true);
 
     int rowIdx = 0;
     Row rowTitle = sheet.createRow(rowIdx);
@@ -112,7 +118,12 @@ public class ExportExcelController {
     CellRangeAddress cra5 = new CellRangeAddress(rowIdx,rowIdx,6,11);
     sheet.addMergedRegion(cra5);
     Cell cell12  = row1.createCell(6);
-    cell12.setCellValue("下单日期："+orderExDTO.getCreateTime());
+    Date createTime = orderExDTO.getCreateTime();
+    String createDateValue = "";
+    if(createTime != null) {
+      createDateValue = DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, createTime);
+    }
+    cell12.setCellValue("下单日期："+createDateValue);
 
     Row row2 = sheet.createRow(++rowIdx);
     CellRangeAddress cra6 = new CellRangeAddress(rowIdx,rowIdx,0,5);
@@ -237,21 +248,27 @@ public class ExportExcelController {
     sheet.addMergedRegion(cra16);
     Cell cell81 = row8.createCell(0);
     cell81.setCellValue("人民币大写");
-    Cell cell82 = row8.createCell(6);
-    cell82.setCellValue("");
-
+    Cell cell82 = row8.createCell(10);
+    cell82.setCellValue(UpperMoney.upper(String.valueOf(orderExDTO.getTotalAmount())));
     Row row9 = sheet.createRow(++rowIdx);
     CellRangeAddress cra17 = new CellRangeAddress(rowIdx,rowIdx,0,11);
     sheet.addMergedRegion(cra17);
+    row9.setHeightInPoints(35);
     Cell cell91 = row9.createCell(0);
-    cell91.setCellValue("1、交货日期："+orderExDTO.getDeliveryTime()+"。供方须严格按交期交货，如需调整日期，须及时知会本公司并经本公司批准，否则延误交货须扣除该批货款10%。");
-
+    Date deliveryTime = orderExDTO.getDeliveryTime();
+    String dateValue = "";
+    if(deliveryTime != null) {
+      dateValue = DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, deliveryTime);
+    }
+    cell91.setCellValue("1、交货日期："+dateValue+"。供方须严格按交期交货，如需调整日期，须及时知会本公司并经本公司批准，否则延误交货须扣除该批货款10%。");
+    cell91.setCellStyle(cellStyle);
     Row row10 = sheet.createRow(++rowIdx);
     CellRangeAddress cra18 = new CellRangeAddress(rowIdx,rowIdx,0,11);
     sheet.addMergedRegion(cra18);
+    row10.setHeightInPoints(35);
     Cell cell101 = row10.createCell(0);
     cell101.setCellValue("2、品质：供方所供产品，应完全依照本公司提供的图纸及相关标准制造，本公司将依照同一标准抽样检查，拒收未经技术管理中心确认的任何来货；");
-
+    cell101.setCellStyle(cellStyle);
     Row row11 = sheet.createRow(++rowIdx);
     CellRangeAddress cra19 = new CellRangeAddress(rowIdx,rowIdx,0,11);
     sheet.addMergedRegion(cra19);
@@ -263,25 +280,26 @@ public class ExportExcelController {
     sheet.addMergedRegion(cra20);
     Cell cell121 = row12.createCell(0);
     cell121.setCellValue("4、付款条件：交货验收合格后，本公司于收到发票之日起60日内结清货款，每月25日以后交付货品拨归次月账项，请于本月30日前将对账单快递至本公司采购部，逾期送单将延至次月对账；");
-
+    cell121.setCellStyle(cellStyle);
+    row12.setHeightInPoints(55);
     Row row13 = sheet.createRow(++rowIdx);
     CellRangeAddress cra21 = new CellRangeAddress(rowIdx,rowIdx,0,11);
     sheet.addMergedRegion(cra21);
     Cell cell131 = row13.createCell(0);
     cell131.setCellValue("5、送货单须规范注明订单编号、产品名称、规格等，同时要注明欠货数量及补货日期；");
-
+    cell131.setCellStyle(cellStyle);
     Row row14 = sheet.createRow(++rowIdx);
     CellRangeAddress cra22 = new CellRangeAddress(rowIdx,rowIdx,0,11);
     sheet.addMergedRegion(cra22);
     Cell cell141 = row14.createCell(0);
     cell141.setCellValue("6、送货时须附上相应的“机械性能报告”、“材质证明书”等相关证明；");
-
+    cell141.setCellStyle(cellStyle);
     Row row15 = sheet.createRow(++rowIdx);
     CellRangeAddress cra23 = new CellRangeAddress(rowIdx,rowIdx,0,11);
     sheet.addMergedRegion(cra23);
     Cell cell151 = row15.createCell(0);
     cell151.setCellValue("7、如因来料品质不符或因交期延误，致使需方蒙受损失，责任全部由供方承担；");
-
+    cell151.setCellStyle(cellStyle);
     Row row16 = sheet.createRow(++rowIdx);
     CellRangeAddress cra24 = new CellRangeAddress(rowIdx,rowIdx,0,11);
     sheet.addMergedRegion(cra24);
@@ -299,7 +317,7 @@ public class ExportExcelController {
     sheet.addMergedRegion(cra28);
     Cell cell171= row17.createCell(0);
     Cell cell172= row17.createCell(3);
-    Cell cell173= row17.createCell(6);
+    Cell cell173= row17.createCell(7);
     Cell cell174= row17.createCell(10);
     cell171.setCellValue("供方确认：");
     cell172.setCellValue("批准：");

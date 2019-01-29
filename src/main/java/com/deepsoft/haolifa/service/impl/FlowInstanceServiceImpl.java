@@ -402,6 +402,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           childDto.setStepId(flowStep.getConditionFalse());
           childDto.setAuditResult(4);// 初始化 未审核
           childDto.setRoleId(map.get(flowStep.getConditionFalse()).get(0).getRoleId());
+          childDto.setChild(new ArrayList<>());
           processerDTO.setChild(Arrays.asList(childDto));
           existStepId.add(flowStep.getConditionFalse());
         }
@@ -413,22 +414,30 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     boolean isAudit = true;
     for (int i = 0; i < flowProcesserDTOS.size(); i++) {
       FlowProcesserDTO processerDTO = flowProcesserDTOS.get(i);
-      Integer stepId = processerDTO.getStepId();
-      if(stepId == flowInstance.getCurrentStepId()) {
-        isAudit = false;
-      }
-      if(isAudit) {
-        HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, flowInstance.getId());
-        processerDTO.setAuditUserName(historyInfo.getAuditUserName());
-        processerDTO.setAuditResult(historyInfo.getAuditResult());
-      } else {
-        processerDTO.setAuditUserName("");
-      }
-      SysRole sysRole = sysRoleMapper.selectByPrimaryKey(processerDTO.getRoleId());
-      processerDTO.setRoleName(sysRole.getDescription());
-      Step step = stepMapper.selectByPrimaryKey(stepId);
-      processerDTO.setStepName(step.getName());
+      isAudit = wrapperProcessDto(processerDTO, flowInstance.getCurrentStepId(), isAudit, flowInstance.getId());
     }
     return ResultBean.success(flowProcesserDTOS);
+  }
+
+  private boolean wrapperProcessDto(FlowProcesserDTO processerDTO, int currentStepId, boolean isAudit, int instanceId) {
+    int stepId = processerDTO.getStepId();
+    if(stepId == currentStepId) {
+      isAudit = false;
+    }
+    if(isAudit) {
+      HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, instanceId);
+      processerDTO.setAuditUserName(historyInfo.getAuditUserName());
+      processerDTO.setAuditResult(historyInfo.getAuditResult());
+    } else {
+      processerDTO.setAuditUserName("");
+    }
+    SysRole sysRole = sysRoleMapper.selectByPrimaryKey(processerDTO.getRoleId());
+    processerDTO.setRoleName(sysRole.getDescription());
+    Step step = stepMapper.selectByPrimaryKey(stepId);
+    processerDTO.setStepName(step.getName());
+    if(processerDTO.getChild() != null && processerDTO.getChild().size()>0) {
+      wrapperProcessDto(processerDTO.getChild().get(0), currentStepId, isAudit, instanceId);
+    }
+    return isAudit;
   }
 }
