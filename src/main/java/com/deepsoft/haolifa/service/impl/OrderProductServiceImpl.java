@@ -961,7 +961,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
                                 flowInstanceDTO.setFormId(id);
                                 flowInstanceDTO.setFlowId(4);
-                                flowInstanceDTO.setFormNo(orderNo);
+                                flowInstanceDTO.setFormNo("");
                                 flowInstanceDTO.setFormType(10);
                                 flowInstanceDTO.setSummary("核料过程中-替换料表单");
                                 flowInstanceService.create(flowInstanceDTO);
