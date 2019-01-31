@@ -2,10 +2,13 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
 import com.deepsoft.haolifa.dao.repository.SupplierEvaluationRecordMapper;
 import com.deepsoft.haolifa.dao.repository.SupplierMapper;
+import com.deepsoft.haolifa.model.domain.FlowInstance;
 import com.deepsoft.haolifa.model.domain.Supplier;
 import com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord;
+import com.deepsoft.haolifa.model.domain.SupplierEvaluationRecordExample;
 import com.deepsoft.haolifa.model.domain.SupplierExample;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -39,6 +42,8 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
   SupplierEvaluationRecordMapper evaluationRecordMapper;
   @Autowired
   FlowInstanceService instanceService;
+  @Autowired
+  FlowInstanceMapper flowInstanceMapper;
 
   @Override
   public ResultBean saveInfo(SupplierRequestDTO model) {
@@ -141,14 +146,6 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     SupplierExample example = new SupplierExample();
     example.createCriteria().andSuppilerNoEqualTo(supplierNo);
     supplierMapper.updateByExampleSelective(supplier, example);
-    // 添加记录
-    SupplierEvaluationRecord evaluationRecord = new SupplierEvaluationRecord();
-    evaluationRecord.setCreateData(new Date());
-    evaluationRecord.setAuditResult((byte) 0);
-    evaluationRecord.setSupplierFile("");
-    evaluationRecord.setAccessory("");
-    evaluationRecord.setSupplierNo(supplierNo);
-    evaluationRecordMapper.insertSelective(evaluationRecord);
     // 添加流程
     FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
     flowInstanceDTO.setFormId(0);
@@ -161,12 +158,28 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
   }
 
   @Override
-  public void updateSupplierStatus(String supplierNo, Integer status) {
+  public void updateSupplierStatus(String supplierNo, Integer status, Integer instanceId) {
     SupplierExample example = new SupplierExample();
     example.createCriteria().andSuppilerNoEqualTo(supplierNo);
     Supplier supplier = new Supplier();
     supplier.setIsQualified(status.byteValue());
     supplierMapper.updateByExampleSelective(supplier, example);
+    // 将审批过程中的附件存到审批记录表
+    FlowInstance flowInstance = flowInstanceMapper.selectByPrimaryKey(instanceId);
+    SupplierEvaluationRecord record = new SupplierEvaluationRecord();
+    record.setSupplierNo(supplierNo);
+    record.setAccessory(flowInstance.getAccessory());
+    record.setCreateData(flowInstance.getCreateTime());
+    record.setUpdateDate(flowInstance.getUpdateTime());
+    record.setAuditResult(status.byteValue());
+    evaluationRecordMapper.insertSelective(record);
+  }
+
+  @Override
+  public ResultBean evaluationRecords(String supplierNo) {
+    SupplierEvaluationRecordExample example = new SupplierEvaluationRecordExample();
+    example.or().andSupplierNoEqualTo(supplierNo);
+    return ResultBean.success(evaluationRecordMapper.selectByExample(example));
   }
 }
 
