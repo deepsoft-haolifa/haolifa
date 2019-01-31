@@ -3,11 +3,13 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.SupplierIsQualified;
 import com.deepsoft.haolifa.dao.repository.FlowHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
 import com.deepsoft.haolifa.dao.repository.FlowStepMapper;
 import com.deepsoft.haolifa.dao.repository.StepMapper;
+import com.deepsoft.haolifa.dao.repository.SysRoleMapper;
 import com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
@@ -16,6 +18,8 @@ import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SupplierService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +55,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   private PurcahseOrderService purcahseOrderService;
   @Autowired
   private OrderProductService orderProductService;
+
+  @Autowired
+  private SysRoleMapper sysRoleMapper;
 
   @Override
   public ResultBean create(FlowInstanceDTO model) {
@@ -145,7 +152,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       updateInstance.setIsOver(CommonEnum.Consts.YES.code);
       // 更新 业务表单状态
       updateFormStatus(flowInstance.getFlowId(), flowInstance.getFormNo(), flowInstance.getFormId(),
-          model.getAuditResult());
+          model.getAuditResult(), flowInstance.getId());
     } else {
       if (model.getAuditResult() == 1) {
         // 通过
@@ -157,7 +164,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           updateInstance.setIsOver(CommonEnum.Consts.YES.code);
           // 更新 业务表单状态
           updateFormStatus(flowInstance.getFlowId(), flowInstance.getFormNo(), flowInstance.getFormId(),
-              model.getAuditResult());
+              model.getAuditResult(), flowInstance.getId());
         } else {
           // 流程实例更新
           // 获取孩子节点
@@ -215,7 +222,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   /**
    * 更新业务审批状态： 生产，采购，替换料，供应商
    */
-  private void updateFormStatus(Integer flowId, String formNo, Integer formId, Integer auditRes) {
+  private void updateFormStatus(Integer flowId, String formNo, Integer formId, Integer auditRes, Integer instanceId) {
     switch (flowId) {
       case 1:
         // 生产
@@ -242,10 +249,10 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         // 供应商审批
         if (auditRes == 1) {
           // 审核通过
-          supplierService.updateSupplierStatus(formNo, 1);
+          supplierService.updateSupplierStatus(formNo, 1, instanceId);
         } else if (auditRes == 0) {
           // 审核不通过
-          supplierService.updateSupplierStatus(formNo, 2);
+          supplierService.updateSupplierStatus(formNo, 2, instanceId);
         }
         break;
       case 4:
@@ -361,14 +368,80 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   }
 
   @Override
-  public ResultBean flowProgress(String formNo) {
+  public ResultBean flowProgress(String formNo, Integer formId) {
     FlowInstanceExample instanceExample = new FlowInstanceExample();
-    instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte)0);
+    if(formId > 0) {
+      instanceExample.or().andFormIdEqualTo(formId).andFlowIdEqualTo(4).andIsOverEqualTo((byte)0);
+    } else {
+      instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte)0);
+    }
     List<FlowInstance> flowInstances = instanceMapper.selectByExample(instanceExample);
-    HistoryInfo historyInfo = new HistoryInfo();
-    historyInfo.setInstanceId(flowInstances.get(0).getId());
-    List<HistoryInfo> historyInfos = instanceHistoryMapper.selectInstanceHistory(historyInfo);
-    Collections.reverse(historyInfos);
-    return ResultBean.success(historyInfos);
+    if(flowInstances == null || flowInstances.size() == 0) {
+      return ResultBean.error(ResponseEnum.FLOW_INSTANCE_NOT_EXIST);
+    }
+    FlowInstance flowInstance = flowInstances.get(0);
+    FlowStepExample flowStepExample = new FlowStepExample();
+    flowStepExample.or().andFlowIdEqualTo(flowInstance.getFlowId());
+    List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
+    int preStepId = 0;
+    List<Integer> existStepId = new ArrayList<>();
+    List<FlowProcesserDTO> flowProcesserDTOS = new ArrayList<>();
+    Map<Integer,List<FlowStep>> map = flowSteps.stream().collect(Collectors.groupingBy(FlowStep::getStepId));
+    for (int i = 0; i < flowSteps.size(); i++) {
+      FlowStep flowStep = flowSteps.get(i);
+      if(existStepId.contains(flowStep.getStepId())) {
+        continue;
+      }
+      FlowProcesserDTO processerDTO = new FlowProcesserDTO();
+      processerDTO.setInstanceId(flowInstance.getId());
+      processerDTO.setStepId(flowStep.getStepId());
+      processerDTO.setAuditResult(4);// 初始化 未审核
+      processerDTO.setRoleId(flowStep.getRoleId());
+      processerDTO.setChild(new ArrayList<>());
+      existStepId.add(flowStep.getStepId());
+      if(flowStep.getPrevStepId() == preStepId) {
+        if(flowStep.getConditionFalse()>0) {
+          FlowProcesserDTO childDto = new FlowProcesserDTO();
+          childDto.setInstanceId(flowInstance.getId());
+          childDto.setStepId(flowStep.getConditionFalse());
+          childDto.setAuditResult(4);// 初始化 未审核
+          childDto.setRoleId(map.get(flowStep.getConditionFalse()).get(0).getRoleId());
+          childDto.setChild(new ArrayList<>());
+          processerDTO.setChild(Arrays.asList(childDto));
+          existStepId.add(flowStep.getConditionFalse());
+        }
+        flowProcesserDTOS.add(processerDTO);
+        preStepId = flowStep.getStepId();
+        continue;
+      }
+    }
+    boolean isAudit = true;
+    for (int i = 0; i < flowProcesserDTOS.size(); i++) {
+      FlowProcesserDTO processerDTO = flowProcesserDTOS.get(i);
+      isAudit = wrapperProcessDto(processerDTO, flowInstance.getCurrentStepId(), isAudit, flowInstance.getId());
+    }
+    return ResultBean.success(flowProcesserDTOS);
+  }
+
+  private boolean wrapperProcessDto(FlowProcesserDTO processerDTO, int currentStepId, boolean isAudit, int instanceId) {
+    int stepId = processerDTO.getStepId();
+    if(stepId == currentStepId) {
+      isAudit = false;
+    }
+    if(isAudit) {
+      HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, instanceId);
+      processerDTO.setAuditUserName(historyInfo.getAuditUserName());
+      processerDTO.setAuditResult(historyInfo.getAuditResult());
+    } else {
+      processerDTO.setAuditUserName("");
+    }
+    SysRole sysRole = sysRoleMapper.selectByPrimaryKey(processerDTO.getRoleId());
+    processerDTO.setRoleName(sysRole.getDescription());
+    Step step = stepMapper.selectByPrimaryKey(stepId);
+    processerDTO.setStepName(step.getName());
+    if(processerDTO.getChild() != null && processerDTO.getChild().size()>0) {
+      wrapperProcessDto(processerDTO.getChild().get(0), currentStepId, isAudit, instanceId);
+    }
+    return isAudit;
   }
 }

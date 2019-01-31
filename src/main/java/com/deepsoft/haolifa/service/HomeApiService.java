@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.vo.QuickStartVO;
 import com.deepsoft.haolifa.model.vo.TodoItemVO;
 
@@ -11,4 +12,5 @@ public interface HomeApiService {
 
     List<TodoItemVO> getTodoItems();
 
+  ResultBean getDoneItems();
 }

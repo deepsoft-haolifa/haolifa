@@ -36,5 +36,10 @@ public class HomeController {
         return ResultBean.success(roleService.getBuyers());
     }
 
+    @ApiOperation("已办事项")
+    @GetMapping("/done")
+    public ResultBean getDoneItems() {
+        return homeApiService.getDoneItems();
+    }
 
 }

@@ -90,4 +90,12 @@ public class SupplierController {
         return supplierService.approve(supplierNo);
     }
 
+    @GetMapping("/evaluation/records")
+    @ApiOperation("供应商合格审批记录")
+    public ResultBean evaluationRecords(@RequestParam String supplierNo) {
+        return supplierService.evaluationRecords(supplierNo);
+    }
+
+
+
 }

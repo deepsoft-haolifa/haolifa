@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.domain.SysPermissionExample;
 import com.deepsoft.haolifa.model.domain.SysRole;
 import com.deepsoft.haolifa.model.domain.SysRoleExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
+import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.sys.DepartmentTree;
 import com.deepsoft.haolifa.model.vo.UserPageVO;

@@ -22,6 +22,7 @@
         m.specifications,
         m.unit,
         m.price,
+        o.id as id,
         o.material_count AS materialCount,
         o.audit_result AS auditResult,
         o.order_no As orderNo,

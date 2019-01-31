@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.domain.FlowInstanceWrapper;
 import com.deepsoft.haolifa.model.domain.FlowStep;
 import com.deepsoft.haolifa.model.dto.BackStepDTO;
 import com.deepsoft.haolifa.model.dto.HistoryInfo;
+import com.deepsoft.haolifa.model.vo.DoneItemVO;
 import com.deepsoft.haolifa.model.vo.QuickStartVO;
 import com.deepsoft.haolifa.model.vo.TodoItemVO;
 import org.apache.ibatis.annotations.Param;
@@ -24,4 +25,8 @@ public interface FlowInstanceHistoryMapper {
     List<TodoItemVO> selectToDoItems(@Param("userId")Integer userId);
 
     FlowStep selectFlowStepByStepId(@Param("flowId") Integer flowId, @Param("stepId") Integer currentStepId);
+
+    List<DoneItemVO> selectDoneItems(@Param("userId") Integer userId);
+
+    HistoryInfo selectHistoryDetails(@Param("stepId") Integer stepId, @Param("instanceId") Integer instanceId);
 }
