@@ -295,7 +295,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (StringUtils.isNotBlank(orderUpdateDTO.getAssemblyGroup())) {
             record.setAssemblyGroup(orderUpdateDTO.getAssemblyGroup());
         }
-
+        if (StringUtils.isNotBlank(orderUpdateDTO.getDeliveryDate())) {
+            record.setDeliveryDate(orderUpdateDTO.getDeliveryDate());
+        }
         OrderProductExample example = new OrderProductExample();
         example.or().andOrderNoEqualTo(orderNo);
         int update = orderProductMapper.updateByExampleSelective(record, example);

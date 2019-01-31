@@ -30,8 +30,10 @@ public class OrderProductDTO {
     private String feedbackTimeConfirmUser;
     @ApiModelProperty(value = "采购反馈时间")
     private String purchaseFeedbackTime;
-    @ApiModelProperty(value = "生产反馈时间")
-    private String productionFeedbackTime;
+//    @ApiModelProperty(value = "生产反馈时间")
+//    private String productionFeedbackTime;
+    @ApiModelProperty(value = "发货时间")
+    private String deliveryDate;
     //    @ApiModelProperty(value = "需求方名称")
 //    private String demandName;
 //    @ApiModelProperty(value = "需求方代理人")

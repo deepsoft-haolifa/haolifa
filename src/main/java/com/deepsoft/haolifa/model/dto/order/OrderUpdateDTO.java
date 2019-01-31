@@ -19,7 +19,8 @@ public class OrderUpdateDTO {
 
     @ApiModelProperty(value = "技术清单")
     private String technicalRequire;
-
+    @ApiModelProperty(value = "发货时间")
+    private String deliveryDate;
     @ApiModelProperty(value = "完成时间")
     private String finishFeedbackTime;
 
