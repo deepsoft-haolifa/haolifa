@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.cache.CacheKeyManager;
 import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.CheckMaterialLogMapper;
 import com.deepsoft.haolifa.dao.repository.OrderMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
@@ -1006,7 +1007,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 获取核料清单
         List<OrderMaterialDTO> orderMaterialDTOS = listOrderMaterial(orderNo);
         if (null != orderMaterialDTOS && orderMaterialDTOS.size() > 0) {
-            orderMaterialDTOS.stream().forEach(e -> {
+            orderMaterialDTOS.stream().filter(e -> e.getCheckStatus() != CommonEnum.CheckMaterialStatus.RELEASE.code).forEach(e -> {
                 // 将核料状态改为【释放料】
                 String materialGraphNo = e.getMaterialGraphNo();
                 String replaceMaterialGraphNo = e.getReplaceMaterialGraphNo();
@@ -1036,7 +1037,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Override
     public List<OrderMaterialDTO> listOrderMaterial(String orderNo) {
         if (StringUtils.isNotBlank(orderNo)) {
-            return orderExtendMapper.listOrderMaterial(orderNo);
+            List<OrderMaterialDTO> orderMaterialDTOS = orderExtendMapper.listOrderMaterial(orderNo);
+            if (null != orderMaterialDTOS && orderMaterialDTOS.size() > 0) {
+                return orderMaterialDTOS.stream().filter(e -> e.getCheckStatus() != CommonEnum.CheckMaterialStatus.RELEASE.code).collect(Collectors.toList());
+            }
         }
         return null;
     }
