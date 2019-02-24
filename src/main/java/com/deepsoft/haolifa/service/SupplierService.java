@@ -39,5 +39,7 @@ public interface SupplierService {
 
   ResultBean approve(String supplierNo);
 
-  void updateSupplierStatus(String supplierNo,Integer status);
+  void updateSupplierStatus(String supplierNo,Integer status, Integer instanceId);
+
+  ResultBean evaluationRecords(String supplierNo);
 }
