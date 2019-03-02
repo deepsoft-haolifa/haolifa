@@ -23,62 +23,69 @@ public class UserController {
     private SysUserService userService;
 
 
-
     @GetMapping("")
     @ApiOperation("获取用户列表")
     public ResultBean users(@RequestParam(name = "pageNum", defaultValue = "1")
-                            Integer pageNum,
+                                    Integer pageNum,
                             @RequestParam(name = "pageSize", defaultValue = "10")
-                            Integer pageSize){
+                                    Integer pageSize) {
         return ResultBean.success(userService.getUserList(pageNum, pageSize));
     }
 
     @GetMapping("/{id}")
     @ApiOperation("获取单个用户")
-    public ResultBean getUser(@PathVariable("id") Integer id){
+    public ResultBean getUser(@PathVariable("id") Integer id) {
         return ResultBean.success(userService.getSysUser(id));
     }
 
 
     @PostMapping("")
     @ApiOperation("添加员工")
-    public ResultBean user(@RequestBody UserBaseDTO userBase){
+    public ResultBean user(@RequestBody UserBaseDTO userBase) {
         return ResultBean.success(userService.insertSysUser(userBase));
     }
 
 
     @PutMapping("")
     @ApiOperation("修改用户")
-    public ResultBean updateUser(@RequestBody UserBaseDTO userBase){
+    public ResultBean updateUser(@RequestBody UserBaseDTO userBase) {
         return ResultBean.success(userService.updateSysUser(userBase));
     }
 
     @PutMapping("/{id}/pwd")
     @ApiOperation("重置用户密码")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResultBean initUserPwd(@PathVariable("id") Integer id){
+    public ResultBean initUserPwd(@PathVariable("id") Integer id) {
         return ResultBean.success(userService.initPwd(id));
+    }
+
+
+    @PutMapping("/{id}/changePwd")
+    @ApiOperation("修改用户密码")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResultBean changeUserPwd(@PathVariable("id") Integer id, @RequestParam("newPassword") String newPassword) {
+        return ResultBean.success(userService.changePwd(id, newPassword));
     }
 
 
     @DeleteMapping("/{id}")
     @ApiOperation("删除用户")
-    public ResultBean deleteUser(@PathVariable("id") Integer id){
+    public ResultBean deleteUser(@PathVariable("id") Integer id) {
         return ResultBean.success(userService.deleteSysUser(id));
     }
 
 
     @PutMapping("/{id}")
     @ApiOperation("禁用/启用用户")
-    public ResultBean closeUser(@PathVariable("id") Integer id){
+    public ResultBean closeUser(@PathVariable("id") Integer id) {
         return ResultBean.success(userService.closeUser(id));
     }
 
 
     @PostMapping("/{userId}/role")
     @ApiOperation("给用户分配角色")
-    public ResultBean insertUserRole(@PathVariable("userId")Integer userId, @RequestBody Integer[] roleIds){
-       return ResultBean.success(userService.insertUserRole(userId, roleIds));
+    public ResultBean insertUserRole(@PathVariable("userId") Integer userId, @RequestBody Integer[] roleIds) {
+        return ResultBean.success(userService.insertUserRole(userId, roleIds));
     }
 
 }

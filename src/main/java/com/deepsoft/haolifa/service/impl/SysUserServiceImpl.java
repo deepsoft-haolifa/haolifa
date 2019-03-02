@@ -171,4 +171,13 @@ public class SysUserServiceImpl implements SysUserService {
         updateSysUser(userBaseDTO);
         return DEFAULT_PASSWORD;
     }
+
+    @Override
+    public String changePwd(Integer id, String newPassword) {
+        UserBaseDTO userBaseDTO = new UserBaseDTO();
+        userBaseDTO.setId(id);
+        userBaseDTO.setPassword(passwordEncoder.encode(newPassword));
+        updateSysUser(userBaseDTO);
+        return newPassword;
+    }
 }
