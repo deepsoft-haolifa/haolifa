@@ -8,6 +8,10 @@ import lombok.Data;
 @ApiModel("申请发票实体")
 public class InvoiceCreateDTO {
 
+  private Integer id;
+
+  private String invoiceNo;
+
   @ApiModelProperty(required = true, value = "合同编号")
   private String orderNo;
 

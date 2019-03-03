@@ -30,6 +30,8 @@ public interface RedisDao {
 
     void expire(String key, long second);
 
+    void expire(String key,TimeUnit timeUnit, long duration);
+
     Long ttl(String key);
 
     Object hget(String key, String field);

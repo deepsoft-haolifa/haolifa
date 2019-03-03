@@ -1,5 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
+import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
+
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.Consts;
 import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
@@ -49,6 +52,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     } else {
       entrust.setStatus((byte) 1);
     }
+    entrust.setBatchNumber(createSerialNumber(BATCH_NUMBER_PREFIX_PC, BATCH_NUM_KEY));
     entrustMapper.insertSelective(entrust);
     if (model.getActionType() == 2) {
       FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();

@@ -5,8 +5,10 @@ import com.deepsoft.haolifa.service.HomeApiService;
 import com.deepsoft.haolifa.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,8 +28,10 @@ public class HomeController {
 
     @ApiOperation("待办事项")
     @GetMapping("/todo")
-    public ResultBean getTodoItems(){
-        return ResultBean.success(homeApiService.getTodoItems());
+    public ResultBean getTodoItems(
+        @ApiParam(required = true,value = "页码，默认1") @RequestParam(defaultValue = "1") Integer pageNum,
+        @ApiParam(required = true,value = "展示数量，默认10") @RequestParam(defaultValue = "10")Integer pageSize){
+        return homeApiService.getTodoItems(pageNum, pageSize);
     }
 
     @ApiOperation("采购员列表")
@@ -38,8 +42,11 @@ public class HomeController {
 
     @ApiOperation("已办事项")
     @GetMapping("/done")
-    public ResultBean getDoneItems() {
-        return homeApiService.getDoneItems();
+    public ResultBean getDoneItems(
+        @ApiParam(required = true,value = "页码，默认1") @RequestParam(defaultValue = "1") Integer pageNum,
+        @ApiParam(required = true,value = "展示数量，默认10") @RequestParam(defaultValue = "10")Integer pageSize
+    ) {
+        return homeApiService.getDoneItems(pageNum,pageSize);
     }
 
 }

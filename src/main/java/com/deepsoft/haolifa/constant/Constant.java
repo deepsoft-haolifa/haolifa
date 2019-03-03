@@ -7,6 +7,11 @@ package com.deepsoft.haolifa.constant;
 public class Constant {
     public static final String METHOD_POST = "POST";
     public static final String METHOD_GET = "GET";
+
+    public interface SerialNumberPrefix {
+        String INSPECT_NO_PREFIX_BJ = "BJ";
+        String BATCH_NUMBER_PREFIX_PC = "PC";
+    }
     /**
      * 成品质量检验失败列表
      */

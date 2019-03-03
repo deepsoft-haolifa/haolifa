@@ -12,6 +12,7 @@ public class DateFormatterUtils {
 
     public static final String TWO_FORMATTERPATTERN = "yyyy-MM-dd";
     public static final String THREE_FORMATTERPATTERN = "yyyy MM dd HH:mm:ss";
+    public static final String THIRD_FORMATTERPATTERN = "yyyyMMdd";
 
     public static LocalDateTime getLocalDateTime(Date date) {
         if (date == null)
@@ -38,5 +39,6 @@ public class DateFormatterUtils {
         System.out.println("yyyy-MM-dd HH:mm:ss:"+formatterDateString(THREE_FORMATTERPATTERN,null));
         System.out.println("yyyy-MM-dd :"+parseDateString(TWO_FORMATTERPATTERN,"2018-09-10"));
         System.out.println("yyyy-MM-dd HH:mm:ss:"+parseDateString(ONE_FORMATTERPATTERN,"2018-08-15 21:55:32"));
+        System.out.println("yyyyMMdd"+parseDateString(THIRD_FORMATTERPATTERN,"2018-08-15 21:55:32"));
     }
 }

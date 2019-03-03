@@ -35,18 +35,24 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     if (validateIsEmpty(model)) {
       return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
     }
+    Map<String, Object> result = new HashMap<>(8);
     Invoice invoice = new Invoice();
     invoice.setStatus(model.getStatus().byteValue());
     invoice.setType(model.getType().byteValue());
     invoice.setOrderNo(model.getOrderNo());
     invoice.setRemark(model.getRemark());
     invoice.setTotalAmount(new BigDecimal(model.getTotalAmount()));
+    invoice.setId(model.getId());
+    invoice.setInvoiceNo(model.getInvoiceNo());
     invoice.setCreateUserId(getLoginUserId());
-    invoiceMapper.insertSelective(invoice);
-    Map<String, Object> result = new HashMap<>(8);
-    result.put("formId", invoice.getId());
-    result.put("formNo", invoice.getInvoiceNo());
-    result.put("formType", CommonEnum.FormType.INVOICE_TYPE.code);
+    if(invoice.getId() != null ) {
+      invoiceMapper.updateByPrimaryKeySelective(invoice);
+    } else {
+      invoiceMapper.insertSelective(invoice);
+      result.put("formId", invoice.getId());
+      result.put("formNo", invoice.getInvoiceNo());
+      result.put("formType", CommonEnum.FormType.INVOICE_TYPE.code);
+    }
     return ResultBean.success(result);
   }
 

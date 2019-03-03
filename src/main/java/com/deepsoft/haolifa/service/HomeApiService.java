@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface HomeApiService {
 
-    List<QuickStartVO> getQuickStartMenu();
+  List<QuickStartVO> getQuickStartMenu();
 
-    List<TodoItemVO> getTodoItems();
+  ResultBean getTodoItems(Integer pageNum, Integer pageSize);
 
-  ResultBean getDoneItems();
+  ResultBean getDoneItems(Integer pageNum, Integer pageSize);
 }

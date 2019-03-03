@@ -76,6 +76,12 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
+    public void expire(String key, TimeUnit timeUnit, long duration) {
+        log.info("expire==>key={}; duration={}", key, duration);
+        TryBase.ofr(RETRY_TIMES, () -> stringRedisTemplate.expire(key, duration, timeUnit));
+    }
+
+    @Override
     public Long ttl(String key) {
         log.info("ttl==>key={}", key);
         return TryBase.ofc(RETRY_TIMES, () -> stringRedisTemplate.getExpire(key)).get();
