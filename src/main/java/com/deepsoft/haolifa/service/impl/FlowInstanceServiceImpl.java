@@ -115,12 +115,6 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     // 审核通过：添加历史记录，并更新下一节点信息；终止添加记录，更新实例记录is_over；退回：添加审核记录,更新实例节点状态
     FlowInstance flowInstance = instanceMapper.selectByPrimaryKey(model.getId());
     List<Accessory> accessorys = new ArrayList<>();
-    if (StringUtils.isNotEmpty(flowInstance.getAccessory())) {
-      accessorys = JSON.parseArray(flowInstance.getAccessory(), Accessory.class);
-    }
-    if(model.getAccessorys() != null) {
-      accessorys.addAll(model.getAccessorys());
-    }
     if (flowInstance.getCurrentStepId() != model.getStepId()) {
       return ResultBean.error(CommonEnum.ResponseEnum.STEP_INCONFORMITY);
     }
@@ -132,6 +126,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         .selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
     // 添加历史
     FlowHistory flowHistory = new FlowHistory();
+    flowHistory.setAccessory(JSON.toJSONString(model.getAccessorys()));
     flowHistory.setAuditUserId(getLoginUserId());
     flowHistory.setAuditInfo(model.getAuditInfo());
     flowHistory.setFormId(model.getFormId() == null ? 0 : model.getFormId());
@@ -142,6 +137,14 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     flowHistory.setAccessory(JSON.toJSONString(model.getAccessorys()));
     // 更新实例
     FlowInstance updateInstance = new FlowInstance();
+    if (StringUtils.isNotEmpty(flowInstance.getAccessory())) {
+      accessorys = JSON.parseArray(flowInstance.getAccessory(), Accessory.class);
+    }
+    if(model.getAccessorys() != null) {
+      accessorys.addAll(model.getAccessorys());
+      flowHistory.setAccessory(JSON.toJSONString(model.getAccessorys()));
+    }
+    updateInstance.setAccessory(JSON.toJSONString(accessorys));
     updateInstance.setId(model.getId());
     // 默认实例 退回标志位false
     updateInstance.setIsBack(CommonEnum.Consts.NO.code);
@@ -280,6 +283,12 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     HistoryInfo historyInfo = new HistoryInfo();
     historyInfo.setInstanceId(instanceId);
     List<HistoryInfo> historyInfos = instanceHistoryMapper.selectInstanceHistory(historyInfo);
+    historyInfos.forEach(historyInfo1 -> {
+      historyInfo1.setAccessories(new ArrayList<>());
+      if(!historyInfo1.getAccessory().isEmpty()) {
+        historyInfo1.setAccessories(JSON.parseArray(historyInfo1.getAccessory(), Accessory.class));
+      }
+    });
     // 2、返回当前要处理的节点
     FlowInstanceWrapper flowInstance = instanceHistoryMapper.selectByPrimaryKey(instanceId);
     // 3、获取FlowStep详情
