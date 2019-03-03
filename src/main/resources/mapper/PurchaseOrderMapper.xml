@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PurchaseOrder" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="purchase_order_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="supplier_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="supplier_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="demander" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="supplier_linkman" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="demander_linkman" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="supplier_addr" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="demander_addr" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="suppiler_phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="demander_phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="delivery_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="operator_user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="operate_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="supplier_confirmer" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="confirm_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="is_delete" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="wreck_amount" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="wreck_reason" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="pay_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="order_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, purchase_order_no, supplier_no, supplier_name, demander, supplier_linkman, demander_linkman, 
+    supplier_addr, demander_addr, suppiler_phone, demander_phone, delivery_time, operator_user_name, 
+    operate_time, supplier_confirmer, confirm_time, create_time, update_time, is_delete, 
+    create_user_id, wreck_amount, wreck_reason, status, pay_type, order_type
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from purchase_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from purchase_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from purchase_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" >
+    delete from purchase_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into purchase_order (purchase_order_no, supplier_no, supplier_name, 
+      demander, supplier_linkman, demander_linkman, 
+      supplier_addr, demander_addr, suppiler_phone, 
+      demander_phone, delivery_time, operator_user_name, 
+      operate_time, supplier_confirmer, confirm_time, 
+      create_time, update_time, is_delete, 
+      create_user_id, wreck_amount, wreck_reason, 
+      status, pay_type, order_type
+      )
+    values (#{purchaseOrderNo,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR}, 
+      #{demander,jdbcType=VARCHAR}, #{supplierLinkman,jdbcType=VARCHAR}, #{demanderLinkman,jdbcType=VARCHAR}, 
+      #{supplierAddr,jdbcType=VARCHAR}, #{demanderAddr,jdbcType=VARCHAR}, #{suppilerPhone,jdbcType=VARCHAR}, 
+      #{demanderPhone,jdbcType=VARCHAR}, #{deliveryTime,jdbcType=TIMESTAMP}, #{operatorUserName,jdbcType=VARCHAR}, 
+      #{operateTime,jdbcType=TIMESTAMP}, #{supplierConfirmer,jdbcType=VARCHAR}, #{confirmTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
+      #{createUserId,jdbcType=INTEGER}, #{wreckAmount,jdbcType=DECIMAL}, #{wreckReason,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{payType,jdbcType=VARCHAR}, #{orderType,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into purchase_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="purchaseOrderNo != null" >
+        purchase_order_no,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="demander != null" >
+        demander,
+      </if>
+      <if test="supplierLinkman != null" >
+        supplier_linkman,
+      </if>
+      <if test="demanderLinkman != null" >
+        demander_linkman,
+      </if>
+      <if test="supplierAddr != null" >
+        supplier_addr,
+      </if>
+      <if test="demanderAddr != null" >
+        demander_addr,
+      </if>
+      <if test="suppilerPhone != null" >
+        suppiler_phone,
+      </if>
+      <if test="demanderPhone != null" >
+        demander_phone,
+      </if>
+      <if test="deliveryTime != null" >
+        delivery_time,
+      </if>
+      <if test="operatorUserName != null" >
+        operator_user_name,
+      </if>
+      <if test="operateTime != null" >
+        operate_time,
+      </if>
+      <if test="supplierConfirmer != null" >
+        supplier_confirmer,
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="wreckAmount != null" >
+        wreck_amount,
+      </if>
+      <if test="wreckReason != null" >
+        wreck_reason,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="purchaseOrderNo != null" >
+        #{purchaseOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="demander != null" >
+        #{demander,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierLinkman != null" >
+        #{supplierLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="demanderLinkman != null" >
+        #{demanderLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierAddr != null" >
+        #{supplierAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="demanderAddr != null" >
+        #{demanderAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="suppilerPhone != null" >
+        #{suppilerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="demanderPhone != null" >
+        #{demanderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null" >
+        #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorUserName != null" >
+        #{operatorUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierConfirmer != null" >
+        #{supplierConfirmer,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmTime != null" >
+        #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="wreckAmount != null" >
+        #{wreckAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="wreckReason != null" >
+        #{wreckReason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" resultType="java.lang.Integer" >
+    select count(*) from purchase_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update purchase_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.purchaseOrderNo != null" >
+        purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierNo != null" >
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierName != null" >
+        supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demander != null" >
+        demander = #{record.demander,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierLinkman != null" >
+        supplier_linkman = #{record.supplierLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demanderLinkman != null" >
+        demander_linkman = #{record.demanderLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierAddr != null" >
+        supplier_addr = #{record.supplierAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demanderAddr != null" >
+        demander_addr = #{record.demanderAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.suppilerPhone != null" >
+        suppiler_phone = #{record.suppilerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.demanderPhone != null" >
+        demander_phone = #{record.demanderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryTime != null" >
+        delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operatorUserName != null" >
+        operator_user_name = #{record.operatorUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateTime != null" >
+        operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.supplierConfirmer != null" >
+        supplier_confirmer = #{record.supplierConfirmer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.confirmTime != null" >
+        confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.wreckAmount != null" >
+        wreck_amount = #{record.wreckAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.wreckReason != null" >
+        wreck_reason = #{record.wreckReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.payType != null" >
+        pay_type = #{record.payType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderType != null" >
+        order_type = #{record.orderType,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update purchase_order
+    set id = #{record.id,jdbcType=INTEGER},
+      purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      demander = #{record.demander,jdbcType=VARCHAR},
+      supplier_linkman = #{record.supplierLinkman,jdbcType=VARCHAR},
+      demander_linkman = #{record.demanderLinkman,jdbcType=VARCHAR},
+      supplier_addr = #{record.supplierAddr,jdbcType=VARCHAR},
+      demander_addr = #{record.demanderAddr,jdbcType=VARCHAR},
+      suppiler_phone = #{record.suppilerPhone,jdbcType=VARCHAR},
+      demander_phone = #{record.demanderPhone,jdbcType=VARCHAR},
+      delivery_time = #{record.deliveryTime,jdbcType=TIMESTAMP},
+      operator_user_name = #{record.operatorUserName,jdbcType=VARCHAR},
+      operate_time = #{record.operateTime,jdbcType=TIMESTAMP},
+      supplier_confirmer = #{record.supplierConfirmer,jdbcType=VARCHAR},
+      confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      wreck_amount = #{record.wreckAmount,jdbcType=DECIMAL},
+      wreck_reason = #{record.wreckReason,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      pay_type = #{record.payType,jdbcType=VARCHAR},
+      order_type = #{record.orderType,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder" >
+    update purchase_order
+    <set >
+      <if test="purchaseOrderNo != null" >
+        purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="demander != null" >
+        demander = #{demander,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierLinkman != null" >
+        supplier_linkman = #{supplierLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="demanderLinkman != null" >
+        demander_linkman = #{demanderLinkman,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierAddr != null" >
+        supplier_addr = #{supplierAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="demanderAddr != null" >
+        demander_addr = #{demanderAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="suppilerPhone != null" >
+        suppiler_phone = #{suppilerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="demanderPhone != null" >
+        demander_phone = #{demanderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null" >
+        delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorUserName != null" >
+        operator_user_name = #{operatorUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="supplierConfirmer != null" >
+        supplier_confirmer = #{supplierConfirmer,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmTime != null" >
+        confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="wreckAmount != null" >
+        wreck_amount = #{wreckAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="wreckReason != null" >
+        wreck_reason = #{wreckReason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder" >
+    update purchase_order
+    set purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      demander = #{demander,jdbcType=VARCHAR},
+      supplier_linkman = #{supplierLinkman,jdbcType=VARCHAR},
+      demander_linkman = #{demanderLinkman,jdbcType=VARCHAR},
+      supplier_addr = #{supplierAddr,jdbcType=VARCHAR},
+      demander_addr = #{demanderAddr,jdbcType=VARCHAR},
+      suppiler_phone = #{suppilerPhone,jdbcType=VARCHAR},
+      demander_phone = #{demanderPhone,jdbcType=VARCHAR},
+      delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      operator_user_name = #{operatorUserName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      supplier_confirmer = #{supplierConfirmer,jdbcType=VARCHAR},
+      confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      wreck_amount = #{wreckAmount,jdbcType=DECIMAL},
+      wreck_reason = #{wreckReason,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
