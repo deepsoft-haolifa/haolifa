@@ -23,9 +23,9 @@ public class PurchaseOrderController {
   private PurcahseOrderService purcahseOrderService;
 
   @ApiOperation("创建采购订单")
-  @PostMapping("save")
-  public ResultBean save(@RequestBody PurchaseOrderDTO model) {
-    return purcahseOrderService.save(model);
+  @PostMapping("save/{orderType}")
+  public ResultBean save(@RequestBody PurchaseOrderDTO model,@PathVariable("orderType") Integer orderType) {
+    return purcahseOrderService.save(model, orderType);
   }
 
   @ApiOperation("删除采购订单")
@@ -54,10 +54,12 @@ public class PurchaseOrderController {
   }
 
   @ApiOperation("查询采购订单列表")
-  @GetMapping("list")
+  @GetMapping("list/{orderType}")
   public ResultBean list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
-      @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize, String orderNo, int createUserId, int status) {
-    return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId,status);
+      @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,
+      String orderNo, int createUserId, int status,
+      @PathVariable("orderType") Integer orderType) {
+    return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId,status,orderType);
   }
 
   @ApiOperation("采购完成")
@@ -67,9 +69,10 @@ public class PurchaseOrderController {
   }
 
   @ApiOperation("发起审批")
-  @GetMapping("approve/{orderNo}")
-  public ResultBean approve(@ApiParam("订单号") @PathVariable("orderNo") String orderNo) {
-    return purcahseOrderService.approve(orderNo);
+  @GetMapping("approve/{orderNo}/{orderType}")
+  public ResultBean approve(@ApiParam("订单号") @PathVariable("orderNo") String orderNo,
+      @ApiParam("订单类型") @PathVariable("orderType") Integer orderType) {
+    return purcahseOrderService.approve(orderNo, orderType);
   }
 
   @ApiOperation("生成报检单")

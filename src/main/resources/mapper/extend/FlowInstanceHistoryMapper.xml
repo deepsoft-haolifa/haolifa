@@ -139,7 +139,6 @@
           ON fi.`create_user_id` = u.`id`
         JOIN `flow` f
           ON fi.`flow_id` = f.`id`
---         ORDER BY fi.`create_time` DESC
     </select>
 
 	<select id="selectDoneItems" resultType="com.deepsoft.haolifa.model.vo.DoneItemVO">
@@ -158,7 +157,6 @@
 			JOIN sys_user u ON fi.`create_user_id` = u.`id`
 		WHERE
 			fh.audit_user_id = #{userId}
--- 			ORDER BY fh.create_time desc
 	</select>
 
     <select id="selectFlowStepByStepId" parameterType="int"

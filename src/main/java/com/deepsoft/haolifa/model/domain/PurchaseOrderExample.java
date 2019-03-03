@@ -1685,6 +1685,66 @@ public class PurchaseOrderExample {
             addCriterion("pay_type not between", value1, value2, "payType");
             return (Criteria) this;
         }
+
+        public Criteria andOrderTypeIsNull() {
+            addCriterion("order_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIsNotNull() {
+            addCriterion("order_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeEqualTo(Byte value) {
+            addCriterion("order_type =", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotEqualTo(Byte value) {
+            addCriterion("order_type <>", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeGreaterThan(Byte value) {
+            addCriterion("order_type >", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("order_type >=", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeLessThan(Byte value) {
+            addCriterion("order_type <", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("order_type <=", value, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeIn(List<Byte> values) {
+            addCriterion("order_type in", values, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotIn(List<Byte> values) {
+            addCriterion("order_type not in", values, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeBetween(Byte value1, Byte value2) {
+            addCriterion("order_type between", value1, value2, "orderType");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("order_type not between", value1, value2, "orderType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

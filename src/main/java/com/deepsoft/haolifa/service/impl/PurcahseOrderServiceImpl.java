@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.service.impl;
 
 import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
 import static com.deepsoft.haolifa.constant.CacheKey.INSPECT_NO_KEY;
+import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_ENTRUST_1;
+import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_PURCHASE_0;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
@@ -68,7 +70,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   private InspectItemMapper inspectItemMapper;
 
   @Override
-  public ResultBean save(PurchaseOrderDTO model) {
+  public ResultBean save(PurchaseOrderDTO model, Integer orderType) {
     PurchaseOrderExample example = new PurchaseOrderExample();
     example.or().andPurchaseOrderNoEqualTo(model.getOrderNo());
     List<PurchaseOrder> orders = purchaseOrderMapper.selectByExample(example);
@@ -78,6 +80,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     model.setId(null);
     PurchaseOrder purchaseOrder = new PurchaseOrder();
     BeanUtils.copyProperties(model, purchaseOrder);
+    purchaseOrder.setOrderType(orderType.byteValue());
     purchaseOrder.setPurchaseOrderNo(model.getOrderNo());
     purchaseOrder.setCreateUserId(getLoginUserId());
     purchaseOrder.setDeliveryTime(
@@ -222,9 +225,10 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   }
 
   @Override
-  public ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status) {
+  public ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType) {
     PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
     PurchaseOrderExample.Criteria criteria = purchaseOrderExample.createCriteria();
+    criteria.andOrderTypeEqualTo(orderType.byteValue());
     if (StringUtils.isNotEmpty(orderNo)) {
       criteria.andPurchaseOrderNoLike("%" + orderNo + "%");
     }
@@ -260,7 +264,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   }
 
   @Override
-  public ResultBean approve(String orderNo) {
+  public ResultBean approve(String orderNo, Integer orderType) {
     PurchaseOrderExample existExample = new PurchaseOrderExample();
     existExample.or().andPurchaseOrderNoEqualTo(orderNo);
     PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByExample(existExample).get(0);
@@ -271,9 +275,16 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     order.setStatus((byte) 2);
     purchaseOrderMapper.updateByExampleSelective(order, example);
     FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
-    flowInstanceDTO.setFlowId(2);
-    flowInstanceDTO.setSummary("采购审批");
-    flowInstanceDTO.setFormType(3);
+    if (ORDER_TYPE_PURCHASE_0 == orderType) {
+      flowInstanceDTO.setFlowId(2);
+      flowInstanceDTO.setSummary("采购订单审批");
+      flowInstanceDTO.setFormType(3);
+    } else if (ORDER_TYPE_ENTRUST_1 == orderType) {
+      flowInstanceDTO.setFlowId(5);
+      flowInstanceDTO.setSummary("机加工订单审批");
+      flowInstanceDTO.setFormType(0);
+    }
+
     flowInstanceDTO.setFormNo(orderNo);
     flowInstanceDTO.setFormId(purchaseOrder.getId());
     flowInstanceService.create(flowInstanceDTO);

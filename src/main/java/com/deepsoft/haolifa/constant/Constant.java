@@ -12,6 +12,11 @@ public class Constant {
         String INSPECT_NO_PREFIX_BJ = "BJ";
         String BATCH_NUMBER_PREFIX_PC = "PC";
     }
+
+    public interface PurchaseOrderType {
+        int ORDER_TYPE_PURCHASE_0 = 0;
+        int ORDER_TYPE_ENTRUST_1 = 1;
+    }
     /**
      * 成品质量检验失败列表
      */

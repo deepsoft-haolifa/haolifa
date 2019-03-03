@@ -561,8 +561,7 @@ CREATE TABLE `product_purchase_record` (
 DROP TABLE IF EXISTS `purchase_order`;
 CREATE TABLE `purchase_order` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
-  `purchase_order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '订单编号',
+  `purchase_order_no` varchar(32) NOT NULL DEFAULT '' COMMENT '订单编号',
   `supplier_no` varchar(255) NOT NULL DEFAULT '' COMMENT '供应商编号',
   `supplier_name` varchar(255) NOT NULL DEFAULT '' COMMENT '提供方',
   `demander` varchar(255) NOT NULL DEFAULT '' COMMENT '需方',
@@ -570,8 +569,8 @@ CREATE TABLE `purchase_order` (
   `demander_linkman` varchar(30) NOT NULL DEFAULT '' COMMENT '需方联系人',
   `supplier_addr` varchar(100) NOT NULL DEFAULT '' COMMENT '供方地址',
   `demander_addr` varchar(100) NOT NULL DEFAULT '' COMMENT '需方地址',
-  `suppiler_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '供方联系人电话',
-  `demander_phone` varchar(11) NOT NULL DEFAULT '' COMMENT '需方联系人电话',
+  `suppiler_phone` varchar(15) NOT NULL DEFAULT '' COMMENT '供方联系人电话',
+  `demander_phone` varchar(15) NOT NULL DEFAULT '' COMMENT '需方联系人电话',
   `delivery_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '交货日期',
   `operator_user_name` varchar(30) NOT NULL DEFAULT '0' COMMENT '订单经办人',
   `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '经办日期',
@@ -581,6 +580,11 @@ CREATE TABLE `purchase_order` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
   `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
+  `wreck_amount` decimal(12,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '折损金额',
+  `wreck_reason` varchar(255) NOT NULL DEFAULT '' COMMENT '折损原因',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '订单状态：1 待审批 2 审批中 3 采购中 4 审批不通过 5 采购完成',
+  `pay_type` varchar(255) NOT NULL DEFAULT '' COMMENT '付款方式',
+  `order_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 采购订单 1 外部机加工订单',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单信息表';
 

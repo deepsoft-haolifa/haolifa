@@ -10,7 +10,7 @@ public interface PurcahseOrderService {
   /**
    * 创建采购订单
    */
-  ResultBean save(PurchaseOrderDTO model);
+  ResultBean save(PurchaseOrderDTO model, Integer orderType);
 
   /**
    * 删除采购订单
@@ -45,7 +45,7 @@ public interface PurcahseOrderService {
    * @param createUserId
    * @return
    */
-  ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status);
+  ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType);
 
   /**
    * 采购完成
@@ -59,7 +59,7 @@ public interface PurcahseOrderService {
    * @param orderNo
    * @return
    */
-  ResultBean approve(String orderNo);
+  ResultBean approve(String orderNo, Integer orderType);
 
   /**
    * 生成送检单
