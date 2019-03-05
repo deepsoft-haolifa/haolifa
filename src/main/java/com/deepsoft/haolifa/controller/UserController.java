@@ -60,11 +60,11 @@ public class UserController {
     }
 
 
-    @PutMapping("/{id}/changePwd")
+    @PutMapping("/changePwd")
     @ApiOperation("修改用户密码")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResultBean changeUserPwd(@PathVariable("id") Integer id, @RequestParam("newPassword") String newPassword) {
-        return ResultBean.success(userService.changePwd(id, newPassword));
+    public ResultBean changeUserPwd(@RequestParam("newPassword") String newPassword) {
+        return ResultBean.success(userService.changePwd(newPassword));
     }
 
 

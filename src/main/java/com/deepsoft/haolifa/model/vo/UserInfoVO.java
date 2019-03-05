@@ -19,6 +19,8 @@ public class UserInfoVO {
 
     private String realName;
 
+    private Integer userId;
+
     private Collection<GrantedAuthority> roles;
 
     private List<String> menus;

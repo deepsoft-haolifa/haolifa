@@ -60,8 +60,8 @@ public class SysUserServiceImpl implements SysUserService {
     public CustomUser selectLoginUser() {
         //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if("anonymousUser".equals(principal))
-            return  (CustomUser) customUserService.loadUserByUsername("admin");
+        if ("anonymousUser".equals(principal))
+            return (CustomUser) customUserService.loadUserByUsername("admin");
         else
             return (CustomUser) principal;
     }
@@ -70,7 +70,7 @@ public class SysUserServiceImpl implements SysUserService {
     public UserInfoVO selectUserInfo() {
         CustomUser customUser = selectLoginUser();
         UserInfoVO userInfoVO = new UserInfoVO(customUser.getUsername(), customUser.getRealName(),
-                customUser.getAuthorities(), permissionService.getMenu("m"));
+                customUser.getId(), customUser.getAuthorities(), permissionService.getMenu("m"));
         return userInfoVO;
     }
 
@@ -80,7 +80,7 @@ public class SysUserServiceImpl implements SysUserService {
         //暂时不用缓存
         redisDao.del(userKey);
         String userCacheStr = redisDao.get(userKey);
-        if(StringUtils.isNotBlank(userCacheStr)){
+        if (StringUtils.isNotBlank(userCacheStr)) {
             return JSONObject.parseObject(userCacheStr, UserCacheDTO.class);
         }
         SysUserExample userExample = new SysUserExample();
@@ -88,7 +88,7 @@ public class SysUserServiceImpl implements SysUserService {
         List<SysUser> sysUsers = userMapper.selectByExample(userExample);
         List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(userId);
         UserCacheDTO userCacheDTO = new UserCacheDTO();
-        if(sysUsers.size() > 0) {
+        if (sysUsers.size() > 0) {
             BeanUtils.copyProperties(sysUsers.get(0), userCacheDTO);
             userCacheDTO.setRoles(rolesByUserId);
         }
@@ -124,13 +124,13 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public int updateSysUser(UserBaseDTO user) {
-        if(user.getId() == null){
+        if (user.getId() == null) {
             throw new BaseException(PARAM_ERROR.code, "用户id不能为空");
         }
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
         int count = userMapper.updateByPrimaryKeySelective(sysUser);
-        String userKey =CacheKeyManager.cacheKeyUserCache(user.getId()).key;
+        String userKey = CacheKeyManager.cacheKeyUserCache(user.getId()).key;
         //暂时不用缓存
         redisDao.del(userKey);
         return count;
@@ -148,7 +148,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysRoleUserExample.createCriteria().andSysUserIdEqualTo(userId);
         roleUserMapper.deleteByExample(sysRoleUserExample);
         int count = 0;
-        for (Integer roleId:roleIds) {
+        for (Integer roleId : roleIds) {
             SysRoleUser roleUser = new SysRoleUser();
             roleUser.setSysUserId(userId);
             roleUser.setSysRoleId(roleId);
@@ -173,9 +173,10 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public String changePwd(Integer id, String newPassword) {
+    public String changePwd(String newPassword) {
+        CustomUser customUser = selectLoginUser();
         UserBaseDTO userBaseDTO = new UserBaseDTO();
-        userBaseDTO.setId(id);
+        userBaseDTO.setId(customUser.getId());
         userBaseDTO.setPassword(passwordEncoder.encode(newPassword));
         updateSysUser(userBaseDTO);
         return newPassword;

@@ -81,9 +81,9 @@ public interface SysUserService {
 
     /**
      * 修改密码
-     * @param id
+     * @param newPassword
      * @return
      */
-    String changePwd(Integer id,String newPassword);
+    String changePwd(String newPassword);
 
 }
