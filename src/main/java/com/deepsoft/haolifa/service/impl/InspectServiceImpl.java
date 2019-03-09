@@ -41,6 +41,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -53,6 +54,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   @Autowired
   InspectHistoryMapper historyMapper;
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(InspectDTO model) {
     int createUserId = getLoginUserId();
@@ -96,6 +98,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     return ResultBean.success(result);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean delete(Integer inspectId) {
     inspectMapper.deleteByPrimaryKey(inspectId);
@@ -104,7 +107,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     inspectItemMapper.deleteByExample(inspectItemExample);
     return ResultBean.success(1);
   }
-
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean update(int inspectId, InspectDTO model) {
     Inspect inspect = new Inspect();
@@ -173,6 +176,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     return ResultBean.success(1);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean updateStatus(Integer inspectId, Integer status) {
     Inspect inspect = new Inspect();

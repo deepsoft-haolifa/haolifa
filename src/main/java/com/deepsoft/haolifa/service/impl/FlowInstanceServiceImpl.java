@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.print.DocFlavor;
@@ -59,6 +60,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   @Autowired
   private SysRoleMapper sysRoleMapper;
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean create(FlowInstanceDTO model) {
     //1、 添加一条初始化历史记录（流程节点表单内容通过单独的接口，前端调用添加）
@@ -108,6 +110,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     return ResultBean.success(result);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean handleStep(FlowHandleStepDTO model) {
     // 1、判断传入的处理节点和instance当前要处理的节点是否一致。
@@ -376,6 +379,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     return ResultBean.success(result);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean flowProgress(String formNo, Integer formId) {
     FlowInstanceExample instanceExample = new FlowInstanceExample();

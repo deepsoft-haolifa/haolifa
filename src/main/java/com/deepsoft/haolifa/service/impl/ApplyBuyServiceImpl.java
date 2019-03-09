@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -37,7 +38,7 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
 
   @Autowired
   PurchaseOrderItemMapper orderItemMapper;
-
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(ApplyBuyDTO model) {
     String applyBuyNo = "ap_" + RandomUtils.orderNoStr();

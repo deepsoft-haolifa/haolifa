@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -40,6 +41,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
   @Autowired
   FlowInstanceService flowInstanceService;
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(EntrustDTO model) {
     String entrustNo = "en_" + RandomUtils.orderNoStr();

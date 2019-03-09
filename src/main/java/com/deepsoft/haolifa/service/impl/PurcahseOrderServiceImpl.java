@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -69,6 +70,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   @Autowired
   private InspectItemMapper inspectItemMapper;
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(PurchaseOrderDTO model, Integer orderType) {
     PurchaseOrderExample example = new PurchaseOrderExample();
@@ -110,6 +112,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     return ResultBean.success(result);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean delete(String purchaseOrderNo) {
     // 删除采购订单
@@ -131,6 +134,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     return ResultBean.success(1);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean update(PurchaseOrderDTO model) {
     if (model.getId() == null || model.getId() == 0) {
@@ -263,6 +267,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     return ResultBean.success(1);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean approve(String orderNo, Integer orderType) {
     PurchaseOrderExample existExample = new PurchaseOrderExample();
@@ -291,6 +296,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     return ResultBean.success(1);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean createInspect(Integer formId) {
     PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(formId);
@@ -334,6 +340,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     return ResultBean.success(inspect.getId());
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public void updateOrderStatus(Integer formId, Integer status) {
     PurchaseOrder purchaseOrder = new PurchaseOrder();

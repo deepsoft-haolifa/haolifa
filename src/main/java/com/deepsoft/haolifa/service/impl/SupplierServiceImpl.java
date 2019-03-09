@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -156,7 +157,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     instanceService.create(flowInstanceDTO);
     return ResultBean.success(1);
   }
-
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public void updateSupplierStatus(String supplierNo, Integer status, Integer instanceId) {
     SupplierExample example = new SupplierExample();

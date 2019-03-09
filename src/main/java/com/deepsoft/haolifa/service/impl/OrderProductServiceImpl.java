@@ -353,7 +353,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
     }
 
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateOrderProductStatus(String orderNo, byte status) {
         log.info("update orderProduct status start|orderNo:{},status:{}", orderNo, status);
