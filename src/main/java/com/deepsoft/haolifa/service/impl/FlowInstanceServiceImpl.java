@@ -143,7 +143,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     if (StringUtils.isNotEmpty(flowInstance.getAccessory())) {
       accessorys = JSON.parseArray(flowInstance.getAccessory(), Accessory.class);
     }
-    if(model.getAccessorys() != null) {
+    if (model.getAccessorys() != null) {
       accessorys.addAll(model.getAccessorys());
       flowHistory.setAccessory(JSON.toJSONString(model.getAccessorys()));
     }
@@ -234,10 +234,10 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         // 生产
         if (auditRes == 1) {
           // 审核通过
-          orderProductService.updateOrderProductStatus(formNo, (byte)7);
+          orderProductService.updateOrderProductStatus(formNo, (byte) 7);
         } else if (auditRes == 0) {
           // 审核不通过
-          orderProductService.updateOrderProductStatus(formNo, (byte)14);
+          orderProductService.updateOrderProductStatus(formNo, (byte) 14);
           orderProductService.releaseMaterial(formNo);
         }
         break;
@@ -288,7 +288,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     List<HistoryInfo> historyInfos = instanceHistoryMapper.selectInstanceHistory(historyInfo);
     historyInfos.forEach(historyInfo1 -> {
       historyInfo1.setAccessories(new ArrayList<>());
-      if(!historyInfo1.getAccessory().isEmpty()) {
+      if (!historyInfo1.getAccessory().isEmpty()) {
         historyInfo1.setAccessories(JSON.parseArray(historyInfo1.getAccessory(), Accessory.class));
       }
     });
@@ -383,13 +383,13 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   @Override
   public ResultBean flowProgress(String formNo, Integer formId) {
     FlowInstanceExample instanceExample = new FlowInstanceExample();
-    if(formId > 0) {
-      instanceExample.or().andFormIdEqualTo(formId).andFlowIdEqualTo(4).andIsOverEqualTo((byte)0);
+    if (formId > 0) {
+      instanceExample.or().andFormIdEqualTo(formId).andFlowIdEqualTo(4).andIsOverEqualTo((byte) 0);
     } else {
-      instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte)0);
+      instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte) 0);
     }
     List<FlowInstance> flowInstances = instanceMapper.selectByExample(instanceExample);
-    if(flowInstances == null || flowInstances.size() == 0) {
+    if (flowInstances == null || flowInstances.size() == 0) {
       return ResultBean.error(ResponseEnum.FLOW_INSTANCE_NOT_EXIST);
     }
     FlowInstance flowInstance = flowInstances.get(0);
@@ -399,10 +399,10 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     int preStepId = 0;
     List<Integer> existStepId = new ArrayList<>();
     List<FlowProcesserDTO> flowProcesserDTOS = new ArrayList<>();
-    Map<Integer,List<FlowStep>> map = flowSteps.stream().collect(Collectors.groupingBy(FlowStep::getStepId));
+    Map<Integer, List<FlowStep>> map = flowSteps.stream().collect(Collectors.groupingBy(FlowStep::getStepId));
     for (int i = 0; i < flowSteps.size(); i++) {
       FlowStep flowStep = flowSteps.get(i);
-      if(existStepId.contains(flowStep.getStepId())) {
+      if (existStepId.contains(flowStep.getStepId())) {
         continue;
       }
       FlowProcesserDTO processerDTO = new FlowProcesserDTO();
@@ -412,8 +412,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       processerDTO.setRoleId(flowStep.getRoleId());
       processerDTO.setChild(new ArrayList<>());
       existStepId.add(flowStep.getStepId());
-      if(flowStep.getPrevStepId() == preStepId) {
-        if(flowStep.getConditionFalse()>0) {
+      if (flowStep.getPrevStepId() == preStepId) {
+        if (flowStep.getConditionFalse() > 0) {
           FlowProcesserDTO childDto = new FlowProcesserDTO();
           childDto.setInstanceId(flowInstance.getId());
           childDto.setStepId(flowStep.getConditionFalse());
@@ -438,10 +438,10 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
 
   private boolean wrapperProcessDto(FlowProcesserDTO processerDTO, int currentStepId, boolean isAudit, int instanceId) {
     int stepId = processerDTO.getStepId();
-    if(stepId == currentStepId) {
+    if (stepId == currentStepId) {
       isAudit = false;
     }
-    if(isAudit) {
+    if (isAudit) {
       HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, instanceId);
       processerDTO.setAuditUserName(historyInfo.getAuditUserName());
       processerDTO.setAuditResult(historyInfo.getAuditResult());
@@ -452,9 +452,28 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     processerDTO.setRoleName(sysRole.getDescription());
     Step step = stepMapper.selectByPrimaryKey(stepId);
     processerDTO.setStepName(step.getName());
-    if(processerDTO.getChild() != null && processerDTO.getChild().size()>0) {
+    if (processerDTO.getChild() != null && processerDTO.getChild().size() > 0) {
       wrapperProcessDto(processerDTO.getChild().get(0), currentStepId, isAudit, instanceId);
     }
     return isAudit;
+  }
+
+  @Override
+  public ResultBean accessoryInfo(String formNo, Integer formId) {
+    FlowInstanceExample example = new FlowInstanceExample();
+    FlowInstanceExample.Criteria criteria = example.createCriteria();
+    if (formId != 0) {
+      criteria.andFormIdEqualTo(formId);
+    }
+    if (StringUtils.isNotEmpty(formNo)) {
+      criteria.andFormNoEqualTo(formNo);
+    }
+    example.setOrderByClause("create_time desc limit 1");
+    List<FlowInstance> instances = instanceMapper.selectByExample(example);
+    List<Accessory> accessories = new ArrayList<>();
+    if (instances != null && instances.size() > 0) {
+        accessories.addAll(JSON.parseArray(instances.get(0).getAccessory(), Accessory.class));
+    }
+    return ResultBean.success(accessories);
   }
 }

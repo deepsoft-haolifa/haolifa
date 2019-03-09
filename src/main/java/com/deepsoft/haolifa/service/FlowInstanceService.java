@@ -35,4 +35,6 @@ public interface FlowInstanceService {
     ResultBean backSteps(Integer instanceId);
 
   ResultBean flowProgress(String formNo, Integer formId);
+
+  ResultBean accessoryInfo(String formNo, Integer formId);
 }

@@ -15,37 +15,45 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = {"流程创建以及流转"})
 public class FlowInstanceController {
 
-    @Autowired
-    private FlowInstanceService flowInstanceService;
+  @Autowired
+  private FlowInstanceService flowInstanceService;
 
-    @PostMapping("create")
-    @ApiOperation("创建流程")
-    public ResultBean createFlowInstance(@RequestBody FlowInstanceDTO model) {
-        return flowInstanceService.create(model);
-    }
+  @PostMapping("create")
+  @ApiOperation("创建流程")
+  public ResultBean createFlowInstance(@RequestBody FlowInstanceDTO model) {
+    return flowInstanceService.create(model);
+  }
 
-    @PostMapping("handleStep")
-    @ApiOperation("节点审核")
-    public ResultBean handleStep(@RequestBody FlowHandleStepDTO model) {
-        return flowInstanceService.handleStep(model);
-    }
+  @PostMapping("handleStep")
+  @ApiOperation("节点审核")
+  public ResultBean handleStep(@RequestBody FlowHandleStepDTO model) {
+    return flowInstanceService.handleStep(model);
+  }
 
-    @GetMapping("flow-history/{instanceId}")
-    @ApiOperation("当前流程实例审核历史信息")
-    public ResultBean flowInstanceHistory(@PathVariable("instanceId") Integer instanceId) {
-        return flowInstanceService.flowInstanceHistory(instanceId);
-    }
+  @GetMapping("flow-history/{instanceId}")
+  @ApiOperation("当前流程实例审核历史信息")
+  public ResultBean flowInstanceHistory(@PathVariable("instanceId") Integer instanceId) {
+    return flowInstanceService.flowInstanceHistory(instanceId);
+  }
 
-    @GetMapping("backSteps/{instanceId}")
-    @ApiOperation("获取当前实例可退回节点的列表")
-    public ResultBean backSteps(@PathVariable("instanceId") Integer instanceId) {
-        return flowInstanceService.backSteps(instanceId);
-    }
+  @GetMapping("backSteps/{instanceId}")
+  @ApiOperation("获取当前实例可退回节点的列表")
+  public ResultBean backSteps(@PathVariable("instanceId") Integer instanceId) {
+    return flowInstanceService.backSteps(instanceId);
+  }
 
-    @GetMapping("flow/progress")
-    @ApiOperation("获取流程审批的进度信息，返回list 是节点审核顺序")
-    public ResultBean flowProgress(@RequestParam String formNo, @RequestParam(required = false,defaultValue = "0") Integer formId) {
-        return flowInstanceService.flowProgress(formNo,formId);
-    }
+  @GetMapping("flow/progress")
+  @ApiOperation("获取流程审批的进度信息，返回list 是节点审核顺序")
+  public ResultBean flowProgress(@RequestParam String formNo,
+      @RequestParam(required = false, defaultValue = "0") Integer formId) {
+    return flowInstanceService.flowProgress(formNo, formId);
+  }
+
+  @GetMapping("flow/accessoryInfo")
+  @ApiOperation("审批附件信息")
+  public ResultBean accessoryInfo(@RequestParam String formNo,
+      @RequestParam(required = false, defaultValue = "0") Integer formId) {
+    return flowInstanceService.accessoryInfo(formNo, formId);
+  }
 
 }
