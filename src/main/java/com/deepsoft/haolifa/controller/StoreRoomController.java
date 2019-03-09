@@ -185,7 +185,7 @@ public class StoreRoomController {
         if (result > 0) {
             return ResultBean.success(result);
         } else {
-            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+            return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_NOT_ENOUGH);
         }
     }
 

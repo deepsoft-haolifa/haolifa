@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.storage.MaterialBatchNoDTO;
 import com.deepsoft.haolifa.service.StockService;
 import com.deepsoft.haolifa.util.RandomUtils;
+import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -133,7 +134,7 @@ public class StockServiceImpl extends BaseService implements StockService {
         if (stocks.size() > 0) {
             return JSON.parseArray(JSON.toJSONString(stocks), MaterialBatchNoDTO.class);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

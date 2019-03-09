@@ -1,5 +1,10 @@
 package com.deepsoft.haolifa.service.impl;
 
+import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
+import static com.deepsoft.haolifa.constant.CacheKey.INSPECT_NO_KEY;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
+
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
@@ -51,12 +56,14 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   @Override
   public ResultBean save(InspectDTO model) {
     int createUserId = getLoginUserId();
-    String inspectNo = "in_" + RandomUtils.orderNoStr();
+    String inspectNo = createSerialNumber(INSPECT_NO_PREFIX_BJ, INSPECT_NO_KEY);
+    String batchNumer = createSerialNumber(BATCH_NUMBER_PREFIX_PC, BATCH_NUM_KEY);
     Inspect inspect = new Inspect();
     BeanUtils.copyProperties(model, inspect);
     inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size()==0?"": JSON.toJSONString(model.getAccessorys()));
     inspect.setCreateUserId(createUserId);
     inspect.setInspectNo(inspectNo);
+    inspect.setBatchNumber(batchNumer);
     inspect.setStatus(model.getStatus().byteValue());
     if (StringUtils.isNotEmpty(model.getArrivalTime())) {
       inspect.setArrivalTime(
