@@ -14,7 +14,7 @@ public interface OrderProductService {
      *
      * @return
      */
-    ResultBean uploadOrderProduct(FileUploadDTO fileUploadDTO);
+    ResultBean uploadOrderProduct(OrderUploadDTO OrderUploadDTO);
 
     /**
      * 添加order信息

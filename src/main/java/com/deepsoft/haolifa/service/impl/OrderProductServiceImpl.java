@@ -93,9 +93,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultBean uploadOrderProduct(FileUploadDTO fileUploadDTO) {
-        String base64Source = fileUploadDTO.getBase64Source();
-        String fileName = fileUploadDTO.getFileName();
+    public ResultBean uploadOrderProduct(OrderUploadDTO orderUploadDTO) {
+        String base64Source = orderUploadDTO.getBase64Source();
+        String fileName = orderUploadDTO.getFileName();
+        String deliveryDate = orderUploadDTO.getDeliveryDate();
         OrderProduct orderProduct = new OrderProduct();
         if (StringUtils.isBlank(base64Source)) {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
@@ -145,7 +146,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
             // 获取订单产品列表
             List<OrderProductAssociate> orderProductAssociates = new ArrayList<>();
-            // 从第十行开始，获取“特殊要求”那一行之前三行
+            // 从第十行开始，获取“特殊要求”那一行之前三行,(从第十行到lastRowNum,就是所有产品的行数)
             int lastRowNum = 10;
             for (int i = 10; i < sheet.getLastRowNum() + 1; i++) {
                 Row row = sheet.getRow(i);
@@ -214,6 +215,24 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderProductAssociates.add(orderProductAssociate);
                 }
             }
+            // 如果没有填写发货日期，从excel表格中获取发货日期
+            if (StringUtils.isBlank(deliveryDate)) {
+                for (int i = lastRowNum; i < sheet.getLastRowNum() + 1; i++) {
+                    Row row = sheet.getRow(i);
+                    if (null != row) {
+                        Cell cell = row.getCell(1);
+                        String cellValue = getCellValue(cell);
+                        if (StringUtils.isNotBlank(cellValue)) {
+                            if (cellValue.contains("发货日期")) {
+                                Cell cell2 = row.getCell(2);
+                                deliveryDate = getCellValue(cell2);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
             // 将后面合计的价格隐藏
             for (int i = lastRowNum; i < lastRowNum + 3; i++) {
                 Row row = sheet.getRow(i);
@@ -229,12 +248,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             orderProductDTO.setOrderProductAssociates(orderProductAssociates);
             //将合同上传到7牛文件服务器
             String fileUrl = QiniuUtil.uploadFile(base64Source, fileName);
-            orderProductDTO.setOrderContractUrl(fileUrl);
+            orderProductDTO.setOrderContractExtendUrl(fileUrl);
             // 将价格隐藏的合同上传到服务器
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
             String extendFileUrl = QiniuUtil.uploadFile(outputStream.toByteArray(), System.currentTimeMillis() + "-noPrice-" + fileName);
-            orderProductDTO.setOrderContractExtendUrl(extendFileUrl);
+            orderProductDTO.setOrderContractUrl(extendFileUrl);
             return saveOrderProductInfo(orderProductDTO);
         } catch (Exception e) {
             log.error("upload orderProduct excel exception|orderProduct:{}", JSONObject.toJSONString(orderProduct), e);

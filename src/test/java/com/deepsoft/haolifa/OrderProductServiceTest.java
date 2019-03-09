@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.order.OrderUploadDTO;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.Base64Utils;
@@ -29,7 +30,7 @@ public class OrderProductServiceTest extends BaseApplicationTests {
     @Test
     public void uploadOrderExcelTest() {
         String fileBase64Str = Base64Utils.encryptToBase64("d:\\123.xlsx");
-        FileUploadDTO fileUploadDTO = new FileUploadDTO();
+        OrderUploadDTO fileUploadDTO = new OrderUploadDTO();
         fileUploadDTO.setBase64Source(fileBase64Str);
         fileUploadDTO.setFileName("HX1812029-X417-H-ST.xlsx");
         ResultBean resultBean = orderService.uploadOrderProduct(fileUploadDTO);

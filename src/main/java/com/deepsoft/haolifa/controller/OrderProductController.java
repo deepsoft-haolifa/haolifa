@@ -28,8 +28,8 @@ public class OrderProductController {
 
     @ApiOperation("平台订单文件上传接口（只能是Excel）")
     @PostMapping("/uploadContract")
-    public ResultBean uploadContract(@RequestBody FileUploadDTO fileUploadDTO) {
-        return orderProductService.uploadOrderProduct(fileUploadDTO);
+    public ResultBean uploadContract(@RequestBody OrderUploadDTO orderUploadDTO) {
+        return orderProductService.uploadOrderProduct(orderUploadDTO);
     }
 
     @ApiOperation("成品订单信息添加")

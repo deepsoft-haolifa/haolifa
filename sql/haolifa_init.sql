@@ -312,8 +312,8 @@ DROP TABLE IF EXISTS `order_product`;
 	  `order_no` varchar(64) NOT NULL COMMENT '订单编号（目前暂时和合同编号一致）',
 	  `order_contract_no` varchar (128) NOT NULL DEFAULT '' COMMENT '合同编号',
 	  `order_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '订单状态',
-	  `order_contract_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url',
-	  `order_contract_extend_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url（价格隐藏）',
+	  `order_contract_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url（默认价格隐藏）',
+	  `order_contract_extend_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url',
 	  `technical_require` varchar(1024) NOT NULL DEFAULT '' COMMENT '技术清单要求（技术员填写）',
 	  `finish_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '工厂反馈完成时间',
 	  `feedback_time_confirm_user` varchar(32) NOT NULL DEFAULT '' COMMENT '反馈确认人',
@@ -886,7 +886,7 @@ CREATE TABLE `delivery_notice` (
 	  `audit_user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '技术审核人',
     `audit_info` varchar(1024) NOT NULL DEFAULT '' COMMENT '技术审核备注',
     `audit_time` timestamp  DEFAULT NULL  COMMENT '技术审批日期',
-    `audit_result` tinyint(4) NOT NULL DEFAULT 0  COMMENT '技术审核结果： 0 未审核 1审核不通过 2 审核通过',
+    `audit_result` tinyint(4) NOT NULL DEFAULT 0  COMMENT '技术审核结果： 0 未审核 1审核不通过 2 审核通过 3 已出库',
 	  `remark` varchar(1024) NOT NULL DEFAULT '' COMMENT '备注',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='更换零件表（车间主任中间要求替换料）';
