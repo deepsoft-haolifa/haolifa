@@ -463,7 +463,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     FlowInstanceExample example = new FlowInstanceExample();
     FlowInstanceExample.Criteria criteria = example.createCriteria();
     if (formId != 0) {
-      criteria.andFormIdEqualTo(formId);
+      criteria.andFormIdEqualTo(formId).andFlowIdEqualTo(4);
     }
     if (StringUtils.isNotEmpty(formNo)) {
       criteria.andFormNoEqualTo(formNo);

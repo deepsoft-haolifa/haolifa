@@ -43,14 +43,14 @@ public class FlowInstanceController {
   }
 
   @GetMapping("flow/progress")
-  @ApiOperation("获取流程审批的进度信息，返回list 是节点审核顺序")
-  public ResultBean flowProgress(@RequestParam String formNo,
+  @ApiOperation("获取流程审批的进度信息，返回list 是节点审核顺序，除了替换料审批，其他流程formNo必填，formId=0")
+  public ResultBean flowProgress(@RequestParam(required = false, defaultValue = "") String formNo,
       @RequestParam(required = false, defaultValue = "0") Integer formId) {
     return flowInstanceService.flowProgress(formNo, formId);
   }
 
   @GetMapping("flow/accessoryInfo")
-  @ApiOperation("审批附件信息")
+  @ApiOperation("审批附件信息,除了替换料审批，其他流程formNo必填，formId=0")
   public ResultBean accessoryInfo(@RequestParam String formNo,
       @RequestParam(required = false, defaultValue = "0") Integer formId) {
     return flowInstanceService.accessoryInfo(formNo, formId);
