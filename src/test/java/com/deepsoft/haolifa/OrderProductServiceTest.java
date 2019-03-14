@@ -48,6 +48,25 @@ public class OrderProductServiceTest extends BaseApplicationTests {
         ResultBean resultBean = orderService.uploadOrderProduct(fileUploadDTO);
     }
 
+    public static void main(String[] args) {
+
+        GenerateOrderDTO generateOrderDTO = new GenerateOrderDTO() {{
+            setContractSignDate("2019-03-14");
+            setDemandName("北京好利阀业集团有限公司");
+            setSupplyName("山西好利阀机械制造有限公司");
+            setOrderContractNo("555555");
+            setTransportMode("货运");
+        }};
+
+        List<OrderProductAssociate> list = new ArrayList();
+        list.add(new OrderProductAssociate() {{
+            setProductName("手柄对夹密封型中线垂直板蝶阀");
+            setProductNo("DSb7A1X3N-16Q-DN65 ");
+        }});
+        generateOrderDTO.setOrderProductAssociates(list);
+        System.out.println(JSONObject.toJSONString(generateOrderDTO));
+    }
+
     @Test
     public void generateOrder() {
 //        OrderProductAssociate orderProductAssociate1=new OrderProductAssociate();

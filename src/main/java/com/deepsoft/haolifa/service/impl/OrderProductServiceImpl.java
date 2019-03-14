@@ -69,8 +69,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private FlowInstanceService flowInstanceService;
 
 
-
-
     @Override
     public ResultBean generateOrder(GenerateOrderDTO generateOrderDTO) {
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -485,7 +483,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String extendFileUrl = QiniuUtil.uploadFile(outputStream.toByteArray(), System.currentTimeMillis() + "-noPrice.xlsx");
+        String extendFileUrl = QiniuUtil.uploadFile(outputStream.toByteArray(), System.currentTimeMillis() + "-" + generateOrderDTO.getOrderContractNo() + ".xlsx");
         log.info("generate file url:{}", extendFileUrl);
         return ResultBean.success(extendFileUrl);
     }
