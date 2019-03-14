@@ -26,6 +26,12 @@ public class OrderProductController {
     @Autowired
     private OrderProductService orderProductService;
 
+    @ApiOperation("生成订单")
+    @PostMapping("/generateOrder")
+    public ResultBean uploadContract(@RequestBody GenerateOrderDTO generateOrderDTO) {
+        return orderProductService.generateOrder(generateOrderDTO);
+    }
+
     @ApiOperation("平台订单文件上传接口（只能是Excel）")
     @PostMapping("/uploadContract")
     public ResultBean uploadContract(@RequestBody OrderUploadDTO orderUploadDTO) {

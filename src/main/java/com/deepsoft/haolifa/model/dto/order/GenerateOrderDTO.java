@@ -50,7 +50,14 @@ public class GenerateOrderDTO {
     @ApiModelProperty(value = "发货日期")
     private String deliveryDate;
     @ApiModelProperty(value = "收货信息")
-    private String receivingnformation;
+    private String receivingInformation;
+    @ApiModelProperty(value = "付款方式")
+    private String paymentMethod;
+    @ApiModelProperty(value = "运费承担")
+    private String freightCharges;
+    @ApiModelProperty(value = "违约责任")
+    private String liabilityForBreach;
+
 
     @ApiModelProperty(value = "需求方代理人")
     private String demandAgentName;
@@ -58,20 +65,17 @@ public class GenerateOrderDTO {
     private String demandPhone;
     @ApiModelProperty(value = "需求方传真")
     private String demandFax;
-    @ApiModelProperty(value = "需求开户银行")
-    private String demandBankName;
-    @ApiModelProperty(value = "需求开户银行账号")
-    private String demandBankCardNo;
+    @ApiModelProperty(value = "需求方地址")
+    private String demandAddress;
+
     @ApiModelProperty(value = "供应方代理人")
     private String supplyAgentName;
     @ApiModelProperty(value = "供应方电话")
     private String supplyPhone;
     @ApiModelProperty(value = "供应方传真")
     private String supplyFax;
-    @ApiModelProperty(value = "供应方开户银行")
-    private String supplyBankName;
-    @ApiModelProperty(value = "需求开户银行账号")
-    private String supplyBankCardNo;
+    @ApiModelProperty(value = "供应方地址")
+    private String supplyAddress;
 
 
 
