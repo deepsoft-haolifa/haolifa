@@ -9,6 +9,14 @@ import com.deepsoft.haolifa.model.dto.order.*;
 import java.util.List;
 
 public interface OrderProductService {
+
+    /**
+     * 上传订单excel
+     *
+     * @return
+     */
+    ResultBean generateOrder(GenerateOrderDTO generateOrderDTO);
+
     /**
      * 上传订单excel
      *

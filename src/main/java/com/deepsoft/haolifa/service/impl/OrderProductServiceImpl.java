@@ -28,6 +28,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,29 +70,41 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private FlowInstanceService flowInstanceService;
 
-    private String getCellValue(Cell cell) {
-        String cellValue = "";
-        if (cell != null) {
-            CellType cellTypeEnum = cell.getCellTypeEnum();
-            switch (cellTypeEnum) {
-                case STRING:
-                    String stringCellValue = cell.getStringCellValue();
-                    boolean number = NumberUtils.isNumber(stringCellValue);
-                    cellValue = number ? new Double(stringCellValue).toString() : stringCellValue;
-                    boolean digits = NumberUtils.isDigits(stringCellValue);
-                    cellValue = digits ? stringCellValue : cellValue;
-                    break;
-                case NUMERIC:
-                    cellValue = new BigDecimal(cell.getNumericCellValue()).toString();
-                    if (cellValue.contains(".")) {
-                        cellValue = Double.toString(cell.getNumericCellValue());
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-        return cellValue;
+
+    @Override
+    public ResultBean generateOrder(GenerateOrderDTO generateOrderDTO) {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet();
+        // region 设置第二行的样式
+        Font fontTitle = workbook.createFont();
+        fontTitle.setFontHeightInPoints((short) 18); //字体大小
+        fontTitle.setBold(true); //粗体显示
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setFont(fontTitle);
+        // endregion
+        //参数说明：1：开始行 2：结束行  3：开始列 4：结束列
+        //比如我要合并 第二行到第四行的    第六列到第八列     sheet.addMergedRegion(new CellRangeAddress(1,3,5,7));
+
+        // 第一行
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 10));
+        XSSFRow row1 = sheet.createRow(0);
+        XSSFCell cell1 = row1.createCell(0);
+        cell1.setCellValue("如无问题，请尽快回传及付款，以免影响交货期！回传电话：010-67171220。");
+        // 第二行
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 10));
+        XSSFRow row2 = sheet.createRow(1);
+        XSSFCell cell2 = row2.createCell(0);
+        cell2.setCellStyle(cellStyle);
+        cell2.setCellValue("产品购销合同");
+        // 第三行
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 1, 4));
+        XSSFRow row3 = sheet.createRow(2);
+        XSSFCell cell3 = row3.createCell(0);
+        cell2.setCellStyle(cellStyle);
+        cell2.setCellValue("产品购销合同");
+
+
+        return null;
     }
 
     @Override
@@ -1131,4 +1147,31 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         return 0;
     }
+
+
+    private String getCellValue(Cell cell) {
+        String cellValue = "";
+        if (cell != null) {
+            CellType cellTypeEnum = cell.getCellTypeEnum();
+            switch (cellTypeEnum) {
+                case STRING:
+                    String stringCellValue = cell.getStringCellValue();
+                    boolean number = NumberUtils.isNumber(stringCellValue);
+                    cellValue = number ? new Double(stringCellValue).toString() : stringCellValue;
+                    boolean digits = NumberUtils.isDigits(stringCellValue);
+                    cellValue = digits ? stringCellValue : cellValue;
+                    break;
+                case NUMERIC:
+                    cellValue = new BigDecimal(cell.getNumericCellValue()).toString();
+                    if (cellValue.contains(".")) {
+                        cellValue = Double.toString(cell.getNumericCellValue());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return cellValue;
+    }
+
 }
