@@ -1,36 +1,36 @@
 package com.deepsoft.haolifa.model.domain;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 public class PriceMaterial {
     private Integer id;
-
+    @ApiModelProperty(value = "零件分类名称")
     private String materialClassifyName;
-
+    @ApiModelProperty(value = "零件名称")
     private String name;
-
+    @ApiModelProperty(value = "图号")
     private String graphNo;
-
+    @ApiModelProperty(value = "型号")
     private String model;
-
+    @ApiModelProperty(value = "规格")
     private String specifications;
-
+    @ApiModelProperty(value = "材料")
     private String material;
-
+    @ApiModelProperty(value = "单位")
     private String unit;
-
+    @ApiModelProperty(value = "单重")
     private String actualWeight;
-
+    @ApiModelProperty(value = "吨价(元)")
     private String tonPrice;
-
+    @ApiModelProperty(value = "毛坯费（元）")
     private String blankCost;
-
+    @ApiModelProperty(value = "加工费（元）")
     private String processCost;
-
+    @ApiModelProperty(value = "成品价（元）")
     private String productPrice;
-
     private Date createTime;
-
     private Date updateTime;
 
     private Integer createUser;

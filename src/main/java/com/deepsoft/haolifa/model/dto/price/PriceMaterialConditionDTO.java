@@ -13,7 +13,7 @@ public class PriceMaterialConditionDTO {
     @ApiModelProperty(value = "图号")
     private String graphNo;
     @ApiModelProperty(value = "零件名称")
-    private String materialName;
+    private String name;
 
     @ApiModelProperty(value = "规格")
     private String specifications;

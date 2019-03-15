@@ -87,8 +87,8 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         if (StringUtils.isNotBlank(priceMaterialConditionDTO.getSpecifications())) {
             criteria.andSpecificationsLike("%" + priceMaterialConditionDTO.getSpecifications() + "%");
         }
-        if (StringUtils.isNotBlank(priceMaterialConditionDTO.getMaterialName())) {
-            criteria.andNameLike("%" + priceMaterialConditionDTO.getMaterialName() + "%");
+        if (StringUtils.isNotBlank(priceMaterialConditionDTO.getName())) {
+            criteria.andNameLike("%" + priceMaterialConditionDTO.getName() + "%");
         }
         example.setOrderByClause("id desc");
 

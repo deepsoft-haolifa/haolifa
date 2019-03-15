@@ -1,54 +1,57 @@
 package com.deepsoft.haolifa.model.domain;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 public class PriceProduct {
+    @ApiModelProperty(value = "主键ID")
     private Integer id;
-
     private String productNo;
 
+    @ApiModelProperty(value = "型号")
     private String model;
-
+    @ApiModelProperty(value = "连接方式")
     private String connectionMode;
-
+    @ApiModelProperty(value = "结构形式")
     private String structuralStyle;
-
+    @ApiModelProperty(value = "公称压力")
     private String nominalPressure;
-
+    @ApiModelProperty(value = "阀体材质")
     private String fatiMaterial;
-
+    @ApiModelProperty(value = "阀板材质")
     private String fabanMaterial;
-
+    @ApiModelProperty(value = "密封形式")
     private String sealForm;
-
+    @ApiModelProperty(value = "阀轴材质")
     private String fazhouMaterial;
-
+    @ApiModelProperty(value = "辅料")
     private String accessories;
-
+    @ApiModelProperty(value = "驱动")
     private String drive;
-
+    @ApiModelProperty(value = "好利型号")
     private String haoliModel;
-
+    @ApiModelProperty(value = "规格")
     private String specifications;
-
+    @ApiModelProperty(value = "成品单价")
     private String productPrice;
-
+    @ApiModelProperty(value = "价格书")
     private String priceBook;
-
+    @ApiModelProperty(value = "阀体单价")
     private String fatiPrice;
-
+    @ApiModelProperty(value = "阀板单价")
     private String fabanPrice;
-
+    @ApiModelProperty(value = "阀座单价")
     private String fazuoPrice;
-
+    @ApiModelProperty(value = "阀轴单价")
     private String fazhouPrice;
-
+    @ApiModelProperty(value = "辅料单价")
     private String accessoriesPrice;
-
+    @ApiModelProperty(value = "驱动单价")
     private String drivePrice;
-
+    @ApiModelProperty(value = "合计单价")
     private String totalPrice;
-
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     private Date createTime;
