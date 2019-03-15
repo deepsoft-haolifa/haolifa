@@ -210,7 +210,7 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <table tableName="price_product" domainObjectName="PriceProduct">
+    <table tableName="price_material" domainObjectName="PriceMaterial">
       <generatedKey column="id" sqlStatement="MySql" identity="true"/>
     </table>
     <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->

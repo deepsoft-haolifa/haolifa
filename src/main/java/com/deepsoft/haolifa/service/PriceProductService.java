@@ -1,7 +1,6 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.PriceProduct;
-import com.deepsoft.haolifa.model.domain.Product;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.price.PriceProductConditionDTO;
 

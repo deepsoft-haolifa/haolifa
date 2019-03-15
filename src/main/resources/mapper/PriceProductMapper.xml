@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PriceProductMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PriceProduct" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="product_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="connection_mode" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="structural_style" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="nominal_pressure" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fati_material" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="faban_material" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="seal_form" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fazhou_material" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accessories" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="drive" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="haoli_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="price_book" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fati_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="faban_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fazuo_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fazhou_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accessories_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="drive_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="total_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="create_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="update_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, product_no, model, connection_mode, structural_style, nominal_pressure, fati_material, 
+    faban_material, seal_form, fazhou_material, accessories, drive, haoli_model, specifications, 
+    product_price, price_book, fati_price, faban_price, fazuo_price, fazhou_price, accessories_price, 
+    drive_price, total_price, remark, create_time, update_time, create_user, update_user
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PriceProductExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from price_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from price_product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from price_product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PriceProductExample" >
+    delete from price_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PriceProduct" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into price_product (product_no, model, connection_mode, 
+      structural_style, nominal_pressure, fati_material, 
+      faban_material, seal_form, fazhou_material, 
+      accessories, drive, haoli_model, 
+      specifications, product_price, price_book, 
+      fati_price, faban_price, fazuo_price, 
+      fazhou_price, accessories_price, drive_price, 
+      total_price, remark, create_time, 
+      update_time, create_user, update_user
+      )
+    values (#{productNo,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{connectionMode,jdbcType=VARCHAR}, 
+      #{structuralStyle,jdbcType=VARCHAR}, #{nominalPressure,jdbcType=VARCHAR}, #{fatiMaterial,jdbcType=VARCHAR}, 
+      #{fabanMaterial,jdbcType=VARCHAR}, #{sealForm,jdbcType=VARCHAR}, #{fazhouMaterial,jdbcType=VARCHAR}, 
+      #{accessories,jdbcType=VARCHAR}, #{drive,jdbcType=VARCHAR}, #{haoliModel,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{productPrice,jdbcType=VARCHAR}, #{priceBook,jdbcType=VARCHAR}, 
+      #{fatiPrice,jdbcType=VARCHAR}, #{fabanPrice,jdbcType=VARCHAR}, #{fazuoPrice,jdbcType=VARCHAR}, 
+      #{fazhouPrice,jdbcType=VARCHAR}, #{accessoriesPrice,jdbcType=VARCHAR}, #{drivePrice,jdbcType=VARCHAR}, 
+      #{totalPrice,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PriceProduct" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into price_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="connectionMode != null" >
+        connection_mode,
+      </if>
+      <if test="structuralStyle != null" >
+        structural_style,
+      </if>
+      <if test="nominalPressure != null" >
+        nominal_pressure,
+      </if>
+      <if test="fatiMaterial != null" >
+        fati_material,
+      </if>
+      <if test="fabanMaterial != null" >
+        faban_material,
+      </if>
+      <if test="sealForm != null" >
+        seal_form,
+      </if>
+      <if test="fazhouMaterial != null" >
+        fazhou_material,
+      </if>
+      <if test="accessories != null" >
+        accessories,
+      </if>
+      <if test="drive != null" >
+        drive,
+      </if>
+      <if test="haoliModel != null" >
+        haoli_model,
+      </if>
+      <if test="specifications != null" >
+        specifications,
+      </if>
+      <if test="productPrice != null" >
+        product_price,
+      </if>
+      <if test="priceBook != null" >
+        price_book,
+      </if>
+      <if test="fatiPrice != null" >
+        fati_price,
+      </if>
+      <if test="fabanPrice != null" >
+        faban_price,
+      </if>
+      <if test="fazuoPrice != null" >
+        fazuo_price,
+      </if>
+      <if test="fazhouPrice != null" >
+        fazhou_price,
+      </if>
+      <if test="accessoriesPrice != null" >
+        accessories_price,
+      </if>
+      <if test="drivePrice != null" >
+        drive_price,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productNo != null" >
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="connectionMode != null" >
+        #{connectionMode,jdbcType=VARCHAR},
+      </if>
+      <if test="structuralStyle != null" >
+        #{structuralStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="nominalPressure != null" >
+        #{nominalPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="fatiMaterial != null" >
+        #{fatiMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="fabanMaterial != null" >
+        #{fabanMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="sealForm != null" >
+        #{sealForm,jdbcType=VARCHAR},
+      </if>
+      <if test="fazhouMaterial != null" >
+        #{fazhouMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="accessories != null" >
+        #{accessories,jdbcType=VARCHAR},
+      </if>
+      <if test="drive != null" >
+        #{drive,jdbcType=VARCHAR},
+      </if>
+      <if test="haoliModel != null" >
+        #{haoliModel,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrice != null" >
+        #{productPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="priceBook != null" >
+        #{priceBook,jdbcType=VARCHAR},
+      </if>
+      <if test="fatiPrice != null" >
+        #{fatiPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="fabanPrice != null" >
+        #{fabanPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="fazuoPrice != null" >
+        #{fazuoPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="fazhouPrice != null" >
+        #{fazhouPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="accessoriesPrice != null" >
+        #{accessoriesPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="drivePrice != null" >
+        #{drivePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PriceProductExample" resultType="java.lang.Integer" >
+    select count(*) from price_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update price_product
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.productNo != null" >
+        product_no = #{record.productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.model != null" >
+        model = #{record.model,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectionMode != null" >
+        connection_mode = #{record.connectionMode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.structuralStyle != null" >
+        structural_style = #{record.structuralStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nominalPressure != null" >
+        nominal_pressure = #{record.nominalPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fatiMaterial != null" >
+        fati_material = #{record.fatiMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fabanMaterial != null" >
+        faban_material = #{record.fabanMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sealForm != null" >
+        seal_form = #{record.sealForm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fazhouMaterial != null" >
+        fazhou_material = #{record.fazhouMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessories != null" >
+        accessories = #{record.accessories,jdbcType=VARCHAR},
+      </if>
+      <if test="record.drive != null" >
+        drive = #{record.drive,jdbcType=VARCHAR},
+      </if>
+      <if test="record.haoliModel != null" >
+        haoli_model = #{record.haoliModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productPrice != null" >
+        product_price = #{record.productPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priceBook != null" >
+        price_book = #{record.priceBook,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fatiPrice != null" >
+        fati_price = #{record.fatiPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fabanPrice != null" >
+        faban_price = #{record.fabanPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fazuoPrice != null" >
+        fazuo_price = #{record.fazuoPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fazhouPrice != null" >
+        fazhou_price = #{record.fazhouPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessoriesPrice != null" >
+        accessories_price = #{record.accessoriesPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.drivePrice != null" >
+        drive_price = #{record.drivePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalPrice != null" >
+        total_price = #{record.totalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateUser != null" >
+        update_user = #{record.updateUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update price_product
+    set id = #{record.id,jdbcType=INTEGER},
+      product_no = #{record.productNo,jdbcType=VARCHAR},
+      model = #{record.model,jdbcType=VARCHAR},
+      connection_mode = #{record.connectionMode,jdbcType=VARCHAR},
+      structural_style = #{record.structuralStyle,jdbcType=VARCHAR},
+      nominal_pressure = #{record.nominalPressure,jdbcType=VARCHAR},
+      fati_material = #{record.fatiMaterial,jdbcType=VARCHAR},
+      faban_material = #{record.fabanMaterial,jdbcType=VARCHAR},
+      seal_form = #{record.sealForm,jdbcType=VARCHAR},
+      fazhou_material = #{record.fazhouMaterial,jdbcType=VARCHAR},
+      accessories = #{record.accessories,jdbcType=VARCHAR},
+      drive = #{record.drive,jdbcType=VARCHAR},
+      haoli_model = #{record.haoliModel,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      product_price = #{record.productPrice,jdbcType=VARCHAR},
+      price_book = #{record.priceBook,jdbcType=VARCHAR},
+      fati_price = #{record.fatiPrice,jdbcType=VARCHAR},
+      faban_price = #{record.fabanPrice,jdbcType=VARCHAR},
+      fazuo_price = #{record.fazuoPrice,jdbcType=VARCHAR},
+      fazhou_price = #{record.fazhouPrice,jdbcType=VARCHAR},
+      accessories_price = #{record.accessoriesPrice,jdbcType=VARCHAR},
+      drive_price = #{record.drivePrice,jdbcType=VARCHAR},
+      total_price = #{record.totalPrice,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=INTEGER},
+      update_user = #{record.updateUser,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PriceProduct" >
+    update price_product
+    <set >
+      <if test="productNo != null" >
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="connectionMode != null" >
+        connection_mode = #{connectionMode,jdbcType=VARCHAR},
+      </if>
+      <if test="structuralStyle != null" >
+        structural_style = #{structuralStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="nominalPressure != null" >
+        nominal_pressure = #{nominalPressure,jdbcType=VARCHAR},
+      </if>
+      <if test="fatiMaterial != null" >
+        fati_material = #{fatiMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="fabanMaterial != null" >
+        faban_material = #{fabanMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="sealForm != null" >
+        seal_form = #{sealForm,jdbcType=VARCHAR},
+      </if>
+      <if test="fazhouMaterial != null" >
+        fazhou_material = #{fazhouMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="accessories != null" >
+        accessories = #{accessories,jdbcType=VARCHAR},
+      </if>
+      <if test="drive != null" >
+        drive = #{drive,jdbcType=VARCHAR},
+      </if>
+      <if test="haoliModel != null" >
+        haoli_model = #{haoliModel,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrice != null" >
+        product_price = #{productPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="priceBook != null" >
+        price_book = #{priceBook,jdbcType=VARCHAR},
+      </if>
+      <if test="fatiPrice != null" >
+        fati_price = #{fatiPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="fabanPrice != null" >
+        faban_price = #{fabanPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="fazuoPrice != null" >
+        fazuo_price = #{fazuoPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="fazhouPrice != null" >
+        fazhou_price = #{fazhouPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="accessoriesPrice != null" >
+        accessories_price = #{accessoriesPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="drivePrice != null" >
+        drive_price = #{drivePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PriceProduct" >
+    update price_product
+    set product_no = #{productNo,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      connection_mode = #{connectionMode,jdbcType=VARCHAR},
+      structural_style = #{structuralStyle,jdbcType=VARCHAR},
+      nominal_pressure = #{nominalPressure,jdbcType=VARCHAR},
+      fati_material = #{fatiMaterial,jdbcType=VARCHAR},
+      faban_material = #{fabanMaterial,jdbcType=VARCHAR},
+      seal_form = #{sealForm,jdbcType=VARCHAR},
+      fazhou_material = #{fazhouMaterial,jdbcType=VARCHAR},
+      accessories = #{accessories,jdbcType=VARCHAR},
+      drive = #{drive,jdbcType=VARCHAR},
+      haoli_model = #{haoliModel,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      product_price = #{productPrice,jdbcType=VARCHAR},
+      price_book = #{priceBook,jdbcType=VARCHAR},
+      fati_price = #{fatiPrice,jdbcType=VARCHAR},
+      faban_price = #{fabanPrice,jdbcType=VARCHAR},
+      fazuo_price = #{fazuoPrice,jdbcType=VARCHAR},
+      fazhou_price = #{fazhouPrice,jdbcType=VARCHAR},
+      accessories_price = #{accessoriesPrice,jdbcType=VARCHAR},
+      drive_price = #{drivePrice,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      update_user = #{updateUser,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
