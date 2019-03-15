@@ -206,10 +206,13 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <table tableName="purchase_order" domainObjectName="PurchaseOrder">
-    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-    </table>
+    <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
 
+    <table tableName="price_product" domainObjectName="PriceProduct">
+      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>
     <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 
     <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->

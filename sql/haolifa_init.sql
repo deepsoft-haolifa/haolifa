@@ -950,3 +950,38 @@ CREATE TABLE `pressure_inspect_unqualified` (
   `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='压力测试不合格记录';
+
+
+DROP TABLE IF EXISTS `price_product`;
+	CREATE TABLE `price_product` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `product_no` varchar(36) NOT NULL DEFAULT '' COMMENT '成品号',
+	  `model` varchar(36) NOT NULL DEFAULT '' COMMENT '型号',
+	  `connection_mode` varchar(32) NOT NULL DEFAULT '' COMMENT '连接方式',
+	  `structural_style` varchar(32) NOT NULL DEFAULT '' COMMENT '结构形式',
+	  `nominal_pressure` varchar(32) NOT NULL DEFAULT '' COMMENT '公称压力',
+	  `fati_material` varchar(32) NOT NULL DEFAULT '' COMMENT '阀体材质',
+	  `faban_material` varchar(32) NOT NULL DEFAULT '' COMMENT '阀板材质',
+	  `seal_form` varchar(32) NOT NULL DEFAULT '' COMMENT '密封形式',
+	  `fazhou_material` varchar(32) NOT NULL DEFAULT '' COMMENT '阀轴材质',
+	  `accessories` varchar(32) NOT NULL DEFAULT '' COMMENT '辅料',
+	  `drive` varchar(32) NOT NULL DEFAULT '' COMMENT '驱动',
+	  `haoli_model` varchar(32) NOT NULL DEFAULT '' COMMENT '好利型号',
+	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '规格（如：DN65，DN80）',
+	  `product_price` varchar(32) NOT NULL DEFAULT '' COMMENT '成品单价(元)',
+	  `price_book` varchar(32) NOT NULL DEFAULT '' COMMENT '价格书',
+	  `fati_price` varchar(32) NOT NULL DEFAULT '' COMMENT '阀体单价(元)',
+	  `faban_price` varchar(32) NOT NULL DEFAULT '' COMMENT '阀板单价(元)',
+	  `fazuo_price` varchar(32) NOT NULL DEFAULT '' COMMENT '阀座单价(元)',
+	  `fazhou_price` varchar(32) NOT NULL DEFAULT '' COMMENT '阀轴单价(元)',
+	  `accessories_price` varchar(32) NOT NULL DEFAULT '' COMMENT '辅料单价(元)',
+	  `drive_price` varchar(32) NOT NULL DEFAULT '' COMMENT '驱动单价(元)',
+	  `total_price` varchar(32) NOT NULL DEFAULT '' COMMENT '合计单价(元)',
+	  `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '备注',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  `create_user` int(11) NOT NULL COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品价格管理表';
+
