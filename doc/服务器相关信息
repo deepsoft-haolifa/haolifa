@@ -1,0 +1,16 @@
+两台机器
+service1 public ip 192.168.1.181
+
+service2 public ip 192.168.1.182
+
+service1心跳ip  192.168.168.10
+
+service2心跳ip  192.168.168.11
+
+ssh 60.221.242.49
+root
+密码123456
+
+redis  nginx MySQL 程序路径目录在 /usr/local/下
+
+MySQL库文件路径在 /data/mysqldata/
