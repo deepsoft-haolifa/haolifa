@@ -232,7 +232,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   public ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType) {
     PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
     PurchaseOrderExample.Criteria criteria = purchaseOrderExample.createCriteria();
-    criteria.andOrderTypeEqualTo(orderType.byteValue());
+    if(orderType != -1) {
+      criteria.andOrderTypeEqualTo(orderType.byteValue());
+    }
     if (StringUtils.isNotEmpty(orderNo)) {
       criteria.andPurchaseOrderNoLike("%" + orderNo + "%");
     }
