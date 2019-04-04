@@ -623,6 +623,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             if (cellValue.contains("发货日期")) {
                                 Cell cell2 = row.getCell(2);
                                 deliveryDate = getCellValue(cell2);
+                                orderUploadDTO.setDeliveryDate(deliveryDate);
                                 break;
                             }
                         }
