@@ -17,6 +17,12 @@ public class Constant {
         int ORDER_TYPE_PURCHASE_0 = 0;
         int ORDER_TYPE_ENTRUST_1 = 1;
     }
+
+    /**
+     * 零件默认批次号
+     */
+    public static final String DEFAULT_BATCH_NO="PC00000000";
+
     /**
      * 成品质量检验失败列表
      */

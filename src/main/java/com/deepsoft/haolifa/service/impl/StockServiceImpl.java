@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.StockMapper;
 import com.deepsoft.haolifa.dao.repository.extend.StockExtendMapper;
 import com.deepsoft.haolifa.model.domain.Stock;
@@ -44,7 +45,7 @@ public class StockServiceImpl extends BaseService implements StockService {
         // 零件才有批次号的概念
         if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
             if (StringUtils.isBlank(model.getMaterialBatchNo())) {
-                model.setMaterialBatchNo("默认批次号");
+                model.setMaterialBatchNo(Constant.DEFAULT_BATCH_NO);
             }
             criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
         }
@@ -91,7 +92,7 @@ public class StockServiceImpl extends BaseService implements StockService {
         // 零件才有批次号的概念
         if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
             if (StringUtils.isBlank(model.getMaterialBatchNo())) {
-                model.setMaterialBatchNo("默认批次号");
+                model.setMaterialBatchNo(Constant.DEFAULT_BATCH_NO);
             }
             criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
         }
