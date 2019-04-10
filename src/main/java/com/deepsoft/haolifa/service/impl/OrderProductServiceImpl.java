@@ -787,6 +787,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     List<OrderProductAssociate> orderProductAssociates = orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
                         or().andOrderNoEqualTo(orderNo);
                     }});
+                    orderProductAssociates.forEach(e->{e.setPrice(BigDecimal.ZERO);e.setTotalPrice(BigDecimal.ZERO);});
                     orderProductDTO.setOrderProductAssociates(orderProductAssociates);
                 }
                 return orderProductDTO;
