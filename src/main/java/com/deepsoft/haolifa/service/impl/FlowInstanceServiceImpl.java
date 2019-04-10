@@ -251,6 +251,16 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
           purcahseOrderService.updateOrderStatus(formId, 4);
         }
         break;
+      case 5:
+        // 机加工
+        if (auditRes == 1) {
+          // 审核通过
+          purcahseOrderService.updateOrderStatus(formId, 3);
+        } else if (auditRes == 0) {
+          // 审核不通过
+          purcahseOrderService.updateOrderStatus(formId, 4);
+        }
+        break;
       case 3:
         // 供应商审批
         if (auditRes == 1) {
@@ -373,9 +383,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       result.add(back);
       preStepId = back.getPrevStepId();
     }
-    if (result.size() > 0) {
-      result.remove(result.size() - 1);
-    }
+//    if (result.size() > 0) {
+//      result.remove(result.size() - 1);
+//    }
     return ResultBean.success(result);
   }
 
