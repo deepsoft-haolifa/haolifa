@@ -129,10 +129,11 @@ public class SysUserServiceImpl implements SysUserService {
         }
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
+        sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
         int count = userMapper.updateByPrimaryKeySelective(sysUser);
-        String userKey = CacheKeyManager.cacheKeyUserCache(user.getId()).key;
-        //暂时不用缓存
-        redisDao.del(userKey);
+//        String userKey = CacheKeyManager.cacheKeyUserCache(user.getId()).key;
+//        //暂时不用缓存
+//        redisDao.del(userKey);
         return count;
     }
 
