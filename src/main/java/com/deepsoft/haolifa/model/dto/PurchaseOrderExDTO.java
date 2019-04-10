@@ -61,4 +61,6 @@ public class PurchaseOrderExDTO {
 
   private Double totalAmount;
 
+  private Integer orderType;
+
 }

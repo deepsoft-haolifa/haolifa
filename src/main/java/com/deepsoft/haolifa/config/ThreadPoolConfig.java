@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -12,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author: hedong@ibeesaas.com
  * @date: 2018-07-11 21:09
  **/
+@EnableAsync
 @Configuration
 public class ThreadPoolConfig {
 

@@ -25,6 +25,7 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
+import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
@@ -53,6 +54,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 
   @Autowired
   private RedisDao redisDao;
+
+  @Autowired
+  private UploadPurchaseExcelService uploadPurchaseExcelService;
 
   @Autowired
   private PurchaseOrderMapper purchaseOrderMapper;
@@ -104,7 +108,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }).collect(Collectors.toList());
     log.info("添加订单单项：{}", JSON.toJSONString(items));
     itemExtendMapper.batchInsertPurchaseOrderItem(items);
-
+    uploadPurchaseExcelService.uploadPurchaseOrderExcel(purchaseOrder.getId());
     Map<String, Object> result = new HashMap<>(8);
     result.put("formId", purchaseOrder.getId());
     result.put("formType", CommonEnum.FormType.PURCHASE_TYPE.code);
@@ -164,6 +168,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }).collect(Collectors.toList());
     log.info("添加订单单项：{}", JSON.toJSONString(items));
     itemExtendMapper.batchInsertPurchaseOrderItem(items);
+    uploadPurchaseExcelService.uploadPurchaseOrderExcel(model.getId());
     return ResultBean.success(1);
   }
 
@@ -175,6 +180,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }
     PurchaseOrderExDTO purchaseOrderExDTO = new PurchaseOrderExDTO();
     BeanUtils.copyProperties(purchaseOrder, purchaseOrderExDTO);
+    purchaseOrderExDTO.setOrderType(purchaseOrder.getOrderType().intValue());
     PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
     purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrder.getPurchaseOrderNo());
     List<PurchaseOrderItem> purchaseOrderItemList = purchaseOrderItemMapper.selectByExample(purchaseOrderItemExample);
@@ -232,7 +238,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   public ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType) {
     PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
     PurchaseOrderExample.Criteria criteria = purchaseOrderExample.createCriteria();
-    if(orderType != -1) {
+    if (orderType != -1) {
       criteria.andOrderTypeEqualTo(orderType.byteValue());
     }
     if (StringUtils.isNotEmpty(orderNo)) {
@@ -295,6 +301,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     flowInstanceDTO.setFormNo(orderNo);
     flowInstanceDTO.setFormId(purchaseOrder.getId());
     flowInstanceService.create(flowInstanceDTO);
+    uploadPurchaseExcelService.uploadPurchaseOrderExcel(purchaseOrder.getId());
     return ResultBean.success(1);
   }
 
