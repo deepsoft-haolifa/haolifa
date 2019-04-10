@@ -63,4 +63,5 @@ public class PurchaseOrderExDTO {
 
   private Integer orderType;
 
+  private String fileUrl;
 }
