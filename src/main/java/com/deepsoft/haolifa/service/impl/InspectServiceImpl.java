@@ -116,6 +116,9 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean update(int inspectId, InspectDTO model) {
+    if (model.getStatus() == 2 && (model.getAccessorys() == null || model.getAccessorys().size() == 0)) {
+      return new ResultBean(MATERIAL_REPORT_IS_NULL);
+    }
     Inspect inspect = new Inspect();
     inspect.setId(inspectId);
     inspect.setSupplierName(model.getSupplierName());
