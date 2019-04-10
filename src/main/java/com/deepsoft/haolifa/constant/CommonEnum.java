@@ -60,7 +60,9 @@ public class CommonEnum {
 
         FILE_NAME_EXIST("5001", "上传的文件名已经存在，请换个名称上传"),
 
-        FLOW_INSTANCE_NOT_EXIST("4005", "该表单不存在审批流程");
+        FLOW_INSTANCE_NOT_EXIST("4005", "该表单不存在审批流程"),
+
+        MATERIAL_REPORT_IS_NULL("4006", "请至少上传一份材质报告");
 
         public final String code;
 

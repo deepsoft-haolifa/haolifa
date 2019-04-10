@@ -109,10 +109,10 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     InvoiceExample invoiceExample = new InvoiceExample();
     InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
     criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-    if(origin == 0) {
-//      经管申请
-      criteria.andCreateUserIdEqualTo(getLoginUserId());
-    }
+//    if(origin == 0) {
+////      经管申请
+//      criteria.andCreateUserIdEqualTo(getLoginUserId());
+//    }
     if (StringUtils.isNotEmpty(modelList.getOrderNo())) {
       criteria.andOrderNoLike("%" + modelList.getOrderNo() + "%");
     }

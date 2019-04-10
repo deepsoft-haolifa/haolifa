@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
 import static com.deepsoft.haolifa.constant.CacheKey.INSPECT_NO_KEY;
+import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.MATERIAL_REPORT_IS_NULL;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
@@ -62,11 +63,15 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     String batchNumer = createSerialNumber(BATCH_NUMBER_PREFIX_PC, BATCH_NUM_KEY);
     Inspect inspect = new Inspect();
     BeanUtils.copyProperties(model, inspect);
-    inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size()==0?"": JSON.toJSONString(model.getAccessorys()));
+    inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size() == 0 ? ""
+        : JSON.toJSONString(model.getAccessorys()));
     inspect.setCreateUserId(createUserId);
     inspect.setInspectNo(inspectNo);
     inspect.setBatchNumber(batchNumer);
     inspect.setStatus(model.getStatus().byteValue());
+    if (model.getStatus() == 2 && (model.getAccessorys() == null || model.getAccessorys().size() == 0)) {
+      return new ResultBean(MATERIAL_REPORT_IS_NULL);
+    }
     if (StringUtils.isNotEmpty(model.getArrivalTime())) {
       inspect.setArrivalTime(
           DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime()));
@@ -107,6 +112,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     inspectItemMapper.deleteByExample(inspectItemExample);
     return ResultBean.success(1);
   }
+
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean update(int inspectId, InspectDTO model) {
@@ -119,7 +125,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       inspect.setArrivalTime(arrivalTime);
     }
     inspect.setBatchNumber(model.getBatchNumber());
-    inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size()==0?"": JSON.toJSONString(model.getAccessorys()));
+    inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size() == 0 ? ""
+        : JSON.toJSONString(model.getAccessorys()));
     inspectMapper.updateByPrimaryKeySelective(inspect);
     InspectItemExample itemExample = new InspectItemExample();
     itemExample.or().andInspectIdEqualTo(inspect.getId());
@@ -147,17 +154,20 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   }
 
   @Override
-  public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo) {
+  public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo) {
     InspectExample example = new InspectExample();
     InspectExample.Criteria criteria = example.createCriteria();
-    if (type == 0) {
-      criteria.andCreateUserIdEqualTo(getLoginUserId());
-    }
+//    if (type == 0) {
+//      criteria.andCreateUserIdEqualTo(getLoginUserId());
+//    }
     if (type == 1) {
       criteria.andStatusNotIn(Arrays.asList(InspectStatus.SAVE.code));
     }
     if (type == 2) {
       criteria.andStatusIn(Arrays.asList(InspectStatus.STOCK_PENDING.code, InspectStatus.STOCKED.code));
+    }
+    if (StringUtils.isNotEmpty(purchaseOrderNo)) {
+      criteria.andPurchaseNoLike("%" + purchaseOrderNo + "%");
     }
     if (StringUtils.isNotEmpty(inspectNo)) {
       criteria.andInspectNoLike("%" + inspectNo + "%");
@@ -182,8 +192,11 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     Inspect inspect = new Inspect();
     inspect.setId(inspectId);
     inspect.setStatus(status.byteValue());
-    inspectMapper.updateByPrimaryKeySelective(inspect);
     Inspect inspect1 = inspectMapper.selectByPrimaryKey(inspectId);
+    if (status == 2 && inspect1.getBlueprints().length() == 0) {
+      return new ResultBean(MATERIAL_REPORT_IS_NULL);
+    }
+    inspectMapper.updateByPrimaryKeySelective(inspect);
     if (status == 2 || status == 3) {
       // 更新单项合格与不合格数量
       InspectHistoryExample historyExample = new InspectHistoryExample();
