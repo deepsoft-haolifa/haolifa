@@ -54,7 +54,9 @@ public class PurchaseOrder {
 
     private Byte orderType;
 
-    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType) {
+    private String fileUrl;
+
+    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
         this.supplierNo = supplierNo;
@@ -80,6 +82,7 @@ public class PurchaseOrder {
         this.status = status;
         this.payType = payType;
         this.orderType = orderType;
+        this.fileUrl = fileUrl;
     }
 
     public PurchaseOrder() {
@@ -284,5 +287,13 @@ public class PurchaseOrder {
 
     public void setOrderType(Byte orderType) {
         this.orderType = orderType;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
     }
 }

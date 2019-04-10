@@ -585,6 +585,7 @@ CREATE TABLE `purchase_order` (
   `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '订单状态：1 待审批 2 审批中 3 采购中 4 审批不通过 5 采购完成',
   `pay_type` varchar(255) NOT NULL DEFAULT '' COMMENT '付款方式',
   `order_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 采购订单 1 外部机加工订单',
+  `file_url` varchar(1024) NOT NULL DEFAULT '' COMMENT '订单附件下载地址',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单信息表';
 
