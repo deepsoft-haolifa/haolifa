@@ -37,4 +37,6 @@ public interface FlowInstanceService {
   ResultBean flowProgress(String formNo, Integer formId);
 
   ResultBean accessoryInfo(String formNo, Integer formId);
+
+  void deleteFlowInstance(int id);
 }

@@ -17,6 +17,8 @@ import java.util.Date;
 @ApiModel
 public class DeliveryNoticeAuditDTO {
 
+    private Integer id;
+
     @ApiModelProperty(value = "发货通知单号")
     private String deliveryNo;
 

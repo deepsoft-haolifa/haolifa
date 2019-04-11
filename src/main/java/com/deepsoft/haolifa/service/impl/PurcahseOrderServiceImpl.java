@@ -74,6 +74,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   @Autowired
   private InspectItemMapper inspectItemMapper;
 
+  @Autowired
+  private FlowInstanceMapper flowInstanceMapper;
+
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(PurchaseOrderDTO model, Integer orderType) {
@@ -127,6 +130,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
     purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
     purchaseOrderItemMapper.deleteByExample(purchaseOrderItemExample);
+    FlowInstanceExample example = new FlowInstanceExample();
+    example.createCriteria().andFormNoEqualTo(purchaseOrderNo);
+    flowInstanceMapper.deleteByExample(example);
     return ResultBean.success(1);
   }
 
@@ -356,5 +362,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     purchaseOrder.setId(formId);
     purchaseOrder.setStatus(status.byteValue());
     purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
+  }
+
+  private void deleteFlowInstance() {
+
   }
 }

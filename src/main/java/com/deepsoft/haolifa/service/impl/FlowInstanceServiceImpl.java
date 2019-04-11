@@ -23,6 +23,7 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -485,5 +486,13 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         accessories.addAll(JSON.parseArray(instances.get(0).getAccessory(), Accessory.class));
     }
     return ResultBean.success(accessories);
+  }
+
+  @Async("threadPoolTaskExecutor")
+  @Override
+  public void deleteFlowInstance(int formId) {
+    FlowInstanceExample example = new FlowInstanceExample();
+    example.createCriteria().andFormIdEqualTo(formId);
+    instanceMapper.deleteByExample(example);
   }
 }
