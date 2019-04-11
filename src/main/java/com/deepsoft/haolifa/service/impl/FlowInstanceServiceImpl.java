@@ -383,9 +383,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       result.add(back);
       preStepId = back.getPrevStepId();
     }
-//    if (result.size() > 0) {
-//      result.remove(result.size() - 1);
-//    }
+    if (result.size() > 0) {
+      result.remove(result.size() - 1);
+    }
     return ResultBean.success(result);
   }
 
