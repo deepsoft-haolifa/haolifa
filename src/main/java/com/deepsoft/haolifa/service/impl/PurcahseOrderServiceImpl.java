@@ -131,9 +131,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
     purchaseOrderItemExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
     purchaseOrderItemMapper.deleteByExample(purchaseOrderItemExample);
-    FlowInstanceExample example = new FlowInstanceExample();
-    example.createCriteria().andFormNoEqualTo(purchaseOrderNo);
-    flowInstanceMapper.deleteByExample(example);
+    flowInstanceService.deleteFlowInstance(purchaseOrderNo);
     return ResultBean.success(1);
   }
 
@@ -363,9 +361,5 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     purchaseOrder.setId(formId);
     purchaseOrder.setStatus(status.byteValue());
     purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
-  }
-
-  private void deleteFlowInstance() {
-
   }
 }

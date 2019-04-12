@@ -490,9 +490,9 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
 
   @Async("threadPoolTaskExecutor")
   @Override
-  public void deleteFlowInstance(int formId) {
+  public void deleteFlowInstance(String formNo) {
     FlowInstanceExample example = new FlowInstanceExample();
-    example.createCriteria().andFormIdEqualTo(formId);
+    example.createCriteria().andFormNoEqualTo(formNo);
     instanceMapper.deleteByExample(example);
   }
 }

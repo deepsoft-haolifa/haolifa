@@ -745,7 +745,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
       int delete = orderProductMapper.deleteByPrimaryKey(id);
 
       // 删除 流程实例
-      flowInstanceService.deleteFlowInstance(id);
+      flowInstanceService.deleteFlowInstance(orderProduct.getOrderNo());
       if (delete > 0) {
         // 刪除订单管理的产品
         OrderProductAssociateExample example = new OrderProductAssociateExample();
