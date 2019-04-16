@@ -13,4 +13,6 @@ public class RoleDTO {
 
     private String description;
 
+    private String roleNo;
+
 }

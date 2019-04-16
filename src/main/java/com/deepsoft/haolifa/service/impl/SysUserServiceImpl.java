@@ -168,7 +168,7 @@ public class SysUserServiceImpl implements SysUserService {
     public String initPwd(Integer id) {
         UserBaseDTO userBaseDTO = new UserBaseDTO();
         userBaseDTO.setId(id);
-        userBaseDTO.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        userBaseDTO.setPassword(DEFAULT_PASSWORD);
         updateSysUser(userBaseDTO);
         return DEFAULT_PASSWORD;
     }
@@ -178,7 +178,7 @@ public class SysUserServiceImpl implements SysUserService {
         CustomUser customUser = selectLoginUser();
         UserBaseDTO userBaseDTO = new UserBaseDTO();
         userBaseDTO.setId(customUser.getId());
-        userBaseDTO.setPassword(passwordEncoder.encode(newPassword));
+        userBaseDTO.setPassword(newPassword);
         updateSysUser(userBaseDTO);
         return newPassword;
     }

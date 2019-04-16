@@ -66,7 +66,7 @@ public class RoleServiceImpl implements RoleService {
     public int insertRole(RoleDTO role) {
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(role, sysRole);
-        sysRole.setDeptId(role.getDepartment().getId());
+//        sysRole.setDeptId(role.getDepartment().getId());
         return roleMapper.insertSelective(sysRole);
     }
 
