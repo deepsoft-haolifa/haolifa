@@ -1007,3 +1007,52 @@ DROP TABLE IF EXISTS `price_material`;
 	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零件价格管理表';
+
+DROP TABLE IF EXISTS `spray`;
+CREATE TABLE `spray` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `spray_no` varchar(64) NOT NULL DEFAULT '',
+  `planner` varchar(255) NOT NULL DEFAULT '',
+	`total_number` int(11) not null default 0 COMMENT '喷涂总数量',
+  `qualified_number` int(11) not null default 0 COMMENT '合格数',
+	`status` TINYINT(4) not null default 0 COMMENT '喷涂状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工',
+	`file_url` VARCHAR(255) not null default '' comment '文件地址；需上传',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='喷涂单';
+
+DROP TABLE IF EXISTS `spray_item`;
+CREATE TABLE `spray_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `spray_no` varchar(64) NOT NULL DEFAULT '' COMMENT '喷涂号',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '图号',
+  `specifications` varchar(255) NOT NULL DEFAULT '' COMMENT '规格',
+  `model` varchar(255) NOT NULL DEFAULT '' COMMENT '型号',
+  `material_classify_name` varchar(255) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `material` varchar(255) NOT NULL DEFAULT '' COMMENT '材质',
+  `special_requires` varchar(255) NOT NULL DEFAULT '' COMMENT '特殊要求',
+  `spray_color` varchar(255) NOT NULL DEFAULT '' COMMENT '喷涂颜色',
+  `number` int(11) NOT NULL DEFAULT '0' COMMENT '喷涂数量',
+  `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '检验合格数量',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `complete_time` varchar(255) NOT NULL DEFAULT '' COMMENT '完成时间',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='喷涂单项';
+
+DROP TABLE IF EXISTS `spray_inspect_history`;
+CREATE TABLE `spray_inspect_history` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `spray_no` varchar(64) NOT NULL DEFAULT '' COMMENT '质检单号',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
+  `material_graph_name` varchar(255) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `test_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
+  `qualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '合格数量',
+  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数量',
+  `handling_suggestion` varchar(255) NOT NULL DEFAULT '' COMMENT '处理意见',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '状态：1 待入库 2 已入库',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '喷涂检验历史';
