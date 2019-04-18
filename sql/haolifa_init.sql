@@ -645,50 +645,44 @@ CREATE TABLE `material_inspect_result` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程/业务表单-送检反馈信息表';
 
 
-DROP TABLE IF EXISTS `pro_inspect_result`;
-CREATE TABLE `pro_inspect_result` (
+DROP TABLE IF EXISTS `pro_inspect_record`;
+CREATE TABLE `pro_inspect_record` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '质检单号',
   `order_no` varchar(36) NOT NULL DEFAULT '' COMMENT '生产订单编号',
+  `product_no` varchar(64) NOT NULL DEFAULT '' COMMENT '成品号',
+  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
+  `product_specifications` varchar(64) DEFAULT '' NOT NULL COMMENT '成品规格',
   `testing_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
-  `qualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '合格总数',
-  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格总数',
+  `qualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '合格数',
+  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数',
+  `reason` varchar(128) NOT NULL DEFAULT '' COMMENT '不合格原因',
   `storage_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1.待入库，2.入库完成',
-  `testing_person` varchar(255) NOT NULL DEFAULT '' COMMENT '操作人',
-  `testing_unit` varchar(255) NOT NULL DEFAULT '' COMMENT '检测单位',
-  `testing_process` varchar(255) NOT NULL DEFAULT '' COMMENT '检测工序',
-  `technical_requirements` varchar(255) NOT NULL DEFAULT '' COMMENT '技术要求',
-  `testing_result` varchar(255) NOT NULL DEFAULT '' COMMENT '检测结果',
-  `inspector` varchar(255) NOT NULL DEFAULT '' COMMENT '检验员',
-  `inspecte_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '检验日期',
-  `reason` varchar(255) NOT NULL DEFAULT '' COMMENT '不合格原因',
-  `responsible_department` varchar(20) NOT NULL DEFAULT '' COMMENT '责任单位',
-  `department_leader` varchar(30) NOT NULL DEFAULT '' COMMENT '责任认定部门负责人',
-  `responsible_analyze_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '责任认定日期',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品质检单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品质检记录';
 
-
-DROP TABLE IF EXISTS `pro_inspect_unqualified`;
-CREATE TABLE `pro_inspect_unqualified` (
+DROP TABLE IF EXISTS `pressure_inspect_record`;
+CREATE TABLE `pressure_inspect_record` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '质检单号',
   `order_no` varchar(36) NOT NULL DEFAULT '' COMMENT '生产订单编号',
+  `product_no` varchar(64) NOT NULL DEFAULT '' COMMENT '成品号',
   `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
   `product_specifications` varchar(64) DEFAULT '' NOT NULL COMMENT '成品规格',
+   `testing_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
+  `reinspect_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '复检数量',
+  `qualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '合格数',
   `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数',
   `reason` varchar(128) NOT NULL DEFAULT '' COMMENT '不合格原因',
   `testing_person` varchar(32) NOT NULL DEFAULT '' COMMENT '操作人',
-  `inspector` varchar(32) NOT NULL DEFAULT '' COMMENT '检验员',
-  `inspecte_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '检验日期',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品质检不合格记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='压力测试记录';
+
+
 
 
 DROP TABLE IF EXISTS `entrust`;
@@ -916,41 +910,6 @@ CREATE TABLE `file_record` (
   `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='文件记录列表（图纸管理）';
-
-
-DROP TABLE IF EXISTS `pressure_inspect_result`;
-CREATE TABLE `pressure_inspect_result` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '质检单号',
-  `order_no` varchar(36) NOT NULL DEFAULT '' COMMENT '生产订单编号',
-  `testing_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
-  `reinspect_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '复检数量',
-  `qualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '合格总数',
-  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格总数',
-  `inspecte_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '检验日期',
-  `testing_person` varchar(255) NOT NULL DEFAULT '' COMMENT '操作人',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='压力质检单';
-
-DROP TABLE IF EXISTS `pressure_inspect_unqualified`;
-CREATE TABLE `pressure_inspect_unqualified` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `inspect_no` varchar(36) NOT NULL DEFAULT '' COMMENT '质检单号',
-  `order_no` varchar(36) NOT NULL DEFAULT '' COMMENT '生产订单编号',
-  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
-  `product_specifications` varchar(64) DEFAULT '' NOT NULL COMMENT '成品规格',
-  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数',
-  `reason` varchar(128) NOT NULL DEFAULT '' COMMENT '不合格原因',
-  `testing_person` varchar(32) NOT NULL DEFAULT '' COMMENT '操作人',
-  `inspector` varchar(32) NOT NULL DEFAULT '' COMMENT '检验员',
-  `inspecte_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '检验日期',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='压力测试不合格记录';
 
 
 DROP TABLE IF EXISTS `price_product`;
