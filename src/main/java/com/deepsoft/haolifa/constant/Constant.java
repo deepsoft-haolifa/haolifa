@@ -11,6 +11,7 @@ public class Constant {
     public interface SerialNumberPrefix {
         String INSPECT_NO_PREFIX_BJ = "BJ";
         String BATCH_NUMBER_PREFIX_PC = "PC";
+        String SPRAY_NO_PREFIX_PT = "PT";
     }
 
     public interface PurchaseOrderType {
