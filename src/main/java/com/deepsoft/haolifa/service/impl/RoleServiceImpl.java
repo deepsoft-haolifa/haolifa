@@ -66,18 +66,18 @@ public class RoleServiceImpl implements RoleService {
     public int insertRole(RoleDTO role) {
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(role, sysRole);
-        sysRole.setDeptId(role.getDepartment().getId());
+//        sysRole.setDeptId(role.getDepartment().getId());
         return roleMapper.insertSelective(sysRole);
     }
 
     @Override
     public int updateRole(RoleDTO role) {
-        if(null != role || role.getId() == null){
+        if(null == role || role.getId() == null){
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(role, sysRole);
-        sysRole.setDeptId(role.getDepartment().getId());
+//        sysRole.setDeptId(role.getDepartment().getId());
         return roleMapper.updateByPrimaryKeySelective(sysRole);
     }
 

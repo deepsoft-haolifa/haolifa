@@ -28,7 +28,7 @@ public class BaseService {
     protected String createSerialNumber(String prefix, String keyTemplate) {
         StringBuilder stringBuilder = new StringBuilder();
         String dateStr = DateFormatterUtils.formatterDateString(DateFormatterUtils.THIRD_FORMATTERPATTERN, new Date());
-        String redisKey = String.format(INSPECT_NO_KEY, dateStr);
+        String redisKey = String.format(keyTemplate, dateStr);
         long serialNumber = redisDao.incrBy(String.format(keyTemplate, dateStr), 1l);
         redisDao.expire(redisKey, TimeUnit.DAYS, 1);
         stringBuilder

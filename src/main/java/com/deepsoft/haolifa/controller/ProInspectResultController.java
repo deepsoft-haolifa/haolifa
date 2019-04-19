@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"成品质检"})
+@Api(tags = {"成品质检（以前）"})
 @RestController
 @RequestMapping("/pro-inspect-res")
 public class ProInspectResultController {
