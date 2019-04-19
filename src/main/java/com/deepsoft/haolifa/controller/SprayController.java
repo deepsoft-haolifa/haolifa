@@ -44,9 +44,9 @@ public class SprayController {
   }
 
   @ApiOperation("获取喷涂加工详情")
-  @GetMapping("form/{sprayId}")
-  public ResultBean getSprayInfo(@PathVariable("sprayId") int id) {
-    return sprayService.getSprayInfo(id);
+  @GetMapping("form/{sprayNo}")
+  public ResultBean getSprayInfo(@PathVariable("sprayNo") String sprayNo) {
+    return sprayService.getSprayInfo(sprayNo);
   }
 
   @ApiOperation("获取喷涂加工列表")

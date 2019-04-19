@@ -13,7 +13,7 @@ public interface SprayService {
 
   ResultBean update(SprayDto sprayDto);
 
-  ResultBean getSprayInfo(int id);
+  ResultBean getSprayInfo(String sprayNo);
 
   ResultBean forms(SprayListDto listDto);
 

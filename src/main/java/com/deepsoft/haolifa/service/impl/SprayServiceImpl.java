@@ -112,8 +112,10 @@ public class SprayServiceImpl extends BaseService implements SprayService {
   }
 
   @Override
-  public ResultBean getSprayInfo(int id) {
-    Spray spray = sprayMapper.selectByPrimaryKey(id);
+  public ResultBean getSprayInfo(String sprayNo) {
+    SprayExample sprayExample = new SprayExample();
+    sprayExample.createCriteria().andSprayNoEqualTo(sprayNo);
+    Spray spray = sprayMapper.selectByExample(sprayExample).get(0);
     SprayDto sprayDto = new SprayDto();
     BeanUtils.copyProperties(spray, sprayDto);
     SprayItemExample itemExample = new SprayItemExample();
