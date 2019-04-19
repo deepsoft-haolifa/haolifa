@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.annotation.LogNotPrint;
+import com.deepsoft.haolifa.model.domain.Entrust;
 import com.deepsoft.haolifa.model.domain.SprayItem;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
@@ -9,6 +10,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
+import com.deepsoft.haolifa.service.EntrustService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SprayService;
@@ -48,6 +50,9 @@ public class ExportExcelController {
   private OrderProductService orderProductService;
   @Autowired
   private SprayService sprayService;
+
+  @Autowired
+  private EntrustService entrustService;
 
   @ApiOperation("导出采购订单")
   @GetMapping("/purchaseOrder/{formId}")
@@ -768,7 +773,7 @@ public class ExportExcelController {
   @ApiOperation("喷涂单下载")
   @GetMapping("spray/excel/{sprayNo}")
   public void sprayExcel(@PathVariable("sprayNo") String sprayNo, HttpServletResponse response) throws IOException {
-    response.setHeader("Content-Disposition", "attachment;filename=requisition_" + sprayNo + ".xls");
+    response.setHeader("Content-Disposition", "attachment;filename=" + sprayNo + ".xls");
     response.setContentType("application/octet-stream;");
     Workbook workbook = new HSSFWorkbook();
     Sheet sheet = workbook.createSheet("领料单");
@@ -890,6 +895,126 @@ public class ExportExcelController {
     left2.setAlignment(HorizontalAlignment.LEFT);
     cellsC.setCellValue("日 期：" + DateFormatterUtils
         .formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayDto.getCreateTime()));
+    cellsC.setCellStyle(left2);
+
+    OutputStream outputStream = response.getOutputStream();
+    workbook.write(outputStream);
+    outputStream.flush();
+    outputStream.close();
+  }
+
+  @ApiOperation("机加委托单下载")
+  @GetMapping("entrust/excel/{entrustNo}")
+  public void entrustExcel(@PathVariable("entrustNo") String entrustNo, HttpServletResponse response) throws IOException {
+    response.setHeader("Content-Disposition", "attachment;filename=" + entrustNo + ".xls");
+    response.setContentType("application/octet-stream;");
+    Workbook workbook = new HSSFWorkbook();
+    Sheet sheet = workbook.createSheet("机加工委托单");
+    ResultBean resultBean = entrustService.getInfo(entrustNo);
+    Entrust entrust = (Entrust) resultBean.getResult();
+    CellStyle cellStyle = workbook.createCellStyle();
+    cellStyle.setWrapText(true);
+
+    // 单元格样式
+    CellStyle center = workbook.createCellStyle();
+    center.setAlignment(HorizontalAlignment.CENTER);
+
+    Row title_1 = sheet.createRow(0);
+    CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 7);
+    sheet.addMergedRegion(cra1);
+    Cell cell_title_1 = title_1.createCell(0);
+    cell_title_1.setCellValue("山 西 好 利 阀 制 造 有 限 公 司");
+    cell_title_1.setCellStyle(center);
+
+    Row title_2 = sheet.createRow(1);
+    CellStyle center2 = workbook.createCellStyle();
+    center2.setAlignment(HorizontalAlignment.CENTER);
+    CellRangeAddress cra2 = new CellRangeAddress(1, 1, 0, 7);
+    sheet.addMergedRegion(cra2);
+    Cell cell_title_2 = title_2.createCell(0);
+    cell_title_2.setCellValue("机 加 生 产 计 划");
+    cell_title_2.setCellStyle(center2);
+
+    CellStyle border = workbook.createCellStyle();
+    border.setBorderBottom(BorderStyle.THIN);
+    border.setBorderLeft(BorderStyle.THIN);
+    border.setBorderRight(BorderStyle.THIN);
+    border.setBorderTop(BorderStyle.THIN);
+
+    int rowIdx = 2;
+    Row rowTitle = sheet.createRow(rowIdx);
+    Cell cellTitle = rowTitle.createCell(0);
+    cellTitle.setCellValue("名称");
+    cellTitle.setCellStyle(border);
+    Cell cellTitle1 = rowTitle.createCell(1);
+    cellTitle1.setCellValue("图号");
+    cellTitle1.setCellStyle(border);
+    Cell cellTitle2 = rowTitle.createCell(2);
+    cellTitle2.setCellValue("采购价格");
+    cellTitle2.setCellStyle(border);
+    Cell cellTitle3 = rowTitle.createCell(3);
+    cellTitle3.setCellValue("批次号");
+    cellTitle3.setCellStyle(border);
+    Cell cellTitle4 = rowTitle.createCell(4);
+    cellTitle4.setCellValue("数量");
+    cellTitle4.setCellStyle(border);
+    Cell cellTitle5 = rowTitle.createCell(5);
+    cellTitle5.setCellValue("采购单号");
+    cellTitle5.setCellStyle(border);
+    Cell cellTitle6 = rowTitle.createCell(6);
+    cellTitle6.setCellValue("加工方式");
+    cellTitle6.setCellStyle(border);
+    Cell cellTitle7 = rowTitle.createCell(7);
+    cellTitle7.setCellValue("机加供应商");
+    cellTitle7.setCellStyle(border);
+
+      Row row = sheet.createRow(++rowIdx);
+      Cell cell = row.createCell(0);
+      cell.setCellValue(entrust.getMaterialGraphName());
+      cell.setCellStyle(border);
+
+      Cell cell1 = row.createCell(1);
+      cell1.setCellValue(entrust.getMaterialGraphNo());
+      cell1.setCellStyle(border);
+
+      Cell cell2 = row.createCell(2);
+      cell2.setCellValue(entrust.getPurchasePrice().doubleValue());
+      cell2.setCellStyle(border);
+
+      Cell cell3 = row.createCell(3);
+      cell3.setCellValue(entrust.getBatchNumber());
+      cell3.setCellStyle(border);
+      Cell cell4 = row.createCell(4);
+      cell4.setCellValue(entrust.getNumber());
+      cell4.setCellStyle(border);
+      Cell cell5 = row.createCell(5);
+      cell5.setCellValue(entrust.getPurchaseNo());
+      cell5.setCellStyle(border);
+      Cell cell6 = row.createCell(6);
+      cell6.setCellValue(entrust.getWorkshopType()==1?"内部加工":"外部加工");
+      cell6.setCellStyle(border);
+      Cell cell7 = row.createCell(7);
+      cell7.setCellValue(entrust.getSupplierName());
+      cell7.setCellStyle(border);
+
+
+    Row rowsp = sheet.createRow(++rowIdx);
+    CellRangeAddress crasp = new CellRangeAddress(rowIdx, rowIdx, 0, 3);
+    CellRangeAddress crasC = new CellRangeAddress(rowIdx, rowIdx, 4, 7);
+    sheet.addMergedRegion(crasp);
+    sheet.addMergedRegion(crasC);
+    Cell cellsp = rowsp.createCell(0);
+    Cell cellsC = rowsp.createCell(4);
+
+    CellStyle left1 = workbook.createCellStyle();
+    left1.setAlignment(HorizontalAlignment.LEFT);
+    cellsp.setCellValue("委 托 人：" + entrust.getEntrustPerson());
+    cellsp.setCellStyle(left1);
+
+    CellStyle left2 = workbook.createCellStyle();
+    left2.setAlignment(HorizontalAlignment.LEFT);
+    cellsC.setCellValue("日 期：" + DateFormatterUtils
+        .formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entrust.getCreateTime()));
     cellsC.setCellStyle(left2);
 
     OutputStream outputStream = response.getOutputStream();

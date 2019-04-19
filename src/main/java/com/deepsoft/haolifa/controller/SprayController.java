@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.controller;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
+import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
 import com.deepsoft.haolifa.service.SprayService;
 import io.swagger.annotations.Api;
@@ -79,5 +80,15 @@ public class SprayController {
     return sprayService.getItemsList(sprayNo);
   }
 
+  @ApiOperation("查询质检待入库列表")
+  @PostMapping("inspect/list/room")
+  public ResultBean getInspectRoom(@RequestBody SprayInspectListDto inspectListDto) {
+    return sprayService.getInspectToRooms(inspectListDto);
+  }
 
+  @ApiOperation("更新入库状态")
+  @PutMapping("/inspect/history/status/{historyId}")
+  public ResultBean updateHistoryStatus(@PathVariable("historyId") Integer historyId) {
+    return sprayService.updateHistoryStatus(historyId);
+  }
 }

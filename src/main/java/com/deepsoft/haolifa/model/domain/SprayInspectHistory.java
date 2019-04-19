@@ -1,9 +1,11 @@
 package com.deepsoft.haolifa.model.domain;
 
-public class sprayInspectHistory {
+public class SprayInspectHistory {
     private Integer id;
 
     private String sprayNo;
+
+    private String originalGraphNo;
 
     private String materialGraphNo;
 
@@ -21,9 +23,10 @@ public class sprayInspectHistory {
 
     private Byte status;
 
-    public sprayInspectHistory(Integer id, String sprayNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status) {
+    public SprayInspectHistory(Integer id, String sprayNo, String originalGraphNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status) {
         this.id = id;
         this.sprayNo = sprayNo;
+        this.originalGraphNo = originalGraphNo;
         this.materialGraphNo = materialGraphNo;
         this.materialGraphName = materialGraphName;
         this.testNumber = testNumber;
@@ -34,7 +37,7 @@ public class sprayInspectHistory {
         this.status = status;
     }
 
-    public sprayInspectHistory() {
+    public SprayInspectHistory() {
         super();
     }
 
@@ -52,6 +55,14 @@ public class sprayInspectHistory {
 
     public void setSprayNo(String sprayNo) {
         this.sprayNo = sprayNo == null ? null : sprayNo.trim();
+    }
+
+    public String getOriginalGraphNo() {
+        return originalGraphNo;
+    }
+
+    public void setOriginalGraphNo(String originalGraphNo) {
+        this.originalGraphNo = originalGraphNo == null ? null : originalGraphNo.trim();
     }
 
     public String getMaterialGraphNo() {

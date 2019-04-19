@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class SprayListDto {
+public class SprayInspectListDto {
 
   private String sprayNo;
 
@@ -14,6 +14,4 @@ public class SprayListDto {
   private Integer pageSize;
 
   private Integer status;
-
-  private Integer type;
 }

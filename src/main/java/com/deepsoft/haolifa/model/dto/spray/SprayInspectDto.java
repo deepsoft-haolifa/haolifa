@@ -12,6 +12,8 @@ public class SprayInspectDto {
 
   private String materialGraphNo;
 
+  private String originalGraphNo;
+
   private String materialGraphName;
 
   private Integer testNumber;

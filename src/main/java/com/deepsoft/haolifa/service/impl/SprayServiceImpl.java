@@ -6,23 +6,25 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.SPRAY_NO
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.SprayItemMapper;
 import com.deepsoft.haolifa.dao.repository.SprayMapper;
-import com.deepsoft.haolifa.dao.repository.sprayInspectHistoryMapper;
+import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
 import com.deepsoft.haolifa.model.domain.Spray;
 import com.deepsoft.haolifa.model.domain.SprayExample;
 import com.deepsoft.haolifa.model.domain.SprayItem;
 import com.deepsoft.haolifa.model.domain.SprayItemExample;
-import com.deepsoft.haolifa.model.domain.sprayInspectHistory;
-import com.deepsoft.haolifa.model.domain.sprayInspectHistoryExample;
+import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
+import com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
+import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
 import com.deepsoft.haolifa.service.SprayService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -44,7 +46,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
   private SprayItemMapper sprayItemMapper;
 
   @Autowired
-  private sprayInspectHistoryMapper inspectHistoryMapper;
+  private SprayInspectHistoryMapper inspectHistoryMapper;
 
   @Transactional(rollbackFor = Exception.class)
   @Override
@@ -65,6 +67,9 @@ public class SprayServiceImpl extends BaseService implements SprayService {
       spray.setTotalNumber(spray.getTotalNumber() + sprayItemDto.getNumber());
       sprayItemMapper.insertSelective(sprayItem);
     });
+    SprayExample sprayExample = new SprayExample();
+    sprayExample.createCriteria().andSprayNoEqualTo(sprayNo);
+    sprayMapper.updateByExampleSelective(spray, sprayExample);
     return ResultBean.success(sprayNo);
   }
 
@@ -138,6 +143,12 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     if (listDto.getStatus() != -1) {
       criteria.andStatusEqualTo(listDto.getStatus().byteValue());
     }
+    // 计划管理 type=0
+
+    // 质检管理 type =1 status in (加工中，质检完成， 加工完成)
+    if (listDto.getType() == 1) {
+      criteria.andStatusIn(Arrays.asList((byte) 1, (byte) 2, (byte) 3));
+    }
     if (StringUtils.isNotEmpty(listDto.getSprayNo())) {
       criteria.andSprayNoLike("%" + listDto.getSprayNo() + "%");
     }
@@ -163,9 +174,9 @@ public class SprayServiceImpl extends BaseService implements SprayService {
 
   @Override
   public ResultBean getInspectList(String sprayNo) {
-    sprayInspectHistoryExample inspectHistoryExample = new sprayInspectHistoryExample();
+    SprayInspectHistoryExample inspectHistoryExample = new SprayInspectHistoryExample();
     inspectHistoryExample.createCriteria().andSprayNoEqualTo(sprayNo);
-    List<sprayInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
+    List<SprayInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
     return ResultBean.success(inspectHistories);
   }
 
@@ -180,7 +191,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean saveInspect(SprayInspectDto inspectDto) {
-    sprayInspectHistory history = new sprayInspectHistory();
+    SprayInspectHistory history = new SprayInspectHistory();
     BeanUtils.copyProperties(inspectDto, history);
     SprayExample example = new SprayExample();
     example.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
@@ -192,5 +203,36 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     }
     inspectHistoryMapper.insertSelective(history);
     return ResultBean.success(history.getId());
+  }
+
+  @Override
+  public ResultBean getInspectToRooms(SprayInspectListDto inspectListDto) {
+    SprayInspectHistoryExample historyExample = new SprayInspectHistoryExample();
+    SprayInspectHistoryExample.Criteria criteria = historyExample.createCriteria();
+    if (StringUtils.isNotEmpty(inspectListDto.getSprayNo())) {
+      criteria.andSprayNoLike("%" + inspectListDto.getSprayNo() + "%");
+    }
+    // 0 全部
+    if (inspectListDto.getStatus() != 0) {
+      criteria.andStatusEqualTo(inspectListDto.getStatus().byteValue());
+    }
+
+    Page<SprayInspectHistory> page = PageHelper
+        .startPage(inspectListDto.getPageNum(), inspectListDto.getPageSize())
+        .doSelectPage(() -> inspectHistoryMapper.selectByExample(historyExample));
+    PageDTO<SprayInspectHistory> sprayInspectHistoryPageDTO = new PageDTO<>();
+    BeanUtils.copyProperties(page, sprayInspectHistoryPageDTO);
+    sprayInspectHistoryPageDTO.setList(page.getResult());
+    return ResultBean.success(sprayInspectHistoryPageDTO);
+  }
+
+  @Override
+  public ResultBean updateHistoryStatus(Integer historyId) {
+    SprayInspectHistory sprayInspectHistory = new SprayInspectHistory();
+    sprayInspectHistory.setId(historyId);
+    // 2 已入库
+    sprayInspectHistory.setStatus((byte) 2);
+    inspectHistoryMapper.updateByPrimaryKeySelective(sprayInspectHistory);
+    return ResultBean.success(1);
   }
 }

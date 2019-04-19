@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
+import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
 
 public interface SprayService {
@@ -24,4 +25,8 @@ public interface SprayService {
   ResultBean getItemsList(String sprayNo);
 
   ResultBean saveInspect(SprayInspectDto inspectDto);
+
+  ResultBean getInspectToRooms(SprayInspectListDto inspectListDto);
+
+  ResultBean updateHistoryStatus(Integer historyId);
 }

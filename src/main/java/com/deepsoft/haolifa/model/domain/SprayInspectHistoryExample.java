@@ -3,14 +3,14 @@ package com.deepsoft.haolifa.model.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class sprayInspectHistoryExample {
+public class SprayInspectHistoryExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public sprayInspectHistoryExample() {
+    public SprayInspectHistoryExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -231,6 +231,76 @@ public class sprayInspectHistoryExample {
 
         public Criteria andSprayNoNotBetween(String value1, String value2) {
             addCriterion("spray_no not between", value1, value2, "sprayNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoIsNull() {
+            addCriterion("original_graph_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoIsNotNull() {
+            addCriterion("original_graph_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoEqualTo(String value) {
+            addCriterion("original_graph_no =", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotEqualTo(String value) {
+            addCriterion("original_graph_no <>", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoGreaterThan(String value) {
+            addCriterion("original_graph_no >", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("original_graph_no >=", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoLessThan(String value) {
+            addCriterion("original_graph_no <", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("original_graph_no <=", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoLike(String value) {
+            addCriterion("original_graph_no like", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotLike(String value) {
+            addCriterion("original_graph_no not like", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoIn(List<String> values) {
+            addCriterion("original_graph_no in", values, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotIn(List<String> values) {
+            addCriterion("original_graph_no not in", values, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoBetween(String value1, String value2) {
+            addCriterion("original_graph_no between", value1, value2, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotBetween(String value1, String value2) {
+            addCriterion("original_graph_no not between", value1, value2, "originalGraphNo");
             return (Criteria) this;
         }
 

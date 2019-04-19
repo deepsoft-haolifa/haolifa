@@ -210,13 +210,13 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <table tableName="spray" domainObjectName="Spray">
-      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-    </table>
+    <!--<table tableName="spray" domainObjectName="Spray">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
     <!--<table tableName="spray_item" domainObjectName="SprayItem">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
-    <!--<table tableName="spray_inspect_history" domainObjectName="sprayInspectHistory">-->
+    <!--<table tableName="spray_inspect_history" domainObjectName="SprayInspectHistory">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 

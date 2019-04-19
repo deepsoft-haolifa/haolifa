@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.deepsoft.haolifa.dao.repository.sprayInspectHistoryMapper" >
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.sprayInspectHistory" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="spray_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="original_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_graph_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="test_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -74,10 +75,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, spray_no, material_graph_no, material_graph_name, test_number, qualified_number, 
-    unqualified_number, handling_suggestion, remark, status
+    id, spray_no, original_graph_no, material_graph_no, material_graph_name, test_number, 
+    qualified_number, unqualified_number, handling_suggestion, remark, status
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.sprayInspectHistoryExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" >
     select
     <if test="distinct" >
       distinct
@@ -101,26 +102,26 @@
     delete from spray_inspect_history
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.sprayInspectHistoryExample" >
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" >
     delete from spray_inspect_history
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.sprayInspectHistory" >
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into spray_inspect_history (spray_no, material_graph_no, material_graph_name, 
-      test_number, qualified_number, unqualified_number, 
-      handling_suggestion, remark, status
-      )
-    values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
-      #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
-      #{handlingSuggestion,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}
-      )
+    insert into spray_inspect_history (spray_no, original_graph_no, material_graph_no, 
+      material_graph_name, test_number, qualified_number, 
+      unqualified_number, handling_suggestion, 
+      remark, status)
+    values (#{sprayNo,jdbcType=VARCHAR}, #{originalGraphNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
+      #{materialGraphName,jdbcType=VARCHAR}, #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
+      #{unqualifiedNumber,jdbcType=INTEGER}, #{handlingSuggestion,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.sprayInspectHistory" >
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -128,6 +129,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sprayNo != null" >
         spray_no,
+      </if>
+      <if test="originalGraphNo != null" >
+        original_graph_no,
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no,
@@ -158,6 +162,9 @@
       <if test="sprayNo != null" >
         #{sprayNo,jdbcType=VARCHAR},
       </if>
+      <if test="originalGraphNo != null" >
+        #{originalGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="materialGraphNo != null" >
         #{materialGraphNo,jdbcType=VARCHAR},
       </if>
@@ -184,7 +191,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.sprayInspectHistoryExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" resultType="java.lang.Integer" >
     select count(*) from spray_inspect_history
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -198,6 +205,9 @@
       </if>
       <if test="record.sprayNo != null" >
         spray_no = #{record.sprayNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originalGraphNo != null" >
+        original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="record.materialGraphNo != null" >
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
@@ -232,6 +242,7 @@
     update spray_inspect_history
     set id = #{record.id,jdbcType=INTEGER},
       spray_no = #{record.sprayNo,jdbcType=VARCHAR},
+      original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
       test_number = #{record.testNumber,jdbcType=INTEGER},
@@ -244,11 +255,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.sprayInspectHistory" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     update spray_inspect_history
     <set >
       <if test="sprayNo != null" >
         spray_no = #{sprayNo,jdbcType=VARCHAR},
+      </if>
+      <if test="originalGraphNo != null" >
+        original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
@@ -277,9 +291,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.sprayInspectHistory" >
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     update spray_inspect_history
     set spray_no = #{sprayNo,jdbcType=VARCHAR},
+      original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
       test_number = #{testNumber,jdbcType=INTEGER},

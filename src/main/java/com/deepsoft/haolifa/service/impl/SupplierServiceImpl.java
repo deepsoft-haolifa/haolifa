@@ -147,11 +147,12 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     Supplier supplier = new Supplier();
     supplier.setIsQualified((byte) 3);// 评定中
     SupplierExample example = new SupplierExample();
-    example.createCriteria().andSuppilerNoEqualTo(supplierNo);
+    example.createCriteria().andSuppilerNoEqualTo(supplierNo).andIsDeleteEqualTo((byte)0);
     supplierMapper.updateByExampleSelective(supplier, example);
+    Supplier supplier1 = supplierMapper.selectByExample(example).get(0);
     // 添加流程
     FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
-    flowInstanceDTO.setFormId(0);
+    flowInstanceDTO.setFormId(supplier1.getId());
     flowInstanceDTO.setFlowId(3);
     flowInstanceDTO.setFormNo(supplierNo);
     flowInstanceDTO.setFormType(9);
