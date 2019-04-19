@@ -1005,6 +1005,7 @@ DROP TABLE IF EXISTS `spray_inspect_history`;
 CREATE TABLE `spray_inspect_history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `spray_no` varchar(64) NOT NULL DEFAULT '' COMMENT '质检单号',
+  `original_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '原图号',
   `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
   `material_graph_name` varchar(255) NOT NULL DEFAULT '' COMMENT '物料名称',
   `test_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
