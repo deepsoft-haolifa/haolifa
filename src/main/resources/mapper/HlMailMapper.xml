@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.HlMailMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.HlMail">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="users" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+
+  <resultMap type="com.deepsoft.haolifa.model.domain.HlMail" id="hlMailMap">
+    <id column="id" javaType="java.lang.Integer"  property="id"/>
+    <result column="title" javaType="java.lang.String" property="title"/>
+    <result column="content" javaType="java.lang.String" property="content"/>
+    <result column="create_time" javaType="java.util.Date" property="createTime"/>
+    <result column="update_time" javaType="java.util.Date" property="updateTime"/>
+    <result column="users" javaType="java.lang.String" property="users"/>
+
+  </resultMap>
+
+
+  <select id="selectHlMails"  resultMap="hlMailMap">
+    select
+    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users
+
+    from hl_mail hl
+
+    order by hl.create_time desc
+
+  </select>
+
+  <select id="selectHlMailsByUserId" parameterType="String" resultMap="hlMailMap">
+    select
+    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users
+
+    from hl_mail hl where users = #{param}
+
+    order by hl.create_time desc
+
+  </select>
+
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.HlMail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into hl_mail (title,users, content,
+      create_time,
+      update_time)
+    values (#{title,jdbcType=VARCHAR},#{users,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+
+</mapper>
