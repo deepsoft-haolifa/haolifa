@@ -452,8 +452,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     if (stepId == currentStepId) {
       isAudit = false;
     }
-    if (isAudit) {
-      HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, instanceId);
+    HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, instanceId);
+    if (isAudit && historyInfo != null) {
       processerDTO.setAuditUserName(historyInfo.getAuditUserName());
       processerDTO.setAuditResult(historyInfo.getAuditResult());
     } else {
