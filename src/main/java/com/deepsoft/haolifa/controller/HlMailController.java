@@ -31,9 +31,10 @@ public class HlMailController {
 //    private HlMailReseService hlMailReseService;
 
     @GetMapping("/getMails")
-    @ApiOperation("根据用户id获取某用户的所有角色")
+    @ApiOperation("获取所有站内信")
     public ResultBean getHlMails(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
                                  @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize){
+        System.out.println(pageNum);
         PageDTO<HlMail> pageDTO = new PageDTO<>();
 
         List<HlMail> hlMails = hlMailService.selectHlMails();
@@ -41,6 +42,7 @@ public class HlMailController {
         hlMails = getList(pageNum,pageSize,hlMails);
         pageDTO.setList(hlMails);
         pageDTO.setPageNum(pageNum);
+        System.out.println(hlMails.size());
         return ResultBean.success(hlMails);
     }
     @ApiOperation("发送站内信")
@@ -54,10 +56,10 @@ public class HlMailController {
         hlMail.setUsers(model.getUsers());
         return hlMailService.save(hlMail);
     }
-    @GetMapping("/getMails/{userId}/{pageNum}/{pageSize}")
+    @GetMapping("/getMailsByUserId")
     @ApiOperation("根据用户id获取某用户的所有站内信")
     public ResultBean getHlMails(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
-                                 @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,@PathParam(value = "userId") Integer userId){
+                                 @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize, @ApiParam("userId") @RequestParam(value = "userId") Integer userId){
         SysUser sysUser = userService.getSysUser(userId);
         if(sysUser==null){
             return ResultBean.error(CommonEnum.ResponseEnum.RESOURCE_NOT_EXIST);
@@ -69,6 +71,7 @@ public class HlMailController {
         hlMails = getList(pageNum,pageSize,hlMails);
         pageDTO.setList(hlMails);
         pageDTO.setPageNum(pageNum);
+        System.out.println(hlMails.size());
         return ResultBean.success(hlMails);
     }
     public static List<HlMail> getList(int pageNo,int pageSize,List<HlMail> list){
@@ -94,9 +97,9 @@ public class HlMailController {
         hlMailReve.setUserName(model.getUserName());
         return hlMailReseService.save(hlMailReve);
     }
-    @GetMapping("/getHlMailReves/{mailId}")
-    @ApiOperation("根据用户id获取某用户的所有站内信")
-    public ResultBean getHlMailReves(@PathParam(value = "mailId") Integer mailId){
+    @GetMapping("/getHlMailRevesByMailId")
+    @ApiOperation("站内信详情")
+    public ResultBean getHlMailReves(@ApiParam("mailId") @RequestParam(value = "mailId") Integer mailId){
 
         return ResultBean.success(hlMailReseService.selectHlMailReves(mailId));
     }

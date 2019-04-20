@@ -16,11 +16,11 @@
 
   <select id="selectHlMailReves" parameterType="Integer" resultMap="hlMailReveMap">
     select
-    hlr.id,hlr.user_name,hlr.content,hlr.reate_time,hlr.mail_id,hlr.user_id
+    hlr.id,hlr.user_name,hlr.content,hlr.create_time,hlr.mail_id,hlr.user_id
 
     from hl_mail_reve hlr where hlr.mail_id = #{mailId}
 
-    order by hl.create_time desc
+    order by hlr.create_time desc
 
   </select>
 

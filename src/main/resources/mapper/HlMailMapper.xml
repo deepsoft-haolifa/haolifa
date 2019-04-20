@@ -37,7 +37,7 @@
     select
     hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users
 
-    from hl_mail hl where #{param} in users
+    from hl_mail hl where  users LIKE CONCAT('%',#{param},'%')
 
     order by hl.create_time desc
 
