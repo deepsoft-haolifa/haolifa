@@ -216,7 +216,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     if (inspectListDto.getStatus() != 0) {
       criteria.andStatusEqualTo(inspectListDto.getStatus().byteValue());
     }
-
+    criteria.andQualifiedNumberGreaterThan(0);
     Page<SprayInspectHistory> page = PageHelper
         .startPage(inspectListDto.getPageNum(), inspectListDto.getPageSize())
         .doSelectPage(() -> inspectHistoryMapper.selectByExample(historyExample));

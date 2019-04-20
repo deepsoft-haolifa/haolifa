@@ -260,10 +260,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   @Override
   public ResultBean historyList(Integer pageNum, Integer pageSize, Integer status) {
     InspectHistoryExample example = new InspectHistoryExample();
+    InspectHistoryExample.Criteria criteria = example.createCriteria();
     if (InspectHistoryStatus.BEEN_STORE_2.code == status
         || InspectHistoryStatus.WAITING_STORE_1.code == status) {
-      example.or().andStatusEqualTo(status.byteValue());
+      criteria.andStatusEqualTo(status.byteValue());
     }
+    criteria.andQualifiedNumberGreaterThan(0);
     Page<InspectHistory> histories = PageHelper.startPage(pageNum, pageSize)
         .doSelectPage(() -> historyMapper.selectByExample(example));
     PageDTO pageDTO = new PageDTO();
