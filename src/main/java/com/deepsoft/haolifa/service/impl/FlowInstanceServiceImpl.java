@@ -395,9 +395,11 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   public ResultBean flowProgress(String formNo, Integer formId) {
     FlowInstanceExample instanceExample = new FlowInstanceExample();
     if (formId > 0) {
-      instanceExample.or().andFormIdEqualTo(formId).andFlowIdEqualTo(4).andIsOverEqualTo((byte) 0);
+      instanceExample.or().andFormIdEqualTo(formId).andFlowIdEqualTo(4);
+      instanceExample.setOrderByClause("create_time desc limit 1");
     } else {
-      instanceExample.or().andFormNoEqualTo(formNo).andIsOverEqualTo((byte) 0);
+      instanceExample.or().andFormNoEqualTo(formNo);
+      instanceExample.setOrderByClause("create_time desc limit 1");
     }
     List<FlowInstance> flowInstances = instanceMapper.selectByExample(instanceExample);
     if (flowInstances == null || flowInstances.size() == 0) {
@@ -442,14 +444,14 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     boolean isAudit = true;
     for (int i = 0; i < flowProcesserDTOS.size(); i++) {
       FlowProcesserDTO processerDTO = flowProcesserDTOS.get(i);
-      isAudit = wrapperProcessDto(processerDTO, flowInstance.getCurrentStepId(), isAudit, flowInstance.getId());
+      isAudit = wrapperProcessDto(processerDTO, flowInstance.getCurrentStepId(), isAudit, flowInstance.getId(), flowInstance.getIsOver());
     }
     return ResultBean.success(flowProcesserDTOS);
   }
 
-  private boolean wrapperProcessDto(FlowProcesserDTO processerDTO, int currentStepId, boolean isAudit, int instanceId) {
+  private boolean wrapperProcessDto(FlowProcesserDTO processerDTO, int currentStepId, boolean isAudit, int instanceId, int isOver) {
     int stepId = processerDTO.getStepId();
-    if (stepId == currentStepId) {
+    if (stepId == currentStepId && isOver == 0) {
       isAudit = false;
     }
     HistoryInfo historyInfo = instanceHistoryMapper.selectHistoryDetails(stepId, instanceId);
@@ -464,7 +466,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     Step step = stepMapper.selectByPrimaryKey(stepId);
     processerDTO.setStepName(step.getName());
     if (processerDTO.getChild() != null && processerDTO.getChild().size() > 0) {
-      wrapperProcessDto(processerDTO.getChild().get(0), currentStepId, isAudit, instanceId);
+      wrapperProcessDto(processerDTO.getChild().get(0), currentStepId, isAudit, instanceId, isOver);
     }
     return isAudit;
   }
