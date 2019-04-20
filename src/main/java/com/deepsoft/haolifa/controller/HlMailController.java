@@ -43,7 +43,7 @@ public class HlMailController {
         pageDTO.setList(hlMails);
         pageDTO.setPageNum(pageNum);
         System.out.println(hlMails.size());
-        return ResultBean.success(hlMails);
+        return ResultBean.success(pageDTO);
     }
     @ApiOperation("发送站内信")
     @PostMapping("sendMail")
@@ -72,7 +72,7 @@ public class HlMailController {
         pageDTO.setList(hlMails);
         pageDTO.setPageNum(pageNum);
         System.out.println(hlMails.size());
-        return ResultBean.success(hlMails);
+        return ResultBean.success(pageDTO);
     }
     public static List<HlMail> getList(int pageNo,int pageSize,List<HlMail> list){
          pageNo=(pageNo-1)*pageSize;   //每页的起始索引
