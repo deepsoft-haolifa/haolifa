@@ -138,7 +138,9 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
 
   @Override
   public ResultBean listByName() {
-    List<Supplier> suppliers = supplierMapper.selectByExample(new SupplierExample());
+    SupplierExample example = new SupplierExample();
+    example.createCriteria().andIsQualifiedEqualTo((byte)1);
+    List<Supplier> suppliers = supplierMapper.selectByExample(example);
     return ResultBean.success(suppliers);
   }
 

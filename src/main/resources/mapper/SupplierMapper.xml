@@ -105,8 +105,12 @@
     </if>
     <include refid="Base_Column_List" />
     from supplier
-    where
-    is_qualified = 1
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
