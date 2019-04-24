@@ -10,6 +10,10 @@ public class Invoice {
 
     private String invoiceNo;
 
+    private String invoiceIssuing;
+
+    private String invoiceCompany;
+
     private BigDecimal totalAmount;
 
     private String remark;
@@ -26,10 +30,12 @@ public class Invoice {
 
     private Integer createUserId;
 
-    public Invoice(Integer id, String orderNo, String invoiceNo, BigDecimal totalAmount, String remark, Byte type, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public Invoice(Integer id, String orderNo, String invoiceNo, String invoiceIssuing, String invoiceCompany, BigDecimal totalAmount, String remark, Byte type, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.orderNo = orderNo;
         this.invoiceNo = invoiceNo;
+        this.invoiceIssuing = invoiceIssuing;
+        this.invoiceCompany = invoiceCompany;
         this.totalAmount = totalAmount;
         this.remark = remark;
         this.type = type;
@@ -130,5 +136,21 @@ public class Invoice {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getInvoiceIssuing() {
+        return invoiceIssuing;
+    }
+
+    public void setInvoiceIssuing(String invoiceIssuing) {
+        this.invoiceIssuing = invoiceIssuing;
+    }
+
+    public String getInvoiceCompany() {
+        return invoiceCompany;
+    }
+
+    public void setInvoiceCompany(String invoiceCompany) {
+        this.invoiceCompany = invoiceCompany;
     }
 }
