@@ -139,7 +139,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
   @Override
   public ResultBean listByName() {
     SupplierExample example = new SupplierExample();
-    example.createCriteria().andIsQualifiedEqualTo((byte)1);
+    example.createCriteria().andIsQualifiedEqualTo((byte)1).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
     List<Supplier> suppliers = supplierMapper.selectByExample(example);
     return ResultBean.success(suppliers);
   }
