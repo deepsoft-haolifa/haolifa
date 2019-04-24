@@ -1016,3 +1016,14 @@ CREATE TABLE `spray_inspect_history` (
   `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '状态：1 待入库 2 已入库',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '喷涂检验历史';
+
+DROP TABLE IF EXISTS `order_file`;
+CREATE TABLE `order_file` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单号',
+  `file_name` varchar(64) NOT NULL DEFAULT '' COMMENT '文件名称',
+  `file_url` varchar(64) NOT NULL DEFAULT '' COMMENT '文件url',
+  `file_type` varchar(64) NOT NULL DEFAULT '' COMMENT '文件类型',
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='订单附件记录表';

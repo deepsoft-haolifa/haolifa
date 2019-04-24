@@ -7,11 +7,7 @@ import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
-import com.deepsoft.haolifa.dao.repository.CheckMaterialLogMapper;
-import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
-import com.deepsoft.haolifa.dao.repository.OrderMaterialMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
@@ -60,7 +56,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private OrderMaterialMapper orderMaterialMapper;
     @Autowired
-    private CheckMaterialLogMapper checkMaterialLogMapper;
+    private OrderFileMapper orderFileMapper;
     @Autowired
     private OrderProductAssociateMapper orderProductAssociateMapper;
     @Autowired
@@ -595,12 +591,18 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     Cell cell7 = row.getCell(7);
                     String cellValue7 = getCellValue(cell7);
                     if (StringUtils.isNotBlank(cellValue7)) {
+                        if (cellValue7.contains("￥")) {
+                            cellValue7 = cellValue7.replaceAll("￥", "");
+                        }
                         orderProductAssociate.setPrice(new BigDecimal(cellValue7));
                     }
                     // 第8列，合计
                     Cell cell8 = row.getCell(8);
                     String cellValue8 = getCellValue(cell8);
                     if (StringUtils.isNotBlank(cellValue8)) {
+                        if (cellValue8.contains("￥")) {
+                            cellValue8 = cellValue8.replaceAll("￥", "");
+                        }
                         orderProductAssociate.setTotalPrice(new BigDecimal(cellValue8));
                     }
                     // 第9列，材质
@@ -665,6 +667,39 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         return ResultBean.success(null);
     }
 
+    @Override
+    public ResultBean uploadOrderFiles(String orderNo, List<OrderUploadDTO> orderUploadDTOs) {
+        if (StringUtils.isBlank(orderNo) || orderUploadDTOs == null && orderUploadDTOs.size() > 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        for (OrderUploadDTO orderUploadDTO : orderUploadDTOs) {
+            String base64Source = orderUploadDTO.getBase64Source();
+            String fileName = orderUploadDTO.getFileName();
+            String fileUrl = QiniuUtil.uploadFile(base64Source, fileName);
+            OrderFile orderFile = new OrderFile() {{
+                setFileUrl(fileUrl);
+                setOrderNo(orderNo);
+                setFileName(fileName.substring(0, fileName.indexOf(".")));
+            }};
+            orderFileMapper.insertSelective(orderFile);
+        }
+        return ResultBean.success(null);
+    }
+
+    @Override
+    public ResultBean delOrderFiles(int fileId) {
+        orderFileMapper.deleteByPrimaryKey(fileId);
+        return ResultBean.success(null);
+    }
+
+    @Override
+    public ResultBean getOrderFiles(String orderNo) {
+        OrderFileExample orderFileExample = new OrderFileExample();
+        OrderFileExample.Criteria criteria = orderFileExample.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo);
+        List<OrderFile> orderFiles = orderFileMapper.selectByExample(orderFileExample);
+        return ResultBean.success(orderFiles);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

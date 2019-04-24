@@ -38,6 +38,24 @@ public class OrderProductController {
         return orderProductService.uploadOrderProduct(orderUploadDTO);
     }
 
+    @ApiOperation("上传订单附件数据")
+    @PostMapping("/uploadOrderFile/{orderNo}")
+    public ResultBean uploadOrderFile(@PathVariable String orderNo, @RequestBody List<OrderUploadDTO> orderUploadDTOs) {
+        return orderProductService.uploadOrderFiles(orderNo, orderUploadDTOs);
+    }
+
+    @ApiOperation("删除订单附件数据")
+    @DeleteMapping("/delOrderFile/{fileId}")
+    public ResultBean uploadOrderFile(@PathVariable int fileId) {
+        return orderProductService.delOrderFiles(fileId);
+    }
+
+    @ApiOperation("获取订单附件列表")
+    @GetMapping("/getOrderFiles/{orderNo}")
+    public ResultBean getOrderFiles(@PathVariable String orderNo) {
+        return orderProductService.getOrderFiles(orderNo);
+    }
+
     @ApiOperation("成品订单信息添加")
     @PostMapping("/save")
     public ResultBean save(@RequestBody OrderProductDTO orderProduct) {

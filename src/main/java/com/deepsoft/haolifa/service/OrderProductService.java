@@ -24,6 +24,28 @@ public interface OrderProductService {
      */
     ResultBean uploadOrderProduct(OrderUploadDTO OrderUploadDTO);
 
+
+    /**
+     * 上传多个订单附件文件
+     *
+     * @return
+     */
+    ResultBean uploadOrderFiles(String orderNo, List<OrderUploadDTO> orderUploadDTOs);
+
+    /**
+     * 删除订单附件文件
+     *
+     * @return
+     */
+    ResultBean delOrderFiles(int fileId);
+    /**
+     * 获取订单附件文件列表
+     *
+     * @return
+     */
+    ResultBean getOrderFiles(String orderNo);
+
+
     /**
      * 添加order信息
      * {
@@ -70,6 +92,7 @@ public interface OrderProductService {
      * @return
      */
     ResultBean updateOrderInfo(OrderUpdateDTO orderUpdateDTO);
+
     /**
      * 删除订单信息
      *
@@ -77,6 +100,7 @@ public interface OrderProductService {
      * @return
      */
     ResultBean deleteOrderInfo(int id);
+
     /**
      * 修改订单状态
      *
@@ -175,6 +199,7 @@ public interface OrderProductService {
      * @param id
      */
     OrderMaterialDTO infoReplaceMaterial(int id);
+
     /**
      * 替换料审核完成
      *
