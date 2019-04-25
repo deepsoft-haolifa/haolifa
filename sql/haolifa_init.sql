@@ -1025,5 +1025,6 @@ CREATE TABLE `order_file` (
   `file_url` varchar(64) NOT NULL DEFAULT '' COMMENT '文件url',
   `file_type` varchar(64) NOT NULL DEFAULT '' COMMENT '文件类型',
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+	INDEX idx_order_no(`order_no`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='订单附件记录表';
