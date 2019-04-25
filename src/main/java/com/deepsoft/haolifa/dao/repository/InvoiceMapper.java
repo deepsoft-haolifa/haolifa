@@ -20,7 +20,7 @@ public interface InvoiceMapper {
 
     Invoice selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") Invoice record, @Param("example") InvoiceExample example);
+    //int updateByExampleSelective(@Param("record") Invoice record, @Param("example") InvoiceExample example);
 
     int updateByExample(@Param("record") Invoice record, @Param("example") InvoiceExample example);
 

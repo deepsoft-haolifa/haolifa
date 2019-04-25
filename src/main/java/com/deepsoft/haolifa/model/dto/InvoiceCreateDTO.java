@@ -26,4 +26,10 @@ public class InvoiceCreateDTO {
 
   @ApiModelProperty(required = true, value = "状态：待开票 1 2 已开票", allowableValues = "1,2")
   private Integer status;
+
+  @ApiModelProperty(value = "开票单位")
+  private String invoiceIssuing;
+
+  @ApiModelProperty(value = "需方单位")
+  private String invoiceCompany;
 }

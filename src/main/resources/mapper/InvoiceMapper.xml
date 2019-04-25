@@ -6,6 +6,8 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="invoice_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="invoice_company" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="invoice_issuing" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="total_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
@@ -75,7 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_no, invoice_no, total_amount, remark, type, status, is_delete, create_time, 
+    id, order_no, invoice_no,invoice_company,invoice_issuing, total_amount, remark, type, status, is_delete, create_time,
     update_time, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InvoiceExample" resultMap="BaseResultMap">
@@ -112,11 +114,11 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into invoice (order_no, invoice_no, total_amount, 
+    insert into invoice (order_no, invoice_no, invoice_company, invoice_issuing, total_amount,
       remark, type, status, 
       is_delete, create_time, update_time, 
       create_user_id)
-    values (#{orderNo,jdbcType=VARCHAR}, #{invoiceNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, 
+    values (#{orderNo,jdbcType=VARCHAR}, #{invoiceNo,jdbcType=VARCHAR},#{invoiceCompany,jdbcType=VARCHAR},#{invoiceIssuing,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL},
       #{remark,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER})
@@ -132,6 +134,12 @@
       </if>
       <if test="invoiceNo != null">
         invoice_no,
+      </if>
+      <if test="invoiceCompany != null">
+        invoice_company,
+      </if>
+      <if test="invoiceIssuing != null">
+        invoice_issuing,
       </if>
       <if test="totalAmount != null">
         total_amount,
@@ -165,6 +173,12 @@
       <if test="invoiceNo != null">
         #{invoiceNo,jdbcType=VARCHAR},
       </if>
+      <if test="invoiceCompany != null">
+        #{invoiceCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceIssuing != null">
+        #{invoiceIssuing,jdbcType=VARCHAR},
+      </if>
       <if test="totalAmount != null">
         #{totalAmount,jdbcType=DECIMAL},
       </if>
@@ -197,7 +211,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+  <!--<update id="updateByExampleSelective" parameterType="map">
     update invoice
     <set>
       <if test="record.id != null">
@@ -237,12 +251,14 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
+  </update>-->
+  <!--<update id="updateByExample" parameterType="map">
     update invoice
     set id = #{record.id,jdbcType=INTEGER},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
       invoice_no = #{record.invoiceNo,jdbcType=VARCHAR},
+      invoice_company = #{record.invoiceCompany,jdbcType=VARCHAR},
+      invoice_issuing = #{record.invoiceIssuing,jdbcType=VARCHAR},
       total_amount = #{record.totalAmount,jdbcType=DECIMAL},
       remark = #{record.remark,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
@@ -254,7 +270,7 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
+  </update>-->
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Invoice">
     update invoice
     <set>
@@ -263,6 +279,12 @@
       </if>
       <if test="invoiceNo != null">
         invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceCompany != null">
+        invoice_company = #{invoiceCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceIssuing != null">
+        invoice_issuing = #{invoiceIssuing,jdbcType=VARCHAR},
       </if>
       <if test="totalAmount != null">
         total_amount = #{totalAmount,jdbcType=DECIMAL},
@@ -295,6 +317,8 @@
     update invoice
     set order_no = #{orderNo,jdbcType=VARCHAR},
       invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      invoice_company = #{record.invoiceCompany,jdbcType=VARCHAR},
+      invoice_issuing = #{record.invoiceIssuing,jdbcType=VARCHAR},
       total_amount = #{totalAmount,jdbcType=DECIMAL},
       remark = #{remark,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},

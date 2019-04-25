@@ -45,6 +45,8 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     invoice.setId(model.getId());
     invoice.setInvoiceNo(model.getInvoiceNo());
     invoice.setCreateUserId(getLoginUserId());
+    invoice.setInvoiceCompany(model.getInvoiceCompany());
+    invoice.setInvoiceIssuing(model.getInvoiceIssuing());
     if(invoice.getId() != null ) {
       invoiceMapper.updateByPrimaryKeySelective(invoice);
     } else {
