@@ -100,7 +100,9 @@ public class SysUserServiceImpl implements SysUserService {
     public int insertSysUser(UserBaseDTO user) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
-        sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userMapper.insertSelective(sysUser);
     }
 
@@ -129,7 +131,9 @@ public class SysUserServiceImpl implements SysUserService {
         }
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
-        sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         int count = userMapper.updateByPrimaryKeySelective(sysUser);
 //        String userKey = CacheKeyManager.cacheKeyUserCache(user.getId()).key;
 //        //暂时不用缓存
