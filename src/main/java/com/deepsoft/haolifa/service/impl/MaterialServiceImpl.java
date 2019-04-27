@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -131,6 +132,8 @@ public class MaterialServiceImpl implements MaterialService {
             return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_EXISTS);
         }
         BeanUtils.copyProperties(model, record);
+        // 不更新价格
+        record.setPrice(null);
         record.setCreateUser(createUser);
         int insert = materialMapper.insertSelective(record);
         return ResultBean.success(insert);
@@ -150,6 +153,8 @@ public class MaterialServiceImpl implements MaterialService {
         record.setUpdateUser(updateUser);
         record.setUpdateTime(new Date());
         BeanUtils.copyProperties(model, record);
+        // 不更新价格
+        record.setPrice(null);
         int update = materialMapper.updateByPrimaryKeySelective(record);
         return ResultBean.success(update);
     }
@@ -298,6 +303,16 @@ public class MaterialServiceImpl implements MaterialService {
         BeanUtils.copyProperties(materials, pageDTO);
         pageDTO.setList(materials);
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public void updateMaterialPrice(String graphNo, BigDecimal price) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoEqualTo(graphNo);
+        Material record = new Material();
+        record.setPrice(price);
+        materialMapper.updateByExampleSelective(record, example);
     }
 
     /**

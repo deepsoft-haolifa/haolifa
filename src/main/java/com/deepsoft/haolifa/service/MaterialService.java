@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.dto.MaterialRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.material.MaterialConditionDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -151,5 +152,11 @@ public interface MaterialService {
      * 库存告警列表
      */
     ResultBean getMaterialAlarmList(MaterialConditionDTO model);
+
+
+    /**
+     * 库存告警列表
+     */
+    void updateMaterialPrice(String graphNo, BigDecimal price);
 
 }

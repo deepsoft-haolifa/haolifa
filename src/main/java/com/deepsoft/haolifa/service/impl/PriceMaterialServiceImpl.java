@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.price.PriceMaterialConditionDTO;
 import com.deepsoft.haolifa.model.dto.price.PriceProductConditionDTO;
+import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.PriceMaterialService;
 import com.deepsoft.haolifa.service.PriceProductService;
 import com.deepsoft.haolifa.service.SysUserService;
@@ -22,12 +23,16 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @Slf4j
 public class PriceMaterialServiceImpl implements PriceMaterialService {
 
     @Autowired
     private PriceMaterialMapper priceMaterialMapper;
+    @Autowired
+    private MaterialService materialService;
 
     @Autowired
     private SysUserService sysUserService;
@@ -39,6 +44,9 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         model.setCreateUser(createUser);
         int insert = priceMaterialMapper.insertSelective(model);
         if (insert > 0) {
+            // 更新零件价格
+            String blankCost = model.getBlankCost();
+            materialService.updateMaterialPrice(model.getGraphNo(),new BigDecimal(blankCost));
             return ResultBean.success(insert);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
@@ -52,6 +60,9 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         }
         int update = priceMaterialMapper.updateByPrimaryKeySelective(model);
         if (update > 0) {
+            // 更新零件价格
+            String blankCost = model.getBlankCost();
+            materialService.updateMaterialPrice(model.getGraphNo(),new BigDecimal(blankCost));
             return ResultBean.success(update);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
