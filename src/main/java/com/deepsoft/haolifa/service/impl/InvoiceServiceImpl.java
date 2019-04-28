@@ -47,6 +47,11 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     invoice.setCreateUserId(getLoginUserId());
     invoice.setInvoiceCompany(model.getInvoiceCompany());
     invoice.setInvoiceIssuing(model.getInvoiceIssuing());
+    if(model.getType() == 1) {
+      invoice.setConstractParty(model.getInvoiceCompany());
+    } else {
+      invoice.setConstractParty(model.getInvoiceIssuing());
+    }
     if(invoice.getId() != null ) {
       invoiceMapper.updateByPrimaryKeySelective(invoice);
     } else {
@@ -120,6 +125,9 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     }
     if (modelList.getStatus() !=0) {
       criteria.andStatusEqualTo(modelList.getStatus().byteValue());
+    }
+    if(StringUtils.isNotEmpty(modelList.getContractParty())) {
+      criteria.andConstractPartyLike("%"+modelList.getContractParty()+"%");
     }
     if(modelList.getType() != 0) {
       criteria.andTypeEqualTo(modelList.getType().byteValue());

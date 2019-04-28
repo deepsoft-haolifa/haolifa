@@ -5,9 +5,12 @@ public class ExpensesClassify {
 
     private String classifyName;
 
-    public ExpensesClassify(Integer id, String classifyName) {
+    private Integer classifyPid;
+
+    public ExpensesClassify(Integer id, String classifyName, Integer classifyPid) {
         this.id = id;
         this.classifyName = classifyName;
+        this.classifyPid = classifyPid;
     }
 
     public ExpensesClassify() {
@@ -28,5 +31,13 @@ public class ExpensesClassify {
 
     public void setClassifyName(String classifyName) {
         this.classifyName = classifyName == null ? null : classifyName.trim();
+    }
+
+    public Integer getClassifyPid() {
+        return classifyPid;
+    }
+
+    public void setClassifyPid(Integer classifyPid) {
+        this.classifyPid = classifyPid;
     }
 }

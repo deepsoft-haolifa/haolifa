@@ -1,57 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.SupplierMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Supplier">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="suppiler_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="suppiler_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="website" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="nature" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="phone" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="address" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="postcode" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="fax" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="legal_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="legal_person_phone" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="total_factory_area" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="total_archit_area" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="work_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="staff_info" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="credentials_info" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="financial_info" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="main_organ" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="quality_assurance_info" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="process_route" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="suppiler_preparer" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="responsible_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="evaluation" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="is_qualified" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.SupplierMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Supplier" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="suppiler_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="suppiler_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="website" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="nature" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="postcode" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="fax" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legal_person" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="legal_person_phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="total_factory_area" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="total_archit_area" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="work_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="staff_info" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="credentials_info" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="financial_info" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="main_organ" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="quality_assurance_info" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="process_route" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="suppiler_preparer" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="responsible_person" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="evaluation" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="is_qualified" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="is_delete" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -62,25 +63,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -91,44 +92,44 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, suppiler_no, suppiler_name, website, nature, phone, address, postcode, fax, legal_person, 
     legal_person_phone, total_factory_area, total_archit_area, work_type, staff_info, 
     credentials_info, financial_info, main_organ, quality_assurance_info, process_route, 
     suppiler_preparer, responsible_person, evaluation, is_qualified, create_user_id, 
-    update_time, create_time, is_delete
+    update_time, create_time, is_delete, accessory
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.SupplierExample" resultMap="BaseResultMap">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SupplierExample" >
     select
-    <if test="distinct">
+    <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
     from supplier
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null">
+    <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from supplier
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from supplier
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.SupplierExample">
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.SupplierExample" >
     delete from supplier
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Supplier">
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Supplier" >
     insert into supplier (id, suppiler_no, suppiler_name, 
       website, nature, phone, 
       address, postcode, fax, 
@@ -138,7 +139,7 @@
       quality_assurance_info, process_route, suppiler_preparer, 
       responsible_person, evaluation, is_qualified, 
       create_user_id, update_time, create_time, 
-      is_delete)
+      is_delete, accessory)
     values (#{id,jdbcType=INTEGER}, #{suppilerNo,jdbcType=VARCHAR}, #{suppilerName,jdbcType=VARCHAR}, 
       #{website,jdbcType=VARCHAR}, #{nature,jdbcType=TINYINT}, #{phone,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, 
@@ -148,282 +149,291 @@
       #{qualityAssuranceInfo,jdbcType=VARCHAR}, #{processRoute,jdbcType=VARCHAR}, #{suppilerPreparer,jdbcType=VARCHAR}, 
       #{responsiblePerson,jdbcType=VARCHAR}, #{evaluation,jdbcType=VARCHAR}, #{isQualified,jdbcType=TINYINT}, 
       #{createUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=TINYINT})
+      #{isDelete,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Supplier">
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Supplier" >
     insert into supplier
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="suppilerNo != null">
+      <if test="suppilerNo != null" >
         suppiler_no,
       </if>
-      <if test="suppilerName != null">
+      <if test="suppilerName != null" >
         suppiler_name,
       </if>
-      <if test="website != null">
+      <if test="website != null" >
         website,
       </if>
-      <if test="nature != null">
+      <if test="nature != null" >
         nature,
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         phone,
       </if>
-      <if test="address != null">
+      <if test="address != null" >
         address,
       </if>
-      <if test="postcode != null">
+      <if test="postcode != null" >
         postcode,
       </if>
-      <if test="fax != null">
+      <if test="fax != null" >
         fax,
       </if>
-      <if test="legalPerson != null">
+      <if test="legalPerson != null" >
         legal_person,
       </if>
-      <if test="legalPersonPhone != null">
+      <if test="legalPersonPhone != null" >
         legal_person_phone,
       </if>
-      <if test="totalFactoryArea != null">
+      <if test="totalFactoryArea != null" >
         total_factory_area,
       </if>
-      <if test="totalArchitArea != null">
+      <if test="totalArchitArea != null" >
         total_archit_area,
       </if>
-      <if test="workType != null">
+      <if test="workType != null" >
         work_type,
       </if>
-      <if test="staffInfo != null">
+      <if test="staffInfo != null" >
         staff_info,
       </if>
-      <if test="credentialsInfo != null">
+      <if test="credentialsInfo != null" >
         credentials_info,
       </if>
-      <if test="financialInfo != null">
+      <if test="financialInfo != null" >
         financial_info,
       </if>
-      <if test="mainOrgan != null">
+      <if test="mainOrgan != null" >
         main_organ,
       </if>
-      <if test="qualityAssuranceInfo != null">
+      <if test="qualityAssuranceInfo != null" >
         quality_assurance_info,
       </if>
-      <if test="processRoute != null">
+      <if test="processRoute != null" >
         process_route,
       </if>
-      <if test="suppilerPreparer != null">
+      <if test="suppilerPreparer != null" >
         suppiler_preparer,
       </if>
-      <if test="responsiblePerson != null">
+      <if test="responsiblePerson != null" >
         responsible_person,
       </if>
-      <if test="evaluation != null">
+      <if test="evaluation != null" >
         evaluation,
       </if>
-      <if test="isQualified != null">
+      <if test="isQualified != null" >
         is_qualified,
       </if>
-      <if test="createUserId != null">
+      <if test="createUserId != null" >
         create_user_id,
       </if>
-      <if test="updateTime != null">
+      <if test="updateTime != null" >
         update_time,
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         create_time,
       </if>
-      <if test="isDelete != null">
+      <if test="isDelete != null" >
         is_delete,
       </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="suppilerNo != null">
+      <if test="suppilerNo != null" >
         #{suppilerNo,jdbcType=VARCHAR},
       </if>
-      <if test="suppilerName != null">
+      <if test="suppilerName != null" >
         #{suppilerName,jdbcType=VARCHAR},
       </if>
-      <if test="website != null">
+      <if test="website != null" >
         #{website,jdbcType=VARCHAR},
       </if>
-      <if test="nature != null">
+      <if test="nature != null" >
         #{nature,jdbcType=TINYINT},
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="address != null">
+      <if test="address != null" >
         #{address,jdbcType=VARCHAR},
       </if>
-      <if test="postcode != null">
+      <if test="postcode != null" >
         #{postcode,jdbcType=VARCHAR},
       </if>
-      <if test="fax != null">
+      <if test="fax != null" >
         #{fax,jdbcType=VARCHAR},
       </if>
-      <if test="legalPerson != null">
+      <if test="legalPerson != null" >
         #{legalPerson,jdbcType=VARCHAR},
       </if>
-      <if test="legalPersonPhone != null">
+      <if test="legalPersonPhone != null" >
         #{legalPersonPhone,jdbcType=VARCHAR},
       </if>
-      <if test="totalFactoryArea != null">
+      <if test="totalFactoryArea != null" >
         #{totalFactoryArea,jdbcType=INTEGER},
       </if>
-      <if test="totalArchitArea != null">
+      <if test="totalArchitArea != null" >
         #{totalArchitArea,jdbcType=INTEGER},
       </if>
-      <if test="workType != null">
+      <if test="workType != null" >
         #{workType,jdbcType=TINYINT},
       </if>
-      <if test="staffInfo != null">
+      <if test="staffInfo != null" >
         #{staffInfo,jdbcType=VARCHAR},
       </if>
-      <if test="credentialsInfo != null">
+      <if test="credentialsInfo != null" >
         #{credentialsInfo,jdbcType=VARCHAR},
       </if>
-      <if test="financialInfo != null">
+      <if test="financialInfo != null" >
         #{financialInfo,jdbcType=VARCHAR},
       </if>
-      <if test="mainOrgan != null">
+      <if test="mainOrgan != null" >
         #{mainOrgan,jdbcType=VARCHAR},
       </if>
-      <if test="qualityAssuranceInfo != null">
+      <if test="qualityAssuranceInfo != null" >
         #{qualityAssuranceInfo,jdbcType=VARCHAR},
       </if>
-      <if test="processRoute != null">
+      <if test="processRoute != null" >
         #{processRoute,jdbcType=VARCHAR},
       </if>
-      <if test="suppilerPreparer != null">
+      <if test="suppilerPreparer != null" >
         #{suppilerPreparer,jdbcType=VARCHAR},
       </if>
-      <if test="responsiblePerson != null">
+      <if test="responsiblePerson != null" >
         #{responsiblePerson,jdbcType=VARCHAR},
       </if>
-      <if test="evaluation != null">
+      <if test="evaluation != null" >
         #{evaluation,jdbcType=VARCHAR},
       </if>
-      <if test="isQualified != null">
+      <if test="isQualified != null" >
         #{isQualified,jdbcType=TINYINT},
       </if>
-      <if test="createUserId != null">
+      <if test="createUserId != null" >
         #{createUserId,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null">
+      <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDelete != null">
+      <if test="isDelete != null" >
         #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.SupplierExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.SupplierExample" resultType="java.lang.Integer" >
     select count(*) from supplier
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+  <update id="updateByExampleSelective" parameterType="map" >
     update supplier
-    <set>
-      <if test="record.id != null">
+    <set >
+      <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.suppilerNo != null">
+      <if test="record.suppilerNo != null" >
         suppiler_no = #{record.suppilerNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.suppilerName != null">
+      <if test="record.suppilerName != null" >
         suppiler_name = #{record.suppilerName,jdbcType=VARCHAR},
       </if>
-      <if test="record.website != null">
+      <if test="record.website != null" >
         website = #{record.website,jdbcType=VARCHAR},
       </if>
-      <if test="record.nature != null">
+      <if test="record.nature != null" >
         nature = #{record.nature,jdbcType=TINYINT},
       </if>
-      <if test="record.phone != null">
+      <if test="record.phone != null" >
         phone = #{record.phone,jdbcType=VARCHAR},
       </if>
-      <if test="record.address != null">
+      <if test="record.address != null" >
         address = #{record.address,jdbcType=VARCHAR},
       </if>
-      <if test="record.postcode != null">
+      <if test="record.postcode != null" >
         postcode = #{record.postcode,jdbcType=VARCHAR},
       </if>
-      <if test="record.fax != null">
+      <if test="record.fax != null" >
         fax = #{record.fax,jdbcType=VARCHAR},
       </if>
-      <if test="record.legalPerson != null">
+      <if test="record.legalPerson != null" >
         legal_person = #{record.legalPerson,jdbcType=VARCHAR},
       </if>
-      <if test="record.legalPersonPhone != null">
+      <if test="record.legalPersonPhone != null" >
         legal_person_phone = #{record.legalPersonPhone,jdbcType=VARCHAR},
       </if>
-      <if test="record.totalFactoryArea != null">
+      <if test="record.totalFactoryArea != null" >
         total_factory_area = #{record.totalFactoryArea,jdbcType=INTEGER},
       </if>
-      <if test="record.totalArchitArea != null">
+      <if test="record.totalArchitArea != null" >
         total_archit_area = #{record.totalArchitArea,jdbcType=INTEGER},
       </if>
-      <if test="record.workType != null">
+      <if test="record.workType != null" >
         work_type = #{record.workType,jdbcType=TINYINT},
       </if>
-      <if test="record.staffInfo != null">
+      <if test="record.staffInfo != null" >
         staff_info = #{record.staffInfo,jdbcType=VARCHAR},
       </if>
-      <if test="record.credentialsInfo != null">
+      <if test="record.credentialsInfo != null" >
         credentials_info = #{record.credentialsInfo,jdbcType=VARCHAR},
       </if>
-      <if test="record.financialInfo != null">
+      <if test="record.financialInfo != null" >
         financial_info = #{record.financialInfo,jdbcType=VARCHAR},
       </if>
-      <if test="record.mainOrgan != null">
+      <if test="record.mainOrgan != null" >
         main_organ = #{record.mainOrgan,jdbcType=VARCHAR},
       </if>
-      <if test="record.qualityAssuranceInfo != null">
+      <if test="record.qualityAssuranceInfo != null" >
         quality_assurance_info = #{record.qualityAssuranceInfo,jdbcType=VARCHAR},
       </if>
-      <if test="record.processRoute != null">
+      <if test="record.processRoute != null" >
         process_route = #{record.processRoute,jdbcType=VARCHAR},
       </if>
-      <if test="record.suppilerPreparer != null">
+      <if test="record.suppilerPreparer != null" >
         suppiler_preparer = #{record.suppilerPreparer,jdbcType=VARCHAR},
       </if>
-      <if test="record.responsiblePerson != null">
+      <if test="record.responsiblePerson != null" >
         responsible_person = #{record.responsiblePerson,jdbcType=VARCHAR},
       </if>
-      <if test="record.evaluation != null">
+      <if test="record.evaluation != null" >
         evaluation = #{record.evaluation,jdbcType=VARCHAR},
       </if>
-      <if test="record.isQualified != null">
+      <if test="record.isQualified != null" >
         is_qualified = #{record.isQualified,jdbcType=TINYINT},
       </if>
-      <if test="record.createUserId != null">
+      <if test="record.createUserId != null" >
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
-      <if test="record.updateTime != null">
+      <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createTime != null">
+      <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.isDelete != null">
+      <if test="record.isDelete != null" >
         is_delete = #{record.isDelete,jdbcType=TINYINT},
       </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
     </set>
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExample" parameterType="map" >
     update supplier
     set id = #{record.id,jdbcType=INTEGER},
       suppiler_no = #{record.suppilerNo,jdbcType=VARCHAR},
@@ -452,99 +462,103 @@
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      is_delete = #{record.isDelete,jdbcType=TINYINT}
-    <if test="_parameter != null">
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Supplier">
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Supplier" >
     update supplier
-    <set>
-      <if test="suppilerNo != null">
+    <set >
+      <if test="suppilerNo != null" >
         suppiler_no = #{suppilerNo,jdbcType=VARCHAR},
       </if>
-      <if test="suppilerName != null">
+      <if test="suppilerName != null" >
         suppiler_name = #{suppilerName,jdbcType=VARCHAR},
       </if>
-      <if test="website != null">
+      <if test="website != null" >
         website = #{website,jdbcType=VARCHAR},
       </if>
-      <if test="nature != null">
+      <if test="nature != null" >
         nature = #{nature,jdbcType=TINYINT},
       </if>
-      <if test="phone != null">
+      <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
       </if>
-      <if test="address != null">
+      <if test="address != null" >
         address = #{address,jdbcType=VARCHAR},
       </if>
-      <if test="postcode != null">
+      <if test="postcode != null" >
         postcode = #{postcode,jdbcType=VARCHAR},
       </if>
-      <if test="fax != null">
+      <if test="fax != null" >
         fax = #{fax,jdbcType=VARCHAR},
       </if>
-      <if test="legalPerson != null">
+      <if test="legalPerson != null" >
         legal_person = #{legalPerson,jdbcType=VARCHAR},
       </if>
-      <if test="legalPersonPhone != null">
+      <if test="legalPersonPhone != null" >
         legal_person_phone = #{legalPersonPhone,jdbcType=VARCHAR},
       </if>
-      <if test="totalFactoryArea != null">
+      <if test="totalFactoryArea != null" >
         total_factory_area = #{totalFactoryArea,jdbcType=INTEGER},
       </if>
-      <if test="totalArchitArea != null">
+      <if test="totalArchitArea != null" >
         total_archit_area = #{totalArchitArea,jdbcType=INTEGER},
       </if>
-      <if test="workType != null">
+      <if test="workType != null" >
         work_type = #{workType,jdbcType=TINYINT},
       </if>
-      <if test="staffInfo != null">
+      <if test="staffInfo != null" >
         staff_info = #{staffInfo,jdbcType=VARCHAR},
       </if>
-      <if test="credentialsInfo != null">
+      <if test="credentialsInfo != null" >
         credentials_info = #{credentialsInfo,jdbcType=VARCHAR},
       </if>
-      <if test="financialInfo != null">
+      <if test="financialInfo != null" >
         financial_info = #{financialInfo,jdbcType=VARCHAR},
       </if>
-      <if test="mainOrgan != null">
+      <if test="mainOrgan != null" >
         main_organ = #{mainOrgan,jdbcType=VARCHAR},
       </if>
-      <if test="qualityAssuranceInfo != null">
+      <if test="qualityAssuranceInfo != null" >
         quality_assurance_info = #{qualityAssuranceInfo,jdbcType=VARCHAR},
       </if>
-      <if test="processRoute != null">
+      <if test="processRoute != null" >
         process_route = #{processRoute,jdbcType=VARCHAR},
       </if>
-      <if test="suppilerPreparer != null">
+      <if test="suppilerPreparer != null" >
         suppiler_preparer = #{suppilerPreparer,jdbcType=VARCHAR},
       </if>
-      <if test="responsiblePerson != null">
+      <if test="responsiblePerson != null" >
         responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
       </if>
-      <if test="evaluation != null">
+      <if test="evaluation != null" >
         evaluation = #{evaluation,jdbcType=VARCHAR},
       </if>
-      <if test="isQualified != null">
+      <if test="isQualified != null" >
         is_qualified = #{isQualified,jdbcType=TINYINT},
       </if>
-      <if test="createUserId != null">
+      <if test="createUserId != null" >
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null">
+      <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createTime != null">
+      <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDelete != null">
+      <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Supplier">
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Supplier" >
     update supplier
     set suppiler_no = #{suppilerNo,jdbcType=VARCHAR},
       suppiler_name = #{suppilerName,jdbcType=VARCHAR},
@@ -572,7 +586,8 @@
       create_user_id = #{createUserId,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=TINYINT}
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

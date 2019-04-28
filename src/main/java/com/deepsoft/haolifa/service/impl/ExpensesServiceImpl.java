@@ -70,7 +70,9 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean classify() {
-        return ResultBean.success(classifyMapper.selectByExample(new ExpensesClassifyExample()));
+    public ResultBean classify(Integer pId) {
+        ExpensesClassifyExample classifyExample = new ExpensesClassifyExample();
+        classifyExample.createCriteria().andClassifyPidEqualTo(pId);
+        return ResultBean.success(classifyMapper.selectByExample(classifyExample));
     }
 }

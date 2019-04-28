@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Equipment {
@@ -21,7 +22,7 @@ public class Equipment {
 
     private String productFactory;
 
-    private Integer servicedYears;
+    private String servicedYears;
 
     private Date createTime;
 
@@ -31,7 +32,11 @@ public class Equipment {
 
     private Integer createUserId;
 
-    public Equipment(Integer id, String equipmentNo, Byte equipmentStatus, String name, Integer number, Byte type, String specification, String supplierNo, String productFactory, Integer servicedYears, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
+    private BigDecimal price;
+
+    private Date purchaseTime;
+
+    public Equipment(Integer id, String equipmentNo, Byte equipmentStatus, String name, Integer number, Byte type, String specification, String supplierNo, String productFactory, String servicedYears, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal price, Date purchaseTime) {
         this.id = id;
         this.equipmentNo = equipmentNo;
         this.equipmentStatus = equipmentStatus;
@@ -46,6 +51,8 @@ public class Equipment {
         this.updateTime = updateTime;
         this.isDelete = isDelete;
         this.createUserId = createUserId;
+        this.price = price;
+        this.purchaseTime = purchaseTime;
     }
 
     public Equipment() {
@@ -124,12 +131,12 @@ public class Equipment {
         this.productFactory = productFactory == null ? null : productFactory.trim();
     }
 
-    public Integer getServicedYears() {
+    public String getServicedYears() {
         return servicedYears;
     }
 
-    public void setServicedYears(Integer servicedYears) {
-        this.servicedYears = servicedYears;
+    public void setServicedYears(String servicedYears) {
+        this.servicedYears = servicedYears == null ? null : servicedYears.trim();
     }
 
     public Date getCreateTime() {
@@ -162,5 +169,21 @@ public class Equipment {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Date getPurchaseTime() {
+        return purchaseTime;
+    }
+
+    public void setPurchaseTime(Date purchaseTime) {
+        this.purchaseTime = purchaseTime;
     }
 }

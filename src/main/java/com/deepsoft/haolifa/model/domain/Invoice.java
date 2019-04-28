@@ -10,8 +10,6 @@ public class Invoice {
 
     private String invoiceNo;
 
-    private String invoiceIssuing;
-
     private String invoiceCompany;
 
     private BigDecimal totalAmount;
@@ -30,11 +28,14 @@ public class Invoice {
 
     private Integer createUserId;
 
-    public Invoice(Integer id, String orderNo, String invoiceNo, String invoiceIssuing, String invoiceCompany, BigDecimal totalAmount, String remark, Byte type, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    private String invoiceIssuing;
+
+    private String constractParty;
+
+    public Invoice(Integer id, String orderNo, String invoiceNo, String invoiceCompany, BigDecimal totalAmount, String remark, Byte type, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, String invoiceIssuing, String constractParty) {
         this.id = id;
         this.orderNo = orderNo;
         this.invoiceNo = invoiceNo;
-        this.invoiceIssuing = invoiceIssuing;
         this.invoiceCompany = invoiceCompany;
         this.totalAmount = totalAmount;
         this.remark = remark;
@@ -44,6 +45,8 @@ public class Invoice {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.invoiceIssuing = invoiceIssuing;
+        this.constractParty = constractParty;
     }
 
     public Invoice() {
@@ -72,6 +75,14 @@ public class Invoice {
 
     public void setInvoiceNo(String invoiceNo) {
         this.invoiceNo = invoiceNo == null ? null : invoiceNo.trim();
+    }
+
+    public String getInvoiceCompany() {
+        return invoiceCompany;
+    }
+
+    public void setInvoiceCompany(String invoiceCompany) {
+        this.invoiceCompany = invoiceCompany == null ? null : invoiceCompany.trim();
     }
 
     public BigDecimal getTotalAmount() {
@@ -143,14 +154,14 @@ public class Invoice {
     }
 
     public void setInvoiceIssuing(String invoiceIssuing) {
-        this.invoiceIssuing = invoiceIssuing;
+        this.invoiceIssuing = invoiceIssuing == null ? null : invoiceIssuing.trim();
     }
 
-    public String getInvoiceCompany() {
-        return invoiceCompany;
+    public String getConstractParty() {
+        return constractParty;
     }
 
-    public void setInvoiceCompany(String invoiceCompany) {
-        this.invoiceCompany = invoiceCompany;
+    public void setConstractParty(String constractParty) {
+        this.constractParty = constractParty == null ? null : constractParty.trim();
     }
 }

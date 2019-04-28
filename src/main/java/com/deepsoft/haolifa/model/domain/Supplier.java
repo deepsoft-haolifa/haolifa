@@ -59,7 +59,9 @@ public class Supplier {
 
     private Byte isDelete;
 
-    public Supplier(Integer id, String suppilerNo, String suppilerName, String website, Byte nature, String phone, String address, String postcode, String fax, String legalPerson, String legalPersonPhone, Integer totalFactoryArea, Integer totalArchitArea, Byte workType, String staffInfo, String credentialsInfo, String financialInfo, String mainOrgan, String qualityAssuranceInfo, String processRoute, String suppilerPreparer, String responsiblePerson, String evaluation, Byte isQualified, Integer createUserId, Date updateTime, Date createTime, Byte isDelete) {
+    private String accessory;
+
+    public Supplier(Integer id, String suppilerNo, String suppilerName, String website, Byte nature, String phone, String address, String postcode, String fax, String legalPerson, String legalPersonPhone, Integer totalFactoryArea, Integer totalArchitArea, Byte workType, String staffInfo, String credentialsInfo, String financialInfo, String mainOrgan, String qualityAssuranceInfo, String processRoute, String suppilerPreparer, String responsiblePerson, String evaluation, Byte isQualified, Integer createUserId, Date updateTime, Date createTime, Byte isDelete, String accessory) {
         this.id = id;
         this.suppilerNo = suppilerNo;
         this.suppilerName = suppilerName;
@@ -88,6 +90,7 @@ public class Supplier {
         this.updateTime = updateTime;
         this.createTime = createTime;
         this.isDelete = isDelete;
+        this.accessory = accessory;
     }
 
     public Supplier() {
@@ -316,5 +319,13 @@ public class Supplier {
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
     }
 }
