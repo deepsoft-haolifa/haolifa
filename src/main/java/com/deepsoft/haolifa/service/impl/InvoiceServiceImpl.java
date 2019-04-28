@@ -126,8 +126,8 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     if (modelList.getStatus() !=0) {
       criteria.andStatusEqualTo(modelList.getStatus().byteValue());
     }
-    if(StringUtils.isNotEmpty(modelList.getContractParty())) {
-      criteria.andConstractPartyLike("%"+modelList.getContractParty()+"%");
+    if(StringUtils.isNotEmpty(modelList.getConstractParty())) {
+      criteria.andConstractPartyLike("%"+modelList.getConstractParty()+"%");
     }
     if(modelList.getType() != 0) {
       criteria.andTypeEqualTo(modelList.getType().byteValue());
