@@ -45,7 +45,7 @@ public interface PurcahseOrderService {
    * @param createUserId
    * @return
    */
-  ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType);
+  ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName);
 
   /**
    * 采购完成

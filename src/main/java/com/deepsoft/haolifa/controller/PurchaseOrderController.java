@@ -58,8 +58,9 @@ public class PurchaseOrderController {
   public ResultBean list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
       @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,
       String orderNo, int createUserId, int status,
-      @PathVariable("orderType") Integer orderType) {
-    return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId,status,orderType);
+      @PathVariable("orderType") Integer orderType,
+      @ApiParam("供应商名字") String supplierName) {
+    return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId,status,orderType,supplierName);
   }
 
   @ApiOperation("采购完成")

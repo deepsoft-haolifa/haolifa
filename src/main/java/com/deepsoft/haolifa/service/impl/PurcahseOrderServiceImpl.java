@@ -78,6 +78,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   @Autowired
   private FlowInstanceMapper flowInstanceMapper;
 
+  @Autowired
+  private SupplierMapper supplierMapper;
+
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(PurchaseOrderDTO model, Integer orderType) {
@@ -240,7 +243,15 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
   }
 
   @Override
-  public ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType) {
+  public ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType,
+      String supplierName) {
+    List<String> supplierNoList = new ArrayList<>();
+    if (StringUtils.isNotEmpty(supplierName)) {
+      SupplierExample supplierExample = new SupplierExample();
+      supplierExample.createCriteria().andSuppilerNameLike("%" + supplierName + "%");
+      List<Supplier> suppliers = supplierMapper.selectByExample(supplierExample);
+      supplierNoList = suppliers.stream().map(Supplier::getSuppilerNo).collect(Collectors.toList());
+    }
     PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
     PurchaseOrderExample.Criteria criteria = purchaseOrderExample.createCriteria();
     if (orderType != -1) {
@@ -254,6 +265,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }
     if (status != 0) {
       criteria.andStatusEqualTo((byte) status);
+    }
+    if(supplierNoList.size() > 0) {
+      criteria.andSupplierNoIn(supplierNoList);
     }
     Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(pageNum, pageSize)
         .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
