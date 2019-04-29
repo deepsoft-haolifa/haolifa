@@ -31,6 +31,9 @@ public class EquipmentController {
     Equipment equipment = new Equipment();
     BeanUtils.copyProperties(model, equipment);
     equipment.setSupplierNo("0");
+    equipment.setPurchaseTime(
+        DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getPurchaseTime()));
+    equipment.setPrice(new BigDecimal(model.getPrice()));
     return equipmentService.save(equipment);
   }
 
@@ -39,9 +42,7 @@ public class EquipmentController {
   public ResultBean save(@RequestBody SupplierEquipmentRequestDTO model) {
     Equipment equipment = new Equipment();
     BeanUtils.copyProperties(model, equipment);
-    equipment.setPurchaseTime(
-        DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getPurchaseTime()));
-    equipment.setPrice(new BigDecimal(model.getPrice()));
+
     if (StringUtils.isEmpty(model.getSupplierNo()) || "0".equals(model.getSupplierNo())) {
       return ResultBean.error(CommonEnum.ResponseEnum.SUPPLIER_NO_WRONG);
     }
@@ -59,6 +60,9 @@ public class EquipmentController {
   public ResultBean update(@RequestBody EquipmentRequestDTO model) {
     Equipment equipment = new Equipment();
     BeanUtils.copyProperties(model, equipment);
+    equipment.setPurchaseTime(
+        DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getPurchaseTime()));
+    equipment.setPrice(new BigDecimal(model.getPrice()));
     return equipmentService.update(equipment);
   }
 
@@ -67,9 +71,6 @@ public class EquipmentController {
   public ResultBean update(@RequestBody SupplierEquipmentRequestDTO model) {
     Equipment equipment = new Equipment();
     BeanUtils.copyProperties(model, equipment);
-    equipment.setPurchaseTime(
-        DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getPurchaseTime()));
-    equipment.setPrice(new BigDecimal(model.getPrice()));
     if (StringUtils.isEmpty(model.getSupplierNo()) || "0".equals(model.getSupplierNo())) {
       return ResultBean.error(CommonEnum.ResponseEnum.SUPPLIER_NO_WRONG);
     }

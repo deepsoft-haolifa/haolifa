@@ -15,9 +15,6 @@ public class SupplierEquipmentRequestDTO extends EquipmentBaseDTO {
     private Byte type;
     @ApiModelProperty(required = true,value = "供应商编号")
     private String supplierNo;
-    @ApiModelProperty(required = true, value = "采购金额")
-    private Double price;
-    @ApiModelProperty(required = true, value = "采购日期")
-    private String purchaseTime;
+
 
 }
