@@ -266,12 +266,17 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     if (status != 0) {
       criteria.andStatusEqualTo((byte) status);
     }
+    PageDTO<PurchaseOrder> purchaseOrderPageDTO;
     if(supplierNoList.size() > 0) {
       criteria.andSupplierNoIn(supplierNoList);
+    } else if(StringUtils.isNotEmpty(supplierName)){
+      purchaseOrderPageDTO = new PageDTO<>();
+      purchaseOrderPageDTO.setList(new ArrayList<>());
+      return ResultBean.success(purchaseOrderPageDTO);
     }
     Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(pageNum, pageSize)
         .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
-    PageDTO<PurchaseOrder> purchaseOrderPageDTO = new PageDTO<>();
+    purchaseOrderPageDTO = new PageDTO<>();
     BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
     purchaseOrderPageDTO.setList(purchaseOrderList.getResult());
     return ResultBean.success(purchaseOrderPageDTO);
