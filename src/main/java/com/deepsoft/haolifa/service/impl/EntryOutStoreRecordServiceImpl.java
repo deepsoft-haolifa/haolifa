@@ -49,6 +49,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte operationType = CommonEnum.OperationType.ENTRY.code;
         byte storageType = CommonEnum.StorageType.PRODUCT.code;
         String orderNo = model.getOrderNo();
+        // 保证数量是正数
+        model.setQuantity(Math.abs(model.getQuantity()));
         EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
             setOperationType(operationType);
             setType(storageType);
@@ -85,14 +87,16 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte storageType = CommonEnum.StorageType.PRODUCT.code;
         // TODO 根据orderNo获取详情 客户代号和客户名称
         String orderNo = model.getOrderNo();
-        String customeNo = "";
-        String customeName = "";
+        // 保证数量是负数
+        model.setQuantity(-Math.abs(model.getQuantity()));
+        String customerNo = "";
+        String customerName = "";
         EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
             setOperationType(operationType);
             setType(storageType);
             setCreateUser(getLoginUserId());
-            setCustomerName(customeName);
-            setCustomerNo(customeNo);
+            setCustomerName(customerName);
+            setCustomerNo(customerNo);
             setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
@@ -122,6 +126,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte operationType = CommonEnum.OperationType.ENTRY.code;
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
         String orderNo = model.getOrderNo();
+        // 保证数量是正数
+        model.setQuantity(Math.abs(model.getQuantity()));
         final String materialGraphNo = model.getMaterialGraphNo();
         // 如果不传入批次号，就给个默认批次号
         if (StringUtils.isBlank(model.getMaterialBatchNo())) {
@@ -162,6 +168,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte operationType = CommonEnum.OperationType.OUT.code;
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
         final String orderNo = model.getOrderNo();
+        // 保证数量是负数
+        model.setQuantity(-Math.abs(model.getQuantity()));
         final String materialGraphNo = model.getMaterialGraphNo();
         final String materialBatchNo = model.getMaterialBatchNo();
         final String roomNo = model.getRoomNo();
