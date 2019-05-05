@@ -16,7 +16,7 @@ public interface StockExtendMapper {
     @Update("UPDATE stock SET quantity=quantity+#{quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and material_graph_no=#{materialGraphNo} and material_batch_no=#{materialBatchNo} and quantity>=abs(#{quantity})")
     int reduceMaterialQuantity(@Param("roomNo") String roomNo, @Param("rackNo") String rackNo, @Param("materialGraphNo") String materialGraphNo, @Param("materialBatchNo") String materialBatchNo, @Param("quantity") int quantity);
 
-    @Update("UPDATE stock SET quantity=quantity+#{#model.quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and product_no=#{productNo}")
+    @Update("UPDATE stock SET quantity=quantity+#{quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and product_no=#{productNo}")
     int addProductQuantity(@Param("roomNo") String roomNo, @Param("rackNo") String rackNo, @Param("productNo") String productNo, @Param("quantity") int quantity);
 
     @Update("UPDATE stock SET quantity=quantity+#{quantity} where room_no=#{roomNo} and rack_no=#{rackNo} and product_no=#{productNo} and quantity>=abs(#{quantity})")
