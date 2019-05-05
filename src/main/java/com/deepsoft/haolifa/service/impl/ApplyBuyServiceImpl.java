@@ -120,7 +120,7 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
     if (status != -1) {
       example.or().andStatusEqualTo((byte) status);
     }
-    Page pageData = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> applyBuyMapper.selectByExample(example));
+    Page pageData = PageHelper.startPage(pageNum, pageSize,"create_time desc").doSelectPage(() -> applyBuyMapper.selectByExample(example));
     List<ApplyBuy> applyBuyList = pageData.getResult();
     List<ApplyBuyListDTO> listDTOS = new ArrayList<>();
     for (int i = 0; i < applyBuyList.size(); i++) {

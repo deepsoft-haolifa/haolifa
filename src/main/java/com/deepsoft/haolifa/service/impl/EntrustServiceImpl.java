@@ -137,10 +137,10 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
       criteria.andStatusNotIn(statusList);
       criteria.andWorkshopTypeEqualTo((byte) 1);// 内部车间
     }
-    if(model.getStatus() != 6) {
+    if(model.getStatus() != -1) {
       criteria.andStatusEqualTo(model.getStatus().byteValue());
     }
-    Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->
+    Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "create_time desc").doSelectPage(() ->
         entrustMapper.selectByExample(entrustExample));
     PageDTO<Entrust> pageDTO = new PageDTO<>();
     BeanUtils.copyProperties(pageData, pageDTO);

@@ -84,6 +84,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         BeanUtils.copyProperties(items.get(i), inspectItem);
         inspectItem.setInspectId(inspect.getId());
         inspectItem.setPurchasePrice(new BigDecimal(items.get(i).getPurchasePrice()));
+        inspectItem.setPurchaseNo(model.getPurchaseNo());
         inspectItemMapper.insertSelective(inspectItem);
       }
     }
@@ -176,7 +177,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       criteria.andInspectNoLike("%" + inspectNo + "%");
     }
 
-    Page pageData = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> inspectMapper.selectByExample(example));
+    Page pageData = PageHelper.startPage(pageNum, pageSize,"create_time desc").doSelectPage(() -> inspectMapper.selectByExample(example));
     PageDTO pageDTO = new PageDTO();
     BeanUtils.copyProperties(pageData, pageDTO);
     pageDTO.setList(pageData.getResult());
