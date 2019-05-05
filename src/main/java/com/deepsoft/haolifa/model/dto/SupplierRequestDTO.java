@@ -12,6 +12,8 @@ public class SupplierRequestDTO {
 
     private Integer id;
 
+    private List<Accessory> accessories;
+
     @ApiModelProperty(required = true, value = "供应商编号")
     private String suppilerNo;
     @ApiModelProperty(required = true, value = "供应商名称")

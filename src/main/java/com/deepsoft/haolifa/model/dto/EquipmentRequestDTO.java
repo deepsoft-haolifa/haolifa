@@ -15,4 +15,9 @@ public class EquipmentRequestDTO extends EquipmentBaseDTO {
     @ApiModelProperty(required = true, value = "设备状态 0 正常 1 损坏待处理 2 处理中 3 处理完成", allowableValues = "0,1,2,3")
     private Byte equipmentStatus;
 
+    @ApiModelProperty(required = true, value = "采购金额")
+    private Double price;
+    @ApiModelProperty(required = true, value = "采购日期")
+    private String purchaseTime;
+
 }

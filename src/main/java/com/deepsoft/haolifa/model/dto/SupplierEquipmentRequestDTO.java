@@ -16,4 +16,5 @@ public class SupplierEquipmentRequestDTO extends EquipmentBaseDTO {
     @ApiModelProperty(required = true,value = "供应商编号")
     private String supplierNo;
 
+
 }

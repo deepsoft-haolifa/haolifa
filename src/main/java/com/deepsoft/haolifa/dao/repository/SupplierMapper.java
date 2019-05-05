@@ -3,12 +3,10 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.Supplier;
 import com.deepsoft.haolifa.model.domain.SupplierExample;
 import java.util.List;
-
-import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
 public interface SupplierMapper {
-    long countByExample(SupplierExample example);
+    int countByExample(SupplierExample example);
 
     int deleteByExample(SupplierExample example);
 

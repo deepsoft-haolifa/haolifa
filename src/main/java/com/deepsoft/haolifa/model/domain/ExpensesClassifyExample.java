@@ -233,6 +233,66 @@ public class ExpensesClassifyExample {
             addCriterion("classify_name not between", value1, value2, "classifyName");
             return (Criteria) this;
         }
+
+        public Criteria andClassifyPidIsNull() {
+            addCriterion("classify_pid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidIsNotNull() {
+            addCriterion("classify_pid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidEqualTo(Integer value) {
+            addCriterion("classify_pid =", value, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidNotEqualTo(Integer value) {
+            addCriterion("classify_pid <>", value, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidGreaterThan(Integer value) {
+            addCriterion("classify_pid >", value, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("classify_pid >=", value, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidLessThan(Integer value) {
+            addCriterion("classify_pid <", value, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidLessThanOrEqualTo(Integer value) {
+            addCriterion("classify_pid <=", value, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidIn(List<Integer> values) {
+            addCriterion("classify_pid in", values, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidNotIn(List<Integer> values) {
+            addCriterion("classify_pid not in", values, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidBetween(Integer value1, Integer value2) {
+            addCriterion("classify_pid between", value1, value2, "classifyPid");
+            return (Criteria) this;
+        }
+
+        public Criteria andClassifyPidNotBetween(Integer value1, Integer value2) {
+            addCriterion("classify_pid not between", value1, value2, "classifyPid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

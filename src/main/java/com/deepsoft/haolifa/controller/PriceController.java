@@ -83,8 +83,8 @@ public class PriceController {
     @ApiOperation("获取零件价格")
     @GetMapping("/material/getInfo/{id}")
     @ApiImplicitParam(name = "id", value = "主键id", dataType = "int", paramType = "path", required = true)
-    public ResultBean getMaterialInfo(@PathVariable int id) {
-        return ResultBean.success(priceMaterialService.getInfo(id));
+    public ResultBean getMaterialInfo(@PathVariable int id, String materialGraphNo) {
+        return ResultBean.success(priceMaterialService.getInfo(id, materialGraphNo));
     }
 
     @ApiOperation("获取零件价格分页")

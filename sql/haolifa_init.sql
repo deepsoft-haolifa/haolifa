@@ -479,6 +479,7 @@ CREATE TABLE `invoice` (
   `flow_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '流程id',
   `order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单合同编号',
   `invoice_no` varchar(64) NOT NULL DEFAULT '' COMMENT '发票号',
+  `invoice_company` varchar(255) DEFAULT '' COMMENT '开票需方',
   `total_amount` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
   `company` varchar(255) NOT NULL DEFAULT '' COMMENT '单位',
   `linkman` varchar(255) NOT NULL DEFAULT '' COMMENT '联系人',
@@ -488,6 +489,8 @@ CREATE TABLE `invoice` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
+  `invoice_issuing` varchar(255) NOT NULL DEFAULT '' COMMENT '开发票者',
+  `constract_party` varchar(255) NOT NULL DEFAULT '' COMMENT '合同方：type 1，为开票需方；type 2 开发票者',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-发票管理表';
 
@@ -495,6 +498,7 @@ DROP TABLE IF EXISTS `expenses`;
 CREATE TABLE `expenses` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `total_amount` decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
+  `second_classify` varchar(255) NOT NULL DEFAULT '' COMMENT '二级费用类别',
   `expenses_classify` varchar(255) NOT NULL DEFAULT '' COMMENT '费用类别',
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
   `commit_user` varchar(255) NOT NULL DEFAULT '' COMMENT '提交人',
@@ -503,6 +507,15 @@ CREATE TABLE `expenses` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-费用管理';
+
+DROP TABLE IF EXISTS `expenses_classify`;
+CREATE TABLE `expenses_classify` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `classify_name` varchar(255) NOT NULL DEFAULT '' COMMENT '分类名称',
+  `classify_pid` int(11) NOT NULL DEFAULT '0' COMMENT '父级id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='费用科目表';
+
 
 DROP TABLE IF EXISTS `contract`;
 CREATE TABLE `contract` (
@@ -732,6 +745,7 @@ CREATE TABLE `supplier` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `accessory` varchar(1024) NOT NULL DEFAULT '' COMMENT '附件',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='供应商信息表';
 
@@ -799,6 +813,8 @@ CREATE TABLE `equipment` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_delete` tinyint(4) unsigned NOT NULL COMMENT '是否删除 0 未删除 1 已删除',
   `create_user_id` int(11) NOT NULL COMMENT '创建者id',
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '采购金额',
+  `purchase_time` timestamp NULL DEFAULT NULL COMMENT '采购日期',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-供应商设备清单表（本企业设备清单和供应商设备清单使用同一张表单）';
 

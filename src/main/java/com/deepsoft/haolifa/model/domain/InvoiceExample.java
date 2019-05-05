@@ -306,6 +306,76 @@ public class InvoiceExample {
             return (Criteria) this;
         }
 
+        public Criteria andInvoiceCompanyIsNull() {
+            addCriterion("invoice_company is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyIsNotNull() {
+            addCriterion("invoice_company is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyEqualTo(String value) {
+            addCriterion("invoice_company =", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyNotEqualTo(String value) {
+            addCriterion("invoice_company <>", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyGreaterThan(String value) {
+            addCriterion("invoice_company >", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyGreaterThanOrEqualTo(String value) {
+            addCriterion("invoice_company >=", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyLessThan(String value) {
+            addCriterion("invoice_company <", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyLessThanOrEqualTo(String value) {
+            addCriterion("invoice_company <=", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyLike(String value) {
+            addCriterion("invoice_company like", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyNotLike(String value) {
+            addCriterion("invoice_company not like", value, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyIn(List<String> values) {
+            addCriterion("invoice_company in", values, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyNotIn(List<String> values) {
+            addCriterion("invoice_company not in", values, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyBetween(String value1, String value2) {
+            addCriterion("invoice_company between", value1, value2, "invoiceCompany");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceCompanyNotBetween(String value1, String value2) {
+            addCriterion("invoice_company not between", value1, value2, "invoiceCompany");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalAmountIsNull() {
             addCriterion("total_amount is null");
             return (Criteria) this;
@@ -793,6 +863,146 @@ public class InvoiceExample {
 
         public Criteria andCreateUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("create_user_id not between", value1, value2, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingIsNull() {
+            addCriterion("invoice_issuing is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingIsNotNull() {
+            addCriterion("invoice_issuing is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingEqualTo(String value) {
+            addCriterion("invoice_issuing =", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingNotEqualTo(String value) {
+            addCriterion("invoice_issuing <>", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingGreaterThan(String value) {
+            addCriterion("invoice_issuing >", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingGreaterThanOrEqualTo(String value) {
+            addCriterion("invoice_issuing >=", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingLessThan(String value) {
+            addCriterion("invoice_issuing <", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingLessThanOrEqualTo(String value) {
+            addCriterion("invoice_issuing <=", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingLike(String value) {
+            addCriterion("invoice_issuing like", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingNotLike(String value) {
+            addCriterion("invoice_issuing not like", value, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingIn(List<String> values) {
+            addCriterion("invoice_issuing in", values, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingNotIn(List<String> values) {
+            addCriterion("invoice_issuing not in", values, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingBetween(String value1, String value2) {
+            addCriterion("invoice_issuing between", value1, value2, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceIssuingNotBetween(String value1, String value2) {
+            addCriterion("invoice_issuing not between", value1, value2, "invoiceIssuing");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyIsNull() {
+            addCriterion("constract_party is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyIsNotNull() {
+            addCriterion("constract_party is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyEqualTo(String value) {
+            addCriterion("constract_party =", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyNotEqualTo(String value) {
+            addCriterion("constract_party <>", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyGreaterThan(String value) {
+            addCriterion("constract_party >", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyGreaterThanOrEqualTo(String value) {
+            addCriterion("constract_party >=", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyLessThan(String value) {
+            addCriterion("constract_party <", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyLessThanOrEqualTo(String value) {
+            addCriterion("constract_party <=", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyLike(String value) {
+            addCriterion("constract_party like", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyNotLike(String value) {
+            addCriterion("constract_party not like", value, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyIn(List<String> values) {
+            addCriterion("constract_party in", values, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyNotIn(List<String> values) {
+            addCriterion("constract_party not in", values, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyBetween(String value1, String value2) {
+            addCriterion("constract_party between", value1, value2, "constractParty");
+            return (Criteria) this;
+        }
+
+        public Criteria andConstractPartyNotBetween(String value1, String value2) {
+            addCriterion("constract_party not between", value1, value2, "constractParty");
             return (Criteria) this;
         }
     }

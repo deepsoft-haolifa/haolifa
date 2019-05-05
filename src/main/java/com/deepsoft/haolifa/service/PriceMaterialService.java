@@ -37,7 +37,7 @@ public interface PriceMaterialService {
      *
      * @return
      */
-    PriceMaterial getInfo(int id);
+    PriceMaterial getInfo(int id, String materialGraphNo);
 
 
     /**

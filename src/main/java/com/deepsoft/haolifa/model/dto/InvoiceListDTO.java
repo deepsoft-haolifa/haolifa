@@ -16,5 +16,7 @@ public class InvoiceListDTO {
     private Integer status;
     @ApiModelProperty(value = "发票类型：类型：0 全部 1 开出（生产） 2 开入（采购）")
     private Integer type;
+    @ApiModelProperty(value = "合同方")
+    private String constractParty;
 
 }

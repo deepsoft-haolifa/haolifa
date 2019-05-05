@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.FlowInstanceMapper;
@@ -10,11 +11,13 @@ import com.deepsoft.haolifa.model.domain.Supplier;
 import com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord;
 import com.deepsoft.haolifa.model.domain.SupplierEvaluationRecordExample;
 import com.deepsoft.haolifa.model.domain.SupplierExample;
+import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierListDTO;
 import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
+import com.deepsoft.haolifa.model.dto.SupplierResponseInfo;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SupplierService;
 import com.deepsoft.haolifa.util.RandomUtils;
@@ -54,9 +57,12 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     if (StringUtils.isAnyBlank()) {
       return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
     }
-    String supplierNo = "sn_" + RandomUtils.orderNoStr();
     Supplier supplier = new Supplier();
     BeanUtils.copyProperties(model, supplier);
+    if (model.getAccessories() != null || model.getAccessories().size() > 0) {
+      supplier.setAccessory(JSON.toJSONString(model.getAccessories()));
+    }
+    String supplierNo = "sn_" + RandomUtils.orderNoStr();
     supplier.setSuppilerNo(supplierNo);
     supplier.setStaffInfo(JSONObject.toJSONString(model.getStaffInfo()));
     supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentialsInfo()));
@@ -76,6 +82,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     }
     Supplier supplier = new Supplier();
     BeanUtils.copyProperties(model, supplier);
+    supplier.setAccessory(model.getAccessories().isEmpty() ? null : JSON.toJSONString(model.getAccessories()));
     supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentialsInfo()));
     supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancialInfo()));
     supplier.setMainOrgan(JSONObject.toJSONString(model.getMainOrgan()));
@@ -107,7 +114,14 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     if (supplier.getIsDelete().equals(CommonEnum.Consts.YES.code)) {
       return new ResultBean(CommonEnum.ResponseEnum.RESOURCE_NOT_EXIST);
     }
-    return ResultBean.success(supplier);
+    SupplierResponseInfo responseInfo = new SupplierResponseInfo();
+    BeanUtils.copyProperties(supplier, responseInfo);
+    if (StringUtils.isNotEmpty(supplier.getAccessory())) {
+      responseInfo.setAccessories(JSON.parseArray(supplier.getAccessory(), Accessory.class));
+    } else {
+      responseInfo.setAccessories(new ArrayList<>());
+    }
+    return ResultBean.success(responseInfo);
   }
 
   @Override
@@ -139,7 +153,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
   @Override
   public ResultBean listByName() {
     SupplierExample example = new SupplierExample();
-    example.createCriteria().andIsQualifiedEqualTo((byte)1).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+    example.createCriteria().andIsQualifiedEqualTo((byte) 1).andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
     List<Supplier> suppliers = supplierMapper.selectByExample(example);
     return ResultBean.success(suppliers);
   }
@@ -149,7 +163,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     Supplier supplier = new Supplier();
     supplier.setIsQualified((byte) 3);// 评定中
     SupplierExample example = new SupplierExample();
-    example.createCriteria().andSuppilerNoEqualTo(supplierNo).andIsDeleteEqualTo((byte)0);
+    example.createCriteria().andSuppilerNoEqualTo(supplierNo).andIsDeleteEqualTo((byte) 0);
     supplierMapper.updateByExampleSelective(supplier, example);
     Supplier supplier1 = supplierMapper.selectByExample(example).get(0);
     // 添加流程
@@ -162,6 +176,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     instanceService.create(flowInstanceDTO);
     return ResultBean.success(1);
   }
+
   @Transactional(rollbackFor = Exception.class)
   @Override
   public void updateSupplierStatus(String supplierNo, Integer status, Integer instanceId) {

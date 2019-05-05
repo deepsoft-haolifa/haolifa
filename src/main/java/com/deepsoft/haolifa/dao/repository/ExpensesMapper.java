@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface ExpensesMapper {
-    long countByExample(ExpensesExample example);
+    int countByExample(ExpensesExample example);
 
     int deleteByExample(ExpensesExample example);
 

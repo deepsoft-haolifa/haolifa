@@ -17,6 +17,7 @@ import com.deepsoft.haolifa.service.PriceProductService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -77,11 +78,18 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
     }
 
     @Override
-    public PriceMaterial getInfo(int id) {
-        if (id == 0) {
-            return null;
+    public PriceMaterial getInfo(int id, String materialGraphNo) {
+        PriceMaterial product = null;
+        if(id > 0) {
+            product = priceMaterialMapper.selectByPrimaryKey(id);
+        } else if(StringUtils.isNotEmpty(materialGraphNo)) {
+            PriceMaterialExample priceMaterialExample = new PriceMaterialExample();
+            priceMaterialExample.createCriteria().andGraphNoEqualTo(materialGraphNo);
+            List<PriceMaterial> priceMaterialList = priceMaterialMapper.selectByExample(priceMaterialExample);
+            if(priceMaterialList != null && priceMaterialList.size()>0) {
+                product = priceMaterialList.get(0);
+            }
         }
-        PriceMaterial product = priceMaterialMapper.selectByPrimaryKey(id);
         return product;
     }
 

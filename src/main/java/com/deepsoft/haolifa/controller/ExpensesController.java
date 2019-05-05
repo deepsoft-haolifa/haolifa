@@ -46,8 +46,8 @@ public class ExpensesController {
 
    @ApiOperation("费用类别")
     @GetMapping("/classify")
-    public ResultBean classify() {
-        return expensesService.classify();
+    public ResultBean classify(@RequestParam(defaultValue = "0") Integer pId) {
+        return expensesService.classify(pId);
    }
 
 }

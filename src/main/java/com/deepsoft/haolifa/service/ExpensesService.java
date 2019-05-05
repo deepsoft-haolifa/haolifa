@@ -13,5 +13,5 @@ public interface ExpensesService {
 
   ResultBean getList(Integer pageNum, Integer pageSize);
 
-  ResultBean classify();
+  ResultBean classify(Integer pId);
 }

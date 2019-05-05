@@ -181,9 +181,9 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <!--<table tableName="invoice" domainObjectName="Invoice">
-      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-    </table>-->
+    <!--<table tableName="invoice" domainObjectName="Invoice">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
     <!--<table tableName="expenses" domainObjectName="Expenses">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
