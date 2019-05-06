@@ -4,7 +4,6 @@ import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.constant.CommonEnum.Consts;
 import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.model.domain.Entrust;
@@ -21,16 +20,16 @@ import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BinaryOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -125,23 +124,24 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     if (model.getType() == 2) {
       // 车间
       List<Byte> statusList = Arrays
-          .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_4.code);
+          .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code);
       criteria.andStatusNotIn(statusList);
       criteria.andWorkshopTypeEqualTo((byte) 1);// 内部车间
     }
     if (model.getType() == 3) {
       // 质检
       List<Byte> statusList = Arrays
-          .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_4.code,
+          .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code,
               EntrustStatus.AUDIT_PASS_WAITING_2.code);
       criteria.andStatusNotIn(statusList);
       criteria.andWorkshopTypeEqualTo((byte) 1);// 内部车间
     }
-    if(model.getStatus() != -1) {
+    if (model.getStatus() != -1) {
       criteria.andStatusEqualTo(model.getStatus().byteValue());
     }
-    Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "create_time desc").doSelectPage(() ->
-        entrustMapper.selectByExample(entrustExample));
+    Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "create_time desc")
+        .doSelectPage(() ->
+            entrustMapper.selectByExample(entrustExample));
     PageDTO<Entrust> pageDTO = new PageDTO<>();
     BeanUtils.copyProperties(pageData, pageDTO);
     pageDTO.setList(pageData.getResult());
@@ -151,7 +151,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
   @Override
   public ResultBean updateStatus(String entrustNo, Integer status) {
     if (StringUtils.isEmpty(entrustNo) || status == null) {
-      return ResultBean.success(CommonEnum.ResponseEnum.PARAM_ERROR);
+      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
     }
 
     Entrust entrust = new Entrust();
@@ -170,5 +170,22 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     entrust.setStatus(EntrustStatus.AUDIT_PASS_WAITING_2.code);
     entrustMapper.updateByPrimaryKeySelective(entrust);
     return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean obtainEntrustNumber(String materialGraphNo) {
+    if (StringUtils.isEmpty(materialGraphNo)) {
+      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+    }
+
+    EntrustExample entrustExample = new EntrustExample();
+    entrustExample.createCriteria().andMaterialGraphNoEqualTo(materialGraphNo)
+        .andStatusIn(Arrays
+            .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));
+    List<Entrust> entrusts = entrustMapper.selectByExample(entrustExample);
+    long number = entrusts.stream().map(Entrust::getNumber).reduce(0, (a, b) -> a + b);
+    Map<String, Object> result = new HashMap<>(3);
+    result.put(materialGraphNo, number);
+    return ResultBean.success(result);
   }
 }

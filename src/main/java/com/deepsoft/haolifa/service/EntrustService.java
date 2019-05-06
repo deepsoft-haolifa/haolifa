@@ -55,4 +55,6 @@ public interface EntrustService {
      * @return
      */
     ResultBean allotEntrust(AllotEntrustDTO allotEntrustDTO);
+
+  ResultBean obtainEntrustNumber(String materialGraphNo);
 }

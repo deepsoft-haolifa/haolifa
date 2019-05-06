@@ -62,4 +62,10 @@ public class EntrustController {
         return entrustService.allotEntrust(allotEntrustDTO);
     }
 
+    @ApiOperation("根据图号查询机加工数量")
+    @GetMapping("/number")
+    public ResultBean obtainEntrustNumber(@RequestParam String materialGraphNo) {
+        return entrustService.obtainEntrustNumber(materialGraphNo);
+    }
+
 }
