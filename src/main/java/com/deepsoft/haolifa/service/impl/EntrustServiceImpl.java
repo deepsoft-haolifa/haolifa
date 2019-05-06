@@ -177,11 +177,17 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     if (StringUtils.isEmpty(materialGraphNo)) {
       return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
     }
-
     EntrustExample entrustExample = new EntrustExample();
-    entrustExample.createCriteria().andMaterialGraphNoEqualTo(materialGraphNo)
-        .andStatusIn(Arrays
-            .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));
+    EntrustExample.Criteria criteria = entrustExample.createCriteria();
+    if (materialGraphNo.endsWith("J") || materialGraphNo.endsWith("j")) {
+      int index = materialGraphNo.lastIndexOf("-");
+      criteria.andMaterialGraphNoLike(materialGraphNo.substring(0, index) + "%");
+    } else {
+      criteria.andMaterialGraphNoEqualTo(materialGraphNo);
+    }
+
+    criteria.andStatusIn(Arrays
+        .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));
     List<Entrust> entrusts = entrustMapper.selectByExample(entrustExample);
     long number = entrusts.stream().map(Entrust::getNumber).reduce(0, (a, b) -> a + b);
     Map<String, Object> result = new HashMap<>(3);
