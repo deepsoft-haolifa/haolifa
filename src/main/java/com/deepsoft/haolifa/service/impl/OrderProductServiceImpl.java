@@ -1173,6 +1173,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 materialsMap.put(graphNo, materialQuantityDTO);
                             } else {
                                 MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
+                                materialQuantityDTO.setType(a.getType());
                                 materialQuantityDTO.setQuantity(materialCount);
                                 materialQuantityDTO.setGraphNo(graphNo);
                                 materialQuantityDTO.setMaterialName(b.getMaterialName());
@@ -1202,25 +1203,60 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             // 循环所需的原料，进行核料
             Iterator<Map.Entry<String, MaterialQuantityDTO>> entryIterator = materialsMap.entrySet().iterator();
             while (entryIterator.hasNext()) {
-                Byte checkStatus = 0;
                 int lackMaterialCount = 0;
+                Byte checkStatus = 0;
                 String checkResult = "";
                 // 替换料充足的核料结果
                 List<OrderCheckMaterialDTO> replaceList = new ArrayList<>();
                 OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                String graphNo = "", graphNoWithJ = "", graphNoWithM = "";
+                Material materialInfo = null, materialInfoWithJ = null, materialInfoWithJWithM = null;
+                int currentQuantity = 0, currentQuantityWithJ = 0, currentQuantityWithM = 0;
                 Map.Entry<String, MaterialQuantityDTO> next = entryIterator.next();
-                String materialGraphNo = next.getKey();
+                graphNo = next.getKey();
+
+
                 MaterialQuantityDTO materialQuantityDTO = next.getValue();
                 Integer materialCount = materialQuantityDTO.getQuantity();
-                // 获取零件的库存
-                Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
-                Integer currentQuantity = infoByGraphNo.getCurrentQuantity();
+                // 获取零件类型（阀体，阀座等）
+                String type = materialQuantityDTO.getType();
+                // 如果零件类型是阀体，需要查询零件库里面图号带J，带M的库存；如果是阀板，需要查询零件里面带数字，带J，带M的库存；如果是其他类型，则按照图号查询；
+                if (type.equals(CommonEnum.ProductModelType.FATI.code)) {
+                    graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
+                    materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
+                    currentQuantityWithJ = materialInfoWithJ.getCurrentQuantity();
+                    // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
+                    if (currentQuantityWithJ < materialCount) {
+                        graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
+                        //TODO 查询正在机加工的数量
+                        int jingCount = 0;
+                        currentQuantityWithJ = currentQuantityWithJ + jingCount;
+                        // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
+                        if (currentQuantityWithJ < materialCount) {
+                            materialInfoWithJWithM = materialService.getInfoByGraphNo(graphNoWithM);
+                            currentQuantityWithM = materialInfoWithJWithM.getCurrentQuantity();
+                        }
+                    }
+                } else if (type.equals(CommonEnum.ProductModelType.FABAN.code)) {
+
+                } else {
+                    // 获取零件的库存
+                    materialInfo = materialService.getInfoByGraphNo(graphNo);
+                    currentQuantity = materialInfo.getCurrentQuantity();
+                }
+
+
+                if(currentQuantityWithJ>0){
+
+                }
+
+
                 if (currentQuantity >= materialCount) {
                     checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
                     checkResult = "核料成功，该零件余量充足";
                 } else {
                     // 如果缺料，将可替换料充足的零件返回给前端
-                    String replaceGraphNos = infoByGraphNo.getReplaceGraphNos();
+                    String replaceGraphNos = materialInfo.getReplaceGraphNos();
                     if (StringUtils.isNotBlank(replaceGraphNos)) {
                         String[] split = replaceGraphNos.split(",");
                         if (split.length > 0) {
@@ -1253,8 +1289,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
                 orderCheckMaterialDTO.setCheckStatus(checkStatus);
                 orderCheckMaterialDTO.setCheckResultMsg(checkResult);
-                orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
-                orderCheckMaterialDTO.setMaterialName(infoByGraphNo.getName());
+                orderCheckMaterialDTO.setMaterialGraphNo(graphNo);
+                orderCheckMaterialDTO.setMaterialName(materialInfo.getName());
                 orderCheckMaterialDTO.setMaterialCount(materialCount);
                 orderCheckMaterialDTO.setOrderNo(orderNo);
                 orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1262,10 +1298,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // 添加核料日志记录
                 int finalCheckState = checkStatus;
                 String finalCheckResult = checkResult;
+                Integer finalCurrentQuantity = currentQuantity;
+                String finalGraphNo = graphNo;
                 checkMaterialLogs.add(new CheckMaterialLog() {
                     {
-                        setMaterialGraphNo(materialGraphNo);
-                        setCurrentMaterialCount(currentQuantity);
+                        setMaterialGraphNo(finalGraphNo);
+                        setCurrentMaterialCount(finalCurrentQuantity);
                         setNeedMaterialCount(materialCount);
                         setCheckUserId(currentUser);
                         setOrderNo(orderNo);
@@ -1462,6 +1500,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         return 0;
     }
+
 
     /**
      * 综合计划【不同意】，将核完的料释放
