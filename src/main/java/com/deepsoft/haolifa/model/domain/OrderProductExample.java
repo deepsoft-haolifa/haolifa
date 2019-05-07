@@ -2955,6 +2955,66 @@ public class OrderProductExample {
             addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
+
+        public Criteria andDeliverStatusIsNull() {
+            addCriterion("deliver_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusIsNotNull() {
+            addCriterion("deliver_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusEqualTo(Byte value) {
+            addCriterion("deliver_status =", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusNotEqualTo(Byte value) {
+            addCriterion("deliver_status <>", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusGreaterThan(Byte value) {
+            addCriterion("deliver_status >", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("deliver_status >=", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusLessThan(Byte value) {
+            addCriterion("deliver_status <", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("deliver_status <=", value, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusIn(List<Byte> values) {
+            addCriterion("deliver_status in", values, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusNotIn(List<Byte> values) {
+            addCriterion("deliver_status not in", values, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusBetween(Byte value1, Byte value2) {
+            addCriterion("deliver_status between", value1, value2, "deliverStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliverStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("deliver_status not between", value1, value2, "deliverStatus");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

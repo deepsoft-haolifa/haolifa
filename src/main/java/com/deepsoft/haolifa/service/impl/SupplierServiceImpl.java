@@ -82,7 +82,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     }
     Supplier supplier = new Supplier();
     BeanUtils.copyProperties(model, supplier);
-    supplier.setAccessory(model.getAccessories().isEmpty() ? null : JSON.toJSONString(model.getAccessories()));
+    supplier.setAccessory(model.getAccessories().isEmpty() ? "" : JSON.toJSONString(model.getAccessories()));
     supplier.setCredentialsInfo(JSONObject.toJSONString(model.getCredentialsInfo()));
     supplier.setFinancialInfo(JSONObject.toJSONString(model.getFinancialInfo()));
     supplier.setMainOrgan(JSONObject.toJSONString(model.getMainOrgan()));

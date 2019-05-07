@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import com.deepsoft.haolifa.model.domain.OrderMaterial;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
@@ -206,5 +207,7 @@ public interface OrderProductService {
      * @param model
      */
     int auditReplaceMaterial(CheckReplaceMaterialAuditDTO model);
+
+    ResultBean updateOrderDeliverStatus(String orderNo, int status);
 
 }
