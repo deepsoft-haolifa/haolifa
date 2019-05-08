@@ -358,4 +358,24 @@ public class CommonEnum {
       this.code = code;
     }
   }
+
+  public enum DeliverStatus {
+    DELIVER_NO_BEGIN_0((byte) 0),
+    DELIVER_PART_1((byte) 1),
+    DELIVER_COMPLETE_2((byte) 2);
+
+    private byte code;
+
+    DeliverStatus(byte code) {
+      this.code = code;
+    }
+
+    public byte getCode() {
+      return code;
+    }
+
+    public void setCode(byte code) {
+      this.code = code;
+    }
+  }
 }

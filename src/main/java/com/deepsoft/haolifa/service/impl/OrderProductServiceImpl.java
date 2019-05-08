@@ -1173,7 +1173,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 materialsMap.put(graphNo, materialQuantityDTO);
                             } else {
                                 MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
-                                materialQuantityDTO.setType(a.getType());
                                 materialQuantityDTO.setQuantity(materialCount);
                                 materialQuantityDTO.setGraphNo(graphNo);
                                 materialQuantityDTO.setMaterialName(b.getMaterialName());
@@ -1533,8 +1532,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     });
         }
 
-        return 0;
-    }
+    return 0;
+  }
 
 // endregion
 
@@ -1648,4 +1647,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         return cellValue;
     }
 
+  @Override
+  public ResultBean updateOrderDeliverStatus(String orderNo, int status) {
+    OrderProduct orderProduct = new OrderProduct();
+    orderProduct.setDeliverStatus((byte) status);
+    OrderProductExample example = new OrderProductExample();
+    example.createCriteria().andOrderNoEqualTo(orderNo);
+    return ResultBean.success(orderProductMapper.updateByExampleSelective(orderProduct, example));
+  }
 }

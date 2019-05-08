@@ -184,4 +184,10 @@ public class OrderProductController {
         }
         return ResultBean.success(list);
     }
+    @ApiOperation("更新订单发货状态")
+    @PutMapping("/deliver/status")
+    public ResultBean updateDeliverStatus(@RequestParam String orderNo, @RequestParam Integer status) {
+        return orderProductService.updateOrderDeliverStatus(orderNo, status);
+    }
+
 }

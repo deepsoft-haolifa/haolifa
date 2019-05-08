@@ -346,6 +346,7 @@ DROP TABLE IF EXISTS `order_product`;
 	  `warranty_period` varchar(256) NOT NULL DEFAULT '' COMMENT '质保期限',
 	  `packaging_specification` varchar(256) NOT NULL DEFAULT '' COMMENT '包装规范',
 	  `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
+	  `deliver_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发货状态：0 待发货（默认） 1 部分发货 2 发货完成',
 	  PRIMARY KEY (`id`),
 	  UNIQUE KEY `uk_order_no` (`order_no`),
 	  UNIQUE KEY `uk_order_contract_no` (`order_contract_no`),
