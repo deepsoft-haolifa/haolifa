@@ -143,7 +143,7 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
           // 部分发货
           orderProductService
               .updateOrderDeliverStatus(model.getContractOrderNo(), DeliverStatus.DELIVER_PART_1.getCode());
-        } else if (count == productCount) {
+        } else if (count >= productCount) {
           // 全部发货
           orderProductService
               .updateOrderDeliverStatus(model.getContractOrderNo(), DeliverStatus.DELIVER_COMPLETE_2.getCode());
