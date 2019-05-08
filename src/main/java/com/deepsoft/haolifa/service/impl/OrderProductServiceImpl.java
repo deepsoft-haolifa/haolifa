@@ -1209,8 +1209,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 List<OrderCheckMaterialDTO> replaceList = new ArrayList<>();
                 OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
                 String graphNo = "", graphNoWithJ = "", graphNoWithM = "";
-                Material materialInfo = null, materialInfoWithJ = null, materialInfoWithJWithM = null;
-                int currentQuantity = 0, currentQuantityWithJ = 0, currentQuantityWithM = 0;
+                Material materialInfo = null, materialInfoWithJ = null, materialInfoWithM = null, materialInfoWithNum = null;
+                int currentQuantity = 0, currentQuantityWithJ = 0, currentQuantityWithM = 0, currentQuantityWithNum = 0;
                 Map.Entry<String, MaterialQuantityDTO> next = entryIterator.next();
                 graphNo = next.getKey();
 
@@ -1219,80 +1219,161 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 Integer materialCount = materialQuantityDTO.getQuantity();
                 // 获取零件类型（阀体，阀座等）
                 String type = materialQuantityDTO.getType();
-                // 如果零件类型是阀体，需要查询零件库里面图号带J，带M的库存；如果是阀板，需要查询零件里面带数字，带J，带M的库存；如果是其他类型，则按照图号查询；
+                // 如果零件类型是阀体，需要查询零件库里面图号带J，带M的库存；
                 if (type.equals(CommonEnum.ProductModelType.FATI.code)) {
                     graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
                     materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
                     currentQuantityWithJ = materialInfoWithJ.getCurrentQuantity();
+                    currentQuantity = currentQuantityWithJ;
                     // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
                     if (currentQuantityWithJ < materialCount) {
-                        graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
+                        graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00M");
                         //TODO 查询正在机加工的数量
                         int jingCount = 0;
                         currentQuantityWithJ = currentQuantityWithJ + jingCount;
+                        currentQuantity = currentQuantityWithJ;
                         // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
                         if (currentQuantityWithJ < materialCount) {
-                            materialInfoWithJWithM = materialService.getInfoByGraphNo(graphNoWithM);
-                            currentQuantityWithM = materialInfoWithJWithM.getCurrentQuantity();
+                            materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
+                            currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                            currentQuantity += currentQuantityWithM;
+                            if (currentQuantity < materialCount) {
+                                lackMaterialCount = materialCount - currentQuantity;
+                            }
                         }
                     }
                 } else if (type.equals(CommonEnum.ProductModelType.FABAN.code)) {
-
-                } else {
-                    // 获取零件的库存
-                    materialInfo = materialService.getInfoByGraphNo(graphNo);
-                    currentQuantity = materialInfo.getCurrentQuantity();
-                }
-
-
-                if(currentQuantityWithJ>0){
-
-                }
-
-
-                if (currentQuantity >= materialCount) {
-                    checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
-                    checkResult = "核料成功，该零件余量充足";
-                } else {
-                    // 如果缺料，将可替换料充足的零件返回给前端
-                    String replaceGraphNos = materialInfo.getReplaceGraphNos();
-                    if (StringUtils.isNotBlank(replaceGraphNos)) {
-                        String[] split = replaceGraphNos.split(",");
-                        if (split.length > 0) {
-                            for (String replaceGraphNo : split) {
-                                Material replaceMaterialInfo = materialService.getInfoByGraphNo(replaceGraphNo);
-                                if (replaceMaterialInfo != null) {
-                                    if (replaceMaterialInfo.getCurrentQuantity() >= materialCount) {
-                                        OrderCheckMaterialDTO replaceOrderCheckMaterialDTO = new OrderCheckMaterialDTO();
-                                        checkStatus = CommonEnum.CheckMaterialStatus.REPLACE.code;
-                                        checkResult = "替换料核料成功，替换料零件余量充足";
-                                        replaceOrderCheckMaterialDTO.setCheckStatus(checkStatus);
-                                        replaceOrderCheckMaterialDTO.setCheckResultMsg(checkResult);
-                                        replaceOrderCheckMaterialDTO.setMaterialGraphNo(replaceGraphNo);
-                                        replaceOrderCheckMaterialDTO.setMaterialName(replaceMaterialInfo.getName());
-                                        replaceOrderCheckMaterialDTO.setMaterialCount(materialCount);
-                                        replaceOrderCheckMaterialDTO.setOrderNo(orderNo);
-                                        replaceList.add(replaceOrderCheckMaterialDTO);
-                                    }
+                    // 如果零件类型是阀板，需要查询零件里面带数字，带J，带M的库存；
+                    String likeGraphNo = graphNo.substring(0, graphNo.lastIndexOf("-") + 1);
+                    List<Material> listByGraphNo = materialService.getListByGraphNoLike(likeGraphNo);
+                    if (listByGraphNo.size() > 0) {
+                        for (Material material : listByGraphNo) {
+                            String materialGraphNo = material.getGraphNo();
+                            if (!materialGraphNo.endsWith("M") && !materialGraphNo.endsWith("J")) {
+                                materialInfoWithNum = material;//TODO 这个地方只把一个零件设置出库，可能其他的零件也行
+                                currentQuantityWithNum += material.getCurrentQuantity();
+                            }
+                        }
+                    }
+                    if (currentQuantityWithNum < materialCount) {
+                        materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
+                        currentQuantityWithJ = materialInfoWithJ.getCurrentQuantity();
+                        currentQuantity = currentQuantityWithNum + currentQuantityWithJ;
+                        // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
+                        if (currentQuantity < materialCount) {
+                            graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("0M");
+                            //TODO 查询正在机加工的数量
+                            int jingCount = 0;
+                            currentQuantityWithJ = currentQuantityWithJ + jingCount;
+                            currentQuantity += jingCount;
+                            // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
+                            if (currentQuantity < materialCount) {
+                                materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
+                                currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                                currentQuantity += currentQuantityWithM;
+                                if (currentQuantity < materialCount) {
+                                    lackMaterialCount = materialCount - currentQuantity;
                                 }
                             }
                         }
                     }
-                    // 无料可以替换，需要走采购流程
-                    checkStatus = CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code;
-                    // 缺少的料的数量
-                    lackMaterialCount = (materialCount - currentQuantity);
-                    checkResult = "库存不足";
+                } else {
+                    // 如果是其他类型，则按照图号查询；
+                    materialInfo = materialService.getInfoByGraphNo(graphNo);
+                    currentQuantity = materialInfo.getCurrentQuantity();
+                    if (currentQuantity < materialCount) {
+                        lackMaterialCount = materialCount - currentQuantity;
+                    }
                 }
-                orderCheckMaterialDTO.setReplaceGraphNoList(replaceList);
-                orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
-                orderCheckMaterialDTO.setCheckStatus(checkStatus);
-                orderCheckMaterialDTO.setCheckResultMsg(checkResult);
-                orderCheckMaterialDTO.setMaterialGraphNo(graphNo);
-                orderCheckMaterialDTO.setMaterialName(materialInfo.getName());
-                orderCheckMaterialDTO.setMaterialCount(materialCount);
-                orderCheckMaterialDTO.setOrderNo(orderNo);
-                orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
+
+                if (currentQuantityWithJ > 0) {
+                    checkResult = "核料成功";
+                    checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
+                    orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                    orderCheckMaterialDTO.setLackMaterialCount(0);
+                    orderCheckMaterialDTO.setCheckStatus(checkStatus);
+                    orderCheckMaterialDTO.setCheckResultMsg(checkResult);
+                    orderCheckMaterialDTO.setMaterialGraphNo(graphNoWithJ);
+                    orderCheckMaterialDTO.setMaterialName(materialInfoWithJ.getName());
+                    orderCheckMaterialDTO.setMaterialCount(currentQuantityWithJ);
+                    orderCheckMaterialDTO.setOrderNo(orderNo);
+                    orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
+                }
+                if (materialInfoWithM != null) {
+                    if (lackMaterialCount > 0) {
+                        checkResult = "库存不足";
+                        checkStatus = CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code;
+                    } else {
+                        checkResult = "核料成功";
+                        checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
+                    }
+                    orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                    orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
+                    orderCheckMaterialDTO.setCheckStatus(checkStatus);
+                    orderCheckMaterialDTO.setCheckResultMsg(checkResult);
+                    orderCheckMaterialDTO.setMaterialGraphNo(graphNoWithM);
+                    orderCheckMaterialDTO.setMaterialName(materialInfoWithM.getName());
+                    orderCheckMaterialDTO.setMaterialCount(currentQuantityWithM + lackMaterialCount);
+                    orderCheckMaterialDTO.setOrderNo(orderNo);
+                    orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
+                }
+                if (currentQuantityWithNum > 0) {
+                    checkResult = "核料成功";
+                    checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
+                    orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                    orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
+                    orderCheckMaterialDTO.setCheckStatus(checkStatus);
+                    orderCheckMaterialDTO.setCheckResultMsg(checkResult);
+                    orderCheckMaterialDTO.setMaterialGraphNo(graphNo);
+                    orderCheckMaterialDTO.setMaterialName(materialInfoWithNum.getName());
+                    orderCheckMaterialDTO.setMaterialCount(currentQuantityWithNum + lackMaterialCount);
+                    orderCheckMaterialDTO.setOrderNo(orderNo);
+                    orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
+                }
+
+                if (materialInfo != null) {
+                    if (lackMaterialCount > 0) {
+                        checkResult = "库存不足";
+                        checkStatus = CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code;
+                        // 如果缺料，将可替换料充足的零件返回给前端
+                        String replaceGraphNos = materialInfo.getReplaceGraphNos();
+                        if (StringUtils.isNotBlank(replaceGraphNos)) {
+                            String[] split = replaceGraphNos.split(",");
+                            if (split.length > 0) {
+                                for (String replaceGraphNo : split) {
+                                    Material replaceMaterialInfo = materialService.getInfoByGraphNo(replaceGraphNo);
+                                    if (replaceMaterialInfo != null) {
+                                        if (replaceMaterialInfo.getCurrentQuantity() >= materialCount) {
+                                            OrderCheckMaterialDTO replaceOrderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                                            checkStatus = CommonEnum.CheckMaterialStatus.REPLACE.code;
+                                            checkResult = "替换料核料成功，替换料零件余量充足";
+                                            replaceOrderCheckMaterialDTO.setCheckStatus(checkStatus);
+                                            replaceOrderCheckMaterialDTO.setCheckResultMsg(checkResult);
+                                            replaceOrderCheckMaterialDTO.setMaterialGraphNo(replaceGraphNo);
+                                            replaceOrderCheckMaterialDTO.setMaterialName(replaceMaterialInfo.getName());
+                                            replaceOrderCheckMaterialDTO.setMaterialCount(materialCount);
+                                            replaceOrderCheckMaterialDTO.setOrderNo(orderNo);
+                                            replaceList.add(replaceOrderCheckMaterialDTO);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        checkResult = "核料成功";
+                        checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
+                    }
+                    orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                    orderCheckMaterialDTO.setReplaceGraphNoList(replaceList);
+                    orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
+                    orderCheckMaterialDTO.setCheckStatus(checkStatus);
+                    orderCheckMaterialDTO.setCheckResultMsg(checkResult);
+                    orderCheckMaterialDTO.setMaterialGraphNo(graphNo);
+                    orderCheckMaterialDTO.setMaterialName(materialInfo.getName());
+                    orderCheckMaterialDTO.setMaterialCount(currentQuantity + lackMaterialCount);
+                    orderCheckMaterialDTO.setOrderNo(orderNo);
+                    orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
+                }
 
                 // 添加核料日志记录
                 int finalCheckState = checkStatus;
@@ -1532,8 +1613,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     });
         }
 
-    return 0;
-  }
+        return 0;
+    }
 
 // endregion
 
@@ -1647,12 +1728,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         return cellValue;
     }
 
-  @Override
-  public ResultBean updateOrderDeliverStatus(String orderNo, int status) {
-    OrderProduct orderProduct = new OrderProduct();
-    orderProduct.setDeliverStatus((byte) status);
-    OrderProductExample example = new OrderProductExample();
-    example.createCriteria().andOrderNoEqualTo(orderNo);
-    return ResultBean.success(orderProductMapper.updateByExampleSelective(orderProduct, example));
-  }
+    @Override
+    public ResultBean updateOrderDeliverStatus(String orderNo, int status) {
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setDeliverStatus((byte) status);
+        OrderProductExample example = new OrderProductExample();
+        example.createCriteria().andOrderNoEqualTo(orderNo);
+        return ResultBean.success(orderProductMapper.updateByExampleSelective(orderProduct, example));
+    }
 }
