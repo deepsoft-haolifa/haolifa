@@ -4,12 +4,15 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.DeliverStatus;
 import com.deepsoft.haolifa.dao.repository.DeliveryNoticeMapper;
 import com.deepsoft.haolifa.dao.repository.DeliveryRecordMapper;
+import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.model.domain.DeliveryNotice;
 import com.deepsoft.haolifa.model.domain.DeliveryNoticeExample;
 import com.deepsoft.haolifa.model.domain.DeliveryRecord;
 import com.deepsoft.haolifa.model.domain.DeliveryRecordExample;
 import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.domain.OrderProductAssociateExample;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeConditionDTO;
@@ -42,7 +45,7 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
   @Autowired
   private DeliveryNoticeMapper deliveryNoticeMapper;
   @Autowired
-  private OrderProductMapper orderProductMapper;
+  private OrderProductAssociateMapper orderProductAssociateMapper;
   @Autowired
   private OrderProductService orderProductService;
 
@@ -131,15 +134,16 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
       recordExample.createCriteria().andContractOrderNoEqualTo(model.getContractOrderNo());
       List<DeliveryRecord> records = deliveryRecordMapper.selectByExample(recordExample);
       int count = records.stream().map(DeliveryRecord::getProductCount).reduce(0, (a, b) -> a + b);
-      OrderProductExample productExample = new OrderProductExample();
-      productExample.createCriteria().andOrderNoEqualTo(model.getContractOrderNo());
-      List<OrderProduct> orderProducts = orderProductMapper.selectByExample(productExample);
+      OrderProductAssociateExample associateExample = new OrderProductAssociateExample();
+      associateExample.createCriteria().andOrderNoEqualTo(model.getContractOrderNo());
+      List<OrderProductAssociate> orderProducts = orderProductAssociateMapper.selectByExample(associateExample);
+      int productCount = orderProducts.stream().map(OrderProductAssociate::getProductNumber).reduce(0, (a, b) -> a + b);
       if (!CollectionUtils.isEmpty(orderProducts)) {
-        if (count > 0 && count < orderProducts.get(0).getTotalCount()) {
+        if (count > 0 && count < productCount) {
           // 部分发货
           orderProductService
               .updateOrderDeliverStatus(model.getContractOrderNo(), DeliverStatus.DELIVER_PART_1.getCode());
-        } else if (count == orderProducts.get(0).getTotalCount()) {
+        } else if (count == productCount) {
           // 全部发货
           orderProductService
               .updateOrderDeliverStatus(model.getContractOrderNo(), DeliverStatus.DELIVER_COMPLETE_2.getCode());
