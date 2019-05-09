@@ -131,8 +131,12 @@ public interface MaterialService {
      * @param classifyId
      */
     List<Material> getListByClassifyId(int classifyId);
-
-
+    /**
+     * 根据图号获取列表
+     *
+     * @param graphNo 图号
+     */
+    List<Material> getListByGraphNoLike(String graphNo);
     /**
      * 根据型号和规格获取列表
      *

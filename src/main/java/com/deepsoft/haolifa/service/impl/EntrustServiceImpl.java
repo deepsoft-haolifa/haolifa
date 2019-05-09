@@ -173,9 +173,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
   }
 
   @Override
-  public ResultBean obtainEntrustNumber(String materialGraphNo) {
+  public int obtainEntrustNumber(String materialGraphNo) {
     if (StringUtils.isEmpty(materialGraphNo)) {
-      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+      return 0;
     }
     EntrustExample entrustExample = new EntrustExample();
     EntrustExample.Criteria criteria = entrustExample.createCriteria();
@@ -189,9 +189,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     criteria.andStatusIn(Arrays
         .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));
     List<Entrust> entrusts = entrustMapper.selectByExample(entrustExample);
-    long number = entrusts.stream().map(Entrust::getNumber).reduce(0, (a, b) -> a + b);
-    Map<String, Object> result = new HashMap<>(3);
-    result.put(materialGraphNo, number);
-    return ResultBean.success(result);
+    int number = entrusts.stream().map(Entrust::getNumber).reduce(0, (a, b) -> a + b);
+    return number;
   }
 }

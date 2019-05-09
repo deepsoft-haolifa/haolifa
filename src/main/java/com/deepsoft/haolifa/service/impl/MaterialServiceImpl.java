@@ -179,6 +179,7 @@ public class MaterialServiceImpl implements MaterialService {
         return null;
     }
 
+
     @Override
     public Material getInfoById(int id) {
         return materialMapper.selectByPrimaryKey(id);
@@ -241,6 +242,18 @@ public class MaterialServiceImpl implements MaterialService {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
         criteria.andMaterialClassifyIdEqualTo(classifyId);
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
+    @Override
+    public List<Material> getListByGraphNoLike(String graphNo) {
+        if (StringUtils.isBlank(graphNo)) {
+            return null;
+        }
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoLike("%" + graphNo + "%");
         List<Material> materials = materialMapper.selectByExample(example);
         return materials;
     }
