@@ -1045,3 +1045,17 @@ CREATE TABLE `order_file` (
   PRIMARY KEY (`id`),
 	INDEX idx_order_no(`order_no`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='订单附件记录表';
+
+DROP TABLE IF EXISTS `sys_dict`;
+CREATE TABLE `sys_dict` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type_code` varchar(64) NOT NULL DEFAULT '' COMMENT '字典类型code',
+  `type_name` varchar(64) NOT NULL DEFAULT '' COMMENT '字典类型名称',
+  `code` varchar(64) NOT NULL DEFAULT '' COMMENT '字典值',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '字典名称',
+  `sort_no` tinyint(4) unsigned DEFAULT 0 COMMENT '展示顺序',
+  `status` tinyint(4) unsigned DEFAULT 1 COMMENT '状态；0 禁用；1可用',
+  `dict_desc` varchar(64) NOT NULL DEFAULT '' COMMENT '字典描述',
+  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='系统字典表';

@@ -3,11 +3,13 @@ package com.deepsoft.haolifa.controller;
 import com.deepsoft.haolifa.annotation.LogNotPrint;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.FileRecord;
+import com.deepsoft.haolifa.model.domain.SysDict;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.file.FileRecordConditionDTO;
 import com.deepsoft.haolifa.model.dto.file.FileRecordDTO;
 import com.deepsoft.haolifa.service.FileRecordService;
+import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.util.QiniuUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Api(tags = {"文件上传相关"})
 @RestController
 @RequestMapping("/file")
@@ -23,6 +30,9 @@ public class FileUploadController {
 
     @Autowired
     FileRecordService fileRecordService;
+
+    @Autowired
+    SysDictService sysDictService;
 
     @ApiOperation("base64文件上传接口，返回文件url")
     @PostMapping("/uploadFileBase64")
@@ -64,6 +74,23 @@ public class FileUploadController {
     @PostMapping("/pageInfo")
     public ResultBean noticeList(@RequestBody FileRecordConditionDTO model) {
         return fileRecordService.pageInfo(model);
+    }
+
+
+    @ApiOperation("文件类型列表")
+    @GetMapping("/fileTypeList")
+    public ResultBean fileTypeList() {
+        List<SysDict> sysDictByTypeCode = sysDictService.getSysDictByTypeCode(CommonEnum.SysDictTypeEnum.FILE_TYPE.code);
+        List<Map<String, Object>> list = new ArrayList<>();
+        if (sysDictByTypeCode.size() > 0) {
+            for (SysDict sysDict : sysDictByTypeCode) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("code", sysDict.getCode());
+                map.put("desc", sysDict.getName());
+                list.add(map);
+            }
+        }
+        return ResultBean.success(list);
     }
 
 

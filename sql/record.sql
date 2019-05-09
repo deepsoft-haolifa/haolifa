@@ -199,4 +199,47 @@ INSERT INTO `haolifa`.`sys_role` (`pid`, `role_no`, `role_name`, `description`) 
 
 
 
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '1', '产品零件图纸', 0, 0, '', '2019-05-09 15:13:01');
 
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '2', '产品装配图纸', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '3', '产品模具图纸', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '4', '工装卡具图纸', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '5', '专用检具图纸', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '6', '木箱、气泡袋等辅料图纸', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '7', '加工工艺', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '8', '装配工艺', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '9', '喷涂工艺', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '10', '硫化工艺', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '11', '检验指导书', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '12', '采购指导书', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '13', '配套明细表', 0, 0, '', '2019-05-09 15:13:01');
+
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '14', '流程图', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '15', '失效模式分析', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '16', '质量控制计划', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '17', '铸件验收规范', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '18', '橡胶件验收规范', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '19', '喷涂件验收规范', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '20', '出厂检验规范', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '21', '产品包装规范', 0, 0, '', '2019-05-09 15:13:01');
+
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('FILE_TYPE', '文件类型', '100', '其他', 0, 0, '', '2019-05-09 15:13:01');
