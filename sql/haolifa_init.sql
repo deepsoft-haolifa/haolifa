@@ -1057,5 +1057,5 @@ CREATE TABLE `sys_dict` (
   `status` tinyint(4) unsigned DEFAULT 1 COMMENT '状态；0 禁用；1可用',
   `dict_desc` varchar(64) NOT NULL DEFAULT '' COMMENT '字典描述',
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='系统字典表';
