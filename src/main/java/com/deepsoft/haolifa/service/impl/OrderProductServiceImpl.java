@@ -1195,7 +1195,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 String materialGraphNo = next.getKey();
                 MaterialQuantityDTO materialQuantityDTO = next.getValue();
                 orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-                orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件余量充足");
+                orderCheckMaterialDTO.setCheckResultMsg("核料成功");
                 orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
                 orderCheckMaterialDTO.setMaterialName(materialQuantityDTO.getMaterialName());
                 orderCheckMaterialDTO.setMaterialCount(materialQuantityDTO.getQuantity());
@@ -1244,6 +1244,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
                             if (materialInfoWithM != null) {
                                 currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                            } else {
+                                materialInfoWithM = new Material();
+                                materialInfoWithM.setName("阀体毛坯（系统中暂无）");
                             }
                             currentQuantity += currentQuantityWithM;
                             log.info("checkMaterial fati check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},quantity:{}", orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
@@ -1261,9 +1264,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 } else if (type.equals(CommonEnum.ProductModelType.FABAN.code)) {
                     // 如果零件类型是阀板，需要查询零件里面带数字，带J，带M的库存；
                     //TODO 只查询该图号的阀板数量够不够
-                    materialInfoWithNum = materialService.getInfoByGraphNo(graphNo);
-                    currentQuantityWithNum = materialInfoWithNum.getCurrentQuantity();
-                    currentQuantity += currentQuantityWithNum;
+                    //如果选择的阀板不是J和M结尾的，会查一下带数字的库存
+                    if (!graphNo.endsWith("J") && !graphNo.endsWith("M")) {
+                        materialInfoWithNum = materialService.getInfoByGraphNo(graphNo);
+                        currentQuantityWithNum = materialInfoWithNum.getCurrentQuantity();
+                        currentQuantity += currentQuantityWithNum;
+                    }
                     log.info("checkMaterial faban check info ,orderNo:{},needMaterialCount:{},graphNo:{},quantity:{}", orderNo, materialCount, graphNo, currentQuantityWithNum);
                     if (currentQuantity < materialCount) {
                         graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("0J");
@@ -1286,8 +1292,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
                                 if (materialInfoWithM != null) {
                                     currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                                } else {
+                                    materialInfoWithM = new Material();
+                                    materialInfoWithM.setName("碟板毛坯（系统中暂无）");
                                 }
-                                currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
                                 currentQuantity += currentQuantityWithM;
                                 log.info("checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},quantity:{}", orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
                                 if (currentQuantity < materialCount) {
