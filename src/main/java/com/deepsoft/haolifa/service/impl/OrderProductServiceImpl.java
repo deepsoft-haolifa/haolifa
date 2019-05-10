@@ -1249,8 +1249,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             log.info("checkMaterial fati check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},quantity:{}", orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
                             if (currentQuantity < materialCount) {
                                 lackMaterialCount = materialCount - currentQuantity;
+                            } else {
+                                currentQuantityWithM = materialCount - currentQuantityWithJ;
                             }
+                        } else {
+                            currentQuantityWithJ = materialCount;
                         }
+                    } else {
+                        currentQuantityWithJ = materialCount;
                     }
                 } else if (type.equals(CommonEnum.ProductModelType.FABAN.code)) {
                     // 如果零件类型是阀板，需要查询零件里面带数字，带J，带M的库存；
@@ -1286,9 +1292,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 log.info("checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},quantity:{}", orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
                                 if (currentQuantity < materialCount) {
                                     lackMaterialCount = materialCount - currentQuantity;
+                                } else {
+                                    currentQuantityWithM = materialCount - currentQuantityWithJ;
                                 }
+                            } else {
+                                currentQuantityWithJ = materialCount - currentQuantityWithNum;
                             }
+                        } else {
+                            currentQuantityWithJ = materialCount - currentQuantityWithNum;
                         }
+                    } else {
+                        currentQuantityWithNum = materialCount;
                     }
                 } else {
                     // 如果是其他类型，则按照图号查询；
