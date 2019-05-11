@@ -133,7 +133,7 @@ public class MaterialServiceImpl implements MaterialService {
         }
         BeanUtils.copyProperties(model, record);
         // 不更新价格
-        record.setPrice(null);
+//        record.setPrice(null);
         record.setCreateUser(createUser);
         int insert = materialMapper.insertSelective(record);
         return ResultBean.success(insert);

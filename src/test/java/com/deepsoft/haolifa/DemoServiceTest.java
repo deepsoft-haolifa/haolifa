@@ -91,7 +91,7 @@ public class DemoServiceTest extends BaseApplicationTests {
                 wb = new XSSFWorkbook(is);
             }
             //读取第一个工作页sheet
-            Sheet sheet = wb.getSheetAt(3);
+            Sheet sheet = wb.getSheetAt(0);
             //第一行为标题
             for (int i = 1; i < sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
