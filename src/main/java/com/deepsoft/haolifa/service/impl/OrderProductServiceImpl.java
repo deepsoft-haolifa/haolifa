@@ -1301,7 +1301,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 if (currentQuantity < materialCount) {
                                     lackMaterialCount = materialCount - currentQuantity;
                                 } else {
-                                    currentQuantityWithM = materialCount - currentQuantityWithJ;
+                                    currentQuantityWithM = materialCount - currentQuantityWithJ - currentQuantityWithNum;
                                 }
                             } else {
                                 currentQuantityWithJ = materialCount - currentQuantityWithNum;
