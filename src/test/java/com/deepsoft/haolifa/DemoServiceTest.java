@@ -1,14 +1,19 @@
 package com.deepsoft.haolifa;
 
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
+import com.deepsoft.haolifa.model.domain.PriceMaterial;
 import com.deepsoft.haolifa.model.domain.SysDepartment;
 import com.deepsoft.haolifa.model.domain.SysDepartmentExample;
 import com.deepsoft.haolifa.model.domain.SysUser;
+import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.MaterialRequestDTO;
 import com.deepsoft.haolifa.model.dto.sys.DepartmentTree;
 import com.deepsoft.haolifa.service.DemoService;
 import com.deepsoft.haolifa.service.MaterialService;
+import com.deepsoft.haolifa.service.PriceMaterialService;
+import com.deepsoft.haolifa.service.StockService;
 import com.deepsoft.haolifa.util.TreeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -66,7 +71,10 @@ public class DemoServiceTest extends BaseApplicationTests {
 
     @Autowired
     private MaterialService materialService;
-
+    @Autowired
+    private StockService stockService;
+    @Autowired
+    private PriceMaterialService priceMaterialService;
 
     @Test
     public void uploadMatierialExcel() {
@@ -114,16 +122,19 @@ public class DemoServiceTest extends BaseApplicationTests {
                 materialRequestDTO.setMaterialClassifyName(classifyName);
                 materialRequestDTO.setMaterialClassifyId(clasifyId);
                 Cell cell2 = row.getCell(2);
-                materialRequestDTO.setGraphNo(getCellValue(cell2));
+                String graphNo=getCellValue(cell2);
+                materialRequestDTO.setGraphNo(graphNo);
                 // 可替换料
                 Cell cell3 = row.getCell(3);
                 materialRequestDTO.setReplaceGraphNos(getCellValue(cell3));
                 // 型号
                 Cell cell4 = row.getCell(4);
-                materialRequestDTO.setModel(getCellValue(cell4));
+                String model = getCellValue(cell4);
+                materialRequestDTO.setModel(model);
                 // 规格
                 Cell cell5 = row.getCell(5);
-                materialRequestDTO.setSpecifications(getCellValue(cell5));
+                String spec = getCellValue(cell5);
+                materialRequestDTO.setSpecifications(spec);
                 // 配套基数
                 Cell cell6 = row.getCell(6);
                 int support = 1;
@@ -131,25 +142,80 @@ public class DemoServiceTest extends BaseApplicationTests {
                     support = Integer.valueOf(getCellValue(cell6));
                 }
                 materialRequestDTO.setSupportQuantity(support);
-                // 安全库存
+                // 期初库存
                 Cell cell8 = row.getCell(8);
-                int safeCount = 0;
+                int currentQuantity = 0;
                 if (StringUtils.isNotBlank(getCellValue(cell8))) {
-                    safeCount = Integer.valueOf(getCellValue(cell8));
+                    currentQuantity = Integer.valueOf(getCellValue(cell8));
+                }
+                materialRequestDTO.setCurrentQuantity(currentQuantity);
+                // 安全库存
+                Cell cell9= row.getCell(9);
+                int safeCount = 0;
+                if (StringUtils.isNotBlank(getCellValue(cell9))) {
+                    safeCount = Integer.valueOf(getCellValue(cell9));
                 }
                 materialRequestDTO.setSafeQuantity(safeCount);
-                // 实际单重
-                Cell cell10 = row.getCell(10);
-                materialRequestDTO.setActualWeight(getCellValue(cell10));
-                // 单价
+                // 所在库房
+                Cell cell11 = row.getCell(11);
+                String roomNo = getCellValue(cell11);
+                // 所在库位
                 Cell cell12 = row.getCell(12);
-                materialRequestDTO.setPrice(new BigDecimal(getCellValue(cell12)));
-                // 材料
+                String rackNo = getCellValue(cell12);
+                // 批次号
+                Cell cell13 = row.getCell(13);
+                String materialBatchNo = getCellValue(cell13);
+
+                // 实际单重
                 Cell cell14 = row.getCell(14);
-                materialRequestDTO.setMaterial(getCellValue(cell14));
-                materialRequestDTO.setCurrentQuantity(1000);
-                System.out.println(materialRequestDTO.getGraphNo());
+                String actualWeight = getCellValue(cell14);
+                materialRequestDTO.setActualWeight(actualWeight);
+                // 单价
+                Cell cell15 = row.getCell(15);
+                BigDecimal price=BigDecimal.ZERO;
+                if(getCellValue(cell15)!=null){
+                    price=new BigDecimal(getCellValue(cell15));
+                }
+                materialRequestDTO.setPrice(price);
+                // 材料
+                Cell cell17 = row.getCell(17);
+                String material = getCellValue(cell17);
+                materialRequestDTO.setMaterial(material);
+                // 添加零件表
                 materialService.save(materialRequestDTO);
+
+                // 添加库房库存表
+                EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO();
+                entryOutStorageDTO.setMaterialBatchNo(materialBatchNo);
+                entryOutStorageDTO.setRoomNo(roomNo);
+                entryOutStorageDTO.setRackNo(rackNo);
+                entryOutStorageDTO.setMaterialGraphNo(graphNo);
+                entryOutStorageDTO.setQuantity(currentQuantity);
+                byte operationType = CommonEnum.OperationType.ENTRY.code;
+                byte storageType = CommonEnum.StorageType.MATERIAL.code;
+                entryOutStorageDTO.setType(storageType);
+                entryOutStorageDTO.setOperationType(operationType);
+                stockService.addStock(entryOutStorageDTO);
+
+                // 添加到零件价格表
+                PriceMaterial priceMaterial=new PriceMaterial(){{
+                    setMaterialClassifyName(classifyName);
+                    setGraphNo(graphNo);
+                    setName(name);
+                    setModel(model);
+                    setSpecifications(spec);
+                    setMaterial(material);
+                    setActualWeight(actualWeight);
+                    // 毛坯价
+                    Cell cell18 = row.getCell(18);
+                    String  blankCost= getCellValue(cell18);
+                    setBlankCost(blankCost);
+                    // 机加
+                    Cell cell19 = row.getCell(19);
+                    String  processCost= getCellValue(cell19);
+                    setProcessCost(processCost);
+                }};
+                priceMaterialService.saveInfo(priceMaterial);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,8 +226,6 @@ public class DemoServiceTest extends BaseApplicationTests {
                 e.printStackTrace();
             }
         }
-
-//        materialService.save(materialRequestDTO);
     }
 
     private static String getCellValue(Cell cell) {
