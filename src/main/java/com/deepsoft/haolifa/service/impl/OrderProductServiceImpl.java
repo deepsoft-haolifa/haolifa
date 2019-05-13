@@ -1318,6 +1318,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     currentQuantity = materialInfo.getCurrentQuantity();
                     if (currentQuantity < materialCount) {
                         lackMaterialCount = materialCount - currentQuantity;
+                    } else {
+                        currentQuantity = materialCount;
                     }
                 }
                 if (currentQuantityWithNum > 0) {
