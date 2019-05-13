@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.SupplierProductExtendMapper">
+
+  <select id="getSupplierProList" parameterType="com.deepsoft.haolifa.model.dto.SupplierProductListDTO"
+    resultType="com.deepsoft.haolifa.model.dto.SupplierProductResDTO">
+    select sp.id id, s.suppiler_name supplierName,sp.material_type materialType, s.suppiler_no supplierNo,
+     sp.material_graph_no materialGraphNo,
+    sp.material_name materialName
+    from supplier_product sp
+    left join supplier s on s.suppiler_no = sp.supplier_no
+    where
+    s.is_delete = 0 and sp.is_delete = 0
+    <if test="materialType != null and materialType !=''">
+      and sp.material_type = #{materialType}
+    </if>
+    <if test="supplierNo != null and supplierNo !=''">
+      and s.suppiler_no like CONCAT('%',#{supplierNo},'%')
+    </if>
+    <if test="supplierName != null and supplierName !=''">
+      and s.suppiler_name like CONCAT('%',#{supplierName},'%')
+    </if>
+    <if test="materialGraphNo != null and materialGraphNo !=''">
+      and sp.material_graph_no like CONCAT('%',#{materialGraphNo},'%')
+    </if>
+  </select>
+
+</mapper>

@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SupplierProductMapper;
+import com.deepsoft.haolifa.dao.repository.extend.SupplierProductExtendMapper;
 import com.deepsoft.haolifa.model.domain.Equipment;
 import com.deepsoft.haolifa.model.domain.SupplierProduct;
 import com.deepsoft.haolifa.model.domain.SupplierProductExample;
@@ -27,6 +28,9 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
 
     @Autowired
     SupplierProductMapper supplierProductMapper;
+
+    @Autowired
+    SupplierProductExtendMapper supplierProductExample;
 
     @Override
     public ResultBean save(SupplierPorductDTO model) {
@@ -76,19 +80,8 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
         if (model.getPageSize() == null || model.getPageSize() == 0) {
             model.setPageSize(10);
         }
-        SupplierProductExample supplierProductExample = new SupplierProductExample();
-        SupplierProductExample.Criteria criteria = supplierProductExample.createCriteria();
-        if(StringUtils.isNotEmpty(model.getSupplierNo())) {
-            criteria.andSupplierNoLike("%"+model.getSupplierNo()+"%");
-        }
-        if (model.getMaterialType() != null) {
-            criteria.andMaterialTypeEqualTo(model.getMaterialType().byteValue());
-        }
-        if (StringUtils.isNotEmpty(model.getMaterialGraphNo())) {
-            criteria.andMaterialGraphNoLike("%" + model.getMaterialGraphNo() + "%");
-        }
         Page<SupplierProduct> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->
-                supplierProductMapper.selectByExample(supplierProductExample));
+            supplierProductExample.getSupplierProList(model));
         PageDTO<SupplierProduct> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
