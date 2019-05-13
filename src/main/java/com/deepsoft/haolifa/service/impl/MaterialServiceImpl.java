@@ -277,18 +277,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public List<Material> getListByMultiModelAndSpec(int classifyId, String model, String specifications) {
-        MaterialExample example = new MaterialExample();
-        MaterialExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(model)) {
-            criteria.andModelLike("%" + model + "%");
-        }
-        if (StringUtils.isNotBlank(specifications)) {
-            criteria.andSpecificationsLike("%" + specifications + "%");
-        }
-        if (classifyId > 0) {
-            criteria.andMaterialClassifyIdEqualTo(classifyId);
-        }
-        List<Material> materials = materialMapper.selectByExample(example);
+        List<Material> materials = materialExtendMapper.getListByMultiModelAndSpec(classifyId, model, specifications);
         return materials;
     }
 
