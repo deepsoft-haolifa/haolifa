@@ -1326,12 +1326,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     checkResult = "核料成功";
                     checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
                     orderCheckMaterialDTO = new OrderCheckMaterialDTO();
-                    orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
+                    orderCheckMaterialDTO.setLackMaterialCount(0);
                     orderCheckMaterialDTO.setCheckStatus(checkStatus);
                     orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                     orderCheckMaterialDTO.setMaterialGraphNo(graphNo);
                     orderCheckMaterialDTO.setMaterialName(materialInfoWithNum.getName());
-                    orderCheckMaterialDTO.setMaterialCount(currentQuantityWithNum + lackMaterialCount);
+                    orderCheckMaterialDTO.setMaterialCount(currentQuantityWithNum);
                     orderCheckMaterialDTO.setOrderNo(orderNo);
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
                 }

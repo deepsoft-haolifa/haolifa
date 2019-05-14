@@ -31,6 +31,9 @@ public class FileRecordServiceImpl extends BaseService implements FileRecordServ
         if (StringUtils.isAnyBlank(model.getFileName(), model.getFileBase64())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+        if (model.getType() == 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
         // 判断文件名是否存在
         FileRecordExample example = new FileRecordExample();
         example.or().andFileNameEqualTo(model.getFileName());
@@ -38,7 +41,7 @@ public class FileRecordServiceImpl extends BaseService implements FileRecordServ
         if (fileRecords.size() > 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.FILE_NAME_EXIST);
         }
-        String fileUrl = QiniuUtil.uploadFile(model.getFileBase64(), model.getFileName(),true);
+        String fileUrl = QiniuUtil.uploadFile(model.getFileBase64(), model.getFileName(), true);
         model.setFileUrl(fileUrl);
         FileRecord fileRecord = new FileRecord();
         BeanUtils.copyProperties(model, fileRecord);
@@ -53,7 +56,7 @@ public class FileRecordServiceImpl extends BaseService implements FileRecordServ
     @Override
     public ResultBean update(FileRecordDTO model) {
         if (StringUtils.isNotBlank(model.getFileBase64())) {
-            String fileUrl = QiniuUtil.uploadFile(model.getFileBase64(), model.getFileName(),true);
+            String fileUrl = QiniuUtil.uploadFile(model.getFileBase64(), model.getFileName(), true);
             model.setFileUrl(fileUrl);
         }
         FileRecord fileRecord = new FileRecord();
