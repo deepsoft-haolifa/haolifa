@@ -911,12 +911,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 获取产品类型（D：蝶阀；H：止回阀；）
         String productType = productModel.substring(0, 1);
         String smallModel = "";
-        if (productType.equals(CommonEnum.ProductType.D.code)) {
+        if (productType.equals(CommonEnum.ProductType.H.code)) {
+            smallModel = "H77";
+        } else {
             if (productModel.length() >= 4) {
                 smallModel = productModel.substring(0, 4);
             }
-        } else {
-            smallModel = "H77";
+
         }
 
         // 产品号（D  Sb 7A 1 X3 N-10 Q-DN50 或者 H 77 X3 R-10 Q-DN50）
@@ -1490,7 +1491,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 //        return orderCheckMaterialDTOS;
 //    }
 // endregion
-
     /**
      * 核料通过,锁定零件（核料员点击下一步）
      */
@@ -1502,6 +1502,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         boolean isExistsReplace = false;
         //  如果核料成功，也需要核料点下一步，才往下走
         if (orderCheckMaterialDTOS != null && orderCheckMaterialDTOS.size() > 0) {
+            orderNo = orderCheckMaterialDTOS.get(0).getOrderNo();
+            // 如果核料完成，不能重复核料确认
+            OrderProductDTO orderProductInfo = getOrderProductInfo(orderNo);
+            if (orderProductInfo != null && orderProductInfo.getOrderStatus().equals(CommonEnum.OrderStatus.CHECK_MATERIAL_COMPLETE.code)) {
+                return 0;
+            }
             for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
                 // 核料成功，插入核料表
                 OrderMaterial orderMaterial = new OrderMaterial();
@@ -1516,7 +1522,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderMaterial.setReplaceMaterialGraphNo(replaceMaterialNo);
                     orderMaterial.setReplaceMaterialName(replaceMaterialName);
                 }
-                orderNo = orderCheckMaterialDTO.getOrderNo();
                 String materialGraphNo = orderCheckMaterialDTO.getMaterialGraphNo();
                 String materialName = orderCheckMaterialDTO.getMaterialName();
                 int lackMaterialCount = orderCheckMaterialDTO.getLackMaterialCount();
