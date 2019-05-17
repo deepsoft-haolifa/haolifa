@@ -904,10 +904,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
      */
     public List<MaterialTypeListDTO> getTypeMaterials(String productNo, String productModel, String specifications) {
         // 1.获取规格,截取数字，保留四位数，前面补0（DN65=>0065）
-        String spec = String.format("%04d", Integer.parseInt(specifications.replaceAll("[^0-9]", "")));
+//        String spec = String.format("%04d", Integer.parseInt(specifications.replaceAll("[^0-9]", "")));
         // 成品型号示例（270DD7A1XH-16Q）
-        int lastIndexOf = productNo.lastIndexOf("-");
-        int indexOf = productNo.indexOf("-");
+
         // 获取产品类型（D：蝶阀；H：止回阀；）
         String productType = productModel.substring(0, 1);
         String smallModel = "";
@@ -921,7 +920,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
 
         // 产品号（D  Sb 7A 1 X3 N-10 Q-DN50 或者 H 77 X3 R-10 Q-DN50）
-        productNo = productNo.replaceAll(" ", "");
+        productNo = productNo.replaceAll(" ", "");// 去掉空格
+        int lastIndexOf = productNo.lastIndexOf("-");
+        int indexOf = productNo.indexOf("-");
         String fati = "", fatiyali = "", faban = "", fazuo = "";
         String fatiGroup = productNo.substring(indexOf + 1, lastIndexOf);
         fatiyali = fatiGroup.substring(0, 2);
@@ -1491,6 +1492,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 //        return orderCheckMaterialDTOS;
 //    }
 // endregion
+
     /**
      * 核料通过,锁定零件（核料员点击下一步）
      */
