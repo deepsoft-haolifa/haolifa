@@ -1296,7 +1296,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                     currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
                                 } else {
                                     materialInfoWithM = new Material();
-                                    materialInfoWithM.setName("碟板毛坯（系统中暂无）");
+                                    materialInfoWithM.setName("蝶板毛坯（系统中暂无）");
                                 }
                                 currentQuantity += currentQuantityWithM;
                                 log.info("checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},quantity:{}", orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
