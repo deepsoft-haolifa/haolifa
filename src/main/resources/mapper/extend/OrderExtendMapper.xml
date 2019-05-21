@@ -36,7 +36,7 @@
         `order_material` o
         LEFT JOIN material m ON o.material_graph_no = m.graph_no
         WHERE
-        o.order_no =#{orderNo};
+        o.order_no =#{orderNo} order by m.material_classify_id asc
     </select>
 
     <insert id="insertBatchCheckLog" parameterType="java.util.List">
