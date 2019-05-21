@@ -55,6 +55,7 @@ public class CommonEnum {
         STEP_BACK_ERROR("4002", "无可退回节点"),
         FLOW_IS_OVER("4003", "流程已结束"),
         BACK_STEP_NOT_EXIST("4004", "未指定退回节点"),
+        FLOW_EXIST("4005", "该表单已存在审批流程"),
 
         FILE_NAME_EXIST("5001", "上传的文件名已经存在，请换个名称上传"),
 
