@@ -503,7 +503,13 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     List<FlowInstance> instances = instanceMapper.selectByExample(example);
     List<Accessory> accessories = new ArrayList<>();
     if (instances != null && instances.size() > 0) {
-      accessories.addAll(JSON.parseArray(instances.get(0).getAccessory(), Accessory.class));
+      String accessorys = instances.get(0).getAccessory();
+      if(StringUtils.isNotEmpty(accessorys)) {
+        List<Accessory> accessoryList = JSON.parseArray(instances.get(0).getAccessory(), Accessory.class);
+        if(accessoryList != null) {
+          accessories.addAll(accessoryList);
+        }
+      }
     }
     return ResultBean.success(accessories);
   }
