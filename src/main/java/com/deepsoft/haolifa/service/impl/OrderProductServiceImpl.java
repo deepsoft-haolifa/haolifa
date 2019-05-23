@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -662,9 +663,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             return saveOrderProductInfo(orderProductDTO);
         } catch (Exception e) {
             log.error("upload orderProduct excel exception|orderProduct:{}", JSONObject.toJSONString(orderProduct), e);
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
         }
-        log.info("upload orderProduct excel end|orderProduct:{}", JSONObject.toJSONString(orderProduct));
-        return ResultBean.success(null);
     }
 
     @Override
@@ -971,10 +971,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
         // 获取符合阀体的列表(D270-0050-01-00Qa-aF05-01-001)
         List<MaterialResultDTO> fatiCollect = new ArrayList<>();
+        List<MaterialResultDTO> fatiCollectEmpty = new ArrayList<>();
         // 获取符合阀座的列表(D270-0050-02-E0-01)
         List<MaterialResultDTO> fazuoCollect = new ArrayList<>();
+        List<MaterialResultDTO> fazuoCollectEmpty = new ArrayList<>();
         // 获取符合阀板的列表(D270-0050-03-Hc-02-00)
         List<MaterialResultDTO> fabanCollect = new ArrayList<>();
+        List<MaterialResultDTO> fabanCollectEmpty = new ArrayList<>();
         // 获取符合阀杆的列表
         List<MaterialResultDTO> faganCollect = new ArrayList<>();
         // 获取通用零件列表的列表
@@ -983,9 +986,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         // 根据型号和规格，获取图号列表
         // 阀体图号列表
         List<Material> fatiMaterialList = materialService
-                .getListBySingleModelAndSpec(CommonEnum.ProductModelType.FATI.classifyId, smallModel, specifications);
+                .getListByMultiModelAndSpec(CommonEnum.ProductModelType.FATI.classifyId, smallModel, specifications);
         if (fatiMaterialList != null && fatiMaterialList.size() > 0) {
-            fatiMaterialList.stream().forEach(e -> {
+            for (Material e : fatiMaterialList) {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
                 Integer currentQuantity = e.getCurrentQuantity();
@@ -996,27 +999,28 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 materialResultDTO.setSupportQuantity(e.getSupportQuantity());
 
                 String[] split = graphNo.split("-");
-                if (split.length > 2) {
-                    if (split.length > 4) {
-                        //阀体材质,阀体压力 都满足
-                        if (fatiModelConfig.size() > 0) {
-                            if (fatiModelConfig.contains(split[3].replaceAll("[0-9]", "")) && fatiYaliModelConfig
-                                    .contains(split[4].substring(0, 1))) {
-                                fatiCollect.add(materialResultDTO);
-                            }
-                        } else {
+                if (split.length > 4) {
+                    //阀体材质,阀体压力 都满足
+                    if (fatiModelConfig.size() > 0) {
+                        if (fatiModelConfig.contains(split[3].replaceAll("[0-9]", "")) && fatiYaliModelConfig
+                                .contains(split[4].substring(0, 1))) {
                             fatiCollect.add(materialResultDTO);
                         }
                     }
                 }
-            });
+                fatiCollectEmpty.add(materialResultDTO);
+            }
+        }
+        // 如果没有符合规则的阀体，则把型号，规则找到的阀体，展示出来
+        if (CollectionUtils.isEmpty(fatiCollect) && !CollectionUtils.isEmpty(fatiCollectEmpty)) {
+            fatiCollect.addAll(fatiCollectEmpty);
         }
 
         // 阀座图号列表
         List<Material> fazuoMaterialList = materialService
                 .getListByMultiModelAndSpec(CommonEnum.ProductModelType.FAZUO.classifyId, smallModel, specifications);
         if (fazuoMaterialList != null && fazuoMaterialList.size() > 0) {
-            fazuoMaterialList.stream().forEach(e -> {
+            for (Material e : fazuoMaterialList) {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
                 Integer currentQuantity = e.getCurrentQuantity();
@@ -1033,18 +1037,21 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         if (split.length > 3 && fazuoModelConfig.contains(split[3])) {
                             fazuoCollect.add(materialResultDTO);
                         }
-                    } else {
-                        fazuoCollect.add(materialResultDTO);
                     }
+                    fazuoCollectEmpty.add(materialResultDTO);
                 }
-            });
+            }
         }
+        if (CollectionUtils.isEmpty(fazuoCollect) && !CollectionUtils.isEmpty(fazuoCollectEmpty)) {
+            fazuoCollect.addAll(fazuoCollectEmpty);
+        }
+
 
         // 阀板图号列表
         List<Material> fabanMaterialList = materialService
                 .getListByMultiModelAndSpec(CommonEnum.ProductModelType.FABAN.classifyId, smallModel, specifications);
         if (fabanMaterialList != null && fabanMaterialList.size() > 0) {
-            fabanMaterialList.stream().forEach(e -> {
+            for (Material e : fabanMaterialList) {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
                 Integer currentQuantity = e.getCurrentQuantity();
@@ -1059,17 +1066,19 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     if (split.length > 3 && fabanModelConfig.contains(split[3])) {
                         fabanCollect.add(materialResultDTO);
                     }
-                } else {
-                    fabanCollect.add(materialResultDTO);
                 }
-            });
+                fabanCollectEmpty.add(materialResultDTO);
+            }
+        }
+        if (CollectionUtils.isEmpty(fabanCollect) && !CollectionUtils.isEmpty(fabanCollectEmpty)) {
+            fabanCollect.addAll(fabanCollectEmpty);
         }
 
         // 阀杆图号列表
         List<Material> faganMaterialList = materialService
                 .getListByMultiModelAndSpec(CommonEnum.ProductModelType.FAGAN.classifyId, smallModel, specifications);
         if (faganMaterialList != null && faganMaterialList.size() > 0) {
-            faganMaterialList.stream().forEach(e -> {
+            faganMaterialList.forEach(e -> {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
                 Integer currentQuantity = e.getCurrentQuantity();
@@ -1086,7 +1095,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<Material> tongyongList = materialService
                 .getListByMultiModelAndSpec(CommonEnum.ProductModelType.TONG_YONG.classifyId, smallModel, specifications);
         if (tongyongList != null && tongyongList.size() > 0) {
-            tongyongList.stream().forEach(e -> {
+            tongyongList.forEach(e -> {
                 MaterialResultDTO materialResultDTO = new MaterialResultDTO();
                 materialResultDTO.setCurrentQuantity(e.getCurrentQuantity());
                 materialResultDTO.setMaterialName(e.getName());
