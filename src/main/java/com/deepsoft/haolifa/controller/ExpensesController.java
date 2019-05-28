@@ -40,8 +40,10 @@ public class ExpensesController {
     @ApiOperation("查询费用记录列表")
     @GetMapping("list")
     public ResultBean getList(@RequestParam(defaultValue = "1") Integer pageNum,
-                              @RequestParam(defaultValue = "10") Integer pageSize) {
-        return expensesService.getList(pageNum, pageSize);
+                              @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(required = false) String classifyName,
+        @RequestParam(required = false) String department) {
+        return expensesService.getList(pageNum, pageSize, classifyName, department);
     }
 
    @ApiOperation("费用类别")

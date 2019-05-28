@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.dao.repository.DeliveryNoticeMapper;
 import com.deepsoft.haolifa.dao.repository.DeliveryRecordMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.extend.DeliveryNoticeExtendMapper;
 import com.deepsoft.haolifa.model.domain.DeliveryNotice;
 import com.deepsoft.haolifa.model.domain.DeliveryNoticeExample;
 import com.deepsoft.haolifa.model.domain.DeliveryRecord;
@@ -16,6 +17,7 @@ import com.deepsoft.haolifa.model.domain.OrderProductAssociateExample;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeConditionDTO;
+import com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeListDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryRecordConditionDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryClassifyDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeAuditDTO;
@@ -48,6 +50,8 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
   private OrderProductAssociateMapper orderProductAssociateMapper;
   @Autowired
   private OrderProductService orderProductService;
+  @Autowired
+  private DeliveryNoticeExtendMapper deliveryNoticeExtendMapper;
 
   @Override
   public ResultBean saveNotice(DeliveryNotice model) {
@@ -73,14 +77,14 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
 
   @Override
   public ResultBean pageNotices(DeliveryNoticeConditionDTO conditionDTO) {
-    DeliveryNoticeExample example = new DeliveryNoticeExample();
-    DeliveryNoticeExample.Criteria criteria = example.createCriteria();
-    if (StringUtils.isNotBlank(conditionDTO.getDeliveryNo())) {
-      criteria.andDeliveryNoLike("%" + conditionDTO.getDeliveryNo() + "%");
-    }
-    if (StringUtils.isNotBlank(conditionDTO.getContractOrderNo())) {
-      criteria.andContractOrderNoLike("%" + conditionDTO.getContractOrderNo() + "%");
-    }
+//    DeliveryNoticeExample example = new DeliveryNoticeExample();
+//    DeliveryNoticeExample.Criteria criteria = example.createCriteria();
+//    if (StringUtils.isNotBlank(conditionDTO.getDeliveryNo())) {
+//      criteria.andDeliveryNoLike("%" + conditionDTO.getDeliveryNo() + "%");
+//    }
+//    if (StringUtils.isNotBlank(conditionDTO.getContractOrderNo())) {
+//      criteria.andContractOrderNoLike("%" + conditionDTO.getContractOrderNo() + "%");
+//    }
 
 //        Date startDeliveryTime = conditionDTO.getStartDeliveryTime();
 //        Date endDeliveryTime = conditionDTO.getEndDeliveryTime();
@@ -93,14 +97,15 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
 //        if (startDeliveryTime == null && endDeliveryTime != null) {
 //            criteria.andDeliveryTimeLessThanOrEqualTo(endDeliveryTime);
 //        }
-    example.setOrderByClause("id desc");
-    Page<DeliveryNotice> deliveryRecordPage = PageHelper
+//    example.setOrderByClause("id desc");
+    Page<DeliveryNoticeListDTO> deliveryRecordPage = PageHelper
         .startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
-        .doSelectPage(() -> deliveryNoticeMapper.selectByExample(example));
+        .doSelectPage(() -> deliveryNoticeExtendMapper.selectDeliverNoticeList(conditionDTO));
 
-    PageDTO<DeliveryNotice> pageDTO = new PageDTO<>();
+    PageDTO<DeliveryNoticeListDTO> pageDTO = new PageDTO<>();
     BeanUtils.copyProperties(deliveryRecordPage, pageDTO);
-    pageDTO.setList(deliveryRecordPage);
+    pageDTO.setList(deliveryRecordPage.getResult());
+
     return ResultBean.success(pageDTO);
   }
 

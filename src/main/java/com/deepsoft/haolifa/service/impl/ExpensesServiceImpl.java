@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.service.ExpensesService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,9 +60,16 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getList(Integer pageNum, Integer pageSize) {
+    public ResultBean getList(Integer pageNum, Integer pageSize,String classifyName, String department) {
         ExpensesExample expensesExample = new ExpensesExample();
-        expensesExample.or().andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        ExpensesExample.Criteria criteria = expensesExample.createCriteria();
+        if(StringUtils.isNotEmpty(classifyName)) {
+            criteria.andExpensesClassifyEqualTo(classifyName);
+        }
+        if(StringUtils.isNotEmpty(department)) {
+            criteria.andDepartmentLike("%"+department+"%");
+        }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         Page<Expenses> page = PageHelper.startPage(pageNum,pageSize).doSelectPage(()->expensesMapper.selectByExample(expensesExample));
         PageDTO<Expenses> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(page,pageDTO);

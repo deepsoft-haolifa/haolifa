@@ -11,7 +11,7 @@ public interface ExpensesService {
 
   ResultBean update(ExpensesDTO model);
 
-  ResultBean getList(Integer pageNum, Integer pageSize);
+  ResultBean getList(Integer pageNum, Integer pageSize,String classifyName, String department);
 
   ResultBean classify(Integer pId);
 }

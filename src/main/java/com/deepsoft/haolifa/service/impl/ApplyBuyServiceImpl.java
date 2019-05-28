@@ -115,10 +115,17 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
   }
 
   @Override
-  public ResultBean list(int pageNum, int pageSize, int status) {
+  public ResultBean list(int pageNum, int pageSize, int status, String materialName, String materialGraphNo) {
     ApplyBuyExample example = new ApplyBuyExample();
+    ApplyBuyExample.Criteria criteria = example.createCriteria();
     if (status != -1) {
-      example.or().andStatusEqualTo((byte) status);
+      criteria.andStatusEqualTo((byte) status);
+    }
+    if(StringUtils.isNotEmpty(materialName)) {
+      criteria.andMaterialNameLike("%"+materialName+"%");
+    }
+    if(StringUtils.isNotEmpty(materialGraphNo)) {
+      criteria.andMaterialGraphNoLike("%"+materialGraphNo+"%");
     }
     Page pageData = PageHelper.startPage(pageNum, pageSize,"create_time desc").doSelectPage(() -> applyBuyMapper.selectByExample(example));
     List<ApplyBuy> applyBuyList = pageData.getResult();
