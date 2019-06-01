@@ -18,4 +18,6 @@ public class FileRecordDTO {
     private byte type;
     @ApiModelProperty(value = "备注")
     private String remark;
+    @ApiModelProperty(value = "文件编号")
+    private String fileNo;
 }

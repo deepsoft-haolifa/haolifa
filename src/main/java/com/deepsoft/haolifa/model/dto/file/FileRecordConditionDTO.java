@@ -17,4 +17,6 @@ public class FileRecordConditionDTO {
     private String fileName;
     @ApiModelProperty(value = "类型(0.全部;1.零件图纸；)")
     private byte type;
+    @ApiModelProperty(value = "文件编号")
+    private String fileNo;
 }

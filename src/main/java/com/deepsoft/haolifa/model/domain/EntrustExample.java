@@ -1205,6 +1205,126 @@ public class EntrustExample {
             addCriterion("create_user_id not between", value1, value2, "createUserId");
             return (Criteria) this;
         }
+
+        public Criteria andInspectStatusIsNull() {
+            addCriterion("inspect_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusIsNotNull() {
+            addCriterion("inspect_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusEqualTo(Byte value) {
+            addCriterion("inspect_status =", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusNotEqualTo(Byte value) {
+            addCriterion("inspect_status <>", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusGreaterThan(Byte value) {
+            addCriterion("inspect_status >", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("inspect_status >=", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusLessThan(Byte value) {
+            addCriterion("inspect_status <", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("inspect_status <=", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusIn(List<Byte> values) {
+            addCriterion("inspect_status in", values, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusNotIn(List<Byte> values) {
+            addCriterion("inspect_status not in", values, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusBetween(Byte value1, Byte value2) {
+            addCriterion("inspect_status between", value1, value2, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("inspect_status not between", value1, value2, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIsNull() {
+            addCriterion("qualified_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIsNotNull() {
+            addCriterion("qualified_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberEqualTo(Integer value) {
+            addCriterion("qualified_number =", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotEqualTo(Integer value) {
+            addCriterion("qualified_number <>", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberGreaterThan(Integer value) {
+            addCriterion("qualified_number >", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("qualified_number >=", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberLessThan(Integer value) {
+            addCriterion("qualified_number <", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("qualified_number <=", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIn(List<Integer> values) {
+            addCriterion("qualified_number in", values, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotIn(List<Integer> values) {
+            addCriterion("qualified_number not in", values, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberBetween(Integer value1, Integer value2) {
+            addCriterion("qualified_number between", value1, value2, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("qualified_number not between", value1, value2, "qualifiedNumber");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

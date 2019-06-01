@@ -17,7 +17,9 @@ public class FileRecord {
 
     private Date updateTime;
 
-    public FileRecord(Integer id, String fileName, String fileUrl, Byte type, String remark, Date createTime, Date updateTime) {
+    private String fileNo;
+
+    public FileRecord(Integer id, String fileName, String fileUrl, Byte type, String remark, Date createTime, Date updateTime, String fileNo) {
         this.id = id;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
@@ -25,6 +27,7 @@ public class FileRecord {
         this.remark = remark;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.fileNo = fileNo;
     }
 
     public FileRecord() {
@@ -85,5 +88,13 @@ public class FileRecord {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getFileNo() {
+        return fileNo;
+    }
+
+    public void setFileNo(String fileNo) {
+        this.fileNo = fileNo == null ? null : fileNo.trim();
     }
 }

@@ -29,4 +29,6 @@ public interface SprayService {
   ResultBean getInspectToRooms(SprayInspectListDto inspectListDto);
 
   ResultBean updateHistoryStatus(Integer historyId);
+
+  ResultBean updateInspectStatus(String sprayNo, int status);
 }

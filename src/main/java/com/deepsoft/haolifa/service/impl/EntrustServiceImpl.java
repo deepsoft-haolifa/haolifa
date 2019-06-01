@@ -192,4 +192,17 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     int number = entrusts.stream().map(Entrust::getNumber).reduce(0, (a, b) -> a + b);
     return number;
   }
+
+  @Override
+  public ResultBean updateInspectStatus(String entrustNo, Integer status) {
+    if (StringUtils.isEmpty(entrustNo) || status == null || status < 0 || status > 3) {
+      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+    }
+    Entrust entrust = new Entrust();
+    entrust.setInspectStatus(status.byteValue());
+    EntrustExample entrustExample = new EntrustExample();
+    entrustExample.or().andEntrustNoEqualTo(entrustNo);
+    entrustMapper.updateByExampleSelective(entrust, entrustExample);
+    return ResultBean.success(1);
+  }
 }

@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import static com.deepsoft.haolifa.constant.CacheKey.SPRAY_NO_KEY;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.SPRAY_NO_PREFIX_PT;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.SprayItemMapper;
 import com.deepsoft.haolifa.dao.repository.SprayMapper;
@@ -191,6 +192,10 @@ public class SprayServiceImpl extends BaseService implements SprayService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean saveInspect(SprayInspectDto inspectDto) {
+    if (StringUtils.isAnyBlank(inspectDto.getOriginalGraphNo(), inspectDto.getMaterialGraphNo(),
+        inspectDto.getMaterialGraphName())) {
+      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+    }
     SprayInspectHistory history = new SprayInspectHistory();
     BeanUtils.copyProperties(inspectDto, history);
     SprayExample example = new SprayExample();
@@ -233,6 +238,17 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     // 2 已入库
     sprayInspectHistory.setStatus((byte) 2);
     inspectHistoryMapper.updateByPrimaryKeySelective(sprayInspectHistory);
+    return ResultBean.success(1);
+  }
+
+  @Override
+  public ResultBean updateInspectStatus(String sprayNo, int status) {
+    SprayExample example = new SprayExample();
+    SprayExample.Criteria criteria = example.createCriteria();
+    criteria.andSprayNoEqualTo(sprayNo);
+    Spray spray = new Spray();
+    spray.setInspectStatus(Integer.valueOf(status).byteValue());
+    sprayMapper.updateByExampleSelective(spray, example);
     return ResultBean.success(1);
   }
 }

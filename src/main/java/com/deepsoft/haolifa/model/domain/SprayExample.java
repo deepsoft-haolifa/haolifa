@@ -674,6 +674,66 @@ public class SprayExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andInspectStatusIsNull() {
+            addCriterion("inspect_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusIsNotNull() {
+            addCriterion("inspect_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusEqualTo(Byte value) {
+            addCriterion("inspect_status =", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusNotEqualTo(Byte value) {
+            addCriterion("inspect_status <>", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusGreaterThan(Byte value) {
+            addCriterion("inspect_status >", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("inspect_status >=", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusLessThan(Byte value) {
+            addCriterion("inspect_status <", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("inspect_status <=", value, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusIn(List<Byte> values) {
+            addCriterion("inspect_status in", values, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusNotIn(List<Byte> values) {
+            addCriterion("inspect_status not in", values, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusBetween(Byte value1, Byte value2) {
+            addCriterion("inspect_status between", value1, value2, "inspectStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("inspect_status not between", value1, value2, "inspectStatus");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

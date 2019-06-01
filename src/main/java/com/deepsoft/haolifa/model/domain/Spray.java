@@ -21,7 +21,9 @@ public class Spray {
 
     private Date updateTime;
 
-    public Spray(Integer id, String sprayNo, String planner, Integer totalNumber, Integer qualifiedNumber, Byte status, String fileUrl, Date createTime, Date updateTime) {
+    private Byte inspectStatus;
+
+    public Spray(Integer id, String sprayNo, String planner, Integer totalNumber, Integer qualifiedNumber, Byte status, String fileUrl, Date createTime, Date updateTime, Byte inspectStatus) {
         this.id = id;
         this.sprayNo = sprayNo;
         this.planner = planner;
@@ -31,6 +33,7 @@ public class Spray {
         this.fileUrl = fileUrl;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.inspectStatus = inspectStatus;
     }
 
     public Spray() {
@@ -107,5 +110,13 @@ public class Spray {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Byte getInspectStatus() {
+        return inspectStatus;
+    }
+
+    public void setInspectStatus(Byte inspectStatus) {
+        this.inspectStatus = inspectStatus;
     }
 }

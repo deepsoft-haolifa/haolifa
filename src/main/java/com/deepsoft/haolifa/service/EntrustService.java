@@ -57,4 +57,6 @@ public interface EntrustService {
     ResultBean allotEntrust(AllotEntrustDTO allotEntrustDTO);
 
     int obtainEntrustNumber(String materialGraphNo);
+
+    ResultBean updateInspectStatus(String entrustNo, Integer status);
 }

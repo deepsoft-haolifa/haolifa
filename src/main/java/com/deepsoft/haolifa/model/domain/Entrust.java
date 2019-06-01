@@ -38,7 +38,11 @@ public class Entrust {
 
     private Integer createUserId;
 
-    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    private Byte inspectStatus;
+
+    private Integer qualifiedNumber;
+
+    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber) {
         this.id = id;
         this.materialGraphName = materialGraphName;
         this.purchaseNo = purchaseNo;
@@ -56,6 +60,8 @@ public class Entrust {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.inspectStatus = inspectStatus;
+        this.qualifiedNumber = qualifiedNumber;
     }
 
     public Entrust() {
@@ -196,5 +202,21 @@ public class Entrust {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public Byte getInspectStatus() {
+        return inspectStatus;
+    }
+
+    public void setInspectStatus(Byte inspectStatus) {
+        this.inspectStatus = inspectStatus;
+    }
+
+    public Integer getQualifiedNumber() {
+        return qualifiedNumber;
+    }
+
+    public void setQualifiedNumber(Integer qualifiedNumber) {
+        this.qualifiedNumber = qualifiedNumber;
     }
 }

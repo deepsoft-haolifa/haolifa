@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
 import com.deepsoft.haolifa.service.SprayService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +61,13 @@ public class SprayController {
   @PutMapping("status/{sprayNo}/{status}")
   public ResultBean updateStatus(@PathVariable("sprayNo") String sprayNo, @PathVariable("status") int status) {
     return sprayService.updateStatus(sprayNo, status);
+  }
+
+  @ApiOperation("更新喷涂加工单质检状态")
+  @PutMapping("inspectStatus/{sprayNo}/{status}")
+  public ResultBean updateInspectStatus(@PathVariable("sprayNo") String sprayNo,
+      @ApiParam("0 待质检 1 质检中 2 质检完成") @PathVariable("status") int status) {
+    return sprayService.updateInspectStatus(sprayNo, status);
   }
 
   @ApiOperation("保存喷涂加工质检记录")

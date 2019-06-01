@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface FileRecordMapper {
-    long countByExample(FileRecordExample example);
+    int countByExample(FileRecordExample example);
 
     int deleteByExample(FileRecordExample example);
 
