@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.ExpensesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +42,10 @@ public class ExpensesController {
     @GetMapping("list")
     public ResultBean getList(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-        @RequestParam(required = false) String classifyName,
+        @ApiParam("一级分类名称, 搜索全部时值：全部") @RequestParam(required = false) String classifyName,
+        @ApiParam("二级分类名称，搜索全部时值：全部") @RequestParam(required = false) String secondClassifyName,
         @RequestParam(required = false) String department) {
-        return expensesService.getList(pageNum, pageSize, classifyName, department);
+        return expensesService.getList(pageNum, pageSize, classifyName, secondClassifyName, department);
     }
 
    @ApiOperation("费用类别")
