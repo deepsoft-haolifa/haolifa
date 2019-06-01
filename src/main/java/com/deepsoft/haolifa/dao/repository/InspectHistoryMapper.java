@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface InspectHistoryMapper {
-    long countByExample(InspectHistoryExample example);
+    int countByExample(InspectHistoryExample example);
 
     int deleteByExample(InspectHistoryExample example);
 

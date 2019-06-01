@@ -1,45 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.InspectHistoryMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.InspectHistory">
-    <constructor>
-      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="purchase_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="inspect_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="batch_number" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="material_graph_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="test_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="qualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="handling_suggestion" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="purchase_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
-      <arg column="supplier_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="supplier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.InspectHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.InspectHistory" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="purchase_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="inspect_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="batch_number" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_graph_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="test_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="unqualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="handling_suggestion" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="purchase_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="supplier_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="supplier_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -50,25 +52,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -79,221 +81,241 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, purchase_no, inspect_no, batch_number, material_graph_no, material_graph_name, 
     test_number, qualified_number, unqualified_number, handling_suggestion, purchase_price, 
-    remark, status, type, supplier_name, supplier_no
+    remark, status, type, supplier_name, supplier_no, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultMap="BaseResultMap">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" >
     select
-    <if test="distinct">
+    <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
     from inspect_history
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null">
+    <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from inspect_history
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from inspect_history
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample">
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" >
     delete from inspect_history
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory" >
     insert into inspect_history (id, purchase_no, inspect_no, 
       batch_number, material_graph_no, material_graph_name, 
       test_number, qualified_number, unqualified_number, 
       handling_suggestion, purchase_price, remark, 
       status, type, supplier_name, 
-      supplier_no)
+      supplier_no, create_time, update_time
+      )
     values (#{id,jdbcType=INTEGER}, #{purchaseNo,jdbcType=VARCHAR}, #{inspectNo,jdbcType=VARCHAR}, 
       #{batchNumber,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
       #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
       #{handlingSuggestion,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{supplierName,jdbcType=VARCHAR}, 
-      #{supplierNo,jdbcType=VARCHAR})
+      #{supplierNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory" >
     insert into inspect_history
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         id,
       </if>
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null" >
         purchase_no,
       </if>
-      <if test="inspectNo != null">
+      <if test="inspectNo != null" >
         inspect_no,
       </if>
-      <if test="batchNumber != null">
+      <if test="batchNumber != null" >
         batch_number,
       </if>
-      <if test="materialGraphNo != null">
+      <if test="materialGraphNo != null" >
         material_graph_no,
       </if>
-      <if test="materialGraphName != null">
+      <if test="materialGraphName != null" >
         material_graph_name,
       </if>
-      <if test="testNumber != null">
+      <if test="testNumber != null" >
         test_number,
       </if>
-      <if test="qualifiedNumber != null">
+      <if test="qualifiedNumber != null" >
         qualified_number,
       </if>
-      <if test="unqualifiedNumber != null">
+      <if test="unqualifiedNumber != null" >
         unqualified_number,
       </if>
-      <if test="handlingSuggestion != null">
+      <if test="handlingSuggestion != null" >
         handling_suggestion,
       </if>
-      <if test="purchasePrice != null">
+      <if test="purchasePrice != null" >
         purchase_price,
       </if>
-      <if test="remark != null">
+      <if test="remark != null" >
         remark,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
-      <if test="type != null">
+      <if test="type != null" >
         type,
       </if>
-      <if test="supplierName != null">
+      <if test="supplierName != null" >
         supplier_name,
       </if>
-      <if test="supplierNo != null">
+      <if test="supplierNo != null" >
         supplier_no,
       </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="purchaseNo != null">
+      <if test="purchaseNo != null" >
         #{purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="inspectNo != null">
+      <if test="inspectNo != null" >
         #{inspectNo,jdbcType=VARCHAR},
       </if>
-      <if test="batchNumber != null">
+      <if test="batchNumber != null" >
         #{batchNumber,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
+      <if test="materialGraphNo != null" >
         #{materialGraphNo,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphName != null">
+      <if test="materialGraphName != null" >
         #{materialGraphName,jdbcType=VARCHAR},
       </if>
-      <if test="testNumber != null">
+      <if test="testNumber != null" >
         #{testNumber,jdbcType=INTEGER},
       </if>
-      <if test="qualifiedNumber != null">
+      <if test="qualifiedNumber != null" >
         #{qualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="unqualifiedNumber != null">
+      <if test="unqualifiedNumber != null" >
         #{unqualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="handlingSuggestion != null">
+      <if test="handlingSuggestion != null" >
         #{handlingSuggestion,jdbcType=VARCHAR},
       </if>
-      <if test="purchasePrice != null">
+      <if test="purchasePrice != null" >
         #{purchasePrice,jdbcType=DECIMAL},
       </if>
-      <if test="remark != null">
+      <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
-      <if test="type != null">
+      <if test="type != null" >
         #{type,jdbcType=TINYINT},
       </if>
-      <if test="supplierName != null">
+      <if test="supplierName != null" >
         #{supplierName,jdbcType=VARCHAR},
       </if>
-      <if test="supplierNo != null">
+      <if test="supplierNo != null" >
         #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" resultType="java.lang.Integer" >
     select count(*) from inspect_history
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+  <update id="updateByExampleSelective" parameterType="map" >
     update inspect_history
-    <set>
-      <if test="record.id != null">
+    <set >
+      <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.purchaseNo != null">
+      <if test="record.purchaseNo != null" >
         purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.inspectNo != null">
+      <if test="record.inspectNo != null" >
         inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.batchNumber != null">
+      <if test="record.batchNumber != null" >
         batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialGraphNo != null">
+      <if test="record.materialGraphNo != null" >
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialGraphName != null">
+      <if test="record.materialGraphName != null" >
         material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
       </if>
-      <if test="record.testNumber != null">
+      <if test="record.testNumber != null" >
         test_number = #{record.testNumber,jdbcType=INTEGER},
       </if>
-      <if test="record.qualifiedNumber != null">
+      <if test="record.qualifiedNumber != null" >
         qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="record.unqualifiedNumber != null">
+      <if test="record.unqualifiedNumber != null" >
         unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="record.handlingSuggestion != null">
+      <if test="record.handlingSuggestion != null" >
         handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
       </if>
-      <if test="record.purchasePrice != null">
+      <if test="record.purchasePrice != null" >
         purchase_price = #{record.purchasePrice,jdbcType=DECIMAL},
       </if>
-      <if test="record.remark != null">
+      <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
+      <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
-      <if test="record.type != null">
+      <if test="record.type != null" >
         type = #{record.type,jdbcType=TINYINT},
       </if>
-      <if test="record.supplierName != null">
+      <if test="record.supplierName != null" >
         supplier_name = #{record.supplierName,jdbcType=VARCHAR},
       </if>
-      <if test="record.supplierNo != null">
+      <if test="record.supplierNo != null" >
         supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExample" parameterType="map" >
     update inspect_history
     set id = #{record.id,jdbcType=INTEGER},
       purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
@@ -310,63 +332,71 @@
       status = #{record.status,jdbcType=TINYINT},
       type = #{record.type,jdbcType=TINYINT},
       supplier_name = #{record.supplierName,jdbcType=VARCHAR},
-      supplier_no = #{record.supplierNo,jdbcType=VARCHAR}
-    <if test="_parameter != null">
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory" >
     update inspect_history
-    <set>
-      <if test="purchaseNo != null">
+    <set >
+      <if test="purchaseNo != null" >
         purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       </if>
-      <if test="inspectNo != null">
+      <if test="inspectNo != null" >
         inspect_no = #{inspectNo,jdbcType=VARCHAR},
       </if>
-      <if test="batchNumber != null">
+      <if test="batchNumber != null" >
         batch_number = #{batchNumber,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphNo != null">
+      <if test="materialGraphNo != null" >
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       </if>
-      <if test="materialGraphName != null">
+      <if test="materialGraphName != null" >
         material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
       </if>
-      <if test="testNumber != null">
+      <if test="testNumber != null" >
         test_number = #{testNumber,jdbcType=INTEGER},
       </if>
-      <if test="qualifiedNumber != null">
+      <if test="qualifiedNumber != null" >
         qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="unqualifiedNumber != null">
+      <if test="unqualifiedNumber != null" >
         unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
       </if>
-      <if test="handlingSuggestion != null">
+      <if test="handlingSuggestion != null" >
         handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
       </if>
-      <if test="purchasePrice != null">
+      <if test="purchasePrice != null" >
         purchase_price = #{purchasePrice,jdbcType=DECIMAL},
       </if>
-      <if test="remark != null">
+      <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
-      <if test="type != null">
+      <if test="type != null" >
         type = #{type,jdbcType=TINYINT},
       </if>
-      <if test="supplierName != null">
+      <if test="supplierName != null" >
         supplier_name = #{supplierName,jdbcType=VARCHAR},
       </if>
-      <if test="supplierNo != null">
+      <if test="supplierNo != null" >
         supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory">
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory" >
     update inspect_history
     set purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       inspect_no = #{inspectNo,jdbcType=VARCHAR},
@@ -382,7 +412,9 @@
       status = #{status,jdbcType=TINYINT},
       type = #{type,jdbcType=TINYINT},
       supplier_name = #{supplierName,jdbcType=VARCHAR},
-      supplier_no = #{supplierNo,jdbcType=VARCHAR}
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

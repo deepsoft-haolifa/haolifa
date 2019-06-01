@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.util.Date;
+
 public class SprayInspectHistory {
     private Integer id;
 
@@ -23,7 +25,11 @@ public class SprayInspectHistory {
 
     private Byte status;
 
-    public SprayInspectHistory(Integer id, String sprayNo, String originalGraphNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status) {
+    private Date createTime;
+
+    private Date updateTime;
+
+    public SprayInspectHistory(Integer id, String sprayNo, String originalGraphNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status, Date createTime, Date updateTime) {
         this.id = id;
         this.sprayNo = sprayNo;
         this.originalGraphNo = originalGraphNo;
@@ -35,6 +41,8 @@ public class SprayInspectHistory {
         this.handlingSuggestion = handlingSuggestion;
         this.remark = remark;
         this.status = status;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
 
     public SprayInspectHistory() {
@@ -127,5 +135,21 @@ public class SprayInspectHistory {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

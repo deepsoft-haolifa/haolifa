@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class InspectHistory {
     private Integer id;
@@ -35,7 +36,11 @@ public class InspectHistory {
 
     private String supplierNo;
 
-    public InspectHistory(Integer id, String purchaseNo, String inspectNo, String batchNumber, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, BigDecimal purchasePrice, String remark, Byte status, Byte type, String supplierName, String supplierNo) {
+    private Date createTime;
+
+    private Date updateTime;
+
+    public InspectHistory(Integer id, String purchaseNo, String inspectNo, String batchNumber, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, BigDecimal purchasePrice, String remark, Byte status, Byte type, String supplierName, String supplierNo, Date createTime, Date updateTime) {
         this.id = id;
         this.purchaseNo = purchaseNo;
         this.inspectNo = inspectNo;
@@ -52,6 +57,8 @@ public class InspectHistory {
         this.type = type;
         this.supplierName = supplierName;
         this.supplierNo = supplierNo;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
 
     public InspectHistory() {
@@ -184,5 +191,21 @@ public class InspectHistory {
 
     public void setSupplierNo(String supplierNo) {
         this.supplierNo = supplierNo == null ? null : supplierNo.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

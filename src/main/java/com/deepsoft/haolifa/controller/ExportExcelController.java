@@ -2,11 +2,27 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.annotation.LogNotPrint;
+import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
+import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
+import com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper;
+import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
+import com.deepsoft.haolifa.dao.repository.SprayMapper;
 import com.deepsoft.haolifa.model.domain.Entrust;
-import com.deepsoft.haolifa.model.domain.SprayItem;
+import com.deepsoft.haolifa.model.domain.Expenses;
+import com.deepsoft.haolifa.model.domain.ExpensesExample;
+import com.deepsoft.haolifa.model.domain.InspectHistory;
+import com.deepsoft.haolifa.model.domain.InspectHistoryExample;
+import com.deepsoft.haolifa.model.domain.ProInspectRecord;
+import com.deepsoft.haolifa.model.domain.ProInspectRecordExample;
+import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
+import com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.export.ExportExpensesDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportMaterialEntryRoomDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportProductEntryRoomDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportSprayEntryRoomDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
@@ -14,27 +30,35 @@ import com.deepsoft.haolifa.service.EntrustService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SprayService;
-import com.deepsoft.haolifa.service.impl.SprayServiceImpl;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,6 +77,18 @@ public class ExportExcelController {
 
   @Autowired
   private EntrustService entrustService;
+
+  @Autowired
+  private SprayInspectHistoryMapper sprayInspectHistoryMapper;
+
+  @Autowired
+  private ExpensesMapper expensesMapper;
+
+  @Autowired
+  private InspectHistoryMapper inspectHistoryMapper;
+
+  @Autowired
+  private ProInspectRecordMapper proInspectRecordMapper;
 
   @ApiOperation("导出采购订单")
   @GetMapping("/purchaseOrder/{formId}")
@@ -905,7 +941,8 @@ public class ExportExcelController {
 
   @ApiOperation("机加委托单下载")
   @GetMapping("entrust/excel/{entrustNo}")
-  public void entrustExcel(@PathVariable("entrustNo") String entrustNo, HttpServletResponse response) throws IOException {
+  public void entrustExcel(@PathVariable("entrustNo") String entrustNo, HttpServletResponse response)
+      throws IOException {
     response.setHeader("Content-Disposition", "attachment;filename=" + entrustNo + ".xls");
     response.setContentType("application/octet-stream;");
     Workbook workbook = new HSSFWorkbook();
@@ -968,35 +1005,34 @@ public class ExportExcelController {
     cellTitle7.setCellValue("机加供应商");
     cellTitle7.setCellStyle(border);
 
-      Row row = sheet.createRow(++rowIdx);
-      Cell cell = row.createCell(0);
-      cell.setCellValue(entrust.getMaterialGraphName());
-      cell.setCellStyle(border);
+    Row row = sheet.createRow(++rowIdx);
+    Cell cell = row.createCell(0);
+    cell.setCellValue(entrust.getMaterialGraphName());
+    cell.setCellStyle(border);
 
-      Cell cell1 = row.createCell(1);
-      cell1.setCellValue(entrust.getMaterialGraphNo());
-      cell1.setCellStyle(border);
+    Cell cell1 = row.createCell(1);
+    cell1.setCellValue(entrust.getMaterialGraphNo());
+    cell1.setCellStyle(border);
 
-      Cell cell2 = row.createCell(2);
-      cell2.setCellValue(entrust.getPurchasePrice().doubleValue());
-      cell2.setCellStyle(border);
+    Cell cell2 = row.createCell(2);
+    cell2.setCellValue(entrust.getPurchasePrice().doubleValue());
+    cell2.setCellStyle(border);
 
-      Cell cell3 = row.createCell(3);
-      cell3.setCellValue(entrust.getBatchNumber());
-      cell3.setCellStyle(border);
-      Cell cell4 = row.createCell(4);
-      cell4.setCellValue(entrust.getNumber());
-      cell4.setCellStyle(border);
-      Cell cell5 = row.createCell(5);
-      cell5.setCellValue(entrust.getPurchaseNo());
-      cell5.setCellStyle(border);
-      Cell cell6 = row.createCell(6);
-      cell6.setCellValue(entrust.getWorkshopType()==1?"内部加工":"外部加工");
-      cell6.setCellStyle(border);
-      Cell cell7 = row.createCell(7);
-      cell7.setCellValue(entrust.getSupplierName());
-      cell7.setCellStyle(border);
-
+    Cell cell3 = row.createCell(3);
+    cell3.setCellValue(entrust.getBatchNumber());
+    cell3.setCellStyle(border);
+    Cell cell4 = row.createCell(4);
+    cell4.setCellValue(entrust.getNumber());
+    cell4.setCellStyle(border);
+    Cell cell5 = row.createCell(5);
+    cell5.setCellValue(entrust.getPurchaseNo());
+    cell5.setCellStyle(border);
+    Cell cell6 = row.createCell(6);
+    cell6.setCellValue(entrust.getWorkshopType() == 1 ? "内部加工" : "外部加工");
+    cell6.setCellStyle(border);
+    Cell cell7 = row.createCell(7);
+    cell7.setCellValue(entrust.getSupplierName());
+    cell7.setCellStyle(border);
 
     Row rowsp = sheet.createRow(++rowIdx);
     CellRangeAddress crasp = new CellRangeAddress(rowIdx, rowIdx, 0, 3);
@@ -1022,5 +1058,418 @@ public class ExportExcelController {
     outputStream.flush();
     outputStream.close();
   }
+
+  @ApiOperation("导出费用管理")
+  @PostMapping("expenses")
+  public void exportExpenses(HttpServletResponse response, HttpServletRequest request,
+      @RequestBody ExportExpensesDTO dto) throws IOException {
+    ExpensesExample expensesExample = new ExpensesExample();
+    ExpensesExample.Criteria criteria = expensesExample.createCriteria();
+    if (StringUtils.isNotEmpty(dto.getStartDate())) {
+      Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
+      criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getEndDate())) {
+      Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
+      criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getDepartment())) {
+      criteria.andDepartmentLike("%" + dto.getDepartment() + "%");
+    }
+    if (StringUtils.isNotEmpty(dto.getFirstClassifyName())) {
+      criteria.andExpensesClassifyEqualTo(dto.getFirstClassifyName());
+    }
+    if (StringUtils.isNotEmpty(dto.getSecondClassifyName())) {
+      criteria.andSecondClassifyEqualTo(dto.getSecondClassifyName());
+    }
+    response.setHeader("Content-Disposition", "attachment;filename=费用报表.xls");
+    response.setContentType("application/octet-stream;");
+    Workbook workbook = new HSSFWorkbook();
+    CellStyle cellStyle = workbook.createCellStyle();
+    cellStyle.setWrapText(true);
+    Sheet sheet = workbook.createSheet("费用报表");
+    // 单元格样式
+    CellStyle center = workbook.createCellStyle();
+    center.setAlignment(HorizontalAlignment.CENTER);
+
+    Row title_1 = sheet.createRow(0);
+    CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 8);
+    sheet.addMergedRegion(cra1);
+    Cell cell_title_1 = title_1.createCell(0);
+    cell_title_1.setCellValue("费 用 报 表");
+    cell_title_1.setCellStyle(center);
+
+    Row columnTitle = sheet.createRow(1);
+    Cell cell_10 = columnTitle.createCell(0);
+    cell_10.setCellValue("序号");
+    cell_10.setCellStyle(center);
+    Cell cell_11 = columnTitle.createCell(1);
+    cell_11.setCellValue("报销人");
+    cell_11.setCellStyle(center);
+    Cell cell_12 = columnTitle.createCell(2);
+    cell_12.setCellValue("报销部门");
+    cell_12.setCellStyle(center);
+    Cell cell_13 = columnTitle.createCell(3);
+    cell_13.setCellValue("报销摘要");
+    cell_13.setCellStyle(center);
+    Cell cell_14 = columnTitle.createCell(4);
+    cell_14.setCellValue("费用类别");
+    cell_14.setCellStyle(center);
+    Cell cell_15 = columnTitle.createCell(5);
+    cell_15.setCellValue("费用类别明细");
+    cell_15.setCellStyle(center);
+    Cell cell_16 = columnTitle.createCell(6);
+    cell_16.setCellValue("总费用");
+    cell_16.setCellStyle(center);
+    Cell cell_17 = columnTitle.createCell(7);
+    cell_17.setCellValue("备注");
+    cell_17.setCellStyle(center);
+    Cell cell_18 = columnTitle.createCell(8);
+    cell_18.setCellValue("提交日期");
+    cell_18.setCellStyle(center);
+
+    List<Expenses> expensesList = expensesMapper.selectByExample(expensesExample);
+    for (int i = 0; i < expensesList.size(); i++) {
+      Expenses expenses = expensesList.get(i);
+      Row row_value = sheet.createRow(i + 2);
+      Cell cell_0 = row_value.createCell(0);
+      cell_0.setCellValue(i + 1);
+      cell_0.setCellStyle(center);
+      Cell cell_1 = row_value.createCell(1);
+      cell_1.setCellValue(expenses.getCommitUser());
+      cell_1.setCellStyle(center);
+      Cell cell_2 = row_value.createCell(2);
+      cell_2.setCellValue(expenses.getDepartment());
+      cell_2.setCellStyle(center);
+      Cell cell_3 = row_value.createCell(3);
+      cell_3.setCellValue(expenses.getSummary());
+      cell_3.setCellStyle(center);
+      Cell cell_4 = row_value.createCell(4);
+      cell_4.setCellValue(expenses.getExpensesClassify());
+      cell_4.setCellStyle(center);
+      Cell cell_5 = row_value.createCell(5);
+      cell_5.setCellValue(expenses.getSecondClassify());
+      cell_5.setCellStyle(center);
+      Cell cell_6 = row_value.createCell(6);
+      cell_6.setCellValue(expenses.getTotalAmount().doubleValue());
+      cell_6.setCellStyle(center);
+      Cell cell_7 = row_value.createCell(7);
+      cell_7.setCellValue(expenses.getRemark());
+      cell_7.setCellStyle(center);
+      Cell cell_8 = row_value.createCell(8);
+      cell_8.setCellValue(
+          DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, expenses.getCreateTime()));
+      cell_8.setCellStyle(center);
+    }
+
+    OutputStream outputStream = response.getOutputStream();
+    workbook.write(outputStream);
+    outputStream.flush();
+    outputStream.close();
+
+
+  }
+
+  @ApiOperation("导出零件待入库")
+  @PostMapping("material-entry")
+  public void exportMaterialEntryRoom(HttpServletResponse response, HttpServletRequest request,
+      @RequestBody ExportMaterialEntryRoomDTO dto) throws IOException {
+    InspectHistoryExample example = new InspectHistoryExample();
+    InspectHistoryExample.Criteria criteria = example.createCriteria();
+    if (StringUtils.isNotEmpty(dto.getStartDate())) {
+      Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
+      criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getEndDate())) {
+      Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
+      criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+    }
+    if (dto.getEntryStatus() != null && dto.getEntryStatus() > 0) {
+      criteria.andStatusEqualTo(dto.getEntryStatus().byteValue());
+    }
+    List<InspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(example);
+
+    response.setHeader("Content-Disposition", "attachment;filename=零件入库.xls");
+    response.setContentType("application/octet-stream;");
+    Workbook workbook = new HSSFWorkbook();
+    CellStyle cellStyle = workbook.createCellStyle();
+    cellStyle.setWrapText(true);
+    Sheet sheet = workbook.createSheet("零件入库报表");
+    // 单元格样式
+    CellStyle center = workbook.createCellStyle();
+    center.setAlignment(HorizontalAlignment.CENTER);
+
+    Row title_1 = sheet.createRow(0);
+    CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 9);
+    sheet.addMergedRegion(cra1);
+    Cell cell_title_1 = title_1.createCell(0);
+    cell_title_1.setCellValue("零 件 入 库 报 表");
+    cell_title_1.setCellStyle(center);
+
+    Row columnTitle = sheet.createRow(1);
+    Cell cell_10 = columnTitle.createCell(0);
+    cell_10.setCellValue("序号");
+    cell_10.setCellStyle(center);
+    Cell cell_11 = columnTitle.createCell(1);
+    cell_11.setCellValue("报检单号");
+    cell_11.setCellStyle(center);
+    Cell cell_12 = columnTitle.createCell(2);
+    cell_12.setCellValue("采购合同号");
+    cell_12.setCellStyle(center);
+    Cell cell_13 = columnTitle.createCell(3);
+    cell_13.setCellValue("批次号");
+    cell_13.setCellStyle(center);
+    Cell cell_14 = columnTitle.createCell(4);
+    cell_14.setCellValue("零件类型");
+    cell_14.setCellStyle(center);
+    Cell cell_15 = columnTitle.createCell(5);
+    cell_15.setCellValue("供应商");
+    cell_15.setCellStyle(center);
+    Cell cell_16 = columnTitle.createCell(6);
+    cell_16.setCellValue("物料名称");
+    cell_16.setCellStyle(center);
+    Cell cell_17 = columnTitle.createCell(7);
+    cell_17.setCellValue("物料图号");
+    cell_17.setCellStyle(center);
+    Cell cell_18 = columnTitle.createCell(8);
+    cell_18.setCellValue("入库数量");
+    cell_18.setCellStyle(center);
+    Cell cell_19 = columnTitle.createCell(9);
+    cell_19.setCellValue("入库日期");
+    cell_19.setCellStyle(center);
+    for (int i = 0; i < inspectHistories.size(); i++) {
+      InspectHistory inspectHistory = inspectHistories.get(i);
+      Row row_value = sheet.createRow(i + 2);
+      Cell cell_0 = row_value.createCell(0);
+      cell_0.setCellValue(i + 1);
+      cell_0.setCellStyle(center);
+      Cell cell_1 = row_value.createCell(1);
+      cell_1.setCellValue(inspectHistory.getInspectNo());
+      cell_1.setCellStyle(center);
+      Cell cell_2 = row_value.createCell(2);
+      cell_2.setCellValue(inspectHistory.getPurchaseNo());
+      cell_2.setCellStyle(center);
+      Cell cell_3 = row_value.createCell(3);
+      cell_3.setCellValue(inspectHistory.getBatchNumber());
+      cell_3.setCellStyle(center);
+      Cell cell_4 = row_value.createCell(4);
+      cell_4.setCellValue(inspectHistory.getType() == 1? "采购零件":"机加工零件");
+      cell_4.setCellStyle(center);
+      Cell cell_5 = row_value.createCell(5);
+      cell_5.setCellValue(inspectHistory.getSupplierName());
+      cell_5.setCellStyle(center);
+      Cell cell_6 = row_value.createCell(6);
+      cell_6.setCellValue(inspectHistory.getMaterialGraphName());
+      cell_6.setCellStyle(center);
+      Cell cell_7 = row_value.createCell(7);
+      cell_7.setCellValue(inspectHistory.getMaterialGraphNo());
+      cell_7.setCellStyle(center);
+      Cell cell_8 = row_value.createCell(8);
+      cell_8.setCellValue(inspectHistory.getQualifiedNumber());
+      cell_8.setCellStyle(center);
+      Cell cell_9 = row_value.createCell(9);
+      cell_9.setCellValue(
+          DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, inspectHistory.getUpdateTime()));
+      cell_9.setCellStyle(center);
+    }
+
+    OutputStream outputStream = response.getOutputStream();
+    workbook.write(outputStream);
+    outputStream.flush();
+    outputStream.close();
+
+  }
+
+  @ApiOperation("导出成品待入库")
+  @PostMapping("product-entry")
+  public void exportProductEntryRoom(HttpServletResponse response, HttpServletRequest request,
+      @RequestBody ExportProductEntryRoomDTO dto) throws IOException {
+    ProInspectRecordExample example = new ProInspectRecordExample();
+    ProInspectRecordExample.Criteria criteria = example.createCriteria();
+    if (StringUtils.isNotEmpty(dto.getStartDate())) {
+      Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
+      criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getEndDate())) {
+      Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
+      criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getOrderNo())) {
+      criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
+    }
+    if (dto.getEntryStatus() != null && dto.getEntryStatus() > 0) {
+      criteria.andStorageStatusEqualTo(dto.getEntryStatus().byteValue());
+    }
+
+    List<ProInspectRecord> proInspectRecordList = proInspectRecordMapper.selectByExample(example);
+    response.setHeader("Content-Disposition", "attachment;filename=成品入库.xls");
+    response.setContentType("application/octet-stream;");
+    Workbook workbook = new HSSFWorkbook();
+    CellStyle cellStyle = workbook.createCellStyle();
+    cellStyle.setWrapText(true);
+    Sheet sheet = workbook.createSheet("成品入库报表");
+    // 单元格样式
+    CellStyle center = workbook.createCellStyle();
+    center.setAlignment(HorizontalAlignment.CENTER);
+
+    Row title_1 = sheet.createRow(0);
+    CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 6);
+    sheet.addMergedRegion(cra1);
+    Cell cell_title_1 = title_1.createCell(0);
+    cell_title_1.setCellValue("成 品 入 库 报 表");
+    cell_title_1.setCellStyle(center);
+
+    Row columnTitle = sheet.createRow(1);
+    Cell cell_10 = columnTitle.createCell(0);
+    cell_10.setCellValue("序号");
+    cell_10.setCellStyle(center);
+    Cell cell_11 = columnTitle.createCell(1);
+    cell_11.setCellValue("订单号");
+    cell_11.setCellStyle(center);
+    Cell cell_12 = columnTitle.createCell(2);
+    cell_12.setCellValue("产品编号");
+    cell_12.setCellStyle(center);
+    Cell cell_13 = columnTitle.createCell(3);
+    cell_13.setCellValue("成品型号");
+    cell_13.setCellStyle(center);
+    Cell cell_14 = columnTitle.createCell(4);
+    cell_14.setCellValue("成品规格");
+    cell_14.setCellStyle(center);
+    Cell cell_15 = columnTitle.createCell(5);
+    cell_15.setCellValue("入库数量");
+    cell_15.setCellStyle(center);
+    Cell cell_16 = columnTitle.createCell(6);
+    cell_16.setCellValue("入库日期");
+    cell_16.setCellStyle(center);
+
+    for (int i = 0; i < proInspectRecordList.size(); i++) {
+      ProInspectRecord proInspectRecord = proInspectRecordList.get(i);
+      Row row_value = sheet.createRow(i + 2);
+      Cell cell_0 = row_value.createCell(0);
+      cell_0.setCellValue(i + 1);
+      cell_0.setCellStyle(center);
+      Cell cell_1 = row_value.createCell(1);
+      cell_1.setCellValue(proInspectRecord.getOrderNo());
+      cell_1.setCellStyle(center);
+      Cell cell_2 = row_value.createCell(2);
+      cell_2.setCellValue(proInspectRecord.getProductNo());
+      cell_2.setCellStyle(center);
+      Cell cell_3 = row_value.createCell(3);
+      cell_3.setCellValue(proInspectRecord.getProductModel());
+      cell_3.setCellStyle(center);
+      Cell cell_4 = row_value.createCell(4);
+      cell_4.setCellValue(proInspectRecord.getProductSpecifications());
+      cell_4.setCellStyle(center);
+      Cell cell_5 = row_value.createCell(8);
+      cell_5.setCellValue(proInspectRecord.getQualifiedNumber());
+      cell_5.setCellStyle(center);
+      Cell cell_6 = row_value.createCell(9);
+      cell_6.setCellValue(
+          DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, proInspectRecord.getUpdateTime()));
+      cell_6.setCellStyle(center);
+    }
+
+    OutputStream outputStream = response.getOutputStream();
+    workbook.write(outputStream);
+    outputStream.flush();
+    outputStream.close();
+  }
+
+  @ApiOperation("导出喷涂待入库")
+  @PostMapping("spray-entry")
+  public void exportSprayEntryRoom(HttpServletResponse response, HttpServletRequest request,
+      @RequestBody ExportSprayEntryRoomDTO dto) throws IOException {
+    SprayInspectHistoryExample example = new SprayInspectHistoryExample();
+    SprayInspectHistoryExample.Criteria criteria = example.createCriteria();
+    if (StringUtils.isNotEmpty(dto.getStartDate())) {
+      Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
+      criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getEndDate())) {
+      Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
+      criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getSprayNo())) {
+      criteria.andSprayNoLike("%" + dto.getSprayNo() + "%");
+    }
+    if (dto.getEntryStatus() != null && dto.getEntryStatus() > 0) {
+      criteria.andStatusEqualTo(dto.getEntryStatus().byteValue());
+    }
+
+    List<SprayInspectHistory> sprayInspectHistoryList = sprayInspectHistoryMapper.selectByExample(example);
+
+    response.setHeader("Content-Disposition", "attachment;filename=喷涂入库.xls");
+    response.setContentType("application/octet-stream;");
+    Workbook workbook = new HSSFWorkbook();
+    CellStyle cellStyle = workbook.createCellStyle();
+    cellStyle.setWrapText(true);
+    Sheet sheet = workbook.createSheet("喷涂入库报表");
+    // 单元格样式
+    CellStyle center = workbook.createCellStyle();
+    center.setAlignment(HorizontalAlignment.CENTER);
+
+    Row title_1 = sheet.createRow(0);
+    CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 6);
+    sheet.addMergedRegion(cra1);
+    Cell cell_title_1 = title_1.createCell(0);
+    cell_title_1.setCellValue("喷 涂 入 库 报 表");
+    cell_title_1.setCellStyle(center);
+
+    Row columnTitle = sheet.createRow(1);
+    Cell cell_10 = columnTitle.createCell(0);
+    cell_10.setCellValue("序号");
+    cell_10.setCellStyle(center);
+    Cell cell_11 = columnTitle.createCell(1);
+    cell_11.setCellValue("喷涂单号");
+    cell_11.setCellStyle(center);
+    Cell cell_12 = columnTitle.createCell(2);
+    cell_12.setCellValue("零件名称");
+    cell_12.setCellStyle(center);
+    Cell cell_13 = columnTitle.createCell(3);
+    cell_13.setCellValue("原图号");
+    cell_13.setCellStyle(center);
+    Cell cell_14 = columnTitle.createCell(4);
+    cell_14.setCellValue("加工后图号");
+    cell_14.setCellStyle(center);
+    Cell cell_15 = columnTitle.createCell(5);
+    cell_15.setCellValue("入库数量");
+    cell_15.setCellStyle(center);
+    Cell cell_16 = columnTitle.createCell(6);
+    cell_16.setCellValue("入库日期");
+    cell_16.setCellStyle(center);
+
+    for (int i = 0; i < sprayInspectHistoryList.size(); i++) {
+      SprayInspectHistory sprayInspectHistory = sprayInspectHistoryList.get(i);
+      Row row_value = sheet.createRow(i + 2);
+      Cell cell_0 = row_value.createCell(0);
+      cell_0.setCellValue(i + 1);
+      cell_0.setCellStyle(center);
+      Cell cell_1 = row_value.createCell(1);
+      cell_1.setCellValue(sprayInspectHistory.getSprayNo());
+      cell_1.setCellStyle(center);
+      Cell cell_2 = row_value.createCell(2);
+      cell_2.setCellValue(sprayInspectHistory.getMaterialGraphName());
+      cell_2.setCellStyle(center);
+      Cell cell_3 = row_value.createCell(3);
+      cell_3.setCellValue(sprayInspectHistory.getOriginalGraphNo());
+      cell_3.setCellStyle(center);
+      Cell cell_4 = row_value.createCell(4);
+      cell_4.setCellValue(sprayInspectHistory.getMaterialGraphNo());
+      cell_4.setCellStyle(center);
+      Cell cell_5 = row_value.createCell(8);
+      cell_5.setCellValue(sprayInspectHistory.getQualifiedNumber());
+      cell_5.setCellStyle(center);
+      Cell cell_6 = row_value.createCell(9);
+      cell_6.setCellValue(
+          DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayInspectHistory.getUpdateTime()));
+      cell_6.setCellStyle(center);
+    }
+
+    OutputStream outputStream = response.getOutputStream();
+    workbook.write(outputStream);
+    outputStream.flush();
+    outputStream.close();
+  }
+
 
 }
