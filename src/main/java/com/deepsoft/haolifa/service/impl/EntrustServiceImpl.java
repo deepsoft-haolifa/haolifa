@@ -5,6 +5,7 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NU
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
+import com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.model.domain.Entrust;
 import com.deepsoft.haolifa.model.domain.EntrustExample;
@@ -155,6 +156,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     }
 
     Entrust entrust = new Entrust();
+    if(status.byteValue() == EntrustStatus.DEALING_3.code) {
+      entrust.setInspectStatus(Inspect2Status.handling.code);
+    }
     entrust.setStatus(status.byteValue());
     EntrustExample entrustExample = new EntrustExample();
     entrustExample.or().andEntrustNoEqualTo(entrustNo);

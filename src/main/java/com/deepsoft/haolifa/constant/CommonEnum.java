@@ -361,6 +361,19 @@ public class CommonEnum {
         }
     }
 
+    public enum Inspect2Status {
+        // 喷涂状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工
+        waiting_handle((byte) 0),
+        handling((byte) 1),
+        handled((byte) 2);
+
+        public final byte code;
+
+        Inspect2Status(byte code) {
+            this.code = code;
+        }
+    }
+
     public enum DeliverStatus {
         DELIVER_NO_BEGIN_0((byte) 0),
         DELIVER_PART_1((byte) 1),

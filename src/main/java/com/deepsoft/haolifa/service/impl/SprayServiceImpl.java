@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
 import static com.deepsoft.haolifa.constant.CacheKey.SPRAY_NO_KEY;
+import static com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status.handling;
+import static com.deepsoft.haolifa.constant.CommonEnum.SprayStatus.SPRAY_MACHINE;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.SPRAY_NO_PREFIX_PT;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -168,6 +170,9 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     SprayExample.Criteria criteria = example.createCriteria();
     criteria.andSprayNoEqualTo(sprayNo);
     Spray spray = new Spray();
+    if(status == SPRAY_MACHINE.code) {
+      spray.setInspectStatus(handling.code);
+    }
     spray.setStatus(Integer.valueOf(status).byteValue());
     sprayMapper.updateByExampleSelective(spray, example);
     return ResultBean.success(1);
