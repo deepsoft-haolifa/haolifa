@@ -192,10 +192,10 @@ public class SprayServiceImpl extends BaseService implements SprayService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean saveInspect(SprayInspectDto inspectDto) {
-    if (StringUtils.isAnyBlank(inspectDto.getOriginalGraphNo(), inspectDto.getMaterialGraphNo(),
-        inspectDto.getMaterialGraphName())) {
-      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-    }
+//    if (StringUtils.isAnyBlank(inspectDto.getOriginalGraphNo(), inspectDto.getMaterialGraphNo(),
+//        inspectDto.getMaterialGraphName())) {
+//      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+//    }
     SprayInspectHistory history = new SprayInspectHistory();
     BeanUtils.copyProperties(inspectDto, history);
     SprayExample example = new SprayExample();
