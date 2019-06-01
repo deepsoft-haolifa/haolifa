@@ -46,6 +46,7 @@
       <arg column="packaging_specification" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="deliver_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -114,7 +115,8 @@
     demand_bank_card_no, supply_name, supply_agent_name, supply_phone, supply_fax, supply_bank_name, 
     contract_bank_card_no, delivery_place, delivery_date, contract_sign_date, total_count, 
     discount_total_price, total_price, special_require, cargo_information, sign_board, 
-    acceptance_criteria, warranty_period, packaging_specification, remark, deliver_status
+    acceptance_criteria, warranty_period, packaging_specification, remark, deliver_status, 
+    accessory
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" >
     select
@@ -164,7 +166,8 @@
       discount_total_price, total_price, special_require, 
       cargo_information, sign_board, acceptance_criteria, 
       warranty_period, packaging_specification, 
-      remark, deliver_status)
+      remark, deliver_status, accessory
+      )
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
       #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR}, 
       #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{orderContractExtendUrl,jdbcType=VARCHAR}, 
@@ -179,7 +182,8 @@
       #{discountTotalPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{specialRequire,jdbcType=VARCHAR}, 
       #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, #{acceptanceCriteria,jdbcType=VARCHAR}, 
       #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{deliverStatus,jdbcType=TINYINT})
+      #{remark,jdbcType=VARCHAR}, #{deliverStatus,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -313,6 +317,9 @@
       <if test="deliverStatus != null" >
         deliver_status,
       </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="createTime != null" >
@@ -440,6 +447,9 @@
       </if>
       <if test="deliverStatus != null" >
         #{deliverStatus,jdbcType=TINYINT},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -581,6 +591,9 @@
       <if test="record.deliverStatus != null" >
         deliver_status = #{record.deliverStatus,jdbcType=TINYINT},
       </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -630,7 +643,8 @@
       warranty_period = #{record.warrantyPeriod,jdbcType=VARCHAR},
       packaging_specification = #{record.packagingSpecification,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
-      deliver_status = #{record.deliverStatus,jdbcType=TINYINT}
+      deliver_status = #{record.deliverStatus,jdbcType=TINYINT},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -764,6 +778,9 @@
       <if test="deliverStatus != null" >
         deliver_status = #{deliverStatus,jdbcType=TINYINT},
       </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -810,7 +827,8 @@
       warranty_period = #{warrantyPeriod,jdbcType=VARCHAR},
       packaging_specification = #{packagingSpecification,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      deliver_status = #{deliverStatus,jdbcType=TINYINT}
+      deliver_status = #{deliverStatus,jdbcType=TINYINT},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

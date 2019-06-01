@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service;
 import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import com.deepsoft.haolifa.model.domain.OrderMaterial;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
@@ -210,4 +211,7 @@ public interface OrderProductService {
 
     ResultBean updateOrderDeliverStatus(String orderNo, int status);
 
+    ResultBean uploadAccessory(String orderNo, List<Accessory> orderUploadDTOs);
+
+    ResultBean getAccessory(String orderNo);
 }

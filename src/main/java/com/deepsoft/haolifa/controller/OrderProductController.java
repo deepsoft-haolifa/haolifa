@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
+import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
@@ -38,22 +39,37 @@ public class OrderProductController {
         return orderProductService.uploadOrderProduct(orderUploadDTO);
     }
 
+    @Deprecated
     @ApiOperation("上传订单附件数据")
     @PostMapping("/uploadOrderFile/{orderNo}")
     public ResultBean uploadOrderFile(@PathVariable String orderNo, @RequestBody List<OrderUploadDTO> orderUploadDTOs) {
         return orderProductService.uploadOrderFiles(orderNo, orderUploadDTOs);
     }
 
+    @Deprecated
     @ApiOperation("删除订单附件数据")
     @DeleteMapping("/delOrderFile/{fileId}")
     public ResultBean uploadOrderFile(@PathVariable int fileId) {
         return orderProductService.delOrderFiles(fileId);
     }
 
+    @Deprecated
     @ApiOperation("获取订单附件列表")
     @GetMapping("/getOrderFiles/{orderNo}")
     public ResultBean getOrderFiles(@PathVariable String orderNo) {
         return orderProductService.getOrderFiles(orderNo);
+    }
+
+    @ApiOperation("上传订单附件")
+    @PostMapping("/accessory/{orderNo}")
+    public ResultBean uploadAccessory(@PathVariable String orderNo, @RequestBody List<Accessory> orderUploadDTOs) {
+        return orderProductService.uploadAccessory(orderNo, orderUploadDTOs);
+    }
+
+    @ApiOperation("获取订单附件")
+    @GetMapping("/accessory/{orderNo}")
+    public ResultBean getAccessory(@PathVariable String orderNo) {
+        return orderProductService.getAccessory(orderNo);
     }
 
     @ApiOperation("成品订单信息添加")

@@ -1,11 +1,13 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.deepsoft.haolifa.cache.CacheKeyManager;
 import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
@@ -1803,5 +1805,36 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     OrderProductExample example = new OrderProductExample();
     example.createCriteria().andOrderNoEqualTo(orderNo);
     return ResultBean.success(orderProductMapper.updateByExampleSelective(orderProduct, example));
+  }
+
+  @Override
+  public ResultBean uploadAccessory(String orderNo, List<Accessory> accessories) {
+    if (StringUtils.isEmpty(orderNo) || CollectionUtils.isEmpty(accessories)) {
+      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    }
+    OrderProduct orderProduct = new OrderProduct();
+    OrderProductExample example = new OrderProductExample();
+    example.createCriteria().andOrderNoEqualTo(orderNo);
+    orderProduct.setAccessory(JSON.toJSONString(accessories));
+    orderProductMapper.updateByExampleSelective(orderProduct, example);
+    return ResultBean.success(accessories);
+  }
+
+  @Override
+  public ResultBean getAccessory(String orderNo) {
+    if (StringUtils.isEmpty(orderNo)) {
+      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    }
+    List<Accessory> accessories = new ArrayList<>();
+    OrderProductExample example = new OrderProductExample();
+    example.createCriteria().andOrderNoEqualTo(orderNo);
+    List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
+    if(!CollectionUtils.isEmpty(orderProducts) && orderProducts.size() > 0) {
+      String accessary = orderProducts.get(0).getAccessory();
+      if(StringUtils.isNotEmpty(accessary)){
+        accessories.addAll(JSON.parseArray(accessary, Accessory.class));
+      }
+    }
+    return ResultBean.success(accessories);
   }
 }
