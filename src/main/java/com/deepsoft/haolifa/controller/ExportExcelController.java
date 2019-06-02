@@ -1060,9 +1060,9 @@ public class ExportExcelController {
   }
 
   @ApiOperation("导出费用管理")
-  @PostMapping("expenses")
+  @GetMapping("expenses")
   public void exportExpenses(HttpServletResponse response, HttpServletRequest request,
-      @RequestBody ExportExpensesDTO dto) throws IOException {
+      ExportExpensesDTO dto) throws IOException {
     ExpensesExample expensesExample = new ExpensesExample();
     ExpensesExample.Criteria criteria = expensesExample.createCriteria();
     if (StringUtils.isNotEmpty(dto.getStartDate())) {
@@ -1171,9 +1171,9 @@ public class ExportExcelController {
   }
 
   @ApiOperation("导出零件待入库")
-  @PostMapping("material-entry")
+  @GetMapping("material-entry")
   public void exportMaterialEntryRoom(HttpServletResponse response, HttpServletRequest request,
-      @RequestBody ExportMaterialEntryRoomDTO dto) throws IOException {
+      ExportMaterialEntryRoomDTO dto) throws IOException {
     InspectHistoryExample example = new InspectHistoryExample();
     InspectHistoryExample.Criteria criteria = example.createCriteria();
     if (StringUtils.isNotEmpty(dto.getStartDate())) {
@@ -1281,9 +1281,9 @@ public class ExportExcelController {
   }
 
   @ApiOperation("导出成品待入库")
-  @PostMapping("product-entry")
+  @GetMapping("product-entry")
   public void exportProductEntryRoom(HttpServletResponse response, HttpServletRequest request,
-      @RequestBody ExportProductEntryRoomDTO dto) throws IOException {
+      ExportProductEntryRoomDTO dto) throws IOException {
     ProInspectRecordExample example = new ProInspectRecordExample();
     ProInspectRecordExample.Criteria criteria = example.createCriteria();
     if (StringUtils.isNotEmpty(dto.getStartDate())) {
@@ -1360,10 +1360,10 @@ public class ExportExcelController {
       Cell cell_4 = row_value.createCell(4);
       cell_4.setCellValue(proInspectRecord.getProductSpecifications());
       cell_4.setCellStyle(center);
-      Cell cell_5 = row_value.createCell(8);
+      Cell cell_5 = row_value.createCell(5);
       cell_5.setCellValue(proInspectRecord.getQualifiedNumber());
       cell_5.setCellStyle(center);
-      Cell cell_6 = row_value.createCell(9);
+      Cell cell_6 = row_value.createCell(6);
       cell_6.setCellValue(
           DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, proInspectRecord.getUpdateTime()));
       cell_6.setCellStyle(center);
@@ -1376,9 +1376,9 @@ public class ExportExcelController {
   }
 
   @ApiOperation("导出喷涂待入库")
-  @PostMapping("spray-entry")
+  @GetMapping("spray-entry")
   public void exportSprayEntryRoom(HttpServletResponse response, HttpServletRequest request,
-      @RequestBody ExportSprayEntryRoomDTO dto) throws IOException {
+      ExportSprayEntryRoomDTO dto) throws IOException {
     SprayInspectHistoryExample example = new SprayInspectHistoryExample();
     SprayInspectHistoryExample.Criteria criteria = example.createCriteria();
     if (StringUtils.isNotEmpty(dto.getStartDate())) {
@@ -1456,10 +1456,10 @@ public class ExportExcelController {
       Cell cell_4 = row_value.createCell(4);
       cell_4.setCellValue(sprayInspectHistory.getMaterialGraphNo());
       cell_4.setCellStyle(center);
-      Cell cell_5 = row_value.createCell(8);
+      Cell cell_5 = row_value.createCell(5);
       cell_5.setCellValue(sprayInspectHistory.getQualifiedNumber());
       cell_5.setCellStyle(center);
-      Cell cell_6 = row_value.createCell(9);
+      Cell cell_6 = row_value.createCell(6);
       cell_6.setCellValue(
           DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayInspectHistory.getUpdateTime()));
       cell_6.setCellStyle(center);
