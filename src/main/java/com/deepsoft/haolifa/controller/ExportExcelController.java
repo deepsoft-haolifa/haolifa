@@ -30,6 +30,7 @@ import com.deepsoft.haolifa.service.EntrustService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SprayService;
+import com.deepsoft.haolifa.util.Base64Utils;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
 import io.swagger.annotations.Api;
@@ -37,6 +38,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +64,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.misc.BASE64Encoder;
 
 @LogNotPrint
 @RestController
@@ -1082,8 +1086,10 @@ public class ExportExcelController {
     if (StringUtils.isNotEmpty(dto.getSecondClassifyName())) {
       criteria.andSecondClassifyEqualTo(dto.getSecondClassifyName());
     }
-    response.setHeader("Content-Disposition", "attachment;filename=费用报表.xls");
+    String fileName = URLEncoder.encode("费用报表", "utf-8");
+    response.setHeader("Content-Disposition", "attachment;filename="+fileName+".xls");
     response.setContentType("application/octet-stream;");
+    response.setCharacterEncoding("utf-8");
     Workbook workbook = new HSSFWorkbook();
     CellStyle cellStyle = workbook.createCellStyle();
     cellStyle.setWrapText(true);
@@ -1189,7 +1195,7 @@ public class ExportExcelController {
     }
     List<InspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(example);
 
-    response.setHeader("Content-Disposition", "attachment;filename=零件入库.xls");
+    response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode("零件入库报表","utf-8")+".xls");
     response.setContentType("application/octet-stream;");
     Workbook workbook = new HSSFWorkbook();
     CellStyle cellStyle = workbook.createCellStyle();
@@ -1302,7 +1308,7 @@ public class ExportExcelController {
     }
 
     List<ProInspectRecord> proInspectRecordList = proInspectRecordMapper.selectByExample(example);
-    response.setHeader("Content-Disposition", "attachment;filename=成品入库.xls");
+    response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode("成品入库报表","utf-8")+".xls");
     response.setContentType("application/octet-stream;");
     Workbook workbook = new HSSFWorkbook();
     CellStyle cellStyle = workbook.createCellStyle();
@@ -1398,7 +1404,7 @@ public class ExportExcelController {
 
     List<SprayInspectHistory> sprayInspectHistoryList = sprayInspectHistoryMapper.selectByExample(example);
 
-    response.setHeader("Content-Disposition", "attachment;filename=喷涂入库.xls");
+    response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode("零件入库报表","utf-8")+".xls");
     response.setContentType("application/octet-stream;");
     Workbook workbook = new HSSFWorkbook();
     CellStyle cellStyle = workbook.createCellStyle();
