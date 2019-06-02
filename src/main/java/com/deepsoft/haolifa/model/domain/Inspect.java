@@ -27,7 +27,9 @@ public class Inspect {
 
     private String blueprints;
 
-    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints) {
+    private Integer qualifiedNumber;
+
+    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints, Integer qualifiedNumber) {
         this.id = id;
         this.inspectNo = inspectNo;
         this.purchaseNo = purchaseNo;
@@ -40,6 +42,7 @@ public class Inspect {
         this.supplierName = supplierName;
         this.supplierNo = supplierNo;
         this.blueprints = blueprints;
+        this.qualifiedNumber = qualifiedNumber;
     }
 
     public Inspect() {
@@ -140,5 +143,13 @@ public class Inspect {
 
     public void setBlueprints(String blueprints) {
         this.blueprints = blueprints == null ? null : blueprints.trim();
+    }
+
+    public Integer getQualifiedNumber() {
+        return qualifiedNumber;
+    }
+
+    public void setQualifiedNumber(Integer qualifiedNumber) {
+        this.qualifiedNumber = qualifiedNumber;
     }
 }

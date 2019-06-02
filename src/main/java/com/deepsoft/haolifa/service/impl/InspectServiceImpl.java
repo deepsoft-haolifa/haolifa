@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.service.impl;
 
 import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
 import static com.deepsoft.haolifa.constant.CacheKey.INSPECT_NO_KEY;
+import static com.deepsoft.haolifa.constant.CommonEnum.InspectMaterialType.ENTRUST_MATERIAL_TYPE_2;
+import static com.deepsoft.haolifa.constant.CommonEnum.InspectMaterialType.PURCHASE_MATERIAL_TYPE_1;
 import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.MATERIAL_REPORT_IS_NULL;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
@@ -9,9 +11,12 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
+import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.InspectItemMapper;
 import com.deepsoft.haolifa.dao.repository.InspectMapper;
+import com.deepsoft.haolifa.model.domain.Entrust;
+import com.deepsoft.haolifa.model.domain.EntrustExample;
 import com.deepsoft.haolifa.model.domain.Inspect;
 import com.deepsoft.haolifa.model.domain.InspectExample;
 import com.deepsoft.haolifa.model.domain.InspectHistory;
@@ -43,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Service
@@ -54,6 +60,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   InspectItemMapper inspectItemMapper;
   @Autowired
   InspectHistoryMapper historyMapper;
+  @Autowired
+  EntrustMapper entrustMapper;
 
   @Transactional(rollbackFor = Exception.class)
   @Override
@@ -177,7 +185,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       criteria.andInspectNoLike("%" + inspectNo + "%");
     }
 
-    Page pageData = PageHelper.startPage(pageNum, pageSize,"create_time desc").doSelectPage(() -> inspectMapper.selectByExample(example));
+    Page pageData = PageHelper.startPage(pageNum, pageSize, "create_time desc")
+        .doSelectPage(() -> inspectMapper.selectByExample(example));
     PageDTO pageDTO = new PageDTO();
     BeanUtils.copyProperties(pageData, pageDTO);
     pageDTO.setList(pageData.getResult());
@@ -238,9 +247,32 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     return ResultBean.success(1);
   }
 
+  @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean historySave(InspectHistory model) {
     historyMapper.insertSelective(model);
+    if (model.getType() == PURCHASE_MATERIAL_TYPE_1.getCode()) {
+      // 采购零件 质检
+      InspectExample example = new InspectExample();
+      example.createCriteria().andInspectNoEqualTo(model.getInspectNo());
+      List<Inspect> inspectList = inspectMapper.selectByExample(example);
+      Inspect inspect = new Inspect();
+      if (CollectionUtils.isEmpty(inspectList) && inspectList.size() > 0) {
+        inspect.setQualifiedNumber(inspectList.get(0).getQualifiedNumber() + model.getQualifiedNumber());
+        inspectMapper.updateByExampleSelective(inspect, example);
+      }
+    }
+    if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
+      // 机加工 质检
+      EntrustExample entrustExample = new EntrustExample();
+      entrustExample.createCriteria().andEntrustNoEqualTo(model.getInspectNo());
+      List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
+      Entrust entrust = new Entrust();
+      if (CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
+        entrust.setQualifiedNumber(model.getQualifiedNumber() + entrustList.get(0).getQualifiedNumber());
+        entrustMapper.updateByExampleSelective(entrust, entrustExample);
+      }
+    }
     return ResultBean.success(1);
   }
 
