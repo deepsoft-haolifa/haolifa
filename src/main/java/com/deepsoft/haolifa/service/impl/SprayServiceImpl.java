@@ -201,6 +201,9 @@ public class SprayServiceImpl extends BaseService implements SprayService {
 //        inspectDto.getMaterialGraphName())) {
 //      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
 //    }
+    if(inspectDto.getTestNumber() == 0) {
+      return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
+    }
     SprayInspectHistory history = new SprayInspectHistory();
     BeanUtils.copyProperties(inspectDto, history);
     SprayExample example = new SprayExample();

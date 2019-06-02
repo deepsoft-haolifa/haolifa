@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectResultMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectUnqualifiedMapper;
@@ -37,6 +38,9 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean save(ProInspectRecordDTO model) {
+        if(model.getTestingNumber() == 0) {
+            return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
+        }
         ProInspectRecord proInspectRecord = new ProInspectRecord();
         BeanUtils.copyProperties(model, proInspectRecord);
         proInspectRecord.setCreateUserId(getLoginUserId());

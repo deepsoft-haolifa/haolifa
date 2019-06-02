@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.PressureInspectRecordMapper;
 import com.deepsoft.haolifa.model.domain.PressureInspectRecord;
 import com.deepsoft.haolifa.model.domain.PressureInspectRecordExample;
@@ -28,6 +29,9 @@ public class PressureInspectServiceImpl extends BaseService implements PressureI
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean save(PressureInspectRecordDTO model) {
+        if(model.getTestingNumber() == 0) {
+            return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
+        }
         PressureInspectRecord pressureInspectRecord = new PressureInspectRecord();
         BeanUtils.copyProperties(model, pressureInspectRecord);
         pressureInspectRecord.setCreateUserId(getLoginUserId());

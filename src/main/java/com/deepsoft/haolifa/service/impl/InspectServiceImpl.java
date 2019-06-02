@@ -11,6 +11,7 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.InspectItemMapper;
@@ -250,6 +251,9 @@ public class InspectServiceImpl extends BaseService implements InspectService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean historySave(InspectHistory model) {
+    if(model.getTestNumber() == 0) {
+      return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
+    }
     historyMapper.insertSelective(model);
     if (model.getType() == PURCHASE_MATERIAL_TYPE_1.getCode()) {
       // 采购零件 质检
