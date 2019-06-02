@@ -257,7 +257,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       example.createCriteria().andInspectNoEqualTo(model.getInspectNo());
       List<Inspect> inspectList = inspectMapper.selectByExample(example);
       Inspect inspect = new Inspect();
-      if (CollectionUtils.isEmpty(inspectList) && inspectList.size() > 0) {
+      if (!CollectionUtils.isEmpty(inspectList) && inspectList.size() > 0) {
         inspect.setQualifiedNumber(inspectList.get(0).getQualifiedNumber() + model.getQualifiedNumber());
         inspectMapper.updateByExampleSelective(inspect, example);
       }
@@ -268,7 +268,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       entrustExample.createCriteria().andEntrustNoEqualTo(model.getInspectNo());
       List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
       Entrust entrust = new Entrust();
-      if (CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
+      if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
         entrust.setQualifiedNumber(model.getQualifiedNumber() + entrustList.get(0).getQualifiedNumber());
         entrustMapper.updateByExampleSelective(entrust, entrustExample);
       }

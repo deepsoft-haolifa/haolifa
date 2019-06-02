@@ -344,8 +344,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             productStorageListDTO.setExecute(isExecute);
             executeMap.put(oneOrderNo, isExecute);
           }
+        }else {
+          productStorageListDTO.setExecute(0);
         }
-        productStorageListDTO.setExecute(0);
         productStorageListDTOS.add(productStorageListDTO);
       }
       BeanUtils.copyProperties(entryOutStoreRecords, pageDTO);
