@@ -25,5 +25,7 @@ public class ProInspectRecordDTO {
     private Integer unqualifiedNumber;
     @ApiModelProperty(value = "不合格原因")
     private String reason;
+    @ApiModelProperty(value = "不合格原因列表")
+    private List<ProInspectReason> unqualifiedList;
 
 }

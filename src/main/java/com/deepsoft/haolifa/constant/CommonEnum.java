@@ -62,7 +62,10 @@ public class CommonEnum {
     FLOW_INSTANCE_NOT_EXIST("4005", "该表单不存在审批流程"),
 
     MATERIAL_REPORT_IS_NULL("4006", "请至少上传一份材质报告"),
-    INSPECT_TESTNUMBER_IS_ZERO("4007", "检测数量不能为0");
+    INSPECT_TESTNUMBER_IS_ZERO("4007", "检测数量不能为0"),
+    UNQUALIFIED_REASON_IS_EMPTY("4008", "不合格品大于0，不合格原因不能为空"),
+    UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY("4009", "不合格品数量与不合格原因总数不一致")
+    ;
 
     public final String code;
 
