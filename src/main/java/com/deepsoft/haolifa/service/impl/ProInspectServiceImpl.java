@@ -50,9 +50,9 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
       if (CollectionUtils.isEmpty(model.getUnqualifiedList())) {
         return ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_IS_EMPTY);
       } else {
-        int needCOunt = model.getUnqualifiedList().stream().map(ProInspectReason::getNumber).reduce(0, (a, b) -> a + b);
-        if(needCOunt != model.getUnqualifiedNumber()) {
-          ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY);
+        Integer needCount = model.getUnqualifiedList().stream().map(ProInspectReason::getNumber).reduce(0, (a, b) -> a + b);
+        if (needCount != model.getUnqualifiedNumber()) {
+          return ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY);
         }
       }
     }
@@ -78,7 +78,7 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
         return ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_IS_EMPTY);
       } else {
         int needCOunt = model.getUnqualifiedList().stream().map(ProInspectReason::getNumber).reduce(0, (a, b) -> a + b);
-        if(needCOunt != model.getUnqualifiedNumber()) {
+        if (needCOunt != model.getUnqualifiedNumber()) {
           ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY);
         }
       }
@@ -111,19 +111,21 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
     BeanUtils.copyProperties(pageData, pageDTO);
     List<ProInspectRecord> result = pageData.getResult();
     List<ProInspectListDTO> pageList = new ArrayList<>();
-    for (int i = 0; i <result.size() ; i++) {
+    for (int i = 0; i < result.size(); i++) {
       ProInspectListDTO proInspectListDTO = new ProInspectListDTO();
       BeanUtils.copyProperties(result.get(i), proInspectListDTO);
-      proInspectListDTO.setReasonList(JSON.parseArray(result.get(i).getReason(), ProInspectReason.class));
-      if(CollectionUtils.isEmpty(proInspectListDTO.getReasonList()) && result.get(i).getUnqualifiedNumber() > 0) {
+      if (result.get(i).getReason().startsWith("[")) {
+        proInspectListDTO.setReasonList(JSON.parseArray(result.get(i).getReason(), ProInspectReason.class));
+      }
+      if (CollectionUtils.isEmpty(proInspectListDTO.getReasonList()) && result.get(i).getUnqualifiedNumber() > 0) {
         ProInspectReason proInspectReason = new ProInspectReason();
-        proInspectListDTO.setReason(result.get(i).getReason());
-        proInspectListDTO.setUnqualifiedNumber(result.get(i).getUnqualifiedNumber());
+        proInspectReason.setReason(result.get(i).getReason());
+        proInspectReason.setNumber(result.get(i).getUnqualifiedNumber());
         proInspectListDTO.setReasonList(Arrays.asList(proInspectReason));
         ProInspectRecord updateReason = new ProInspectRecord();
-        updateReason.setReason(JSON.toJSONString(proInspectReason));
+        updateReason.setReason(JSON.toJSONString(Arrays.asList(proInspectReason)));
         updateReason.setId(result.get(i).getId());
-        proInspectRecordMapper.updateByPrimaryKey(updateReason);
+        proInspectRecordMapper.updateByPrimaryKeySelective(updateReason);
       }
       pageList.add(proInspectListDTO);
     }
