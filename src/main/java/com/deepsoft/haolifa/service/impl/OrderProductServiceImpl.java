@@ -1585,8 +1585,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                 materialService.updateLockQuantity(materialGraphNo, lockCount);
                             }
                         } else {
-                            materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
-                            materialService.updateLockQuantity(materialGraphNo, materialCount);
+                            // 通用零件核料不锁定数量
+                            Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
+                            if (infoByGraphNo != null && infoByGraphNo.getMaterialClassifyId() != CommonEnum.ProductModelType.TONG_YONG.classifyId) {
+                                materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
+                                materialService.updateLockQuantity(materialGraphNo, materialCount);
+                            }
                         }
                     }
                 } else {
@@ -1603,8 +1607,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             materialService.updateLockQuantity(materialGraphNo, lockCount);
                         }
                     } else {
-                        materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
-                        materialService.updateLockQuantity(materialGraphNo, materialCount);
+                        // 通用零件核料不锁定数量
+                        Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
+                        if (infoByGraphNo != null && infoByGraphNo.getMaterialClassifyId() != CommonEnum.ProductModelType.TONG_YONG.classifyId) {
+                            materialService.updateCurrentQuantity(materialGraphNo, (-1) * materialCount);
+                            materialService.updateLockQuantity(materialGraphNo, materialCount);
+                        }
                     }
                 }
                 Integer id = orderMaterial.getId();
