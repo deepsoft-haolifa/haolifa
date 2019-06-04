@@ -4,6 +4,7 @@ import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.Consts;
 import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
@@ -115,6 +116,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     }
     EntrustExample entrustExample = new EntrustExample();
     EntrustExample.Criteria criteria = entrustExample.createCriteria();
+    criteria.andIsDeleteEqualTo(Consts.NO.code);
     if (StringUtils.isNotEmpty(model.getEntrustNo())) {
       criteria.andEntrustNoLike("%" + model.getEntrustNo() + "%");
     }
