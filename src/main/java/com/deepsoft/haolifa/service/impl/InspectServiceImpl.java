@@ -303,7 +303,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       criteria.andStatusEqualTo(status.byteValue());
     }
     criteria.andQualifiedNumberGreaterThan(0);
-    Page<InspectHistory> histories = PageHelper.startPage(pageNum, pageSize)
+    Page<InspectHistory> histories = PageHelper.startPage(pageNum, pageSize,"id desc")
         .doSelectPage(() -> historyMapper.selectByExample(example));
     PageDTO pageDTO = new PageDTO();
     BeanUtils.copyProperties(histories, pageDTO);

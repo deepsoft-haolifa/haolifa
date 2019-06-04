@@ -231,7 +231,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     }
     criteria.andQualifiedNumberGreaterThan(0);
     Page<SprayInspectHistory> page = PageHelper
-        .startPage(inspectListDto.getPageNum(), inspectListDto.getPageSize())
+        .startPage(inspectListDto.getPageNum(), inspectListDto.getPageSize(),"id desc")
         .doSelectPage(() -> inspectHistoryMapper.selectByExample(historyExample));
     PageDTO<SprayInspectHistory> sprayInspectHistoryPageDTO = new PageDTO<>();
     BeanUtils.copyProperties(page, sprayInspectHistoryPageDTO);

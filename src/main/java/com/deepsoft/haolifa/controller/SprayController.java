@@ -99,4 +99,6 @@ public class SprayController {
   public ResultBean updateHistoryStatus(@PathVariable("historyId") Integer historyId) {
     return sprayService.updateHistoryStatus(historyId);
   }
+
+
 }
