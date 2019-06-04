@@ -254,6 +254,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     if(model.getTestNumber() == 0) {
       return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
     }
+    // todo 质检合格数校验：是否等于委托数量
+
     historyMapper.insertSelective(model);
     if (model.getType() == PURCHASE_MATERIAL_TYPE_1.getCode()) {
       // 采购零件 质检
