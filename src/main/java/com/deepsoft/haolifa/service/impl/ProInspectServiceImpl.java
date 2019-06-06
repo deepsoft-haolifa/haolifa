@@ -127,6 +127,9 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
         updateReason.setId(result.get(i).getId());
         proInspectRecordMapper.updateByPrimaryKeySelective(updateReason);
       }
+      if(CollectionUtils.isEmpty(proInspectListDTO.getReasonList())) {
+        proInspectListDTO.setReasonList(new ArrayList<>());
+      }
       pageList.add(proInspectListDTO);
     }
     pageDTO.setList(pageList);
