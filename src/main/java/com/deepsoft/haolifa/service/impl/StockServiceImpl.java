@@ -44,9 +44,6 @@ public class StockServiceImpl extends BaseService implements StockService {
         criteria.andRoomNoEqualTo(model.getRoomNo()).andRackNoEqualTo(model.getRackNo());
         // 零件才有批次号的概念
         if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
-            if (StringUtils.isBlank(model.getMaterialBatchNo())) {
-                model.setMaterialBatchNo(Constant.DEFAULT_BATCH_NO);
-            }
             criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
         }
         if (StringUtils.isNotBlank(model.getProductNo())) {
@@ -91,9 +88,6 @@ public class StockServiceImpl extends BaseService implements StockService {
                 .andRackNoEqualTo(model.getRackNo());
         // 零件才有批次号的概念
         if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
-            if (StringUtils.isBlank(model.getMaterialBatchNo())) {
-                model.setMaterialBatchNo(Constant.DEFAULT_BATCH_NO);
-            }
             criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
         }
         if (StringUtils.isNotBlank(model.getProductNo())) {
