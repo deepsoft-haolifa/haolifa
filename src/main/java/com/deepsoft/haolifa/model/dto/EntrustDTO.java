@@ -10,6 +10,8 @@ public class EntrustDTO {
     private String materialGraphNo;
     @ApiModelProperty(required = true,value = "物料名称")
     private String materialGraphName;
+    @ApiModelProperty(required = true, value = "加工后图号")
+    private String processedGraphNo;
     @ApiModelProperty(required = true,value = "委托数量")
     private Integer number;
     @ApiModelProperty(required = true,value = "采购合同号")

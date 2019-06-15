@@ -14,6 +14,8 @@ public class Entrust {
 
     private String materialGraphNo;
 
+    private String processedGraphNo;
+
     private Byte workshopType;
 
     private String supplierName;
@@ -42,12 +44,13 @@ public class Entrust {
 
     private Integer qualifiedNumber;
 
-    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber) {
+    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, String processedGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber) {
         this.id = id;
         this.materialGraphName = materialGraphName;
         this.purchaseNo = purchaseNo;
         this.entrustNo = entrustNo;
         this.materialGraphNo = materialGraphNo;
+        this.processedGraphNo = processedGraphNo;
         this.workshopType = workshopType;
         this.supplierName = supplierName;
         this.supplierNo = supplierNo;
@@ -106,6 +109,14 @@ public class Entrust {
 
     public void setMaterialGraphNo(String materialGraphNo) {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public String getProcessedGraphNo() {
+        return processedGraphNo;
+    }
+
+    public void setProcessedGraphNo(String processedGraphNo) {
+        this.processedGraphNo = processedGraphNo == null ? null : processedGraphNo.trim();
     }
 
     public Byte getWorkshopType() {

@@ -1,12 +1,15 @@
 package com.deepsoft.haolifa.service.impl;
 
 import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
+import static com.deepsoft.haolifa.constant.CacheKey.ENTRUST_NO_KEY;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.ENTRUST_NO_PREFIX_JJ;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.Consts;
 import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.model.domain.Entrust;
 import com.deepsoft.haolifa.model.domain.EntrustExample;
@@ -47,7 +50,15 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(EntrustDTO model) {
-    String entrustNo = "en_" + RandomUtils.orderNoStr();
+    if(model.getNumber() == null || model.getNumber() == 0) {
+      return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_NUMBER_ERROR);
+    }
+    if (StringUtils.isAnyBlank(model.getMaterialGraphName(), model.getMaterialGraphNo(), model.getProcessedGraphNo(),
+        model.getPurchaseNo())) {
+      return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
+    }
+
+    String entrustNo = createSerialNumber(ENTRUST_NO_PREFIX_JJ, ENTRUST_NO_KEY);
     Entrust entrust = new Entrust();
     BeanUtils.copyProperties(model, entrust);
     entrust.setCreateUserId(getLoginUserId());
@@ -87,6 +98,13 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
 
   @Override
   public ResultBean update(String entrustNo, EntrustDTO model) {
+    if(model.getNumber() == null || model.getNumber() == 0) {
+      return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_NUMBER_ERROR);
+    }
+    if (StringUtils.isAnyBlank(model.getMaterialGraphName(), model.getMaterialGraphNo(), model.getProcessedGraphNo(),
+        model.getPurchaseNo())) {
+      return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
+    }
     Entrust entrust = new Entrust();
     BeanUtils.copyProperties(model, entrust);
     EntrustExample entrustExample = new EntrustExample();
@@ -158,7 +176,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     }
 
     Entrust entrust = new Entrust();
-    if(status.byteValue() == EntrustStatus.DEALING_3.code) {
+    if (status.byteValue() == EntrustStatus.DEALING_3.code) {
       entrust.setInspectStatus(Inspect2Status.handling.code);
     }
     entrust.setStatus(status.byteValue());

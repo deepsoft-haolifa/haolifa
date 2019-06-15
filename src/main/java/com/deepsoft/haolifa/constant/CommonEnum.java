@@ -64,7 +64,9 @@ public class CommonEnum {
     MATERIAL_REPORT_IS_NULL("4006", "请至少上传一份材质报告"),
     INSPECT_TESTNUMBER_IS_ZERO("4007", "检测数量不能为0"),
     UNQUALIFIED_REASON_IS_EMPTY("4008", "不合格品大于0，不合格原因不能为空"),
-    UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY("4009", "不合格品数量与不合格原因总数不一致")
+    UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY("4009", "不合格品数量与不合格原因总数不一致"),
+    ENTRUST_PARAMS_VALIDATE_ERROR("4010", "请填写完整信息"),
+    ENTRUST_PARAMS_NUMBER_ERROR("4011", "委托数量必须大于0")
     ;
 
     public final String code;
