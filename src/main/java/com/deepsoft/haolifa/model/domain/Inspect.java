@@ -29,7 +29,9 @@ public class Inspect {
 
     private Integer qualifiedNumber;
 
-    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints, Integer qualifiedNumber) {
+    private Integer totalCount;
+
+    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints, Integer qualifiedNumber, Integer totalCount) {
         this.id = id;
         this.inspectNo = inspectNo;
         this.purchaseNo = purchaseNo;
@@ -43,6 +45,7 @@ public class Inspect {
         this.supplierNo = supplierNo;
         this.blueprints = blueprints;
         this.qualifiedNumber = qualifiedNumber;
+        this.totalCount = totalCount;
     }
 
     public Inspect() {
@@ -151,5 +154,13 @@ public class Inspect {
 
     public void setQualifiedNumber(Integer qualifiedNumber) {
         this.qualifiedNumber = qualifiedNumber;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 }

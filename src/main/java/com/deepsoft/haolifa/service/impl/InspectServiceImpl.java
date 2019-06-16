@@ -87,6 +87,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     }
     inspectMapper.insertSelective(inspect);
     List<InspectItemDTO> items = model.getItems();
+    int totalCount = 0;
     if (items != null && items.size() > 0) {
       for (int i = 0; i < items.size(); i++) {
         InspectItem inspectItem = new InspectItem();
@@ -95,7 +96,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         inspectItem.setPurchasePrice(new BigDecimal(items.get(i).getPurchasePrice()));
         inspectItem.setPurchaseNo(model.getPurchaseNo());
         inspectItemMapper.insertSelective(inspectItem);
+        totalCount += items.get(i).getDeliveryNumber();
       }
+      Inspect inspectCount = new Inspect();
+      inspectCount.setId(inspect.getId());
+      inspectCount.setTotalCount(totalCount);
+      inspectMapper.updateByPrimaryKeySelective(inspectCount);
     }
     return ResultBean.success(inspect.getId());
   }
@@ -145,6 +151,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     itemExample.or().andInspectIdEqualTo(inspect.getId());
     inspectItemMapper.deleteByExample(itemExample);
     List<InspectItemDTO> items = model.getItems();
+    int totalCount = 0;
     if (items != null && items.size() > 0) {
       for (int i = 0; i < items.size(); i++) {
         InspectItem inspectItem = new InspectItem();
@@ -152,7 +159,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         inspectItem.setPurchasePrice(new BigDecimal(items.get(i).getPurchasePrice()));
         inspectItem.setInspectId(inspect.getId());
         inspectItemMapper.insertSelective(inspectItem);
+        totalCount += items.get(i).getDeliveryNumber();
       }
+      Inspect inspectCount = new Inspect();
+      inspectCount.setId(inspect.getId());
+      inspectCount.setTotalCount(totalCount);
+      inspectMapper.updateByPrimaryKeySelective(inspectCount);
     }
     return ResultBean.success(1);
   }

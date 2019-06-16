@@ -303,54 +303,55 @@ CREATE TABLE `flow_history` (
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零件分类表';
 
 DROP TABLE IF EXISTS `order_product`;
-	CREATE TABLE `order_product` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  `order_no` varchar(64) NOT NULL COMMENT '订单编号（目前暂时和合同编号一致）',
-	  `order_contract_no` varchar (128) NOT NULL DEFAULT '' COMMENT '合同编号',
-	  `order_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '订单状态',
-	  `order_contract_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url（默认价格隐藏）',
-	  `order_contract_extend_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url',
-	  `technical_require` varchar(1024) NOT NULL DEFAULT '' COMMENT '技术清单要求（技术员填写）',
-	  `finish_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '工厂反馈完成时间',
-	  `feedback_time_confirm_user` varchar(32) NOT NULL DEFAULT '' COMMENT '反馈确认人',
-	  `purchase_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '采购反馈时间',
-	  `production_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '生产反馈时间',
-	  `assembly_shop` varchar(32) NOT NULL DEFAULT '' COMMENT '装配车间',
-	  `assembly_group` varchar(32) NOT NULL DEFAULT '' COMMENT '装配小组',
-	  `demand_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方名称',
-	  `demand_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方代理人',
-	  `demand_phone` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方电话',
-	  `demand_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方传真',
-	  `demand_bank_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求开户银行',
-	  `demand_bank_card_no` varchar(64) NOT NULL DEFAULT '' COMMENT '需求开户银行账号',
-	  `supply_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方',
-	  `supply_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方代理人',
-	  `supply_phone` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方电话',
-	  `supply_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方传真',
-	  `supply_bank_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方开户银行',
-	  `contract_bank_card_no` varchar(64) NOT NULL DEFAULT '' COMMENT '供应方开户银行账号',
-	  `delivery_place` varchar(64) NOT NULL DEFAULT '' COMMENT '交货地点',
-	  `delivery_date` varchar(64) NOT NULL DEFAULT '' COMMENT '交货日期',
-	  `contract_sign_date` varchar(32) NOT NULL DEFAULT '' COMMENT '合同签订日期',
-	  `total_count` int(11) NOT NULL DEFAULT 0 COMMENT '数量合计',
-	  `discount_total_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '优惠后总价',
-	  `total_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '总价',
-	  `special_require` varchar(256) NOT NULL DEFAULT '' COMMENT '特殊要求',
-	  `cargo_information` varchar(256) NOT NULL DEFAULT '' COMMENT '随货资料',
-	  `sign_board` varchar(256) NOT NULL DEFAULT '' COMMENT '标牌',
-	  `acceptance_criteria` varchar(256) NOT NULL DEFAULT '' COMMENT '验收标准',
-	  `warranty_period` varchar(256) NOT NULL DEFAULT '' COMMENT '质保期限',
-	  `packaging_specification` varchar(256) NOT NULL DEFAULT '' COMMENT '包装规范',
-	  `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
-	  `deliver_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发货状态：0 待发货（默认） 1 部分发货 2 发货完成',
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_order_no` (`order_no`),
-	  UNIQUE KEY `uk_order_contract_no` (`order_contract_no`),
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
+CREATE TABLE `order_product` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user` int(11) NOT NULL COMMENT '创建用户',
+  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
+  `order_no` varchar(64) NOT NULL COMMENT '订单编号（目前暂时和合同编号一致）',
+  `order_contract_no` varchar(128) NOT NULL DEFAULT '' COMMENT '合同编号',
+  `order_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '订单状态',
+  `order_contract_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url',
+  `order_contract_extend_url` varchar(128) NOT NULL DEFAULT '' COMMENT '订单合同url（价格隐藏）',
+  `technical_require` varchar(1024) NOT NULL DEFAULT '[{"name":"","xinhao":"","guige":"","num":"","biaozhun":"","lianjiek":"","jiaodu":"","zhongxinju":"","xinshi":"","length":"","tuhao":"","jinniuju":"","jishuxinhao":"","guodupan":""}]' COMMENT '技术清单（技术员填写）',
+  `finish_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '工厂反馈完成时间',
+  `feedback_time_confirm_user` varchar(32) NOT NULL DEFAULT '' COMMENT '反馈确认人',
+  `purchase_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '采购反馈时间',
+  `production_feedback_time` varchar(32) NOT NULL DEFAULT '' COMMENT '生产反馈时间',
+  `assembly_shop` varchar(32) NOT NULL DEFAULT '' COMMENT '装配车间',
+  `assembly_group` varchar(32) NOT NULL DEFAULT '' COMMENT '装配小组',
+  `demand_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方名称',
+  `demand_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方代理人',
+  `demand_phone` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方电话',
+  `demand_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '需求方传真',
+  `demand_bank_name` varchar(32) NOT NULL DEFAULT '' COMMENT '需求开户银行',
+  `demand_bank_card_no` varchar(64) NOT NULL DEFAULT '' COMMENT '需求开户银行账号',
+  `supply_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方',
+  `supply_agent_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方代理人',
+  `supply_phone` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方电话',
+  `supply_fax` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方传真',
+  `supply_bank_name` varchar(32) NOT NULL DEFAULT '' COMMENT '供应方开户银行',
+  `contract_bank_card_no` varchar(64) NOT NULL DEFAULT '' COMMENT '供应方开户银行账号',
+  `delivery_place` varchar(64) NOT NULL DEFAULT '' COMMENT '交货地点',
+  `delivery_date` varchar(64) NOT NULL DEFAULT '' COMMENT '交货日期',
+  `contract_sign_date` varchar(32) NOT NULL DEFAULT '' COMMENT '合同签订日期',
+  `total_count` int(11) NOT NULL DEFAULT '0' COMMENT '数量合计',
+  `discount_total_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '优惠后总价',
+  `total_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT '总价',
+  `special_require` varchar(256) NOT NULL DEFAULT '' COMMENT '特殊要求',
+  `cargo_information` varchar(256) NOT NULL DEFAULT '' COMMENT '随货资料',
+  `sign_board` varchar(256) NOT NULL DEFAULT '' COMMENT '标牌',
+  `acceptance_criteria` varchar(256) NOT NULL DEFAULT '' COMMENT '验收标准',
+  `warranty_period` varchar(256) NOT NULL DEFAULT '' COMMENT '质保期限',
+  `packaging_specification` varchar(256) NOT NULL DEFAULT '' COMMENT '包装规范',
+  `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
+  `deliver_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发货状态：0 待发货（默认） 1 部分发货 2 发货完成',
+  `accessory` varchar(2048) NOT NULL DEFAULT '' COMMENT '订单附件',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_order_no` (`order_no`),
+  UNIQUE KEY `uk_order_contract_no` (`order_contract_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
 
 	DROP TABLE IF EXISTS `order_product_associate`;
 	CREATE TABLE `order_product_associate` (
@@ -626,20 +627,45 @@ CREATE TABLE `purchase_order_item` (
 
 DROP TABLE IF EXISTS `inspect`;
 CREATE TABLE `inspect` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '编号',
-  `type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '送检订单类型：0 采购单 1 机加委托订单号 2 生产订单号',
-  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '送检单状态：0 未送检  1 待处理 2处理中 3处理完成',
-  `inspect_no` varchar(20) NOT NULL DEFAULT '' COMMENT '送检单编号，type:0 1 1对多物料 type2 1对1成品',
-  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号：type为2时，不填。',
-  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号：type为0，1时，不填。',
-  `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '送检数量',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `inspect_no` varchar(32) NOT NULL DEFAULT '' COMMENT '送检单编号',
+  `purchase_no` varchar(32) NOT NULL DEFAULT '' COMMENT '采购合同号',
+  `batch_number` varchar(32) NOT NULL DEFAULT '' COMMENT '批次号',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '送检单状态：1 保存 2 待处理 3 质检完成 4待入库 5入库完成',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `create_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建者',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程表单-送检单信息表';
+  `arrival_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '到货日期',
+  `supplier_name` varchar(255) NOT NULL DEFAULT '' COMMENT '供应商名称',
+  `supplier_no` varchar(255) NOT NULL DEFAULT '' COMMENT '供应商编号',
+  `blueprints` varchar(255) NOT NULL DEFAULT '' COMMENT '图纸，多个用逗号隔开',
+  `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '合格数量',
+  `total_count` int(11) NOT NULL DEFAULT '0' COMMENT '送检总数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `inspect_history`;
+CREATE TABLE `inspect_history` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `purchase_no` varchar(64) NOT NULL DEFAULT '' COMMENT '采购合同号',
+  `inspect_no` varchar(64) NOT NULL DEFAULT '' COMMENT '质检单号',
+  `batch_number` varchar(64) NOT NULL COMMENT '批次号',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '物料图号',
+  `material_graph_name` varchar(255) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `test_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '检测数量',
+  `qualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '合格数量',
+  `unqualified_number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '不合格数量',
+  `handling_suggestion` varchar(255) NOT NULL DEFAULT '' COMMENT '处理意见',
+  `purchase_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '购买单价',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '状态：1 待入库 2 已入库',
+  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '类型：送检零件，机加工零件 1 送检 2 机加工',
+  `supplier_name` varchar(255) NOT NULL DEFAULT '' COMMENT '供应商名称',
+  `supplier_no` varchar(255) NOT NULL DEFAULT '' COMMENT '供应商编号',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 DROP TABLE IF EXISTS `material_inspect_result`;
 CREATE TABLE `material_inspect_result` (
@@ -702,19 +728,27 @@ CREATE TABLE `pressure_inspect_record` (
 DROP TABLE IF EXISTS `entrust`;
 CREATE TABLE `entrust` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `purchase_order_no` varchar(20) NOT NULL DEFAULT '' COMMENT '采购编号',
-  `entrust_no` varchar(20) NOT NULL DEFAULT '' COMMENT '委托合同编号',
-  `material_graph_no` varchar(50) NOT NULL DEFAULT '' COMMENT '成品图号',
+  `material_graph_name` varchar(32) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `purchase_no` varchar(32) NOT NULL COMMENT '采购合同编号',
+  `entrust_no` varchar(32) NOT NULL DEFAULT '' COMMENT '委托合同编号',
+  `material_graph_no` varchar(50) NOT NULL DEFAULT '' COMMENT '产品图号',
+  `processed_graph_no` varchar(50) NOT NULL DEFAULT '' COMMENT '加工后图号',
+  `workShop_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '车间类型：外部车间 2 内部车间 1',
+  `supplier_name` varchar(255) NOT NULL DEFAULT '' COMMENT '加工厂商名称',
+  `supplier_no` varchar(255) NOT NULL DEFAULT '' COMMENT '加工厂商编号',
+  `batch_number` varchar(32) NOT NULL COMMENT '毛坯零件批次号',
   `number` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '委托数量',
-  `status` tinyint(4) NOT NULL COMMENT '状态：0 待处理 1 处理中 2 已完成',
+  `purchase_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '购买单价',
+  `status` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '状态：0 未提交 1 审批中 2审批通过，待处理 3 处理中  4 已完成 5 审批不通过 6 质检完成',
   `entrust_person` varchar(255) NOT NULL DEFAULT '' COMMENT '委托人',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除：0 未删除 1 已删除',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `create_user_id` int(11) unsigned NOT NULL COMMENT '创建者id',
+  `inspect_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '质检状态：0 待质检 1 质检中 2 质检完成',
+  `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '检验合格数量',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表单-委托加工信息表';
-
 
 DROP TABLE IF EXISTS `supplier`;
 CREATE TABLE `supplier` (
@@ -918,15 +952,16 @@ CREATE TABLE `sys_message` (
 
 DROP TABLE IF EXISTS `file_record`;
 CREATE TABLE `file_record` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `file_name` varchar(64) NOT NULL DEFAULT '' COMMENT '文件名称',
   `file_url` varchar(64) NOT NULL DEFAULT '' COMMENT '文件url',
-  `type` TINYINT(4) NOT NULL COMMENT '类型：1-零件图纸，2-成品图纸',
+  `type` tinyint(4) NOT NULL COMMENT '类型：1-零件图纸，2-成品图纸',
   `remark` varchar(64) NOT NULL DEFAULT '' COMMENT '文件备注',
-  `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `file_no` varchar(64) NOT NULL DEFAULT '' COMMENT '文件编号',
   PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='文件记录列表（图纸管理）';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件记录列表（图纸管理）';
 
 
 DROP TABLE IF EXISTS `price_product`;
@@ -989,12 +1024,13 @@ CREATE TABLE `spray` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `spray_no` varchar(64) NOT NULL DEFAULT '',
   `planner` varchar(255) NOT NULL DEFAULT '',
-	`total_number` int(11) not null default 0 COMMENT '喷涂总数量',
-  `qualified_number` int(11) not null default 0 COMMENT '合格数',
-	`status` TINYINT(4) not null default 0 COMMENT '喷涂状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工',
-	`file_url` VARCHAR(255) not null default '' comment '文件地址；需上传',
+  `total_number` int(11) NOT NULL DEFAULT '0' COMMENT '喷涂总数量',
+  `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '合格数',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '喷涂状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工',
+  `file_url` varchar(255) NOT NULL DEFAULT '' COMMENT '文件地址；需上传',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `inspect_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 待质检 1 质检中 2 质检完成',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='喷涂单';
 
@@ -1031,8 +1067,10 @@ CREATE TABLE `spray_inspect_history` (
   `handling_suggestion` varchar(255) NOT NULL DEFAULT '' COMMENT '处理意见',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '状态：1 待入库 2 已入库',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '喷涂检验历史';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='喷涂检验历史';
 
 DROP TABLE IF EXISTS `order_file`;
 CREATE TABLE `order_file` (

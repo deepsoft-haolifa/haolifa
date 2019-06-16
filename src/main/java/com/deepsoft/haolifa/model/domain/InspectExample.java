@@ -944,6 +944,66 @@ public class InspectExample {
             addCriterion("qualified_number not between", value1, value2, "qualifiedNumber");
             return (Criteria) this;
         }
+
+        public Criteria andTotalCountIsNull() {
+            addCriterion("total_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountIsNotNull() {
+            addCriterion("total_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountEqualTo(Integer value) {
+            addCriterion("total_count =", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotEqualTo(Integer value) {
+            addCriterion("total_count <>", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountGreaterThan(Integer value) {
+            addCriterion("total_count >", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_count >=", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountLessThan(Integer value) {
+            addCriterion("total_count <", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountLessThanOrEqualTo(Integer value) {
+            addCriterion("total_count <=", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountIn(List<Integer> values) {
+            addCriterion("total_count in", values, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotIn(List<Integer> values) {
+            addCriterion("total_count not in", values, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountBetween(Integer value1, Integer value2) {
+            addCriterion("total_count between", value1, value2, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_count not between", value1, value2, "totalCount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
