@@ -641,6 +641,7 @@ CREATE TABLE `inspect` (
   `blueprints` varchar(255) NOT NULL DEFAULT '' COMMENT '图纸，多个用逗号隔开',
   `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '合格数量',
   `total_count` int(11) NOT NULL DEFAULT '0' COMMENT '送检总数',
+  `unqualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '不合格总数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
