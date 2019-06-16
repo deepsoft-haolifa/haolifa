@@ -18,7 +18,8 @@ public class OrderConditionDTO {
     private String orderNo;
     @ApiModelProperty(value = Constant.ORDER_STATUS_DESC, name = "订单状态")
     private Byte orderStatus;
-
+    @ApiModelProperty(value = "需求方名称")
+    private String demandName;
     @ApiModelProperty(value = Constant.ORDER_STATUS_DESC, name = "订单状态列表(逗号分隔)")
     private List<Byte> orderStatusList;
 }

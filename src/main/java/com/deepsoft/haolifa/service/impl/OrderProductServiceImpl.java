@@ -544,6 +544,32 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 throw new BaseException(CommonEnum.ResponseEnum.ORDER_NO_EXISTS);
             }
 
+            // 获取需方,在第3行,第二列
+            String demandName = "";
+            Row demandNameRow = sheet.getRow(2);
+            if (null != demandNameRow) {
+                Cell cell = demandNameRow.getCell(1);
+                String cellValue = getCellValue(cell);
+                if (StringUtils.isNotBlank(cellValue)) {
+                    String[] split = cellValue.split("：");
+                    if (split.length > 1) {
+                        demandName = split[1];
+                    }
+                }
+            }
+            // 获取供应方,在第4行,第二列
+            String supplyName = "";
+            Row supplyNameRow = sheet.getRow(3);
+            if (null != supplyNameRow) {
+                Cell cell = supplyNameRow.getCell(1);
+                String cellValue = getCellValue(cell);
+                if (StringUtils.isNotBlank(cellValue)) {
+                    String[] split = cellValue.split("：");
+                    if (split.length > 1) {
+                        supplyName = split[1];
+                    }
+                }
+            }
             // 获取订单产品列表
             List<OrderProductAssociate> orderProductAssociates = new ArrayList<>();
             // 从第十行开始，获取“特殊要求”那一行之前三行,(从第十行到lastRowNum,就是所有产品的行数)
@@ -649,7 +675,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     cell8.setCellValue("");
                 }
             }
+            // 将数据赋值
             OrderProductDTO orderProductDTO = new OrderProductDTO();
+            orderProductDTO.setDemandName(demandName);
+            orderProductDTO.setSupplyName(supplyName);
             orderProductDTO.setOrderContractNo(orderContractNo);
             orderProductDTO.setOrderProductAssociates(orderProductAssociates);
             //将合同上传到7牛文件服务器
@@ -870,6 +899,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         if (model.getOrderStatusList() != null && model.getOrderStatusList().size() > 0) {
             criteria.andOrderStatusIn(model.getOrderStatusList());
+        }
+        if (StringUtils.isNotBlank(model.getDemandName())) {
+            criteria.andDemandNameLike("%" + model.getDemandName() + "%");
         }
         example.setOrderByClause("id desc");
         Page<OrderProduct> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
