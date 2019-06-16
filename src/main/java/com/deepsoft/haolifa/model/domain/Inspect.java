@@ -31,7 +31,9 @@ public class Inspect {
 
     private Integer totalCount;
 
-    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints, Integer qualifiedNumber, Integer totalCount) {
+    private Integer unqualifiedNumber;
+
+    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints, Integer qualifiedNumber, Integer totalCount, Integer unqualifiedNumber) {
         this.id = id;
         this.inspectNo = inspectNo;
         this.purchaseNo = purchaseNo;
@@ -46,6 +48,7 @@ public class Inspect {
         this.blueprints = blueprints;
         this.qualifiedNumber = qualifiedNumber;
         this.totalCount = totalCount;
+        this.unqualifiedNumber = unqualifiedNumber;
     }
 
     public Inspect() {
@@ -162,5 +165,13 @@ public class Inspect {
 
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public Integer getUnqualifiedNumber() {
+        return unqualifiedNumber;
+    }
+
+    public void setUnqualifiedNumber(Integer unqualifiedNumber) {
+        this.unqualifiedNumber = unqualifiedNumber;
     }
 }

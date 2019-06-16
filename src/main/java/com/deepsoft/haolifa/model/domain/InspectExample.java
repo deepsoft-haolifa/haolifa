@@ -1004,6 +1004,66 @@ public class InspectExample {
             addCriterion("total_count not between", value1, value2, "totalCount");
             return (Criteria) this;
         }
+
+        public Criteria andUnqualifiedNumberIsNull() {
+            addCriterion("unqualified_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberIsNotNull() {
+            addCriterion("unqualified_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberEqualTo(Integer value) {
+            addCriterion("unqualified_number =", value, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberNotEqualTo(Integer value) {
+            addCriterion("unqualified_number <>", value, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberGreaterThan(Integer value) {
+            addCriterion("unqualified_number >", value, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("unqualified_number >=", value, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberLessThan(Integer value) {
+            addCriterion("unqualified_number <", value, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("unqualified_number <=", value, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberIn(List<Integer> values) {
+            addCriterion("unqualified_number in", values, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberNotIn(List<Integer> values) {
+            addCriterion("unqualified_number not in", values, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberBetween(Integer value1, Integer value2) {
+            addCriterion("unqualified_number between", value1, value2, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnqualifiedNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("unqualified_number not between", value1, value2, "unqualifiedNumber");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
