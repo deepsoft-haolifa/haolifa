@@ -206,4 +206,10 @@ public class OrderProductController {
         return orderProductService.updateOrderDeliverStatus(orderNo, status);
     }
 
+    @ApiOperation("更新订单需方字段")
+    @GetMapping("/demand/update")
+    public ResultBean updateOrderDemand(@RequestParam String orderNo, String demandName) {
+        return orderProductService.updateOrderDemand(orderNo, demandName);
+    }
+
 }

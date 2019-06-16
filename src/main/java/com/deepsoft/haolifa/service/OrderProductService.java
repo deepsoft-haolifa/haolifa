@@ -214,4 +214,6 @@ public interface OrderProductService {
     ResultBean uploadAccessory(String orderNo, List<Accessory> orderUploadDTOs);
 
     ResultBean getAccessory(String orderNo);
+
+  ResultBean updateOrderDemand(String orderNo, String demandName);
 }

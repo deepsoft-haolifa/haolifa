@@ -1882,4 +1882,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         return ResultBean.success(accessories);
     }
+
+    @Override
+    public ResultBean updateOrderDemand(String orderNo, String demandName) {
+        if(StringUtils.isEmpty(orderNo)) {
+            return ResultBean.error(ResponseEnum.PARAM_ERROR);
+        }
+        OrderProductExample example = new OrderProductExample();
+        example.createCriteria().andOrderNoEqualTo(orderNo);
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setDemandName(demandName);
+        orderProductMapper.updateByExampleSelective(orderProduct, example);
+        return ResultBean.success(1);
+    }
 }
