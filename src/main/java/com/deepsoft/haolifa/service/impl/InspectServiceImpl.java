@@ -274,8 +274,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       List<Inspect> inspectList = inspectMapper.selectByExample(example);
       Inspect inspect = new Inspect();
       if (!CollectionUtils.isEmpty(inspectList) && inspectList.size() > 0) {
-        inspect.setQualifiedNumber(inspectList.get(0).getQualifiedNumber() + model.getQualifiedNumber());
-        inspect.setUnqualifiedNumber(inspectList.get(0).getUnqualifiedNumber() + model.getUnqualifiedNumber());
+        Inspect inspectRecord = inspectList.get(0);
+        inspect.setQualifiedNumber(inspectRecord.getQualifiedNumber() + model.getQualifiedNumber());
+        inspect.setUnqualifiedNumber(inspectRecord.getUnqualifiedNumber() + model.getUnqualifiedNumber());
+        if(inspectRecord.getTotalCount() < inspect.getQualifiedNumber()) {
+          return ResultBean.error(ResponseEnum.INSPECT_QUALIFIED_NUMBER_ERROR);
+        }
         inspectMapper.updateByExampleSelective(inspect, example);
       }
     }
@@ -286,7 +290,11 @@ public class InspectServiceImpl extends BaseService implements InspectService {
       List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
       Entrust entrust = new Entrust();
       if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
+        Entrust entrustRecord = entrustList.get(0);
         entrust.setQualifiedNumber(model.getQualifiedNumber() + entrustList.get(0).getQualifiedNumber());
+        if(entrustRecord.getNumber() < entrust.getQualifiedNumber()) {
+          return ResultBean.error(ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);
+        }
         entrustMapper.updateByExampleSelective(entrust, entrustExample);
       }
     }
