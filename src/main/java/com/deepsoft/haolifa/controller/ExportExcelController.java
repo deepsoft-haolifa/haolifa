@@ -2,12 +2,14 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.annotation.LogNotPrint;
+import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
 import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper;
 import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
-import com.deepsoft.haolifa.dao.repository.SprayMapper;
 import com.deepsoft.haolifa.model.domain.Entrust;
+import com.deepsoft.haolifa.model.domain.EntryOutStoreRecord;
+import com.deepsoft.haolifa.model.domain.EntryOutStoreRecordExample;
 import com.deepsoft.haolifa.model.domain.Expenses;
 import com.deepsoft.haolifa.model.domain.ExpensesExample;
 import com.deepsoft.haolifa.model.domain.InspectHistory;
@@ -22,15 +24,16 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.ExportExpensesDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportMaterialEntryRoomDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportProductEntryRoomDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportProductOutRoomDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSprayEntryRoomDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
 import com.deepsoft.haolifa.service.EntrustService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SprayService;
-import com.deepsoft.haolifa.util.Base64Utils;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
 import io.swagger.annotations.Api;
@@ -39,14 +42,12 @@ import io.swagger.annotations.ApiParam;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -60,11 +61,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Encoder;
 
 @LogNotPrint
 @RestController
@@ -93,6 +91,9 @@ public class ExportExcelController {
 
   @Autowired
   private ProInspectRecordMapper proInspectRecordMapper;
+
+  @Autowired
+  private EntryOutStoreRecordMapper entryOutStoreRecordMapper;
 
   @ApiOperation("导出采购订单")
   @GetMapping("/purchaseOrder/{formId}")
@@ -1476,6 +1477,123 @@ public class ExportExcelController {
     outputStream.flush();
     outputStream.close();
   }
+
+  @ApiOperation("导出成品出库")
+  @GetMapping("product-out")
+  public void exportProductOutRoom(HttpServletResponse response, HttpServletRequest request,
+      ExportProductOutRoomDTO dto) throws IOException {
+    EntryOutStoreRecordExample example = new EntryOutStoreRecordExample();
+    EntryOutStoreRecordExample.Criteria criteria = example.createCriteria();
+    if (StringUtils.isNotEmpty(dto.getStartDate())) {
+      Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
+      criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getEndDate())) {
+      Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
+      criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+    }
+    if (StringUtils.isNotEmpty(dto.getOrderNo())) {
+      criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
+    }
+    if (dto.getOperationType() != null) {
+      criteria.andOperationTypeEqualTo(dto.getOperationType().byteValue());
+    }
+
+    List<EntryOutStoreRecord> entryOutStoreRecordList = entryOutStoreRecordMapper.selectByExample(example);
+
+    response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode("成品出库明细","utf-8")+".xls");
+    response.setContentType("application/octet-stream;");
+    Workbook workbook = new HSSFWorkbook();
+    CellStyle cellStyle = workbook.createCellStyle();
+    cellStyle.setWrapText(true);
+    Sheet sheet = workbook.createSheet("成品出库明细");
+    // 单元格样式
+    CellStyle center = workbook.createCellStyle();
+    center.setAlignment(HorizontalAlignment.CENTER);
+
+    Row title_1 = sheet.createRow(0);
+    CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 9);
+    sheet.addMergedRegion(cra1);
+    Cell cell_title_1 = title_1.createCell(0);
+    cell_title_1.setCellValue("成 品 出 库 明 细");
+    cell_title_1.setCellStyle(center);
+
+    Row columnTitle = sheet.createRow(1);
+    Cell cell_10 = columnTitle.createCell(0);
+    cell_10.setCellValue("序号");
+    cell_10.setCellStyle(center);
+    Cell cell_11 = columnTitle.createCell(1);
+    cell_11.setCellValue("订单号");
+    cell_11.setCellStyle(center);
+    Cell cell_19 = columnTitle.createCell(2);
+    cell_19.setCellValue("需方");
+    cell_19.setCellStyle(center);
+    Cell cell_12 = columnTitle.createCell(3);
+    cell_12.setCellValue("成品ID");
+    cell_12.setCellStyle(center);
+    Cell cell_13 = columnTitle.createCell(4);
+    cell_13.setCellValue("成品型号");
+    cell_13.setCellStyle(center);
+    Cell cell_14 = columnTitle.createCell(5);
+    cell_14.setCellValue("成品规格");
+    cell_14.setCellStyle(center);
+    Cell cell_15 = columnTitle.createCell(6);
+    cell_15.setCellValue("操作类型");
+    cell_15.setCellStyle(center);
+    Cell cell_16 = columnTitle.createCell(7);
+    cell_16.setCellValue("出库日期");
+    cell_16.setCellStyle(center);
+    Cell cell_17 = columnTitle.createCell(8);
+    cell_17.setCellValue("出库数量");
+    cell_17.setCellStyle(center);
+    Cell cell_18 = columnTitle.createCell(9);
+    cell_18.setCellValue("单价");
+    cell_18.setCellStyle(center);
+
+    for (int i = 0; i < entryOutStoreRecordList.size(); i++) {
+      EntryOutStoreRecord entryOutStoreRecord = entryOutStoreRecordList.get(i);
+      OrderProductDTO orderProductDTO = orderProductService.getOrderProductInfo(entryOutStoreRecord.getOrderNo());
+      Row row_value = sheet.createRow(i + 2);
+      Cell cell_0 = row_value.createCell(0);
+      cell_0.setCellValue(i + 1);
+      cell_0.setCellStyle(center);
+      Cell cell_1 = row_value.createCell(1);
+      cell_1.setCellValue(entryOutStoreRecord.getOrderNo());
+      cell_1.setCellStyle(center);
+      Cell cell_2 = row_value.createCell(2);
+      cell_2.setCellValue(orderProductDTO.getDemandName());
+      cell_2.setCellStyle(center);
+      Cell cell_3 = row_value.createCell(3);
+      cell_3.setCellValue(entryOutStoreRecord.getProductNo());
+      cell_3.setCellStyle(center);
+      Cell cell_4 = row_value.createCell(4);
+      cell_4.setCellValue(entryOutStoreRecord.getProductModel());
+      cell_4.setCellStyle(center);
+      Cell cell_5 = row_value.createCell(5);
+      cell_5.setCellValue(entryOutStoreRecord.getProductSpecifications());
+      cell_5.setCellStyle(center);
+      Cell cell_6 = row_value.createCell(6);
+      cell_6.setCellValue(entryOutStoreRecord.getOperationType() == 1? "出库":"入库");
+      cell_6.setCellStyle(center);
+      Cell cell_7 = row_value.createCell(7);
+      cell_7.setCellValue(
+          DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entryOutStoreRecord.getCreateTime()));
+      cell_7.setCellStyle(center);
+      Cell cell_8 = row_value.createCell(8);
+      cell_8.setCellValue(entryOutStoreRecord.getPrice().doubleValue());
+      cell_8.setCellStyle(center);
+      Cell cell_9 = row_value.createCell(9);
+      cell_9.setCellValue(entryOutStoreRecord.getQuantity());
+      cell_9.setCellStyle(center);
+    }
+
+    OutputStream outputStream = response.getOutputStream();
+    workbook.write(outputStream);
+    outputStream.flush();
+    outputStream.close();
+  }
+
+
 
 
 }
