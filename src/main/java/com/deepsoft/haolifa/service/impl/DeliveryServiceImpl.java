@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.DeliverStatus;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.DeliveryNoticeMapper;
 import com.deepsoft.haolifa.dao.repository.DeliveryRecordMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
@@ -21,6 +22,7 @@ import com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeListDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryRecordConditionDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryClassifyDTO;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeAuditDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.service.DeliveryService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.util.RandomUtils;
@@ -56,6 +58,10 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
   @Override
   public ResultBean saveNotice(DeliveryNotice model) {
     int insertUpdate = 0;
+    OrderProductDTO orderProductDTO = orderProductService.getOrderProductInfo(model.getContractOrderNo());
+    if(orderProductDTO == null) {
+      return ResultBean.error(ResponseEnum.DELIVERY_ORDERNO_NOT_EXIST);
+    }
     if (model.getId() != null && model.getId() > 0) {
       insertUpdate = deliveryNoticeMapper.updateByPrimaryKeySelective(model);
     } else {

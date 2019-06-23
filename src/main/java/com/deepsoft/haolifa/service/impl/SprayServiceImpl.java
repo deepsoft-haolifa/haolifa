@@ -197,12 +197,11 @@ public class SprayServiceImpl extends BaseService implements SprayService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean saveInspect(SprayInspectDto inspectDto) {
-//    if (StringUtils.isAnyBlank(inspectDto.getOriginalGraphNo(), inspectDto.getMaterialGraphNo(),
-//        inspectDto.getMaterialGraphName())) {
-//      return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
-//    }
     if(inspectDto.getTestNumber() == 0) {
       return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
+    }
+    if(inspectDto.getQualifiedNumber()+inspectDto.getUnqualifiedNumber() != inspectDto.getTestNumber()) {
+      return ResultBean.error(ResponseEnum.INSPECT_RECORD_DATA_ERROR);
     }
     SprayInspectHistory history = new SprayInspectHistory();
     BeanUtils.copyProperties(inspectDto, history);
@@ -212,6 +211,9 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     if (sprays != null && sprays.size() > 0) {
       Spray spray = sprays.get(0);
       spray.setQualifiedNumber(spray.getQualifiedNumber() + inspectDto.getQualifiedNumber());
+      if(spray.getTotalNumber() < spray.getQualifiedNumber()) {
+        return ResultBean.error(ResponseEnum.SPRAY_QUALIFIED_NUMBER_ERROR);
+      }
       sprayMapper.updateByExampleSelective(spray, example);
     }
     inspectHistoryMapper.insertSelective(history);

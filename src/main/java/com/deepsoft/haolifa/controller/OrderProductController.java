@@ -212,4 +212,10 @@ public class OrderProductController {
         return orderProductService.updateOrderDemand(orderNo, demandName);
     }
 
+    @ApiOperation("查询订单号列表")
+    @GetMapping("/list/orderNo/{type}")
+    public ResultBean getOrderNoListByquery(@PathVariable("type") Integer type, @RequestParam("订单状态：发货状态 or 流程状态") Integer status, String orderNo) {
+        return orderProductService.getOrderNoListByquery(type, status, orderNo);
+    }
+
 }

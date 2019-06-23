@@ -68,7 +68,10 @@ public class CommonEnum {
     ENTRUST_PARAMS_VALIDATE_ERROR("4010", "请填写完整信息"),
     ENTRUST_PARAMS_NUMBER_ERROR("4011", "委托数量必须大于0"),
     INSPECT_QUALIFIED_NUMBER_ERROR("4012", "检验合格数量不能大于送检数"),
-    ENTRUST_QUALIFIED_NUMBER_ERROR("4013", "检验合格数量不能大于委托加工数")
+    ENTRUST_QUALIFIED_NUMBER_ERROR("4013", "检验合格数量不能大于委托加工数"),
+    SPRAY_QUALIFIED_NUMBER_ERROR("4014", "检验合格数量不能大于喷涂加工数"),
+    INSPECT_RECORD_DATA_ERROR("4015", "检验数据不正确：合格与不合格品总数不等于检测数量"),
+    DELIVERY_ORDERNO_NOT_EXIST("4016", "发货通知单订单号不存在")
     ;
 
     public final String code;
