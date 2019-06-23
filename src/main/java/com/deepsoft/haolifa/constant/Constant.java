@@ -13,6 +13,7 @@ public class Constant {
         String BATCH_NUMBER_PREFIX_PC = "PC";
         String SPRAY_NO_PREFIX_PT = "PT";
         String ENTRUST_NO_PREFIX_JJ = "JJ";
+        String DELIVERY_NO_PREFIX_FHTZD = "FHTZD";
     }
 
     public interface PurchaseOrderType {

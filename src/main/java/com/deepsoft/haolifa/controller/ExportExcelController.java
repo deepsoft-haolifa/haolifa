@@ -1580,10 +1580,10 @@ public class ExportExcelController {
           DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entryOutStoreRecord.getCreateTime()));
       cell_7.setCellStyle(center);
       Cell cell_8 = row_value.createCell(8);
-      cell_8.setCellValue(entryOutStoreRecord.getPrice().doubleValue());
+      cell_8.setCellValue(Math.abs(entryOutStoreRecord.getQuantity()));
       cell_8.setCellStyle(center);
       Cell cell_9 = row_value.createCell(9);
-      cell_9.setCellValue(entryOutStoreRecord.getQuantity());
+      cell_9.setCellValue(entryOutStoreRecord.getPrice().doubleValue());
       cell_9.setCellStyle(center);
     }
 

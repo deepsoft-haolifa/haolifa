@@ -1,5 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
+import static com.deepsoft.haolifa.constant.CacheKey.DELIVERY_NO_KEY;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.DELIVERY_NO_PREFIX_FHTZD;
+
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.DeliverStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
@@ -59,14 +62,15 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
   public ResultBean saveNotice(DeliveryNotice model) {
     int insertUpdate = 0;
     OrderProductDTO orderProductDTO = orderProductService.getOrderProductInfo(model.getContractOrderNo());
-    if(orderProductDTO == null) {
+    if (orderProductDTO == null) {
       return ResultBean.error(ResponseEnum.DELIVERY_ORDERNO_NOT_EXIST);
     }
     if (model.getId() != null && model.getId() > 0) {
       insertUpdate = deliveryNoticeMapper.updateByPrimaryKeySelective(model);
     } else {
       model.setCreateUserId(getLoginUserId());
-      model.setDeliveryNo("dn_" + RandomUtils.orderNoStr());
+      String deliveryNo = createSerialNumber(DELIVERY_NO_PREFIX_FHTZD, DELIVERY_NO_KEY);
+      model.setDeliveryNo(deliveryNo);
       insertUpdate = deliveryNoticeMapper.insertSelective(model);
     }
     if (insertUpdate > 0) {
@@ -83,27 +87,6 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
 
   @Override
   public ResultBean pageNotices(DeliveryNoticeConditionDTO conditionDTO) {
-//    DeliveryNoticeExample example = new DeliveryNoticeExample();
-//    DeliveryNoticeExample.Criteria criteria = example.createCriteria();
-//    if (StringUtils.isNotBlank(conditionDTO.getDeliveryNo())) {
-//      criteria.andDeliveryNoLike("%" + conditionDTO.getDeliveryNo() + "%");
-//    }
-//    if (StringUtils.isNotBlank(conditionDTO.getContractOrderNo())) {
-//      criteria.andContractOrderNoLike("%" + conditionDTO.getContractOrderNo() + "%");
-//    }
-
-//        Date startDeliveryTime = conditionDTO.getStartDeliveryTime();
-//        Date endDeliveryTime = conditionDTO.getEndDeliveryTime();
-//        if (startDeliveryTime != null && endDeliveryTime != null) {
-//            criteria.andDeliveryTimeBetween(startDeliveryTime, endDeliveryTime);
-//        }
-//        if (startDeliveryTime != null && endDeliveryTime == null) {
-//            criteria.andDeliveryTimeGreaterThanOrEqualTo(startDeliveryTime);
-//        }
-//        if (startDeliveryTime == null && endDeliveryTime != null) {
-//            criteria.andDeliveryTimeLessThanOrEqualTo(endDeliveryTime);
-//        }
-//    example.setOrderByClause("id desc");
     Page<DeliveryNoticeListDTO> deliveryRecordPage = PageHelper
         .startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
         .doSelectPage(() -> deliveryNoticeExtendMapper.selectDeliverNoticeList(conditionDTO));
