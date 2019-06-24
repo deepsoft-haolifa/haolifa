@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.controller;
 
 
+import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.PRODUCT;
+
 import com.deepsoft.haolifa.annotation.LogNotPrint;
 import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
@@ -1484,6 +1486,7 @@ public class ExportExcelController {
       ExportProductOutRoomDTO dto) throws IOException {
     EntryOutStoreRecordExample example = new EntryOutStoreRecordExample();
     EntryOutStoreRecordExample.Criteria criteria = example.createCriteria();
+    criteria.andTypeEqualTo(PRODUCT.code);
     if (StringUtils.isNotEmpty(dto.getStartDate())) {
       Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
       criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
