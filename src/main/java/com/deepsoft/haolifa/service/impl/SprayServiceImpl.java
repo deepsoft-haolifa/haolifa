@@ -51,11 +51,17 @@ public class SprayServiceImpl extends BaseService implements SprayService {
   @Autowired
   private SprayInspectHistoryMapper inspectHistoryMapper;
 
+  @Autowired
+  private ValidateService validateService;
+
   @Transactional(rollbackFor = Exception.class)
   @Override
   public ResultBean save(SprayDto sprayDto) {
     if (sprayDto.getItems().isEmpty()) {
       return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    }
+    for (int i = 0; i < sprayDto.getItems().size(); i++) {
+      validateService.validateIsExistMaterialGraphNo(sprayDto.getItems().get(i).getMaterialGraphNo());
     }
     String sprayNo = createSerialNumber(SPRAY_NO_PREFIX_PT, SPRAY_NO_KEY);
     Spray spray = new Spray();

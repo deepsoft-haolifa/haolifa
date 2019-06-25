@@ -40,6 +40,8 @@ public class CommonEnum {
     PRODUCT_NO_EXISTS("2004", "成品号已经存在"),
     MATERIAL_NOT_ENOUGH("2005", "该零件库存不足"),
     OUT_PRODUCT_COUNT_ERROR("2006", "成品出库数量大于入库数量"),
+    MATERIAL_GRAPH_NO_NOT_EXIST("2007", "零件库中无此图号"),
+    MATERIAL_HANDLED_GRAPH_NO_NOT_EXIST("2008", "零件库中无此加工后图号"),
 
     // 采购计划、请购单、采购单模块错误码开头3***
     PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0"),

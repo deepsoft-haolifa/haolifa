@@ -46,6 +46,8 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
   @Lazy
   @Autowired
   FlowInstanceService flowInstanceService;
+  @Autowired
+  private ValidateService validateService;
 
   @Transactional(rollbackFor = Exception.class)
   @Override
@@ -57,7 +59,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         model.getPurchaseNo())) {
       return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
     }
-
+    validateService.validateIsExistMaterialGraphNo(model.getProcessedGraphNo());
     String entrustNo = createSerialNumber(ENTRUST_NO_PREFIX_JJ, ENTRUST_NO_KEY);
     Entrust entrust = new Entrust();
     BeanUtils.copyProperties(model, entrust);
