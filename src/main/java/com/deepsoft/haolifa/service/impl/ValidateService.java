@@ -2,8 +2,11 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
+import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.model.domain.Material;
 import com.deepsoft.haolifa.model.domain.MaterialExample;
+import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,8 @@ public class ValidateService {
 
   @Autowired
   private MaterialMapper materialMapper;
+  @Autowired
+  private OrderProductMapper orderProductMapper;
 
   public void validateIsExistMaterialGraphNo(String materialGraphNo) {
     MaterialExample example = new MaterialExample();
@@ -27,4 +32,12 @@ public class ValidateService {
     }
   }
 
+  public void validateIsExistOrderNo(String orderNo) {
+    OrderProductExample example = new OrderProductExample();
+    example.createCriteria().andOrderNoEqualTo(orderNo);
+    List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
+    if(CollectionUtils.isEmpty(orderProducts)) {
+      throw new BaseException(ResponseEnum.ORDER_NO_NOT_EXIST);
+    }
+  }
 }

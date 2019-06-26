@@ -25,7 +25,7 @@
         and dn.delivery_no like concat('%',#{deliveryNo},'%')
       </if>
       <if test="contractOrderNo != null and contractOrderNo != ''">
-        and dn.order_contract_no like concat('%',#{contractOrderNo},'%')
+        and dn.contract_order_no like concat('%',#{contractOrderNo},'%')
       </if>
     </where>
     order by dn.id desc
