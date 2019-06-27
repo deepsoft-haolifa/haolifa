@@ -16,6 +16,7 @@ import com.deepsoft.haolifa.model.domain.SprayItem;
 import com.deepsoft.haolifa.model.domain.SprayItemExample;
 import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
 import com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
@@ -218,7 +219,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
       Spray spray = sprays.get(0);
       spray.setQualifiedNumber(spray.getQualifiedNumber() + inspectDto.getQualifiedNumber());
       if(spray.getTotalNumber() < spray.getQualifiedNumber()) {
-        return ResultBean.error(ResponseEnum.SPRAY_QUALIFIED_NUMBER_ERROR);
+        throw new BaseException(ResponseEnum.SPRAY_QUALIFIED_NUMBER_ERROR);
       }
       sprayMapper.updateByExampleSelective(spray, example);
     }

@@ -24,6 +24,7 @@ import com.deepsoft.haolifa.model.domain.InspectHistory;
 import com.deepsoft.haolifa.model.domain.InspectHistoryExample;
 import com.deepsoft.haolifa.model.domain.InspectItem;
 import com.deepsoft.haolifa.model.domain.InspectItemExample;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
@@ -281,7 +282,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         inspect.setQualifiedNumber(inspectRecord.getQualifiedNumber() + model.getQualifiedNumber());
         inspect.setUnqualifiedNumber(inspectRecord.getUnqualifiedNumber() + model.getUnqualifiedNumber());
         if(inspectRecord.getTotalCount() < inspect.getQualifiedNumber()) {
-          return ResultBean.error(ResponseEnum.INSPECT_QUALIFIED_NUMBER_ERROR);
+          throw new BaseException(ResponseEnum.INSPECT_QUALIFIED_NUMBER_ERROR);
         }
         inspectMapper.updateByExampleSelective(inspect, example);
       }
@@ -296,7 +297,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         Entrust entrustRecord = entrustList.get(0);
         entrust.setQualifiedNumber(model.getQualifiedNumber() + entrustList.get(0).getQualifiedNumber());
         if(entrustRecord.getNumber() < entrust.getQualifiedNumber()) {
-          return ResultBean.error(ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);
+          throw new BaseException(ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);
         }
         entrustMapper.updateByExampleSelective(entrust, entrustExample);
       }
