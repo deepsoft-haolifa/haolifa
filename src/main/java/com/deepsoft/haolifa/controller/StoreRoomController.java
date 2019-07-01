@@ -132,14 +132,14 @@ public class StoreRoomController {
     }
 
     @ApiOperation("批次号列表（根据库房，库位，零件图号），用于零件出库选择批次号")
-    @GetMapping("/material-batch-nos/{roomNo}/{rackNo}/{materialGraphNo}")
+    @GetMapping("/material-batch-nos")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roomNo", value = "库房No", dataType = "String", paramType = "path", required = true),
-            @ApiImplicitParam(name = "rackNo", value = "库位No", dataType = "String", paramType = "path", required = true),
-            @ApiImplicitParam(name = "materialGraphNo", value = "零件图号", dataType = "String", paramType = "path", required = true)
+            @ApiImplicitParam(name = "roomNo", value = "库房No", dataType = "String", paramType = "query", required = true),
+            @ApiImplicitParam(name = "rackNo", value = "库位No", dataType = "String", paramType = "query", required = true),
+            @ApiImplicitParam(name = "graphNo", value = "零件图号", dataType = "String", paramType = "query", required = true)
     })
-    public ResultBean getMaterialBatchNos(@PathVariable String roomNo, @PathVariable String rackNo, @PathVariable String materialGraphNo) {
-        return new ResultBean(stockService.listMaterialBatchNos(roomNo, rackNo, materialGraphNo));
+    public ResultBean getMaterialBatchNos(@RequestParam String roomNo, @RequestParam String rackNo, @RequestParam String graphNo) {
+        return new ResultBean(stockService.listMaterialBatchNos(roomNo, rackNo, graphNo));
     }
 
 
