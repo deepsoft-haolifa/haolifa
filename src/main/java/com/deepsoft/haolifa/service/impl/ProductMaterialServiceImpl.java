@@ -4,9 +4,11 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.ProductMaterialMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.ProductMaterialDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.ProductMaterialService;
+import com.deepsoft.haolifa.service.ProductService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,27 +29,28 @@ public class ProductMaterialServiceImpl extends BaseService implements ProductMa
     private ProductMaterialMapper productMaterialMapper;
     @Autowired
     private MaterialService materialService;
+    @Autowired
+    private ProductService productService;
 
     @Override
-    public ResultBean saveInfo(String productNo, String materialGraphNo) {
-        ProductMaterial productMaterial = new ProductMaterial() {{
-            setMaterialGraphNo(materialGraphNo);
-            setProductNo(productNo);
-            setCreateUser(getLoginUserId());
-        }};
-        int insert = productMaterialMapper.insertSelective(productMaterial);
-        return ResultBean.success(insert);
+    public List<ProductMaterial> getMaterialListByNo(String productNo) {
+        // 判断是否有这个产品
+        Product infoByNo = productService.getInfoByNo(productNo);
+        if (infoByNo == null) {
+            return null;
+        }
+        ProductMaterialExample example = new ProductMaterialExample();
+        example.or().andProductNoEqualTo(productNo);
+        List<ProductMaterial> productMaterials = productMaterialMapper.selectByExample(example);
+        return productMaterials;
     }
 
     @Override
     public ResultBean delete(String productNo, String materialGraphNo) {
         ProductMaterialExample example = new ProductMaterialExample();
         example.or().andProductNoEqualTo(productNo).andMaterialGraphNoEqualTo(materialGraphNo);
-        ProductMaterial productMaterial = new ProductMaterial() {{
-            setIsDelete(CommonEnum.Consts.YES.code);
-        }};
-        int update = productMaterialMapper.updateByExampleSelective(productMaterial, example);
-        return ResultBean.success(update);
+        int delete = productMaterialMapper.deleteByExample(example);
+        return ResultBean.success(delete);
     }
 
     @Override

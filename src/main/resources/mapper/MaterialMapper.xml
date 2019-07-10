@@ -13,6 +13,8 @@
       <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="replace_graph_nos" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="graph_url" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="unit" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -24,6 +26,8 @@
       <arg column="safe_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="safety_factor" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="current_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="lock_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="support_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
@@ -88,8 +92,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user, update_user, material_classify_id, material_classify_name, 
-    name, material, graph_no, unit, price, specifications, model, actual_weight, theoretical_weight, 
-    tax_rate, status, safe_quantity, safety_factor, current_quantity, is_delete, remark
+    name, material, graph_no, replace_graph_nos, graph_url, unit, price, specifications, 
+    model, actual_weight, theoretical_weight, tax_rate, status, safe_quantity, safety_factor, 
+    current_quantity, lock_quantity, support_quantity, is_delete, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialExample" resultMap="BaseResultMap">
     select
@@ -125,19 +130,23 @@
     insert into material (id, create_time, update_time, 
       create_user, update_user, material_classify_id, 
       material_classify_name, name, material, 
-      graph_no, unit, price, 
-      specifications, model, actual_weight, 
-      theoretical_weight, tax_rate, status, 
-      safe_quantity, safety_factor, current_quantity, 
-      is_delete, remark)
+      graph_no, replace_graph_nos, graph_url, 
+      unit, price, specifications, 
+      model, actual_weight, theoretical_weight, 
+      tax_rate, status, safe_quantity, 
+      safety_factor, current_quantity, lock_quantity, 
+      support_quantity, is_delete, remark
+      )
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{materialClassifyId,jdbcType=INTEGER}, 
       #{materialClassifyName,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
-      #{graphNo,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{actualWeight,jdbcType=VARCHAR}, 
-      #{theoreticalWeight,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{safeQuantity,jdbcType=INTEGER}, #{safetyFactor,jdbcType=VARCHAR}, #{currentQuantity,jdbcType=INTEGER}, 
-      #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
+      #{graphNo,jdbcType=VARCHAR}, #{replaceGraphNos,jdbcType=VARCHAR}, #{graphUrl,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{specifications,jdbcType=VARCHAR}, 
+      #{model,jdbcType=VARCHAR}, #{actualWeight,jdbcType=VARCHAR}, #{theoreticalWeight,jdbcType=VARCHAR}, 
+      #{taxRate,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{safeQuantity,jdbcType=INTEGER}, 
+      #{safetyFactor,jdbcType=VARCHAR}, #{currentQuantity,jdbcType=INTEGER}, #{lockQuantity,jdbcType=INTEGER}, 
+      #{supportQuantity,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Material">
     insert into material
@@ -172,6 +181,12 @@
       <if test="graphNo != null">
         graph_no,
       </if>
+      <if test="replaceGraphNos != null">
+        replace_graph_nos,
+      </if>
+      <if test="graphUrl != null">
+        graph_url,
+      </if>
       <if test="unit != null">
         unit,
       </if>
@@ -204,6 +219,12 @@
       </if>
       <if test="currentQuantity != null">
         current_quantity,
+      </if>
+      <if test="lockQuantity != null">
+        lock_quantity,
+      </if>
+      <if test="supportQuantity != null">
+        support_quantity,
       </if>
       <if test="isDelete != null">
         is_delete,
@@ -243,6 +264,12 @@
       <if test="graphNo != null">
         #{graphNo,jdbcType=VARCHAR},
       </if>
+      <if test="replaceGraphNos != null">
+        #{replaceGraphNos,jdbcType=VARCHAR},
+      </if>
+      <if test="graphUrl != null">
+        #{graphUrl,jdbcType=VARCHAR},
+      </if>
       <if test="unit != null">
         #{unit,jdbcType=VARCHAR},
       </if>
@@ -275,6 +302,12 @@
       </if>
       <if test="currentQuantity != null">
         #{currentQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="lockQuantity != null">
+        #{lockQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="supportQuantity != null">
+        #{supportQuantity,jdbcType=INTEGER},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -323,6 +356,12 @@
       <if test="record.graphNo != null">
         graph_no = #{record.graphNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.replaceGraphNos != null">
+        replace_graph_nos = #{record.replaceGraphNos,jdbcType=VARCHAR},
+      </if>
+      <if test="record.graphUrl != null">
+        graph_url = #{record.graphUrl,jdbcType=VARCHAR},
+      </if>
       <if test="record.unit != null">
         unit = #{record.unit,jdbcType=VARCHAR},
       </if>
@@ -356,6 +395,12 @@
       <if test="record.currentQuantity != null">
         current_quantity = #{record.currentQuantity,jdbcType=INTEGER},
       </if>
+      <if test="record.lockQuantity != null">
+        lock_quantity = #{record.lockQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.supportQuantity != null">
+        support_quantity = #{record.supportQuantity,jdbcType=INTEGER},
+      </if>
       <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=TINYINT},
       </if>
@@ -379,6 +424,8 @@
       name = #{record.name,jdbcType=VARCHAR},
       material = #{record.material,jdbcType=VARCHAR},
       graph_no = #{record.graphNo,jdbcType=VARCHAR},
+      replace_graph_nos = #{record.replaceGraphNos,jdbcType=VARCHAR},
+      graph_url = #{record.graphUrl,jdbcType=VARCHAR},
       unit = #{record.unit,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=DECIMAL},
       specifications = #{record.specifications,jdbcType=VARCHAR},
@@ -390,6 +437,8 @@
       safe_quantity = #{record.safeQuantity,jdbcType=INTEGER},
       safety_factor = #{record.safetyFactor,jdbcType=VARCHAR},
       current_quantity = #{record.currentQuantity,jdbcType=INTEGER},
+      lock_quantity = #{record.lockQuantity,jdbcType=INTEGER},
+      support_quantity = #{record.supportQuantity,jdbcType=INTEGER},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -426,6 +475,12 @@
       <if test="graphNo != null">
         graph_no = #{graphNo,jdbcType=VARCHAR},
       </if>
+      <if test="replaceGraphNos != null">
+        replace_graph_nos = #{replaceGraphNos,jdbcType=VARCHAR},
+      </if>
+      <if test="graphUrl != null">
+        graph_url = #{graphUrl,jdbcType=VARCHAR},
+      </if>
       <if test="unit != null">
         unit = #{unit,jdbcType=VARCHAR},
       </if>
@@ -459,6 +514,12 @@
       <if test="currentQuantity != null">
         current_quantity = #{currentQuantity,jdbcType=INTEGER},
       </if>
+      <if test="lockQuantity != null">
+        lock_quantity = #{lockQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="supportQuantity != null">
+        support_quantity = #{supportQuantity,jdbcType=INTEGER},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -479,6 +540,8 @@
       name = #{name,jdbcType=VARCHAR},
       material = #{material,jdbcType=VARCHAR},
       graph_no = #{graphNo,jdbcType=VARCHAR},
+      replace_graph_nos = #{replaceGraphNos,jdbcType=VARCHAR},
+      graph_url = #{graphUrl,jdbcType=VARCHAR},
       unit = #{unit,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       specifications = #{specifications,jdbcType=VARCHAR},
@@ -490,6 +553,8 @@
       safe_quantity = #{safeQuantity,jdbcType=INTEGER},
       safety_factor = #{safetyFactor,jdbcType=VARCHAR},
       current_quantity = #{currentQuantity,jdbcType=INTEGER},
+      lock_quantity = #{lockQuantity,jdbcType=INTEGER},
+      support_quantity = #{supportQuantity,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

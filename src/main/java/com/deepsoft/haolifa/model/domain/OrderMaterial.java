@@ -7,30 +7,36 @@ public class OrderMaterial {
 
     private Date createTime;
 
-    private Date updateTime;
-
-    private Integer createUser;
-
-    private Integer updateUser;
-
     private String orderNo;
-
-    private Integer materialId;
 
     private String materialGraphNo;
 
-    private String materialCount;
+    private String materialName;
 
-    public OrderMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, Integer materialId, String materialGraphNo, String materialCount) {
+    private String replaceMaterialGraphNo;
+
+    private String replaceMaterialName;
+
+    private Byte auditResult;
+
+    private Integer materialCount;
+
+    private Integer lackMaterialCount;
+
+    private Byte checkStatus;
+
+    public OrderMaterial(Integer id, Date createTime, String orderNo, String materialGraphNo, String materialName, String replaceMaterialGraphNo, String replaceMaterialName, Byte auditResult, Integer materialCount, Integer lackMaterialCount, Byte checkStatus) {
         this.id = id;
         this.createTime = createTime;
-        this.updateTime = updateTime;
-        this.createUser = createUser;
-        this.updateUser = updateUser;
         this.orderNo = orderNo;
-        this.materialId = materialId;
         this.materialGraphNo = materialGraphNo;
+        this.materialName = materialName;
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo;
+        this.replaceMaterialName = replaceMaterialName;
+        this.auditResult = auditResult;
         this.materialCount = materialCount;
+        this.lackMaterialCount = lackMaterialCount;
+        this.checkStatus = checkStatus;
     }
 
     public OrderMaterial() {
@@ -53,44 +59,12 @@ public class OrderMaterial {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Integer getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
-    }
-
     public String getOrderNo() {
         return orderNo;
     }
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
-    }
-
-    public Integer getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Integer materialId) {
-        this.materialId = materialId;
     }
 
     public String getMaterialGraphNo() {
@@ -101,11 +75,59 @@ public class OrderMaterial {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
     }
 
-    public String getMaterialCount() {
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName == null ? null : materialName.trim();
+    }
+
+    public String getReplaceMaterialGraphNo() {
+        return replaceMaterialGraphNo;
+    }
+
+    public void setReplaceMaterialGraphNo(String replaceMaterialGraphNo) {
+        this.replaceMaterialGraphNo = replaceMaterialGraphNo == null ? null : replaceMaterialGraphNo.trim();
+    }
+
+    public String getReplaceMaterialName() {
+        return replaceMaterialName;
+    }
+
+    public void setReplaceMaterialName(String replaceMaterialName) {
+        this.replaceMaterialName = replaceMaterialName == null ? null : replaceMaterialName.trim();
+    }
+
+    public Byte getAuditResult() {
+        return auditResult;
+    }
+
+    public void setAuditResult(Byte auditResult) {
+        this.auditResult = auditResult;
+    }
+
+    public Integer getMaterialCount() {
         return materialCount;
     }
 
-    public void setMaterialCount(String materialCount) {
-        this.materialCount = materialCount == null ? null : materialCount.trim();
+    public void setMaterialCount(Integer materialCount) {
+        this.materialCount = materialCount;
+    }
+
+    public Integer getLackMaterialCount() {
+        return lackMaterialCount;
+    }
+
+    public void setLackMaterialCount(Integer lackMaterialCount) {
+        this.lackMaterialCount = lackMaterialCount;
+    }
+
+    public Byte getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Byte checkStatus) {
+        this.checkStatus = checkStatus;
     }
 }

@@ -235,73 +235,73 @@ public class PurchaseOrderItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductNameIsNull() {
-            addCriterion("product_name is null");
+        public Criteria andMaterialNameIsNull() {
+            addCriterion("material_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameIsNotNull() {
-            addCriterion("product_name is not null");
+        public Criteria andMaterialNameIsNotNull() {
+            addCriterion("material_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameEqualTo(String value) {
-            addCriterion("product_name =", value, "productName");
+        public Criteria andMaterialNameEqualTo(String value) {
+            addCriterion("material_name =", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameNotEqualTo(String value) {
-            addCriterion("product_name <>", value, "productName");
+        public Criteria andMaterialNameNotEqualTo(String value) {
+            addCriterion("material_name <>", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameGreaterThan(String value) {
-            addCriterion("product_name >", value, "productName");
+        public Criteria andMaterialNameGreaterThan(String value) {
+            addCriterion("material_name >", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameGreaterThanOrEqualTo(String value) {
-            addCriterion("product_name >=", value, "productName");
+        public Criteria andMaterialNameGreaterThanOrEqualTo(String value) {
+            addCriterion("material_name >=", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameLessThan(String value) {
-            addCriterion("product_name <", value, "productName");
+        public Criteria andMaterialNameLessThan(String value) {
+            addCriterion("material_name <", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameLessThanOrEqualTo(String value) {
-            addCriterion("product_name <=", value, "productName");
+        public Criteria andMaterialNameLessThanOrEqualTo(String value) {
+            addCriterion("material_name <=", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameLike(String value) {
-            addCriterion("product_name like", value, "productName");
+        public Criteria andMaterialNameLike(String value) {
+            addCriterion("material_name like", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameNotLike(String value) {
-            addCriterion("product_name not like", value, "productName");
+        public Criteria andMaterialNameNotLike(String value) {
+            addCriterion("material_name not like", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameIn(List<String> values) {
-            addCriterion("product_name in", values, "productName");
+        public Criteria andMaterialNameIn(List<String> values) {
+            addCriterion("material_name in", values, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameNotIn(List<String> values) {
-            addCriterion("product_name not in", values, "productName");
+        public Criteria andMaterialNameNotIn(List<String> values) {
+            addCriterion("material_name not in", values, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameBetween(String value1, String value2) {
-            addCriterion("product_name between", value1, value2, "productName");
+        public Criteria andMaterialNameBetween(String value1, String value2) {
+            addCriterion("material_name between", value1, value2, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andProductNameNotBetween(String value1, String value2) {
-            addCriterion("product_name not between", value1, value2, "productName");
+        public Criteria andMaterialNameNotBetween(String value1, String value2) {
+            addCriterion("material_name not between", value1, value2, "materialName");
             return (Criteria) this;
         }
 

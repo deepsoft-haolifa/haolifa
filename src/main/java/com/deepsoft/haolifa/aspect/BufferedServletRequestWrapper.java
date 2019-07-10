@@ -12,7 +12,6 @@ import java.io.*;
  */
 class BufferedServletRequestWrapper extends HttpServletRequestWrapper {
 
-
     private final byte[] body;
 
     public BufferedServletRequestWrapper(HttpServletRequest request) throws IOException {

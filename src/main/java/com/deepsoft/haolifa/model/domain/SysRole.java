@@ -7,6 +7,10 @@ public class SysRole {
 
     private Integer deptId;
 
+    private Integer pid;
+
+    private String roleNo;
+
     private String roleName;
 
     private String description;
@@ -17,9 +21,11 @@ public class SysRole {
 
     private Date updateTime;
 
-    public SysRole(Integer id, Integer deptId, String roleName, String description, Byte isDelete, Date createTime, Date updateTime) {
+    public SysRole(Integer id, Integer deptId, Integer pid, String roleNo, String roleName, String description, Byte isDelete, Date createTime, Date updateTime) {
         this.id = id;
         this.deptId = deptId;
+        this.pid = pid;
+        this.roleNo = roleNo;
         this.roleName = roleName;
         this.description = description;
         this.isDelete = isDelete;
@@ -45,6 +51,22 @@ public class SysRole {
 
     public void setDeptId(Integer deptId) {
         this.deptId = deptId;
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
+    public String getRoleNo() {
+        return roleNo;
+    }
+
+    public void setRoleNo(String roleNo) {
+        this.roleNo = roleNo == null ? null : roleNo.trim();
     }
 
     public String getRoleName() {

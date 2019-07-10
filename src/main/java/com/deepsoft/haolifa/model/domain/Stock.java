@@ -13,15 +13,17 @@ public class Stock {
 
     private Integer updateUser;
 
-    private String stockId;
+    private String roomNo;
 
-    private Integer storeRoomId;
-
-    private Integer storeRoomRackId;
-
-    private String storeRoomRackNo;
+    private String rackNo;
 
     private String productNo;
+
+    private String productModel;
+
+    private String productSpecifications;
+
+    private String materialBatchNo;
 
     private String materialGraphNo;
 
@@ -29,27 +31,25 @@ public class Stock {
 
     private Integer quantity;
 
-    private Integer lockQuantity;
-
     private Byte isDelete;
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String stockId, Integer storeRoomId, Integer storeRoomRackId, String storeRoomRackNo, String productNo, String materialGraphNo, Byte type, Integer quantity, Integer lockQuantity, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String productModel, String productSpecifications, String materialBatchNo, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
-        this.stockId = stockId;
-        this.storeRoomId = storeRoomId;
-        this.storeRoomRackId = storeRoomRackId;
-        this.storeRoomRackNo = storeRoomRackNo;
+        this.roomNo = roomNo;
+        this.rackNo = rackNo;
         this.productNo = productNo;
+        this.productModel = productModel;
+        this.productSpecifications = productSpecifications;
+        this.materialBatchNo = materialBatchNo;
         this.materialGraphNo = materialGraphNo;
         this.type = type;
         this.quantity = quantity;
-        this.lockQuantity = lockQuantity;
         this.isDelete = isDelete;
         this.remark = remark;
     }
@@ -98,36 +98,20 @@ public class Stock {
         this.updateUser = updateUser;
     }
 
-    public String getStockId() {
-        return stockId;
+    public String getRoomNo() {
+        return roomNo;
     }
 
-    public void setStockId(String stockId) {
-        this.stockId = stockId == null ? null : stockId.trim();
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo == null ? null : roomNo.trim();
     }
 
-    public Integer getStoreRoomId() {
-        return storeRoomId;
+    public String getRackNo() {
+        return rackNo;
     }
 
-    public void setStoreRoomId(Integer storeRoomId) {
-        this.storeRoomId = storeRoomId;
-    }
-
-    public Integer getStoreRoomRackId() {
-        return storeRoomRackId;
-    }
-
-    public void setStoreRoomRackId(Integer storeRoomRackId) {
-        this.storeRoomRackId = storeRoomRackId;
-    }
-
-    public String getStoreRoomRackNo() {
-        return storeRoomRackNo;
-    }
-
-    public void setStoreRoomRackNo(String storeRoomRackNo) {
-        this.storeRoomRackNo = storeRoomRackNo == null ? null : storeRoomRackNo.trim();
+    public void setRackNo(String rackNo) {
+        this.rackNo = rackNo == null ? null : rackNo.trim();
     }
 
     public String getProductNo() {
@@ -136,6 +120,30 @@ public class Stock {
 
     public void setProductNo(String productNo) {
         this.productNo = productNo == null ? null : productNo.trim();
+    }
+
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel == null ? null : productModel.trim();
+    }
+
+    public String getProductSpecifications() {
+        return productSpecifications;
+    }
+
+    public void setProductSpecifications(String productSpecifications) {
+        this.productSpecifications = productSpecifications == null ? null : productSpecifications.trim();
+    }
+
+    public String getMaterialBatchNo() {
+        return materialBatchNo;
+    }
+
+    public void setMaterialBatchNo(String materialBatchNo) {
+        this.materialBatchNo = materialBatchNo == null ? null : materialBatchNo.trim();
     }
 
     public String getMaterialGraphNo() {
@@ -160,14 +168,6 @@ public class Stock {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Integer getLockQuantity() {
-        return lockQuantity;
-    }
-
-    public void setLockQuantity(Integer lockQuantity) {
-        this.lockQuantity = lockQuantity;
     }
 
     public Byte getIsDelete() {

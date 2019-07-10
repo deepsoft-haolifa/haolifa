@@ -2,7 +2,8 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.deepsoft.haolifa.dao.redis.RedisDao;
+import com.deepsoft.haolifa.cache.CacheKeyManager;
+import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MyUserMapper;
@@ -17,7 +18,6 @@ import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.PermissionService;
 import com.deepsoft.haolifa.service.RoleService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.util.RedisKeyUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -59,24 +59,28 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public CustomUser selectLoginUser() {
         //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return  (CustomUser) customUserService.loadUserByUsername("admin");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if ("anonymousUser".equals(principal))
+            return (CustomUser) customUserService.loadUserByUsername("admin");
+        else
+            return (CustomUser) principal;
     }
 
     @Override
     public UserInfoVO selectUserInfo() {
         CustomUser customUser = selectLoginUser();
         UserInfoVO userInfoVO = new UserInfoVO(customUser.getUsername(), customUser.getRealName(),
-                customUser.getAuthorities(), permissionService.getMenu());
+                customUser.getId(), customUser.getAuthorities(), permissionService.getMenu("m"));
         return userInfoVO;
     }
 
     @Override
     public SysUser getSysUser(Integer userId) {
-        String userKey = RedisKeyUtil.getUserKey(userId);
+        String userKey = CacheKeyManager.cacheKeyUserCache(userId).key;
         //暂时不用缓存
         redisDao.del(userKey);
         String userCacheStr = redisDao.get(userKey);
-        if(StringUtils.isNotBlank(userCacheStr)){
+        if (StringUtils.isNotBlank(userCacheStr)) {
             return JSONObject.parseObject(userCacheStr, UserCacheDTO.class);
         }
         SysUserExample userExample = new SysUserExample();
@@ -84,10 +88,9 @@ public class SysUserServiceImpl implements SysUserService {
         List<SysUser> sysUsers = userMapper.selectByExample(userExample);
         List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(userId);
         UserCacheDTO userCacheDTO = new UserCacheDTO();
-        if(sysUsers.size() > 0){
+        if (sysUsers.size() > 0) {
             BeanUtils.copyProperties(sysUsers.get(0), userCacheDTO);
             userCacheDTO.setRoles(rolesByUserId);
-
         }
         redisDao.set(userKey, JSON.toJSONString(userCacheDTO));
         return userCacheDTO;
@@ -97,7 +100,9 @@ public class SysUserServiceImpl implements SysUserService {
     public int insertSysUser(UserBaseDTO user) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
-        sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userMapper.insertSelective(sysUser);
     }
 
@@ -121,12 +126,19 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public int updateSysUser(UserBaseDTO user) {
-        if(user.getId() == null){
+        if (user.getId() == null) {
             throw new BaseException(PARAM_ERROR.code, "用户id不能为空");
         }
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
-        return userMapper.updateByPrimaryKeySelective(sysUser);
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            sysUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        int count = userMapper.updateByPrimaryKeySelective(sysUser);
+//        String userKey = CacheKeyManager.cacheKeyUserCache(user.getId()).key;
+//        //暂时不用缓存
+//        redisDao.del(userKey);
+        return count;
     }
 
     @Override
@@ -141,7 +153,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysRoleUserExample.createCriteria().andSysUserIdEqualTo(userId);
         roleUserMapper.deleteByExample(sysRoleUserExample);
         int count = 0;
-        for (Integer roleId:roleIds) {
+        for (Integer roleId : roleIds) {
             SysRoleUser roleUser = new SysRoleUser();
             roleUser.setSysUserId(userId);
             roleUser.setSysRoleId(roleId);
@@ -160,8 +172,18 @@ public class SysUserServiceImpl implements SysUserService {
     public String initPwd(Integer id) {
         UserBaseDTO userBaseDTO = new UserBaseDTO();
         userBaseDTO.setId(id);
-        userBaseDTO.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        userBaseDTO.setPassword(DEFAULT_PASSWORD);
         updateSysUser(userBaseDTO);
         return DEFAULT_PASSWORD;
+    }
+
+    @Override
+    public String changePwd(String newPassword) {
+        CustomUser customUser = selectLoginUser();
+        UserBaseDTO userBaseDTO = new UserBaseDTO();
+        userBaseDTO.setId(customUser.getId());
+        userBaseDTO.setPassword(newPassword);
+        updateSysUser(userBaseDTO);
+        return newPassword;
     }
 }

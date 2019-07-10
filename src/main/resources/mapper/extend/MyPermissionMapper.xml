@@ -33,4 +33,42 @@
     ORDER BY sp.id
   </select>
 
+  <select id="findPermissiosByRoleId" parameterType="int" resultType="com.deepsoft.haolifa.model.vo.MenuVO">
+    SELECT
+      DISTINCT
+      sp.id,
+      sp.pid,
+      sp.description,
+      url as code
+    FROM sys_role sr
+    LEFT JOIN sys_permission_role srp ON sr.id = srp.role_id
+    LEFT JOIN sys_permission sp ON srp.permission_id = sp.id
+    WHERE sr.id = #{id}
+    ORDER BY sp.id
+  </select>
+  
+  <insert id="inserRoleMenu" parameterType="map">
+    INSERT INTO sys_permission_role
+    (role_id, permission_id)
+    VALUES
+    <foreach collection="menuIds" item="menuId" separator=",">
+      (#{roleId},#{menuId})
+    </foreach>
+  </insert>
+
+  <select id="selectUserByRole" parameterType="java.lang.String" resultType="com.deepsoft.haolifa.model.vo.UserPageVO">
+    SELECT
+      u.`id` AS id,
+      u.`username` AS username,
+      u.`real_name` AS realName
+   FROM `sys_role` r LEFT JOIN
+   	`sys_role_user` ru ON
+   	 r.`id` = ru.`sys_role_id`
+   LEFT JOIN
+    `sys_user` u ON
+     u.`id` = ru.`sys_user_id`
+	WHERE r.`role_name` = #{roleName}
+	AND u.`is_delete` = 0;
+  </select>
+
 </mapper>

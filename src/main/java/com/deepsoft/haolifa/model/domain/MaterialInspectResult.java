@@ -7,8 +7,6 @@ public class MaterialInspectResult {
 
     private Integer flowId;
 
-    private String purchaseOrderNo;
-
     private String inspectNo;
 
     private String materialGraphNo;
@@ -29,10 +27,9 @@ public class MaterialInspectResult {
 
     private Integer createUserId;
 
-    public MaterialInspectResult(Integer id, Integer flowId, String purchaseOrderNo, String inspectNo, String materialGraphNo, String materialName, Integer inspectNumber, Integer unqualifiedNumber, String handlingResult, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    public MaterialInspectResult(Integer id, Integer flowId, String inspectNo, String materialGraphNo, String materialName, Integer inspectNumber, Integer unqualifiedNumber, String handlingResult, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.flowId = flowId;
-        this.purchaseOrderNo = purchaseOrderNo;
         this.inspectNo = inspectNo;
         this.materialGraphNo = materialGraphNo;
         this.materialName = materialName;
@@ -63,14 +60,6 @@ public class MaterialInspectResult {
 
     public void setFlowId(Integer flowId) {
         this.flowId = flowId;
-    }
-
-    public String getPurchaseOrderNo() {
-        return purchaseOrderNo;
-    }
-
-    public void setPurchaseOrderNo(String purchaseOrderNo) {
-        this.purchaseOrderNo = purchaseOrderNo == null ? null : purchaseOrderNo.trim();
     }
 
     public String getInspectNo() {

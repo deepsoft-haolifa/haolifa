@@ -1,10 +1,18 @@
 server:
   servlet:
     context-path: /haolifa
+    session:
+      timeout: 1d
+      cookie:
+        http-only: true
+        max-age: 1d
 
 spring:
   profiles:
     active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
 mybatis:
   mapper-locations: classpath:mapper/**/*Mapper.xml
@@ -23,3 +31,11 @@ log:
 
 project:
    url: http://47.105.36.56
+
+my:
+  security:
+    image:
+      width: 60
+      height: 40
+      expire-sec: 60
+      length: 4

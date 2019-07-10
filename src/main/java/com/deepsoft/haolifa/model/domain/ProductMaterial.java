@@ -15,7 +15,15 @@ public class ProductMaterial {
 
     private String productNo;
 
+    private String productModel;
+
+    private String specification;
+
     private String materialGraphNo;
+
+    private Integer materialCount;
+
+    private String replaceMaterialGraphNos;
 
     private Byte status;
 
@@ -23,14 +31,18 @@ public class ProductMaterial {
 
     private String remark;
 
-    public ProductMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String materialGraphNo, Byte status, Byte isDelete, String remark) {
+    public ProductMaterial(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String productNo, String productModel, String specification, String materialGraphNo, Integer materialCount, String replaceMaterialGraphNos, Byte status, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.productNo = productNo;
+        this.productModel = productModel;
+        this.specification = specification;
         this.materialGraphNo = materialGraphNo;
+        this.materialCount = materialCount;
+        this.replaceMaterialGraphNos = replaceMaterialGraphNos;
         this.status = status;
         this.isDelete = isDelete;
         this.remark = remark;
@@ -88,12 +100,44 @@ public class ProductMaterial {
         this.productNo = productNo == null ? null : productNo.trim();
     }
 
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel == null ? null : productModel.trim();
+    }
+
+    public String getSpecification() {
+        return specification;
+    }
+
+    public void setSpecification(String specification) {
+        this.specification = specification == null ? null : specification.trim();
+    }
+
     public String getMaterialGraphNo() {
         return materialGraphNo;
     }
 
     public void setMaterialGraphNo(String materialGraphNo) {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public Integer getMaterialCount() {
+        return materialCount;
+    }
+
+    public void setMaterialCount(Integer materialCount) {
+        this.materialCount = materialCount;
+    }
+
+    public String getReplaceMaterialGraphNos() {
+        return replaceMaterialGraphNos;
+    }
+
+    public void setReplaceMaterialGraphNos(String replaceMaterialGraphNos) {
+        this.replaceMaterialGraphNos = replaceMaterialGraphNos == null ? null : replaceMaterialGraphNos.trim();
     }
 
     public Byte getStatus() {

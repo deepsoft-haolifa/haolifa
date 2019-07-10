@@ -13,7 +13,7 @@ public class StoreRoomRack {
 
     private Integer updateUser;
 
-    private String storeRoomNo;
+    private String roomNo;
 
     private String rackNo;
 
@@ -25,13 +25,13 @@ public class StoreRoomRack {
 
     private String rackName;
 
-    public StoreRoomRack(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String storeRoomNo, String rackNo, Byte status, String remark, Byte isDelete, String rackName) {
+    public StoreRoomRack(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, Byte status, String remark, Byte isDelete, String rackName) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
-        this.storeRoomNo = storeRoomNo;
+        this.roomNo = roomNo;
         this.rackNo = rackNo;
         this.status = status;
         this.remark = remark;
@@ -83,12 +83,12 @@ public class StoreRoomRack {
         this.updateUser = updateUser;
     }
 
-    public String getStoreRoomNo() {
-        return storeRoomNo;
+    public String getRoomNo() {
+        return roomNo;
     }
 
-    public void setStoreRoomNo(String storeRoomNo) {
-        this.storeRoomNo = storeRoomNo == null ? null : storeRoomNo.trim();
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo == null ? null : roomNo.trim();
     }
 
     public String getRackNo() {

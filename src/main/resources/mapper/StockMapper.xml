@@ -8,15 +8,15 @@
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="stock_id" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="store_room_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="store_room_rack_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="store_room_rack_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="room_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rack_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="product_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_batch_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="lock_quantity" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
@@ -80,9 +80,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, stock_id, store_room_id, 
-    store_room_rack_id, store_room_rack_no, product_no, material_graph_no, type, quantity, 
-    lock_quantity, is_delete, remark
+    id, create_time, update_time, create_user, update_user, room_no, rack_no, product_no, 
+    product_model, product_specifications, material_batch_no, material_graph_no, type, 
+    quantity, is_delete, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.StockExample" resultMap="BaseResultMap">
     select
@@ -116,17 +116,17 @@
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Stock">
     insert into stock (id, create_time, update_time, 
-      create_user, update_user, stock_id, 
-      store_room_id, store_room_rack_id, store_room_rack_no, 
-      product_no, material_graph_no, type, 
-      quantity, lock_quantity, is_delete, 
-      remark)
+      create_user, update_user, room_no, 
+      rack_no, product_no, product_model, 
+      product_specifications, material_batch_no, 
+      material_graph_no, type, quantity, 
+      is_delete, remark)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{stockId,jdbcType=CHAR}, 
-      #{storeRoomId,jdbcType=INTEGER}, #{storeRoomRackId,jdbcType=INTEGER}, #{storeRoomRackNo,jdbcType=VARCHAR}, 
-      #{productNo,jdbcType=CHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{quantity,jdbcType=INTEGER}, #{lockQuantity,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}, 
-      #{remark,jdbcType=VARCHAR})
+      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{roomNo,jdbcType=VARCHAR}, 
+      #{rackNo,jdbcType=VARCHAR}, #{productNo,jdbcType=CHAR}, #{productModel,jdbcType=VARCHAR}, 
+      #{productSpecifications,jdbcType=VARCHAR}, #{materialBatchNo,jdbcType=VARCHAR}, 
+      #{materialGraphNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{quantity,jdbcType=INTEGER}, 
+      #{isDelete,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Stock">
     insert into stock
@@ -146,20 +146,23 @@
       <if test="updateUser != null">
         update_user,
       </if>
-      <if test="stockId != null">
-        stock_id,
+      <if test="roomNo != null">
+        room_no,
       </if>
-      <if test="storeRoomId != null">
-        store_room_id,
-      </if>
-      <if test="storeRoomRackId != null">
-        store_room_rack_id,
-      </if>
-      <if test="storeRoomRackNo != null">
-        store_room_rack_no,
+      <if test="rackNo != null">
+        rack_no,
       </if>
       <if test="productNo != null">
         product_no,
+      </if>
+      <if test="productModel != null">
+        product_model,
+      </if>
+      <if test="productSpecifications != null">
+        product_specifications,
+      </if>
+      <if test="materialBatchNo != null">
+        material_batch_no,
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
@@ -169,9 +172,6 @@
       </if>
       <if test="quantity != null">
         quantity,
-      </if>
-      <if test="lockQuantity != null">
-        lock_quantity,
       </if>
       <if test="isDelete != null">
         is_delete,
@@ -196,20 +196,23 @@
       <if test="updateUser != null">
         #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="stockId != null">
-        #{stockId,jdbcType=CHAR},
+      <if test="roomNo != null">
+        #{roomNo,jdbcType=VARCHAR},
       </if>
-      <if test="storeRoomId != null">
-        #{storeRoomId,jdbcType=INTEGER},
-      </if>
-      <if test="storeRoomRackId != null">
-        #{storeRoomRackId,jdbcType=INTEGER},
-      </if>
-      <if test="storeRoomRackNo != null">
-        #{storeRoomRackNo,jdbcType=VARCHAR},
+      <if test="rackNo != null">
+        #{rackNo,jdbcType=VARCHAR},
       </if>
       <if test="productNo != null">
         #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="productModel != null">
+        #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null">
+        #{productSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="materialBatchNo != null">
+        #{materialBatchNo,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
@@ -219,9 +222,6 @@
       </if>
       <if test="quantity != null">
         #{quantity,jdbcType=INTEGER},
-      </if>
-      <if test="lockQuantity != null">
-        #{lockQuantity,jdbcType=INTEGER},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -255,20 +255,23 @@
       <if test="record.updateUser != null">
         update_user = #{record.updateUser,jdbcType=INTEGER},
       </if>
-      <if test="record.stockId != null">
-        stock_id = #{record.stockId,jdbcType=CHAR},
+      <if test="record.roomNo != null">
+        room_no = #{record.roomNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.storeRoomId != null">
-        store_room_id = #{record.storeRoomId,jdbcType=INTEGER},
-      </if>
-      <if test="record.storeRoomRackId != null">
-        store_room_rack_id = #{record.storeRoomRackId,jdbcType=INTEGER},
-      </if>
-      <if test="record.storeRoomRackNo != null">
-        store_room_rack_no = #{record.storeRoomRackNo,jdbcType=VARCHAR},
+      <if test="record.rackNo != null">
+        rack_no = #{record.rackNo,jdbcType=VARCHAR},
       </if>
       <if test="record.productNo != null">
         product_no = #{record.productNo,jdbcType=CHAR},
+      </if>
+      <if test="record.productModel != null">
+        product_model = #{record.productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productSpecifications != null">
+        product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialBatchNo != null">
+        material_batch_no = #{record.materialBatchNo,jdbcType=VARCHAR},
       </if>
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
@@ -278,9 +281,6 @@
       </if>
       <if test="record.quantity != null">
         quantity = #{record.quantity,jdbcType=INTEGER},
-      </if>
-      <if test="record.lockQuantity != null">
-        lock_quantity = #{record.lockQuantity,jdbcType=INTEGER},
       </if>
       <if test="record.isDelete != null">
         is_delete = #{record.isDelete,jdbcType=TINYINT},
@@ -300,15 +300,15 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
-      stock_id = #{record.stockId,jdbcType=CHAR},
-      store_room_id = #{record.storeRoomId,jdbcType=INTEGER},
-      store_room_rack_id = #{record.storeRoomRackId,jdbcType=INTEGER},
-      store_room_rack_no = #{record.storeRoomRackNo,jdbcType=VARCHAR},
+      room_no = #{record.roomNo,jdbcType=VARCHAR},
+      rack_no = #{record.rackNo,jdbcType=VARCHAR},
       product_no = #{record.productNo,jdbcType=CHAR},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
+      material_batch_no = #{record.materialBatchNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
       quantity = #{record.quantity,jdbcType=INTEGER},
-      lock_quantity = #{record.lockQuantity,jdbcType=INTEGER},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -330,20 +330,23 @@
       <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="stockId != null">
-        stock_id = #{stockId,jdbcType=CHAR},
+      <if test="roomNo != null">
+        room_no = #{roomNo,jdbcType=VARCHAR},
       </if>
-      <if test="storeRoomId != null">
-        store_room_id = #{storeRoomId,jdbcType=INTEGER},
-      </if>
-      <if test="storeRoomRackId != null">
-        store_room_rack_id = #{storeRoomRackId,jdbcType=INTEGER},
-      </if>
-      <if test="storeRoomRackNo != null">
-        store_room_rack_no = #{storeRoomRackNo,jdbcType=VARCHAR},
+      <if test="rackNo != null">
+        rack_no = #{rackNo,jdbcType=VARCHAR},
       </if>
       <if test="productNo != null">
         product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="productModel != null">
+        product_model = #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null">
+        product_specifications = #{productSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="materialBatchNo != null">
+        material_batch_no = #{materialBatchNo,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
@@ -353,9 +356,6 @@
       </if>
       <if test="quantity != null">
         quantity = #{quantity,jdbcType=INTEGER},
-      </if>
-      <if test="lockQuantity != null">
-        lock_quantity = #{lockQuantity,jdbcType=INTEGER},
       </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
@@ -372,15 +372,15 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},
-      stock_id = #{stockId,jdbcType=CHAR},
-      store_room_id = #{storeRoomId,jdbcType=INTEGER},
-      store_room_rack_id = #{storeRoomRackId,jdbcType=INTEGER},
-      store_room_rack_no = #{storeRoomRackNo,jdbcType=VARCHAR},
+      room_no = #{roomNo,jdbcType=VARCHAR},
+      rack_no = #{rackNo,jdbcType=VARCHAR},
       product_no = #{productNo,jdbcType=CHAR},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      product_specifications = #{productSpecifications,jdbcType=VARCHAR},
+      material_batch_no = #{materialBatchNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
       quantity = #{quantity,jdbcType=INTEGER},
-      lock_quantity = #{lockQuantity,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=TINYINT},
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}

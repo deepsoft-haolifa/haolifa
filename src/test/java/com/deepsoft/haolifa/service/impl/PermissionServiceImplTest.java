@@ -14,6 +14,6 @@ public class PermissionServiceImplTest extends BaseApplicationTests {
 
     @Test
     public void getMenu() {
-        System.out.println(permissionService.getMenu());
+        System.out.println(permissionService.getMenu("m"));
     }
 }

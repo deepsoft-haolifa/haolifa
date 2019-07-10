@@ -746,6 +746,146 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andReplaceGraphNosIsNull() {
+            addCriterion("replace_graph_nos is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosIsNotNull() {
+            addCriterion("replace_graph_nos is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosEqualTo(String value) {
+            addCriterion("replace_graph_nos =", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosNotEqualTo(String value) {
+            addCriterion("replace_graph_nos <>", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosGreaterThan(String value) {
+            addCriterion("replace_graph_nos >", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosGreaterThanOrEqualTo(String value) {
+            addCriterion("replace_graph_nos >=", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosLessThan(String value) {
+            addCriterion("replace_graph_nos <", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosLessThanOrEqualTo(String value) {
+            addCriterion("replace_graph_nos <=", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosLike(String value) {
+            addCriterion("replace_graph_nos like", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosNotLike(String value) {
+            addCriterion("replace_graph_nos not like", value, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosIn(List<String> values) {
+            addCriterion("replace_graph_nos in", values, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosNotIn(List<String> values) {
+            addCriterion("replace_graph_nos not in", values, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosBetween(String value1, String value2) {
+            addCriterion("replace_graph_nos between", value1, value2, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andReplaceGraphNosNotBetween(String value1, String value2) {
+            addCriterion("replace_graph_nos not between", value1, value2, "replaceGraphNos");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlIsNull() {
+            addCriterion("graph_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlIsNotNull() {
+            addCriterion("graph_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlEqualTo(String value) {
+            addCriterion("graph_url =", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlNotEqualTo(String value) {
+            addCriterion("graph_url <>", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlGreaterThan(String value) {
+            addCriterion("graph_url >", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("graph_url >=", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlLessThan(String value) {
+            addCriterion("graph_url <", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlLessThanOrEqualTo(String value) {
+            addCriterion("graph_url <=", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlLike(String value) {
+            addCriterion("graph_url like", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlNotLike(String value) {
+            addCriterion("graph_url not like", value, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlIn(List<String> values) {
+            addCriterion("graph_url in", values, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlNotIn(List<String> values) {
+            addCriterion("graph_url not in", values, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlBetween(String value1, String value2) {
+            addCriterion("graph_url between", value1, value2, "graphUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andGraphUrlNotBetween(String value1, String value2) {
+            addCriterion("graph_url not between", value1, value2, "graphUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andUnitIsNull() {
             addCriterion("unit is null");
             return (Criteria) this;
@@ -1436,22 +1576,22 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andCurrentQuantityGreaterThan(String value) {
+        public Criteria andCurrentQuantityGreaterThan(Integer value) {
             addCriterion("current_quantity >", value, "currentQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentQuantityGreaterThanOrEqualTo(String value) {
+        public Criteria andCurrentQuantityGreaterThanOrEqualTo(Integer value) {
             addCriterion("current_quantity >=", value, "currentQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentQuantityLessThan(String value) {
+        public Criteria andCurrentQuantityLessThan(Integer value) {
             addCriterion("current_quantity <", value, "currentQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andCurrentQuantityLessThanOrEqualTo(Integer value) {
+        public Criteria andCurrentQuantityLessThanOrEqualTo(String value) {
             addCriterion("current_quantity <=", value, "currentQuantity");
             return (Criteria) this;
         }
@@ -1476,6 +1616,125 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andLockQuantityIsNull() {
+            addCriterion("lock_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityIsNotNull() {
+            addCriterion("lock_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityEqualTo(Integer value) {
+            addCriterion("lock_quantity =", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityNotEqualTo(Integer value) {
+            addCriterion("lock_quantity <>", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityGreaterThan(Integer value) {
+            addCriterion("lock_quantity >", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity >=", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityLessThan(Integer value) {
+            addCriterion("lock_quantity <", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity <=", value, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityIn(List<Integer> values) {
+            addCriterion("lock_quantity in", values, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityNotIn(List<Integer> values) {
+            addCriterion("lock_quantity not in", values, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity between", value1, value2, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andLockQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity not between", value1, value2, "lockQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityIsNull() {
+            addCriterion("support_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityIsNotNull() {
+            addCriterion("support_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityEqualTo(Integer value) {
+            addCriterion("support_quantity =", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityNotEqualTo(Integer value) {
+            addCriterion("support_quantity <>", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityGreaterThan(Integer value) {
+            addCriterion("support_quantity >", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("support_quantity >=", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityLessThan(Integer value) {
+            addCriterion("support_quantity <", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("support_quantity <=", value, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityIn(List<Integer> values) {
+            addCriterion("support_quantity in", values, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityNotIn(List<Integer> values) {
+            addCriterion("support_quantity not in", values, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("support_quantity between", value1, value2, "supportQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupportQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("support_quantity not between", value1, value2, "supportQuantity");
+            return (Criteria) this;
+        }
 
         public Criteria andIsDeleteIsNull() {
             addCriterion("is_delete is null");
@@ -1606,7 +1865,6 @@ public class MaterialExample {
             addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
-
     }
 
     public static class Criteria extends GeneratedCriteria {

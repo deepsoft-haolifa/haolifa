@@ -5,38 +5,41 @@ import com.deepsoft.haolifa.model.dto.SupplierListDTO;
 import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
 
 public interface SupplierService {
-    /**
-     * 保存供应商信息
-     * @param model
-     * @return
-     */
-    ResultBean saveInfo(SupplierRequestDTO model);
 
-    /**
-     * 更新供应商信息
-     * @param model
-     * @return
-     */
-    ResultBean updateInfo(SupplierRequestDTO model);
+  /**
+   * 保存供应商信息
+   */
+  ResultBean saveInfo(SupplierRequestDTO model);
 
-    /**
-     * 删除供应商
-     * @param id
-     * @return
-     */
-    ResultBean deleteInfo(Integer id);
+  /**
+   * 更新供应商信息
+   */
+  ResultBean updateInfo(SupplierRequestDTO model);
 
-    /**
-     * 获取供应商详情
-     * @param id
-     * @return
-     */
-    ResultBean getInfo(Integer id);
+  /**
+   * 删除供应商
+   */
+  ResultBean deleteInfo(Integer id);
 
-    /**
-     * 获取供应商列表
-     * @param model
-     * @return
-     */
-    ResultBean getList(SupplierListDTO model);
+  /**
+   * 获取供应商详情
+   */
+  ResultBean getInfo(Integer id);
+
+  /**
+   * 获取供应商列表
+   */
+  ResultBean getList(SupplierListDTO model);
+
+  /**
+   * 通过名称查询
+   * @return
+   */
+  ResultBean listByName();
+
+  ResultBean approve(String supplierNo);
+
+  void updateSupplierStatus(String supplierNo,Integer status, Integer instanceId);
+
+  ResultBean evaluationRecords(String supplierNo);
 }

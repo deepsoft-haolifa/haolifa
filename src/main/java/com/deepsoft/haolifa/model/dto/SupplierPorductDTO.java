@@ -19,7 +19,7 @@ public class SupplierPorductDTO {
     @ApiModelProperty(required = true,value = "产品名称")
     private String materialName;
     @ApiModelProperty(required = true,value = "年产量")
-    private Integer annualProdection;
+    private Integer annualProduction;
     @ApiModelProperty(required = true,value = "主要客户")
     private String mainCustomer;
 }

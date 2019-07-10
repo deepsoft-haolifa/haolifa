@@ -1,13 +1,14 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.MaterialInspectResListDTO;
-import com.deepsoft.haolifa.model.dto.ProInspectResDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.proInspect.ProInspectConditionDTO;
+import com.deepsoft.haolifa.model.dto.proInspect.ProInspectResDTO;
 
 public interface ProInspectResultService {
 
     /**
      * 创建成品送检报告
+     *
      * @param model
      * @return
      */
@@ -15,6 +16,7 @@ public interface ProInspectResultService {
 
     /**
      * 删除成品送检报告
+     *
      * @param id
      * @return
      */
@@ -22,6 +24,7 @@ public interface ProInspectResultService {
 
     /**
      * 更新成品送检报告
+     *
      * @param model
      * @return
      */
@@ -29,6 +32,7 @@ public interface ProInspectResultService {
 
     /**
      * 查询详情
+     *
      * @param inspectNo
      * @return
      */
@@ -36,8 +40,16 @@ public interface ProInspectResultService {
 
     /**
      * 查询列表
+     *
      * @param model
      * @return
      */
-    ResultBean getList(MaterialInspectResListDTO model);
+    ResultBean pageInfo(ProInspectConditionDTO model);
+
+    /**
+     * 更新入库状态
+     *
+     * @return
+     */
+    int updateStorageStatus(String inspectNo, Byte storageStatus);
 }

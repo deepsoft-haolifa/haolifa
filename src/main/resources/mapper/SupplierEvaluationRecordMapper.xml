@@ -4,29 +4,10 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="supplier_num" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="qc_way" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="year" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="quality_score" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="quality_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="quality_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="deliver_score" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="deliver_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="deliver_score_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="other_score" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="other_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="other_score_date" javaType="java.lang.Long" jdbcType="BIGINT" />
-      <arg column="price_score" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="price_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="price_score_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="total_score" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="total_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="total_score_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="manager_opinions" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="manager_person" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="manager_opinions_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="supplier_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="supplier_file" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accessory" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="audit_result" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_data" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
     </constructor>
@@ -90,11 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, supplier_num, qc_way, year, quality_score, quality_person, quality_date, deliver_score, 
-    deliver_person, deliver_score_date, other_score, other_person, other_score_date, 
-    price_score, price_person, price_score_date, total_score, total_person, total_score_date, 
-    manager_opinions, manager_person, manager_opinions_date, remark, is_delete, create_data, 
-    update_date
+    id, supplier_no, supplier_file, accessory, audit_result, create_data, update_date
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.SupplierEvaluationRecordExample" resultMap="BaseResultMap">
     select
@@ -127,24 +104,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord">
-    insert into supplier_evaluation_record (id, supplier_num, qc_way, 
-      year, quality_score, quality_person, 
-      quality_date, deliver_score, deliver_person, 
-      deliver_score_date, other_score, other_person, 
-      other_score_date, price_score, price_person, 
-      price_score_date, total_score, total_person, 
-      total_score_date, manager_opinions, manager_person, 
-      manager_opinions_date, remark, is_delete, 
-      create_data, update_date)
-    values (#{id,jdbcType=INTEGER}, #{supplierNum,jdbcType=VARCHAR}, #{qcWay,jdbcType=VARCHAR}, 
-      #{year,jdbcType=VARCHAR}, #{qualityScore,jdbcType=INTEGER}, #{qualityPerson,jdbcType=VARCHAR}, 
-      #{qualityDate,jdbcType=TIMESTAMP}, #{deliverScore,jdbcType=INTEGER}, #{deliverPerson,jdbcType=VARCHAR}, 
-      #{deliverScoreDate,jdbcType=TIMESTAMP}, #{otherScore,jdbcType=INTEGER}, #{otherPerson,jdbcType=VARCHAR}, 
-      #{otherScoreDate,jdbcType=BIGINT}, #{priceScore,jdbcType=TIMESTAMP}, #{pricePerson,jdbcType=VARCHAR}, 
-      #{priceScoreDate,jdbcType=TIMESTAMP}, #{totalScore,jdbcType=INTEGER}, #{totalPerson,jdbcType=VARCHAR}, 
-      #{totalScoreDate,jdbcType=TIMESTAMP}, #{managerOpinions,jdbcType=VARCHAR}, #{managerPerson,jdbcType=VARCHAR}, 
-      #{managerOpinionsDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, 
-      #{createData,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP})
+    insert into supplier_evaluation_record (id, supplier_no, supplier_file, 
+      accessory, audit_result, create_data, 
+      update_date)
+    values (#{id,jdbcType=INTEGER}, #{supplierNo,jdbcType=VARCHAR}, #{supplierFile,jdbcType=VARCHAR}, 
+      #{accessory,jdbcType=VARCHAR}, #{auditResult,jdbcType=TINYINT}, #{createData,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord">
     insert into supplier_evaluation_record
@@ -152,74 +117,17 @@
       <if test="id != null">
         id,
       </if>
-      <if test="supplierNum != null">
-        supplier_num,
+      <if test="supplierNo != null">
+        supplier_no,
       </if>
-      <if test="qcWay != null">
-        qc_way,
+      <if test="supplierFile != null">
+        supplier_file,
       </if>
-      <if test="year != null">
-        year,
+      <if test="accessory != null">
+        accessory,
       </if>
-      <if test="qualityScore != null">
-        quality_score,
-      </if>
-      <if test="qualityPerson != null">
-        quality_person,
-      </if>
-      <if test="qualityDate != null">
-        quality_date,
-      </if>
-      <if test="deliverScore != null">
-        deliver_score,
-      </if>
-      <if test="deliverPerson != null">
-        deliver_person,
-      </if>
-      <if test="deliverScoreDate != null">
-        deliver_score_date,
-      </if>
-      <if test="otherScore != null">
-        other_score,
-      </if>
-      <if test="otherPerson != null">
-        other_person,
-      </if>
-      <if test="otherScoreDate != null">
-        other_score_date,
-      </if>
-      <if test="priceScore != null">
-        price_score,
-      </if>
-      <if test="pricePerson != null">
-        price_person,
-      </if>
-      <if test="priceScoreDate != null">
-        price_score_date,
-      </if>
-      <if test="totalScore != null">
-        total_score,
-      </if>
-      <if test="totalPerson != null">
-        total_person,
-      </if>
-      <if test="totalScoreDate != null">
-        total_score_date,
-      </if>
-      <if test="managerOpinions != null">
-        manager_opinions,
-      </if>
-      <if test="managerPerson != null">
-        manager_person,
-      </if>
-      <if test="managerOpinionsDate != null">
-        manager_opinions_date,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="isDelete != null">
-        is_delete,
+      <if test="auditResult != null">
+        audit_result,
       </if>
       <if test="createData != null">
         create_data,
@@ -232,74 +140,17 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="supplierNum != null">
-        #{supplierNum,jdbcType=VARCHAR},
+      <if test="supplierNo != null">
+        #{supplierNo,jdbcType=VARCHAR},
       </if>
-      <if test="qcWay != null">
-        #{qcWay,jdbcType=VARCHAR},
+      <if test="supplierFile != null">
+        #{supplierFile,jdbcType=VARCHAR},
       </if>
-      <if test="year != null">
-        #{year,jdbcType=VARCHAR},
+      <if test="accessory != null">
+        #{accessory,jdbcType=VARCHAR},
       </if>
-      <if test="qualityScore != null">
-        #{qualityScore,jdbcType=INTEGER},
-      </if>
-      <if test="qualityPerson != null">
-        #{qualityPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="qualityDate != null">
-        #{qualityDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deliverScore != null">
-        #{deliverScore,jdbcType=INTEGER},
-      </if>
-      <if test="deliverPerson != null">
-        #{deliverPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="deliverScoreDate != null">
-        #{deliverScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="otherScore != null">
-        #{otherScore,jdbcType=INTEGER},
-      </if>
-      <if test="otherPerson != null">
-        #{otherPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="otherScoreDate != null">
-        #{otherScoreDate,jdbcType=BIGINT},
-      </if>
-      <if test="priceScore != null">
-        #{priceScore,jdbcType=TIMESTAMP},
-      </if>
-      <if test="pricePerson != null">
-        #{pricePerson,jdbcType=VARCHAR},
-      </if>
-      <if test="priceScoreDate != null">
-        #{priceScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="totalScore != null">
-        #{totalScore,jdbcType=INTEGER},
-      </if>
-      <if test="totalPerson != null">
-        #{totalPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="totalScoreDate != null">
-        #{totalScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="managerOpinions != null">
-        #{managerOpinions,jdbcType=VARCHAR},
-      </if>
-      <if test="managerPerson != null">
-        #{managerPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="managerOpinionsDate != null">
-        #{managerOpinionsDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=TINYINT},
+      <if test="auditResult != null">
+        #{auditResult,jdbcType=TINYINT},
       </if>
       <if test="createData != null">
         #{createData,jdbcType=TIMESTAMP},
@@ -321,74 +172,17 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.supplierNum != null">
-        supplier_num = #{record.supplierNum,jdbcType=VARCHAR},
+      <if test="record.supplierNo != null">
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.qcWay != null">
-        qc_way = #{record.qcWay,jdbcType=VARCHAR},
+      <if test="record.supplierFile != null">
+        supplier_file = #{record.supplierFile,jdbcType=VARCHAR},
       </if>
-      <if test="record.year != null">
-        year = #{record.year,jdbcType=VARCHAR},
+      <if test="record.accessory != null">
+        accessory = #{record.accessory,jdbcType=VARCHAR},
       </if>
-      <if test="record.qualityScore != null">
-        quality_score = #{record.qualityScore,jdbcType=INTEGER},
-      </if>
-      <if test="record.qualityPerson != null">
-        quality_person = #{record.qualityPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="record.qualityDate != null">
-        quality_date = #{record.qualityDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.deliverScore != null">
-        deliver_score = #{record.deliverScore,jdbcType=INTEGER},
-      </if>
-      <if test="record.deliverPerson != null">
-        deliver_person = #{record.deliverPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="record.deliverScoreDate != null">
-        deliver_score_date = #{record.deliverScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.otherScore != null">
-        other_score = #{record.otherScore,jdbcType=INTEGER},
-      </if>
-      <if test="record.otherPerson != null">
-        other_person = #{record.otherPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="record.otherScoreDate != null">
-        other_score_date = #{record.otherScoreDate,jdbcType=BIGINT},
-      </if>
-      <if test="record.priceScore != null">
-        price_score = #{record.priceScore,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.pricePerson != null">
-        price_person = #{record.pricePerson,jdbcType=VARCHAR},
-      </if>
-      <if test="record.priceScoreDate != null">
-        price_score_date = #{record.priceScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.totalScore != null">
-        total_score = #{record.totalScore,jdbcType=INTEGER},
-      </if>
-      <if test="record.totalPerson != null">
-        total_person = #{record.totalPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="record.totalScoreDate != null">
-        total_score_date = #{record.totalScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.managerOpinions != null">
-        manager_opinions = #{record.managerOpinions,jdbcType=VARCHAR},
-      </if>
-      <if test="record.managerPerson != null">
-        manager_person = #{record.managerPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="record.managerOpinionsDate != null">
-        manager_opinions_date = #{record.managerOpinionsDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isDelete != null">
-        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      <if test="record.auditResult != null">
+        audit_result = #{record.auditResult,jdbcType=TINYINT},
       </if>
       <if test="record.createData != null">
         create_data = #{record.createData,jdbcType=TIMESTAMP},
@@ -404,29 +198,10 @@
   <update id="updateByExample" parameterType="map">
     update supplier_evaluation_record
     set id = #{record.id,jdbcType=INTEGER},
-      supplier_num = #{record.supplierNum,jdbcType=VARCHAR},
-      qc_way = #{record.qcWay,jdbcType=VARCHAR},
-      year = #{record.year,jdbcType=VARCHAR},
-      quality_score = #{record.qualityScore,jdbcType=INTEGER},
-      quality_person = #{record.qualityPerson,jdbcType=VARCHAR},
-      quality_date = #{record.qualityDate,jdbcType=TIMESTAMP},
-      deliver_score = #{record.deliverScore,jdbcType=INTEGER},
-      deliver_person = #{record.deliverPerson,jdbcType=VARCHAR},
-      deliver_score_date = #{record.deliverScoreDate,jdbcType=TIMESTAMP},
-      other_score = #{record.otherScore,jdbcType=INTEGER},
-      other_person = #{record.otherPerson,jdbcType=VARCHAR},
-      other_score_date = #{record.otherScoreDate,jdbcType=BIGINT},
-      price_score = #{record.priceScore,jdbcType=TIMESTAMP},
-      price_person = #{record.pricePerson,jdbcType=VARCHAR},
-      price_score_date = #{record.priceScoreDate,jdbcType=TIMESTAMP},
-      total_score = #{record.totalScore,jdbcType=INTEGER},
-      total_person = #{record.totalPerson,jdbcType=VARCHAR},
-      total_score_date = #{record.totalScoreDate,jdbcType=TIMESTAMP},
-      manager_opinions = #{record.managerOpinions,jdbcType=VARCHAR},
-      manager_person = #{record.managerPerson,jdbcType=VARCHAR},
-      manager_opinions_date = #{record.managerOpinionsDate,jdbcType=TIMESTAMP},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      supplier_file = #{record.supplierFile,jdbcType=VARCHAR},
+      accessory = #{record.accessory,jdbcType=VARCHAR},
+      audit_result = #{record.auditResult,jdbcType=TINYINT},
       create_data = #{record.createData,jdbcType=TIMESTAMP},
       update_date = #{record.updateDate,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -436,74 +211,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord">
     update supplier_evaluation_record
     <set>
-      <if test="supplierNum != null">
-        supplier_num = #{supplierNum,jdbcType=VARCHAR},
+      <if test="supplierNo != null">
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
       </if>
-      <if test="qcWay != null">
-        qc_way = #{qcWay,jdbcType=VARCHAR},
+      <if test="supplierFile != null">
+        supplier_file = #{supplierFile,jdbcType=VARCHAR},
       </if>
-      <if test="year != null">
-        year = #{year,jdbcType=VARCHAR},
+      <if test="accessory != null">
+        accessory = #{accessory,jdbcType=VARCHAR},
       </if>
-      <if test="qualityScore != null">
-        quality_score = #{qualityScore,jdbcType=INTEGER},
-      </if>
-      <if test="qualityPerson != null">
-        quality_person = #{qualityPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="qualityDate != null">
-        quality_date = #{qualityDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deliverScore != null">
-        deliver_score = #{deliverScore,jdbcType=INTEGER},
-      </if>
-      <if test="deliverPerson != null">
-        deliver_person = #{deliverPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="deliverScoreDate != null">
-        deliver_score_date = #{deliverScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="otherScore != null">
-        other_score = #{otherScore,jdbcType=INTEGER},
-      </if>
-      <if test="otherPerson != null">
-        other_person = #{otherPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="otherScoreDate != null">
-        other_score_date = #{otherScoreDate,jdbcType=BIGINT},
-      </if>
-      <if test="priceScore != null">
-        price_score = #{priceScore,jdbcType=TIMESTAMP},
-      </if>
-      <if test="pricePerson != null">
-        price_person = #{pricePerson,jdbcType=VARCHAR},
-      </if>
-      <if test="priceScoreDate != null">
-        price_score_date = #{priceScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="totalScore != null">
-        total_score = #{totalScore,jdbcType=INTEGER},
-      </if>
-      <if test="totalPerson != null">
-        total_person = #{totalPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="totalScoreDate != null">
-        total_score_date = #{totalScoreDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="managerOpinions != null">
-        manager_opinions = #{managerOpinions,jdbcType=VARCHAR},
-      </if>
-      <if test="managerPerson != null">
-        manager_person = #{managerPerson,jdbcType=VARCHAR},
-      </if>
-      <if test="managerOpinionsDate != null">
-        manager_opinions_date = #{managerOpinionsDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=TINYINT},
+      <if test="auditResult != null">
+        audit_result = #{auditResult,jdbcType=TINYINT},
       </if>
       <if test="createData != null">
         create_data = #{createData,jdbcType=TIMESTAMP},
@@ -516,29 +234,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SupplierEvaluationRecord">
     update supplier_evaluation_record
-    set supplier_num = #{supplierNum,jdbcType=VARCHAR},
-      qc_way = #{qcWay,jdbcType=VARCHAR},
-      year = #{year,jdbcType=VARCHAR},
-      quality_score = #{qualityScore,jdbcType=INTEGER},
-      quality_person = #{qualityPerson,jdbcType=VARCHAR},
-      quality_date = #{qualityDate,jdbcType=TIMESTAMP},
-      deliver_score = #{deliverScore,jdbcType=INTEGER},
-      deliver_person = #{deliverPerson,jdbcType=VARCHAR},
-      deliver_score_date = #{deliverScoreDate,jdbcType=TIMESTAMP},
-      other_score = #{otherScore,jdbcType=INTEGER},
-      other_person = #{otherPerson,jdbcType=VARCHAR},
-      other_score_date = #{otherScoreDate,jdbcType=BIGINT},
-      price_score = #{priceScore,jdbcType=TIMESTAMP},
-      price_person = #{pricePerson,jdbcType=VARCHAR},
-      price_score_date = #{priceScoreDate,jdbcType=TIMESTAMP},
-      total_score = #{totalScore,jdbcType=INTEGER},
-      total_person = #{totalPerson,jdbcType=VARCHAR},
-      total_score_date = #{totalScoreDate,jdbcType=TIMESTAMP},
-      manager_opinions = #{managerOpinions,jdbcType=VARCHAR},
-      manager_person = #{managerPerson,jdbcType=VARCHAR},
-      manager_opinions_date = #{managerOpinionsDate,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=TINYINT},
+    set supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      supplier_file = #{supplierFile,jdbcType=VARCHAR},
+      accessory = #{accessory,jdbcType=VARCHAR},
+      audit_result = #{auditResult,jdbcType=TINYINT},
       create_data = #{createData,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

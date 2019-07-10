@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.domain.MaterialClassify;
 import com.deepsoft.haolifa.model.domain.MaterialClassifyExample;
 import com.deepsoft.haolifa.model.domain.MaterialExample;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.material.MaterialConditionDTO;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -19,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -119,10 +121,19 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public ResultBean save(MaterialRequestDTO model) {
-        CustomUser customUser = sysUserService.selectLoginUser();
+        CustomUser customUser = null;
         int createUser = customUser != null ? customUser.getId() : 1;
         Material record = new Material();
+        // 判断图号是否已经存在
+        String graphNo = model.getGraphNo();
+        boolean existGraphNo = judgeGraphNo(graphNo, 0);
+        log.info("save material existGraphNo graphNo:{},result:{}", graphNo, existGraphNo);
+        if (existGraphNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_EXISTS);
+        }
         BeanUtils.copyProperties(model, record);
+        // 不更新价格
+//        record.setPrice(null);
         record.setCreateUser(createUser);
         int insert = materialMapper.insertSelective(record);
         return ResultBean.success(insert);
@@ -131,11 +142,19 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public ResultBean update(MaterialRequestDTO model) {
         Material record = new Material();
+        String graphNo = model.getGraphNo();
+        boolean existGraphNo = judgeGraphNo(graphNo, model.getId());
+        log.info("update material existGraphNo graphNo:{},result:{}", graphNo, existGraphNo);
+        if (existGraphNo) {
+            return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_EXISTS);
+        }
         CustomUser customUser = sysUserService.selectLoginUser();
         int updateUser = customUser != null ? customUser.getId() : 1;
         record.setUpdateUser(updateUser);
         record.setUpdateTime(new Date());
         BeanUtils.copyProperties(model, record);
+        // 不更新价格
+        record.setPrice(null);
         int update = materialMapper.updateByPrimaryKeySelective(record);
         return ResultBean.success(update);
     }
@@ -145,12 +164,8 @@ public class MaterialServiceImpl implements MaterialService {
         if (id == 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        Material record = new Material() {{
-            setId(id);
-            setIsDelete(CommonEnum.Consts.YES.code);
-        }};
-        int update = materialMapper.updateByPrimaryKeySelective(record);
-        return ResultBean.success(update);
+        int delete = materialMapper.deleteByPrimaryKey(id);
+        return ResultBean.success(delete);
     }
 
     @Override
@@ -164,38 +179,41 @@ public class MaterialServiceImpl implements MaterialService {
         return null;
     }
 
+
     @Override
     public Material getInfoById(int id) {
         return materialMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String classifyNameLike, String nameLike, String graphNoLike, int status) {
-        currentPage = currentPage == null ? 1 : currentPage;
-        pageSize = pageSize == null ? 20 : pageSize;
-
+    public ResultBean pageInfo(MaterialConditionDTO conditionDTO) {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(classifyNameLike)) {
-            criteria.andMaterialClassifyNameLike("%" + classifyNameLike + "%");
+        if (conditionDTO.getClassifyId() != null && conditionDTO.getClassifyId() > 0) {
+            criteria.andMaterialClassifyIdEqualTo(conditionDTO.getClassifyId());
         }
-        if (StringUtils.isNotBlank(nameLike)) {
-            criteria.andNameLike("%" + nameLike + "%");
+        if (StringUtils.isNotBlank(conditionDTO.getMaterialName())) {
+            criteria.andNameLike("%" + conditionDTO.getMaterialName() + "%");
         }
-        if (StringUtils.isNotBlank(graphNoLike)) {
-            criteria.andGraphNoLike("%" + graphNoLike + "%");
+        if (StringUtils.isNotBlank(conditionDTO.getGraphNo())) {
+            criteria.andGraphNoLike("%" + conditionDTO.getGraphNo() + "%");
         }
-        // 告警状态1（库存数量<预警值）
-        if (status == 1) {
-            criteria.andCurrentQuantityLessThan("safe_quantity");
+        if (StringUtils.isNotBlank(conditionDTO.getSpecifications())) {
+            criteria.andSpecificationsLike("%" + conditionDTO.getSpecifications() + "%");
         }
-        // 正常状态2（库存数量>预警值）
-        if (status == 2) {
-            criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
+        if (StringUtils.isNotBlank(conditionDTO.getModel())) {
+            criteria.andModelLike("%" + conditionDTO.getModel() + "%");
         }
-        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        example.setOrderByClause("create_time desc");
-        Page<Material> materials = PageHelper.startPage(currentPage, pageSize)
+//        // 告警状态1（库存数量<预警值）
+//        if (status == 1) {
+//            criteria.andCurrentQuantityLessThan("safe_quantity");
+//        }
+//        // 正常状态2（库存数量>预警值）
+//        if (status == 2) {
+//            criteria.andCurrentQuantityGreaterThanOrEqualTo("safe_quantity");
+//        }
+        example.setOrderByClause("id desc");
+        Page<Material> materials = PageHelper.startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
                 .doSelectPage(() -> materialMapper.selectByExample(example));
 
         PageDTO<Material> pageDTO = new PageDTO<>();
@@ -210,4 +228,116 @@ public class MaterialServiceImpl implements MaterialService {
         return materialExtendMapper.updateCurrentQuantity(graphNo, quantity);
     }
 
+    @Override
+    public int updateLockQuantity(String graphNo, int quantity) {
+        log.info("update lock quantity start,graphNo:{},quantity:{}", graphNo, quantity);
+        return materialExtendMapper.updateLockQuantity(graphNo, quantity);
+    }
+
+    @Override
+    public List<Material> getListByClassifyId(int classifyId) {
+        if (classifyId <= 0) {
+            return null;
+        }
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andMaterialClassifyIdEqualTo(classifyId);
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
+    @Override
+    public List<Material> getListByGraphNoLike(String graphNo) {
+        if (StringUtils.isBlank(graphNo)) {
+            return null;
+        }
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoLike("%" + graphNo + "%");
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
+    @Override
+    public List<Material> getListBySingleModelAndSpec(int classifyId, String model, String specifications) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model)) {
+            criteria.andModelEqualTo(model);
+        }
+        if (StringUtils.isNotBlank(specifications)) {
+            criteria.andSpecificationsEqualTo(specifications);
+        }
+        if (classifyId > 0) {
+            criteria.andMaterialClassifyIdEqualTo(classifyId);
+        }
+        List<Material> materials = materialMapper.selectByExample(example);
+        return materials;
+    }
+
+    @Override
+    public List<Material> getListByMultiModelAndSpec(int classifyId, String model, String specifications) {
+        List<Material> materials = materialExtendMapper.getListByMultiModelAndSpec(classifyId, model, specifications);
+        return materials;
+    }
+
+
+    @Override
+    public ResultBean getMaterialAlarmList(MaterialConditionDTO model) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (null != model.getClassifyId() && model.getClassifyId() > 0) {
+            criteria.andMaterialClassifyIdEqualTo(model.getClassifyId());
+        }
+        if (StringUtils.isNotBlank(model.getGraphNo())) {
+            criteria.andGraphNoLike("%" + model.getGraphNo() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getMaterialName())) {
+            criteria.andNameLike("%" + model.getMaterialName() + "%");
+        }
+        criteria.andCurrentQuantityLessThanOrEqualTo("safe_quantity");
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        example.setOrderByClause("id desc");
+        Page<Material> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+                .doSelectPage(() -> materialMapper.selectByExample(example));
+
+        PageDTO<Material> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(materials, pageDTO);
+        pageDTO.setList(materials);
+        return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public void updateMaterialPrice(String graphNo, BigDecimal price) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoEqualTo(graphNo);
+        Material record = new Material();
+        record.setPrice(price);
+        materialMapper.updateByExampleSelective(record, example);
+    }
+
+    /**
+     * 判断是否有相同的图号
+     *
+     * @param graphNo
+     * @return
+     */
+    private boolean judgeGraphNo(String graphNo, int id) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoEqualTo(graphNo);
+        List<Material> materials = materialMapper.selectByExample(example);
+        if (materials.size() > 0) {
+            // 更新的时候传id，如果查出来的id和传过来的id相同，则返回false
+            if (id > 0) {
+                Material material = materials.get(0);
+                if (material.getId() == id) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

@@ -79,4 +79,11 @@ public interface SysUserService {
      */
     String initPwd(Integer id);
 
+    /**
+     * 修改密码
+     * @param newPassword
+     * @return
+     */
+    String changePwd(String newPassword);
+
 }

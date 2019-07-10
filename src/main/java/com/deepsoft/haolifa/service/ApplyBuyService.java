@@ -6,25 +6,12 @@ import java.util.List;
 
 public interface ApplyBuyService {
     /**
-     * 保存请购单by请购计划
-     * @param modelList
+     * 保存请购单
+     * @param model
      * @return
      */
-    ResultBean saveByPurchasePlan(List<ApplyBuyDTO> modelList);
+    ResultBean save(ApplyBuyDTO model);
 
-    /**
-     * 保存请购单by库管
-     * @param modelList
-     * @return
-     */
-    ResultBean saveByStoreKeeper(List<StoreKeeperApplyBuyDTO> modelList);
-
-    /**
-     * 删除请购单
-     * @param applyBuyNo
-     * @return
-     */
-    ResultBean delete(String applyBuyNo);
 
     /**
      * 更新请购单项
@@ -35,23 +22,46 @@ public interface ApplyBuyService {
 
     /**
      * 获取请购详情
-     * @param applyBuyNo
+     * @param formNo
      * @return
      */
-    ResultBean getInfo(String applyBuyNo);
-
-    /**
-     * 获取请购单列表
-     * @param model
-     * @return
-     */
-    ResultBean getList(ApplyBuyListDTO model);
+    ResultBean getInfo(String formNo);
 
     /**
      * 删除请购单单项
-     * @param applyBuyNo
-     * @param materialGraphNo
+     * @param itemId
      * @return
      */
-    ResultBean deleteItem(String applyBuyNo, String materialGraphNo);
+    ResultBean deleteItem(int itemId);
+
+    /**
+     * 填写采购完成日期
+     * @param itemId
+     * @param arrivalTime
+     * @return
+     */
+    ResultBean updateArrivalTime(int itemId, String arrivalTime);
+
+    /**
+     * 更新待采购单项状态
+     * @param itemId
+     * @return
+     */
+    ResultBean updateStatus(int itemId);
+
+    /**
+     * 列表
+     */
+    ResultBean list(int pageNum, int pageSize, int status, String materialName,String materialGraphNo);
+
+    /**
+     * 生产订单 关联的请购列表
+     * @param orderNo
+     * @return
+     */
+  ResultBean list(String orderNo);
+
+  ResultBean updateStatusByOrderNo(String orderNo, String arriveTime);
+
+    ResultBean updateStatusByOrderNo(String orderNo, Integer status);
 }

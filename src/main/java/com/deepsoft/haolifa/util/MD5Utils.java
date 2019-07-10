@@ -5,6 +5,7 @@ package com.deepsoft.haolifa.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -96,6 +97,38 @@ public class MD5Utils {
             return true;
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+//        String abc="D  Sb 7A 1 X3 Ha-10 Q-DN50";
+        String abc="H 77 X3 RL-10 Q-DN50 ";
+        abc=abc.replaceAll(" ","");
+        System.out.println(abc);
+        int indexOf = abc.indexOf("-");
+        int lastIndexOf = abc.lastIndexOf("-");
+        System.out.println(indexOf);
+        System.out.println(lastIndexOf);
+        System.out.println(abc.substring(indexOf+1,lastIndexOf));
+        String fatiGroup=abc.substring(indexOf+1,lastIndexOf);
+
+        String fatiyali = fatiGroup.substring(0, 2);
+        String fati=fatiGroup.substring(2,fatiGroup.length());
+        System.out.println(fati);
+        System.out.println(fatiyali);
+        String s = abc.substring(indexOf - 1, indexOf);
+        System.out.println(s);
+        String[] abcd=new String[]{"a","b","d","L"};
+        String fazuo="",faban="";
+        if(Arrays.asList(abcd).contains(s)){
+            fazuo=abc.substring(indexOf-2,indexOf);
+            faban=abc.substring(indexOf-4,indexOf-2);
+        }else{
+            fazuo=abc.substring(indexOf-1,indexOf);
+            faban=abc.substring(indexOf-3,indexOf-1);
+        }
+        System.out.println(fazuo);
+        System.out.println(faban);
+
     }
 
 }

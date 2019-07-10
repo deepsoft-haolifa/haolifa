@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.dto.AllotEntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -24,7 +25,7 @@ public interface EntrustService {
      * @param model
      * @return
      */
-    ResultBean update(EntrustDTO model);
+    ResultBean update(String entrustNo,EntrustDTO model);
 
     /**
      * 查询详情
@@ -47,4 +48,15 @@ public interface EntrustService {
      * @return
      */
     ResultBean updateStatus(String entrustNo, Integer status);
+
+    /**
+     * 分配车间
+     * @param allotEntrustDTO
+     * @return
+     */
+    ResultBean allotEntrust(AllotEntrustDTO allotEntrustDTO);
+
+    int obtainEntrustNumber(String materialGraphNo);
+
+    ResultBean updateInspectStatus(String entrustNo, Integer status);
 }

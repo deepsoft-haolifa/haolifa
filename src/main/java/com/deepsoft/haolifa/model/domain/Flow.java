@@ -17,7 +17,9 @@ public class Flow {
 
     private String description;
 
-    public Flow(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String name, String description) {
+    private Integer roleId;
+
+    public Flow(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String name, String description, Integer roleId) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -25,6 +27,7 @@ public class Flow {
         this.updateUser = updateUser;
         this.name = name;
         this.description = description;
+        this.roleId = roleId;
     }
 
     public Flow() {
@@ -85,5 +88,13 @@ public class Flow {
 
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 }

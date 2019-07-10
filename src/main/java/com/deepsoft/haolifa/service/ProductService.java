@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.Product;
 import com.deepsoft.haolifa.model.dto.ProductRequestDTO;
+import com.deepsoft.haolifa.model.dto.ProductUpdateRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
 /**
@@ -31,7 +32,7 @@ public interface ProductService {
      *
      * @return
      */
-    ResultBean delete(int id);
+    ResultBean delete(int id,String productNo);
 
 
     /**
@@ -40,6 +41,18 @@ public interface ProductService {
      * @return
      */
     Product getInfo(int id);
+    /**
+     * 获取no成品详情
+     *
+     * @return
+     */
+    Product getInfoByNo(String productNo);
+    /**
+     * 获取成品详情信息（包含关联的零件信息）
+     * @param id
+     * @return
+     */
+    ProductRequestDTO getProductAllInfo(int id);
 
     /**
      * 获取成品分页列表

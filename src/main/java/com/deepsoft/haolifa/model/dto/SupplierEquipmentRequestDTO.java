@@ -13,5 +13,8 @@ public class SupplierEquipmentRequestDTO extends EquipmentBaseDTO {
     private String specification;
     @ApiModelProperty(required = true, value = "设备类型： 0  制造设备 1 检测设备", allowableValues = "0,1")
     private Byte type;
+    @ApiModelProperty(required = true,value = "供应商编号")
+    private String supplierNo;
+
 
 }

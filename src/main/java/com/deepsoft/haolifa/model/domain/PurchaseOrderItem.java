@@ -7,7 +7,7 @@ public class PurchaseOrderItem {
 
     private String purchaseOrderNo;
 
-    private String productName;
+    private String materialName;
 
     private String materialGraphNo;
 
@@ -25,10 +25,10 @@ public class PurchaseOrderItem {
 
     private String remark;
 
-    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String productName, String materialGraphNo, String specification, String material, String unit, Integer number, BigDecimal unitWeight, BigDecimal unitPrice, String remark) {
+    public PurchaseOrderItem(Integer id, String purchaseOrderNo, String materialName, String materialGraphNo, String specification, String material, String unit, Integer number, BigDecimal unitWeight, BigDecimal unitPrice, String remark) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
-        this.productName = productName;
+        this.materialName = materialName;
         this.materialGraphNo = materialGraphNo;
         this.specification = specification;
         this.material = material;
@@ -59,12 +59,12 @@ public class PurchaseOrderItem {
         this.purchaseOrderNo = purchaseOrderNo == null ? null : purchaseOrderNo.trim();
     }
 
-    public String getProductName() {
-        return productName;
+    public String getMaterialName() {
+        return materialName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName == null ? null : materialName.trim();
     }
 
     public String getMaterialGraphNo() {

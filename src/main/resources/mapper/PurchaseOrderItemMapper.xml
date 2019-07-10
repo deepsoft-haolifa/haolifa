@@ -5,7 +5,7 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="purchase_order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="material_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material_graph_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="specification" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="material" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, purchase_order_no, product_name, material_graph_no, specification, material, 
+    id, purchase_order_no, material_name, material_graph_no, specification, material, 
     unit, number, unit_weight, unit_price, remark
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItemExample" resultMap="BaseResultMap">
@@ -109,11 +109,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItem">
-    insert into purchase_order_item (id, purchase_order_no, product_name, 
+    insert into purchase_order_item (id, purchase_order_no, material_name, 
       material_graph_no, specification, material, 
       unit, number, unit_weight, 
       unit_price, remark)
-    values (#{id,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{purchaseOrderNo,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
       #{materialGraphNo,jdbcType=VARCHAR}, #{specification,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
       #{unit,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{unitWeight,jdbcType=DECIMAL}, 
       #{unitPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
@@ -127,8 +127,8 @@
       <if test="purchaseOrderNo != null">
         purchase_order_no,
       </if>
-      <if test="productName != null">
-        product_name,
+      <if test="materialName != null">
+        material_name,
       </if>
       <if test="materialGraphNo != null">
         material_graph_no,
@@ -162,8 +162,8 @@
       <if test="purchaseOrderNo != null">
         #{purchaseOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="productName != null">
-        #{productName,jdbcType=VARCHAR},
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         #{materialGraphNo,jdbcType=VARCHAR},
@@ -206,8 +206,8 @@
       <if test="record.purchaseOrderNo != null">
         purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.productName != null">
-        product_name = #{record.productName,jdbcType=VARCHAR},
+      <if test="record.materialName != null">
+        material_name = #{record.materialName,jdbcType=VARCHAR},
       </if>
       <if test="record.materialGraphNo != null">
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
@@ -242,7 +242,7 @@
     update purchase_order_item
     set id = #{record.id,jdbcType=INTEGER},
       purchase_order_no = #{record.purchaseOrderNo,jdbcType=VARCHAR},
-      product_name = #{record.productName,jdbcType=VARCHAR},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       specification = #{record.specification,jdbcType=VARCHAR},
       material = #{record.material,jdbcType=VARCHAR},
@@ -261,8 +261,8 @@
       <if test="purchaseOrderNo != null">
         purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
       </if>
-      <if test="productName != null">
-        product_name = #{productName,jdbcType=VARCHAR},
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null">
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
@@ -294,7 +294,7 @@
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderItem">
     update purchase_order_item
     set purchase_order_no = #{purchaseOrderNo,jdbcType=VARCHAR},
-      product_name = #{productName,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       specification = #{specification,jdbcType=VARCHAR},
       material = #{material,jdbcType=VARCHAR},
@@ -305,80 +305,4 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <insert id="batchInsertPurchaseOrderItem" parameterType="List">
-    <foreach collection="list" item="item" separator=";">
-    insert into purchase_order_item
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="item.id != null">
-        id,
-      </if>
-      <if test="item.purchaseOrderNo != null">
-        purchase_order_no,
-      </if>
-      <if test="item.productName != null">
-        product_name,
-      </if>
-      <if test="item.materialGraphNo != null">
-        material_graph_no,
-      </if>
-      <if test="item.specification != null">
-        specification,
-      </if>
-      <if test="item.material != null">
-        material,
-      </if>
-      <if test="item.unit != null">
-        unit,
-      </if>
-      <if test="item.number != null">
-        number,
-      </if>
-      <if test="item.unitWeight != null">
-        unit_weight,
-      </if>
-      <if test="item.unitPrice != null">
-        unit_price,
-      </if>
-      <if test="item.remark != null">
-        remark,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="item.id != null">
-        #{item.id,jdbcType=INTEGER},
-      </if>
-      <if test="item.purchaseOrderNo != null">
-        #{item.purchaseOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="item.productName != null">
-        #{item.productName,jdbcType=VARCHAR},
-      </if>
-      <if test="item.materialGraphNo != null">
-        #{item.materialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="item.specification != null">
-        #{item.specification,jdbcType=VARCHAR},
-      </if>
-      <if test="item.material != null">
-        #{item.material,jdbcType=VARCHAR},
-      </if>
-      <if test="item.unit != null">
-        #{item.unit,jdbcType=VARCHAR},
-      </if>
-      <if test="item.number != null">
-        #{item.number,jdbcType=INTEGER},
-      </if>
-      <if test="item.unitWeight != null">
-        #{item.unitWeight,jdbcType=DECIMAL},
-      </if>
-      <if test="item.unitPrice != null">
-        #{item.unitPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="item.remark != null">
-        #{item.remark,jdbcType=VARCHAR},
-      </if>
-    </trim>
-    </foreach>
-  </insert>
 </mapper>

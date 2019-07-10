@@ -3,19 +3,23 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SysRoleMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
+import com.deepsoft.haolifa.model.domain.SysPermission;
+import com.deepsoft.haolifa.model.domain.SysPermissionExample;
 import com.deepsoft.haolifa.model.domain.SysRole;
 import com.deepsoft.haolifa.model.domain.SysRoleExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
-import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
+import com.deepsoft.haolifa.model.dto.sys.DepartmentTree;
+import com.deepsoft.haolifa.model.vo.UserPageVO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.RoleService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.deepsoft.haolifa.util.TreeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,16 +66,38 @@ public class RoleServiceImpl implements RoleService {
     public int insertRole(RoleDTO role) {
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(role, sysRole);
+//        sysRole.setDeptId(role.getDepartment().getId());
         return roleMapper.insertSelective(sysRole);
     }
 
     @Override
     public int updateRole(RoleDTO role) {
-        if(null != role || role.getId() == null){
+        if(null == role || role.getId() == null){
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         SysRole sysRole = new SysRole();
         BeanUtils.copyProperties(role, sysRole);
+//        sysRole.setDeptId(role.getDepartment().getId());
         return roleMapper.updateByPrimaryKeySelective(sysRole);
+    }
+
+    @Override
+    public List<UserPageVO> getBuyers() {
+        return myPermissionMapper.selectUserByRole("ROLE_CGY");
+    }
+
+    @Override
+    public List<DepartmentTree> roleTree() {
+        List<SysRole> sysRoles = roleMapper.selectByExample(new SysRoleExample());
+        List<DepartmentTree> departmentTrees = new ArrayList<>();
+        sysRoles.stream().forEach(e -> {
+            DepartmentTree departmentTree = new DepartmentTree();
+            departmentTree.setId(String.valueOf(e.getId()));
+            departmentTree.setNo(String.valueOf(e.getRoleNo()));
+            departmentTree.setName(e.getDescription());
+            departmentTree.setParentId(String.valueOf(e.getPid()));
+            departmentTrees.add(departmentTree);
+        });
+        return TreeUtils.getTreeList("0", departmentTrees);
     }
 }

@@ -1,11 +1,10 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PurchaseOrder {
     private Integer id;
-
-    private Integer flowId;
 
     private String purchaseOrderNo;
 
@@ -33,6 +32,10 @@ public class PurchaseOrder {
 
     private Date operateTime;
 
+    private String supplierConfirmer;
+
+    private Date confirmTime;
+
     private Date createTime;
 
     private Date updateTime;
@@ -41,9 +44,20 @@ public class PurchaseOrder {
 
     private Integer createUserId;
 
-    public PurchaseOrder(Integer id, Integer flowId, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId) {
+    private BigDecimal wreckAmount;
+
+    private String wreckReason;
+
+    private Byte status;
+
+    private String payType;
+
+    private Byte orderType;
+
+    private String fileUrl;
+
+    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl) {
         this.id = id;
-        this.flowId = flowId;
         this.purchaseOrderNo = purchaseOrderNo;
         this.supplierNo = supplierNo;
         this.supplierName = supplierName;
@@ -57,10 +71,18 @@ public class PurchaseOrder {
         this.deliveryTime = deliveryTime;
         this.operatorUserName = operatorUserName;
         this.operateTime = operateTime;
+        this.supplierConfirmer = supplierConfirmer;
+        this.confirmTime = confirmTime;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.isDelete = isDelete;
         this.createUserId = createUserId;
+        this.wreckAmount = wreckAmount;
+        this.wreckReason = wreckReason;
+        this.status = status;
+        this.payType = payType;
+        this.orderType = orderType;
+        this.fileUrl = fileUrl;
     }
 
     public PurchaseOrder() {
@@ -73,14 +95,6 @@ public class PurchaseOrder {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getFlowId() {
-        return flowId;
-    }
-
-    public void setFlowId(Integer flowId) {
-        this.flowId = flowId;
     }
 
     public String getPurchaseOrderNo() {
@@ -187,6 +201,22 @@ public class PurchaseOrder {
         this.operateTime = operateTime;
     }
 
+    public String getSupplierConfirmer() {
+        return supplierConfirmer;
+    }
+
+    public void setSupplierConfirmer(String supplierConfirmer) {
+        this.supplierConfirmer = supplierConfirmer == null ? null : supplierConfirmer.trim();
+    }
+
+    public Date getConfirmTime() {
+        return confirmTime;
+    }
+
+    public void setConfirmTime(Date confirmTime) {
+        this.confirmTime = confirmTime;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -217,5 +247,53 @@ public class PurchaseOrder {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public BigDecimal getWreckAmount() {
+        return wreckAmount;
+    }
+
+    public void setWreckAmount(BigDecimal wreckAmount) {
+        this.wreckAmount = wreckAmount;
+    }
+
+    public String getWreckReason() {
+        return wreckReason;
+    }
+
+    public void setWreckReason(String wreckReason) {
+        this.wreckReason = wreckReason == null ? null : wreckReason.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType == null ? null : payType.trim();
+    }
+
+    public Byte getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Byte orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
     }
 }

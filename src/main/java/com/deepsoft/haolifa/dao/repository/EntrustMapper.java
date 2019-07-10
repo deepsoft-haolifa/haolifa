@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface EntrustMapper {
-    long countByExample(EntrustExample example);
+    int countByExample(EntrustExample example);
 
     int deleteByExample(EntrustExample example);
 

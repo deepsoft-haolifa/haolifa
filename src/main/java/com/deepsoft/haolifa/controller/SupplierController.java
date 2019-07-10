@@ -78,4 +78,24 @@ public class SupplierController {
         return supplierService.getList(model);
     }
 
+    @GetMapping("/list-all")
+    @ApiOperation("查询供应商列表")
+    public ResultBean listByName() {
+        return supplierService.listByName();
+    }
+
+    @PostMapping("/approve/{supplierNo}")
+    @ApiOperation("发起合格审批")
+    public ResultBean approve(@PathVariable("supplierNo") String supplierNo) {
+        return supplierService.approve(supplierNo);
+    }
+
+    @GetMapping("/evaluation/records")
+    @ApiOperation("供应商合格审批记录")
+    public ResultBean evaluationRecords(@RequestParam String supplierNo) {
+        return supplierService.evaluationRecords(supplierNo);
+    }
+
+
+
 }

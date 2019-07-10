@@ -1,17 +1,32 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Entrust {
     private Integer id;
 
-    private String purchaseOrderNo;
+    private String materialGraphName;
+
+    private String purchaseNo;
 
     private String entrustNo;
 
     private String materialGraphNo;
 
+    private String processedGraphNo;
+
+    private Byte workshopType;
+
+    private String supplierName;
+
+    private String supplierNo;
+
+    private String batchNumber;
+
     private Integer number;
+
+    private BigDecimal purchasePrice;
 
     private Byte status;
 
@@ -25,18 +40,31 @@ public class Entrust {
 
     private Integer createUserId;
 
-    public Entrust(Integer id, String purchaseOrderNo, String entrustNo, String materialGraphNo, Integer number, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    private Byte inspectStatus;
+
+    private Integer qualifiedNumber;
+
+    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, String processedGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber) {
         this.id = id;
-        this.purchaseOrderNo = purchaseOrderNo;
+        this.materialGraphName = materialGraphName;
+        this.purchaseNo = purchaseNo;
         this.entrustNo = entrustNo;
         this.materialGraphNo = materialGraphNo;
+        this.processedGraphNo = processedGraphNo;
+        this.workshopType = workshopType;
+        this.supplierName = supplierName;
+        this.supplierNo = supplierNo;
+        this.batchNumber = batchNumber;
         this.number = number;
+        this.purchasePrice = purchasePrice;
         this.status = status;
         this.entrustPerson = entrustPerson;
         this.isDelete = isDelete;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.inspectStatus = inspectStatus;
+        this.qualifiedNumber = qualifiedNumber;
     }
 
     public Entrust() {
@@ -51,12 +79,20 @@ public class Entrust {
         this.id = id;
     }
 
-    public String getPurchaseOrderNo() {
-        return purchaseOrderNo;
+    public String getMaterialGraphName() {
+        return materialGraphName;
     }
 
-    public void setPurchaseOrderNo(String purchaseOrderNo) {
-        this.purchaseOrderNo = purchaseOrderNo == null ? null : purchaseOrderNo.trim();
+    public void setMaterialGraphName(String materialGraphName) {
+        this.materialGraphName = materialGraphName == null ? null : materialGraphName.trim();
+    }
+
+    public String getPurchaseNo() {
+        return purchaseNo;
+    }
+
+    public void setPurchaseNo(String purchaseNo) {
+        this.purchaseNo = purchaseNo == null ? null : purchaseNo.trim();
     }
 
     public String getEntrustNo() {
@@ -75,12 +111,60 @@ public class Entrust {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
     }
 
+    public String getProcessedGraphNo() {
+        return processedGraphNo;
+    }
+
+    public void setProcessedGraphNo(String processedGraphNo) {
+        this.processedGraphNo = processedGraphNo == null ? null : processedGraphNo.trim();
+    }
+
+    public Byte getWorkshopType() {
+        return workshopType;
+    }
+
+    public void setWorkshopType(Byte workshopType) {
+        this.workshopType = workshopType;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName == null ? null : supplierName.trim();
+    }
+
+    public String getSupplierNo() {
+        return supplierNo;
+    }
+
+    public void setSupplierNo(String supplierNo) {
+        this.supplierNo = supplierNo == null ? null : supplierNo.trim();
+    }
+
+    public String getBatchNumber() {
+        return batchNumber;
+    }
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber == null ? null : batchNumber.trim();
+    }
+
     public Integer getNumber() {
         return number;
     }
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
     public Byte getStatus() {
@@ -129,5 +213,21 @@ public class Entrust {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public Byte getInspectStatus() {
+        return inspectStatus;
+    }
+
+    public void setInspectStatus(Byte inspectStatus) {
+        this.inspectStatus = inspectStatus;
+    }
+
+    public Integer getQualifiedNumber() {
+        return qualifiedNumber;
+    }
+
+    public void setQualifiedNumber(Integer qualifiedNumber) {
+        this.qualifiedNumber = qualifiedNumber;
     }
 }

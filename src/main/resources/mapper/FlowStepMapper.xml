@@ -6,14 +6,15 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="next_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="pre_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="goto_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="step_order" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="role_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="prev_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="condition_true" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="condition_false" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="form_show_step_id" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, update_user, flow_id, step_id, next_step_id, 
-    pre_step_id, goto_step_id, step_order
+    id, create_time, update_time, create_user_id, flow_id, step_id, user_id, role_id, 
+    prev_step_id, condition_true, condition_false, form_show_step_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowStepExample" resultMap="BaseResultMap">
     select
@@ -110,13 +111,15 @@
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.FlowStep">
     insert into flow_step (id, create_time, update_time, 
-      create_user, update_user, flow_id, 
-      step_id, next_step_id, pre_step_id, 
-      goto_step_id, step_order)
+      create_user_id, flow_id, step_id, 
+      user_id, role_id, prev_step_id, 
+      condition_true, condition_false, form_show_step_id
+      )
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, 
-      #{stepId,jdbcType=INTEGER}, #{nextStepId,jdbcType=INTEGER}, #{preStepId,jdbcType=INTEGER}, 
-      #{gotoStepId,jdbcType=INTEGER}, #{stepOrder,jdbcType=INTEGER})
+      #{createUserId,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{stepId,jdbcType=INTEGER}, 
+      #{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, #{prevStepId,jdbcType=INTEGER}, 
+      #{conditionTrue,jdbcType=INTEGER}, #{conditionFalse,jdbcType=INTEGER}, #{formShowStepId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowStep">
     insert into flow_step
@@ -130,11 +133,8 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="createUser != null">
-        create_user,
-      </if>
-      <if test="updateUser != null">
-        update_user,
+      <if test="createUserId != null">
+        create_user_id,
       </if>
       <if test="flowId != null">
         flow_id,
@@ -142,17 +142,23 @@
       <if test="stepId != null">
         step_id,
       </if>
-      <if test="nextStepId != null">
-        next_step_id,
+      <if test="userId != null">
+        user_id,
       </if>
-      <if test="preStepId != null">
-        pre_step_id,
+      <if test="roleId != null">
+        role_id,
       </if>
-      <if test="gotoStepId != null">
-        goto_step_id,
+      <if test="prevStepId != null">
+        prev_step_id,
       </if>
-      <if test="stepOrder != null">
-        step_order,
+      <if test="conditionTrue != null">
+        condition_true,
+      </if>
+      <if test="conditionFalse != null">
+        condition_false,
+      </if>
+      <if test="formShowStepId != null">
+        form_show_step_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -165,11 +171,8 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUser != null">
-        #{createUser,jdbcType=INTEGER},
-      </if>
-      <if test="updateUser != null">
-        #{updateUser,jdbcType=INTEGER},
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
       </if>
       <if test="flowId != null">
         #{flowId,jdbcType=INTEGER},
@@ -177,17 +180,23 @@
       <if test="stepId != null">
         #{stepId,jdbcType=INTEGER},
       </if>
-      <if test="nextStepId != null">
-        #{nextStepId,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="preStepId != null">
-        #{preStepId,jdbcType=INTEGER},
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
       </if>
-      <if test="gotoStepId != null">
-        #{gotoStepId,jdbcType=INTEGER},
+      <if test="prevStepId != null">
+        #{prevStepId,jdbcType=INTEGER},
       </if>
-      <if test="stepOrder != null">
-        #{stepOrder,jdbcType=INTEGER},
+      <if test="conditionTrue != null">
+        #{conditionTrue,jdbcType=INTEGER},
+      </if>
+      <if test="conditionFalse != null">
+        #{conditionFalse,jdbcType=INTEGER},
+      </if>
+      <if test="formShowStepId != null">
+        #{formShowStepId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -209,11 +218,8 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createUser != null">
-        create_user = #{record.createUser,jdbcType=INTEGER},
-      </if>
-      <if test="record.updateUser != null">
-        update_user = #{record.updateUser,jdbcType=INTEGER},
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
       <if test="record.flowId != null">
         flow_id = #{record.flowId,jdbcType=INTEGER},
@@ -221,17 +227,23 @@
       <if test="record.stepId != null">
         step_id = #{record.stepId,jdbcType=INTEGER},
       </if>
-      <if test="record.nextStepId != null">
-        next_step_id = #{record.nextStepId,jdbcType=INTEGER},
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
-      <if test="record.preStepId != null">
-        pre_step_id = #{record.preStepId,jdbcType=INTEGER},
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=INTEGER},
       </if>
-      <if test="record.gotoStepId != null">
-        goto_step_id = #{record.gotoStepId,jdbcType=INTEGER},
+      <if test="record.prevStepId != null">
+        prev_step_id = #{record.prevStepId,jdbcType=INTEGER},
       </if>
-      <if test="record.stepOrder != null">
-        step_order = #{record.stepOrder,jdbcType=INTEGER},
+      <if test="record.conditionTrue != null">
+        condition_true = #{record.conditionTrue,jdbcType=INTEGER},
+      </if>
+      <if test="record.conditionFalse != null">
+        condition_false = #{record.conditionFalse,jdbcType=INTEGER},
+      </if>
+      <if test="record.formShowStepId != null">
+        form_show_step_id = #{record.formShowStepId,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -243,14 +255,15 @@
     set id = #{record.id,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_user = #{record.createUser,jdbcType=INTEGER},
-      update_user = #{record.updateUser,jdbcType=INTEGER},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
       flow_id = #{record.flowId,jdbcType=INTEGER},
       step_id = #{record.stepId,jdbcType=INTEGER},
-      next_step_id = #{record.nextStepId,jdbcType=INTEGER},
-      pre_step_id = #{record.preStepId,jdbcType=INTEGER},
-      goto_step_id = #{record.gotoStepId,jdbcType=INTEGER},
-      step_order = #{record.stepOrder,jdbcType=INTEGER}
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      role_id = #{record.roleId,jdbcType=INTEGER},
+      prev_step_id = #{record.prevStepId,jdbcType=INTEGER},
+      condition_true = #{record.conditionTrue,jdbcType=INTEGER},
+      condition_false = #{record.conditionFalse,jdbcType=INTEGER},
+      form_show_step_id = #{record.formShowStepId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -264,11 +277,8 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUser != null">
-        create_user = #{createUser,jdbcType=INTEGER},
-      </if>
-      <if test="updateUser != null">
-        update_user = #{updateUser,jdbcType=INTEGER},
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
       <if test="flowId != null">
         flow_id = #{flowId,jdbcType=INTEGER},
@@ -276,17 +286,23 @@
       <if test="stepId != null">
         step_id = #{stepId,jdbcType=INTEGER},
       </if>
-      <if test="nextStepId != null">
-        next_step_id = #{nextStepId,jdbcType=INTEGER},
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="preStepId != null">
-        pre_step_id = #{preStepId,jdbcType=INTEGER},
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
       </if>
-      <if test="gotoStepId != null">
-        goto_step_id = #{gotoStepId,jdbcType=INTEGER},
+      <if test="prevStepId != null">
+        prev_step_id = #{prevStepId,jdbcType=INTEGER},
       </if>
-      <if test="stepOrder != null">
-        step_order = #{stepOrder,jdbcType=INTEGER},
+      <if test="conditionTrue != null">
+        condition_true = #{conditionTrue,jdbcType=INTEGER},
+      </if>
+      <if test="conditionFalse != null">
+        condition_false = #{conditionFalse,jdbcType=INTEGER},
+      </if>
+      <if test="formShowStepId != null">
+        form_show_step_id = #{formShowStepId,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -295,14 +311,15 @@
     update flow_step
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=INTEGER},
-      update_user = #{updateUser,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
       flow_id = #{flowId,jdbcType=INTEGER},
       step_id = #{stepId,jdbcType=INTEGER},
-      next_step_id = #{nextStepId,jdbcType=INTEGER},
-      pre_step_id = #{preStepId,jdbcType=INTEGER},
-      goto_step_id = #{gotoStepId,jdbcType=INTEGER},
-      step_order = #{stepOrder,jdbcType=INTEGER}
+      user_id = #{userId,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=INTEGER},
+      prev_step_id = #{prevStepId,jdbcType=INTEGER},
+      condition_true = #{conditionTrue,jdbcType=INTEGER},
+      condition_false = #{conditionFalse,jdbcType=INTEGER},
+      form_show_step_id = #{formShowStepId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

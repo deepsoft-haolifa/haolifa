@@ -1,11 +1,14 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.StoreRoomMapper;
 import com.deepsoft.haolifa.model.domain.StoreRoom;
 import com.deepsoft.haolifa.model.domain.StoreRoomExample;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomListDTO;
+import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRequestDTO;
 import com.deepsoft.haolifa.service.StoreRoomService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -118,11 +121,16 @@ public class StoreRoomServiceImpl implements StoreRoomService {
         StoreRoomExample example = new StoreRoomExample();
         StoreRoomExample.Criteria criteria = example.createCriteria();
         if (type > 0) {
-            criteria.andIdEqualTo(type);
+            criteria.andTypeEqualTo((byte) type);
         }
         criteria.andIsDeleteEqualTo(NO.code);
         List<StoreRoom> storeRooms = storeRoomMapper.selectByExample(example);
-        return ResultBean.success(storeRooms);
+        if (storeRooms.size() > 0) {
+            List<StoreRoomListDTO> storeRoomListDTOS = JSON.parseArray(JSON.toJSONString(storeRooms), StoreRoomListDTO.class);
+            return ResultBean.success(storeRoomListDTOS);
+        } else {
+            return ResultBean.success(null);
+        }
     }
 
     @Override

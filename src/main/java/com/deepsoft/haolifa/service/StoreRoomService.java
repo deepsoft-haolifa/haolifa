@@ -2,7 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.StoreRoom;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.StoreRoomRequestDTO;
+import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRequestDTO;
 
 public interface StoreRoomService {
 

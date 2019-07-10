@@ -22,6 +22,12 @@ public class DepartmentController {
         return ResultBean.success(departmentService.insertDepartment(departmentDTO));
     }
 
+    @ApiOperation("获取部门")
+    @GetMapping("/{id}")
+    public ResultBean getDapartment(@PathVariable("id") Integer id){
+        return ResultBean.success(departmentService.selectDepartmentById(id));
+    }
+
     @ApiOperation("部门列表")
     @GetMapping("/list")
     public ResultBean getDepartments(){
@@ -35,9 +41,15 @@ public class DepartmentController {
     }
 
     @ApiOperation("删除部门")
-    @DeleteMapping("")
-    public ResultBean deleteDapartment(@RequestBody Integer id){
+    @DeleteMapping("/{id}")
+    public ResultBean deleteDapartment(@PathVariable("id") Integer id){
         return ResultBean.success(departmentService.deleteDepartment(id));
+    }
+
+    @ApiOperation("获取部门树状结构")
+    @GetMapping("/departmentTree")
+    public ResultBean departmentTree(){
+        return ResultBean.success(departmentService.departmentTree());
     }
 
 }

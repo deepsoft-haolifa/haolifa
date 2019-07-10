@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -705,52 +706,62 @@ public class EquipmentExample {
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsEqualTo(Integer value) {
+        public Criteria andServicedYearsEqualTo(String value) {
             addCriterion("serviced_years =", value, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsNotEqualTo(Integer value) {
+        public Criteria andServicedYearsNotEqualTo(String value) {
             addCriterion("serviced_years <>", value, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsGreaterThan(Integer value) {
+        public Criteria andServicedYearsGreaterThan(String value) {
             addCriterion("serviced_years >", value, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsGreaterThanOrEqualTo(Integer value) {
+        public Criteria andServicedYearsGreaterThanOrEqualTo(String value) {
             addCriterion("serviced_years >=", value, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsLessThan(Integer value) {
+        public Criteria andServicedYearsLessThan(String value) {
             addCriterion("serviced_years <", value, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsLessThanOrEqualTo(Integer value) {
+        public Criteria andServicedYearsLessThanOrEqualTo(String value) {
             addCriterion("serviced_years <=", value, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsIn(List<Integer> values) {
+        public Criteria andServicedYearsLike(String value) {
+            addCriterion("serviced_years like", value, "servicedYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andServicedYearsNotLike(String value) {
+            addCriterion("serviced_years not like", value, "servicedYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andServicedYearsIn(List<String> values) {
             addCriterion("serviced_years in", values, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsNotIn(List<Integer> values) {
+        public Criteria andServicedYearsNotIn(List<String> values) {
             addCriterion("serviced_years not in", values, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsBetween(Integer value1, Integer value2) {
+        public Criteria andServicedYearsBetween(String value1, String value2) {
             addCriterion("serviced_years between", value1, value2, "servicedYears");
             return (Criteria) this;
         }
 
-        public Criteria andServicedYearsNotBetween(Integer value1, Integer value2) {
+        public Criteria andServicedYearsNotBetween(String value1, String value2) {
             addCriterion("serviced_years not between", value1, value2, "servicedYears");
             return (Criteria) this;
         }
@@ -992,6 +1003,126 @@ public class EquipmentExample {
 
         public Criteria andCreateUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("create_user_id not between", value1, value2, "createUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIsNull() {
+            addCriterion("price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIsNotNull() {
+            addCriterion("price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceEqualTo(BigDecimal value) {
+            addCriterion("price =", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotEqualTo(BigDecimal value) {
+            addCriterion("price <>", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceGreaterThan(BigDecimal value) {
+            addCriterion("price >", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("price >=", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceLessThan(BigDecimal value) {
+            addCriterion("price <", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("price <=", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIn(List<BigDecimal> values) {
+            addCriterion("price in", values, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotIn(List<BigDecimal> values) {
+            addCriterion("price not in", values, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price between", value1, value2, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price not between", value1, value2, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeIsNull() {
+            addCriterion("purchase_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeIsNotNull() {
+            addCriterion("purchase_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeEqualTo(Date value) {
+            addCriterion("purchase_time =", value, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeNotEqualTo(Date value) {
+            addCriterion("purchase_time <>", value, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeGreaterThan(Date value) {
+            addCriterion("purchase_time >", value, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("purchase_time >=", value, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeLessThan(Date value) {
+            addCriterion("purchase_time <", value, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeLessThanOrEqualTo(Date value) {
+            addCriterion("purchase_time <=", value, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeIn(List<Date> values) {
+            addCriterion("purchase_time in", values, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeNotIn(List<Date> values) {
+            addCriterion("purchase_time not in", values, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeBetween(Date value1, Date value2) {
+            addCriterion("purchase_time between", value1, value2, "purchaseTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseTimeNotBetween(Date value1, Date value2) {
+            addCriterion("purchase_time not between", value1, value2, "purchaseTime");
             return (Criteria) this;
         }
     }

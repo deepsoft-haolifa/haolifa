@@ -112,23 +112,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
-    insert into sys_user (id, username, password, 
-      real_name, user_no, sex, 
-      native_place, phone, id_card, 
-      photo_url, is_delete, entry_time, 
-      create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{realName,jdbcType=VARCHAR}, #{userNo,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
-      #{nativePlace,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
-      #{photoUrl,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{entryTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys_user (username, password, real_name, 
+      user_no, sex, native_place, 
+      phone, id_card, photo_url, 
+      is_delete, entry_time, create_time, 
+      update_time)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{userNo,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{nativePlace,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=TINYINT}, #{entryTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SysUser">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="username != null">
         username,
       </if>
@@ -170,9 +173,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="username != null">
         #{username,jdbcType=VARCHAR},
       </if>

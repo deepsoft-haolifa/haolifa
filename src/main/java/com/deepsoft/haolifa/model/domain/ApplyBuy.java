@@ -1,28 +1,17 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ApplyBuy {
     private Integer id;
 
-    private Integer flowId;
+    private String applyBuyNo;
 
-    private String applyNo;
+    private String productOrderNo;
 
-    private String materialGraphNo;
+    private Integer purchaseNumber;
 
-    private Integer number;
-
-    private String unit;
-
-    private BigDecimal valuation;
-
-    private String remark;
-
-    private String purpose;
-
-    private Byte isDelete;
+    private Date arrivalTime;
 
     private Date createTime;
 
@@ -30,20 +19,27 @@ public class ApplyBuy {
 
     private Integer createUserId;
 
-    public ApplyBuy(Integer id, Integer flowId, String applyNo, String materialGraphNo, Integer number, String unit, BigDecimal valuation, String remark, String purpose, Byte isDelete, Date createTime, Date updateTime, Integer createUserId) {
+    private String materialGraphNo;
+
+    private String materialName;
+
+    private Byte status;
+
+    private Integer dealUserId;
+
+    public ApplyBuy(Integer id, String applyBuyNo, String productOrderNo, Integer purchaseNumber, Date arrivalTime, Date createTime, Date updateTime, Integer createUserId, String materialGraphNo, String materialName, Byte status, Integer dealUserId) {
         this.id = id;
-        this.flowId = flowId;
-        this.applyNo = applyNo;
-        this.materialGraphNo = materialGraphNo;
-        this.number = number;
-        this.unit = unit;
-        this.valuation = valuation;
-        this.remark = remark;
-        this.purpose = purpose;
-        this.isDelete = isDelete;
+        this.applyBuyNo = applyBuyNo;
+        this.productOrderNo = productOrderNo;
+        this.purchaseNumber = purchaseNumber;
+        this.arrivalTime = arrivalTime;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.materialGraphNo = materialGraphNo;
+        this.materialName = materialName;
+        this.status = status;
+        this.dealUserId = dealUserId;
     }
 
     public ApplyBuy() {
@@ -58,76 +54,36 @@ public class ApplyBuy {
         this.id = id;
     }
 
-    public Integer getFlowId() {
-        return flowId;
+    public String getApplyBuyNo() {
+        return applyBuyNo;
     }
 
-    public void setFlowId(Integer flowId) {
-        this.flowId = flowId;
+    public void setApplyBuyNo(String applyBuyNo) {
+        this.applyBuyNo = applyBuyNo == null ? null : applyBuyNo.trim();
     }
 
-    public String getApplyNo() {
-        return applyNo;
+    public String getProductOrderNo() {
+        return productOrderNo;
     }
 
-    public void setApplyNo(String applyNo) {
-        this.applyNo = applyNo == null ? null : applyNo.trim();
+    public void setProductOrderNo(String productOrderNo) {
+        this.productOrderNo = productOrderNo == null ? null : productOrderNo.trim();
     }
 
-    public String getMaterialGraphNo() {
-        return materialGraphNo;
+    public Integer getPurchaseNumber() {
+        return purchaseNumber;
     }
 
-    public void setMaterialGraphNo(String materialGraphNo) {
-        this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    public void setPurchaseNumber(Integer purchaseNumber) {
+        this.purchaseNumber = purchaseNumber;
     }
 
-    public Integer getNumber() {
-        return number;
+    public Date getArrivalTime() {
+        return arrivalTime;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit == null ? null : unit.trim();
-    }
-
-    public BigDecimal getValuation() {
-        return valuation;
-    }
-
-    public void setValuation(BigDecimal valuation) {
-        this.valuation = valuation;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getPurpose() {
-        return purpose;
-    }
-
-    public void setPurpose(String purpose) {
-        this.purpose = purpose == null ? null : purpose.trim();
-    }
-
-    public Byte getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Byte isDelete) {
-        this.isDelete = isDelete;
+    public void setArrivalTime(Date arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
     public Date getCreateTime() {
@@ -152,5 +108,37 @@ public class ApplyBuy {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getMaterialGraphNo() {
+        return materialGraphNo;
+    }
+
+    public void setMaterialGraphNo(String materialGraphNo) {
+        this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName == null ? null : materialName.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Integer getDealUserId() {
+        return dealUserId;
+    }
+
+    public void setDealUserId(Integer dealUserId) {
+        this.dealUserId = dealUserId;
     }
 }

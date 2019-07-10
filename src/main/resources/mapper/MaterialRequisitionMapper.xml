@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.MaterialRequisitionMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.MaterialRequisition">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="receive_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="receive_department" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receive_user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="receive_user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_time, create_user, receive_no, order_no, receive_department, receive_user_id, 
+    receive_user_name
+  </sql>
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisitionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from material_requisition
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from material_requisition
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from material_requisition
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisitionExample">
+    delete from material_requisition
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material_requisition (create_time, create_user, receive_no, 
+      order_no, receive_department, receive_user_id, 
+      receive_user_name)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, #{receiveNo,jdbcType=CHAR}, 
+      #{orderNo,jdbcType=CHAR}, #{receiveDepartment,jdbcType=VARCHAR}, #{receiveUserId,jdbcType=VARCHAR}, 
+      #{receiveUserName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material_requisition
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="receiveNo != null">
+        receive_no,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="receiveDepartment != null">
+        receive_department,
+      </if>
+      <if test="receiveUserId != null">
+        receive_user_id,
+      </if>
+      <if test="receiveUserName != null">
+        receive_user_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="receiveNo != null">
+        #{receiveNo,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="receiveDepartment != null">
+        #{receiveDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveUserId != null">
+        #{receiveUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveUserName != null">
+        #{receiveUserName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisitionExample" resultType="java.lang.Long">
+    select count(*) from material_requisition
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update material_requisition
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.receiveNo != null">
+        receive_no = #{record.receiveNo,jdbcType=CHAR},
+      </if>
+      <if test="record.orderNo != null">
+        order_no = #{record.orderNo,jdbcType=CHAR},
+      </if>
+      <if test="record.receiveDepartment != null">
+        receive_department = #{record.receiveDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveUserId != null">
+        receive_user_id = #{record.receiveUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveUserName != null">
+        receive_user_name = #{record.receiveUserName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update material_requisition
+    set id = #{record.id,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=INTEGER},
+      receive_no = #{record.receiveNo,jdbcType=CHAR},
+      order_no = #{record.orderNo,jdbcType=CHAR},
+      receive_department = #{record.receiveDepartment,jdbcType=VARCHAR},
+      receive_user_id = #{record.receiveUserId,jdbcType=VARCHAR},
+      receive_user_name = #{record.receiveUserName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
+    update material_requisition
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="receiveNo != null">
+        receive_no = #{receiveNo,jdbcType=CHAR},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=CHAR},
+      </if>
+      <if test="receiveDepartment != null">
+        receive_department = #{receiveDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveUserId != null">
+        receive_user_id = #{receiveUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveUserName != null">
+        receive_user_name = #{receiveUserName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.MaterialRequisition">
+    update material_requisition
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=INTEGER},
+      receive_no = #{receiveNo,jdbcType=CHAR},
+      order_no = #{orderNo,jdbcType=CHAR},
+      receive_department = #{receiveDepartment,jdbcType=VARCHAR},
+      receive_user_id = #{receiveUserId,jdbcType=VARCHAR},
+      receive_user_name = #{receiveUserName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

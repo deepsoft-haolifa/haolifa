@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.HlMailReveMapper">
+
+
+  <resultMap type="com.deepsoft.haolifa.model.domain.HlMailReve" id="hlMailReveMap">
+    <id column="id" javaType="java.lang.Integer"  property="id"/>
+    <result column="content" javaType="java.lang.String" property="content"/>
+    <result column="create_time" javaType="java.util.Date" property="createTime"/>
+    <result column="user_name" javaType="java.lang.String" property="userName"/>
+    <result column="mail_id" javaType="java.lang.Integer" property="mailId"/>
+    <result column="user_id" javaType="java.lang.Integer" property="userId"/>
+
+  </resultMap>
+
+
+  <select id="selectHlMailReves" parameterType="Integer" resultMap="hlMailReveMap">
+    select
+    hlr.id,hlr.user_name,hlr.content,hlr.create_time,hlr.mail_id,hlr.user_id
+
+    from hl_mail_reve hlr where hlr.mail_id = #{mailId}
+
+    order by hlr.create_time desc
+
+  </select>
+
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.HlMailReve">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into hl_mail_reve (user_name,content, create_time,
+    mail_id,
+    user_id)
+    values (#{userName,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{mailId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER})
+  </insert>
+
+</mapper>

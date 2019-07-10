@@ -9,25 +9,19 @@ public class Step {
 
     private Date updateTime;
 
-    private Integer createUser;
-
-    private Integer updateUser;
+    private Integer createUserId;
 
     private String name;
 
     private String description;
 
-    private Integer roleId;
-
-    public Step(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String name, String description, Integer roleId) {
+    public Step(Integer id, Date createTime, Date updateTime, Integer createUserId, String name, String description) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.createUser = createUser;
-        this.updateUser = updateUser;
+        this.createUserId = createUserId;
         this.name = name;
         this.description = description;
-        this.roleId = roleId;
     }
 
     public Step() {
@@ -58,20 +52,12 @@ public class Step {
         this.updateTime = updateTime;
     }
 
-    public Integer getCreateUser() {
-        return createUser;
+    public Integer getCreateUserId() {
+        return createUserId;
     }
 
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
+    public void setCreateUserId(Integer createUserId) {
+        this.createUserId = createUserId;
     }
 
     public String getName() {
@@ -88,13 +74,5 @@ public class Step {
 
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
     }
 }

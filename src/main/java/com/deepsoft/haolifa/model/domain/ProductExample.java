@@ -475,6 +475,76 @@ public class ProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductModelIsNull() {
+            addCriterion("product_model is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIsNotNull() {
+            addCriterion("product_model is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelEqualTo(String value) {
+            addCriterion("product_model =", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotEqualTo(String value) {
+            addCriterion("product_model <>", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelGreaterThan(String value) {
+            addCriterion("product_model >", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelGreaterThanOrEqualTo(String value) {
+            addCriterion("product_model >=", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelLessThan(String value) {
+            addCriterion("product_model <", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelLessThanOrEqualTo(String value) {
+            addCriterion("product_model <=", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelLike(String value) {
+            addCriterion("product_model like", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotLike(String value) {
+            addCriterion("product_model not like", value, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIn(List<String> values) {
+            addCriterion("product_model in", values, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotIn(List<String> values) {
+            addCriterion("product_model not in", values, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelBetween(String value1, String value2) {
+            addCriterion("product_model between", value1, value2, "productModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelNotBetween(String value1, String value2) {
+            addCriterion("product_model not between", value1, value2, "productModel");
+            return (Criteria) this;
+        }
+
         public Criteria andNameIsNull() {
             addCriterion("name is null");
             return (Criteria) this;
@@ -542,76 +612,6 @@ public class ProductExample {
 
         public Criteria andNameNotBetween(String value1, String value2) {
             addCriterion("name not between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentIsNull() {
-            addCriterion("fit_component is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentIsNotNull() {
-            addCriterion("fit_component is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentEqualTo(String value) {
-            addCriterion("fit_component =", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentNotEqualTo(String value) {
-            addCriterion("fit_component <>", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentGreaterThan(String value) {
-            addCriterion("fit_component >", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentGreaterThanOrEqualTo(String value) {
-            addCriterion("fit_component >=", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentLessThan(String value) {
-            addCriterion("fit_component <", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentLessThanOrEqualTo(String value) {
-            addCriterion("fit_component <=", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentLike(String value) {
-            addCriterion("fit_component like", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentNotLike(String value) {
-            addCriterion("fit_component not like", value, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentIn(List<String> values) {
-            addCriterion("fit_component in", values, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentNotIn(List<String> values) {
-            addCriterion("fit_component not in", values, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentBetween(String value1, String value2) {
-            addCriterion("fit_component between", value1, value2, "fitComponent");
-            return (Criteria) this;
-        }
-
-        public Criteria andFitComponentNotBetween(String value1, String value2) {
-            addCriterion("fit_component not between", value1, value2, "fitComponent");
             return (Criteria) this;
         }
 

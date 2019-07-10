@@ -20,7 +20,7 @@ public interface EntryOutStoreRecordService {
      *
      * @return
      */
-    int outProduct(OutProductStorageDTO model);
+    ResultBean outProduct(OutProductStorageDTO model);
 
     /**
      * 零件入库

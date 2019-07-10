@@ -6,12 +6,13 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="inspect_no" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="order_no" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="product_model" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="testing_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="qualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="storage_status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="testing_person" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="testing_unit" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="testing_process" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="testing_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="unqualified_number" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="testing_person" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="technical_requirements" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="testing_result" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="inspector" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -22,7 +23,6 @@
       <arg column="responsible_analyze_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="is_delete" javaType="java.lang.Byte" jdbcType="TINYINT" />
       <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
     </constructor>
   </resultMap>
@@ -85,10 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, inspect_no, order_no, product_model, testing_unit, testing_process, testing_number, 
-    unqualified_number, testing_person, technical_requirements, testing_result, inspector, 
-    inspecte_time, reason, responsible_department, department_leader, responsible_analyze_time, 
-    create_time, update_time, is_delete, create_user_id
+    id, inspect_no, order_no, testing_number, qualified_number, unqualified_number, storage_status, 
+    testing_person, testing_unit, testing_process, technical_requirements, testing_result, 
+    inspector, inspecte_time, reason, responsible_department, department_leader, responsible_analyze_time, 
+    create_time, update_time, create_user_id
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResultExample" resultMap="BaseResultMap">
     select
@@ -121,52 +121,58 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
-    insert into pro_inspect_result (id, inspect_no, order_no, 
-      product_model, testing_unit, testing_process, 
-      testing_number, unqualified_number, testing_person, 
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pro_inspect_result (inspect_no, order_no, testing_number, 
+      qualified_number, unqualified_number, storage_status, 
+      testing_person, testing_unit, testing_process, 
       technical_requirements, testing_result, inspector, 
       inspecte_time, reason, responsible_department, 
       department_leader, responsible_analyze_time, 
-      create_time, update_time, is_delete, 
-      create_user_id)
-    values (#{id,jdbcType=INTEGER}, #{inspectNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
-      #{productModel,jdbcType=VARCHAR}, #{testingUnit,jdbcType=VARCHAR}, #{testingProcess,jdbcType=VARCHAR}, 
-      #{testingNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{testingPerson,jdbcType=VARCHAR}, 
+      create_time, update_time, create_user_id
+      )
+    values (#{inspectNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{testingNumber,jdbcType=INTEGER}, 
+      #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{storageStatus,jdbcType=TINYINT}, 
+      #{testingPerson,jdbcType=VARCHAR}, #{testingUnit,jdbcType=VARCHAR}, #{testingProcess,jdbcType=VARCHAR}, 
       #{technicalRequirements,jdbcType=VARCHAR}, #{testingResult,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, 
       #{inspecteTime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, #{responsibleDepartment,jdbcType=VARCHAR}, 
       #{departmentLeader,jdbcType=VARCHAR}, #{responsibleAnalyzeTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
-      #{createUserId,jdbcType=INTEGER})
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ProInspectResult">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into pro_inspect_result
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="inspectNo != null">
         inspect_no,
       </if>
       <if test="orderNo != null">
         order_no,
       </if>
-      <if test="productModel != null">
-        product_model,
+      <if test="testingNumber != null">
+        testing_number,
+      </if>
+      <if test="qualifiedNumber != null">
+        qualified_number,
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number,
+      </if>
+      <if test="storageStatus != null">
+        storage_status,
+      </if>
+      <if test="testingPerson != null">
+        testing_person,
       </if>
       <if test="testingUnit != null">
         testing_unit,
       </if>
       <if test="testingProcess != null">
         testing_process,
-      </if>
-      <if test="testingNumber != null">
-        testing_number,
-      </if>
-      <if test="unqualifiedNumber != null">
-        unqualified_number,
-      </if>
-      <if test="testingPerson != null">
-        testing_person,
       </if>
       <if test="technicalRequirements != null">
         technical_requirements,
@@ -198,40 +204,37 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="isDelete != null">
-        is_delete,
-      </if>
       <if test="createUserId != null">
         create_user_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="inspectNo != null">
         #{inspectNo,jdbcType=VARCHAR},
       </if>
       <if test="orderNo != null">
         #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="productModel != null">
-        #{productModel,jdbcType=VARCHAR},
+      <if test="testingNumber != null">
+        #{testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null">
+        #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="storageStatus != null">
+        #{storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="testingPerson != null">
+        #{testingPerson,jdbcType=VARCHAR},
       </if>
       <if test="testingUnit != null">
         #{testingUnit,jdbcType=VARCHAR},
       </if>
       <if test="testingProcess != null">
         #{testingProcess,jdbcType=VARCHAR},
-      </if>
-      <if test="testingNumber != null">
-        #{testingNumber,jdbcType=INTEGER},
-      </if>
-      <if test="unqualifiedNumber != null">
-        #{unqualifiedNumber,jdbcType=INTEGER},
-      </if>
-      <if test="testingPerson != null">
-        #{testingPerson,jdbcType=VARCHAR},
       </if>
       <if test="technicalRequirements != null">
         #{technicalRequirements,jdbcType=VARCHAR},
@@ -263,9 +266,6 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=TINYINT},
-      </if>
       <if test="createUserId != null">
         #{createUserId,jdbcType=INTEGER},
       </if>
@@ -289,23 +289,26 @@
       <if test="record.orderNo != null">
         order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.productModel != null">
-        product_model = #{record.productModel,jdbcType=VARCHAR},
+      <if test="record.testingNumber != null">
+        testing_number = #{record.testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.qualifiedNumber != null">
+        qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unqualifiedNumber != null">
+        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.storageStatus != null">
+        storage_status = #{record.storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.testingPerson != null">
+        testing_person = #{record.testingPerson,jdbcType=VARCHAR},
       </if>
       <if test="record.testingUnit != null">
         testing_unit = #{record.testingUnit,jdbcType=VARCHAR},
       </if>
       <if test="record.testingProcess != null">
         testing_process = #{record.testingProcess,jdbcType=VARCHAR},
-      </if>
-      <if test="record.testingNumber != null">
-        testing_number = #{record.testingNumber,jdbcType=INTEGER},
-      </if>
-      <if test="record.unqualifiedNumber != null">
-        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
-      </if>
-      <if test="record.testingPerson != null">
-        testing_person = #{record.testingPerson,jdbcType=VARCHAR},
       </if>
       <if test="record.technicalRequirements != null">
         technical_requirements = #{record.technicalRequirements,jdbcType=VARCHAR},
@@ -337,9 +340,6 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.isDelete != null">
-        is_delete = #{record.isDelete,jdbcType=TINYINT},
-      </if>
       <if test="record.createUserId != null">
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
@@ -353,12 +353,13 @@
     set id = #{record.id,jdbcType=INTEGER},
       inspect_no = #{record.inspectNo,jdbcType=VARCHAR},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
-      product_model = #{record.productModel,jdbcType=VARCHAR},
+      testing_number = #{record.testingNumber,jdbcType=INTEGER},
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      storage_status = #{record.storageStatus,jdbcType=TINYINT},
+      testing_person = #{record.testingPerson,jdbcType=VARCHAR},
       testing_unit = #{record.testingUnit,jdbcType=VARCHAR},
       testing_process = #{record.testingProcess,jdbcType=VARCHAR},
-      testing_number = #{record.testingNumber,jdbcType=INTEGER},
-      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
-      testing_person = #{record.testingPerson,jdbcType=VARCHAR},
       technical_requirements = #{record.technicalRequirements,jdbcType=VARCHAR},
       testing_result = #{record.testingResult,jdbcType=VARCHAR},
       inspector = #{record.inspector,jdbcType=VARCHAR},
@@ -369,7 +370,6 @@
       responsible_analyze_time = #{record.responsibleAnalyzeTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      is_delete = #{record.isDelete,jdbcType=TINYINT},
       create_user_id = #{record.createUserId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -384,23 +384,26 @@
       <if test="orderNo != null">
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="productModel != null">
-        product_model = #{productModel,jdbcType=VARCHAR},
+      <if test="testingNumber != null">
+        testing_number = #{testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null">
+        qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null">
+        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="storageStatus != null">
+        storage_status = #{storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="testingPerson != null">
+        testing_person = #{testingPerson,jdbcType=VARCHAR},
       </if>
       <if test="testingUnit != null">
         testing_unit = #{testingUnit,jdbcType=VARCHAR},
       </if>
       <if test="testingProcess != null">
         testing_process = #{testingProcess,jdbcType=VARCHAR},
-      </if>
-      <if test="testingNumber != null">
-        testing_number = #{testingNumber,jdbcType=INTEGER},
-      </if>
-      <if test="unqualifiedNumber != null">
-        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
-      </if>
-      <if test="testingPerson != null">
-        testing_person = #{testingPerson,jdbcType=VARCHAR},
       </if>
       <if test="technicalRequirements != null">
         technical_requirements = #{technicalRequirements,jdbcType=VARCHAR},
@@ -432,9 +435,6 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=TINYINT},
-      </if>
       <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
@@ -445,12 +445,13 @@
     update pro_inspect_result
     set inspect_no = #{inspectNo,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},
-      product_model = #{productModel,jdbcType=VARCHAR},
+      testing_number = #{testingNumber,jdbcType=INTEGER},
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      storage_status = #{storageStatus,jdbcType=TINYINT},
+      testing_person = #{testingPerson,jdbcType=VARCHAR},
       testing_unit = #{testingUnit,jdbcType=VARCHAR},
       testing_process = #{testingProcess,jdbcType=VARCHAR},
-      testing_number = #{testingNumber,jdbcType=INTEGER},
-      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
-      testing_person = #{testingPerson,jdbcType=VARCHAR},
       technical_requirements = #{technicalRequirements,jdbcType=VARCHAR},
       testing_result = #{testingResult,jdbcType=VARCHAR},
       inspector = #{inspector,jdbcType=VARCHAR},
@@ -461,7 +462,6 @@
       responsible_analyze_time = #{responsibleAnalyzeTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      is_delete = #{isDelete,jdbcType=TINYINT},
       create_user_id = #{createUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

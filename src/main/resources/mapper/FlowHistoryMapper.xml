@@ -6,15 +6,17 @@
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="flow_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="instance_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="next_step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="audit_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="audit_info" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="allot_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="audit_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="buy_no" javaType="java.lang.String" jdbcType="CHAR" />
-      <arg column="order_no" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="audit_result" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="form_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="form_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="form_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accessory" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -76,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, create_time, update_time, create_user, flow_id, step_id, next_step_id, audit_user_id, 
-    audit_info, audit_time, buy_no, order_no
+    id, create_time, update_time, instance_id, step_id, audit_user_id, audit_info, allot_user_id, 
+    audit_time, audit_result, form_type, form_id, form_no, accessory
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowHistoryExample" resultMap="BaseResultMap">
     select
@@ -111,15 +113,15 @@
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
     insert into flow_history (id, create_time, update_time, 
-      create_user, flow_id, step_id, 
-      next_step_id, audit_user_id, audit_info, 
-      audit_time, buy_no, order_no
-      )
+      instance_id, step_id, audit_user_id, 
+      audit_info, allot_user_id, audit_time, 
+      audit_result, form_type, form_id, 
+      form_no, accessory)
     values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{stepId,jdbcType=INTEGER}, 
-      #{nextStepId,jdbcType=INTEGER}, #{auditUserId,jdbcType=INTEGER}, #{auditInfo,jdbcType=VARCHAR}, 
-      #{auditTime,jdbcType=TIMESTAMP}, #{buyNo,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR}
-      )
+      #{instanceId,jdbcType=INTEGER}, #{stepId,jdbcType=INTEGER}, #{auditUserId,jdbcType=INTEGER}, 
+      #{auditInfo,jdbcType=VARCHAR}, #{allotUserId,jdbcType=INTEGER}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{auditResult,jdbcType=TINYINT}, #{formType,jdbcType=TINYINT}, #{formId,jdbcType=INTEGER}, 
+      #{formNo,jdbcType=VARCHAR}, #{accessory,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
     insert into flow_history
@@ -133,17 +135,11 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="createUser != null">
-        create_user,
-      </if>
-      <if test="flowId != null">
-        flow_id,
+      <if test="instanceId != null">
+        instance_id,
       </if>
       <if test="stepId != null">
         step_id,
-      </if>
-      <if test="nextStepId != null">
-        next_step_id,
       </if>
       <if test="auditUserId != null">
         audit_user_id,
@@ -151,14 +147,26 @@
       <if test="auditInfo != null">
         audit_info,
       </if>
+      <if test="allotUserId != null">
+        allot_user_id,
+      </if>
       <if test="auditTime != null">
         audit_time,
       </if>
-      <if test="buyNo != null">
-        buy_no,
+      <if test="auditResult != null">
+        audit_result,
       </if>
-      <if test="orderNo != null">
-        order_no,
+      <if test="formType != null">
+        form_type,
+      </if>
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="formNo != null">
+        form_no,
+      </if>
+      <if test="accessory != null">
+        accessory,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -171,17 +179,11 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUser != null">
-        #{createUser,jdbcType=INTEGER},
-      </if>
-      <if test="flowId != null">
-        #{flowId,jdbcType=INTEGER},
+      <if test="instanceId != null">
+        #{instanceId,jdbcType=INTEGER},
       </if>
       <if test="stepId != null">
         #{stepId,jdbcType=INTEGER},
-      </if>
-      <if test="nextStepId != null">
-        #{nextStepId,jdbcType=INTEGER},
       </if>
       <if test="auditUserId != null">
         #{auditUserId,jdbcType=INTEGER},
@@ -189,14 +191,26 @@
       <if test="auditInfo != null">
         #{auditInfo,jdbcType=VARCHAR},
       </if>
+      <if test="allotUserId != null">
+        #{allotUserId,jdbcType=INTEGER},
+      </if>
       <if test="auditTime != null">
         #{auditTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="buyNo != null">
-        #{buyNo,jdbcType=CHAR},
+      <if test="auditResult != null">
+        #{auditResult,jdbcType=TINYINT},
       </if>
-      <if test="orderNo != null">
-        #{orderNo,jdbcType=CHAR},
+      <if test="formType != null">
+        #{formType,jdbcType=TINYINT},
+      </if>
+      <if test="formId != null">
+        #{formId,jdbcType=INTEGER},
+      </if>
+      <if test="formNo != null">
+        #{formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accessory != null">
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -218,17 +232,11 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createUser != null">
-        create_user = #{record.createUser,jdbcType=INTEGER},
-      </if>
-      <if test="record.flowId != null">
-        flow_id = #{record.flowId,jdbcType=INTEGER},
+      <if test="record.instanceId != null">
+        instance_id = #{record.instanceId,jdbcType=INTEGER},
       </if>
       <if test="record.stepId != null">
         step_id = #{record.stepId,jdbcType=INTEGER},
-      </if>
-      <if test="record.nextStepId != null">
-        next_step_id = #{record.nextStepId,jdbcType=INTEGER},
       </if>
       <if test="record.auditUserId != null">
         audit_user_id = #{record.auditUserId,jdbcType=INTEGER},
@@ -236,14 +244,26 @@
       <if test="record.auditInfo != null">
         audit_info = #{record.auditInfo,jdbcType=VARCHAR},
       </if>
+      <if test="record.allotUserId != null">
+        allot_user_id = #{record.allotUserId,jdbcType=INTEGER},
+      </if>
       <if test="record.auditTime != null">
         audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.buyNo != null">
-        buy_no = #{record.buyNo,jdbcType=CHAR},
+      <if test="record.auditResult != null">
+        audit_result = #{record.auditResult,jdbcType=TINYINT},
       </if>
-      <if test="record.orderNo != null">
-        order_no = #{record.orderNo,jdbcType=CHAR},
+      <if test="record.formType != null">
+        form_type = #{record.formType,jdbcType=TINYINT},
+      </if>
+      <if test="record.formId != null">
+        form_id = #{record.formId,jdbcType=INTEGER},
+      </if>
+      <if test="record.formNo != null">
+        form_no = #{record.formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessory != null">
+        accessory = #{record.accessory,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -255,15 +275,17 @@
     set id = #{record.id,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_user = #{record.createUser,jdbcType=INTEGER},
-      flow_id = #{record.flowId,jdbcType=INTEGER},
+      instance_id = #{record.instanceId,jdbcType=INTEGER},
       step_id = #{record.stepId,jdbcType=INTEGER},
-      next_step_id = #{record.nextStepId,jdbcType=INTEGER},
       audit_user_id = #{record.auditUserId,jdbcType=INTEGER},
       audit_info = #{record.auditInfo,jdbcType=VARCHAR},
+      allot_user_id = #{record.allotUserId,jdbcType=INTEGER},
       audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
-      buy_no = #{record.buyNo,jdbcType=CHAR},
-      order_no = #{record.orderNo,jdbcType=CHAR}
+      audit_result = #{record.auditResult,jdbcType=TINYINT},
+      form_type = #{record.formType,jdbcType=TINYINT},
+      form_id = #{record.formId,jdbcType=INTEGER},
+      form_no = #{record.formNo,jdbcType=VARCHAR},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -277,17 +299,11 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUser != null">
-        create_user = #{createUser,jdbcType=INTEGER},
-      </if>
-      <if test="flowId != null">
-        flow_id = #{flowId,jdbcType=INTEGER},
+      <if test="instanceId != null">
+        instance_id = #{instanceId,jdbcType=INTEGER},
       </if>
       <if test="stepId != null">
         step_id = #{stepId,jdbcType=INTEGER},
-      </if>
-      <if test="nextStepId != null">
-        next_step_id = #{nextStepId,jdbcType=INTEGER},
       </if>
       <if test="auditUserId != null">
         audit_user_id = #{auditUserId,jdbcType=INTEGER},
@@ -295,14 +311,26 @@
       <if test="auditInfo != null">
         audit_info = #{auditInfo,jdbcType=VARCHAR},
       </if>
+      <if test="allotUserId != null">
+        allot_user_id = #{allotUserId,jdbcType=INTEGER},
+      </if>
       <if test="auditTime != null">
         audit_time = #{auditTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="buyNo != null">
-        buy_no = #{buyNo,jdbcType=CHAR},
+      <if test="auditResult != null">
+        audit_result = #{auditResult,jdbcType=TINYINT},
       </if>
-      <if test="orderNo != null">
-        order_no = #{orderNo,jdbcType=CHAR},
+      <if test="formType != null">
+        form_type = #{formType,jdbcType=TINYINT},
+      </if>
+      <if test="formId != null">
+        form_id = #{formId,jdbcType=INTEGER},
+      </if>
+      <if test="formNo != null">
+        form_no = #{formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accessory != null">
+        accessory = #{accessory,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -311,15 +339,17 @@
     update flow_history
     set create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=INTEGER},
-      flow_id = #{flowId,jdbcType=INTEGER},
+      instance_id = #{instanceId,jdbcType=INTEGER},
       step_id = #{stepId,jdbcType=INTEGER},
-      next_step_id = #{nextStepId,jdbcType=INTEGER},
       audit_user_id = #{auditUserId,jdbcType=INTEGER},
       audit_info = #{auditInfo,jdbcType=VARCHAR},
+      allot_user_id = #{allotUserId,jdbcType=INTEGER},
       audit_time = #{auditTime,jdbcType=TIMESTAMP},
-      buy_no = #{buyNo,jdbcType=CHAR},
-      order_no = #{orderNo,jdbcType=CHAR}
+      audit_result = #{auditResult,jdbcType=TINYINT},
+      form_type = #{formType,jdbcType=TINYINT},
+      form_id = #{formId,jdbcType=INTEGER},
+      form_no = #{formNo,jdbcType=VARCHAR},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
