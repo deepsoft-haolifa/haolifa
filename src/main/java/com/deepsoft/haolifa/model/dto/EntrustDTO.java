@@ -16,8 +16,8 @@ public class EntrustDTO {
     private Integer number;
     @ApiModelProperty(required = true,value = "采购合同号")
     private String purchaseNo;
-//    @ApiModelProperty(required = true,value = "加工批次号")
-//    private String batchNumber;
+    @ApiModelProperty(required = true,value = "加工批次号")
+    private String batchNumber;
     @ApiModelProperty(required = true,value = "执行操作：1 保存 2 保存并发起",allowableValues = "1,2")
     private Integer actionType;
 

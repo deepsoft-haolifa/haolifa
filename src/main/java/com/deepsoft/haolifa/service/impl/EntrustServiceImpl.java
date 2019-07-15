@@ -56,7 +56,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
       return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_NUMBER_ERROR);
     }
     if (StringUtils.isAnyBlank(model.getMaterialGraphName(), model.getMaterialGraphNo(), model.getProcessedGraphNo(),
-        model.getPurchaseNo())) {
+        model.getPurchaseNo(), model.getBatchNumber())) {
       return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
     }
     validateService.validateIsExistMaterialGraphNo(model.getProcessedGraphNo());
@@ -70,7 +70,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     } else {
       entrust.setStatus((byte) 1);
     }
-    entrust.setBatchNumber(createSerialNumber(BATCH_NUMBER_PREFIX_PC, BATCH_NUM_KEY));
+//    entrust.setBatchNumber(createSerialNumber(BATCH_NUMBER_PREFIX_PC, BATCH_NUM_KEY));
     entrustMapper.insertSelective(entrust);
     if (model.getActionType() == 2) {
       FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();

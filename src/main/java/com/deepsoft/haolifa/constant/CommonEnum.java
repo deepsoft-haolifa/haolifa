@@ -74,8 +74,7 @@ public class CommonEnum {
     ENTRUST_QUALIFIED_NUMBER_ERROR("4013", "检验合格数量不能大于委托加工数"),
     SPRAY_QUALIFIED_NUMBER_ERROR("4014", "检验合格数量不能大于喷涂加工数"),
     INSPECT_RECORD_DATA_ERROR("4015", "检验数据不正确：合格与不合格品总数不等于检测数量"),
-    DELIVERY_ORDERNO_NOT_EXIST("4016", "发货通知单订单号不存在")
-    ;
+    DELIVERY_ORDERNO_NOT_EXIST("4016", "发货通知单订单号不存在");
 
     public final String code;
 
@@ -446,6 +445,44 @@ public class CommonEnum {
 
     public void setCode(byte code) {
       this.code = code;
+    }}
+
+  /**
+   * 供应商产品类型
+   */
+  public enum SupplierProType {
+    VALVE_BODY(1,"阀体"),
+    VALVE_SEAT(2, "阀座"),
+    VALVE_PLATE(3,"阀板"),
+    VALVE_ROD(4, "阀杆"),
+    PARTS_COMMON(5, "通用零件"),
+    DRIVE(6,"驱动"),
+    STANDRAD_COMPONENT(7, "标准件"),
+    OTHER(8,"其它原件")
+    ;
+
+    private int type;
+    private String name;
+
+    SupplierProType(int type, String name) {
+      this.type = type;
+      this.name = name;
+    }
+
+    public int getType() {
+      return type;
+    }
+
+    public void setType(int type) {
+      this.type = type;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
     }}
 
 }

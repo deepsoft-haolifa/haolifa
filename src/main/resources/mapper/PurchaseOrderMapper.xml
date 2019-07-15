@@ -29,6 +29,11 @@
       <arg column="pay_type" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="order_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="file_url" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="total_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="accept_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="back_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="process_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="process_charges" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -93,7 +98,8 @@
     id, purchase_order_no, supplier_no, supplier_name, demander, supplier_linkman, demander_linkman, 
     supplier_addr, demander_addr, suppiler_phone, demander_phone, delivery_time, operator_user_name, 
     operate_time, supplier_confirmer, confirm_time, create_time, update_time, is_delete, 
-    create_user_id, wreck_amount, wreck_reason, status, pay_type, order_type, file_url
+    create_user_id, wreck_amount, wreck_reason, status, pay_type, order_type, file_url, 
+    total_count, accept_count, back_count, process_count, process_charges
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" >
     select
@@ -137,7 +143,9 @@
       create_time, update_time, is_delete, 
       create_user_id, wreck_amount, wreck_reason, 
       status, pay_type, order_type, 
-      file_url)
+      file_url, total_count, accept_count, 
+      back_count, process_count, process_charges
+      )
     values (#{purchaseOrderNo,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR}, 
       #{demander,jdbcType=VARCHAR}, #{supplierLinkman,jdbcType=VARCHAR}, #{demanderLinkman,jdbcType=VARCHAR}, 
       #{supplierAddr,jdbcType=VARCHAR}, #{demanderAddr,jdbcType=VARCHAR}, #{suppilerPhone,jdbcType=VARCHAR}, 
@@ -146,7 +154,9 @@
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
       #{createUserId,jdbcType=INTEGER}, #{wreckAmount,jdbcType=DECIMAL}, #{wreckReason,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{payType,jdbcType=VARCHAR}, #{orderType,jdbcType=TINYINT}, 
-      #{fileUrl,jdbcType=VARCHAR})
+      #{fileUrl,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, #{acceptCount,jdbcType=INTEGER}, 
+      #{backCount,jdbcType=INTEGER}, #{processCount,jdbcType=INTEGER}, #{processCharges,jdbcType=DECIMAL}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -229,6 +239,21 @@
       <if test="fileUrl != null" >
         file_url,
       </if>
+      <if test="totalCount != null" >
+        total_count,
+      </if>
+      <if test="acceptCount != null" >
+        accept_count,
+      </if>
+      <if test="backCount != null" >
+        back_count,
+      </if>
+      <if test="processCount != null" >
+        process_count,
+      </if>
+      <if test="processCharges != null" >
+        process_charges,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="purchaseOrderNo != null" >
@@ -305,6 +330,21 @@
       </if>
       <if test="fileUrl != null" >
         #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCount != null" >
+        #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="acceptCount != null" >
+        #{acceptCount,jdbcType=INTEGER},
+      </if>
+      <if test="backCount != null" >
+        #{backCount,jdbcType=INTEGER},
+      </if>
+      <if test="processCount != null" >
+        #{processCount,jdbcType=INTEGER},
+      </if>
+      <if test="processCharges != null" >
+        #{processCharges,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -395,6 +435,21 @@
       <if test="record.fileUrl != null" >
         file_url = #{record.fileUrl,jdbcType=VARCHAR},
       </if>
+      <if test="record.totalCount != null" >
+        total_count = #{record.totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.acceptCount != null" >
+        accept_count = #{record.acceptCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.backCount != null" >
+        back_count = #{record.backCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.processCount != null" >
+        process_count = #{record.processCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.processCharges != null" >
+        process_charges = #{record.processCharges,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -427,7 +482,12 @@
       status = #{record.status,jdbcType=TINYINT},
       pay_type = #{record.payType,jdbcType=VARCHAR},
       order_type = #{record.orderType,jdbcType=TINYINT},
-      file_url = #{record.fileUrl,jdbcType=VARCHAR}
+      file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      total_count = #{record.totalCount,jdbcType=INTEGER},
+      accept_count = #{record.acceptCount,jdbcType=INTEGER},
+      back_count = #{record.backCount,jdbcType=INTEGER},
+      process_count = #{record.processCount,jdbcType=INTEGER},
+      process_charges = #{record.processCharges,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -510,6 +570,21 @@
       <if test="fileUrl != null" >
         file_url = #{fileUrl,jdbcType=VARCHAR},
       </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="acceptCount != null" >
+        accept_count = #{acceptCount,jdbcType=INTEGER},
+      </if>
+      <if test="backCount != null" >
+        back_count = #{backCount,jdbcType=INTEGER},
+      </if>
+      <if test="processCount != null" >
+        process_count = #{processCount,jdbcType=INTEGER},
+      </if>
+      <if test="processCharges != null" >
+        process_charges = #{processCharges,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -539,7 +614,12 @@
       status = #{status,jdbcType=TINYINT},
       pay_type = #{payType,jdbcType=VARCHAR},
       order_type = #{orderType,jdbcType=TINYINT},
-      file_url = #{fileUrl,jdbcType=VARCHAR}
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      total_count = #{totalCount,jdbcType=INTEGER},
+      accept_count = #{acceptCount,jdbcType=INTEGER},
+      back_count = #{backCount,jdbcType=INTEGER},
+      process_count = #{processCount,jdbcType=INTEGER},
+      process_charges = #{processCharges,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

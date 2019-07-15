@@ -56,7 +56,17 @@ public class PurchaseOrder {
 
     private String fileUrl;
 
-    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl) {
+    private Integer totalCount;
+
+    private Integer acceptCount;
+
+    private Integer backCount;
+
+    private Integer processCount;
+
+    private BigDecimal processCharges;
+
+    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl, Integer totalCount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
         this.supplierNo = supplierNo;
@@ -83,6 +93,11 @@ public class PurchaseOrder {
         this.payType = payType;
         this.orderType = orderType;
         this.fileUrl = fileUrl;
+        this.totalCount = totalCount;
+        this.acceptCount = acceptCount;
+        this.backCount = backCount;
+        this.processCount = processCount;
+        this.processCharges = processCharges;
     }
 
     public PurchaseOrder() {
@@ -295,5 +310,45 @@ public class PurchaseOrder {
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl == null ? null : fileUrl.trim();
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public Integer getAcceptCount() {
+        return acceptCount;
+    }
+
+    public void setAcceptCount(Integer acceptCount) {
+        this.acceptCount = acceptCount;
+    }
+
+    public Integer getBackCount() {
+        return backCount;
+    }
+
+    public void setBackCount(Integer backCount) {
+        this.backCount = backCount;
+    }
+
+    public Integer getProcessCount() {
+        return processCount;
+    }
+
+    public void setProcessCount(Integer processCount) {
+        this.processCount = processCount;
+    }
+
+    public BigDecimal getProcessCharges() {
+        return processCharges;
+    }
+
+    public void setProcessCharges(BigDecimal processCharges) {
+        this.processCharges = processCharges;
     }
 }
