@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ExpensesClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
 import com.deepsoft.haolifa.model.domain.Expenses;
@@ -33,12 +34,21 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean save(ExpensesDTO model) {
+    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getSecondClassify(), model.getVoucherNo())
+        || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    }
     Expenses expenses = new Expenses();
     BeanUtils.copyProperties(model, expenses);
     expenses.setCreateUserId(getLoginUserId());
     expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
     expensesMapper.insertSelective(expenses);
     return ResultBean.success(0);
+  }
+
+  @Override
+  public ResultBean info(Integer id) {
+    return ResultBean.success(expensesMapper.selectByPrimaryKey(id));
   }
 
   @Override
@@ -53,6 +63,10 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean update(ExpensesDTO model) {
+    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getSecondClassify(), model.getVoucherNo())
+        || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    }
     Expenses expenses = new Expenses();
     BeanUtils.copyProperties(model, expenses);
     expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
@@ -62,17 +76,20 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean getList(Integer pageNum, Integer pageSize, String classifyName,
-      String secondClassifyName, String department) {
+      String secondClassifyName, String department, String voucherNo) {
     ExpensesExample expensesExample = new ExpensesExample();
     ExpensesExample.Criteria criteria = expensesExample.createCriteria();
     if (StringUtils.isNotEmpty(classifyName) && !"全部".equals(classifyName)) {
       criteria.andExpensesClassifyEqualTo(classifyName);
     }
-    if(StringUtils.isNotEmpty(secondClassifyName) && !"全部".equals(secondClassifyName)) {
+    if (StringUtils.isNotEmpty(secondClassifyName) && !"全部".equals(secondClassifyName)) {
       criteria.andSecondClassifyEqualTo(secondClassifyName);
     }
     if (StringUtils.isNotEmpty(department)) {
       criteria.andDepartmentLike("%" + department + "%");
+    }
+    if (StringUtils.isNotEmpty(voucherNo)) {
+      criteria.andVoucherNoLike("%" + voucherNo + "%");
     }
     criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
     Page<Expenses> page = PageHelper.startPage(pageNum, pageSize)

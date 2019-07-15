@@ -11,7 +11,10 @@ public interface ExpensesService {
 
   ResultBean update(ExpensesDTO model);
 
-  ResultBean getList(Integer pageNum, Integer pageSize,String classifyName,String secondClassifyName, String department);
+  ResultBean getList(Integer pageNum, Integer pageSize, String classifyName, String secondClassifyName,
+      String department, String voucherNo);
 
   ResultBean classify(Integer pId);
+
+  ResultBean info(Integer id);
 }

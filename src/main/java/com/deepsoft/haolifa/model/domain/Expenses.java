@@ -28,7 +28,9 @@ public class Expenses {
 
     private String remark;
 
-    public Expenses(Integer id, BigDecimal totalAmount, String secondClassify, String expensesClassify, Integer createUserId, String commitUser, Byte isDelete, Date createTime, Date updateTime, String department, String summary, String remark) {
+    private String voucherNo;
+
+    public Expenses(Integer id, BigDecimal totalAmount, String secondClassify, String expensesClassify, Integer createUserId, String commitUser, Byte isDelete, Date createTime, Date updateTime, String department, String summary, String remark, String voucherNo) {
         this.id = id;
         this.totalAmount = totalAmount;
         this.secondClassify = secondClassify;
@@ -41,6 +43,7 @@ public class Expenses {
         this.department = department;
         this.summary = summary;
         this.remark = remark;
+        this.voucherNo = voucherNo;
     }
 
     public Expenses() {
@@ -141,5 +144,13 @@ public class Expenses {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getVoucherNo() {
+        return voucherNo;
+    }
+
+    public void setVoucherNo(String voucherNo) {
+        this.voucherNo = voucherNo == null ? null : voucherNo.trim();
     }
 }

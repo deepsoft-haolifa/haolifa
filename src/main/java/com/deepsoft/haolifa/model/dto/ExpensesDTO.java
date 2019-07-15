@@ -14,6 +14,9 @@ public class ExpensesDTO {
     @ApiModelProperty(required = true,value = "二级费用类别")
     private String secondClassify;
 
+    @ApiModelProperty(required = true, value = "凭证号")
+    private String voucherNo;
+
     @ApiModelProperty(required = true,value = "总费用")
     private Double totalAmount;
 
@@ -24,6 +27,6 @@ public class ExpensesDTO {
     private String department;
     @ApiModelProperty(value = "报销摘要")
     private String summary;
-    @ApiModelProperty(value = "备注")
+    @ApiModelProperty(value = "备注or 内容")
     private String remark;
 }

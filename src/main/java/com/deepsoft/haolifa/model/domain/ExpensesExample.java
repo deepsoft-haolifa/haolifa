@@ -885,6 +885,76 @@ public class ExpensesExample {
             addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
+
+        public Criteria andVoucherNoIsNull() {
+            addCriterion("voucher_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoIsNotNull() {
+            addCriterion("voucher_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoEqualTo(String value) {
+            addCriterion("voucher_no =", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoNotEqualTo(String value) {
+            addCriterion("voucher_no <>", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoGreaterThan(String value) {
+            addCriterion("voucher_no >", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoGreaterThanOrEqualTo(String value) {
+            addCriterion("voucher_no >=", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoLessThan(String value) {
+            addCriterion("voucher_no <", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoLessThanOrEqualTo(String value) {
+            addCriterion("voucher_no <=", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoLike(String value) {
+            addCriterion("voucher_no like", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoNotLike(String value) {
+            addCriterion("voucher_no not like", value, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoIn(List<String> values) {
+            addCriterion("voucher_no in", values, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoNotIn(List<String> values) {
+            addCriterion("voucher_no not in", values, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoBetween(String value1, String value2) {
+            addCriterion("voucher_no between", value1, value2, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherNoNotBetween(String value1, String value2) {
+            addCriterion("voucher_no not between", value1, value2, "voucherNo");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
