@@ -901,6 +901,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     if (model.getOrderStatusList() != null && model.getOrderStatusList().size() > 0) {
       criteria.andOrderStatusIn(model.getOrderStatusList());
     }
+    if(model.getDeliverStatus() != null) {
+      criteria.andDeliverStatusEqualTo(model.getDeliverStatus());
+    }
     if (StringUtils.isNotBlank(model.getDemandName())) {
       criteria.andDemandNameLike("%" + model.getDemandName() + "%");
     }

@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.model.dto.order;
 
 import com.deepsoft.haolifa.constant.Constant;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public class OrderConditionDTO {
     private String demandName;
     @ApiModelProperty(value = Constant.ORDER_STATUS_DESC, name = "订单状态列表(逗号分隔)")
     private List<Byte> orderStatusList;
+    @ApiModelProperty(value = "发货状态:0 待发货（默认） 1 部分发货 2 发货完成")
+    private Byte deliverStatus;
 }
 
 
