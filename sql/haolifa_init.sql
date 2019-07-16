@@ -1098,3 +1098,35 @@ CREATE TABLE `sys_dict` (
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='系统字典表';
+
+DROP TABLE IF EXISTS `spray_color_relation`;
+create table spray_color_relation(
+ id int(11) UNSIGNED not null AUTO_INCREMENT comment '主键',
+ color VARCHAR(64) not null default '' comment '喷涂颜色',
+ relation_no varchar(64) not null default '' comment '颜色编号',
+ create_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+ update_time TIMESTAMP not null default CURRENT_TIMESTAMP COMMENT '更新时间',
+ PRIMARY key (id) USING BTREE
+) engine innodb DEFAULT CHARSET=utf8 COMMENT='喷涂加工颜色编号对照表';
+
+DROP TABLE IF EXISTS `entrust_graph_no_relation`;
+create table entrust_graph_no_relation(
+ id int(11) UNSIGNED not null auto_increment comment '主键',
+ material_name VARCHAR(32) not null default '' comment '图号名称',
+ original_graph_no VARCHAR(64) not null default '' comment '毛坯图号',
+ processed_graph_no VARCHAR(64) not null default '' comment '加工后图号',
+ create_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+ update_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+ PRIMARY key (id) using BTREE
+) engine innodb default CHARSET=utf8 COMMENT='机加工图号对照表';
+
+DROP TABLE IF EXISTS `customer_model_relation`;
+CREATE table customer_model_relation(
+	id int(11) UNSIGNED not null auto_increment comment '主键',
+	customer_no VARCHAR(32) not null default '' comment '客户编号',
+	customer_model_no varchar(64) not null default '客户产品型号',
+	haoli_model_no VARCHAR(64) not null default '好利产品型号',
+	create_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+	update_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '更新时间',
+	PRIMARY KEY (id) using BTREE
+) ENGINE = innodb default charset=utf8 comment='大客户-好利产品型号对照表';

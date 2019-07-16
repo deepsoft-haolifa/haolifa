@@ -99,6 +99,18 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
+    <!--<table tableName="spray_color_relation" domainObjectName="SprayColorRelation">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="entrust_graph_no_relation" domainObjectName="EntrustGraphNoRelation">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="customer_model_relation" domainObjectName="CustomerModelRelation">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
     <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
 
     <!--<table tableName="sys_permission" domainObjectName="SysPermission"></table>-->
