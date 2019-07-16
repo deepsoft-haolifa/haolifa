@@ -1,5 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
+import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.SUPPLIER_FLOW;
+import static com.deepsoft.haolifa.constant.CommonEnum.FormType.SUPPLIER_TYPE;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -169,9 +172,9 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     // 添加流程
     FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
     flowInstanceDTO.setFormId(supplier1.getId());
-    flowInstanceDTO.setFlowId(3);
+    flowInstanceDTO.setFlowId(SUPPLIER_FLOW.id);
     flowInstanceDTO.setFormNo(supplierNo);
-    flowInstanceDTO.setFormType(9);
+    flowInstanceDTO.setFormType(SUPPLIER_TYPE.code);
     flowInstanceDTO.setSummary("供应商合格审批");
     instanceService.create(flowInstanceDTO);
     return ResultBean.success(1);

@@ -191,23 +191,39 @@ public class CommonEnum {
     }
   }
 
+  public enum FlowId {
+
+    ORDER_PRODUCT_FLOW(1, "生产流程"),
+    PURCHASE_FLOW(2, "采购流程"),
+    SUPPLIER_FLOW(3, "供应商合格审批"),
+    REPLACE_FLOW(4, "替换料审批"),
+    ENTRUST_FLOW(5, "外部委托审批流程");
+
+    public int id;
+    public String desc;
+
+    FlowId(int id, String desc) {
+      this.id = id;
+      this.desc = desc;
+    }
+  }
+
   public enum FormType {
 
-    DEFAULT_TYPE((byte) 0),
-    PRODUCT_TYPE((byte) 1),
-    APPLYBUY_TYPE((byte) 2),
-    PURCHASE_TYPE((byte) 3),
-    INSPECT_TYPE((byte) 4),
-    PROINSPECT_TYPE((byte) 5),
-    MATERIALINSPECT_TYPE((byte) 6),
-    INVOICE_TYPE((byte) 7),
-    DELIVER_TYPE((byte) 8),
-    ENTRUST_TYPE((byte) 9);
+    DEFAULT_TYPE((byte) 0, "默认"),
+    PRODUCT_TYPE((byte) 1, "订单合同"),
+    ENTRUST_TYPE((byte) 2, "委托加工合同"),
+    PURCHASE_TYPE((byte) 3, "采购合同"),
+    REPLACE_TYPE((byte) 4, "替换料"),
+    SUPPLIER_TYPE((byte) 5, "供应商审批");
 
-    public final byte code;
 
-    FormType(byte code) {
+    public final int code;
+    public final String desc;
+
+    FormType(byte code, String desc) {
       this.code = code;
+      this.desc = desc;
     }
   }
 
@@ -451,15 +467,14 @@ public class CommonEnum {
    * 供应商产品类型
    */
   public enum SupplierProType {
-    VALVE_BODY(1,"阀体"),
+    VALVE_BODY(1, "阀体"),
     VALVE_SEAT(2, "阀座"),
-    VALVE_PLATE(3,"阀板"),
+    VALVE_PLATE(3, "阀板"),
     VALVE_ROD(4, "阀杆"),
     PARTS_COMMON(5, "通用零件"),
-    DRIVE(6,"驱动"),
+    DRIVE(6, "驱动"),
     STANDRAD_COMPONENT(7, "标准件"),
-    OTHER(8,"其它原件")
-    ;
+    OTHER(8, "其它原件");
 
     private int type;
     private String name;

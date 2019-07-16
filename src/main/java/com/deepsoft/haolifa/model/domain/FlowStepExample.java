@@ -844,6 +844,66 @@ public class FlowStepExample {
             addCriterion("form_show_step_id not between", value1, value2, "formShowStepId");
             return (Criteria) this;
         }
+
+        public Criteria andStepOrderIsNull() {
+            addCriterion("step_order is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderIsNotNull() {
+            addCriterion("step_order is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderEqualTo(Integer value) {
+            addCriterion("step_order =", value, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderNotEqualTo(Integer value) {
+            addCriterion("step_order <>", value, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderGreaterThan(Integer value) {
+            addCriterion("step_order >", value, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("step_order >=", value, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderLessThan(Integer value) {
+            addCriterion("step_order <", value, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderLessThanOrEqualTo(Integer value) {
+            addCriterion("step_order <=", value, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderIn(List<Integer> values) {
+            addCriterion("step_order in", values, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderNotIn(List<Integer> values) {
+            addCriterion("step_order not in", values, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderBetween(Integer value1, Integer value2) {
+            addCriterion("step_order between", value1, value2, "stepOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andStepOrderNotBetween(Integer value1, Integer value2) {
+            addCriterion("step_order not between", value1, value2, "stepOrder");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

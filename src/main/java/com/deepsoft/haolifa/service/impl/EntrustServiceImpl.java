@@ -72,19 +72,6 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     }
 //    entrust.setBatchNumber(createSerialNumber(BATCH_NUMBER_PREFIX_PC, BATCH_NUM_KEY));
     entrustMapper.insertSelective(entrust);
-    if (model.getActionType() == 2) {
-      FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
-      flowInstanceDTO.setFlowId(6);
-      flowInstanceDTO.setFormType(9);
-      flowInstanceDTO.setFormNo(entrustNo);
-      flowInstanceDTO.setFormId(entrust.getId());
-      flowInstanceDTO.setSummary("机加工审批");
-      flowInstanceService.create(flowInstanceDTO);
-    }
-    Map<String, Object> result = new HashMap<>(8);
-    result.put("formId", entrust.getId());
-    result.put("formNo", entrust.getEntrustNo());
-    result.put("formType", CommonEnum.FormType.ENTRUST_TYPE.code);
     return ResultBean.success(entrustNo);
   }
 

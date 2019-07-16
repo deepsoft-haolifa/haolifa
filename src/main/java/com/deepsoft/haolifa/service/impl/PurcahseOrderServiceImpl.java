@@ -2,6 +2,10 @@ package com.deepsoft.haolifa.service.impl;
 
 import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
 import static com.deepsoft.haolifa.constant.CacheKey.INSPECT_NO_KEY;
+import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.ENTRUST_FLOW;
+import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.PURCHASE_FLOW;
+import static com.deepsoft.haolifa.constant.CommonEnum.FormType.ENTRUST_TYPE;
+import static com.deepsoft.haolifa.constant.CommonEnum.FormType.PURCHASE_TYPE;
 import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_ENTRUST_1;
 import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_PURCHASE_0;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
@@ -118,7 +122,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     uploadPurchaseExcelService.uploadPurchaseOrderExcel(purchaseOrder.getId());
     Map<String, Object> result = new HashMap<>(8);
     result.put("formId", purchaseOrder.getId());
-    result.put("formType", CommonEnum.FormType.PURCHASE_TYPE.code);
+    result.put("formType", PURCHASE_TYPE.code);
     result.put("formNo", purchaseOrder.getPurchaseOrderNo());
     return ResultBean.success(result);
   }
@@ -313,13 +317,13 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     purchaseOrderMapper.updateByExampleSelective(order, example);
     FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
     if (ORDER_TYPE_PURCHASE_0 == orderType) {
-      flowInstanceDTO.setFlowId(2);
+      flowInstanceDTO.setFlowId(PURCHASE_FLOW.id);
       flowInstanceDTO.setSummary("采购订单审批");
-      flowInstanceDTO.setFormType(3);
+      flowInstanceDTO.setFormType(PURCHASE_TYPE.code);
     } else if (ORDER_TYPE_ENTRUST_1 == orderType) {
-      flowInstanceDTO.setFlowId(5);
+      flowInstanceDTO.setFlowId(ENTRUST_FLOW.id);
       flowInstanceDTO.setSummary("机加工订单审批");
-      flowInstanceDTO.setFormType(0);
+      flowInstanceDTO.setFormType(ENTRUST_TYPE.code);
     }
 
     flowInstanceDTO.setFormNo(orderNo);
