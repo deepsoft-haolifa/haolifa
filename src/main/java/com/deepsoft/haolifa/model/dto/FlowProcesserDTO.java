@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.model.dto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Date;
 import java.util.List;
 import lombok.Data;
 
@@ -30,5 +31,8 @@ public class FlowProcesserDTO {
   private Integer auditResult;
   @ApiModelProperty("分支节点，目前只有生产流程有一个分支，且节点只有一个。stepId=55是合并的节点")
   private List<FlowProcesserDTO> child;
+
+  @ApiModelProperty("审核时间")
+  private Date createTime;
 
 }

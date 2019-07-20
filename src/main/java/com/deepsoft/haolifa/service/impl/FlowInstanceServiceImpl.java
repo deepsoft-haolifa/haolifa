@@ -426,6 +426,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     FlowInstance flowInstance = flowInstances.get(0);
     FlowStepExample flowStepExample = new FlowStepExample();
     flowStepExample.or().andFlowIdEqualTo(flowInstance.getFlowId());
+    flowStepExample.setOrderByClause("step_order asc");
     List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
     int preStepId = 0;
     List<Integer> existStepId = new ArrayList<>();
@@ -478,6 +479,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     if (isAudit && historyInfo != null) {
       processerDTO.setAuditUserName(historyInfo.getAuditUserName());
       processerDTO.setAuditResult(historyInfo.getAuditResult());
+      processerDTO.setCreateTime(historyInfo.getCreateTime());
     } else {
       processerDTO.setAuditUserName("");
     }
