@@ -58,7 +58,6 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
       }
       Map result = new HashMap(2);
       result.put("formNo", applyBuyNo);
-      result.put("formType", FormType.APPLYBUY_TYPE.code);
       result.put("formId", 0);
       return ResultBean.success(result);
     } else {

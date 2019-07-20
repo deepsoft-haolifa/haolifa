@@ -4,14 +4,15 @@ add column voucher_no VARCHAR(64) not null default '' comment '凭证号',
 modify column remark VARCHAR(512) not null DEFAULT '' COMMENT '备注内容';
 
 alter table flow_instance
-add column form_type TINYINT(4) default null comment '表单类型：';
+add column form_type TINYINT(4) default null comment '表单类型：0 默认 1 订单合同,2委托加工 3 采购合同 4 替换料 5 供应商';
 
 alter table purchase_order
 add column `total_count` int(11) NOT NULL DEFAULT '0' COMMENT '合同采购总数量',
 add column `accept_count` int(11) NOT NULL DEFAULT '0' COMMENT '让步接收数量',
 add column `back_count` int(11) NOT NULL DEFAULT '0' COMMENT '退货数量',
 add column `process_count` int(11) NOT NULL DEFAULT '0' COMMENT '加工数量',
-add column `process_charges` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '加工费用';
+add column `process_charges` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '加工费用',
+add column `qualified_number` int(11) not null default 0 comment '检验合格数量';
 
 
 create table spray_color_relation(

@@ -43,7 +43,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     expenses.setCreateUserId(getLoginUserId());
     expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
     expensesMapper.insertSelective(expenses);
-    return ResultBean.success(0);
+    return ResultBean.success(expenses.getId());
   }
 
   @Override

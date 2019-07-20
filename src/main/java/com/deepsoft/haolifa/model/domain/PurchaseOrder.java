@@ -66,7 +66,9 @@ public class PurchaseOrder {
 
     private BigDecimal processCharges;
 
-    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl, Integer totalCount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges) {
+    private Integer qualifiedNumber;
+
+    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl, Integer totalCount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges, Integer qualifiedNumber) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
         this.supplierNo = supplierNo;
@@ -98,6 +100,7 @@ public class PurchaseOrder {
         this.backCount = backCount;
         this.processCount = processCount;
         this.processCharges = processCharges;
+        this.qualifiedNumber = qualifiedNumber;
     }
 
     public PurchaseOrder() {
@@ -350,5 +353,13 @@ public class PurchaseOrder {
 
     public void setProcessCharges(BigDecimal processCharges) {
         this.processCharges = processCharges;
+    }
+
+    public Integer getQualifiedNumber() {
+        return qualifiedNumber;
+    }
+
+    public void setQualifiedNumber(Integer qualifiedNumber) {
+        this.qualifiedNumber = qualifiedNumber;
     }
 }

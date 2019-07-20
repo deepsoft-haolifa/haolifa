@@ -34,6 +34,7 @@
       <arg column="back_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="process_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="process_charges" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -99,7 +100,7 @@
     supplier_addr, demander_addr, suppiler_phone, demander_phone, delivery_time, operator_user_name, 
     operate_time, supplier_confirmer, confirm_time, create_time, update_time, is_delete, 
     create_user_id, wreck_amount, wreck_reason, status, pay_type, order_type, file_url, 
-    total_count, accept_count, back_count, process_count, process_charges
+    total_count, accept_count, back_count, process_count, process_charges, qualified_number
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" >
     select
@@ -144,8 +145,8 @@
       create_user_id, wreck_amount, wreck_reason, 
       status, pay_type, order_type, 
       file_url, total_count, accept_count, 
-      back_count, process_count, process_charges
-      )
+      back_count, process_count, process_charges, 
+      qualified_number)
     values (#{purchaseOrderNo,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{supplierName,jdbcType=VARCHAR}, 
       #{demander,jdbcType=VARCHAR}, #{supplierLinkman,jdbcType=VARCHAR}, #{demanderLinkman,jdbcType=VARCHAR}, 
       #{supplierAddr,jdbcType=VARCHAR}, #{demanderAddr,jdbcType=VARCHAR}, #{suppilerPhone,jdbcType=VARCHAR}, 
@@ -155,8 +156,8 @@
       #{createUserId,jdbcType=INTEGER}, #{wreckAmount,jdbcType=DECIMAL}, #{wreckReason,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{payType,jdbcType=VARCHAR}, #{orderType,jdbcType=TINYINT}, 
       #{fileUrl,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, #{acceptCount,jdbcType=INTEGER}, 
-      #{backCount,jdbcType=INTEGER}, #{processCount,jdbcType=INTEGER}, #{processCharges,jdbcType=DECIMAL}
-      )
+      #{backCount,jdbcType=INTEGER}, #{processCount,jdbcType=INTEGER}, #{processCharges,jdbcType=DECIMAL}, 
+      #{qualifiedNumber,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -254,6 +255,9 @@
       <if test="processCharges != null" >
         process_charges,
       </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="purchaseOrderNo != null" >
@@ -345,6 +349,9 @@
       </if>
       <if test="processCharges != null" >
         #{processCharges,jdbcType=DECIMAL},
+      </if>
+      <if test="qualifiedNumber != null" >
+        #{qualifiedNumber,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -450,6 +457,9 @@
       <if test="record.processCharges != null" >
         process_charges = #{record.processCharges,jdbcType=DECIMAL},
       </if>
+      <if test="record.qualifiedNumber != null" >
+        qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -487,7 +497,8 @@
       accept_count = #{record.acceptCount,jdbcType=INTEGER},
       back_count = #{record.backCount,jdbcType=INTEGER},
       process_count = #{record.processCount,jdbcType=INTEGER},
-      process_charges = #{record.processCharges,jdbcType=DECIMAL}
+      process_charges = #{record.processCharges,jdbcType=DECIMAL},
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -585,6 +596,9 @@
       <if test="processCharges != null" >
         process_charges = #{processCharges,jdbcType=DECIMAL},
       </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -619,7 +633,8 @@
       accept_count = #{acceptCount,jdbcType=INTEGER},
       back_count = #{backCount,jdbcType=INTEGER},
       process_count = #{processCount,jdbcType=INTEGER},
-      process_charges = #{processCharges,jdbcType=DECIMAL}
+      process_charges = #{processCharges,jdbcType=DECIMAL},
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
