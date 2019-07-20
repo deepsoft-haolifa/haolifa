@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
+import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectResultMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectUnqualifiedMapper;
@@ -39,6 +40,8 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
 
   @Autowired
   private ProInspectRecordMapper proInspectRecordMapper;
+  @Autowired
+  private OrderProductMapper orderProductMapper;
 
   @Transactional(rollbackFor = Exception.class)
   @Override
@@ -63,6 +66,16 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
 
     proInspectRecord.setReason(JSON.toJSONString(model.getUnqualifiedList()));
     int insert = proInspectRecordMapper.insertSelective(proInspectRecord);
+    // 更新成品质检 合格数量
+    OrderProductExample orderProductExample = new OrderProductExample() ;
+    orderProductExample.createCriteria().andOrderNoEqualTo(proInspectRecord.getOrderNo());
+    List<OrderProduct> orderProducts = orderProductMapper.selectByExample(orderProductExample);
+    if(!CollectionUtils.isEmpty(orderProducts)) {
+      int originalNumber = orderProducts.get(0).getQualifiedNumber();
+      OrderProduct orderProduct = new OrderProduct();
+      orderProduct.setQualifiedNumber(originalNumber + proInspectRecord.getQualifiedNumber());
+      orderProductMapper.updateByExampleSelective(orderProduct, orderProductExample);
+    }
     return ResultBean.success(insert);
   }
 

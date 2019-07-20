@@ -141,7 +141,7 @@ public interface OrderProductService {
    */
   int auditReplaceMaterial(CheckReplaceMaterialAuditDTO model);
 
-  ResultBean updateOrderDeliverStatus(String orderNo, int status);
+  ResultBean updateOrderDeliverStatus(String orderNo, int status, Integer number);
 
   ResultBean uploadAccessory(String orderNo, List<Accessory> orderUploadDTOs);
 

@@ -1856,9 +1856,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
   }
 
   @Override
-  public ResultBean updateOrderDeliverStatus(String orderNo, int status) {
+  public ResultBean updateOrderDeliverStatus(String orderNo, int status, Integer deliveredNumber) {
     OrderProduct orderProduct = new OrderProduct();
     orderProduct.setDeliverStatus((byte) status);
+    if(deliveredNumber != null && deliveredNumber > 0) {
+      // 更新已发货数量
+      orderProduct.setDeliveredNumber(deliveredNumber);
+    }
     OrderProductExample example = new OrderProductExample();
     example.createCriteria().andOrderNoEqualTo(orderNo);
     return ResultBean.success(orderProductMapper.updateByExampleSelective(orderProduct, example));

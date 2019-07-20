@@ -203,7 +203,7 @@ public class OrderProductController {
     @ApiOperation("更新订单发货状态")
     @PutMapping("/deliver/status")
     public ResultBean updateDeliverStatus(@RequestParam String orderNo, @RequestParam Integer status) {
-        return orderProductService.updateOrderDeliverStatus(orderNo, status);
+        return orderProductService.updateOrderDeliverStatus(orderNo, status, null);
     }
 
     @ApiOperation("更新订单需方字段")
