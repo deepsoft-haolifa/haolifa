@@ -129,9 +129,9 @@
 
     <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
 
-    <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
-    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+    <!--<table tableName="order_product" domainObjectName="OrderProduct">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
 
     <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
     <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->

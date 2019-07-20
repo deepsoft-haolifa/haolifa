@@ -1,3 +1,7 @@
+alter table order_product
+add column qualified_number int(11) not null default 0 comment '成品检验合格数量',
+add column pressure_qualified_number int(11) not null default 0 comment '压力检测合格数量',
+add column delivered_number int(11) not null default 0 comment '已发货数量';
 
 alter table expenses
 add column voucher_no VARCHAR(64) not null default '' comment '凭证号',
