@@ -68,7 +68,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     // 判断该表单是否存在处于审批中的流程
     FlowInstanceExample preInstanceExample = new FlowInstanceExample();
     FlowInstanceExample.Criteria criteria = preInstanceExample.createCriteria();
-    criteria.andIsOverEqualTo(Consts.NO.code).andFormIdEqualTo(model.getFlowId());
+    criteria.andIsOverEqualTo(Consts.NO.code).andFlowIdEqualTo(model.getFlowId());
     if (StringUtils.isEmpty(model.getFormNo()) && model.getFormId() == null) {
       throw new BaseException(ResponseEnum.PARAM_ERROR);
     } else if (StringUtils.isNotEmpty(model.getFormNo())) {

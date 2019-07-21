@@ -21,7 +21,7 @@
   </resultMap>
 
   <select id="selectDeliverNoticeList" parameterType="com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeConditionDTO" resultMap="BaseResultMap">
-    select dn.*,op.deliver_status,op. from delivery_notice dn left join order_product op on op.order_contract_no = dn.contract_order_no
+    select dn.*,op.deliver_status,op.delivered_number,op.total_count from delivery_notice dn left join order_product op on op.order_contract_no = dn.contract_order_no
     <where>
       <if test="deliveryNo != null and deliveryNo != ''">
         and dn.delivery_no like concat('%',#{deliveryNo},'%')
