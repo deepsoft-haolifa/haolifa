@@ -281,7 +281,7 @@ public class UploadPurchaseExcelService {
     cell72.setCellStyle(border);
     cell74.setCellValue(orderExDTO.getTotalWeight());
     cell74.setCellStyle(border);
-    cell76.setCellValue(orderExDTO.getTotalAmount());
+    cell76.setCellValue(orderExDTO.getTotalPrice());
     cell76.setCellStyle(border);
     cell77.setCellValue("按图纸加工");
     cell77.setCellStyle(border);
@@ -295,7 +295,7 @@ public class UploadPurchaseExcelService {
     cell81.setCellValue("人 民 币 大 写：");
     cell81.setCellStyle(totalStyle);
     HSSFCell cell82 = row8.createCell(3);
-    String totalAmount = UpperMoney.upper(String.valueOf(orderExDTO.getTotalAmount()));
+    String totalAmount = UpperMoney.upper(String.valueOf(orderExDTO.getTotalPrice()));
     cell82.setCellValue(totalAmount);
     cell82.setCellStyle(border);
     HSSFCell cell83 = row8.createCell(11);
