@@ -750,7 +750,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     orderProduct.setOrderStatus(CommonEnum.OrderStatus.CREATE.code);
     int count = orderProductDTO.getOrderProductAssociates().stream().map(OrderProductAssociate::getProductNumber)
         .reduce(0, (a, b) -> a + b);
+    double totalPrice = orderProductDTO.getOrderProductAssociates().stream().map(item ->
+        item.getProductNumber().doubleValue() * item.getPrice().doubleValue()
+    ).reduce(0.0, (a, b) -> a + b);
     orderProduct.setTotalCount(count);
+    orderProduct.setTotalPrice(new BigDecimal(totalPrice));
     int insert = orderProductMapper.insertSelective(orderProduct);
     if (insert > 0) {
       // 批量插入订单产品关联表
@@ -1920,11 +1924,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
       // 查询 订单流转状态
       criteria.andOrderStatusEqualTo(status.byteValue());
     }
-    if(StringUtils.isNotEmpty(orderNo)) {
+    if (StringUtils.isNotEmpty(orderNo)) {
       criteria.andOrderNoLike("%" + orderNo + "%");
     }
     List<OrderProduct> orderProducts = orderProductMapper.selectByExample(orderProductExample);
-    if(CollectionUtils.isEmpty(orderProducts)) {
+    if (CollectionUtils.isEmpty(orderProducts)) {
       ResultBean.success(new ArrayList<>());
     }
     List<String> orderNoList = orderProducts.stream().map(OrderProduct::getOrderNo).collect(Collectors.toList());

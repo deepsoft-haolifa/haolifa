@@ -1815,6 +1815,486 @@ public class PurchaseOrderExample {
             addCriterion("file_url not between", value1, value2, "fileUrl");
             return (Criteria) this;
         }
+
+        public Criteria andTotalCountIsNull() {
+            addCriterion("total_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountIsNotNull() {
+            addCriterion("total_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountEqualTo(Integer value) {
+            addCriterion("total_count =", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotEqualTo(Integer value) {
+            addCriterion("total_count <>", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountGreaterThan(Integer value) {
+            addCriterion("total_count >", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_count >=", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountLessThan(Integer value) {
+            addCriterion("total_count <", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountLessThanOrEqualTo(Integer value) {
+            addCriterion("total_count <=", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountIn(List<Integer> values) {
+            addCriterion("total_count in", values, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotIn(List<Integer> values) {
+            addCriterion("total_count not in", values, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountBetween(Integer value1, Integer value2) {
+            addCriterion("total_count between", value1, value2, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_count not between", value1, value2, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountIsNull() {
+            addCriterion("accept_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountIsNotNull() {
+            addCriterion("accept_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountEqualTo(Integer value) {
+            addCriterion("accept_count =", value, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountNotEqualTo(Integer value) {
+            addCriterion("accept_count <>", value, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountGreaterThan(Integer value) {
+            addCriterion("accept_count >", value, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("accept_count >=", value, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountLessThan(Integer value) {
+            addCriterion("accept_count <", value, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountLessThanOrEqualTo(Integer value) {
+            addCriterion("accept_count <=", value, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountIn(List<Integer> values) {
+            addCriterion("accept_count in", values, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountNotIn(List<Integer> values) {
+            addCriterion("accept_count not in", values, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountBetween(Integer value1, Integer value2) {
+            addCriterion("accept_count between", value1, value2, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAcceptCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("accept_count not between", value1, value2, "acceptCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountIsNull() {
+            addCriterion("back_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountIsNotNull() {
+            addCriterion("back_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountEqualTo(Integer value) {
+            addCriterion("back_count =", value, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountNotEqualTo(Integer value) {
+            addCriterion("back_count <>", value, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountGreaterThan(Integer value) {
+            addCriterion("back_count >", value, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("back_count >=", value, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountLessThan(Integer value) {
+            addCriterion("back_count <", value, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountLessThanOrEqualTo(Integer value) {
+            addCriterion("back_count <=", value, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountIn(List<Integer> values) {
+            addCriterion("back_count in", values, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountNotIn(List<Integer> values) {
+            addCriterion("back_count not in", values, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountBetween(Integer value1, Integer value2) {
+            addCriterion("back_count between", value1, value2, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andBackCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("back_count not between", value1, value2, "backCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountIsNull() {
+            addCriterion("process_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountIsNotNull() {
+            addCriterion("process_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountEqualTo(Integer value) {
+            addCriterion("process_count =", value, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountNotEqualTo(Integer value) {
+            addCriterion("process_count <>", value, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountGreaterThan(Integer value) {
+            addCriterion("process_count >", value, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("process_count >=", value, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountLessThan(Integer value) {
+            addCriterion("process_count <", value, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountLessThanOrEqualTo(Integer value) {
+            addCriterion("process_count <=", value, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountIn(List<Integer> values) {
+            addCriterion("process_count in", values, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountNotIn(List<Integer> values) {
+            addCriterion("process_count not in", values, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountBetween(Integer value1, Integer value2) {
+            addCriterion("process_count between", value1, value2, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("process_count not between", value1, value2, "processCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesIsNull() {
+            addCriterion("process_charges is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesIsNotNull() {
+            addCriterion("process_charges is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesEqualTo(BigDecimal value) {
+            addCriterion("process_charges =", value, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesNotEqualTo(BigDecimal value) {
+            addCriterion("process_charges <>", value, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesGreaterThan(BigDecimal value) {
+            addCriterion("process_charges >", value, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("process_charges >=", value, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesLessThan(BigDecimal value) {
+            addCriterion("process_charges <", value, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("process_charges <=", value, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesIn(List<BigDecimal> values) {
+            addCriterion("process_charges in", values, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesNotIn(List<BigDecimal> values) {
+            addCriterion("process_charges not in", values, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("process_charges between", value1, value2, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessChargesNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("process_charges not between", value1, value2, "processCharges");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIsNull() {
+            addCriterion("qualified_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIsNotNull() {
+            addCriterion("qualified_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberEqualTo(Integer value) {
+            addCriterion("qualified_number =", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotEqualTo(Integer value) {
+            addCriterion("qualified_number <>", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberGreaterThan(Integer value) {
+            addCriterion("qualified_number >", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("qualified_number >=", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberLessThan(Integer value) {
+            addCriterion("qualified_number <", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("qualified_number <=", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIn(List<Integer> values) {
+            addCriterion("qualified_number in", values, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotIn(List<Integer> values) {
+            addCriterion("qualified_number not in", values, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberBetween(Integer value1, Integer value2) {
+            addCriterion("qualified_number between", value1, value2, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("qualified_number not between", value1, value2, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIsNull() {
+            addCriterion("total_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIsNotNull() {
+            addCriterion("total_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceEqualTo(BigDecimal value) {
+            addCriterion("total_price =", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotEqualTo(BigDecimal value) {
+            addCriterion("total_price <>", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThan(BigDecimal value) {
+            addCriterion("total_price >", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price >=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThan(BigDecimal value) {
+            addCriterion("total_price <", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price <=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIn(List<BigDecimal> values) {
+            addCriterion("total_price in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotIn(List<BigDecimal> values) {
+            addCriterion("total_price not in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price not between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountIsNull() {
+            addCriterion("paid_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountIsNotNull() {
+            addCriterion("paid_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountEqualTo(BigDecimal value) {
+            addCriterion("paid_account =", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountNotEqualTo(BigDecimal value) {
+            addCriterion("paid_account <>", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountGreaterThan(BigDecimal value) {
+            addCriterion("paid_account >", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("paid_account >=", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountLessThan(BigDecimal value) {
+            addCriterion("paid_account <", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("paid_account <=", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountIn(List<BigDecimal> values) {
+            addCriterion("paid_account in", values, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountNotIn(List<BigDecimal> values) {
+            addCriterion("paid_account not in", values, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("paid_account between", value1, value2, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("paid_account not between", value1, value2, "paidAccount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

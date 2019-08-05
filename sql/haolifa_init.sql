@@ -348,10 +348,14 @@ CREATE TABLE `order_product` (
   `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
   `deliver_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发货状态：0 待发货（默认） 1 部分发货 2 发货完成',
   `accessory` varchar(2048) NOT NULL DEFAULT '' COMMENT '订单附件',
+  `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '成品检验合格数量',
+  `pressure_qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '压力检测合格数量',
+  `delivered_number` int(11) NOT NULL DEFAULT '0' COMMENT '已发货数量',
+  `received_account` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已收货款',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_order_no` (`order_no`),
   UNIQUE KEY `uk_order_contract_no` (`order_contract_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
 
 	DROP TABLE IF EXISTS `order_product_associate`;
 	CREATE TABLE `order_product_associate` (
@@ -590,7 +594,7 @@ CREATE TABLE `purchase_order` (
   `operator_user_name` varchar(30) NOT NULL DEFAULT '0' COMMENT '订单经办人',
   `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '经办日期',
   `supplier_confirmer` varchar(255) NOT NULL DEFAULT '' COMMENT '供方确认人',
-  `confirm_time` timestamp NOT NULL COMMENT '确认时间',
+  `confirm_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '确认时间',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日期',
   `is_delete` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0 未删除 1 已删除',
@@ -601,8 +605,16 @@ CREATE TABLE `purchase_order` (
   `pay_type` varchar(255) NOT NULL DEFAULT '' COMMENT '付款方式',
   `order_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 采购订单 1 外部机加工订单',
   `file_url` varchar(1024) NOT NULL DEFAULT '' COMMENT '订单附件下载地址',
+  `total_count` int(11) NOT NULL DEFAULT '0' COMMENT '合同采购总数量',
+  `accept_count` int(11) NOT NULL DEFAULT '0' COMMENT '让步接收数量',
+  `back_count` int(11) NOT NULL DEFAULT '0' COMMENT '退货数量',
+  `process_count` int(11) NOT NULL DEFAULT '0' COMMENT '加工数量',
+  `process_charges` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '加工费用',
+  `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '检验合格数量',
+  `total_price` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '合同总金额',
+  `paid_account` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已付货款',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8 COMMENT='采购订单信息表';;
 
 
 DROP TABLE IF EXISTS `purchase_order_item`;

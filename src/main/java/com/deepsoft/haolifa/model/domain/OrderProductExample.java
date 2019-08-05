@@ -3085,6 +3085,246 @@ public class OrderProductExample {
             addCriterion("accessory not between", value1, value2, "accessory");
             return (Criteria) this;
         }
+
+        public Criteria andQualifiedNumberIsNull() {
+            addCriterion("qualified_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIsNotNull() {
+            addCriterion("qualified_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberEqualTo(Integer value) {
+            addCriterion("qualified_number =", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotEqualTo(Integer value) {
+            addCriterion("qualified_number <>", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberGreaterThan(Integer value) {
+            addCriterion("qualified_number >", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("qualified_number >=", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberLessThan(Integer value) {
+            addCriterion("qualified_number <", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("qualified_number <=", value, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberIn(List<Integer> values) {
+            addCriterion("qualified_number in", values, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotIn(List<Integer> values) {
+            addCriterion("qualified_number not in", values, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberBetween(Integer value1, Integer value2) {
+            addCriterion("qualified_number between", value1, value2, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andQualifiedNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("qualified_number not between", value1, value2, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberIsNull() {
+            addCriterion("pressure_qualified_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberIsNotNull() {
+            addCriterion("pressure_qualified_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberEqualTo(Integer value) {
+            addCriterion("pressure_qualified_number =", value, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberNotEqualTo(Integer value) {
+            addCriterion("pressure_qualified_number <>", value, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberGreaterThan(Integer value) {
+            addCriterion("pressure_qualified_number >", value, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("pressure_qualified_number >=", value, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberLessThan(Integer value) {
+            addCriterion("pressure_qualified_number <", value, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("pressure_qualified_number <=", value, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberIn(List<Integer> values) {
+            addCriterion("pressure_qualified_number in", values, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberNotIn(List<Integer> values) {
+            addCriterion("pressure_qualified_number not in", values, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberBetween(Integer value1, Integer value2) {
+            addCriterion("pressure_qualified_number between", value1, value2, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPressureQualifiedNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("pressure_qualified_number not between", value1, value2, "pressureQualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberIsNull() {
+            addCriterion("delivered_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberIsNotNull() {
+            addCriterion("delivered_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberEqualTo(Integer value) {
+            addCriterion("delivered_number =", value, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberNotEqualTo(Integer value) {
+            addCriterion("delivered_number <>", value, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberGreaterThan(Integer value) {
+            addCriterion("delivered_number >", value, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("delivered_number >=", value, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberLessThan(Integer value) {
+            addCriterion("delivered_number <", value, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("delivered_number <=", value, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberIn(List<Integer> values) {
+            addCriterion("delivered_number in", values, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberNotIn(List<Integer> values) {
+            addCriterion("delivered_number not in", values, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberBetween(Integer value1, Integer value2) {
+            addCriterion("delivered_number between", value1, value2, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveredNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("delivered_number not between", value1, value2, "deliveredNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountIsNull() {
+            addCriterion("received_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountIsNotNull() {
+            addCriterion("received_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountEqualTo(BigDecimal value) {
+            addCriterion("received_account =", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountNotEqualTo(BigDecimal value) {
+            addCriterion("received_account <>", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountGreaterThan(BigDecimal value) {
+            addCriterion("received_account >", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("received_account >=", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountLessThan(BigDecimal value) {
+            addCriterion("received_account <", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("received_account <=", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountIn(List<BigDecimal> values) {
+            addCriterion("received_account in", values, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountNotIn(List<BigDecimal> values) {
+            addCriterion("received_account not in", values, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("received_account between", value1, value2, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("received_account not between", value1, value2, "receivedAccount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

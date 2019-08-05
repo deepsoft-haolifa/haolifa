@@ -66,8 +66,8 @@ public class OrderProductDTO {
 //    private String contractSignDate;
     @ApiModelProperty(value = "总计数量" ,hidden = true)
     private Integer totalCount;
-//    @ApiModelProperty(value = "总价")
-//    private BigDecimal totalPrice;
+    @ApiModelProperty(value = "总价")
+    private BigDecimal totalPrice;
 //    @ApiModelProperty(value = "优惠后总价")
 //    private BigDecimal discountTotalPrice;
 //    @ApiModelProperty(value = "特殊要求")

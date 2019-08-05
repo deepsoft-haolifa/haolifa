@@ -59,7 +59,13 @@ public class PurchaseOrderExDTO {
 
   private Double totalWeight;
 
-  private Double totalAmount;
+  private Double totalPrice;
+
+  private Integer totalCount;
+
+  private Double paidAccount;
+
+  private Integer acceptCount;
 
   private Integer orderType;
 

@@ -102,17 +102,25 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
     purchaseOrder.setConfirmTime(
         DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
-    log.info("添加订单内容：{}", JSON.toJSONString(purchaseOrder));
-    purchaseOrderMapper.insertSelective(purchaseOrder);
     // 插入单项
-    List<PurchaseOrderItem> items = model.getItemList().stream().map(item -> {
+    double totalPrice = 0.0;
+    int totalCount = 0;
+    List<PurchaseOrderItem> items = new ArrayList<>();
+    for (int i = 0; i < model.getItemList().size(); i++) {
       PurchaseOrderItem orderItem = new PurchaseOrderItem();
+      com.deepsoft.haolifa.model.dto.PurchaseOrderItem item = model.getItemList().get(i);
       BeanUtils.copyProperties(item, orderItem);
       orderItem.setUnitPrice(new BigDecimal(item.getUnitPrice()));
       orderItem.setUnitWeight(new BigDecimal(item.getUnitWeight()));
       orderItem.setPurchaseOrderNo(model.getOrderNo());
-      return orderItem;
-    }).collect(Collectors.toList());
+      items.add(orderItem);
+      totalPrice += item.getUnitPrice() * item.getNumber();
+      totalCount += item.getNumber();
+    }
+    purchaseOrder.setTotalPrice(new BigDecimal(totalPrice));
+    purchaseOrder.setTotalCount(totalCount);
+    log.info("添加订单内容：{}", JSON.toJSONString(purchaseOrder));
+    purchaseOrderMapper.insertSelective(purchaseOrder);
     log.info("添加订单单项：{}", JSON.toJSONString(items));
     itemExtendMapper.batchInsertPurchaseOrderItem(items);
     uploadPurchaseExcelService.uploadPurchaseOrderExcel(purchaseOrder.getId());
@@ -161,19 +169,27 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
     purchaseOrder.setConfirmTime(
         DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
-    purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
     PurchaseOrderItemExample example = new PurchaseOrderItemExample();
     example.or().andPurchaseOrderNoEqualTo(model.getOrderNo());
     purchaseOrderItemMapper.deleteByExample(example);
     // 插入单项
-    List<PurchaseOrderItem> items = model.getItemList().stream().map(item -> {
+    double totalPrice = 0.0;
+    int totalCount = 0;
+    List<PurchaseOrderItem> items = new ArrayList<>();
+    for (int i = 0; i < model.getItemList().size(); i++) {
       PurchaseOrderItem orderItem = new PurchaseOrderItem();
+      com.deepsoft.haolifa.model.dto.PurchaseOrderItem item = model.getItemList().get(i);
       BeanUtils.copyProperties(item, orderItem);
       orderItem.setUnitPrice(new BigDecimal(item.getUnitPrice()));
       orderItem.setUnitWeight(new BigDecimal(item.getUnitWeight()));
       orderItem.setPurchaseOrderNo(model.getOrderNo());
-      return orderItem;
-    }).collect(Collectors.toList());
+      items.add(orderItem);
+      totalPrice += item.getUnitPrice() * item.getNumber();
+      totalCount += item.getNumber();
+    }
+    purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
+    purchaseOrder.setTotalPrice(new BigDecimal(totalPrice));
+    purchaseOrder.setTotalCount(totalCount);
     log.info("添加订单单项：{}", JSON.toJSONString(items));
     itemExtendMapper.batchInsertPurchaseOrderItem(items);
     uploadPurchaseExcelService.uploadPurchaseOrderExcel(model.getId());
@@ -212,7 +228,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
       orderTotalNumber += item.getNumber();
       exDTOS.add(itemExDTO);
     }
-    purchaseOrderExDTO.setTotalAmount(orderTotalAmount);
+    purchaseOrderExDTO.setTotalPrice(orderTotalAmount);
     purchaseOrderExDTO.setTotalWeight(orderTotalWeight);
     purchaseOrderExDTO.setOrderNumber(orderTotalNumber);
     Map<String, Object> result = new HashMap<>(2);
@@ -267,14 +283,14 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
       criteria.andStatusEqualTo((byte) status);
     }
     PageDTO<PurchaseOrder> purchaseOrderPageDTO;
-    if(supplierNoList.size() > 0) {
+    if (supplierNoList.size() > 0) {
       criteria.andSupplierNoIn(supplierNoList);
-    } else if(StringUtils.isNotEmpty(supplierName)){
+    } else if (StringUtils.isNotEmpty(supplierName)) {
       purchaseOrderPageDTO = new PageDTO<>();
       purchaseOrderPageDTO.setList(new ArrayList<>());
       return ResultBean.success(purchaseOrderPageDTO);
     }
-    Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(pageNum, pageSize,"create_time desc")
+    Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(pageNum, pageSize, "create_time desc")
         .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
     purchaseOrderPageDTO = new PageDTO<>();
     BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
