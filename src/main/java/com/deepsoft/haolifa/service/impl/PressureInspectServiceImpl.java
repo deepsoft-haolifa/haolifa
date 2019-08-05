@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.dao.repository.PressureInspectRecordMapper;
@@ -7,13 +8,16 @@ import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.domain.PressureInspectRecord;
 import com.deepsoft.haolifa.model.domain.PressureInspectRecordExample;
+import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pressureInspect.PressureInspectConditionDTO;
 import com.deepsoft.haolifa.model.dto.pressureInspect.PressureInspectRecordDTO;
+import com.deepsoft.haolifa.model.dto.pressureInspect.PressureInspectRecordListDto;
 import com.deepsoft.haolifa.service.PressureInspectService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +46,9 @@ public class PressureInspectServiceImpl extends BaseService implements PressureI
     PressureInspectRecord pressureInspectRecord = new PressureInspectRecord();
     BeanUtils.copyProperties(model, pressureInspectRecord);
     pressureInspectRecord.setCreateUserId(getLoginUserId());
+    if(!CollectionUtils.isEmpty(model.getAccessoryList())) {
+      pressureInspectRecord.setAccessory(JSON.toJSONString(model.getAccessoryList()));
+    }
     int insert = pressureInspectRecordMapper.insertSelective(pressureInspectRecord);
     // 更新压力测试质检合格数量
     OrderProductExample orderProductExample = new OrderProductExample() ;
@@ -60,6 +67,9 @@ public class PressureInspectServiceImpl extends BaseService implements PressureI
   public ResultBean update(PressureInspectRecordDTO model) {
     PressureInspectRecord pressureInspectRecord = new PressureInspectRecord();
     BeanUtils.copyProperties(model, pressureInspectRecord);
+    if(!CollectionUtils.isEmpty(model.getAccessoryList())) {
+      pressureInspectRecord.setAccessory(JSON.toJSONString(model.getAccessoryList()));
+    }
     int update = pressureInspectRecordMapper.updateByPrimaryKeySelective(pressureInspectRecord);
     return ResultBean.success(update);
   }
@@ -81,9 +91,18 @@ public class PressureInspectServiceImpl extends BaseService implements PressureI
         .doSelectPage(() -> {
           pressureInspectRecordMapper.selectByExample(example);
         });
-    PageDTO<PressureInspectRecord> pageDTO = new PageDTO<>();
+    PageDTO<PressureInspectRecordListDto> pageDTO = new PageDTO<>();
     BeanUtils.copyProperties(pageData, pageDTO);
-    pageDTO.setList(pageData.getResult());
+    List<PressureInspectRecordListDto> dtos = new ArrayList<>();
+    for (int i = 0; i < pageData.getResult().size(); i++) {
+      PressureInspectRecordListDto dto = new PressureInspectRecordListDto();
+      BeanUtils.copyProperties(pageData.getResult().get(i), dto);
+      if(StringUtils.isNotEmpty(dto.getAccessory())) {
+        dto.setAccessoryList(JSON.parseArray(dto.getAccessory(), Accessory.class));
+      }
+      dtos.add(dto);
+    }
+    pageDTO.setList(dtos);
     return ResultBean.success(pageDTO);
   }
 }
