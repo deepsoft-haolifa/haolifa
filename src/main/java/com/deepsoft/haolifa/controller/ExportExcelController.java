@@ -1606,6 +1606,7 @@ public class ExportExcelController {
     outputStream.close();
   }
 
+  @ApiOperation("导出零件出库记录")
   @GetMapping("/material/record")
   public void materialRecord(HttpServletResponse response, HttpServletRequest request,
       ExportMaterialRecordDTO dto) throws IOException {
@@ -1620,8 +1621,8 @@ public class ExportExcelController {
       Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
       criteria.andUpdateTimeLessThanOrEqualTo(endDate);
     }
-    if (StringUtils.isNotEmpty(dto.getOrderNo())) {
-      criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
+    if (StringUtils.isNotEmpty(dto.getMaterialGraphNo())) {
+      criteria.andMaterialGraphNoEqualTo("%" + dto.getMaterialGraphNo() + "%");
     }
     if (dto.getOperationType() != null) {
       criteria.andOperationTypeEqualTo(dto.getOperationType().byteValue());
@@ -1711,6 +1712,7 @@ public class ExportExcelController {
 
   }
 
+  @ApiOperation("导出零件结存数据")
   @GetMapping("/material/surplus")
   public void materialSurplus(HttpServletResponse response, HttpServletRequest request)
       throws IOException {

@@ -18,5 +18,5 @@ public class ExportMaterialRecordDTO {
   private Integer operationType;
 
   @ApiModelProperty("订单号")
-  private String orderNo;
+  private String materialGraphNo;
 }
