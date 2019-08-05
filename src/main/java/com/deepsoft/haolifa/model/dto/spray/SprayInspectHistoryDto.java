@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 public class SprayInspectHistoryDto extends SprayInspectHistory {
 
   private List<Accessory> accessoryList;

@@ -5,11 +5,13 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.EqualsAndHashCode;
 
 /**
  * 出库零件实体
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class OutMaterialStorageDTO extends BaseStorageDTO{
 
     @ApiModelProperty(value = "零件号",required = true)
