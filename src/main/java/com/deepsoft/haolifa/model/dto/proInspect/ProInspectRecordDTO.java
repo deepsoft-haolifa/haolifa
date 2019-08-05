@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.proInspect;
 
+import com.deepsoft.haolifa.model.dto.Accessory;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -27,5 +28,7 @@ public class ProInspectRecordDTO {
     private String reason;
     @ApiModelProperty(value = "不合格原因列表")
     private List<ProInspectReason> unqualifiedList;
+    @ApiModelProperty(value = "质检记录附件")
+    private List<Accessory> accessoryList;
 
 }

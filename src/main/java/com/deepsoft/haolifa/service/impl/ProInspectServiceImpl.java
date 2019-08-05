@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectResultMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectUnqualifiedMapper;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectConditionDTO;
@@ -63,7 +64,9 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
     BeanUtils.copyProperties(model, proInspectRecord);
     proInspectRecord.setCreateUserId(getLoginUserId());
     proInspectRecord.setStorageStatus((byte) 1);
-
+    if(!CollectionUtils.isEmpty(model.getAccessoryList())){
+      proInspectRecord.setAccessory(JSON.toJSONString(model.getAccessoryList()));
+    }
     proInspectRecord.setReason(JSON.toJSONString(model.getUnqualifiedList()));
     int insert = proInspectRecordMapper.insertSelective(proInspectRecord);
     // 更新成品质检 合格数量
@@ -94,6 +97,9 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
         if (needCOunt != model.getUnqualifiedNumber()) {
           ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY);
         }
+      }
+      if(!CollectionUtils.isEmpty(model.getAccessoryList())){
+        proInspectRecord.setAccessory(JSON.toJSONString(model.getAccessoryList()));
       }
       proInspectRecord.setReason(JSON.toJSONString(model.getUnqualifiedList()));
     }
@@ -127,6 +133,9 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
     for (int i = 0; i < result.size(); i++) {
       ProInspectListDTO proInspectListDTO = new ProInspectListDTO();
       BeanUtils.copyProperties(result.get(i), proInspectListDTO);
+      if(StringUtils.isNotEmpty(result.get(i).getAccessory())) {
+        proInspectListDTO.setAccessoryList(JSON.parseArray(result.get(i).getAccessory(), Accessory.class));
+      }
       if (result.get(i).getReason().startsWith("[")) {
         proInspectListDTO.setReasonList(JSON.parseArray(result.get(i).getReason(), ProInspectReason.class));
       }
