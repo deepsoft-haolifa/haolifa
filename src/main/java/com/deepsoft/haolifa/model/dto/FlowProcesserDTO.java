@@ -33,6 +33,6 @@ public class FlowProcesserDTO {
   private List<FlowProcesserDTO> child;
 
   @ApiModelProperty("审核时间")
-  private Date createTime;
+  private Date auditTime;
 
 }
