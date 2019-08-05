@@ -16,6 +16,7 @@ import com.deepsoft.haolifa.dao.repository.EntrustMapper;
 import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.InspectItemMapper;
 import com.deepsoft.haolifa.dao.repository.InspectMapper;
+import com.deepsoft.haolifa.model.InspectHistoryDto;
 import com.deepsoft.haolifa.model.domain.Entrust;
 import com.deepsoft.haolifa.model.domain.EntrustExample;
 import com.deepsoft.haolifa.model.domain.Inspect;
@@ -24,7 +25,9 @@ import com.deepsoft.haolifa.model.domain.InspectHistory;
 import com.deepsoft.haolifa.model.domain.InspectHistoryExample;
 import com.deepsoft.haolifa.model.domain.InspectItem;
 import com.deepsoft.haolifa.model.domain.InspectItemExample;
+import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.BaseException;
+import com.deepsoft.haolifa.model.dto.HistoryInfo;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
@@ -37,6 +40,7 @@ import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map.Entry;
@@ -263,14 +267,19 @@ public class InspectServiceImpl extends BaseService implements InspectService {
 
   @Transactional(rollbackFor = Exception.class)
   @Override
-  public ResultBean historySave(InspectHistory model) {
+  public ResultBean historySave(InspectHistoryDto model) {
     if(model.getTestNumber() == 0) {
       return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
     }
     if(model.getQualifiedNumber()+model.getUnqualifiedNumber() != model.getTestNumber()) {
       return ResultBean.error(ResponseEnum.INSPECT_RECORD_DATA_ERROR);
     }
-    historyMapper.insertSelective(model);
+    if(!CollectionUtils.isEmpty(model.getAccessoryList())) {
+      model.setAccessory(JSON.toJSONString(model.getAccessoryList()));
+    }
+    InspectHistory inspectHistory = new InspectHistory();
+    BeanUtils.copyProperties(model, inspectHistory);
+    historyMapper.insertSelective(inspectHistory);
     if (model.getType() == PURCHASE_MATERIAL_TYPE_1.getCode()) {
       // 采购零件 质检
       InspectExample example = new InspectExample();
@@ -316,7 +325,18 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     InspectHistoryExample historyExample = new InspectHistoryExample();
     historyExample.or().andInspectNoEqualTo(inspectNo);
     List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
-    return ResultBean.success(histories);
+    List<InspectHistoryDto> inspectHistoryDtos = new ArrayList<>();
+    if(!CollectionUtils.isEmpty(histories)) {
+      for (int i = 0; i < histories.size(); i++) {
+        InspectHistoryDto dto = new InspectHistoryDto();
+        BeanUtils.copyProperties(histories.get(i), dto);
+        if(StringUtils.isNotEmpty(histories.get(i).getAccessory())) {
+          dto.setAccessoryList(JSON.parseArray(dto.getAccessory(), Accessory.class));
+        }
+        inspectHistoryDtos.add(dto);
+      }
+    }
+    return ResultBean.success(inspectHistoryDtos);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
+import com.deepsoft.haolifa.model.InspectHistoryDto;
 import com.deepsoft.haolifa.model.domain.InspectHistory;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemDTO;
@@ -71,7 +72,7 @@ public class InspectController {
 
   @ApiOperation("添加质检记录")
   @PostMapping("history/save")
-  public ResultBean historySave(@RequestBody InspectHistory model) {
+  public ResultBean historySave(@RequestBody InspectHistoryDto model) {
     return inspectService.historySave(model);
   }
 

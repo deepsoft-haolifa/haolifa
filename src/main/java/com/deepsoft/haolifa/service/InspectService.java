@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.InspectHistoryDto;
 import com.deepsoft.haolifa.model.domain.InspectHistory;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemDTO;
@@ -61,7 +62,7 @@ public interface InspectService {
   /**
    * 质检记录保存
    */
-  ResultBean historySave(InspectHistory model);
+  ResultBean historySave(InspectHistoryDto model);
 
   /**
    * 质检记录删除

@@ -204,7 +204,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
       }
       sprayInspectHistoryDtos.add(dto);
     }
-    return ResultBean.success(inspectHistories);
+    return ResultBean.success(sprayInspectHistoryDtos);
   }
 
   @Override
