@@ -50,6 +50,7 @@
       <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="pressure_qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="delivered_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="received_account" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -119,7 +120,7 @@
     contract_bank_card_no, delivery_place, delivery_date, contract_sign_date, total_count, 
     discount_total_price, total_price, special_require, cargo_information, sign_board, 
     acceptance_criteria, warranty_period, packaging_specification, remark, deliver_status, 
-    accessory, qualified_number, pressure_qualified_number, delivered_number
+    accessory, qualified_number, pressure_qualified_number, delivered_number, received_account
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" >
     select
@@ -171,7 +172,7 @@
       warranty_period, packaging_specification, 
       remark, deliver_status, accessory, 
       qualified_number, pressure_qualified_number, 
-      delivered_number)
+      delivered_number, received_account)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
       #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR}, 
       #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{orderContractExtendUrl,jdbcType=VARCHAR}, 
@@ -188,7 +189,7 @@
       #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{deliverStatus,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR}, 
       #{qualifiedNumber,jdbcType=INTEGER}, #{pressureQualifiedNumber,jdbcType=INTEGER}, 
-      #{deliveredNumber,jdbcType=INTEGER})
+      #{deliveredNumber,jdbcType=INTEGER}, #{receivedAccount,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -334,6 +335,9 @@
       <if test="deliveredNumber != null" >
         delivered_number,
       </if>
+      <if test="receivedAccount != null" >
+        received_account,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="createTime != null" >
@@ -473,6 +477,9 @@
       </if>
       <if test="deliveredNumber != null" >
         #{deliveredNumber,jdbcType=INTEGER},
+      </if>
+      <if test="receivedAccount != null" >
+        #{receivedAccount,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -626,6 +633,9 @@
       <if test="record.deliveredNumber != null" >
         delivered_number = #{record.deliveredNumber,jdbcType=INTEGER},
       </if>
+      <if test="record.receivedAccount != null" >
+        received_account = #{record.receivedAccount,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -679,7 +689,8 @@
       accessory = #{record.accessory,jdbcType=VARCHAR},
       qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       pressure_qualified_number = #{record.pressureQualifiedNumber,jdbcType=INTEGER},
-      delivered_number = #{record.deliveredNumber,jdbcType=INTEGER}
+      delivered_number = #{record.deliveredNumber,jdbcType=INTEGER},
+      received_account = #{record.receivedAccount,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -825,6 +836,9 @@
       <if test="deliveredNumber != null" >
         delivered_number = #{deliveredNumber,jdbcType=INTEGER},
       </if>
+      <if test="receivedAccount != null" >
+        received_account = #{receivedAccount,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -875,7 +889,8 @@
       accessory = #{accessory,jdbcType=VARCHAR},
       qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       pressure_qualified_number = #{pressureQualifiedNumber,jdbcType=INTEGER},
-      delivered_number = #{deliveredNumber,jdbcType=INTEGER}
+      delivered_number = #{deliveredNumber,jdbcType=INTEGER},
+      received_account = #{receivedAccount,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

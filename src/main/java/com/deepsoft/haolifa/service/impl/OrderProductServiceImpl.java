@@ -750,7 +750,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     orderProduct.setOrderStatus(CommonEnum.OrderStatus.CREATE.code);
     int count = orderProductDTO.getOrderProductAssociates().stream().map(OrderProductAssociate::getProductNumber)
         .reduce(0, (a, b) -> a + b);
+    double totalPrice = orderProductDTO.getOrderProductAssociates().stream().map(item ->
+        item.getProductNumber().doubleValue() * item.getPrice().doubleValue()
+    ).reduce(0.0, (a, b) -> a + b);
     orderProduct.setTotalCount(count);
+    orderProduct.setTotalPrice(new BigDecimal(totalPrice));
     int insert = orderProductMapper.insertSelective(orderProduct);
     if (insert > 0) {
       // 批量插入订单产品关联表

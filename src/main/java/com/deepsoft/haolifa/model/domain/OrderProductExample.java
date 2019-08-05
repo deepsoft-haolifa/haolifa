@@ -3265,6 +3265,66 @@ public class OrderProductExample {
             addCriterion("delivered_number not between", value1, value2, "deliveredNumber");
             return (Criteria) this;
         }
+
+        public Criteria andReceivedAccountIsNull() {
+            addCriterion("received_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountIsNotNull() {
+            addCriterion("received_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountEqualTo(BigDecimal value) {
+            addCriterion("received_account =", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountNotEqualTo(BigDecimal value) {
+            addCriterion("received_account <>", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountGreaterThan(BigDecimal value) {
+            addCriterion("received_account >", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("received_account >=", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountLessThan(BigDecimal value) {
+            addCriterion("received_account <", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("received_account <=", value, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountIn(List<BigDecimal> values) {
+            addCriterion("received_account in", values, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountNotIn(List<BigDecimal> values) {
+            addCriterion("received_account not in", values, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("received_account between", value1, value2, "receivedAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceivedAccountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("received_account not between", value1, value2, "receivedAccount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -225,9 +225,9 @@
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">-->
-    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+    <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
 
     <!--<table tableName="spray" domainObjectName="Spray">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->

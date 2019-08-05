@@ -56,7 +56,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
       return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_NUMBER_ERROR);
     }
     if (StringUtils.isAnyBlank(model.getMaterialGraphName(), model.getMaterialGraphNo(), model.getProcessedGraphNo(),
-        model.getPurchaseNo(), model.getBatchNumber())) {
+        model.getBatchNumber())) {
       return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
     }
     validateService.validateIsExistMaterialGraphNo(model.getProcessedGraphNo());
@@ -91,7 +91,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
       return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_NUMBER_ERROR);
     }
     if (StringUtils.isAnyBlank(model.getMaterialGraphName(), model.getMaterialGraphNo(), model.getProcessedGraphNo(),
-        model.getPurchaseNo())) {
+        model.getBatchNumber())) {
       return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
     }
     Entrust entrust = new Entrust();
