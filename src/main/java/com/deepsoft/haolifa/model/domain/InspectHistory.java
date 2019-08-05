@@ -40,7 +40,9 @@ public class InspectHistory {
 
     private Date updateTime;
 
-    public InspectHistory(Integer id, String purchaseNo, String inspectNo, String batchNumber, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, BigDecimal purchasePrice, String remark, Byte status, Byte type, String supplierName, String supplierNo, Date createTime, Date updateTime) {
+    private String accessory;
+
+    public InspectHistory(Integer id, String purchaseNo, String inspectNo, String batchNumber, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, BigDecimal purchasePrice, String remark, Byte status, Byte type, String supplierName, String supplierNo, Date createTime, Date updateTime, String accessory) {
         this.id = id;
         this.purchaseNo = purchaseNo;
         this.inspectNo = inspectNo;
@@ -59,6 +61,7 @@ public class InspectHistory {
         this.supplierNo = supplierNo;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.accessory = accessory;
     }
 
     public InspectHistory() {
@@ -207,5 +210,13 @@ public class InspectHistory {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
     }
 }

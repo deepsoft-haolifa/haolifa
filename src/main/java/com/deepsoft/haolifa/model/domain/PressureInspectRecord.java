@@ -31,7 +31,9 @@ public class PressureInspectRecord {
 
     private Integer createUserId;
 
-    public PressureInspectRecord(Integer id, String orderNo, String productNo, String productModel, String productSpecifications, Integer testingNumber, Integer reinspectNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String reason, String testingPerson, Date createTime, Date updateTime, Integer createUserId) {
+    private String accessory;
+
+    public PressureInspectRecord(Integer id, String orderNo, String productNo, String productModel, String productSpecifications, Integer testingNumber, Integer reinspectNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String reason, String testingPerson, Date createTime, Date updateTime, Integer createUserId, String accessory) {
         this.id = id;
         this.orderNo = orderNo;
         this.productNo = productNo;
@@ -46,6 +48,7 @@ public class PressureInspectRecord {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.accessory = accessory;
     }
 
     public PressureInspectRecord() {
@@ -162,5 +165,13 @@ public class PressureInspectRecord {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
     }
 }

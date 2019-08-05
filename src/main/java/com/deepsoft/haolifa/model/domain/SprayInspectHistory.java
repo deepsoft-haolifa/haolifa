@@ -29,7 +29,9 @@ public class SprayInspectHistory {
 
     private Date updateTime;
 
-    public SprayInspectHistory(Integer id, String sprayNo, String originalGraphNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status, Date createTime, Date updateTime) {
+    private String accessory;
+
+    public SprayInspectHistory(Integer id, String sprayNo, String originalGraphNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status, Date createTime, Date updateTime, String accessory) {
         this.id = id;
         this.sprayNo = sprayNo;
         this.originalGraphNo = originalGraphNo;
@@ -43,6 +45,7 @@ public class SprayInspectHistory {
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.accessory = accessory;
     }
 
     public SprayInspectHistory() {
@@ -151,5 +154,13 @@ public class SprayInspectHistory {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
     }
 }

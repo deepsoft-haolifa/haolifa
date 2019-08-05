@@ -17,6 +17,7 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -80,7 +81,7 @@
   <sql id="Base_Column_List" >
     id, order_no, product_no, product_model, product_specifications, testing_number, 
     reinspect_number, qualified_number, unqualified_number, reason, testing_person, create_time, 
-    update_time, create_user_id
+    update_time, create_user_id, accessory
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PressureInspectRecordExample" >
     select
@@ -113,26 +114,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PressureInspectRecord" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into pressure_inspect_record (order_no, product_no, product_model, 
-      product_specifications, testing_number, reinspect_number, 
-      qualified_number, unqualified_number, reason, 
-      testing_person, create_time, update_time, 
-      create_user_id)
-    values (#{orderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
-      #{productSpecifications,jdbcType=VARCHAR}, #{testingNumber,jdbcType=INTEGER}, #{reinspectNumber,jdbcType=INTEGER}, 
-      #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, 
-      #{testingPerson,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER})
+    insert into pressure_inspect_record (id, order_no, product_no, 
+      product_model, product_specifications, testing_number, 
+      reinspect_number, qualified_number, unqualified_number, 
+      reason, testing_person, create_time, 
+      update_time, create_user_id, accessory
+      )
+    values (#{id,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, 
+      #{productModel,jdbcType=VARCHAR}, #{productSpecifications,jdbcType=VARCHAR}, #{testingNumber,jdbcType=INTEGER}, 
+      #{reinspectNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
+      #{reason,jdbcType=VARCHAR}, #{testingPerson,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{accessory,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PressureInspectRecord" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into pressure_inspect_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
       <if test="orderNo != null" >
         order_no,
       </if>
@@ -172,8 +172,14 @@
       <if test="createUserId != null" >
         create_user_id,
       </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="orderNo != null" >
         #{orderNo,jdbcType=VARCHAR},
       </if>
@@ -212,6 +218,9 @@
       </if>
       <if test="createUserId != null" >
         #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -266,6 +275,9 @@
       <if test="record.createUserId != null" >
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -286,7 +298,8 @@
       testing_person = #{record.testingPerson,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{record.createUserId,jdbcType=INTEGER}
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -333,6 +346,9 @@
       <if test="createUserId != null" >
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -350,7 +366,8 @@
       testing_person = #{testingPerson,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{createUserId,jdbcType=INTEGER}
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

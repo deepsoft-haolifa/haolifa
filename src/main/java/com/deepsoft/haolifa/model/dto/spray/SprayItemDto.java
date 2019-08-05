@@ -27,4 +27,6 @@ public class SprayItemDto {
 
   private String completeTime;
 
+  private String batchNumber;
+
 }

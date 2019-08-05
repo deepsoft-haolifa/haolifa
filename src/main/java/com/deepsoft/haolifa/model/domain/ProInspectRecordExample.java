@@ -934,6 +934,76 @@ public class ProInspectRecordExample {
             addCriterion("create_user_id not between", value1, value2, "createUserId");
             return (Criteria) this;
         }
+
+        public Criteria andAccessoryIsNull() {
+            addCriterion("accessory is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryIsNotNull() {
+            addCriterion("accessory is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryEqualTo(String value) {
+            addCriterion("accessory =", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotEqualTo(String value) {
+            addCriterion("accessory <>", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryGreaterThan(String value) {
+            addCriterion("accessory >", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryGreaterThanOrEqualTo(String value) {
+            addCriterion("accessory >=", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryLessThan(String value) {
+            addCriterion("accessory <", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryLessThanOrEqualTo(String value) {
+            addCriterion("accessory <=", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryLike(String value) {
+            addCriterion("accessory like", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotLike(String value) {
+            addCriterion("accessory not like", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryIn(List<String> values) {
+            addCriterion("accessory in", values, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotIn(List<String> values) {
+            addCriterion("accessory not in", values, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryBetween(String value1, String value2) {
+            addCriterion("accessory between", value1, value2, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotBetween(String value1, String value2) {
+            addCriterion("accessory not between", value1, value2, "accessory");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

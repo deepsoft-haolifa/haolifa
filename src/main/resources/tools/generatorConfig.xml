@@ -250,9 +250,12 @@
 
     <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
 
-    <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">-->
+    <!--<table tableName="pro_inspect_record" domainObjectName="ProInspectRecord">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
+    <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">
+      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
     <!--<table tableName="pro_inspect_unqualified" domainObjectName="ProInspectUnqualified">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
@@ -262,6 +265,7 @@
     <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
     <!--<table tableName="sys_message" domainObjectName="SysMessage"></table>-->
     <!--<table tableName="pressure_inspect_result" domainObjectName="PressureInspectResult"></table>-->
+    <!--<table tableName="pressure_inspect_record" domainObjectName="PressureInspectRecord"></table>-->
     <!--<table tableName="pressure_inspect_unqualified" domainObjectName="PressureInspectUnqualified"></table>-->
 
 

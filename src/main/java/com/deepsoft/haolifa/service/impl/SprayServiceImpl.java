@@ -5,6 +5,7 @@ import static com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status.handling;
 import static com.deepsoft.haolifa.constant.CommonEnum.SprayStatus.SPRAY_MACHINE;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.SPRAY_NO_PREFIX_PT;
 
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.SprayItemMapper;
@@ -16,11 +17,13 @@ import com.deepsoft.haolifa.model.domain.SprayItem;
 import com.deepsoft.haolifa.model.domain.SprayItemExample;
 import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
 import com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample;
+import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
+import com.deepsoft.haolifa.model.dto.spray.SprayInspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
@@ -38,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Service
 public class SprayServiceImpl extends BaseService implements SprayService {
@@ -63,6 +67,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     }
     for (int i = 0; i < sprayDto.getItems().size(); i++) {
       validateService.validateIsExistMaterialGraphNo(sprayDto.getItems().get(i).getMaterialGraphNo());
+      validateService.validIsEmpty(sprayDto.getItems().get(0).getBatchNumber());
     }
     String sprayNo = createSerialNumber(SPRAY_NO_PREFIX_PT, SPRAY_NO_KEY);
     Spray spray = new Spray();
@@ -190,6 +195,15 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     SprayInspectHistoryExample inspectHistoryExample = new SprayInspectHistoryExample();
     inspectHistoryExample.createCriteria().andSprayNoEqualTo(sprayNo);
     List<SprayInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
+    List<SprayInspectHistoryDto> sprayInspectHistoryDtos = new ArrayList<>(inspectHistories.size());
+    for (SprayInspectHistory history :inspectHistories) {
+      SprayInspectHistoryDto dto = new SprayInspectHistoryDto();
+      BeanUtils.copyProperties(history, dto);
+      if(StringUtils.isNotEmpty(history.getAccessory())) {
+        dto.setAccessoryList(JSON.parseArray(history.getAccessory(), Accessory.class));
+      }
+      sprayInspectHistoryDtos.add(dto);
+    }
     return ResultBean.success(inspectHistories);
   }
 
@@ -212,6 +226,10 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     }
     SprayInspectHistory history = new SprayInspectHistory();
     BeanUtils.copyProperties(inspectDto, history);
+    // 质检附件
+    if(!CollectionUtils.isEmpty(inspectDto.getAccessoryList())) {
+      history.setAccessory(JSON.toJSONString(inspectDto.getAccessoryList()));
+    }
     SprayExample example = new SprayExample();
     example.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
     List<Spray> sprays = sprayMapper.selectByExample(example);

@@ -16,6 +16,7 @@
       <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -79,7 +80,7 @@
   <sql id="Base_Column_List" >
     id, spray_no, original_graph_no, material_graph_no, material_graph_name, test_number, 
     qualified_number, unqualified_number, handling_suggestion, remark, status, create_time, 
-    update_time
+    update_time, accessory
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" >
     select
@@ -119,12 +120,12 @@
       material_graph_name, test_number, qualified_number, 
       unqualified_number, handling_suggestion, 
       remark, status, create_time, 
-      update_time)
+      update_time, accessory)
     values (#{sprayNo,jdbcType=VARCHAR}, #{originalGraphNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
       #{materialGraphName,jdbcType=VARCHAR}, #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
       #{unqualifiedNumber,jdbcType=INTEGER}, #{handlingSuggestion,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP}, #{accessory,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -168,6 +169,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sprayNo != null" >
@@ -205,6 +209,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -256,6 +263,9 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -275,7 +285,8 @@
       remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -319,6 +330,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -335,7 +349,8 @@
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

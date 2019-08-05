@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -38,6 +39,12 @@ public class ValidateService {
     List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
     if(CollectionUtils.isEmpty(orderProducts)) {
       throw new BaseException(ResponseEnum.ORDER_NO_NOT_EXIST);
+    }
+  }
+
+  public void validIsEmpty(String... objs) {
+    if(StringUtils.isAnyBlank(objs)) {
+      throw new BaseException(ResponseEnum.PARAM_ERROR);
     }
   }
 }

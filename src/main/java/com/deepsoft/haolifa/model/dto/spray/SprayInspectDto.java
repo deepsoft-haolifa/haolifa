@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.dto.spray;
 
+import com.deepsoft.haolifa.model.dto.Accessory;
+import java.util.List;
 import lombok.Data;
 import lombok.ToString;
 
@@ -25,5 +27,7 @@ public class SprayInspectDto {
   private String handlingSuggestion;
 
   private String remark;
+
+  private List<Accessory> accessoryList;
 
 }
