@@ -17,6 +17,6 @@ public class ExportMaterialRecordDTO {
   @ApiModelProperty("操作类型 0 全部 1 出库 2 入库")
   private Integer operationType;
 
-  @ApiModelProperty("订单号")
+  @ApiModelProperty("零件图号")
   private String materialGraphNo;
 }
