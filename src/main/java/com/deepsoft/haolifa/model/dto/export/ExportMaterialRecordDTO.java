@@ -14,7 +14,7 @@ public class ExportMaterialRecordDTO {
   @ApiModelProperty("结束时间")
   private String endDate;
 
-  @ApiModelProperty("操作类型 0 全部 1 出库 2 入库")
+  @ApiModelProperty("操作类型：1 出库")
   private Integer operationType;
 
   @ApiModelProperty("零件图号")

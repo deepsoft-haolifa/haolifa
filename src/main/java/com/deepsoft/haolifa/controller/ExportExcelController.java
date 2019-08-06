@@ -64,6 +64,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1639,6 +1640,7 @@ public class ExportExcelController {
     // 单元格样式
     CellStyle center = workbook.createCellStyle();
     center.setAlignment(HorizontalAlignment.CENTER);
+    center.setVerticalAlignment(VerticalAlignment.CENTER);
     center.setWrapText(true);
 
     Row title_1 = sheet.createRow(0);
@@ -1704,6 +1706,14 @@ public class ExportExcelController {
       cell_7.setCellValue(entryOutStoreRecord.getReceiveDepartment());
       cell_7.setCellStyle(center);
     }
+    sheet.autoSizeColumn(0,true);
+    sheet.autoSizeColumn(1,true);
+    sheet.autoSizeColumn(2,true);
+    sheet.autoSizeColumn(3,true);
+    sheet.autoSizeColumn(4,true);
+    sheet.autoSizeColumn(5,true);
+    sheet.autoSizeColumn(6,true);
+    sheet.autoSizeColumn(7,true);
 
     OutputStream outputStream = response.getOutputStream();
     workbook.write(outputStream);
@@ -1725,6 +1735,7 @@ public class ExportExcelController {
     // 单元格样式
     CellStyle center = workbook.createCellStyle();
     center.setAlignment(HorizontalAlignment.CENTER);
+    center.setVerticalAlignment(VerticalAlignment.CENTER);
     center.setWrapText(true);
 
     Row title_1 = sheet.createRow(0);
@@ -1771,6 +1782,9 @@ public class ExportExcelController {
       cell_4.setCellValue(material.getUnit());
       cell_4.setCellStyle(center);
     }
+
+    sheet.autoSizeColumn(1, true);
+    sheet.autoSizeColumn(2, true);
 
     OutputStream outputStream = response.getOutputStream();
     workbook.write(outputStream);
