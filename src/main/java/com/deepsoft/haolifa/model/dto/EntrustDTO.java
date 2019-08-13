@@ -14,7 +14,7 @@ public class EntrustDTO {
     private String processedGraphNo;
     @ApiModelProperty(required = true,value = "委托数量")
     private Integer number;
-    @ApiModelProperty(required = true,value = "采购合同号")
+    @ApiModelProperty(value = "采购合同号")
     private String purchaseNo;
     @ApiModelProperty(required = true,value = "加工批次号")
     private String batchNumber;
