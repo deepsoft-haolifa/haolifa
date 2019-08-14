@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.rejectMaterial.RejectMaterialListDto;
+import com.deepsoft.haolifa.model.dto.rejectMaterial.RejectMaterialResultDto;
 import com.deepsoft.haolifa.model.dto.rejectMaterial.RejectMaterialSaveDto;
 import com.deepsoft.haolifa.service.RejectMaterialService;
 import io.swagger.annotations.Api;
@@ -41,6 +42,12 @@ public class RejectMaterialController {
   @PutMapping("record/{recordNo}")
   public ResultBean updateRecordStatus(@PathVariable("recordNo") String recordNo,@RequestParam(defaultValue = "0") int status) {
     return rejectMaterialService.updateRecordStatus(recordNo, status);
+  }
+
+  @ApiOperation("更新不合格品处理结果")
+  @PutMapping("record/result")
+  public ResultBean updateRecordResult(@RequestBody RejectMaterialResultDto resultDto) {
+    return rejectMaterialService.updateRecordResult(resultDto);
   }
 
   @ApiOperation("查看不合格审批记录")

@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.rejectMaterial.RejectMaterialListDto;
+import com.deepsoft.haolifa.model.dto.rejectMaterial.RejectMaterialResultDto;
 import com.deepsoft.haolifa.model.dto.rejectMaterial.RejectMaterialSaveDto;
 import com.deepsoft.haolifa.service.RejectMaterialService;
 import com.github.pagehelper.Page;
@@ -88,12 +89,35 @@ public class RejectMaterialServiceImpl extends BaseService implements RejectMate
       criteria.andPurchaseOrderNoLike("%" + listDto.getPurchaseOrderNo() + "%");
     }
     recordExample.setOrderByClause("id desc");
-    Page<RejectMaterialRecord> rejectMaterialRecordPage = PageHelper.startPage(listDto.getPageNum(), listDto.getPageSize()).doSelectPage(() -> {
-      rejectMaterialRecordMapper.selectByExample(recordExample);
-    });
+    Page<RejectMaterialRecord> rejectMaterialRecordPage = PageHelper
+        .startPage(listDto.getPageNum(), listDto.getPageSize()).doSelectPage(() -> {
+          rejectMaterialRecordMapper.selectByExample(recordExample);
+        });
     PageDTO<RejectMaterialRecord> rejectMaterialRecordPageDTO = new PageDTO<>();
     BeanUtils.copyProperties(rejectMaterialRecordPage, rejectMaterialRecordPageDTO);
     rejectMaterialRecordPageDTO.setList(rejectMaterialRecordPage.getResult());
     return ResultBean.success(rejectMaterialRecordPageDTO);
+  }
+
+  @Override
+  public ResultBean updateRecordResult(RejectMaterialResultDto resultDto) {
+    if (resultDto.getAcceptNumber() == null || resultDto.getBackNumber() == null || resultDto.getEntrustNumber() == null
+        || resultDto.getNumber() == null || StringUtils.isEmpty(resultDto.getRecordNo())) {
+      throw new BaseException(ResponseEnum.PARAM_ERROR);
+    }
+    int count = resultDto.getAcceptNumber() + resultDto.getBackNumber() + resultDto.getEntrustNumber();
+    if(count != resultDto.getNumber()) {
+      throw new BaseException(ResponseEnum.REJECT_MATERIAL_HANDLED_NUMBER_ERROR);
+    }
+    RejectMaterialRecord rejectMaterialRecord = new RejectMaterialRecord();
+    rejectMaterialRecord.setAcceptNumber(resultDto.getAcceptNumber());
+    rejectMaterialRecord.setEntrustNumber(resultDto.getEntrustNumber());
+    rejectMaterialRecord.setBackNumber(resultDto.getBackNumber());
+    rejectMaterialRecord.setStatus((byte) 2);
+    RejectMaterialRecordExample example = new RejectMaterialRecordExample();
+    example.createCriteria().andRecordNoEqualTo(resultDto.getRecordNo());
+    rejectMaterialRecordMapper.updateByExampleSelective(rejectMaterialRecord, example);
+    return ResultBean.success(1);
+
   }
 }
