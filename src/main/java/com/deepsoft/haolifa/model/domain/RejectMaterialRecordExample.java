@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class rejectMaterialRecordExample {
+public class RejectMaterialRecordExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public rejectMaterialRecordExample() {
+    public RejectMaterialRecordExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -935,52 +935,52 @@ public class rejectMaterialRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdEqualTo(Long value) {
+        public Criteria andCreateUserIdEqualTo(Integer value) {
             addCriterion("create_user_id =", value, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotEqualTo(Long value) {
+        public Criteria andCreateUserIdNotEqualTo(Integer value) {
             addCriterion("create_user_id <>", value, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdGreaterThan(Long value) {
+        public Criteria andCreateUserIdGreaterThan(Integer value) {
             addCriterion("create_user_id >", value, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andCreateUserIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("create_user_id >=", value, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLessThan(Long value) {
+        public Criteria andCreateUserIdLessThan(Integer value) {
             addCriterion("create_user_id <", value, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLessThanOrEqualTo(Long value) {
+        public Criteria andCreateUserIdLessThanOrEqualTo(Integer value) {
             addCriterion("create_user_id <=", value, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdIn(List<Long> values) {
+        public Criteria andCreateUserIdIn(List<Integer> values) {
             addCriterion("create_user_id in", values, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotIn(List<Long> values) {
+        public Criteria andCreateUserIdNotIn(List<Integer> values) {
             addCriterion("create_user_id not in", values, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdBetween(Long value1, Long value2) {
+        public Criteria andCreateUserIdBetween(Integer value1, Integer value2) {
             addCriterion("create_user_id between", value1, value2, "createUserId");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotBetween(Long value1, Long value2) {
+        public Criteria andCreateUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("create_user_id not between", value1, value2, "createUserId");
             return (Criteria) this;
         }

@@ -147,9 +147,9 @@
     <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
     <!--</table>-->
 
-    <table tableName="reject_material_record" domainObjectName="rejectMaterialRecord">
-    <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-    </table>
+    <!--<table tableName="reject_material_record" domainObjectName="RejectMaterialRecord">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
     <!--<table tableName="replace_material_list" domainObjectName="ReplaceMaterialList"></table>-->
 
     <!--<table tableName="replace_material" domainObjectName="ReplaceMaterial"></table>-->

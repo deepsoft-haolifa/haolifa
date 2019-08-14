@@ -2,7 +2,7 @@ package com.deepsoft.haolifa.model.domain;
 
 import java.util.Date;
 
-public class rejectMaterialRecord {
+public class RejectMaterialRecord {
     private Long id;
 
     private String recordNo;
@@ -29,9 +29,9 @@ public class rejectMaterialRecord {
 
     private Date updateTime;
 
-    private Long createUserId;
+    private Integer createUserId;
 
-    public rejectMaterialRecord(Long id, String recordNo, String purchaseOrderNo, String batchNumber, String materialGraphNo, Integer number, Integer acceptNumber, Integer entrustNumber, Integer backNumber, Byte status, Long inspectId, Date createTime, Date updateTime, Long createUserId) {
+    public RejectMaterialRecord(Long id, String recordNo, String purchaseOrderNo, String batchNumber, String materialGraphNo, Integer number, Integer acceptNumber, Integer entrustNumber, Integer backNumber, Byte status, Long inspectId, Date createTime, Date updateTime, Integer createUserId) {
         this.id = id;
         this.recordNo = recordNo;
         this.purchaseOrderNo = purchaseOrderNo;
@@ -48,7 +48,7 @@ public class rejectMaterialRecord {
         this.createUserId = createUserId;
     }
 
-    public rejectMaterialRecord() {
+    public RejectMaterialRecord() {
         super();
     }
 
@@ -156,11 +156,11 @@ public class rejectMaterialRecord {
         this.updateTime = updateTime;
     }
 
-    public Long getCreateUserId() {
+    public Integer getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Long createUserId) {
+    public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
     }
 }

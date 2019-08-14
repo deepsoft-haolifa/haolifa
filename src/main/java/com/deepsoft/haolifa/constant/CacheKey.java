@@ -7,6 +7,7 @@ public class CacheKey {
   public static String SPRAY_NO_KEY = "deepsoft:haolifa:cache:sprayNo:%s";
   public static String ENTRUST_NO_KEY = "deepsoft:haolifa:cache:entrustNo:%s";
   public static String DELIVERY_NO_KEY = "deepsoft:haolifa:cache:deliveryNo:%s";
+  public static String REJECT_MATERIAL_NO_KEY = "deepsoft:haolifa:cache:rejectRecordNo:%s";
   public static String TOTAL_INVENTORY_MATERIAL = "total_inventory_material";
   public static String TOTAL_MONEY_ORDER = "total_money_order";
   /*
@@ -49,7 +50,5 @@ public class CacheKey {
   生产订单 已收款金额
    */
   public static String ORDER_PRODUCT_RECEIVED_ACCOUNT = "order_product_received_account:%s";
-  /*
 
-   */
 }
