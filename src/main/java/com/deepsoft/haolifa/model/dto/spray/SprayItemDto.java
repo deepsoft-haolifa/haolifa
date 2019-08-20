@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.spray;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 
@@ -20,6 +21,9 @@ public class SprayItemDto {
   private String specialRequires;
 
   private String sprayColor;
+
+  @ApiModelProperty("喷涂颜色编号")
+  private String relationNo;
 
   private Integer number;
 
