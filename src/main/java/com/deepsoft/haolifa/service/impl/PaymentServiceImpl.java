@@ -84,7 +84,7 @@ public class PaymentServiceImpl implements PaymentService {
         OrderProduct update = new OrderProduct();
         update.setId(orderProduct.getId());
         update.setReceivedAccount(new BigDecimal(model.getAmount() + orderProduct.getReceivedAccount().doubleValue()));
-        orderProductMapper.updateByPrimaryKey(update);
+        orderProductMapper.updateByPrimaryKeySelective(update);
       }
     }
     return ResultBean.success(1);
