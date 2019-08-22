@@ -2,12 +2,17 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.SupplierProType;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierPorductDTO;
 import com.deepsoft.haolifa.model.dto.SupplierProductListDTO;
 import com.deepsoft.haolifa.service.SupplierProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,7 +63,14 @@ public class SupplierProductController {
     @GetMapping("/classify/list")
     public ResultBean getClassifyList() {
         CommonEnum.SupplierProType[] classify = CommonEnum.SupplierProType.values();
-        return ResultBean.success(classify);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (SupplierProType type: classify) {
+            Map map = new HashMap();
+            map.put("name",type.getName());
+            map.put("type",type.getType());
+            result.add(map);
+        }
+        return ResultBean.success(result);
     }
 
 }

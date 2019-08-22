@@ -67,7 +67,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     }
     for (int i = 0; i < sprayDto.getItems().size(); i++) {
       validateService.validateIsExistMaterialGraphNo(sprayDto.getItems().get(i).getMaterialGraphNo());
-      validateService.validIsEmpty(sprayDto.getItems().get(0).getBatchNumber());
+      validateService.validIsEmpty(sprayDto.getItems().get(i).getBatchNumber());
     }
     String sprayNo = createSerialNumber(SPRAY_NO_PREFIX_PT, SPRAY_NO_KEY);
     Spray spray = new Spray();
