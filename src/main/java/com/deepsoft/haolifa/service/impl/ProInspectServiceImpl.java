@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.dao.repository.ProInspectResultMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectUnqualifiedMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.Accessory;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectConditionDTO;
@@ -75,8 +76,12 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
     List<OrderProduct> orderProducts = orderProductMapper.selectByExample(orderProductExample);
     if(!CollectionUtils.isEmpty(orderProducts)) {
       int originalNumber = orderProducts.get(0).getQualifiedNumber();
+      int totalCount = orderProducts.get(0).getTotalCount();
       OrderProduct orderProduct = new OrderProduct();
       orderProduct.setQualifiedNumber(originalNumber + proInspectRecord.getQualifiedNumber());
+      if(totalCount < orderProduct.getQualifiedNumber()) {
+        throw new BaseException(ResponseEnum.ORDER_PRO_INSPECT_NUM_ERROR);
+      }
       orderProductMapper.updateByExampleSelective(orderProduct, orderProductExample);
     }
     return ResultBean.success(insert);

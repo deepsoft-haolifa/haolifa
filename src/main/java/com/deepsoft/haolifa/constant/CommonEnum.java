@@ -75,7 +75,9 @@ public class CommonEnum {
     SPRAY_QUALIFIED_NUMBER_ERROR("4014", "检验合格数量不能大于喷涂加工数"),
     INSPECT_RECORD_DATA_ERROR("4015", "检验数据不正确：合格与不合格品总数不等于检测数量"),
     DELIVERY_ORDERNO_NOT_EXIST("4016", "发货通知单订单号不存在"),
-    REJECT_MATERIAL_HANDLED_NUMBER_ERROR("4017", "不合格品未进行全部处理");
+    REJECT_MATERIAL_HANDLED_NUMBER_ERROR("4017", "不合格品未进行全部处理"),
+    ORDER_PRO_INSPECT_NUM_ERROR("4018", "检验合格数已超出订单总数量"),
+    PURCHASE_PRO_INSPECT_NUM_ERROR("4019", "检验合格数已超出采购总数量");
 
     public final String code;
 
