@@ -52,6 +52,15 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
   }
 
   @Override
+  public ResultBean getClassify() {
+    return  ResultBean.success(expensesMapper.getClassify());
+  }
+  @Override
+  public ResultBean classifyByDepartment() {
+    return  ResultBean.success(expensesMapper.classifyByDepartment());
+  }
+
+  @Override
   public ResultBean delete(Integer id) {
     ExpensesExample expensesExample = new ExpensesExample();
     expensesExample.or().andIdEqualTo(id);
