@@ -1,44 +1,56 @@
 package com.deepsoft.haolifa.model.domain;
 
-import io.swagger.annotations.ApiModelProperty;
-
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PriceMaterial {
     private Integer id;
-    @ApiModelProperty(value = "零件分类名称")
+
+    private Integer materialClassifyId;
+
     private String materialClassifyName;
-    @ApiModelProperty(value = "零件名称")
+
     private String name;
-    @ApiModelProperty(value = "图号")
+
     private String graphNo;
-    @ApiModelProperty(value = "型号")
+
     private String model;
-    @ApiModelProperty(value = "规格")
+
     private String specifications;
-    @ApiModelProperty(value = "材料")
+
     private String material;
-    @ApiModelProperty(value = "单位")
+
     private String unit;
-    @ApiModelProperty(value = "单重")
+
     private String actualWeight;
-    @ApiModelProperty(value = "吨价(元)")
-    private String tonPrice;
-    @ApiModelProperty(value = "毛坯费（元）")
-    private String blankCost;
-    @ApiModelProperty(value = "加工费（元）")
-    private String processCost;
-    @ApiModelProperty(value = "成品价（元）")
-    private String productPrice;
+
+    private String taxRate;
+
+    private BigDecimal tonPrice;
+
+    private BigDecimal blankCost;
+
+    private BigDecimal blankCostTax;
+
+    private BigDecimal processCost;
+
+    private BigDecimal sprayCost;
+
+    private BigDecimal price;
+
+    private BigDecimal priceTax;
+
     private Date createTime;
+
     private Date updateTime;
 
     private Integer createUser;
 
     private Integer updateUser;
 
-    public PriceMaterial(Integer id, String materialClassifyName, String name, String graphNo, String model, String specifications, String material, String unit, String actualWeight, String tonPrice, String blankCost, String processCost, String productPrice, Date createTime, Date updateTime, Integer createUser, Integer updateUser) {
+    public PriceMaterial(Integer id, Integer materialClassifyId, String materialClassifyName, String name, String graphNo, String model, String specifications, String material, String unit, String actualWeight, String taxRate, BigDecimal tonPrice, BigDecimal blankCost, BigDecimal blankCostTax, BigDecimal processCost, BigDecimal sprayCost, BigDecimal price, BigDecimal priceTax, Date createTime, Date updateTime, Integer createUser, Integer updateUser) {
         this.id = id;
+        this.materialClassifyId = materialClassifyId;
         this.materialClassifyName = materialClassifyName;
         this.name = name;
         this.graphNo = graphNo;
@@ -47,10 +59,14 @@ public class PriceMaterial {
         this.material = material;
         this.unit = unit;
         this.actualWeight = actualWeight;
+        this.taxRate = taxRate;
         this.tonPrice = tonPrice;
         this.blankCost = blankCost;
+        this.blankCostTax = blankCostTax;
         this.processCost = processCost;
-        this.productPrice = productPrice;
+        this.sprayCost = sprayCost;
+        this.price = price;
+        this.priceTax = priceTax;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUser = createUser;
@@ -67,6 +83,14 @@ public class PriceMaterial {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getMaterialClassifyId() {
+        return materialClassifyId;
+    }
+
+    public void setMaterialClassifyId(Integer materialClassifyId) {
+        this.materialClassifyId = materialClassifyId;
     }
 
     public String getMaterialClassifyName() {
@@ -133,36 +157,68 @@ public class PriceMaterial {
         this.actualWeight = actualWeight == null ? null : actualWeight.trim();
     }
 
-    public String getTonPrice() {
+    public String getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(String taxRate) {
+        this.taxRate = taxRate == null ? null : taxRate.trim();
+    }
+
+    public BigDecimal getTonPrice() {
         return tonPrice;
     }
 
-    public void setTonPrice(String tonPrice) {
-        this.tonPrice = tonPrice == null ? null : tonPrice.trim();
+    public void setTonPrice(BigDecimal tonPrice) {
+        this.tonPrice = tonPrice;
     }
 
-    public String getBlankCost() {
+    public BigDecimal getBlankCost() {
         return blankCost;
     }
 
-    public void setBlankCost(String blankCost) {
-        this.blankCost = blankCost == null ? null : blankCost.trim();
+    public void setBlankCost(BigDecimal blankCost) {
+        this.blankCost = blankCost;
     }
 
-    public String getProcessCost() {
+    public BigDecimal getBlankCostTax() {
+        return blankCostTax;
+    }
+
+    public void setBlankCostTax(BigDecimal blankCostTax) {
+        this.blankCostTax = blankCostTax;
+    }
+
+    public BigDecimal getProcessCost() {
         return processCost;
     }
 
-    public void setProcessCost(String processCost) {
-        this.processCost = processCost == null ? null : processCost.trim();
+    public void setProcessCost(BigDecimal processCost) {
+        this.processCost = processCost;
     }
 
-    public String getProductPrice() {
-        return productPrice;
+    public BigDecimal getSprayCost() {
+        return sprayCost;
     }
 
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice == null ? null : productPrice.trim();
+    public void setSprayCost(BigDecimal sprayCost) {
+        this.sprayCost = sprayCost;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getPriceTax() {
+        return priceTax;
+    }
+
+    public void setPriceTax(BigDecimal priceTax) {
+        this.priceTax = priceTax;
     }
 
     public Date getCreateTime() {

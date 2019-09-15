@@ -188,8 +188,35 @@ CREATE table customer_model_relation(
 	PRIMARY KEY (id) using BTREE
 ) ENGINE = innodb default charset=utf8 comment='大客户-好利产品型号对照表';
 -- 质检不合格原因
-alter table inspect_history add column reasons varchar(1024) not null default '[]' comment '不合格原因列表';
-alter table spray_inspect_history add column reasons varchar(1024) not null default '[]' comment '不合格原因列表';
+alter table inspect_history add column reasons varchar(1024) not null default '' comment '不合格原因列表';
+alter table spray_inspect_history add column reasons varchar(1024) not null default '' comment '不合格原因列表';
+
+DROP TABLE IF EXISTS `price_material` ;
+CREATE TABLE `price_material` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	`material_classify_id` int(11) NOT NULL DEFAULT '0' COMMENT '零件分类Id',
+  `material_classify_name` char(36) NOT NULL DEFAULT '' COMMENT '零件分类名称',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
+  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '图号',
+  `model` varchar(64) NOT NULL DEFAULT '' COMMENT '型号',
+  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '规格',
+  `material` varchar(64) NOT NULL DEFAULT '' COMMENT '材料',
+  `unit` varchar(64) NOT NULL DEFAULT '' COMMENT '单位(如：根，个)',
+  `actual_weight` varchar(32) NOT NULL DEFAULT '' COMMENT '实际重量',
+	`tax_rate` varchar(32) NOT NULL DEFAULT '' COMMENT '税率',
+  `ton_price` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '吨价(元)',
+  `blank_cost` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '毛坯费不含税（元）',
+  `blank_cost_tax` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '毛坯费含税（元）',
+  `process_cost` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '加工费（元）',
+  `spray_cost` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '喷涂费（元）',
+  `price` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '成品价不含税（元）',
+  `price_tax` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '成品价含税（元）',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user` int(11) NOT NULL COMMENT '创建用户',
+  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零件价格管理表';
 
 
 

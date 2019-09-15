@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -162,6 +163,66 @@ public class PriceMaterialExample {
 
         public Criteria andIdNotBetween(Integer value1, Integer value2) {
             addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdIsNull() {
+            addCriterion("material_classify_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdIsNotNull() {
+            addCriterion("material_classify_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdEqualTo(Integer value) {
+            addCriterion("material_classify_id =", value, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdNotEqualTo(Integer value) {
+            addCriterion("material_classify_id <>", value, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdGreaterThan(Integer value) {
+            addCriterion("material_classify_id >", value, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("material_classify_id >=", value, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdLessThan(Integer value) {
+            addCriterion("material_classify_id <", value, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdLessThanOrEqualTo(Integer value) {
+            addCriterion("material_classify_id <=", value, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdIn(List<Integer> values) {
+            addCriterion("material_classify_id in", values, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdNotIn(List<Integer> values) {
+            addCriterion("material_classify_id not in", values, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdBetween(Integer value1, Integer value2) {
+            addCriterion("material_classify_id between", value1, value2, "materialClassifyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialClassifyIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("material_classify_id not between", value1, value2, "materialClassifyId");
             return (Criteria) this;
         }
 
@@ -725,6 +786,76 @@ public class PriceMaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andTaxRateIsNull() {
+            addCriterion("tax_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateIsNotNull() {
+            addCriterion("tax_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateEqualTo(String value) {
+            addCriterion("tax_rate =", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotEqualTo(String value) {
+            addCriterion("tax_rate <>", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateGreaterThan(String value) {
+            addCriterion("tax_rate >", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateGreaterThanOrEqualTo(String value) {
+            addCriterion("tax_rate >=", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateLessThan(String value) {
+            addCriterion("tax_rate <", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateLessThanOrEqualTo(String value) {
+            addCriterion("tax_rate <=", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateLike(String value) {
+            addCriterion("tax_rate like", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotLike(String value) {
+            addCriterion("tax_rate not like", value, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateIn(List<String> values) {
+            addCriterion("tax_rate in", values, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotIn(List<String> values) {
+            addCriterion("tax_rate not in", values, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateBetween(String value1, String value2) {
+            addCriterion("tax_rate between", value1, value2, "taxRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxRateNotBetween(String value1, String value2) {
+            addCriterion("tax_rate not between", value1, value2, "taxRate");
+            return (Criteria) this;
+        }
+
         public Criteria andTonPriceIsNull() {
             addCriterion("ton_price is null");
             return (Criteria) this;
@@ -735,62 +866,52 @@ public class PriceMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceEqualTo(String value) {
+        public Criteria andTonPriceEqualTo(BigDecimal value) {
             addCriterion("ton_price =", value, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceNotEqualTo(String value) {
+        public Criteria andTonPriceNotEqualTo(BigDecimal value) {
             addCriterion("ton_price <>", value, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceGreaterThan(String value) {
+        public Criteria andTonPriceGreaterThan(BigDecimal value) {
             addCriterion("ton_price >", value, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceGreaterThanOrEqualTo(String value) {
+        public Criteria andTonPriceGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("ton_price >=", value, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceLessThan(String value) {
+        public Criteria andTonPriceLessThan(BigDecimal value) {
             addCriterion("ton_price <", value, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceLessThanOrEqualTo(String value) {
+        public Criteria andTonPriceLessThanOrEqualTo(BigDecimal value) {
             addCriterion("ton_price <=", value, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceLike(String value) {
-            addCriterion("ton_price like", value, "tonPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTonPriceNotLike(String value) {
-            addCriterion("ton_price not like", value, "tonPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTonPriceIn(List<String> values) {
+        public Criteria andTonPriceIn(List<BigDecimal> values) {
             addCriterion("ton_price in", values, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceNotIn(List<String> values) {
+        public Criteria andTonPriceNotIn(List<BigDecimal> values) {
             addCriterion("ton_price not in", values, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceBetween(String value1, String value2) {
+        public Criteria andTonPriceBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("ton_price between", value1, value2, "tonPrice");
             return (Criteria) this;
         }
 
-        public Criteria andTonPriceNotBetween(String value1, String value2) {
+        public Criteria andTonPriceNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("ton_price not between", value1, value2, "tonPrice");
             return (Criteria) this;
         }
@@ -805,63 +926,113 @@ public class PriceMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostEqualTo(String value) {
+        public Criteria andBlankCostEqualTo(BigDecimal value) {
             addCriterion("blank_cost =", value, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostNotEqualTo(String value) {
+        public Criteria andBlankCostNotEqualTo(BigDecimal value) {
             addCriterion("blank_cost <>", value, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostGreaterThan(String value) {
+        public Criteria andBlankCostGreaterThan(BigDecimal value) {
             addCriterion("blank_cost >", value, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostGreaterThanOrEqualTo(String value) {
+        public Criteria andBlankCostGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("blank_cost >=", value, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostLessThan(String value) {
+        public Criteria andBlankCostLessThan(BigDecimal value) {
             addCriterion("blank_cost <", value, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostLessThanOrEqualTo(String value) {
+        public Criteria andBlankCostLessThanOrEqualTo(BigDecimal value) {
             addCriterion("blank_cost <=", value, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostLike(String value) {
-            addCriterion("blank_cost like", value, "blankCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andBlankCostNotLike(String value) {
-            addCriterion("blank_cost not like", value, "blankCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andBlankCostIn(List<String> values) {
+        public Criteria andBlankCostIn(List<BigDecimal> values) {
             addCriterion("blank_cost in", values, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostNotIn(List<String> values) {
+        public Criteria andBlankCostNotIn(List<BigDecimal> values) {
             addCriterion("blank_cost not in", values, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostBetween(String value1, String value2) {
+        public Criteria andBlankCostBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("blank_cost between", value1, value2, "blankCost");
             return (Criteria) this;
         }
 
-        public Criteria andBlankCostNotBetween(String value1, String value2) {
+        public Criteria andBlankCostNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("blank_cost not between", value1, value2, "blankCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxIsNull() {
+            addCriterion("blank_cost_tax is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxIsNotNull() {
+            addCriterion("blank_cost_tax is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxEqualTo(BigDecimal value) {
+            addCriterion("blank_cost_tax =", value, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxNotEqualTo(BigDecimal value) {
+            addCriterion("blank_cost_tax <>", value, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxGreaterThan(BigDecimal value) {
+            addCriterion("blank_cost_tax >", value, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("blank_cost_tax >=", value, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxLessThan(BigDecimal value) {
+            addCriterion("blank_cost_tax <", value, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("blank_cost_tax <=", value, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxIn(List<BigDecimal> values) {
+            addCriterion("blank_cost_tax in", values, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxNotIn(List<BigDecimal> values) {
+            addCriterion("blank_cost_tax not in", values, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("blank_cost_tax between", value1, value2, "blankCostTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andBlankCostTaxNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("blank_cost_tax not between", value1, value2, "blankCostTax");
             return (Criteria) this;
         }
 
@@ -875,133 +1046,233 @@ public class PriceMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostEqualTo(String value) {
+        public Criteria andProcessCostEqualTo(BigDecimal value) {
             addCriterion("process_cost =", value, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostNotEqualTo(String value) {
+        public Criteria andProcessCostNotEqualTo(BigDecimal value) {
             addCriterion("process_cost <>", value, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostGreaterThan(String value) {
+        public Criteria andProcessCostGreaterThan(BigDecimal value) {
             addCriterion("process_cost >", value, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostGreaterThanOrEqualTo(String value) {
+        public Criteria andProcessCostGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("process_cost >=", value, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostLessThan(String value) {
+        public Criteria andProcessCostLessThan(BigDecimal value) {
             addCriterion("process_cost <", value, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostLessThanOrEqualTo(String value) {
+        public Criteria andProcessCostLessThanOrEqualTo(BigDecimal value) {
             addCriterion("process_cost <=", value, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostLike(String value) {
-            addCriterion("process_cost like", value, "processCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessCostNotLike(String value) {
-            addCriterion("process_cost not like", value, "processCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessCostIn(List<String> values) {
+        public Criteria andProcessCostIn(List<BigDecimal> values) {
             addCriterion("process_cost in", values, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostNotIn(List<String> values) {
+        public Criteria andProcessCostNotIn(List<BigDecimal> values) {
             addCriterion("process_cost not in", values, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostBetween(String value1, String value2) {
+        public Criteria andProcessCostBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("process_cost between", value1, value2, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProcessCostNotBetween(String value1, String value2) {
+        public Criteria andProcessCostNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("process_cost not between", value1, value2, "processCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceIsNull() {
-            addCriterion("product_price is null");
+        public Criteria andSprayCostIsNull() {
+            addCriterion("spray_cost is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceIsNotNull() {
-            addCriterion("product_price is not null");
+        public Criteria andSprayCostIsNotNull() {
+            addCriterion("spray_cost is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceEqualTo(String value) {
-            addCriterion("product_price =", value, "productPrice");
+        public Criteria andSprayCostEqualTo(BigDecimal value) {
+            addCriterion("spray_cost =", value, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceNotEqualTo(String value) {
-            addCriterion("product_price <>", value, "productPrice");
+        public Criteria andSprayCostNotEqualTo(BigDecimal value) {
+            addCriterion("spray_cost <>", value, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceGreaterThan(String value) {
-            addCriterion("product_price >", value, "productPrice");
+        public Criteria andSprayCostGreaterThan(BigDecimal value) {
+            addCriterion("spray_cost >", value, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceGreaterThanOrEqualTo(String value) {
-            addCriterion("product_price >=", value, "productPrice");
+        public Criteria andSprayCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("spray_cost >=", value, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceLessThan(String value) {
-            addCriterion("product_price <", value, "productPrice");
+        public Criteria andSprayCostLessThan(BigDecimal value) {
+            addCriterion("spray_cost <", value, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceLessThanOrEqualTo(String value) {
-            addCriterion("product_price <=", value, "productPrice");
+        public Criteria andSprayCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("spray_cost <=", value, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceLike(String value) {
-            addCriterion("product_price like", value, "productPrice");
+        public Criteria andSprayCostIn(List<BigDecimal> values) {
+            addCriterion("spray_cost in", values, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceNotLike(String value) {
-            addCriterion("product_price not like", value, "productPrice");
+        public Criteria andSprayCostNotIn(List<BigDecimal> values) {
+            addCriterion("spray_cost not in", values, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceIn(List<String> values) {
-            addCriterion("product_price in", values, "productPrice");
+        public Criteria andSprayCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("spray_cost between", value1, value2, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceNotIn(List<String> values) {
-            addCriterion("product_price not in", values, "productPrice");
+        public Criteria andSprayCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("spray_cost not between", value1, value2, "sprayCost");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceBetween(String value1, String value2) {
-            addCriterion("product_price between", value1, value2, "productPrice");
+        public Criteria andPriceIsNull() {
+            addCriterion("price is null");
             return (Criteria) this;
         }
 
-        public Criteria andProductPriceNotBetween(String value1, String value2) {
-            addCriterion("product_price not between", value1, value2, "productPrice");
+        public Criteria andPriceIsNotNull() {
+            addCriterion("price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceEqualTo(BigDecimal value) {
+            addCriterion("price =", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotEqualTo(BigDecimal value) {
+            addCriterion("price <>", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceGreaterThan(BigDecimal value) {
+            addCriterion("price >", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("price >=", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceLessThan(BigDecimal value) {
+            addCriterion("price <", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("price <=", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIn(List<BigDecimal> values) {
+            addCriterion("price in", values, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotIn(List<BigDecimal> values) {
+            addCriterion("price not in", values, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price between", value1, value2, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price not between", value1, value2, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxIsNull() {
+            addCriterion("price_tax is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxIsNotNull() {
+            addCriterion("price_tax is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxEqualTo(BigDecimal value) {
+            addCriterion("price_tax =", value, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxNotEqualTo(BigDecimal value) {
+            addCriterion("price_tax <>", value, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxGreaterThan(BigDecimal value) {
+            addCriterion("price_tax >", value, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_tax >=", value, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxLessThan(BigDecimal value) {
+            addCriterion("price_tax <", value, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_tax <=", value, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxIn(List<BigDecimal> values) {
+            addCriterion("price_tax in", values, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxNotIn(List<BigDecimal> values) {
+            addCriterion("price_tax not in", values, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_tax between", value1, value2, "priceTax");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceTaxNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_tax not between", value1, value2, "priceTax");
             return (Criteria) this;
         }
 

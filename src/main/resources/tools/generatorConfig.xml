@@ -220,8 +220,8 @@
     <!--</table>-->
     <!--<table tableName="inspect_item" domainObjectName="InspectItem">-->
     <!--</table>-->
-    <table tableName="inspect_history" domainObjectName="InspectHistory">
-    </table>
+<!--    <table tableName="inspect_history" domainObjectName="InspectHistory">-->
+<!--    </table>-->
 
 
     <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult">-->
@@ -238,13 +238,13 @@
     <!--<table tableName="spray_item" domainObjectName="SprayItem">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
-    <table tableName="spray_inspect_history" domainObjectName="SprayInspectHistory">
-      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-    </table>
+<!--    <table tableName="spray_inspect_history" domainObjectName="SprayInspectHistory">-->
+<!--      <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--    </table>-->
 
-    <!--<table tableName="price_material" domainObjectName="PriceMaterial">-->
-      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+<!--    <table tableName="price_material" domainObjectName="PriceMaterial">-->
+<!--      <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--    </table>-->
     <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 
     <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->
