@@ -14,4 +14,8 @@ public interface ExpensesService {
   ResultBean getList(Integer pageNum, Integer pageSize,String classifyName,String secondClassifyName, String department);
 
   ResultBean classify(Integer pId);
+  ResultBean info(Integer id);
+  //获取费用统计表，每个费用类别每个月的开支
+  ResultBean getClassify();
+  ResultBean classifyByDepartment();
 }
