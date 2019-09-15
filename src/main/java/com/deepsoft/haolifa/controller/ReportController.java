@@ -25,7 +25,7 @@ public class ReportController {
         return expensesService.classifyByDepartment();
     }
     @ApiOperation("费用每月汇总--二级部门")
-    @GetMapping("/expense/classifyByDepartment")
+    @GetMapping("/expense/classifyBySecondDepartment")
     public ResultBean classifyBySecondDepartment() {
         return expensesService.classifyByDepartment();
     }
