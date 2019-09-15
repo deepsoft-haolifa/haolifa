@@ -187,6 +187,9 @@ CREATE table customer_model_relation(
 	update_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '更新时间',
 	PRIMARY KEY (id) using BTREE
 ) ENGINE = innodb default charset=utf8 comment='大客户-好利产品型号对照表';
+-- 质检不合格原因
+alter table inspect_history add column reasons varchar(1024) not null default '[]' comment '不合格原因列表';
+alter table spray_inspect_history add column reasons varchar(1024) not null default '[]' comment '不合格原因列表';
 
 
 

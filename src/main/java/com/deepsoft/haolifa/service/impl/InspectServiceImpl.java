@@ -14,20 +14,10 @@ import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.*;
-import com.deepsoft.haolifa.model.InspectHistoryDto;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.Accessory;
-import com.deepsoft.haolifa.model.dto.BaseException;
-import com.deepsoft.haolifa.model.dto.HistoryInfo;
-import com.deepsoft.haolifa.model.dto.InspectDTO;
-import com.deepsoft.haolifa.model.dto.InspectItemDTO;
-import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
-import com.deepsoft.haolifa.model.dto.InspectResDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.InspectService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
-import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -270,6 +260,13 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (model.getQualifiedNumber() + model.getUnqualifiedNumber() != model.getTestNumber()) {
             return ResultBean.error(ResponseEnum.INSPECT_RECORD_DATA_ERROR);
         }
+        boolean isEmpty = CollectionUtils.isEmpty(model.getReasonList());
+        if (model.getUnqualifiedNumber() > 0 && isEmpty) {
+            return ResultBean.error(ResponseEnum.INSPECT_UNQUALIFIED_EMPTY_ERROR);
+        }
+        if (!isEmpty) {
+            model.setReasons(JSON.toJSONString(model.getReasonList()));
+        }
         if (!CollectionUtils.isEmpty(model.getAccessoryList())) {
             model.setAccessory(JSON.toJSONString(model.getAccessoryList()));
         }
@@ -290,7 +287,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 if (inspectRecord.getTotalCount() < inspect.getQualifiedNumber()) {
                     throw new BaseException(ResponseEnum.INSPECT_QUALIFIED_NUMBER_ERROR);
                 }
-              inspectMapper.updateByExampleSelective(inspect, example);
+                inspectMapper.updateByExampleSelective(inspect, example);
                 PurchaseOrderExample orderExample = new PurchaseOrderExample();
                 orderExample.createCriteria().andPurchaseOrderNoEqualTo(inspectRecord.getPurchaseNo());
                 List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(orderExample);
@@ -298,10 +295,10 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                     PurchaseOrder purchaseOrder = purchaseOrders.get(0);
                     PurchaseOrder order = new PurchaseOrder();
                     order.setQualifiedNumber(purchaseOrder.getQualifiedNumber() + model.getQualifiedNumber());
-                    if(purchaseOrder.getTotalCount() < order.getQualifiedNumber()) {
-                      throw new BaseException(PURCHASE_PRO_INSPECT_NUM_ERROR);
+                    if (purchaseOrder.getTotalCount() < order.getQualifiedNumber()) {
+                        throw new BaseException(PURCHASE_PRO_INSPECT_NUM_ERROR);
                     }
-                    purchaseOrderMapper.updateByExampleSelective(order,orderExample);
+                    purchaseOrderMapper.updateByExampleSelective(order, orderExample);
                 }
             }
         }
@@ -341,6 +338,11 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 BeanUtils.copyProperties(histories.get(i), dto);
                 if (StringUtils.isNotEmpty(histories.get(i).getAccessory())) {
                     dto.setAccessoryList(JSON.parseArray(dto.getAccessory(), Accessory.class));
+                }
+                if (StringUtils.isNotEmpty(histories.get(i).getReasons())) {
+                    dto.setReasonList(JSON.parseArray(dto.getReasons(), InspectReason.class));
+                } else if (dto.getUnqualifiedNumber() > 0) {
+                    dto.setReasonList(Arrays.asList(new InspectReason(dto.getRemark(), dto.getUnqualifiedNumber())));
                 }
                 inspectHistoryDtos.add(dto);
             }

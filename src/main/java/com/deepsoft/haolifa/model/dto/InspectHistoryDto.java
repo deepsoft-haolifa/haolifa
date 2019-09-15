@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model;
+package com.deepsoft.haolifa.model.dto;
 
 import com.deepsoft.haolifa.model.domain.InspectHistory;
 import com.deepsoft.haolifa.model.dto.Accessory;
@@ -13,4 +13,6 @@ import lombok.ToString;
 public class InspectHistoryDto extends InspectHistory {
 
   private List<Accessory> accessoryList;
+
+  private List<InspectReason> reasonList;
 }

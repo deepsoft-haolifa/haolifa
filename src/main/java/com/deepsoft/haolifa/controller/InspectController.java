@@ -1,14 +1,8 @@
 package com.deepsoft.haolifa.controller;
 
 
-import com.deepsoft.haolifa.model.InspectHistoryDto;
-import com.deepsoft.haolifa.model.domain.InspectHistory;
+import com.deepsoft.haolifa.model.dto.InspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
-import com.deepsoft.haolifa.model.dto.InspectItemDTO;
-import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
-import com.deepsoft.haolifa.model.dto.InspectListDTO;
-import com.deepsoft.haolifa.model.dto.InspectResDTO;
-import com.deepsoft.haolifa.model.dto.InspectUpdateDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.InspectService;
 import io.swagger.annotations.Api;
@@ -16,9 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = {"零件送检管理"})
 @RestController

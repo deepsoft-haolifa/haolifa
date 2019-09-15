@@ -1,13 +1,9 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper;
-import com.deepsoft.haolifa.dao.repository.ProInspectResultMapper;
-import com.deepsoft.haolifa.dao.repository.ProInspectUnqualifiedMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.BaseException;
@@ -15,13 +11,9 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectConditionDTO;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectListDTO;
-import com.deepsoft.haolifa.model.dto.proInspect.ProInspectReason;
+import com.deepsoft.haolifa.model.dto.InspectReason;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectRecordDTO;
-import com.deepsoft.haolifa.model.dto.proInspect.ProInspectResDTO;
-import com.deepsoft.haolifa.model.dto.proInspect.ProInspectUnqualifiedDTO;
-import com.deepsoft.haolifa.service.ProInspectResultService;
 import com.deepsoft.haolifa.service.ProInspectService;
-import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import java.util.Arrays;
@@ -55,7 +47,7 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
       if (CollectionUtils.isEmpty(model.getUnqualifiedList())) {
         return ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_IS_EMPTY);
       } else {
-        Integer needCount = model.getUnqualifiedList().stream().map(ProInspectReason::getNumber).reduce(0, (a, b) -> a + b);
+        Integer needCount = model.getUnqualifiedList().stream().map(InspectReason::getNumber).reduce(0, (a, b) -> a + b);
         if (needCount != model.getUnqualifiedNumber()) {
           return ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY);
         }
@@ -98,7 +90,7 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
       if (CollectionUtils.isEmpty(model.getUnqualifiedList())) {
         return ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_IS_EMPTY);
       } else {
-        int needCOunt = model.getUnqualifiedList().stream().map(ProInspectReason::getNumber).reduce(0, (a, b) -> a + b);
+        int needCOunt = model.getUnqualifiedList().stream().map(InspectReason::getNumber).reduce(0, (a, b) -> a + b);
         if (needCOunt != model.getUnqualifiedNumber()) {
           ResultBean.error(ResponseEnum.UNQUALIFIED_REASON_NUMBER_NO_CONSISTENCY);
         }
@@ -142,10 +134,10 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
         proInspectListDTO.setAccessoryList(JSON.parseArray(result.get(i).getAccessory(), Accessory.class));
       }
       if (result.get(i).getReason().startsWith("[")) {
-        proInspectListDTO.setReasonList(JSON.parseArray(result.get(i).getReason(), ProInspectReason.class));
+        proInspectListDTO.setReasonList(JSON.parseArray(result.get(i).getReason(), InspectReason.class));
       }
       if (CollectionUtils.isEmpty(proInspectListDTO.getReasonList()) && result.get(i).getUnqualifiedNumber() > 0) {
-        ProInspectReason proInspectReason = new ProInspectReason();
+        InspectReason proInspectReason = new InspectReason();
         proInspectReason.setReason(result.get(i).getReason());
         proInspectReason.setNumber(result.get(i).getUnqualifiedNumber());
         proInspectListDTO.setReasonList(Arrays.asList(proInspectReason));

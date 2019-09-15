@@ -1345,6 +1345,76 @@ public class InspectHistoryExample {
             addCriterion("accessory not between", value1, value2, "accessory");
             return (Criteria) this;
         }
+
+        public Criteria andReasonsIsNull() {
+            addCriterion("reasons is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsIsNotNull() {
+            addCriterion("reasons is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsEqualTo(String value) {
+            addCriterion("reasons =", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotEqualTo(String value) {
+            addCriterion("reasons <>", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsGreaterThan(String value) {
+            addCriterion("reasons >", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsGreaterThanOrEqualTo(String value) {
+            addCriterion("reasons >=", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsLessThan(String value) {
+            addCriterion("reasons <", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsLessThanOrEqualTo(String value) {
+            addCriterion("reasons <=", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsLike(String value) {
+            addCriterion("reasons like", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotLike(String value) {
+            addCriterion("reasons not like", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsIn(List<String> values) {
+            addCriterion("reasons in", values, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotIn(List<String> values) {
+            addCriterion("reasons not in", values, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsBetween(String value1, String value2) {
+            addCriterion("reasons between", value1, value2, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotBetween(String value1, String value2) {
+            addCriterion("reasons not between", value1, value2, "reasons");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

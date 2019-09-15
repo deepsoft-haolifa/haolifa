@@ -22,6 +22,7 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="reasons" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -85,7 +86,8 @@
   <sql id="Base_Column_List" >
     id, purchase_no, inspect_no, batch_number, material_graph_no, material_graph_name, 
     test_number, qualified_number, unqualified_number, handling_suggestion, purchase_price, 
-    remark, status, type, supplier_name, supplier_no, create_time, update_time, accessory
+    remark, status, type, supplier_name, supplier_no, create_time, update_time, accessory, 
+    reasons
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.InspectHistoryExample" >
     select
@@ -124,14 +126,14 @@
       handling_suggestion, purchase_price, remark, 
       status, type, supplier_name, 
       supplier_no, create_time, update_time, 
-      accessory)
+      accessory, reasons)
     values (#{id,jdbcType=INTEGER}, #{purchaseNo,jdbcType=VARCHAR}, #{inspectNo,jdbcType=VARCHAR}, 
       #{batchNumber,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
       #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
       #{handlingSuggestion,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{supplierName,jdbcType=VARCHAR}, 
       #{supplierNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{accessory,jdbcType=VARCHAR})
+      #{accessory,jdbcType=VARCHAR}, #{reasons,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.InspectHistory" >
     insert into inspect_history
@@ -193,6 +195,9 @@
       <if test="accessory != null" >
         accessory,
       </if>
+      <if test="reasons != null" >
+        reasons,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -251,6 +256,9 @@
       </if>
       <if test="accessory != null" >
         #{accessory,jdbcType=VARCHAR},
+      </if>
+      <if test="reasons != null" >
+        #{reasons,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -320,6 +328,9 @@
       <if test="record.accessory != null" >
         accessory = #{record.accessory,jdbcType=VARCHAR},
       </if>
+      <if test="record.reasons != null" >
+        reasons = #{record.reasons,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -345,7 +356,8 @@
       supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      accessory = #{record.accessory,jdbcType=VARCHAR}
+      accessory = #{record.accessory,jdbcType=VARCHAR},
+      reasons = #{record.reasons,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -407,6 +419,9 @@
       <if test="accessory != null" >
         accessory = #{accessory,jdbcType=VARCHAR},
       </if>
+      <if test="reasons != null" >
+        reasons = #{reasons,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -429,7 +444,8 @@
       supplier_no = #{supplierNo,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      accessory = #{accessory,jdbcType=VARCHAR}
+      accessory = #{accessory,jdbcType=VARCHAR},
+      reasons = #{reasons,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

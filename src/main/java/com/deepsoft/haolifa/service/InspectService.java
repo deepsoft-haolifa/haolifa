@@ -1,16 +1,10 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.InspectHistoryDto;
-import com.deepsoft.haolifa.model.domain.InspectHistory;
+import com.deepsoft.haolifa.model.dto.InspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
-import com.deepsoft.haolifa.model.dto.InspectItemDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
-import com.deepsoft.haolifa.model.dto.InspectListDTO;
 import com.deepsoft.haolifa.model.dto.InspectResDTO;
-import com.deepsoft.haolifa.model.dto.InspectUpdateDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-
-import java.util.List;
 
 public interface InspectService {
 
