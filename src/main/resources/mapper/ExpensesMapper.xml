@@ -337,4 +337,13 @@
       voucher_no = #{voucherNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="getClassify" resultMap="reportMap" parameterType="java.lang.Integer">
+   select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by expenses_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+  </select>
+    <select id="classifyByDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
+   select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by expenses_classify,department
+  </select>
+    <select id="classifyBySecondDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
+   select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by second_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+  </select>
 </mapper>
