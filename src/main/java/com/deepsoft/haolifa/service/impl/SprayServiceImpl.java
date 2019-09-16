@@ -226,23 +226,30 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         if (inspectDto.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
+        // 不合格原因
+        SprayInspectHistory history = new SprayInspectHistory();
+        BeanUtils.copyProperties(inspectDto, history);
+        boolean isEmpty = CollectionUtils.isEmpty(inspectDto.getReasonList());
+        if (!isEmpty) {
+            int unqualifiedNum = inspectDto.getReasonList().stream().map(InspectReason::getNumber).reduce(0, (a, b) -> a + b);
+            inspectDto.setUnqualifiedNumber(unqualifiedNum);
+            history.setUnqualifiedNumber(unqualifiedNum);
+            history.setReasons(JSON.toJSONString(inspectDto.getReasonList()));
+        } else {
+            inspectDto.setUnqualifiedNumber(0);
+            history.setUnqualifiedNumber(0);
+        }
+
         if (inspectDto.getQualifiedNumber() + inspectDto.getUnqualifiedNumber() != inspectDto.getTestNumber()) {
             return ResultBean.error(ResponseEnum.INSPECT_RECORD_DATA_ERROR);
         }
-        boolean isEmpty = CollectionUtils.isEmpty(inspectDto.getReasonList());
-        if (inspectDto.getUnqualifiedNumber() > 0 && isEmpty) {
-            return ResultBean.error(ResponseEnum.INSPECT_UNQUALIFIED_EMPTY_ERROR);
-        }
-        SprayInspectHistory history = new SprayInspectHistory();
-        BeanUtils.copyProperties(inspectDto, history);
+
+
         // 质检附件
         if (!CollectionUtils.isEmpty(inspectDto.getAccessoryList())) {
             history.setAccessory(JSON.toJSONString(inspectDto.getAccessoryList()));
         }
-        // 不合格原因
-        if (!isEmpty) {
-            history.setReasons(JSON.toJSONString(inspectDto.getReasonList()));
-        }
+
         SprayExample example = new SprayExample();
         example.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
         List<Spray> sprays = sprayMapper.selectByExample(example);

@@ -257,15 +257,17 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (model.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
+        // 计算不合格数
+        boolean isEmpty = CollectionUtils.isEmpty(model.getReasonList());
+        if (!isEmpty) {
+            int unqualifiedNum = model.getReasonList().stream().map(InspectReason::getNumber).reduce(0, (a, b) -> a + b);
+            model.setUnqualifiedNumber(unqualifiedNum);
+            model.setReasons(JSON.toJSONString(model.getReasonList()));
+        } else {
+            model.setUnqualifiedNumber(0);
+        }
         if (model.getQualifiedNumber() + model.getUnqualifiedNumber() != model.getTestNumber()) {
             return ResultBean.error(ResponseEnum.INSPECT_RECORD_DATA_ERROR);
-        }
-        boolean isEmpty = CollectionUtils.isEmpty(model.getReasonList());
-        if (model.getUnqualifiedNumber() > 0 && isEmpty) {
-            return ResultBean.error(ResponseEnum.INSPECT_UNQUALIFIED_EMPTY_ERROR);
-        }
-        if (!isEmpty) {
-            model.setReasons(JSON.toJSONString(model.getReasonList()));
         }
         if (!CollectionUtils.isEmpty(model.getAccessoryList())) {
             model.setAccessory(JSON.toJSONString(model.getAccessoryList()));
