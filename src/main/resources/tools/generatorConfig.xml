@@ -88,9 +88,9 @@
     <table tableName="customer_graph_no" domainObjectName="CustomerGraphNo">
     <generatedKey column="id" sqlStatement="MySql" identity="true"/>
     </table>
-    <table tableName="graph_no_rel" domainObjectName="GraphNoRel">
-      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-    </table>
+    <!--<table tableName="graph_no_rel" domainObjectName="GraphNoRel">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
 
     <!--<table tableName="flow" domainObjectName="Flow"></table>-->
 
