@@ -75,7 +75,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private EntrustService entrustService;
     @Autowired
     private GraphNoRelService graphNoRelService;
-
+    @Autowired
+    private CustomerModelRelationService customerModelRelationService;
     @Lazy
     @Autowired
     FlowInstanceService flowInstanceService;
@@ -540,6 +541,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     }
                 }
             }
+
+            if (StringUtils.isBlank(orderContractNo)) {
+                throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，平台编号不能为空");
+            }
             // 判断订单号在系统中是否存在
             OrderProductExample orderProductExample = new OrderProductExample();
             OrderProductExample.Criteria criteria = orderProductExample.createCriteria();
@@ -599,6 +604,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     // 第一列，产品Id[DSb7A1X3N-10Q-DN50]
                     Cell cell1 = row.getCell(1);
                     orderProductAssociate.setProductNo(getCellValue(cell1));
+                    if (Objects.isNull(getCellValue(cell1))) {
+                        throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，产品ID不能为空");
+                    }
                     // 第二列，产品名称[手柄对夹密封型中线垂直板蝶阀]
                     Cell cell2 = row.getCell(2);
                     orderProductAssociate.setProductName(getCellValue(cell2));
@@ -614,6 +622,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     // 第四列，规格[DN50]
                     Cell cell4 = row.getCell(4);
                     orderProductAssociate.setSpecifications(getCellValue(cell4));
+                    if (Objects.isNull(getCellValue(cell4))) {
+                        throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，规格不能为空");
+                    }
                     // 第五列，颜色[蓝色(RAL5010)]
                     Cell cell5 = row.getCell(5);
                     orderProductAssociate.setProductColor(getCellValue(cell5));
@@ -621,6 +632,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     Cell cell6 = row.getCell(6);
                     String cellValue6 = getCellValue(cell6);
                     orderProductAssociate.setProductNumber(Integer.valueOf(cellValue6));
+                    if (Objects.isNull(getCellValue(cell6))) {
+                        throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，数量不能为空");
+                    }
                     // 第7列，单价
                     Cell cell7 = row.getCell(7);
                     String cellValue7 = getCellValue(cell7);
@@ -629,6 +643,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             cellValue7 = cellValue7.replaceAll("￥", "");
                         }
                         orderProductAssociate.setPrice(new BigDecimal(cellValue7));
+                    } else {
+                        throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，单价不能为空");
                     }
                     // 第8列，合计
                     Cell cell8 = row.getCell(8);
@@ -773,6 +789,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         return ResultBean.success(insert);
     }
 
+    public static void main(String[] args) {
+
+    }
 
     @Override
     public ResultBean updateOrderInfo(OrderUpdateDTO orderUpdateDTO) {
@@ -975,9 +994,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         int indexOf = productNo.indexOf("-");
         String fati = "", fatiyali = "", faban = "", fazuo = "";
         String fatiGroup = productNo.substring(indexOf + 1, lastIndexOf);
-        fatiyali = fatiGroup.substring(0, 2);
-        fati = fatiGroup.substring(2, fatiGroup.length());
-
+        int fatiGroupLength = fatiGroup.length();
+        if (fatiGroup.contains("150LB")) {
+            fatiyali = fatiGroup.substring(0, 5);
+            fati = fatiGroup.substring(5, fatiGroupLength);
+        } else if (fatiGroup.contains("10K")) {
+            fatiyali = fatiGroup.substring(0, 3);
+            fati = fatiGroup.substring(3, fatiGroupLength);
+        } else {
+            fatiyali = fatiGroup.substring(0, 2);
+            fati = fatiGroup.substring(2, fatiGroupLength);
+        }
         String fabanRule = productNo.substring(indexOf - 1, indexOf);
         // 判断- 前一位，是否是a,b,d,L。如果是，说明阀板是两位英文，否则是一位
         String[] fabanRules = new String[]{"a", "b", "d", "L"};
@@ -1038,6 +1065,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<Material> fatiMaterialList = materialService
                 .getListByMultiModelAndSpec(CommonEnum.ProductModelType.FATI.classifyId, smallModel, specifications);
         if (fatiMaterialList != null && fatiMaterialList.size() > 0) {
+            // 去除尾部带数字的阀体图号
+            fatiMaterialList = fatiMaterialList.stream().filter(e -> e.getGraphNo().endsWith("M") || e.getGraphNo().endsWith("J") || e.getGraphNo().endsWith("B")).collect(Collectors.toList());
             for (Material e : fatiMaterialList) {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
@@ -1067,9 +1096,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             }
         }
         // 如果没有符合规则的阀体，则把型号，规则找到的阀体，展示出来
-        if (CollectionUtils.isEmpty(fatiCollect) && !CollectionUtils.isEmpty(fatiCollectEmpty)) {
-            fatiCollect.addAll(fatiCollectEmpty);
-        }
+//        if (CollectionUtils.isEmpty(fatiCollect) && !CollectionUtils.isEmpty(fatiCollectEmpty)) {
+//            fatiCollect.addAll(fatiCollectEmpty);
+//        }
 
         // 阀座图号列表
         List<Material> fazuoMaterialList = materialService

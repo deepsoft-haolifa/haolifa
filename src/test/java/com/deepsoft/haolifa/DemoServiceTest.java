@@ -209,11 +209,11 @@ public class DemoServiceTest extends BaseApplicationTests {
                     // 毛坯价
                     Cell cell18 = row.getCell(18);
                     String  blankCost= getCellValue(cell18);
-                    setBlankCost(blankCost);
+//                    setBlankCost(blankCost);
                     // 机加
                     Cell cell19 = row.getCell(19);
                     String  processCost= getCellValue(cell19);
-                    setProcessCost(processCost);
+//                    setProcessCost(processCost);
                 }};
                 priceMaterialService.saveInfo(priceMaterial);
             }
