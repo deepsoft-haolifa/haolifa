@@ -1351,13 +1351,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
                         if (currentQuantity < materialCount) {
                             //查询正在机加工的数量
-                            int jingCount = entrustService.obtainEntrustNumber(graphNoWithM);
-                            currentQuantityWithJ = currentQuantityWithJ + jingCount;
-                            currentQuantity += currentQuantityWithJ;
+                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM);
+                            currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
+                            currentQuantity += jijiaCount;
                             log.info(
                                     "checkMaterial fati check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},jijiagong:{},"
                                             + "quantity:{}",
-                                    orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jingCount, currentQuantity);
+                                    orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jijiaCount, currentQuantity);
                             // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
                             if (currentQuantity < materialCount) {
                                 materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
@@ -1409,13 +1409,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         if (currentQuantity < materialCount) {
                             graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("0M");
                             //查询正在机加工的数量
-                            int jingCount = entrustService.obtainEntrustNumber(graphNoWithM);
-                            currentQuantityWithJ = currentQuantityWithJ + jingCount;
-                            currentQuantity += jingCount;
+                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM);
+                            currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
+                            currentQuantity += jijiaCount;
                             log.info(
                                     "checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},jijiagong:{},"
                                             + "quantity:{}",
-                                    orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jingCount, currentQuantity);
+                                    orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jijiaCount, currentQuantity);
                             // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
                             if (currentQuantity < materialCount) {
                                 materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
