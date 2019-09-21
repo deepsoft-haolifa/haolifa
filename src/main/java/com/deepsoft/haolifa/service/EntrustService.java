@@ -56,6 +56,11 @@ public interface EntrustService {
      */
     ResultBean allotEntrust(AllotEntrustDTO allotEntrustDTO);
 
+    /**
+     * 获取正在机加工的数量（排除机加工已入库的数据）
+     * @param materialGraphNo
+     * @return
+     */
     int obtainEntrustNumber(String materialGraphNo);
 
     ResultBean updateInspectStatus(String entrustNo, Integer status);

@@ -377,4 +377,21 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         historyMapper.updateByPrimaryKeySelective(inspectHistory);
         return ResultBean.success(1);
     }
+
+    @Override
+    public List<InspectHistory> historyList(List<String> inspectNo, Byte status, Byte type) {
+        InspectHistoryExample historyExample = new InspectHistoryExample();
+        InspectHistoryExample.Criteria criteria = historyExample.createCriteria();
+        if (!CollectionUtils.isEmpty(inspectNo)) {
+            criteria.andInspectNoIn(inspectNo);
+        }
+        if (status != null && status > 0) {
+            criteria.andStatusEqualTo(status);
+        }
+        if (type != null && type > 0) {
+            criteria.andTypeEqualTo(type);
+        }
+        List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
+        return histories;
+    }
 }

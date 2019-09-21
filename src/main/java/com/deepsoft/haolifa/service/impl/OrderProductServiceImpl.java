@@ -1327,8 +1327,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         // 先核带B的，需要将图号转换成QaEa,
                         graphNoWithB = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00B").replaceAll("00Qa", "QaEa");
                         // 如果机加工，毛坯图号 需要将QaEa转换成00Qa
-                        graphNoWithJ = graphNo.replaceAll("QaEa", "00Qa");
-                        graphNoWithM = graphNo.replaceAll("QaEa", "00Qa");
+                        graphNoWithJ = graphNoWithJ.replaceAll("QaEa", "00Qa");
+                        graphNoWithM = graphNoWithM.replaceAll("QaEa", "00Qa");
                         materialInfoWithB = materialService.getInfoByGraphNo(graphNoWithB);
                         currentQuantityWithB = materialInfoWithB != null ? materialInfoWithB.getCurrentQuantity() : 0;
                         currentQuantity += currentQuantityWithB;
