@@ -8,27 +8,36 @@ import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
 
 public interface SprayService {
 
-  ResultBean save(SprayDto sprayDto);
+    ResultBean save(SprayDto sprayDto);
 
-  ResultBean delete(String sprayNo);
+    ResultBean delete(String sprayNo);
 
-  ResultBean update(SprayDto sprayDto);
+    ResultBean update(SprayDto sprayDto);
 
-  ResultBean getSprayInfo(String sprayNo);
+    ResultBean getSprayInfo(String sprayNo);
 
-  ResultBean forms(SprayListDto listDto);
+    ResultBean forms(SprayListDto listDto);
 
-  ResultBean updateStatus(String sprayNo, int status);
+    ResultBean updateStatus(String sprayNo, int status);
 
-  ResultBean getInspectList(String sprayNo);
+    ResultBean getInspectList(String sprayNo);
 
-  ResultBean getItemsList(String sprayNo);
+    ResultBean getItemsList(String sprayNo);
 
-  ResultBean saveInspect(SprayInspectDto inspectDto);
+    ResultBean saveInspect(SprayInspectDto inspectDto);
 
-  ResultBean getInspectToRooms(SprayInspectListDto inspectListDto);
+    ResultBean getInspectToRooms(SprayInspectListDto inspectListDto);
 
-  ResultBean updateHistoryStatus(Integer historyId);
+    ResultBean updateHistoryStatus(Integer historyId);
 
-  ResultBean updateInspectStatus(String sprayNo, int status);
+    ResultBean updateInspectStatus(String sprayNo, int status);
+
+
+    /**
+     * 获取正在喷涂的数量（除去已经入库的数量）
+     *
+     * @param materialGraphNo
+     * @return
+     */
+    int obtainNumber(String materialGraphNo);
 }

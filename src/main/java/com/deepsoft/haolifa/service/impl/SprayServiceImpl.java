@@ -306,4 +306,17 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         sprayMapper.updateByExampleSelective(spray, example);
         return ResultBean.success(1);
     }
+
+    @Override
+    public int obtainNumber(String materialGraphNo) {
+        if (StringUtils.isBlank(materialGraphNo)) {
+            return 0;
+        }
+        // 根据 material_graph_no  获取 spray_item 表中 spray_no
+        SprayItemExample example = new SprayItemExample();
+        SprayItemExample.Criteria criteria = example.createCriteria();
+        criteria.andMaterialNotEqualTo(materialGraphNo);
+        List<SprayItem> sprayItems = sprayItemMapper.selectByExample(example);
+        return 0;
+    }
 }
