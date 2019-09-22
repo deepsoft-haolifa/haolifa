@@ -1,38 +1,18 @@
 package com.deepsoft.haolifa.service.impl;
 
-import static com.deepsoft.haolifa.constant.CacheKey.SPRAY_NO_KEY;
-import static com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status.handling;
-import static com.deepsoft.haolifa.constant.CommonEnum.SprayStatus.SPRAY_MACHINE;
-import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.SPRAY_NO_PREFIX_PT;
-
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
+import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.SprayItemMapper;
 import com.deepsoft.haolifa.dao.repository.SprayMapper;
-import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
-import com.deepsoft.haolifa.model.domain.Spray;
-import com.deepsoft.haolifa.model.domain.SprayExample;
-import com.deepsoft.haolifa.model.domain.SprayItem;
-import com.deepsoft.haolifa.model.domain.SprayItemExample;
-import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
-import com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample;
+import com.deepsoft.haolifa.dao.repository.extend.SparyExtendMapper;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
-import com.deepsoft.haolifa.model.dto.spray.SprayDto;
-import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
-import com.deepsoft.haolifa.model.dto.spray.SprayInspectHistoryDto;
-import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
-import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
-import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
+import com.deepsoft.haolifa.model.dto.spray.*;
 import com.deepsoft.haolifa.service.SprayService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -43,6 +23,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.deepsoft.haolifa.constant.CacheKey.SPRAY_NO_KEY;
+import static com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status.handling;
+import static com.deepsoft.haolifa.constant.CommonEnum.SprayStatus.SPRAY_MACHINE;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.SPRAY_NO_PREFIX_PT;
+
 @Service
 public class SprayServiceImpl extends BaseService implements SprayService {
 
@@ -52,6 +42,8 @@ public class SprayServiceImpl extends BaseService implements SprayService {
 
     @Autowired
     private SprayItemMapper sprayItemMapper;
+    @Autowired
+    private SparyExtendMapper sparyExtendMapper;
 
     @Autowired
     private SprayInspectHistoryMapper inspectHistoryMapper;
@@ -309,14 +301,29 @@ public class SprayServiceImpl extends BaseService implements SprayService {
 
     @Override
     public int obtainNumber(String materialGraphNo) {
+        int number = 0;
         if (StringUtils.isBlank(materialGraphNo)) {
-            return 0;
+            return number;
         }
-        // 根据 material_graph_no  获取 spray_item 表中 spray_no
-        SprayItemExample example = new SprayItemExample();
-        SprayItemExample.Criteria criteria = example.createCriteria();
-        criteria.andMaterialNotEqualTo(materialGraphNo);
-        List<SprayItem> sprayItems = sprayItemMapper.selectByExample(example);
-        return 0;
+        // 根据 material_graph_no  获取 spray_item 表中 spray_no,然后在查出状态为 加工中和质检完成的spray
+        List<Spray> sprays = sparyExtendMapper.obtainNumber(materialGraphNo);
+
+        if (!CollectionUtils.isEmpty(sprays)) {
+            number = sprays.stream().map(Spray::getTotalNumber).reduce(0, (a, b) -> a + b);
+            if (number > 0) {
+                // 获取 喷涂历史记录的合格数量
+                List<String> noList = sprays.stream().map(Spray::getSprayNo).collect(Collectors.toList());
+                SprayInspectHistoryExample example = new SprayInspectHistoryExample();
+                example.or().andSprayNoIn(noList).andStatusEqualTo(CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code);
+                List<SprayInspectHistory> sprayInspectHistories = inspectHistoryMapper.selectByExample(example);
+                if (!CollectionUtils.isEmpty(sprayInspectHistories)) {
+                    // 已经入库的数量
+                    Integer storeCount = sprayInspectHistories.stream().map(SprayInspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
+                    // 正在喷涂的数据，需要减去已经入库的数量
+                    number = number - storeCount;
+                }
+            }
+        }
+        return number;
     }
 }

@@ -216,11 +216,10 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
             if (CollectionUtils.isEmpty(inspectHistories)) {
                 // 已经入库的数量
                 Integer storeCount = inspectHistories.stream().map(InspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
-                // 正在机加工的数据，需要减去已经入口的数量
+                // 正在机加工的数据，需要减去已经入库的数量
                 number = number - storeCount;
             }
         }
-
         return number;
     }
 

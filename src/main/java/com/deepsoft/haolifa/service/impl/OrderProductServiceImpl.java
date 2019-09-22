@@ -74,6 +74,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private EntrustService entrustService;
     @Autowired
+    private SprayService sprayService;
+    @Autowired
     private GraphNoRelService graphNoRelService;
     @Autowired
     private CustomerModelRelationService customerModelRelationService;
@@ -1416,24 +1418,36 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                     "checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},jijiagong:{},"
                                             + "quantity:{}",
                                     orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jijiaCount, currentQuantity);
-                            // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
                             if (currentQuantity < materialCount) {
-                                materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
-                                if (materialInfoWithM != null) {
-                                    currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
-                                } else {
-                                    materialInfoWithM = new Material();
-                                    materialInfoWithM.setName("蝶板毛坯（系统中暂无）");
-                                }
-                                currentQuantity += currentQuantityWithM;
+                                // 正在喷涂的数量，通过机加工图号查询
+                                int sprayCount = sprayService.obtainNumber(graphNoWithJ);
+                                currentQuantityWithJ = currentQuantityWithJ + sprayCount;
+                                currentQuantity += sprayCount;
                                 log.info(
-                                        "checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},"
-                                                + "quantity:{}",
-                                        orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
+                                        "checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},jijiagong:{},"
+                                                + "spray:{},quantity:{}",
+                                        orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jijiaCount, sprayCount, currentQuantity);
+                                // 如果库存中机加工和正在机加工和正在喷涂的数量还小于要求的数量，查询库存中带M的库存
                                 if (currentQuantity < materialCount) {
-                                    lackMaterialCount = materialCount - currentQuantity;
+                                    materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
+                                    if (materialInfoWithM != null) {
+                                        currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                                    } else {
+                                        materialInfoWithM = new Material();
+                                        materialInfoWithM.setName("蝶板毛坯（系统中暂无）");
+                                    }
+                                    currentQuantity += currentQuantityWithM;
+                                    log.info(
+                                            "checkMaterial faban check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},"
+                                                    + "quantity:{}",
+                                            orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
+                                    if (currentQuantity < materialCount) {
+                                        lackMaterialCount = materialCount - currentQuantity;
+                                    } else {
+                                        currentQuantityWithM = materialCount - currentQuantityWithJ - currentQuantityWithNum;
+                                    }
                                 } else {
-                                    currentQuantityWithM = materialCount - currentQuantityWithJ - currentQuantityWithNum;
+                                    currentQuantityWithJ = materialCount - currentQuantityWithNum;
                                 }
                             } else {
                                 currentQuantityWithJ = materialCount - currentQuantityWithNum;
