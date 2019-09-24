@@ -78,7 +78,8 @@ public class CommonEnum {
         REJECT_MATERIAL_HANDLED_NUMBER_ERROR("4017", "不合格品未进行全部处理"),
         ORDER_PRO_INSPECT_NUM_ERROR("4018", "检验合格数已超出订单总数量"),
         PURCHASE_PRO_INSPECT_NUM_ERROR("4019", "检验合格数已超出采购总数量"),
-        INSPECT_UNQUALIFIED_EMPTY_ERROR("4020", "不合格原因不能为空");
+        INSPECT_UNQUALIFIED_EMPTY_ERROR("4020", "不合格原因不能为空"),
+        PAY_TOTAL_COUNT_ERROR("4021", "首付款总金额不能大于合同总金额");
 
         public final String code;
 

@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.constant.CommonEnum.StorageType;
 import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -206,6 +207,11 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     // 保证数量是正数
     model.setQuantity(Math.abs(model.getQuantity()));
     final String materialGraphNo = model.getMaterialGraphNo();
+    // 校验库中是否存在该零件号
+    Material material = materialService.getInfoByGraphNo(materialGraphNo);
+    if(material == null) {
+      throw new BaseException(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_NOT_EXIST);
+    }
     // 如果不传入批次号，就给个默认批次号
     if (StringUtils.isBlank(model.getMaterialBatchNo())) {
       String pcTime = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));

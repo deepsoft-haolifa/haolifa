@@ -10,6 +10,8 @@ public class PaymentManagement {
 
     private Date payTime;
 
+    private String invoiceNo;
+
     private String orderNo;
 
     private Integer createUserId;
@@ -18,10 +20,11 @@ public class PaymentManagement {
 
     private Date updateTime;
 
-    public PaymentManagement(Integer id, BigDecimal amount, Date payTime, String orderNo, Integer createUserId, Date createTime, Date updateTime) {
+    public PaymentManagement(Integer id, BigDecimal amount, Date payTime, String invoiceNo, String orderNo, Integer createUserId, Date createTime, Date updateTime) {
         this.id = id;
         this.amount = amount;
         this.payTime = payTime;
+        this.invoiceNo = invoiceNo;
         this.orderNo = orderNo;
         this.createUserId = createUserId;
         this.createTime = createTime;
@@ -54,6 +57,14 @@ public class PaymentManagement {
 
     public void setPayTime(Date payTime) {
         this.payTime = payTime;
+    }
+
+    public String getInvoiceNo() {
+        return invoiceNo;
+    }
+
+    public void setInvoiceNo(String invoiceNo) {
+        this.invoiceNo = invoiceNo == null ? null : invoiceNo.trim();
     }
 
     public String getOrderNo() {

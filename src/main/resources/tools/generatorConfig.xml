@@ -216,7 +216,7 @@
     <generatedKey column="id" sqlStatement="MySql" identity="true"/>
     </table>-->
     <!--<table tableName="expenses_classify" domainObjectName="ExpensesClassify"></table>-->
-    <!--<table tableName="payment_management" domainObjectName="PaymentManagement"></table>-->
+<!--    <table tableName="payment_management" domainObjectName="PaymentManagement"></table>-->
     <!--<table tableName="contract" domainObjectName="Contract">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->

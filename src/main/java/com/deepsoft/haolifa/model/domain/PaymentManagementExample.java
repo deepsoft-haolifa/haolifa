@@ -286,6 +286,76 @@ public class PaymentManagementExample {
             return (Criteria) this;
         }
 
+        public Criteria andInvoiceNoIsNull() {
+            addCriterion("invoice_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoIsNotNull() {
+            addCriterion("invoice_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoEqualTo(String value) {
+            addCriterion("invoice_no =", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoNotEqualTo(String value) {
+            addCriterion("invoice_no <>", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoGreaterThan(String value) {
+            addCriterion("invoice_no >", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoGreaterThanOrEqualTo(String value) {
+            addCriterion("invoice_no >=", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoLessThan(String value) {
+            addCriterion("invoice_no <", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoLessThanOrEqualTo(String value) {
+            addCriterion("invoice_no <=", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoLike(String value) {
+            addCriterion("invoice_no like", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoNotLike(String value) {
+            addCriterion("invoice_no not like", value, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoIn(List<String> values) {
+            addCriterion("invoice_no in", values, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoNotIn(List<String> values) {
+            addCriterion("invoice_no not in", values, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoBetween(String value1, String value2) {
+            addCriterion("invoice_no between", value1, value2, "invoiceNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceNoNotBetween(String value1, String value2) {
+            addCriterion("invoice_no not between", value1, value2, "invoiceNo");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNoIsNull() {
             addCriterion("order_no is null");
             return (Criteria) this;

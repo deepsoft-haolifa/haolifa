@@ -218,5 +218,7 @@ CREATE TABLE `price_material` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零件价格管理表';
 
+alter table payment_management add COLUMN invoice_no varchar(64) default '' comment '发票编号';
+
 
 
