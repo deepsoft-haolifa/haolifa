@@ -974,10 +974,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
      * 根据型号和规格获取原料（阀体，阀板，阀座,阀杆）
      */
     public List<MaterialTypeListDTO> getTypeMaterials(String productNo, String productModel, String specifications) {
-        // 1.获取规格,截取数字，保留四位数，前面补0（DN65=>0065）
-//        String spec = String.format("%04d", Integer.parseInt(specifications.replaceAll("[^0-9]", "")));
         // 成品型号示例（270DD7A1XH-16Q）
-
         // 获取产品类型（D：蝶阀；H：止回阀；）
         String productType = productModel.substring(0, 1);
         String smallModel = "";
@@ -1034,14 +1031,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 final String indexRule = e.getIndexRule();
                 final String materialType = e.getMaterialType();
                 final String productTypeRule = e.getProductType();
-                if (indexRule.equals(fati) && materialType.equals("fati") && productTypeRule.equals(productType)) {
+                if (indexRule.equals(fati) && materialType.equals(CommonEnum.ProductModelType.FATI.code) && productTypeRule.equals(productType)) {
                     fatiModelConfig.add(e.getMaterialGraphNoStr());
-                } else if (indexRule.equals(fatiyali) && materialType.equals("fatiyali") && productTypeRule
+                } else if (indexRule.equals(fatiyali) && materialType.equals(CommonEnum.ProductModelType.FATI_YALI.code) && productTypeRule
                         .equals(productType)) {
                     fatiYaliModelConfig.add(e.getMaterialGraphNoStr());
-                } else if (indexRule.equals(fazuo) && materialType.equals("fazuo") && productTypeRule.equals(productType)) {
+                } else if (indexRule.equals(fazuo) && materialType.equals(CommonEnum.ProductModelType.FAZUO.code) && productTypeRule.equals(productType)) {
                     fazuoModelConfig.add(e.getMaterialGraphNoStr());
-                } else if (indexRule.equals(faban) && materialType.equals("faban") && productTypeRule.equals(productType)) {
+                } else if (indexRule.equals(faban) && materialType.equals(CommonEnum.ProductModelType.FABAN.code) && productTypeRule.equals(productType)) {
                     fabanModelConfig.add(e.getMaterialGraphNoStr());
                 }
             }
@@ -1310,6 +1307,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 List<OrderCheckMaterialDTO> replaceList = new ArrayList<>();
                 OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
                 String graphNo = "", graphNoWithJ = "", graphNoWithM = "", graphNoWithB = "";
+                List<String> graphNoWithJList = new ArrayList<>();
+                List<OrderCheckMaterialDTO> specialResultList = new ArrayList<>();
                 Material materialInfo = null, materialInfoWithJ = null, materialInfoWithM = null, materialInfoWithNum = null, materialInfoWithB = null;
                 int currentQuantity = 0, currentQuantityWithJ = 0, currentQuantityWithM = 0, currentQuantityWithNum = 0, currentQuantityWithB = 0;
 
@@ -1320,11 +1319,27 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 Integer materialCount = materialQuantityDTO.getQuantity();
                 // 获取零件类型（阀体，阀座等）
                 String type = materialQuantityDTO.getType();
+                // region 核料规则
                 // 如果零件类型是阀体，需要查询零件库里面图号带J，带M的库存；
                 if (type.equals(CommonEnum.ProductModelType.FATI.code)) {
                     graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
                     graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00M");
-                    // 如果是止回阀，
+
+                    if (graphNo.endsWith("M")) {
+                        List<GraphNoRel> graphNoRels = graphNoRelService.listByGraphNoM(graphNo);
+                        if (!CollectionUtils.isEmpty(graphNoRels)) {
+                            graphNoWithJList = graphNoRels.stream().map(GraphNoRel::getGraphNoM).collect(Collectors.toList());
+                        }
+                        graphNoWithM = graphNo;
+                    } else if (graphNo.endsWith("J")) {
+                        GraphNoRel graphNoRel = graphNoRelService.listByGraphNoJ(graphNo);
+                        if (null != graphNoRel) {
+                            graphNoWithM = graphNoRel.getGraphNoM();
+                        }
+                    }
+
+
+                    // 如果是止回阀
                     if (graphNo.startsWith(CommonEnum.ProductType.H.code)) {
                         // 先核带B的，需要将图号转换成QaEa,
                         graphNoWithB = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00B").replaceAll("00Qa", "QaEa");
@@ -1336,14 +1351,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         currentQuantity += currentQuantityWithB;
                     }
 
+                    // 如果选择的毛坯图号对应多个机加工图号
+                    if (!CollectionUtils.isEmpty(graphNoWithJList)) {
+                        // 如果一个毛坯件对应多个机加工件，则走这个方法的核料
+                        specialResultList = this.checkMaterialSpecial(graphNoWithJList, graphNoWithM, materialCount);
+                        // 不往下走了，直接走下一个循环
+                        continue;
+                    }
 
-//                    // 如果选择的是带M的图号（需要看下他对应的J的图号是什么）
-//                    if (graphNo.endsWith("M")) {
-//                        List<GraphNoRel> graphNoRels = graphNoRelService.listByGraphNoM(graphNo);
-//                        if(graphNoRels.size()>0){
-//                            // 如果选择的毛坯件有多个机加工件，循环获取多个机加工件的数量
-//                        }
-//                    }
                     if (currentQuantity < materialCount) {
                         materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
                         currentQuantityWithJ = materialInfoWithJ != null ? materialInfoWithJ.getCurrentQuantity() : 0;
@@ -1353,7 +1368,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
                         if (currentQuantity < materialCount) {
                             //查询正在机加工的数量
-                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM);
+                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
                             currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
                             currentQuantity += jijiaCount;
                             log.info(
@@ -1388,6 +1403,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     } else {
                         currentQuantityWithB = materialCount;
                     }
+                    // endregion
+
+
+                    // region 阀板规则
                 } else if (type.equals(CommonEnum.ProductModelType.FABAN.code)) {
                     // 如果零件类型是阀板，需要查询零件里面带数字，带J，带M的库存；
                     //如果选择的阀板不是J和M结尾的，会查一下带数字的库存
@@ -1411,7 +1430,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         if (currentQuantity < materialCount) {
                             graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("0M");
                             //查询正在机加工的数量
-                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM);
+                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
                             currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
                             currentQuantity += jijiaCount;
                             log.info(
@@ -1458,6 +1477,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     } else {
                         currentQuantityWithNum = materialCount;
                     }
+                    // endregion
+
+                    // region 其他料的核料
                 } else {
                     // 如果是其他类型，则按照图号查询；
                     materialInfo = materialService.getInfoByGraphNo(graphNo);
@@ -1466,6 +1488,29 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         lackMaterialCount = materialCount - currentQuantity;
                     } else {
                         currentQuantity = materialCount;
+                    }
+                }
+                // endregion
+
+                // 一个毛坯对应对个机加工件的 核料结果
+                if (!CollectionUtils.isEmpty(specialResultList)) {
+                    for (OrderCheckMaterialDTO checkMaterialDTO : specialResultList) {
+                        if (checkMaterialDTO.getLackMaterialCount() > 0) {
+                            checkResult = "库存不足";
+                            checkStatus = CommonEnum.CheckMaterialStatus.NEED_PURCHASE.code;
+                        } else {
+                            checkResult = "核料成功";
+                            checkStatus = CommonEnum.CheckMaterialStatus.SUCCESS.code;
+                        }
+                        orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+                        orderCheckMaterialDTO.setLackMaterialCount(checkMaterialDTO.getLackMaterialCount());
+                        orderCheckMaterialDTO.setCheckStatus(checkStatus);
+                        orderCheckMaterialDTO.setCheckResultMsg(checkResult);
+                        orderCheckMaterialDTO.setMaterialGraphNo(checkMaterialDTO.getMaterialGraphNo());
+                        orderCheckMaterialDTO.setMaterialName(checkMaterialDTO.getMaterialName());
+                        orderCheckMaterialDTO.setMaterialCount(checkMaterialDTO.getMaterialCount());
+                        orderCheckMaterialDTO.setOrderNo(orderNo);
+                        orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
                     }
                 }
 
@@ -1573,88 +1618,78 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderCheckMaterialDTO.setOrderNo(orderNo);
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
                 }
-
-                // 添加核料日志记录
-//                int finalCheckState = checkStatus;
-//                String finalCheckResult = checkResult;
-//                Integer finalCurrentQuantity = currentQuantity;
-//                String finalGraphNo = graphNo;
-//                checkMaterialLogs.add(new CheckMaterialLog() {
-//                    {
-//                        setMaterialGraphNo(finalGraphNo);
-//                        setCurrentMaterialCount(finalCurrentQuantity);
-//                        setNeedMaterialCount(materialCount);
-//                        setCheckUserId(currentUser);
-//                        setOrderNo(orderNo);
-//                        setCheckResult(finalCheckResult);
-//                        setCheckState(String.valueOf(finalCheckState));
-//                    }
-//                });
             }
-            // 批量插入审核日志
-//            orderExtendMapper.insertBatchCheckLog(checkMaterialLogs);
         } catch (Exception e) {
             log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
         }
         return orderCheckMaterialDTOS;
     }
 
-    // region 暂时废弃，替换料初步核料会提供
-//
-//    /**
-//     * 替换料核料
-//     *
-//     * @return
-//     */
-//    @Transactional(rollbackFor = Exception.class)
-//    @Override
-//    public List<OrderCheckMaterialDTO> checkReplaceMaterial(String orderNo, List<OrderCheckMaterialDTO>
-//    orderCheckMaterialDTOS) {
-//        // 核料总状态（0.全部成功；1.只要有一个零件是失败的；2.有替换料的零件，其余全成功）
-//        int checkState = 0;
-//        String checkResult = "";
-//        int currentUser = getLoginUserId();
-//        try {
-//            // 循环所需的原料，进行核料
-//            for (OrderCheckMaterialDTO orderCheckMaterialDTO : orderCheckMaterialDTOS) {
-//                List<MaterialResultDTO> replaceGraphNoList = orderCheckMaterialDTO.getReplaceGraphNoList();
-//                if (replaceGraphNoList != null && replaceGraphNoList.size() > 0) {
-//                    for (MaterialResultDTO materialResultDTO : replaceGraphNoList) {
-//                        Integer materialCount = orderCheckMaterialDTO.getMaterialCount();
-//                        // 获取替换料零件的库存
-//                        String replaceMaterialGraphNo = materialResultDTO.getGraphNo();
-//                        Material replaceGraphNoInfo = materialService.getInfoByGraphNo(replaceMaterialGraphNo);
-//                        Integer replaceGraphNoInfoCurrentQuantity = replaceGraphNoInfo.getCurrentQuantity();
-//                        if (replaceGraphNoInfoCurrentQuantity >= materialCount) {
-//                            orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-//                            orderCheckMaterialDTO.setCheckResultMsg("核料成功，该零件替换料充足，可走替换料方案");
-//                            checkResult += "【替换料{" + replaceMaterialGraphNo + "}库存充足】,";
-//                            if (checkState != 1) {
-//                                checkState = 2;
-//                            }
-//                        }
-//                    }
-//                }
-//                orderCheckMaterialDTO.setIsReplace(CommonEnum.Consts.YES.code);
-//            }
-//        } catch (Exception e) {
-//            log.error("替换料核料过程中出现的异常，orderNo:{}", orderNo, e);
-//        } finally {
-//            // 添加核料日志记录
-//            int finalCheckState = checkState;
-//            String finalCheckResult = checkResult;
-//            String finalOrderNo = orderNo;
-//            CheckMaterialLog checkMaterialLog = new CheckMaterialLog() {{
-//                setCheckUserId(currentUser);
-//                setOrderNo(finalOrderNo);
-//                setCheckResult(finalCheckResult);
-//                setCheckState(String.valueOf(finalCheckState));
-//            }};
-//            checkMaterialLogMapper.insertSelective(checkMaterialLog);
-//        }
-//        return orderCheckMaterialDTOS;
-//    }
-// endregion
+
+    /**
+     * 一个毛坯件对应多个机加工件的核料
+     *
+     * @return
+     */
+    private List<OrderCheckMaterialDTO> checkMaterialSpecial(List<String> graphNoWithJList, String graphNoWithM, int materialCount) {
+        List<OrderCheckMaterialDTO> resultList = new ArrayList<>();
+        int currentQuantity = 0, currentQuantityWithJTotal = 0;
+        for (String graphNoWithJ : graphNoWithJList) {
+            if (currentQuantity >= materialCount) {
+                break;
+            }
+            Material materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
+            int currentQuantityWithJ = materialInfoWithJ != null ? materialInfoWithJ.getCurrentQuantity() : 0;
+            currentQuantity += currentQuantityWithJ;
+
+            // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
+            if (currentQuantity < materialCount) {
+                //查询正在机加工的数量
+                int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, graphNoWithJ);
+                currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
+                currentQuantity += jijiaCount;
+                // 如果库存中机加工和正在机加工的数量满足要求的数量
+                if (currentQuantity >= materialCount) {
+                    currentQuantityWithJ = materialCount;
+                }
+            } else {
+                currentQuantityWithJ = materialCount;
+            }
+            if (currentQuantityWithJ == 0) {
+                continue;
+            }
+            currentQuantityWithJTotal += currentQuantityWithJ;
+
+            OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+            orderCheckMaterialDTO.setMaterialName(materialInfoWithJ.getName());
+            orderCheckMaterialDTO.setMaterialCount(currentQuantityWithJ);
+            resultList.add(orderCheckMaterialDTO);
+        }
+        // 如果多个机加工还不满足需求，则核毛坯件
+        if (currentQuantity < materialCount) {
+            int currentQuantityWithM = 0, lackMaterialCount = 0;
+            Material materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
+            if (materialInfoWithM != null) {
+                currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+            } else {
+                materialInfoWithM = new Material();
+                materialInfoWithM.setName("阀体毛坯（系统中暂无）");
+            }
+            currentQuantity += currentQuantityWithM;
+            if (currentQuantity < materialCount) {
+                lackMaterialCount = materialCount - currentQuantity;
+            } else {
+                currentQuantityWithM = materialCount - currentQuantityWithJTotal;
+            }
+            OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
+            orderCheckMaterialDTO.setMaterialName(materialInfoWithM.getName());
+            orderCheckMaterialDTO.setMaterialCount(currentQuantityWithM + lackMaterialCount);
+            orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
+            resultList.add(orderCheckMaterialDTO);
+        }
+        return resultList;
+    }
+
 
     /**
      * 核料通过,锁定零件（核料员点击下一步）

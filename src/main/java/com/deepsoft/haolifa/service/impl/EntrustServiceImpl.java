@@ -191,7 +191,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     }
 
     @Override
-    public int obtainEntrustNumber(String materialGraphNo) {
+    public int obtainEntrustNumber(String materialGraphNo, String processedGraphNo) {
         if (StringUtils.isEmpty(materialGraphNo)) {
             return 0;
         }
@@ -202,6 +202,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
             criteria.andMaterialGraphNoLike(materialGraphNo.substring(0, index) + "%");
         } else {
             criteria.andMaterialGraphNoEqualTo(materialGraphNo);
+        }
+        if (StringUtils.isNotBlank(processedGraphNo)) {
+            criteria.andProcessedGraphNoEqualTo(processedGraphNo);
         }
 
         criteria.andStatusIn(Arrays
