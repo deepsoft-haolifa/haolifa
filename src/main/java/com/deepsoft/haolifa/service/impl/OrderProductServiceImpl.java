@@ -1328,7 +1328,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     if (graphNo.endsWith("M")) {
                         List<GraphNoRel> graphNoRels = graphNoRelService.listByGraphNoM(graphNo);
                         if (!CollectionUtils.isEmpty(graphNoRels)) {
-                            graphNoWithJList = graphNoRels.stream().map(GraphNoRel::getGraphNoM).collect(Collectors.toList());
+                            graphNoWithJList = graphNoRels.stream().map(GraphNoRel::getGraphNoJ).collect(Collectors.toList());
                         }
                         graphNoWithM = graphNo;
                     } else if (graphNo.endsWith("J")) {
