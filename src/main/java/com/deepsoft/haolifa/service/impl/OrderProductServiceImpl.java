@@ -8,8 +8,10 @@ import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
-import com.deepsoft.haolifa.constant.Constant;
-import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.dao.repository.OrderFileMapper;
+import com.deepsoft.haolifa.dao.repository.OrderMaterialMapper;
+import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
+import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
@@ -22,11 +24,7 @@ import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.QiniuUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
-import java.sql.ResultSetMetaData;
-
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -43,7 +41,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,7 +76,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private SprayService sprayService;
     @Autowired
-    private GraphNoRelService graphNoRelService;
+    private EntrustRelationService entrustRelationService;
     @Autowired
     private CustomerModelRelationService customerModelRelationService;
     @Lazy
@@ -1326,15 +1326,15 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00M");
 
                     if (graphNo.endsWith("M")) {
-                        List<GraphNoRel> graphNoRels = graphNoRelService.listByGraphNoM(graphNo);
+                        List<EntrustGraphNoRelation> graphNoRels = entrustRelationService.listByGraphNoM(graphNo);
                         if (!CollectionUtils.isEmpty(graphNoRels)) {
-                            graphNoWithJList = graphNoRels.stream().map(GraphNoRel::getGraphNoJ).collect(Collectors.toList());
+                            graphNoWithJList = graphNoRels.stream().map(EntrustGraphNoRelation::getProcessedGraphNo).collect(Collectors.toList());
                         }
                         graphNoWithM = graphNo;
                     } else if (graphNo.endsWith("J")) {
-                        GraphNoRel graphNoRel = graphNoRelService.listByGraphNoJ(graphNo);
+                        EntrustGraphNoRelation graphNoRel = entrustRelationService.findByGraphNoJ(graphNo);
                         if (null != graphNoRel) {
-                            graphNoWithM = graphNoRel.getGraphNoM();
+                            graphNoWithM = graphNoRel.getOriginalGraphNo();
                         }
                     }
 

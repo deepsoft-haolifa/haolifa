@@ -13,43 +13,62 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 @Slf4j
 @Service
 public class EntrustRelationServiceImpl extends BaseService implements EntrustRelationService {
 
-  @Autowired
-  private EntrustGraphNoRelationMapper entrustRelationMapper;
+    @Autowired
+    private EntrustGraphNoRelationMapper entrustRelationMapper;
 
-  @Override
-  public ResultBean save(EntrustRelationDto dto) {
-    EntrustGraphNoRelation graphNoRelation = new EntrustGraphNoRelation();
-    graphNoRelation.setMaterialName(dto.getMaterialName());
-    graphNoRelation.setOriginalGraphNo(dto.getOriginalGraphNo());
-    graphNoRelation.setProcessedGraphNo(dto.getProcessedGraphNo());
-    entrustRelationMapper.insertSelective(graphNoRelation);
-    return ResultBean.success(graphNoRelation.getId());
-  }
+    @Override
+    public ResultBean save(EntrustRelationDto dto) {
+        EntrustGraphNoRelation graphNoRelation = new EntrustGraphNoRelation();
+        graphNoRelation.setMaterialName(dto.getMaterialName());
+        graphNoRelation.setOriginalGraphNo(dto.getOriginalGraphNo());
+        graphNoRelation.setProcessedGraphNo(dto.getProcessedGraphNo());
+        entrustRelationMapper.insertSelective(graphNoRelation);
+        return ResultBean.success(graphNoRelation.getId());
+    }
 
-  @Override
-  public ResultBean delete(Integer id) {
-    return ResultBean.success(entrustRelationMapper.deleteByPrimaryKey(id));
-  }
+    @Override
+    public ResultBean delete(Integer id) {
+        return ResultBean.success(entrustRelationMapper.deleteByPrimaryKey(id));
+    }
 
-  @Override
-  public ResultBean getRelations(String originalGraphNo) {
-    EntrustGraphNoRelationExample relationExample = new EntrustGraphNoRelationExample();
-    relationExample.createCriteria().andOriginalGraphNoEqualTo(originalGraphNo);
-    return ResultBean.success(entrustRelationMapper.selectByExample(relationExample));
-  }
+    @Override
+    public ResultBean getRelations(String originalGraphNo) {
+        EntrustGraphNoRelationExample relationExample = new EntrustGraphNoRelationExample();
+        relationExample.createCriteria().andOriginalGraphNoEqualTo(originalGraphNo);
+        return ResultBean.success(entrustRelationMapper.selectByExample(relationExample));
+    }
 
-  @Override
-  public ResultBean getList(Integer pageNum, Integer pageSize) {
-    Page<EntrustGraphNoRelation> page = PageHelper.startPage(pageNum, pageSize)
-        .doSelectPage(() -> entrustRelationMapper.selectByExample(new EntrustGraphNoRelationExample()));
-    PageDTO<EntrustGraphNoRelation> pageDTO = new PageDTO<>();
-    BeanUtils.copyProperties(page, pageDTO);
-    pageDTO.setList(page.getResult());
-    return ResultBean.success(pageDTO);
-  }
+    @Override
+    public ResultBean getList(Integer pageNum, Integer pageSize) {
+        Page<EntrustGraphNoRelation> page = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPage(() -> entrustRelationMapper.selectByExample(new EntrustGraphNoRelationExample()));
+        PageDTO<EntrustGraphNoRelation> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(page, pageDTO);
+        pageDTO.setList(page.getResult());
+        return ResultBean.success(pageDTO);
+    }
+
+
+    @Override
+    public EntrustGraphNoRelation findByGraphNoJ(String graphNoJ) {
+        EntrustGraphNoRelationExample example = new EntrustGraphNoRelationExample();
+        example.or().andProcessedGraphNoEqualTo(graphNoJ);
+        List<EntrustGraphNoRelation> graphNoRels = entrustRelationMapper.selectByExample(example);
+        return CollectionUtils.isEmpty(graphNoRels) ? null : graphNoRels.get(0);
+    }
+
+    @Override
+    public List<EntrustGraphNoRelation> listByGraphNoM(String graphNoM) {
+        EntrustGraphNoRelationExample example = new EntrustGraphNoRelationExample();
+        example.or().andOriginalGraphNoEqualTo(graphNoM);
+        return entrustRelationMapper.selectByExample(example);
+    }
 }
