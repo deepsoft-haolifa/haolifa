@@ -305,22 +305,32 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         if (StringUtils.isBlank(materialGraphNo)) {
             return number;
         }
-        // 根据 material_graph_no  获取 spray_item 表中 spray_no,然后在查出状态为 加工中和质检完成的spray
-        List<Spray> sprays = sparyExtendMapper.obtainNumber(materialGraphNo);
-
+        // 根据查出状态为 加工中和暂停加工的spray
+        SprayExample example = new SprayExample();
+        example.or().andStatusIn(Arrays.asList(CommonEnum.SprayStatus.SPRAY_MACHINE.code, CommonEnum.SprayStatus.SPRAY_STOP_MACHINE.code));
+        List<Spray> sprays = sprayMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(sprays)) {
-            number = sprays.stream().map(Spray::getTotalNumber).reduce(0, (a, b) -> a + b);
-            if (number > 0) {
-                // 获取 喷涂历史记录的合格数量
-                List<String> noList = sprays.stream().map(Spray::getSprayNo).collect(Collectors.toList());
-                SprayInspectHistoryExample example = new SprayInspectHistoryExample();
-                example.or().andSprayNoIn(noList).andStatusEqualTo(CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code);
-                List<SprayInspectHistory> sprayInspectHistories = inspectHistoryMapper.selectByExample(example);
-                if (!CollectionUtils.isEmpty(sprayInspectHistories)) {
-                    // 已经入库的数量
-                    Integer storeCount = sprayInspectHistories.stream().map(SprayInspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
-                    // 正在喷涂的数据，需要减去已经入库的数量
-                    number = number - storeCount;
+            List<String> sprayNoList = sprays.stream().map(Spray::getSprayNo).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(sprayNoList)) {
+                // 根据喷涂号，图号 查出 这个图号喷涂的总数量
+                SprayItemExample sprayItemExample = new SprayItemExample();
+                sprayItemExample.or().andMaterialGraphNoEqualTo(materialGraphNo).andSprayNoIn(sprayNoList);
+                List<SprayItem> sprayItemList = sprayItemMapper.selectByExample(sprayItemExample);
+                if (!CollectionUtils.isEmpty(sprayItemList)) {
+                    // 获取正在机加工的总数量
+                    number = sprayItemList.stream().map(SprayItem::getNumber).reduce(0, (a, b) -> a + b);
+                    if (number > 0) {
+                        // 获取 喷涂历史记录的合格数量
+                        SprayInspectHistoryExample sprayInspectHistoryExample = new SprayInspectHistoryExample();
+                        sprayInspectHistoryExample.or().andSprayNoIn(sprayNoList).andOriginalGraphNoEqualTo(materialGraphNo).andStatusEqualTo(CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code);
+                        List<SprayInspectHistory> sprayInspectHistories = inspectHistoryMapper.selectByExample(sprayInspectHistoryExample);
+                        if (!CollectionUtils.isEmpty(sprayInspectHistories)) {
+                            // 已经入库的数量
+                            Integer storeCount = sprayInspectHistories.stream().map(SprayInspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
+                            // 正在喷涂的数据，需要减去已经入库的数量
+                            number = number - storeCount;
+                        }
+                    }
                 }
             }
         }

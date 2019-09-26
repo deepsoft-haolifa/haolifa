@@ -107,6 +107,12 @@ INSERT INTO `spray_color_relation` VALUES (20, 'RAL5017高光', '018', '2019-08-
 INSERT INTO `spray_color_relation` VALUES (21, 'RAL8003高光', '019', '2019-08-20 20:43:35', '2019-08-20 20:43:35');
 INSERT INTO `spray_color_relation` VALUES (22, 'RAL6016亚光', '020', '2019-08-20 20:43:35', '2019-08-20 20:43:35');
 INSERT INTO `spray_color_relation` VALUES (23, 'RAL7011高光', '021', '2019-08-20 20:43:35', '2019-08-20 20:43:35');
+INSERT INTO `spray_color_relation` VALUES (24, 'RAL7011高光', '021', '2019-08-20 20:43:35', '2019-08-20 20:43:35');
+INSERT INTO `spray_color_relation` VALUES (25, 'RAL7011高光', '021', '2019-08-20 20:43:35', '2019-08-20 20:43:35');
+INSERT INTO `spray_color_relation` VALUES (26, 'RAL7011高光', '021', '2019-08-20 20:43:35', '2019-08-20 20:43:35');
+INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('尼龙灰 ', '022', NOW(),  NOW());
+INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('尼龙蓝 ', '023', NOW(),  NOW());
+INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('防腐灰 ', '024', NOW(),  NOW());
 
 create table entrust_graph_no_relation(
  id int(11) UNSIGNED not null auto_increment comment '主键',
