@@ -76,8 +76,10 @@ update purchase_order po,(select purchase_no purchaseNo,sum(qualified_number) qu
 -- 已付货款
 update purchase_order po, (select order_no orderNo,sum(amount) paidAccount from payment_management GROUP BY order_no) pm set po.paid_account = pm.paidAccount where pm.orderNo = po.purchase_order_no;
 
+drop table spray_color_relation;
 create table spray_color_relation(
  id int(11) UNSIGNED not null AUTO_INCREMENT comment '主键',
+ type TINYINT(4) not null default 0 comment '1.阀体；2.阀板',
  color VARCHAR(64) not null default '' comment '喷涂颜色',
  relation_no varchar(64) not null default '' comment '颜色编号',
  create_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
@@ -85,30 +87,31 @@ create table spray_color_relation(
  PRIMARY key (id) USING BTREE
 ) engine innodb DEFAULT CHARSET=utf8 COMMENT='喷涂加工颜色编号对照表';
 
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL9005砂纹', '001', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL9005高光', '002', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL9017砂纹', '003', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL7016砂纹', '004', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL6016砂纹', '005', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL5024高光', '006', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL5015高光', '007', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL5011高光', '008', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL5010砂纹', '009', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL5010高光', '010', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL5002砂纹', '011', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL3020高光', '012', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL1021高光', '013', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL7011砂纹', '014', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL7035高光', '015', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL7016亚光', '016', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL7024砂纹', '017', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL5017高光', '018', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL8003高光', '019', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL6016亚光', '020', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('RAL7011高光', '021', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('尼龙灰 ', '022', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('尼龙蓝 ', '023', NOW(), NOW());
-INSERT INTO `spray_color_relation`(`color`, `relation_no`, `create_time`, `update_time`) VALUES ('防腐灰 ', '024', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL9005砂纹', '001', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL9005高光', '002', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL9017砂纹', '003', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL7016砂纹', '004', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL6016砂纹', '005', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL5024高光', '006', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL5015高光', '007', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL5011高光', '008', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL5010砂纹', '009', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL5010高光', '010', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL5002砂纹', '011', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL3020高光', '012', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL1021高光', '013', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL7011砂纹', '014', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL7035高光', '015', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL7016亚光', '016', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL7024砂纹', '017', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL5017高光', '018', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL8003高光', '019', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL6016亚光', '020', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (1,'RAL7011高光', '021', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (2,'尼龙灰', '01', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (2,'尼龙蓝', '02', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (2,'防腐灰', '03', NOW(), NOW());
+INSERT INTO `spray_color_relation`(`type`,`color`, `relation_no`, `create_time`, `update_time`) VALUES (2,'RAL5015', '05', NOW(), NOW());
 
 create table entrust_graph_no_relation(
  id int(11) UNSIGNED not null auto_increment comment '主键',
@@ -241,6 +244,8 @@ INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_
 INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES (NOW(), 'Hc', 'Hi', '', 'faban', 'H', '');
 INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES (NOW(), 'D', 'QD', '', 'faban', 'H', '');
 
+-- 备份数据库
+mysqldump -uroot -p haolifa > /home/admin/20190927/haolifa_20190927.sql
 
 
 

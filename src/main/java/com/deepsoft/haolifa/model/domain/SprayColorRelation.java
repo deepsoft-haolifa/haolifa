@@ -5,6 +5,8 @@ import java.util.Date;
 public class SprayColorRelation {
     private Integer id;
 
+    private Byte type;
+
     private String color;
 
     private String relationNo;
@@ -13,8 +15,9 @@ public class SprayColorRelation {
 
     private Date updateTime;
 
-    public SprayColorRelation(Integer id, String color, String relationNo, Date createTime, Date updateTime) {
+    public SprayColorRelation(Integer id, Byte type, String color, String relationNo, Date createTime, Date updateTime) {
         this.id = id;
+        this.type = type;
         this.color = color;
         this.relationNo = relationNo;
         this.createTime = createTime;
@@ -31,6 +34,14 @@ public class SprayColorRelation {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 
     public String getColor() {
