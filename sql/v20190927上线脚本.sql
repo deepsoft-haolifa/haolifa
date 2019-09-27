@@ -194,6 +194,12 @@ CREATE table customer_model_relation(
 -- 质检不合格原因
 alter table inspect_history add column reasons varchar(1024) not null default '' comment '不合格原因列表';
 alter table spray_inspect_history add column reasons varchar(1024) not null default '' comment '不合格原因列表';
+-- 质检附件
+alter table inspect_history add column `accessory` varchar(2048) NOT NULL DEFAULT '' COMMENT '质检附件';
+alter table spray_inspect_history add column `accessory` varchar(2048) NOT NULL DEFAULT '' COMMENT '质检附件';
+alter table pro_inspect_record add column `accessory` varchar(2048) NOT NULL DEFAULT '' COMMENT '质检附件'
+
+alter table spray_item add column `batch_number` varchar(64) NOT NULL DEFAULT '' COMMENT '批次号';
 
 DROP TABLE IF EXISTS `price_material` ;
 CREATE TABLE `price_material` (
@@ -244,8 +250,8 @@ INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_
 INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES (NOW(), 'Hc', 'Hi', '', 'faban', 'H', '');
 INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_no_str`, `material_graph_no_indexof`, `material_type`, `product_type`, `remark`) VALUES (NOW(), 'D', 'QD', '', 'faban', 'H', '');
 
--- 备份数据库
-mysqldump -uroot -p haolifa > /home/admin/20190927/haolifa_20190927.sql
+-- 添加索引字段
+ALTER TABLE `material` ADD INDEX idx_classify_id (`material_classify_id`);
 
 
 

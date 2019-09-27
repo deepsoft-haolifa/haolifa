@@ -22,9 +22,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.Map.Entry;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +30,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -345,6 +339,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                     dto.setReasonList(JSON.parseArray(dto.getReasons(), InspectReason.class));
                 } else if (dto.getUnqualifiedNumber() > 0) {
                     dto.setReasonList(Arrays.asList(new InspectReason(dto.getRemark(), dto.getUnqualifiedNumber())));
+                } else {
+                    dto.setReasonList(Collections.emptyList());
                 }
                 inspectHistoryDtos.add(dto);
             }
