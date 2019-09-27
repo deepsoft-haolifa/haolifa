@@ -85,9 +85,17 @@ public interface InspectService {
      */
     ResultBean updateHistoryStatus(Integer historyId);
 
-
     /**
      * 获取机加工已入库的记录
      */
     List<InspectHistory> historyList(List<String> inspectNo, Byte status, Byte type);
+
+
+    /**
+     * 获取历史质检记录详情
+     *
+     * @param historyId
+     * @return
+     */
+    InspectHistory getHistoryInfo(Integer historyId);
 }

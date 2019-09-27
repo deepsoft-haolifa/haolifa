@@ -379,6 +379,11 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     }
 
     @Override
+    public InspectHistory getHistoryInfo(Integer historyId) {
+        return historyMapper.selectByPrimaryKey(historyId);
+    }
+
+    @Override
     public List<InspectHistory> historyList(List<String> inspectNo, Byte status, Byte type) {
         InspectHistoryExample historyExample = new InspectHistoryExample();
         InspectHistoryExample.Criteria criteria = historyExample.createCriteria();

@@ -336,4 +336,9 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         }
         return number;
     }
+
+    @Override
+    public SprayInspectHistory getHistoryInfo(Integer historyId) {
+        return inspectHistoryMapper.selectByPrimaryKey(historyId);
+    }
 }

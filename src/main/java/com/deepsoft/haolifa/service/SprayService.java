@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
@@ -40,4 +41,6 @@ public interface SprayService {
      * @return
      */
     int obtainNumber(String materialGraphNo);
+
+    SprayInspectHistory getHistoryInfo(Integer historyId);
 }
