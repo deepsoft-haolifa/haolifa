@@ -94,7 +94,7 @@ public class InspectController {
     }
 
     @ApiOperation("获取质检记录状态")
-    @GetMapping("getHistoryInfo/{historyId}")
+    @GetMapping("history-info/{historyId}")
     public ResultBean getHistoryStatus(@ApiParam("记录标示") @PathVariable("historyId") Integer historyId) {
         return ResultBean.success(inspectService.getHistoryInfo(historyId));
     }
