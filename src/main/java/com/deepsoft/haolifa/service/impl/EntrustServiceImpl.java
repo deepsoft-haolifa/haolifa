@@ -220,7 +220,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         if (number > 0) {
             List<String> noList = entrusts.stream().map(Entrust::getEntrustNo).collect(Collectors.toList());
             List<InspectHistory> inspectHistories = inspectService.historyList(noList, CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code, CommonEnum.InspectHistoryType.ENTRUST.code);
-            if (CollectionUtils.isEmpty(inspectHistories)) {
+            if (!CollectionUtils.isEmpty(inspectHistories)) {
                 // 已经入库的数量
                 Integer storeCount = inspectHistories.stream().map(InspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
                 // 正在机加工的数据，需要减去已经入库的数量
