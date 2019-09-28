@@ -9,7 +9,9 @@ import com.deepsoft.haolifa.dao.repository.SprayMapper;
 import com.deepsoft.haolifa.dao.repository.extend.SparyExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
 import com.deepsoft.haolifa.model.dto.spray.*;
+import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.SprayService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -48,6 +50,8 @@ public class SprayServiceImpl extends BaseService implements SprayService {
 
     @Autowired
     private ValidateService validateService;
+    @Autowired
+    private CheckMaterialLockService checkMaterialLockService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -196,7 +200,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                 dto.setReasonList(JSON.parseArray(history.getReasons(), InspectReason.class));
             } else if (history.getUnqualifiedNumber() > 0) {
                 dto.setReasonList(Arrays.asList(new InspectReason(history.getRemark(), history.getUnqualifiedNumber())));
-            }else{
+            } else {
                 dto.setReasonList(Collections.emptyList());
             }
             sprayInspectHistoryDtos.add(dto);
@@ -284,7 +288,18 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         sprayInspectHistory.setId(historyId);
         // 2 已入库
         sprayInspectHistory.setStatus((byte) 2);
-        inspectHistoryMapper.updateByPrimaryKeySelective(sprayInspectHistory);
+        int update = inspectHistoryMapper.updateByPrimaryKeySelective(sprayInspectHistory);
+        if (update > 0) {
+            // 入库成功,释放锁定的料
+            SprayInspectHistory historyInfo = this.getHistoryInfo(historyId);
+            if (historyInfo != null) {
+                CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
+                checkMaterialLockDTO.setType(CommonEnum.CheckMaterialLockType.SPRAY.type);
+                checkMaterialLockDTO.setMaterialGraphNo(historyInfo.getMaterialGraphNo());
+                checkMaterialLockDTO.setLockQuantity(historyInfo.getQualifiedNumber());
+                checkMaterialLockService.updateLockQuantity(checkMaterialLockDTO);
+            }
+        }
         return ResultBean.success(1);
     }
 

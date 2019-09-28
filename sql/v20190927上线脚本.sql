@@ -200,7 +200,8 @@ alter table spray_inspect_history add column `accessory` varchar(2048) NOT NULL 
 alter table pro_inspect_record add column `accessory` varchar(2048) NOT NULL DEFAULT '' COMMENT '质检附件'
 
 alter table spray_item add column `batch_number` varchar(64) NOT NULL DEFAULT '' COMMENT '批次号';
-
+-- 更新合同金额
+update order_product po, (select order_no orderNo, sum(`product_number` * price) sumPrice from order_product_associate GROUP BY order_no) poi set po.total_price = poi.sumPrice where po.order_no = poi.orderNo;
 DROP TABLE IF EXISTS `price_material` ;
 CREATE TABLE `price_material` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -252,6 +253,19 @@ INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_
 
 -- 添加索引字段
 ALTER TABLE `material` ADD INDEX idx_classify_id (`material_classify_id`);
+
+-- 核料过程中，机加工和喷涂图号锁定
+CREATE TABLE `check_material_lock` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	`order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单编号',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1.机加工；2.喷涂',
+  `lock_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '锁定数量',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  INDEX idx_material_graph_no (`material_graph_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='核料过程中，锁定料的中间表，用来不重复核料';
 
 
 

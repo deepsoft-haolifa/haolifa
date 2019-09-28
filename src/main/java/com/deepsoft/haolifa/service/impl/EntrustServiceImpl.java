@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
+import com.deepsoft.haolifa.model.domain.CheckMaterialLock;
 import com.deepsoft.haolifa.model.domain.Entrust;
 import com.deepsoft.haolifa.model.domain.EntrustExample;
 import com.deepsoft.haolifa.model.domain.InspectHistory;
@@ -20,6 +21,7 @@ import com.deepsoft.haolifa.model.dto.EntrustListDTO;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.EntrustService;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.InspectService;
@@ -53,6 +55,8 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
     FlowInstanceService flowInstanceService;
     @Autowired
     private ValidateService validateService;
+    @Autowired
+    private CheckMaterialLockService checkMaterialLockService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -221,6 +225,15 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
                 Integer storeCount = inspectHistories.stream().map(InspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
                 // 正在机加工的数据，需要减去已经入库的数量
                 number = number - storeCount;
+
+                if (number > 0) {
+                    // 获取已经核料锁定的数量
+                    List<CheckMaterialLock> checkMaterialLocks = checkMaterialLockService.findByMaterialAndType(materialGraphNo, CommonEnum.CheckMaterialLockType.ENTRUST.type);
+                    if (!CollectionUtils.isEmpty(checkMaterialLocks)) {
+                        Integer lockCount = checkMaterialLocks.stream().map(CheckMaterialLock::getLockQuantity).reduce(0, (a, b) -> a + b);
+                        number = number - lockCount;
+                    }
+                }
             }
         }
         return number;

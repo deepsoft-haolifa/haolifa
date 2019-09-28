@@ -31,6 +31,16 @@ public class CacheKeyManager {
         return new CacheKeyVo("deepsoft:haolifa:cache:user:", 60L, TimeUnit.DAYS);
     }
 
+    /**
+     * 核料过程中 正在机加工和正在喷涂的数量
+     * 1. 初步核料的时候，如果有正在机加工和正在喷涂的图号，会添加这个redis；重新选择初步核料，要清空这个redis
+     * 2. 然后再点核料成功的时候，会根据订单号获取这个订单有多少正在机加工和正在喷涂的，把数量锁定；
+     * 3. 数量锁定完，这个redis 就可以删除；
+     */
+    public static CacheKeyVo dbKeylockQuantity(String orderNo) {
+        return new CacheKeyVo("deepsoft:haolifa:db:lockQuantity:", 12L, TimeUnit.HOURS);
+    }
+
 
     public static class CacheKeyVo {
         public String key;
