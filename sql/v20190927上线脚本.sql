@@ -181,6 +181,16 @@ INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `p
 INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0300-01-00Qa-pF12-07-00M', 'D271-0300-01-00Qa-dF12-07-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
 INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0300-01-00Qa-pF12-01-00M', 'D271-0300-01-00Qa-eF12-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
 INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0300-01-00Qa-pF12-01-00M', 'D271-0300-01-00Qa-dF12-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D240-0040-01-00La-cF04-10-00M', 'D240-0040-01-00La-cF03-10-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D240-0040-01-00La-cF04-10-00M', 'D240-0040-01-00La-cF04-10-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0040-01-00Qa-pF04-01-00M', 'D270-0040-01-00Qa-pF04-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0040-01-00Qa-pF04-01-00M', 'D271-0040-01-00Qa-pF04-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0350-01-00Qa-pF12-07-00M', 'D271-0350-01-00Qa-dF12-07-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0350-01-00Qa-pF12-07-00M', 'D271-0350-01-00Qa-eF12-07-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D370-0350-01-00Qa-aF12-11-00M', 'D370-0350-01-00Qa-dF12-11-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D370-0350-01-00Qa-aF12-11-00M', 'D370-0350-01-00Qa-eF12-11-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+
+
 
 CREATE table customer_model_relation(
 	id int(11) UNSIGNED not null auto_increment comment '主键',

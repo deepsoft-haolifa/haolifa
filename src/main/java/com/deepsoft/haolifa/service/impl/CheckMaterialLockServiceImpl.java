@@ -5,8 +5,8 @@ import com.deepsoft.haolifa.model.domain.CheckMaterialLock;
 import com.deepsoft.haolifa.model.domain.CheckMaterialLockExample;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
-import com.deepsoft.haolifa.util.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -25,7 +25,7 @@ public class CheckMaterialLockServiceImpl implements CheckMaterialLockService {
         CheckMaterialLock checkMaterialLock = new CheckMaterialLock();
         BeanUtils.copyProperties(checkMaterialLockDTO, checkMaterialLock);
         checkMaterialLock.setOrderNo(orderNo);
-        checkMaterialLockMapper.insert(checkMaterialLock);
+        checkMaterialLockMapper.insertSelective(checkMaterialLock);
     }
 
     @Override

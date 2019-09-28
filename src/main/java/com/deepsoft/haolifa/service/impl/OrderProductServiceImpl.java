@@ -795,7 +795,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     public static void main(String[] args) {
-
+        String redisValue = "[{\"lockQuantity\":20,\"materialGraphNo\":\"D270-1000-01-00Qa-aF10-05-00J\",\"type\":1},{\"lockQuantity\":10,\"materialGraphNo\":\"D270-1000-03-QN-01-0J\",\"type\":1},{\"lockQuantity\":2,\"materialGraphNo\":\"D270-1000-03-QN-01-0J\",\"type\":2}]";
+        if (StringUtils.isNotBlank(redisValue)) {
+            List<CheckMaterialLockDTO> materialLockDTOList = JSONObject.parseArray(redisValue, CheckMaterialLockDTO.class);
+            if (!CollectionUtils.isEmpty(materialLockDTOList)) {
+                for (CheckMaterialLockDTO checkMaterialLockDTO : materialLockDTOList) {
+                    CheckMaterialLock checkMaterialLock=new CheckMaterialLock();
+                    BeanUtils.copyProperties(checkMaterialLockDTO,checkMaterialLock);
+                    System.out.println();
+                }
+            }
+        }
     }
 
     @Override
@@ -1866,6 +1876,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             // 将正在机加工和正在喷涂的图号锁定
             String redisValue = redisDao.get(CacheKeyManager.dbKeylockQuantity(orderNo).key);
             if (StringUtils.isNotBlank(redisValue)) {
+                log.info("get check material lock redis info:{}", redisValue);
                 List<CheckMaterialLockDTO> materialLockDTOList = JSONObject.parseArray(redisValue, CheckMaterialLockDTO.class);
                 if (!CollectionUtils.isEmpty(materialLockDTOList)) {
                     for (CheckMaterialLockDTO checkMaterialLockDTO : materialLockDTOList) {

@@ -38,7 +38,7 @@ public class CacheKeyManager {
      * 3. 数量锁定完，这个redis 就可以删除；
      */
     public static CacheKeyVo dbKeylockQuantity(String orderNo) {
-        return new CacheKeyVo("deepsoft:haolifa:db:lockQuantity:", 12L, TimeUnit.HOURS);
+        return new CacheKeyVo("deepsoft:haolifa:db:lockQuantity:" + orderNo, 12L, TimeUnit.HOURS);
     }
 
 
