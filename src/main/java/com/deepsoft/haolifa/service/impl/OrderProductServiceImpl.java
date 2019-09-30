@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.deepsoft.haolifa.cache.CacheKeyManager;
@@ -82,6 +83,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Lazy
     @Autowired
     FlowInstanceService flowInstanceService;
+    @Autowired
+    private CheckMaterialLockService checkMaterialLockService;
 
     @Override
     public ResultBean generateOrder(GenerateOrderDTO generateOrderDTO) {
@@ -792,7 +795,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     public static void main(String[] args) {
-
+        String redisValue = "[{\"lockQuantity\":20,\"materialGraphNo\":\"D270-1000-01-00Qa-aF10-05-00J\",\"type\":1},{\"lockQuantity\":10,\"materialGraphNo\":\"D270-1000-03-QN-01-0J\",\"type\":1},{\"lockQuantity\":2,\"materialGraphNo\":\"D270-1000-03-QN-01-0J\",\"type\":2}]";
+        if (StringUtils.isNotBlank(redisValue)) {
+            List<CheckMaterialLockDTO> materialLockDTOList = JSONObject.parseArray(redisValue, CheckMaterialLockDTO.class);
+            if (!CollectionUtils.isEmpty(materialLockDTOList)) {
+                for (CheckMaterialLockDTO checkMaterialLockDTO : materialLockDTOList) {
+                    CheckMaterialLock checkMaterialLock=new CheckMaterialLock();
+                    BeanUtils.copyProperties(checkMaterialLockDTO,checkMaterialLock);
+                    System.out.println();
+                }
+            }
+        }
     }
 
     @Override
@@ -1220,6 +1233,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Override
     public List<OrderCheckMaterialDTO> checkMaterial(String orderNo,
                                                      List<ProductCheckMaterialListDTO> productCheckMaterialListDTOList) {
+
+        // 先清除核料过程中的redis
+        CacheKeyManager.CacheKeyVo cacheKeyVo = CacheKeyManager.dbKeylockQuantity(orderNo);
+        redisDao.del(cacheKeyVo.key);
+
         List<OrderCheckMaterialDTO> orderCheckMaterialDTOS = new ArrayList<>();
         List<CheckMaterialLog> checkMaterialLogs = new ArrayList<>();
         // 核料总状态（0.全部成功；1.只要有一个零件是失败的,就是失败的）
@@ -1297,6 +1315,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
             }
 
+            // 核料过程中，正在机加工和喷涂的数量
+            List<CheckMaterialLockDTO> materialLockDTOList = new ArrayList<>();
             // 循环所需的原料，进行核料
             Iterator<Map.Entry<String, MaterialQuantityDTO>> entryIterator = materialsMap.entrySet().iterator();
             while (entryIterator.hasNext()) {
@@ -1369,6 +1389,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         if (currentQuantity < materialCount) {
                             //查询正在机加工的数量
                             int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
+                            if (jijiaCount > 0) {
+                                CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
+                                checkMaterialLockDTO.setMaterialGraphNo(graphNoWithJ);
+                                checkMaterialLockDTO.setType(CommonEnum.CheckMaterialLockType.ENTRUST.type);
+                                checkMaterialLockDTO.setLockQuantity(jijiaCount);
+                                materialLockDTOList.add(checkMaterialLockDTO);
+                            }
                             currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
                             currentQuantity += jijiaCount;
                             log.info(
@@ -1431,6 +1458,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("0M");
                             //查询正在机加工的数量
                             int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
+                            if (jijiaCount > 0) {
+                                CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
+                                checkMaterialLockDTO.setMaterialGraphNo(graphNoWithJ);
+                                checkMaterialLockDTO.setType(CommonEnum.CheckMaterialLockType.ENTRUST.type);
+                                checkMaterialLockDTO.setLockQuantity(jijiaCount);
+                                materialLockDTOList.add(checkMaterialLockDTO);
+                            }
                             currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
                             currentQuantity += jijiaCount;
                             log.info(
@@ -1440,6 +1474,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             if (currentQuantity < materialCount) {
                                 // 正在喷涂的数量，通过机加工图号查询
                                 int sprayCount = sprayService.obtainNumber(graphNoWithJ);
+                                if (sprayCount > 0) {
+                                    CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
+                                    checkMaterialLockDTO.setMaterialGraphNo(graphNoWithJ);
+                                    checkMaterialLockDTO.setType(CommonEnum.CheckMaterialLockType.SPRAY.type);
+                                    checkMaterialLockDTO.setLockQuantity(sprayCount);
+                                    materialLockDTOList.add(checkMaterialLockDTO);
+                                }
                                 currentQuantityWithJ = currentQuantityWithJ + sprayCount;
                                 currentQuantity += sprayCount;
                                 log.info(
@@ -1619,6 +1660,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
                 }
             }
+
+            // 添加redis
+            redisDao.set(cacheKeyVo.key, JSONArray.toJSONString(materialLockDTOList), cacheKeyVo.seconds, cacheKeyVo.timeUnit);
+
         } catch (Exception e) {
             log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
         }
@@ -1827,6 +1872,18 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // 将订单状态改为核料完成
                 updateOrderProductStatus(orderNo, CommonEnum.OrderStatus.CHECK_MATERIAL_COMPLETE.code);
             }
+
+            // 将正在机加工和正在喷涂的图号锁定
+            String redisValue = redisDao.get(CacheKeyManager.dbKeylockQuantity(orderNo).key);
+            if (StringUtils.isNotBlank(redisValue)) {
+                log.info("get check material lock redis info:{}", redisValue);
+                List<CheckMaterialLockDTO> materialLockDTOList = JSONObject.parseArray(redisValue, CheckMaterialLockDTO.class);
+                if (!CollectionUtils.isEmpty(materialLockDTOList)) {
+                    for (CheckMaterialLockDTO checkMaterialLockDTO : materialLockDTOList) {
+                        checkMaterialLockService.add(orderNo, checkMaterialLockDTO);
+                    }
+                }
+            }
             return 1;
         }
         return 0;
@@ -1862,6 +1919,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             materialService.updateLockQuantity(materialGraphNo, (-1) * materialCount);
                         }
                     });
+
+            // 将核料机加工喷涂释放
+            checkMaterialLockService.delByOrderNo(orderNo);
         }
 
         return 0;

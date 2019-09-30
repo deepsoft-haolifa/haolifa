@@ -10,12 +10,15 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NU
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
 import com.alibaba.fastjson.JSON;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
+import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.InspectService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
@@ -48,6 +51,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     EntrustMapper entrustMapper;
     @Autowired
     PurchaseOrderMapper purchaseOrderMapper;
+    @Autowired
+    CheckMaterialLockService checkMaterialLockService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -370,7 +375,19 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         InspectHistory inspectHistory = new InspectHistory();
         inspectHistory.setId(historyId);
         inspectHistory.setStatus(InspectHistoryStatus.BEEN_STORE_2.code);
-        historyMapper.updateByPrimaryKeySelective(inspectHistory);
+        int update = historyMapper.updateByPrimaryKeySelective(inspectHistory);
+        // 入库成功
+        if (update > 0) {
+            // 如果是机加工入库 ，释放锁定的料
+            InspectHistory historyInfo = this.getHistoryInfo(historyId);
+            if (historyInfo != null && historyInfo.getType().equals(CommonEnum.InspectHistoryType.ENTRUST.code)) {
+                CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
+                checkMaterialLockDTO.setType(CommonEnum.CheckMaterialLockType.ENTRUST.type);
+                checkMaterialLockDTO.setMaterialGraphNo(historyInfo.getMaterialGraphNo());
+                checkMaterialLockDTO.setLockQuantity(historyInfo.getQualifiedNumber());
+                checkMaterialLockService.updateLockQuantity(checkMaterialLockDTO);
+            }
+        }
         return ResultBean.success(1);
     }
 

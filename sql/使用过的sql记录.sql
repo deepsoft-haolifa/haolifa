@@ -11,3 +11,4 @@ update order_product set order_contract_url=replace(order_contract_url,'d.miaoji
 update file_record set file_url=replace(file_url,'d.miaojiebei.com','upload.haolifa.com');
 update purchase_order set file_url=replace(file_url,'d.miaojiebei.com','upload.haolifa.com');
 update flow_instance set accessory=replace(accessory,'d.miaojiebei.com','upload.haolifa.com');
+update delivery_notice set delivery_url=replace(delivery_url,'d.miaojiebei.com','upload.haolifa.com');

@@ -512,4 +512,20 @@ public class CommonEnum {
         }
     }
 
+
+    /**
+     * 核料锁定料类型
+     */
+    public enum CheckMaterialLockType {
+        ENTRUST((byte) 1, "机加工"),
+        SPRAY((byte) 2, "喷涂");
+
+        public final byte type;
+        public final String name;
+
+        CheckMaterialLockType(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
 }

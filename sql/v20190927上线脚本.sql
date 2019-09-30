@@ -181,6 +181,16 @@ INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `p
 INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0300-01-00Qa-pF12-07-00M', 'D271-0300-01-00Qa-dF12-07-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
 INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0300-01-00Qa-pF12-01-00M', 'D271-0300-01-00Qa-eF12-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
 INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0300-01-00Qa-pF12-01-00M', 'D271-0300-01-00Qa-dF12-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D240-0040-01-00La-cF04-10-00M', 'D240-0040-01-00La-cF03-10-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D240-0040-01-00La-cF04-10-00M', 'D240-0040-01-00La-cF04-10-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0040-01-00Qa-pF04-01-00M', 'D270-0040-01-00Qa-pF04-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0040-01-00Qa-pF04-01-00M', 'D271-0040-01-00Qa-pF04-01-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0350-01-00Qa-pF12-07-00M', 'D271-0350-01-00Qa-dF12-07-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D271-0350-01-00Qa-pF12-07-00M', 'D271-0350-01-00Qa-eF12-07-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D370-0350-01-00Qa-aF12-11-00M', 'D370-0350-01-00Qa-dF12-11-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+INSERT INTO `entrust_graph_no_relation`(`material_name`, `original_graph_no`, `processed_graph_no`, `create_time`, `update_time`) VALUES ( '毛坯', 'D370-0350-01-00Qa-aF12-11-00M', 'D370-0350-01-00Qa-eF12-11-00J', '2019-08-20 20:49:29', '2019-08-20 20:49:29');
+
+
 
 CREATE table customer_model_relation(
 	id int(11) UNSIGNED not null auto_increment comment '主键',
@@ -200,7 +210,8 @@ alter table spray_inspect_history add column `accessory` varchar(2048) NOT NULL 
 alter table pro_inspect_record add column `accessory` varchar(2048) NOT NULL DEFAULT '' COMMENT '质检附件'
 
 alter table spray_item add column `batch_number` varchar(64) NOT NULL DEFAULT '' COMMENT '批次号';
-
+-- 更新合同金额
+update order_product po, (select order_no orderNo, sum(`product_number` * price) sumPrice from order_product_associate GROUP BY order_no) poi set po.total_price = poi.sumPrice where po.order_no = poi.orderNo;
 DROP TABLE IF EXISTS `price_material` ;
 CREATE TABLE `price_material` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -252,6 +263,19 @@ INSERT INTO `product_model_config`(`create_time`, `index_rule`, `material_graph_
 
 -- 添加索引字段
 ALTER TABLE `material` ADD INDEX idx_classify_id (`material_classify_id`);
+
+-- 核料过程中，机加工和喷涂图号锁定
+CREATE TABLE `check_material_lock` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	`order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单编号',
+  `material_graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1.机加工；2.喷涂',
+  `lock_quantity` int(11) NOT NULL DEFAULT 0 COMMENT '锁定数量',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  INDEX idx_material_graph_no (`material_graph_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='核料过程中，锁定料的中间表，用来不重复核料';
 
 
 
