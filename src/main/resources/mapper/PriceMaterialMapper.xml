@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PriceMaterial" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="material_classify_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="material_classify_name" jdbcType="CHAR" javaType="java.lang.String" />
       <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -12,10 +13,14 @@
       <arg column="material" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="unit" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="actual_weight" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="ton_price" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="blank_cost" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="process_cost" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="product_price" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="tax_rate" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="ton_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="blank_cost" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="blank_cost_tax" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="process_cost" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="spray_cost" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="price_tax" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="create_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -81,9 +86,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, material_classify_name, name, graph_no, model, specifications, material, unit, 
-    actual_weight, ton_price, blank_cost, process_cost, product_price, create_time, update_time, 
-    create_user, update_user
+    id, material_classify_id, material_classify_name, name, graph_no, model, specifications, 
+    material, unit, actual_weight, tax_rate, ton_price, blank_cost, blank_cost_tax, process_cost, 
+    spray_cost, price, price_tax, create_time, update_time, create_user, update_user
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PriceMaterialExample" >
     select
@@ -119,16 +124,20 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into price_material (material_classify_name, name, graph_no, 
-      model, specifications, material, 
-      unit, actual_weight, ton_price, 
-      blank_cost, process_cost, product_price, 
+    insert into price_material (material_classify_id, material_classify_name, 
+      name, graph_no, model, 
+      specifications, material, unit, 
+      actual_weight, tax_rate, ton_price, 
+      blank_cost, blank_cost_tax, process_cost, 
+      spray_cost, price, price_tax, 
       create_time, update_time, create_user, 
       update_user)
-    values (#{materialClassifyName,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{graphNo,jdbcType=VARCHAR}, 
-      #{model,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
-      #{unit,jdbcType=VARCHAR}, #{actualWeight,jdbcType=VARCHAR}, #{tonPrice,jdbcType=VARCHAR}, 
-      #{blankCost,jdbcType=VARCHAR}, #{processCost,jdbcType=VARCHAR}, #{productPrice,jdbcType=VARCHAR}, 
+    values (#{materialClassifyId,jdbcType=INTEGER}, #{materialClassifyName,jdbcType=CHAR}, 
+      #{name,jdbcType=VARCHAR}, #{graphNo,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{actualWeight,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{tonPrice,jdbcType=DECIMAL}, 
+      #{blankCost,jdbcType=DECIMAL}, #{blankCostTax,jdbcType=DECIMAL}, #{processCost,jdbcType=DECIMAL}, 
+      #{sprayCost,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, #{priceTax,jdbcType=DECIMAL}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
       #{updateUser,jdbcType=INTEGER})
   </insert>
@@ -138,6 +147,9 @@
     </selectKey>
     insert into price_material
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="materialClassifyId != null" >
+        material_classify_id,
+      </if>
       <if test="materialClassifyName != null" >
         material_classify_name,
       </if>
@@ -162,17 +174,29 @@
       <if test="actualWeight != null" >
         actual_weight,
       </if>
+      <if test="taxRate != null" >
+        tax_rate,
+      </if>
       <if test="tonPrice != null" >
         ton_price,
       </if>
       <if test="blankCost != null" >
         blank_cost,
       </if>
+      <if test="blankCostTax != null" >
+        blank_cost_tax,
+      </if>
       <if test="processCost != null" >
         process_cost,
       </if>
-      <if test="productPrice != null" >
-        product_price,
+      <if test="sprayCost != null" >
+        spray_cost,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="priceTax != null" >
+        price_tax,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -188,6 +212,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="materialClassifyId != null" >
+        #{materialClassifyId,jdbcType=INTEGER},
+      </if>
       <if test="materialClassifyName != null" >
         #{materialClassifyName,jdbcType=CHAR},
       </if>
@@ -212,17 +239,29 @@
       <if test="actualWeight != null" >
         #{actualWeight,jdbcType=VARCHAR},
       </if>
+      <if test="taxRate != null" >
+        #{taxRate,jdbcType=VARCHAR},
+      </if>
       <if test="tonPrice != null" >
-        #{tonPrice,jdbcType=VARCHAR},
+        #{tonPrice,jdbcType=DECIMAL},
       </if>
       <if test="blankCost != null" >
-        #{blankCost,jdbcType=VARCHAR},
+        #{blankCost,jdbcType=DECIMAL},
+      </if>
+      <if test="blankCostTax != null" >
+        #{blankCostTax,jdbcType=DECIMAL},
       </if>
       <if test="processCost != null" >
-        #{processCost,jdbcType=VARCHAR},
+        #{processCost,jdbcType=DECIMAL},
       </if>
-      <if test="productPrice != null" >
-        #{productPrice,jdbcType=VARCHAR},
+      <if test="sprayCost != null" >
+        #{sprayCost,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="priceTax != null" >
+        #{priceTax,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -250,6 +289,9 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
+      <if test="record.materialClassifyId != null" >
+        material_classify_id = #{record.materialClassifyId,jdbcType=INTEGER},
+      </if>
       <if test="record.materialClassifyName != null" >
         material_classify_name = #{record.materialClassifyName,jdbcType=CHAR},
       </if>
@@ -274,17 +316,29 @@
       <if test="record.actualWeight != null" >
         actual_weight = #{record.actualWeight,jdbcType=VARCHAR},
       </if>
+      <if test="record.taxRate != null" >
+        tax_rate = #{record.taxRate,jdbcType=VARCHAR},
+      </if>
       <if test="record.tonPrice != null" >
-        ton_price = #{record.tonPrice,jdbcType=VARCHAR},
+        ton_price = #{record.tonPrice,jdbcType=DECIMAL},
       </if>
       <if test="record.blankCost != null" >
-        blank_cost = #{record.blankCost,jdbcType=VARCHAR},
+        blank_cost = #{record.blankCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.blankCostTax != null" >
+        blank_cost_tax = #{record.blankCostTax,jdbcType=DECIMAL},
       </if>
       <if test="record.processCost != null" >
-        process_cost = #{record.processCost,jdbcType=VARCHAR},
+        process_cost = #{record.processCost,jdbcType=DECIMAL},
       </if>
-      <if test="record.productPrice != null" >
-        product_price = #{record.productPrice,jdbcType=VARCHAR},
+      <if test="record.sprayCost != null" >
+        spray_cost = #{record.sprayCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.priceTax != null" >
+        price_tax = #{record.priceTax,jdbcType=DECIMAL},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -306,6 +360,7 @@
   <update id="updateByExample" parameterType="map" >
     update price_material
     set id = #{record.id,jdbcType=INTEGER},
+      material_classify_id = #{record.materialClassifyId,jdbcType=INTEGER},
       material_classify_name = #{record.materialClassifyName,jdbcType=CHAR},
       name = #{record.name,jdbcType=VARCHAR},
       graph_no = #{record.graphNo,jdbcType=VARCHAR},
@@ -314,10 +369,14 @@
       material = #{record.material,jdbcType=VARCHAR},
       unit = #{record.unit,jdbcType=VARCHAR},
       actual_weight = #{record.actualWeight,jdbcType=VARCHAR},
-      ton_price = #{record.tonPrice,jdbcType=VARCHAR},
-      blank_cost = #{record.blankCost,jdbcType=VARCHAR},
-      process_cost = #{record.processCost,jdbcType=VARCHAR},
-      product_price = #{record.productPrice,jdbcType=VARCHAR},
+      tax_rate = #{record.taxRate,jdbcType=VARCHAR},
+      ton_price = #{record.tonPrice,jdbcType=DECIMAL},
+      blank_cost = #{record.blankCost,jdbcType=DECIMAL},
+      blank_cost_tax = #{record.blankCostTax,jdbcType=DECIMAL},
+      process_cost = #{record.processCost,jdbcType=DECIMAL},
+      spray_cost = #{record.sprayCost,jdbcType=DECIMAL},
+      price = #{record.price,jdbcType=DECIMAL},
+      price_tax = #{record.priceTax,jdbcType=DECIMAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
@@ -329,6 +388,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PriceMaterial" >
     update price_material
     <set >
+      <if test="materialClassifyId != null" >
+        material_classify_id = #{materialClassifyId,jdbcType=INTEGER},
+      </if>
       <if test="materialClassifyName != null" >
         material_classify_name = #{materialClassifyName,jdbcType=CHAR},
       </if>
@@ -353,17 +415,29 @@
       <if test="actualWeight != null" >
         actual_weight = #{actualWeight,jdbcType=VARCHAR},
       </if>
+      <if test="taxRate != null" >
+        tax_rate = #{taxRate,jdbcType=VARCHAR},
+      </if>
       <if test="tonPrice != null" >
-        ton_price = #{tonPrice,jdbcType=VARCHAR},
+        ton_price = #{tonPrice,jdbcType=DECIMAL},
       </if>
       <if test="blankCost != null" >
-        blank_cost = #{blankCost,jdbcType=VARCHAR},
+        blank_cost = #{blankCost,jdbcType=DECIMAL},
+      </if>
+      <if test="blankCostTax != null" >
+        blank_cost_tax = #{blankCostTax,jdbcType=DECIMAL},
       </if>
       <if test="processCost != null" >
-        process_cost = #{processCost,jdbcType=VARCHAR},
+        process_cost = #{processCost,jdbcType=DECIMAL},
       </if>
-      <if test="productPrice != null" >
-        product_price = #{productPrice,jdbcType=VARCHAR},
+      <if test="sprayCost != null" >
+        spray_cost = #{sprayCost,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="priceTax != null" >
+        price_tax = #{priceTax,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -382,7 +456,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PriceMaterial" >
     update price_material
-    set material_classify_name = #{materialClassifyName,jdbcType=CHAR},
+    set material_classify_id = #{materialClassifyId,jdbcType=INTEGER},
+      material_classify_name = #{materialClassifyName,jdbcType=CHAR},
       name = #{name,jdbcType=VARCHAR},
       graph_no = #{graphNo,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
@@ -390,10 +465,14 @@
       material = #{material,jdbcType=VARCHAR},
       unit = #{unit,jdbcType=VARCHAR},
       actual_weight = #{actualWeight,jdbcType=VARCHAR},
-      ton_price = #{tonPrice,jdbcType=VARCHAR},
-      blank_cost = #{blankCost,jdbcType=VARCHAR},
-      process_cost = #{processCost,jdbcType=VARCHAR},
-      product_price = #{productPrice,jdbcType=VARCHAR},
+      tax_rate = #{taxRate,jdbcType=VARCHAR},
+      ton_price = #{tonPrice,jdbcType=DECIMAL},
+      blank_cost = #{blankCost,jdbcType=DECIMAL},
+      blank_cost_tax = #{blankCostTax,jdbcType=DECIMAL},
+      process_cost = #{processCost,jdbcType=DECIMAL},
+      spray_cost = #{sprayCost,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      price_tax = #{priceTax,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},

@@ -13,7 +13,9 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.storage.MaterialBatchNoDTO;
 import com.deepsoft.haolifa.service.StockService;
 import com.deepsoft.haolifa.util.RandomUtils;
+
 import java.util.ArrayList;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -115,15 +118,16 @@ public class StockServiceImpl extends BaseService implements StockService {
     public List<MaterialBatchNoDTO> listMaterialBatchNos(String roomNo, String rackNo, String materialGraphNo) {
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isBlank(materialGraphNo)) {
+            return Collections.emptyList();
+        }
         if (StringUtils.isNotBlank(roomNo)) {
             criteria.andRoomNoEqualTo(roomNo);
         }
         if (StringUtils.isNotBlank(rackNo)) {
             criteria.andRackNoEqualTo(rackNo);
         }
-        if (StringUtils.isNotBlank(materialGraphNo)) {
-            criteria.andMaterialGraphNoEqualTo(materialGraphNo);
-        }
+        criteria.andMaterialGraphNoEqualTo(materialGraphNo);
         criteria.andQuantityGreaterThan(0);
         List<Stock> stocks = stockMapper.selectByExample(example);
         if (stocks.size() > 0) {

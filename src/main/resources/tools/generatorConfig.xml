@@ -85,6 +85,12 @@
       <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
+    <table tableName="check_material_lock" domainObjectName="CheckMaterialLock">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>
+    <!--<table tableName="graph_no_rel" domainObjectName="GraphNoRel">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
 
     <!--<table tableName="flow" domainObjectName="Flow"></table>-->
 
@@ -210,7 +216,7 @@
     <generatedKey column="id" sqlStatement="MySql" identity="true"/>
     </table>-->
     <!--<table tableName="expenses_classify" domainObjectName="ExpensesClassify"></table>-->
-    <!--<table tableName="payment_management" domainObjectName="PaymentManagement"></table>-->
+<!--    <table tableName="payment_management" domainObjectName="PaymentManagement"></table>-->
     <!--<table tableName="contract" domainObjectName="Contract">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
@@ -220,8 +226,8 @@
     <!--</table>-->
     <!--<table tableName="inspect_item" domainObjectName="InspectItem">-->
     <!--</table>-->
-    <!--<table tableName="inspect_history" domainObjectName="InspectHistory">-->
-    <!--</table>-->
+<!--    <table tableName="inspect_history" domainObjectName="InspectHistory">-->
+<!--    </table>-->
 
 
     <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult">-->
@@ -238,13 +244,13 @@
     <!--<table tableName="spray_item" domainObjectName="SprayItem">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
-    <!--<table tableName="spray_inspect_history" domainObjectName="SprayInspectHistory">-->
-      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+<!--    <table tableName="spray_inspect_history" domainObjectName="SprayInspectHistory">-->
+<!--      <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--    </table>-->
 
-    <!--<table tableName="price_material" domainObjectName="PriceMaterial">-->
-      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+<!--    <table tableName="price_material" domainObjectName="PriceMaterial">-->
+<!--      <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--    </table>-->
     <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 
     <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->

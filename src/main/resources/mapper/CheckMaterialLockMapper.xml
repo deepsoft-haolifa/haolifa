@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.deepsoft.haolifa.dao.repository.PaymentManagementMapper" >
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PaymentManagement" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.CheckMaterialLockMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.CheckMaterialLock" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="amount" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="pay_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="invoice_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="order_no" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="lock_quantity" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
@@ -72,15 +71,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, amount, pay_time, invoice_no, order_no, create_user_id, create_time, update_time
+    id, order_no, material_graph_no, type, lock_quantity, create_time, update_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PaymentManagementExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLockExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from payment_management
+    from check_material_lock
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,47 +90,47 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from payment_management
+    from check_material_lock
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from payment_management
+    delete from check_material_lock
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PaymentManagementExample" >
-    delete from payment_management
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLockExample" >
+    delete from check_material_lock
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PaymentManagement" >
-    insert into payment_management (id, amount, pay_time, 
-      invoice_no, order_no, create_user_id, 
-      create_time, update_time)
-    values (#{id,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{payTime,jdbcType=TIMESTAMP}, 
-      #{invoiceNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLock" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into check_material_lock (order_no, material_graph_no, type, 
+      lock_quantity, create_time, update_time
+      )
+    values (#{orderNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{lockQuantity,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PaymentManagement" >
-    insert into payment_management
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLock" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into check_material_lock
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="amount != null" >
-        amount,
-      </if>
-      <if test="payTime != null" >
-        pay_time,
-      </if>
-      <if test="invoiceNo != null" >
-        invoice_no,
-      </if>
       <if test="orderNo != null" >
         order_no,
       </if>
-      <if test="createUserId != null" >
-        create_user_id,
+      <if test="materialGraphNo != null" >
+        material_graph_no,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="lockQuantity != null" >
+        lock_quantity,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -141,23 +140,17 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="amount != null" >
-        #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="payTime != null" >
-        #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="invoiceNo != null" >
-        #{invoiceNo,jdbcType=VARCHAR},
-      </if>
       <if test="orderNo != null" >
         #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="createUserId != null" >
-        #{createUserId,jdbcType=INTEGER},
+      <if test="materialGraphNo != null" >
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="lockQuantity != null" >
+        #{lockQuantity,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -167,32 +160,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PaymentManagementExample" resultType="java.lang.Integer" >
-    select count(*) from payment_management
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLockExample" resultType="java.lang.Integer" >
+    select count(*) from check_material_lock
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update payment_management
+    update check_material_lock
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.amount != null" >
-        amount = #{record.amount,jdbcType=DECIMAL},
-      </if>
-      <if test="record.payTime != null" >
-        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.invoiceNo != null" >
-        invoice_no = #{record.invoiceNo,jdbcType=VARCHAR},
-      </if>
       <if test="record.orderNo != null" >
         order_no = #{record.orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.createUserId != null" >
-        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      <if test="record.materialGraphNo != null" >
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.lockQuantity != null" >
+        lock_quantity = #{record.lockQuantity,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -206,36 +196,32 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update payment_management
+    update check_material_lock
     set id = #{record.id,jdbcType=INTEGER},
-      amount = #{record.amount,jdbcType=DECIMAL},
-      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
-      invoice_no = #{record.invoiceNo,jdbcType=VARCHAR},
       order_no = #{record.orderNo,jdbcType=VARCHAR},
-      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=TINYINT},
+      lock_quantity = #{record.lockQuantity,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PaymentManagement" >
-    update payment_management
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLock" >
+    update check_material_lock
     <set >
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="payTime != null" >
-        pay_time = #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="invoiceNo != null" >
-        invoice_no = #{invoiceNo,jdbcType=VARCHAR},
-      </if>
       <if test="orderNo != null" >
         order_no = #{orderNo,jdbcType=VARCHAR},
       </if>
-      <if test="createUserId != null" >
-        create_user_id = #{createUserId,jdbcType=INTEGER},
+      <if test="materialGraphNo != null" >
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="lockQuantity != null" >
+        lock_quantity = #{lockQuantity,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -246,13 +232,12 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PaymentManagement" >
-    update payment_management
-    set amount = #{amount,jdbcType=DECIMAL},
-      pay_time = #{payTime,jdbcType=TIMESTAMP},
-      invoice_no = #{invoiceNo,jdbcType=VARCHAR},
-      order_no = #{orderNo,jdbcType=VARCHAR},
-      create_user_id = #{createUserId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.CheckMaterialLock" >
+    update check_material_lock
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      lock_quantity = #{lockQuantity,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

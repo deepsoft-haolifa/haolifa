@@ -46,8 +46,7 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         int insert = priceMaterialMapper.insertSelective(model);
         if (insert > 0) {
             // 更新零件价格
-            String blankCost = model.getBlankCost();
-            materialService.updateMaterialPrice(model.getGraphNo(),new BigDecimal(blankCost));
+            materialService.updateMaterialPrice(model.getGraphNo(),model.getBlankCost());
             return ResultBean.success(insert);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
@@ -62,8 +61,7 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         int update = priceMaterialMapper.updateByPrimaryKeySelective(model);
         if (update > 0) {
             // 更新零件价格
-            String blankCost = model.getBlankCost();
-            materialService.updateMaterialPrice(model.getGraphNo(),new BigDecimal(blankCost));
+            materialService.updateMaterialPrice(model.getGraphNo(),model.getBlankCost());
             return ResultBean.success(update);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);

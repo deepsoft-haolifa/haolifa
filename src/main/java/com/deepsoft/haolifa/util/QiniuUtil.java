@@ -21,7 +21,7 @@ public class QiniuUtil {
 
     private static final String QINIU_AK = "eL1I7mEOm1JrlO2BsSs0j0fxXCMFo8J1396Uqq_w";
     private static final String QINIU_SK = "2UeiBk74-o7uE_c2K1nXRyo2eSeb4LgSyctV2Dil";
-    private static final String QINIU_URL = "http://d.miaojiebei.com/";
+    private static final String QINIU_URL = "http://upload.haolifa.com/";
     private static final String QINIU_BUCKET = "haolifa";
 
 

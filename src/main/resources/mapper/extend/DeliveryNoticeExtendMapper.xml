@@ -30,7 +30,7 @@
         and dn.contract_order_no like concat('%',#{contractOrderNo},'%')
       </if>
       <if test="deliverStatus > -1" >
-        op.deliver_status = #{deliverStatus}
+        and op.deliver_status = #{deliverStatus}
       </if>
     </where>
     order by dn.id desc

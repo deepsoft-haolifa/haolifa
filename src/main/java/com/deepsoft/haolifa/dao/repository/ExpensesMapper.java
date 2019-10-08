@@ -29,7 +29,6 @@ public interface ExpensesMapper {
     int updateByPrimaryKeySelective(Expenses record);
 
     int updateByPrimaryKey(Expenses record);
-
     List<ExpensesReport> getClassify();
     List<ExpensesReport> classifyByDepartment();
     List<ExpensesReport> classifyBySecondDepartment();

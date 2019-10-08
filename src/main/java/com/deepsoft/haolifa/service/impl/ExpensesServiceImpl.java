@@ -115,4 +115,13 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     classifyExample.createCriteria().andClassifyPidEqualTo(pId);
     return ResultBean.success(classifyMapper.selectByExample(classifyExample));
   }
+  @Override
+  public ResultBean getClassify() {
+    return  ResultBean.success(expensesMapper.getClassify());
+  }
+  @Override
+  public ResultBean classifyByDepartment() {
+    return  ResultBean.success(expensesMapper.classifyByDepartment());
+  }
+
 }

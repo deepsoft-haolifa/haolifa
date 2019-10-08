@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SprayColorRelationExample {
+public class CheckMaterialLockExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public SprayColorRelationExample() {
+    public CheckMaterialLockExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -165,6 +165,146 @@ public class SprayColorRelationExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderNoIsNull() {
+            addCriterion("order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoIsNotNull() {
+            addCriterion("order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoEqualTo(String value) {
+            addCriterion("order_no =", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotEqualTo(String value) {
+            addCriterion("order_no <>", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoGreaterThan(String value) {
+            addCriterion("order_no >", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("order_no >=", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoLessThan(String value) {
+            addCriterion("order_no <", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("order_no <=", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoLike(String value) {
+            addCriterion("order_no like", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotLike(String value) {
+            addCriterion("order_no not like", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoIn(List<String> values) {
+            addCriterion("order_no in", values, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotIn(List<String> values) {
+            addCriterion("order_no not in", values, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoBetween(String value1, String value2) {
+            addCriterion("order_no between", value1, value2, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotBetween(String value1, String value2) {
+            addCriterion("order_no not between", value1, value2, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoIsNull() {
+            addCriterion("material_graph_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoIsNotNull() {
+            addCriterion("material_graph_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoEqualTo(String value) {
+            addCriterion("material_graph_no =", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoNotEqualTo(String value) {
+            addCriterion("material_graph_no <>", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoGreaterThan(String value) {
+            addCriterion("material_graph_no >", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("material_graph_no >=", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoLessThan(String value) {
+            addCriterion("material_graph_no <", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("material_graph_no <=", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoLike(String value) {
+            addCriterion("material_graph_no like", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoNotLike(String value) {
+            addCriterion("material_graph_no not like", value, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoIn(List<String> values) {
+            addCriterion("material_graph_no in", values, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoNotIn(List<String> values) {
+            addCriterion("material_graph_no not in", values, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoBetween(String value1, String value2) {
+            addCriterion("material_graph_no between", value1, value2, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNoNotBetween(String value1, String value2) {
+            addCriterion("material_graph_no not between", value1, value2, "materialGraphNo");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -225,143 +365,63 @@ public class SprayColorRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andColorIsNull() {
-            addCriterion("color is null");
+        public Criteria andLockQuantityIsNull() {
+            addCriterion("lock_quantity is null");
             return (Criteria) this;
         }
 
-        public Criteria andColorIsNotNull() {
-            addCriterion("color is not null");
+        public Criteria andLockQuantityIsNotNull() {
+            addCriterion("lock_quantity is not null");
             return (Criteria) this;
         }
 
-        public Criteria andColorEqualTo(String value) {
-            addCriterion("color =", value, "color");
+        public Criteria andLockQuantityEqualTo(Integer value) {
+            addCriterion("lock_quantity =", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorNotEqualTo(String value) {
-            addCriterion("color <>", value, "color");
+        public Criteria andLockQuantityNotEqualTo(Integer value) {
+            addCriterion("lock_quantity <>", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorGreaterThan(String value) {
-            addCriterion("color >", value, "color");
+        public Criteria andLockQuantityGreaterThan(Integer value) {
+            addCriterion("lock_quantity >", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorGreaterThanOrEqualTo(String value) {
-            addCriterion("color >=", value, "color");
+        public Criteria andLockQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity >=", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorLessThan(String value) {
-            addCriterion("color <", value, "color");
+        public Criteria andLockQuantityLessThan(Integer value) {
+            addCriterion("lock_quantity <", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorLessThanOrEqualTo(String value) {
-            addCriterion("color <=", value, "color");
+        public Criteria andLockQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("lock_quantity <=", value, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorLike(String value) {
-            addCriterion("color like", value, "color");
+        public Criteria andLockQuantityIn(List<Integer> values) {
+            addCriterion("lock_quantity in", values, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorNotLike(String value) {
-            addCriterion("color not like", value, "color");
+        public Criteria andLockQuantityNotIn(List<Integer> values) {
+            addCriterion("lock_quantity not in", values, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorIn(List<String> values) {
-            addCriterion("color in", values, "color");
+        public Criteria andLockQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity between", value1, value2, "lockQuantity");
             return (Criteria) this;
         }
 
-        public Criteria andColorNotIn(List<String> values) {
-            addCriterion("color not in", values, "color");
-            return (Criteria) this;
-        }
-
-        public Criteria andColorBetween(String value1, String value2) {
-            addCriterion("color between", value1, value2, "color");
-            return (Criteria) this;
-        }
-
-        public Criteria andColorNotBetween(String value1, String value2) {
-            addCriterion("color not between", value1, value2, "color");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoIsNull() {
-            addCriterion("relation_no is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoIsNotNull() {
-            addCriterion("relation_no is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoEqualTo(String value) {
-            addCriterion("relation_no =", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoNotEqualTo(String value) {
-            addCriterion("relation_no <>", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoGreaterThan(String value) {
-            addCriterion("relation_no >", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoGreaterThanOrEqualTo(String value) {
-            addCriterion("relation_no >=", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoLessThan(String value) {
-            addCriterion("relation_no <", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoLessThanOrEqualTo(String value) {
-            addCriterion("relation_no <=", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoLike(String value) {
-            addCriterion("relation_no like", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoNotLike(String value) {
-            addCriterion("relation_no not like", value, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoIn(List<String> values) {
-            addCriterion("relation_no in", values, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoNotIn(List<String> values) {
-            addCriterion("relation_no not in", values, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoBetween(String value1, String value2) {
-            addCriterion("relation_no between", value1, value2, "relationNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andRelationNoNotBetween(String value1, String value2) {
-            addCriterion("relation_no not between", value1, value2, "relationNo");
+        public Criteria andLockQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("lock_quantity not between", value1, value2, "lockQuantity");
             return (Criteria) this;
         }
 

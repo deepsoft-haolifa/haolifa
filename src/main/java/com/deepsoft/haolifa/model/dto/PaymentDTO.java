@@ -19,4 +19,7 @@ public class PaymentDTO {
 
   @ApiModelProperty(required = true,value = "收付款时间")
   private String payTime;
+
+  @ApiModelProperty(value = "发票编号")
+  private String invoiceNo;
 }
