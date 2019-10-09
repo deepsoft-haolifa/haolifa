@@ -81,9 +81,9 @@ public class PaymentServiceImpl implements PaymentService {
             List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(orderExample);
             if (!CollectionUtils.isEmpty(purchaseOrders)) {
                 PurchaseOrder purchaseOrder = purchaseOrders.get(0);
-                if (purchaseOrder.getTotalPrice().doubleValue() < (hasRecordCount + model.getAmount())) {
-                    throw new BaseException(ResponseEnum.PAY_TOTAL_COUNT_ERROR);
-                }
+//                if (purchaseOrder.getTotalPrice().doubleValue() < (hasRecordCount + model.getAmount())) {
+//                    throw new BaseException(ResponseEnum.PAY_TOTAL_COUNT_ERROR);
+//                }
                 paymentManagementMapper.insertSelective(paymentManagement);
                 PurchaseOrder update = new PurchaseOrder();
                 update.setPaidAccount(new BigDecimal(purchaseOrder.getPaidAccount().doubleValue() + model.getAmount()));
@@ -98,9 +98,9 @@ public class PaymentServiceImpl implements PaymentService {
             List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
             if (!CollectionUtils.isEmpty(orderProducts)) {
                 OrderProduct orderProduct = orderProducts.get(0);
-                if (orderProduct.getTotalPrice().doubleValue() < (hasRecordCount + model.getAmount())) {
-                    throw new BaseException(ResponseEnum.PAY_TOTAL_COUNT_ERROR);
-                }
+//                if (orderProduct.getTotalPrice().doubleValue() < (hasRecordCount + model.getAmount())) {
+//                    throw new BaseException(ResponseEnum.PAY_TOTAL_COUNT_ERROR);
+//                }
                 paymentManagementMapper.insertSelective(paymentManagement);
                 OrderProduct update = new OrderProduct();
                 update.setId(orderProduct.getId());
