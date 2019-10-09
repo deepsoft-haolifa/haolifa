@@ -117,7 +117,7 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
       criteria.andStorageStatusEqualTo(model.getStorageStatus());
     }
     if (StringUtils.isNotBlank(model.getOrderNo())) {
-      criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
+      criteria.andOrderNoEqualTo(model.getOrderNo());
     }
     example.setOrderByClause("id desc");
     Page<ProInspectRecord> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {

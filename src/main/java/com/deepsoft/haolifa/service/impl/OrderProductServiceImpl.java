@@ -1108,9 +1108,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             }
         }
         // 如果没有符合规则的阀体，则把型号，规则找到的阀体，展示出来
-//        if (CollectionUtils.isEmpty(fatiCollect) && !CollectionUtils.isEmpty(fatiCollectEmpty)) {
-//            fatiCollect.addAll(fatiCollectEmpty);
-//        }
+        if (CollectionUtils.isEmpty(fatiCollect) && !CollectionUtils.isEmpty(fatiCollectEmpty)) {
+            fatiCollect.addAll(fatiCollectEmpty);
+        }
 
         // 阀座图号列表
         List<Material> fazuoMaterialList = materialService
