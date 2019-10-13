@@ -39,10 +39,12 @@ public class CommonEnum {
         MATERIAL_GRAPH_NO_EXISTS("2003", "零件图号已经存在"),
         PRODUCT_NO_EXISTS("2004", "成品号已经存在"),
         MATERIAL_NOT_ENOUGH("2005", "该零件库存不足"),
-        OUT_PRODUCT_COUNT_ERROR("2006", "成品出库数量大于入库数量"),
+        OUT_PRODUCT_COUNT_ERROR("2006", "订单成品出库数量大于入库数量"),
         MATERIAL_GRAPH_NO_NOT_EXIST("2007", "零件库中无此图号"),
         MATERIAL_HANDLED_GRAPH_NO_NOT_EXIST("2008", "零件库中无此加工后图号"),
         ORDER_NO_NOT_EXIST("2009", "库中无此订单"),
+        OUT_PRODUCT_NO_COUNT_ERROR("2010", "这个订单号，这个成品号的出库数量不能大于它的入库数量"),
+
 
         // 采购计划、请购单、采购单模块错误码开头3***
         PURCHASE_NUMBER_NOT_ZERO("3000", "原料采购数量不能为0"),

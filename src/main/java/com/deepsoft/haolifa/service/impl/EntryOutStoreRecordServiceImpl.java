@@ -96,7 +96,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             boolean result = stockService.addStock(entryOutStorageDTO);
             log.info("EntryOutStoreRecordServiceImpl entryProduct add stock result:{}", result);
             // 统计入库数量-->变更订单状态（生产完成）
-            int storeCount = getEntryProductCountByOrderNo(orderNo);
+            int storeCount = getEntryProductCountByOrderNo(orderNo, "");
             OrderProductAssociateExample associateExample = new OrderProductAssociateExample();
             associateExample.createCriteria().andOrderNoEqualTo(model.getOrderNo());
             List<OrderProductAssociate> associates = associateMapper.selectByExample(associateExample);
@@ -111,11 +111,16 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     /**
      * 根据订单号获取成品入库数
      */
-    private int getEntryProductCountByOrderNo(String orderNo) {
+    private int getEntryProductCountByOrderNo(String orderNo, String productNo) {
         EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
-        recordExample.createCriteria().andOrderNoEqualTo(orderNo)
+        EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo)
                 .andOperationTypeEqualTo(CommonEnum.OperationType.ENTRY.code)
                 .andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
+        if (StringUtils.isNotBlank(productNo)) {
+            criteria.andProductNoEqualTo(productNo);
+        }
+
         List<EntryOutStoreRecord> recordList = entryOutStoreRecordMapper.selectByExample(recordExample);
         int storeCount = recordList.stream().map(EntryOutStoreRecord::getQuantity).reduce(0, (a, b) -> a + b);
         return storeCount;
@@ -124,11 +129,15 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     /**
      * 根据订单号获取成品出库数
      */
-    private int getOutProductCountByOrderNo(String orderNo) {
+    private int getOutProductCountByOrderNo(String orderNo, String productNo) {
         EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
-        recordExample.createCriteria().andOrderNoEqualTo(orderNo)
+        EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
+        criteria.andOrderNoEqualTo(orderNo)
                 .andOperationTypeEqualTo(CommonEnum.OperationType.OUT.code)
                 .andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
+        if (StringUtils.isNotBlank(productNo)) {
+            criteria.andProductNoEqualTo(productNo);
+        }
         List<EntryOutStoreRecord> recordList = entryOutStoreRecordMapper.selectByExample(recordExample);
         int storeCount = recordList.stream().map(EntryOutStoreRecord::getQuantity).reduce(0, (a, b) -> a + b);
         storeCount = Math.abs(storeCount);
@@ -142,18 +151,34 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte operationType = CommonEnum.OperationType.OUT.code;
         byte storageType = CommonEnum.StorageType.PRODUCT.code;
         String orderNo = model.getOrderNo();
-        // 根据订单号获取入库数量，不能多出库
-        // 入库数量
-        int entryProductCount = getEntryProductCountByOrderNo(orderNo);
-        // 已经出库数量
-        int storeCount = getOutProductCountByOrderNo(orderNo);
+        String productNo = model.getProductNo();
         // 待出库数量
         int outProductCount = Math.abs(model.getQuantity());
+        // 获取这个订单，这个成品号的入库数量，出库数量不能大于入库数量
+        // 入库数量
+        int entryOrderProductCount = getEntryProductCountByOrderNo(orderNo, productNo);
+        // 已经出库数量
+        int outOrderProductCount = getOutProductCountByOrderNo(orderNo, productNo);
+
+        log.info("outProduct productNo already count:{},out count:{},orderNo:{},productNo:{}", outOrderProductCount, outProductCount, orderNo,productNo);
+        if (outOrderProductCount + outProductCount > entryOrderProductCount) {
+            log.error("outProduct productNo out count more than entry count，orderNo:{},productNo:{}", orderNo,productNo);
+            return ResultBean.error(CommonEnum.ResponseEnum.OUT_PRODUCT_NO_COUNT_ERROR);
+        }
+
+        // 根据订单号获取入库数量，不能多出库
+        // 入库数量,
+        int entryProductCount = getEntryProductCountByOrderNo(orderNo, "");
+        // 已经出库数量
+        int storeCount = getOutProductCountByOrderNo(orderNo, "");
         log.info("outProduct already count:{},out count:{},orderNo:{}", storeCount, outProductCount, orderNo);
         if (storeCount + outProductCount > entryProductCount) {
             log.error("outProduct out count more than entry count，orderNo:{}", orderNo);
             return ResultBean.error(CommonEnum.ResponseEnum.OUT_PRODUCT_COUNT_ERROR);
         }
+
+
+
         // 保证数量是负数
         model.setQuantity(-outProductCount);
         String customerNo = "";
@@ -369,9 +394,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         productStorageListDTO.setExecute(executeMap.get(oneOrderNo));
                     } else {
                         // 入库数量
-                        int entryProductCount = getEntryProductCountByOrderNo(oneOrderNo);
+                        int entryProductCount = getEntryProductCountByOrderNo(oneOrderNo,"");
                         // 已经出库数量
-                        int storeCount = getOutProductCountByOrderNo(oneOrderNo);
+                        int storeCount = getOutProductCountByOrderNo(oneOrderNo,"");
                         int isExecute = 0; // 默认可出库
                         if (entryProductCount <= storeCount) {
                             isExecute = 1;// 不可出库
