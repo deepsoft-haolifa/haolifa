@@ -102,6 +102,6 @@ public class UpperMoney {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(upper("123045.35443"));
+        System.out.println(upper("100.00"));
     }
 }
