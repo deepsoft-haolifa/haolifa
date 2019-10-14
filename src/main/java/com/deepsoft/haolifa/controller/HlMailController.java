@@ -47,7 +47,7 @@ public class HlMailController {
         System.out.println(hlMails.size());
         return ResultBean.success(pageDTO);
     }
-    @GetMapping("/getsendMails")
+    @GetMapping("/getSendMails")
     @ApiOperation("获取已发送站内信")
     public ResultBean getsendMails(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
                                  @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize){
