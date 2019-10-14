@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,10 +68,13 @@ public class HlMailController {
         UserInfoVO userInfoVO = userService.selectUserInfo();
         HlMail hlMail = new HlMail();
         hlMail.setContent(model.getContent());
+        int userId = Integer.valueOf(model.getUsers().split("-")[0]);
+        SysUser sysUser = userService.getSysUser(userId);
         hlMail.setCreateTime(new Date());
         hlMail.setTitle(model.getTitle());
         hlMail.setUsers(model.getUsers());
         hlMail.setSendUser(userInfoVO.getRealName());
+        hlMail.setRevUser(sysUser.getRealName());
         return hlMailService.save(hlMail);
     }
     @GetMapping("/getMailsByUserId")
