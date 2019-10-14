@@ -13,7 +13,6 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_
 
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
-import com.deepsoft.haolifa.constant.CacheKey;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.*;
@@ -30,16 +29,12 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
-import com.deepsoft.haolifa.util.ConvertMoneyUtil;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
-import com.deepsoft.haolifa.util.RandomUtils;
+import com.deepsoft.haolifa.util.UpperMoney;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
-import javax.print.DocFlavor.STRING;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -238,11 +233,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             exDTOS.add(itemExDTO);
         }
         purchaseOrderExDTO.setTotalPrice(orderTotalAmount);
-        try {
-            purchaseOrderExDTO.setTotalPriceCN(ConvertMoneyUtil.toChinaUpper(String.valueOf(orderTotalAmount)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        purchaseOrderExDTO.setTotalPriceCN(UpperMoney.upper(String.valueOf(orderTotalAmount)));
         purchaseOrderExDTO.setTotalWeight(orderTotalWeight);
         purchaseOrderExDTO.setOrderNumber(orderTotalNumber);
         Map<String, Object> result = new HashMap<>(2);

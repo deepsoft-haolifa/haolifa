@@ -34,7 +34,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean save(ExpensesDTO model) {
-    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getSecondClassify(), model.getVoucherNo())
+    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
         || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
       return ResultBean.error(ResponseEnum.PARAM_ERROR);
     }
@@ -72,7 +72,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean update(ExpensesDTO model) {
-    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getSecondClassify(), model.getVoucherNo())
+    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
         || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
       return ResultBean.error(ResponseEnum.PARAM_ERROR);
     }
@@ -101,6 +101,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
       criteria.andVoucherNoLike("%" + voucherNo + "%");
     }
     criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+    expensesExample.setOrderByClause("id desc");
     Page<Expenses> page = PageHelper.startPage(pageNum, pageSize)
         .doSelectPage(() -> expensesMapper.selectByExample(expensesExample));
     PageDTO<Expenses> pageDTO = new PageDTO<>();
