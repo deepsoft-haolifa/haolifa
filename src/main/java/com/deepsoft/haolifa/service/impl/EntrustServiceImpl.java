@@ -145,7 +145,10 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
             List<Byte> statusList = Arrays
                     .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code);
             criteria.andStatusNotIn(statusList);
-            criteria.andWorkshopTypeEqualTo((byte) 1);// 内部车间
+
+            List<Byte> workShopTypeList = Arrays
+                    .asList(CommonEnum.WorkshopType.INTERNAL_1.type,CommonEnum.WorkshopType.INTERNAL_2.type);
+            criteria.andWorkshopTypeIn(workShopTypeList);// 内部车间1,内部车间2
         }
         if (model.getType() == 3) {
             // 质检
@@ -153,7 +156,10 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
                     .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code,
                             EntrustStatus.AUDIT_PASS_WAITING_2.code);
             criteria.andStatusNotIn(statusList);
-            criteria.andWorkshopTypeEqualTo((byte) 1);// 内部车间
+
+            List<Byte> workShopTypeList = Arrays
+                    .asList(CommonEnum.WorkshopType.INTERNAL_1.type,CommonEnum.WorkshopType.INTERNAL_2.type);
+            criteria.andWorkshopTypeIn(workShopTypeList);// 内部车间1,内部车间2
         }
         if (model.getStatus() != -1) {
             criteria.andStatusEqualTo(model.getStatus().byteValue());

@@ -112,7 +112,8 @@ public class CommonEnum {
         AUDIT_PASS((byte) 1),
         AUDIT_NO_PASS((byte) 0),
         AUDIT_BACK((byte) 2),
-        FLOW_INIT((byte) 3),;
+        FLOW_INIT((byte) 3),
+        ;
 
         public final byte code;
 
@@ -140,7 +141,8 @@ public class CommonEnum {
         STORAGE_FINISH((byte) 11, "已入库"),
         APPLY_DELIVERY((byte) 12, "申请发货"),
         DELIVERY_FINISH((byte) 13, "发货完成"),
-        AUDIT_ORDER_CLOSE((byte) 14, "审核不通过"),;
+        AUDIT_ORDER_CLOSE((byte) 14, "审核不通过"),
+        ;
 
         public final byte code;
         public final String desc;
@@ -248,7 +250,8 @@ public class CommonEnum {
         // 阀体压力
         FATI_YALI("fatiyali", 0),
         // 通用零件
-        TONG_YONG("tongyong", 5),;
+        TONG_YONG("tongyong", 5),
+        ;
 
         public final String code;
 
@@ -267,7 +270,8 @@ public class CommonEnum {
         // 蝶阀
         D("D"),
         // 止回阀
-        H("H"),;
+        H("H"),
+        ;
         public final String code;
 
         ProductType(String code) {
@@ -287,7 +291,8 @@ public class CommonEnum {
         // 替换料
         REPLACE((byte) 3),
         // 释放料
-        RELEASE((byte) 4),;
+        RELEASE((byte) 4),
+        ;
 
         public final byte code;
 
@@ -306,7 +311,8 @@ public class CommonEnum {
         // 释放料
         WDH((byte) 3, "外调货"),
         TYX((byte) 4, "调压箱"),
-        QI_TA((byte) 5, "其他"),;
+        QI_TA((byte) 5, "其他"),
+        ;
 
         public final byte code;
         public final String msg;
@@ -441,7 +447,8 @@ public class CommonEnum {
      * 字典类型枚举
      */
     public enum SysDictTypeEnum {
-        FILE_TYPE("FILE_TYPE", "文件类型"),;
+        FILE_TYPE("FILE_TYPE", "文件类型"),
+        ;
 
         public String code;
         public String name;
@@ -526,6 +533,19 @@ public class CommonEnum {
         public final String name;
 
         CheckMaterialLockType(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
+
+    public enum WorkshopType {
+        INTERNAL_1((byte) 1, "内部车间1"),
+        INTERNAL_2((byte) 3, "内部车间2"),
+        EXTERNAL((byte) 2, "外部车间");
+        public final byte type;
+        public final String name;
+
+        WorkshopType(byte type, String name) {
             this.type = type;
             this.name = name;
         }
