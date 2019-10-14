@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.domain.HlMail;
 import com.deepsoft.haolifa.model.domain.HlMailReve;
 import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.vo.UserInfoVO;
 import com.deepsoft.haolifa.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,15 +46,31 @@ public class HlMailController {
         System.out.println(hlMails.size());
         return ResultBean.success(pageDTO);
     }
+    @GetMapping("/getsendMails")
+    @ApiOperation("获取已发送站内信")
+    public ResultBean getsendMails(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
+                                 @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize){
+
+        PageDTO<HlMail> pageDTO = new PageDTO<>();
+        UserInfoVO userInfoVO = userService.selectUserInfo();
+        List<HlMail> hlMails = hlMailService.selectsendHlMails(userInfoVO.getRealName());
+        pageDTO.setTotal(hlMails.size());
+        hlMails = getList(pageNum,pageSize,hlMails);
+        pageDTO.setList(hlMails);
+        pageDTO.setPageNum(pageNum);
+
+        return ResultBean.success(pageDTO);
+    }
     @ApiOperation("发送站内信")
     @PostMapping("sendMail")
     public ResultBean sendMail(@RequestBody HlMailDTO model) {
-
+        UserInfoVO userInfoVO = userService.selectUserInfo();
         HlMail hlMail = new HlMail();
         hlMail.setContent(model.getContent());
         hlMail.setCreateTime(new Date());
         hlMail.setTitle(model.getTitle());
         hlMail.setUsers(model.getUsers());
+        hlMail.setSendUser(userInfoVO.getRealName());
         return hlMailService.save(hlMail);
     }
     @GetMapping("/getMailsByUserId")

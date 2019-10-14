@@ -123,5 +123,20 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
   public ResultBean classifyByDepartment() {
     return  ResultBean.success(expensesMapper.classifyByDepartment());
   }
-
+  @Override
+  public ResultBean getAllClassify() {
+    return  ResultBean.success(expensesMapper.getAllClassify());
+  }
+  @Override
+  public ResultBean classifyByDepartmentAll() {
+    return  ResultBean.success(expensesMapper.classifyByDepartmentAll());
+  }
+  @Override
+  public ResultBean getAllClassifyWithDepartment(String department) {
+    return  ResultBean.success(expensesMapper.getAllClassifyWithDepartment( department));
+  }
+  @Override
+  public ResultBean getAllClassifyWithFirstClassify(String classify) {
+    return  ResultBean.success(expensesMapper.getAllClassifyWithFirstClassify( classify));
+  }
 }

@@ -32,4 +32,8 @@ public interface ExpensesMapper {
     List<ExpensesReport> getClassify();
     List<ExpensesReport> classifyByDepartment();
     List<ExpensesReport> classifyBySecondDepartment();
+    List<ExpensesReport> getAllClassify();
+    List<ExpensesReport> classifyByDepartmentAll();
+    List<ExpensesReport> getAllClassifyWithDepartment(String department);
+    List<ExpensesReport> getAllClassifyWithFirstClassify(String classify);
 }

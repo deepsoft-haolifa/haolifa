@@ -29,5 +29,11 @@ public interface HlMailService {
      * @return
      */
     List<HlMail> selectHlMailsByUserId(String param);
+    /**
+     * 获取已发送站内信列表
+
+     * @return
+     */
+    List<HlMail> selectsendHlMails(String userName);
 
 }

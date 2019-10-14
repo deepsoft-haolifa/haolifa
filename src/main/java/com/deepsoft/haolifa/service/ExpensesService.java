@@ -20,4 +20,10 @@ public interface ExpensesService {
   //获取费用统计表，每个费用类别每个月的开支
   ResultBean getClassify();
   ResultBean classifyByDepartment();
+  //获取费用统计表
+  ResultBean getAllClassify();
+//查询部门费用总计
+  ResultBean classifyByDepartmentAll();
+  ResultBean getAllClassifyWithDepartment(String department);
+  ResultBean getAllClassifyWithFirstClassify(String classify);
 }

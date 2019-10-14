@@ -14,14 +14,16 @@ public class HlMail {
     private Date createTime;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+    private String sendUser;
 
-    public HlMail(Integer id, String title, String users, String content, Date createTime, Date updateTime) {
+    public HlMail(Integer id, String title, String users, String content, Date createTime, Date updateTime,String sendUser) {
         this.id = id;
         this.title = title;
         this.users = users;
         this.content = content;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.sendUser = sendUser;
     }
 
     public HlMail() {
@@ -73,6 +75,14 @@ public class HlMail {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getSendUser() {
+        return sendUser;
+    }
+
+    public void setSendUser(String sendUser) {
+        this.sendUser = sendUser;
     }
 }
 
