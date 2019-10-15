@@ -34,7 +34,7 @@ public interface InspectService {
     /**
      * 查询列表
      */
-    ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo);
+    ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo,String supplierName);
 
     /**
      * 更新状态

@@ -169,7 +169,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     }
 
     @Override
-    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo) {
+    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo,String supplierName) {
         InspectExample example = new InspectExample();
         InspectExample.Criteria criteria = example.createCriteria();
 //    if (type == 0) {
@@ -187,7 +187,9 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (StringUtils.isNotEmpty(inspectNo)) {
             criteria.andInspectNoLike("%" + inspectNo + "%");
         }
-
+        if (StringUtils.isNotEmpty(supplierName)) {
+            criteria.andSupplierNameLike("%" + supplierName + "%");
+        }
         Page pageData = PageHelper.startPage(pageNum, pageSize, "create_time desc")
                 .doSelectPage(() -> inspectMapper.selectByExample(example));
         PageDTO pageDTO = new PageDTO();
