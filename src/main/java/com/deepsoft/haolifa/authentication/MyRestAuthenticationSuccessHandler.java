@@ -1,8 +1,11 @@
 package com.deepsoft.haolifa.authentication;
 
+import ch.qos.logback.classic.net.SyslogAppender;
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.model.domain.SysLog;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.service.SysLogService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.validator.ValidateCode;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +37,8 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Autowired
     private SysUserService userService;
-
+    @Autowired
+    private SysLogService sysLogService;
     @Autowired
     private HttpSession httpSession;
 
@@ -45,13 +49,20 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) throws ServletException, IOException {
 
         CustomUser customUser = userService.selectLoginUser();
-        log.info("customeUser:{}, time:",customUser, new Date());
+        log.info("customeUser:{}, time:", customUser, new Date());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
         writer.write(JSONObject.toJSONString(ResultBean.success(userService.selectUserInfo())));
         writer.flush();
         writer.close();
+
+// 登录成功添加登录日志
+        SysLog sysLog = new SysLog();
+        sysLog.setType((byte) 1);
+        sysLog.setRealName(customUser.getRealName());
+        sysLog.setUserId(customUser.getId());
+        sysLogService.save(sysLog);
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
