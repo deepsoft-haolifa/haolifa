@@ -558,13 +558,13 @@ public class CommonEnum {
      * 零件类型
      */
     public enum MaterialGraphType {
-        NORMAL((byte) 1, "正常件"),
-        M((byte) 2, "毛坯件"),
-        J((byte) 3, "机加工件");
-        public final byte type;
+        NORMAL( 1, "正常件"),
+        M( 2, "毛坯件"),
+        J(3, "机加工件");
+        public final int type;
         public final String name;
 
-        MaterialGraphType(byte type, String name) {
+        MaterialGraphType(int type, String name) {
             this.type = type;
             this.name = name;
         }

@@ -334,9 +334,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         Integer type = materialListDTO.getType();
         if (type != null && type > 0) {
-            if (type.equals(CommonEnum.MaterialGraphType.J)) {
+            if (type.equals(CommonEnum.MaterialGraphType.J.type)) {
                 criteria.andGraphNoLike("%J");
-            } else if (type.equals(CommonEnum.MaterialGraphType.M)) {
+            } else if (type.equals(CommonEnum.MaterialGraphType.M.type)) {
                 criteria.andGraphNoLike("%M");
             }
         }
