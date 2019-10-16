@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.domain.MaterialClassifyExample;
 import com.deepsoft.haolifa.model.domain.MaterialExample;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.material.MaterialConditionDTO;
+import com.deepsoft.haolifa.model.dto.material.MaterialListDTO;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -19,10 +20,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -315,6 +320,28 @@ public class MaterialServiceImpl implements MaterialService {
         Material record = new Material();
         record.setPrice(price);
         materialMapper.updateByExampleSelective(record, example);
+    }
+
+    @Override
+    public List<String> getGraphNoList(MaterialListDTO materialListDTO) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(materialListDTO.getMaterialName())) {
+            criteria.andNameEqualTo(materialListDTO.getMaterialName());
+        }
+        if (materialListDTO.getClassifyId() != null && materialListDTO.getClassifyId() > 0) {
+            criteria.andMaterialClassifyIdEqualTo(materialListDTO.getClassifyId());
+        }
+        Integer type = materialListDTO.getType();
+        if (type != null && type > 0) {
+            if (type.equals(CommonEnum.MaterialGraphType.J)) {
+                criteria.andGraphNoLike("%J");
+            } else if (type.equals(CommonEnum.MaterialGraphType.M)) {
+                criteria.andGraphNoLike("%M");
+            }
+        }
+        List<Material> materials = materialMapper.selectByExample(example);
+        return Optional.ofNullable(materials).orElse(Collections.emptyList()).stream().map(Material::getGraphNo).collect(Collectors.toList());
     }
 
     /**

@@ -538,6 +538,9 @@ public class CommonEnum {
         }
     }
 
+    /**
+     * 车间类型
+     */
     public enum WorkshopType {
         INTERNAL_1((byte) 1, "内部车间1"),
         INTERNAL_2((byte) 3, "内部车间2"),
@@ -550,4 +553,22 @@ public class CommonEnum {
             this.name = name;
         }
     }
+
+    /**
+     * 零件类型
+     */
+    public enum MaterialGraphType {
+        NORMAL((byte) 1, "正常件"),
+        M((byte) 2, "毛坯件"),
+        J((byte) 3, "机加工件");
+        public final byte type;
+        public final String name;
+
+        MaterialGraphType(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
+
+
 }
