@@ -79,15 +79,13 @@ public class PriceProductServiceImpl implements PriceProductService {
     public ResultBean pageInfo(PriceProductConditionDTO priceProductConditionDTO) {
         PriceProductExample example = new PriceProductExample();
         PriceProductExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(priceProductConditionDTO.getModel())) {
-            criteria.andModelLike("%" + priceProductConditionDTO.getModel() + "%");
+        if (StringUtils.isNotBlank(priceProductConditionDTO.getProductModel())) {
+            criteria.andProductModelLike("%" + priceProductConditionDTO.getProductModel() + "%");
         }
-        if (StringUtils.isNotBlank(priceProductConditionDTO.getHaoliModel())) {
-            criteria.andHaoliModelLike("%" + priceProductConditionDTO.getHaoliModel() + "%");
+        if (StringUtils.isNotBlank(priceProductConditionDTO.getProductNo())) {
+            criteria.andProductNoLike("%" + priceProductConditionDTO.getProductNo() + "%");
         }
-        if (StringUtils.isNotBlank(priceProductConditionDTO.getSpecifications())) {
-            criteria.andSpecificationsLike("%" + priceProductConditionDTO.getSpecifications() + "%");
-        }
+
         example.setOrderByClause("id desc");
 
         Page<PriceProduct> products = PageHelper.startPage(priceProductConditionDTO.getPageNum(), priceProductConditionDTO.getPageSize())

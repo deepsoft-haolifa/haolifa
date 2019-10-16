@@ -27,3 +27,17 @@ CREATE TABLE `sys_log` (
   INDEX idx_real_name (`real_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统操作日志表';
 
+
+-- 成品价格管理表
+DROP TABLE IF EXISTS `price_product` ;
+CREATE TABLE `price_product` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `product_no` varchar(64) NOT NULL DEFAULT '' COMMENT '成品编号',
+  `product_model` varchar(64) NOT NULL DEFAULT '' COMMENT '成品型号',
+  `ex_factory_price` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '出厂价格（元）',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user` int(11) NOT NULL COMMENT '创建用户',
+  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品价格管理表';
