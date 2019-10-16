@@ -79,7 +79,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private EntrustRelationService entrustRelationService;
     @Autowired
-    private CustomerModelRelationService customerModelRelationService;
+    private PriceProductService priceProductService;
     @Lazy
     @Autowired
     FlowInstanceService flowInstanceService;
@@ -648,6 +648,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             cellValue7 = cellValue7.replaceAll("￥", "");
                         }
                         orderProductAssociate.setPrice(new BigDecimal(cellValue7));
+                        // 根据产品ID 获取成品价格，如果小于这个成品价格或者价格库中无此产品，拒绝上传订单
+                        String productNo = orderProductAssociate.getProductNo().replaceAll(" ","");
+                        PriceProduct priceProduct = priceProductService.getInfoByProductId(productNo, orderProductAssociate.getProductModel());
+                        if (null == priceProduct) {
+                            throw new BaseException(ResponseEnum.PARAM_ERROR.code, "[" + productNo + "] 这个产品的在成品价格库里面没有数据，不允许提交");
+                        } else {
+                            BigDecimal exFactoryPrice = priceProduct.getExFactoryPrice();
+                            if (new BigDecimal(cellValue7).compareTo(exFactoryPrice) == -1) {
+                                throw new BaseException(ResponseEnum.PARAM_ERROR.code, "[" + productNo + "] 这个产品的价格小于在成品价格库的价格，不允许提交");
+                            }
+                        }
                     } else {
                         throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，单价不能为空");
                     }
@@ -719,6 +730,13 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             orderProductDTO.setDeliveryDate(deliveryDate);
             return saveOrderProductInfo(orderProductDTO);
         } catch (Exception e) {
+            if (e instanceof BaseException) {
+                ResultBean resultBean = new ResultBean();
+                BaseException e2 = (BaseException) e;
+                resultBean.setCode(e2.getCode());
+                resultBean.setMessage(e2.getMessage());
+                return resultBean;
+            }
             log.error("upload orderProduct excel exception|orderProduct:{}", JSONObject.toJSONString(orderProduct), e);
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
         }
@@ -764,8 +782,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         OrderProduct orderProduct = new OrderProduct();
         String orderNo = orderProductDTO.getOrderContractNo();
         log.info("save orderProduct info start|orderNo:{},model:{}", orderNo, JSONObject.toJSONString(orderProduct));
-        if (null != getOrderProductInfo(orderNo)) {
-            return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NO_EXISTS);
+        OrderProductExample orderProductExample = new OrderProductExample();
+        OrderProductExample.Criteria criteria = orderProductExample.createCriteria();
+        criteria.andOrderContractNoEqualTo(orderNo);
+        long countByExample = orderProductMapper.countByExample(orderProductExample);
+        if (countByExample > 0) {
+            throw new BaseException(CommonEnum.ResponseEnum.ORDER_NO_EXISTS);
         }
         orderProductDTO.setOrderNo(orderNo);
         // 属性copy复制
@@ -792,20 +814,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
         log.info("save orderProduct info end|orderNo:{},result:{}", orderNo, insert);
         return ResultBean.success(insert);
-    }
-
-    public static void main(String[] args) {
-        String redisValue = "[{\"lockQuantity\":20,\"materialGraphNo\":\"D270-1000-01-00Qa-aF10-05-00J\",\"type\":1},{\"lockQuantity\":10,\"materialGraphNo\":\"D270-1000-03-QN-01-0J\",\"type\":1},{\"lockQuantity\":2,\"materialGraphNo\":\"D270-1000-03-QN-01-0J\",\"type\":2}]";
-        if (StringUtils.isNotBlank(redisValue)) {
-            List<CheckMaterialLockDTO> materialLockDTOList = JSONObject.parseArray(redisValue, CheckMaterialLockDTO.class);
-            if (!CollectionUtils.isEmpty(materialLockDTOList)) {
-                for (CheckMaterialLockDTO checkMaterialLockDTO : materialLockDTOList) {
-                    CheckMaterialLock checkMaterialLock=new CheckMaterialLock();
-                    BeanUtils.copyProperties(checkMaterialLockDTO,checkMaterialLock);
-                    System.out.println();
-                }
-            }
-        }
     }
 
     @Override
@@ -858,6 +866,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             }
             int delete = orderProductMapper.deleteByPrimaryKey(id);
 
+            // 删除 redis
             // 删除 流程实例
             flowInstanceService.deleteFlowInstance(orderProduct.getOrderNo());
             if (delete > 0) {
