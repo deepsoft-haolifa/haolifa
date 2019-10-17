@@ -169,7 +169,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     }
 
     @Override
-    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo,String supplierName) {
+    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo,String supplierName,String batchNumber) {
         InspectExample example = new InspectExample();
         InspectExample.Criteria criteria = example.createCriteria();
 //    if (type == 0) {
@@ -183,6 +183,9 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         }
         if (StringUtils.isNotEmpty(purchaseOrderNo)) {
             criteria.andPurchaseNoLike("%" + purchaseOrderNo + "%");
+        }
+        if (StringUtils.isNotEmpty(batchNumber)) {
+            criteria.andBatchNumberLike("%" + batchNumber + "%");
         }
         if (StringUtils.isNotEmpty(inspectNo)) {
             criteria.andInspectNoLike("%" + inspectNo + "%");

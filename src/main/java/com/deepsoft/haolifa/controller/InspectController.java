@@ -51,8 +51,9 @@ public class InspectController {
                                    @ApiParam("展示数量") @RequestParam(defaultValue = "10") Integer pageSize,
                                    @ApiParam("送检单单号") String inspectNo,
                                    @ApiParam("采购合同号") String purchaseOrderNo,
-                                   @ApiParam("供应商名称") String supplierName) {
-        return inspectService.getList(type, pageNum, pageSize, inspectNo, purchaseOrderNo,supplierName);
+                                   @ApiParam("供应商名称") String supplierName,
+                                   @ApiParam("批次号") String batchNumber) {
+        return inspectService.getList(type, pageNum, pageSize, inspectNo, purchaseOrderNo, supplierName, batchNumber);
     }
 
     @ApiOperation("更新送检单状态")
