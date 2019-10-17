@@ -132,19 +132,22 @@ public interface MaterialService {
      * @param classifyId
      */
     List<Material> getListByClassifyId(int classifyId);
+
     /**
      * 根据图号获取列表
      *
      * @param graphNo 图号
      */
     List<Material> getListByGraphNoLike(String graphNo);
+
     /**
      * 根据型号和规格获取列表
      *
      * @param model          型号
      * @param specifications 规格
      */
-    List<Material> getListBySingleModelAndSpec(int classifyId,String model, String specifications);
+    List<Material> getListBySingleModelAndSpec(int classifyId, String model, String specifications);
+
     /**
      * 根据型号和规格获取零件列表（因为零件可以多个型号，多个规格）
      *
@@ -164,6 +167,20 @@ public interface MaterialService {
      */
     void updateMaterialPrice(String graphNo, BigDecimal price);
 
+    /**
+     * 获取零件图号列表（根据后缀）
+     *
+     * @param materialListDTO
+     * @return
+     */
     List<String> getGraphNoList(MaterialListDTO materialListDTO);
+
+    /**
+     * 判断图号是否存在
+     *
+     * @param graphNo
+     * @return
+     */
+    boolean existsGraphNo(String graphNo);
 
 }

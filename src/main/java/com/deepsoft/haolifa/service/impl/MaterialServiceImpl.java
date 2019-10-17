@@ -344,6 +344,15 @@ public class MaterialServiceImpl implements MaterialService {
         return Optional.ofNullable(materials).orElse(Collections.emptyList()).stream().map(Material::getGraphNo).collect(Collectors.toList());
     }
 
+    @Override
+    public boolean existsGraphNo(String graphNo) {
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoEqualTo(graphNo);
+        long l = materialMapper.countByExample(example);
+        return l > 0L ? true : false;
+    }
+
     /**
      * 判断是否有相同的图号
      *

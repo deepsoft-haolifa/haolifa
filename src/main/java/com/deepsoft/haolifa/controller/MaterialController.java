@@ -124,5 +124,10 @@ public class MaterialController {
         return ResultBean.success(materialService.getGraphNoList(materialListDTO));
     }
 
+    @ApiOperation("判断零件图号是否存在")
+    @PostMapping("/graphNo-exist")
+    public ResultBean graphNoList(@RequestParam String graphNo) {
+        return ResultBean.success(materialService.existsGraphNo(graphNo));
+    }
 
 }
