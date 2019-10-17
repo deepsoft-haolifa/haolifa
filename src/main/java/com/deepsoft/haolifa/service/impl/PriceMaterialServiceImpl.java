@@ -17,12 +17,16 @@ import com.deepsoft.haolifa.service.PriceProductService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.math.BigDecimal;
 
@@ -39,14 +43,15 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
     private SysUserService sysUserService;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean saveInfo(PriceMaterial model) {
         CustomUser customUser = sysUserService.selectLoginUser();
         int createUser = customUser != null ? customUser.getId() : 1;
         model.setCreateUser(createUser);
         int insert = priceMaterialMapper.insertSelective(model);
         if (insert > 0) {
-            // 更新零件价格
-            materialService.updateMaterialPrice(model.getGraphNo(),model.getBlankCost());
+            // 更新零件价格(价格表的成品不含税 更新为零件表的价格)
+            materialService.updateMaterialPrice(model.getGraphNo(), model.getPrice());
             return ResultBean.success(insert);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
@@ -61,7 +66,7 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         int update = priceMaterialMapper.updateByPrimaryKeySelective(model);
         if (update > 0) {
             // 更新零件价格
-            materialService.updateMaterialPrice(model.getGraphNo(),model.getBlankCost());
+            materialService.updateMaterialPrice(model.getGraphNo(), model.getPrice());
             return ResultBean.success(update);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
@@ -78,13 +83,13 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
     @Override
     public PriceMaterial getInfo(int id, String materialGraphNo) {
         PriceMaterial product = null;
-        if(id > 0) {
+        if (id > 0) {
             product = priceMaterialMapper.selectByPrimaryKey(id);
-        } else if(StringUtils.isNotEmpty(materialGraphNo)) {
+        } else if (StringUtils.isNotEmpty(materialGraphNo)) {
             PriceMaterialExample priceMaterialExample = new PriceMaterialExample();
             priceMaterialExample.createCriteria().andGraphNoEqualTo(materialGraphNo);
             List<PriceMaterial> priceMaterialList = priceMaterialMapper.selectByExample(priceMaterialExample);
-            if(priceMaterialList != null && priceMaterialList.size()>0) {
+            if (priceMaterialList != null && priceMaterialList.size() > 0) {
                 product = priceMaterialList.get(0);
             }
         }

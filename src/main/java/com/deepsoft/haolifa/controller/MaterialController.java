@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.dto.MaterialClassifyRequestDTO;
 import com.deepsoft.haolifa.model.dto.MaterialRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.material.MaterialConditionDTO;
+import com.deepsoft.haolifa.model.dto.material.MaterialListDTO;
 import com.deepsoft.haolifa.service.MaterialService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -106,7 +107,7 @@ public class MaterialController {
     @ApiOperation("零件分页列表")
     @PostMapping("/pageInfo")
     public ResultBean pageInfo(@RequestBody MaterialConditionDTO conditionDTO) {
-        return materialService.pageInfo( conditionDTO);
+        return materialService.pageInfo(conditionDTO);
     }
 
 
@@ -114,6 +115,13 @@ public class MaterialController {
     @PostMapping("/store-alarm")
     public ResultBean storeAlarmList(@RequestBody MaterialConditionDTO model) {
         return materialService.getMaterialAlarmList(model);
+    }
+
+
+    @ApiOperation("根据条件获取零件列表")
+    @PostMapping("/graphNo-list")
+    public ResultBean graphNoList(@RequestBody MaterialListDTO materialListDTO) {
+        return ResultBean.success(materialService.getGraphNoList(materialListDTO));
     }
 
 

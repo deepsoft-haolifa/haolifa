@@ -63,6 +63,13 @@ public interface PriceProductService {
      */
     PriceProduct getInfo(int id);
 
+    /**
+     * 获取产品价格信息
+     *
+     * @return
+     */
+    PriceProduct getInfoByProductId(String productId,String productModel);
+
 
     /**
      * 获取分页列表

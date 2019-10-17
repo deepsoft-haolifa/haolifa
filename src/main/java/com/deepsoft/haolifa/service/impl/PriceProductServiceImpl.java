@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,18 +77,31 @@ public class PriceProductServiceImpl implements PriceProductService {
     }
 
     @Override
+    public PriceProduct getInfoByProductId(String productId, String productModel) {
+        if (StringUtils.isBlank(productId)) {
+            return null;
+        }
+        PriceProductExample example = new PriceProductExample();
+        PriceProductExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(productModel)) {
+            criteria.andProductModelEqualTo(productModel);
+        }
+        criteria.andProductNoEqualTo(productId);
+        List<PriceProduct> priceProducts = priceProductMapper.selectByExample(example);
+        return CollectionUtils.isEmpty(priceProducts) ? null : priceProducts.get(0);
+    }
+
+    @Override
     public ResultBean pageInfo(PriceProductConditionDTO priceProductConditionDTO) {
         PriceProductExample example = new PriceProductExample();
         PriceProductExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(priceProductConditionDTO.getModel())) {
-            criteria.andModelLike("%" + priceProductConditionDTO.getModel() + "%");
+        if (StringUtils.isNotBlank(priceProductConditionDTO.getProductModel())) {
+            criteria.andProductModelLike("%" + priceProductConditionDTO.getProductModel() + "%");
         }
-        if (StringUtils.isNotBlank(priceProductConditionDTO.getHaoliModel())) {
-            criteria.andHaoliModelLike("%" + priceProductConditionDTO.getHaoliModel() + "%");
+        if (StringUtils.isNotBlank(priceProductConditionDTO.getProductNo())) {
+            criteria.andProductNoLike("%" + priceProductConditionDTO.getProductNo() + "%");
         }
-        if (StringUtils.isNotBlank(priceProductConditionDTO.getSpecifications())) {
-            criteria.andSpecificationsLike("%" + priceProductConditionDTO.getSpecifications() + "%");
-        }
+
         example.setOrderByClause("id desc");
 
         Page<PriceProduct> products = PageHelper.startPage(priceProductConditionDTO.getPageNum(), priceProductConditionDTO.getPageSize())

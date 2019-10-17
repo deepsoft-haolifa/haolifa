@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Api(tags = {"订单成品相关管理"})
 @RestController
-@RequestMapping("/order-product/")
+@RequestMapping("/order-product")
 public class OrderProductController {
 
     @Autowired

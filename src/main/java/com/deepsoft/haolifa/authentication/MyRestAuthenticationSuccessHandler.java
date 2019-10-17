@@ -1,12 +1,14 @@
 package com.deepsoft.haolifa.authentication;
 
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.model.domain.SysLoginLog;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.validator.ValidateCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -16,11 +18,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
 /**
@@ -34,7 +36,8 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Autowired
     private SysUserService userService;
-
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
     @Autowired
     private HttpSession httpSession;
 
@@ -45,13 +48,21 @@ public class MyRestAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) throws ServletException, IOException {
 
         CustomUser customUser = userService.selectLoginUser();
-        log.info("customeUser:{}, time:",customUser, new Date());
+        log.info("customeUser:{}, time:", customUser, new Date());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        PrintWriter writer = response.getWriter();
-        writer.write(JSONObject.toJSONString(ResultBean.success(userService.selectUserInfo())));
-        writer.flush();
-        writer.close();
+        ServletOutputStream outputStream = response.getOutputStream();
+        String json = JSONObject.toJSONString(ResultBean.success(userService.selectUserInfo()));
+        outputStream.write(json.getBytes());
+        outputStream.flush();
+        outputStream.close();
+
+
+        // 登录成功添加登录日志
+        SysLoginLog sysLog = new SysLoginLog();
+        sysLog.setRealName(customUser.getRealName());
+        sysLog.setUserId(customUser.getId());
+        applicationEventPublisher.publishEvent(sysLog);
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 

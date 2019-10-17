@@ -38,6 +38,7 @@ public class LoginController {
     @ApiOperation("登录")
     @PostMapping("/login")
     public ResultBean login(String username, String password, String imageCode){
+        System.out.println("denglu");
         return ResultBean.success(userService.selectUserInfo());
     }
 
