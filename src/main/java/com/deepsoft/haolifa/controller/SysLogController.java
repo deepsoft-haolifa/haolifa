@@ -19,7 +19,6 @@ public class SysLogController {
     @PostMapping("page-list")
     @ApiOperation("获取登录日志分页列表")
     public ResultBean pageList(@RequestBody SysLogConditionDTO sysLogConditionDTO) {
-        sysLogConditionDTO.setType((byte) 1);
-        return ResultBean.success(sysLogService.pageList(sysLogConditionDTO));
+        return ResultBean.success(sysLogService.pageLoginList(sysLogConditionDTO));
     }
 }

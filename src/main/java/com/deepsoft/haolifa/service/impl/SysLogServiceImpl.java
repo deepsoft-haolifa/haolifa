@@ -1,8 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
-import com.deepsoft.haolifa.dao.repository.SysLogMapper;
-import com.deepsoft.haolifa.model.domain.SysLog;
-import com.deepsoft.haolifa.model.domain.SysLogExample;
+import com.deepsoft.haolifa.dao.repository.SysLoginLogMapper;
+import com.deepsoft.haolifa.model.domain.SysLoginLog;
+import com.deepsoft.haolifa.model.domain.SysLoginLogExample;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.SysLogConditionDTO;
 import com.deepsoft.haolifa.service.SysLogService;
@@ -18,29 +18,25 @@ import javax.annotation.Resource;
 public class SysLogServiceImpl implements SysLogService {
 
     @Resource
-    private SysLogMapper sysLogMapper;
+    private SysLoginLogMapper sysLoginLogMapper;
 
     @Override
-    public void save(SysLog sysLog) {
-        sysLogMapper.insertSelective(sysLog);
+    public void saveLogin(SysLoginLog sysLog) {
+        sysLoginLogMapper.insertSelective(sysLog);
     }
 
     @Override
-    public PageDTO<SysLog> pageList(SysLogConditionDTO sysLogConditionDTO) {
-        SysLogExample example = new SysLogExample();
-        SysLogExample.Criteria criteria = example.createCriteria();
+    public PageDTO<SysLoginLog> pageLoginList(SysLogConditionDTO sysLogConditionDTO) {
+        SysLoginLogExample example = new SysLoginLogExample();
+        SysLoginLogExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(sysLogConditionDTO.getRealName())) {
             criteria.andRealNameLike("%" + sysLogConditionDTO.getRealName() + "%");
         }
 
-        if (sysLogConditionDTO.getType() != null && sysLogConditionDTO.getType() > 0) {
-            criteria.andTypeEqualTo(sysLogConditionDTO.getType());
-        }
         example.setOrderByClause("id desc");
-        Page<SysLog> logs = PageHelper.startPage(sysLogConditionDTO.getPageNum(), sysLogConditionDTO.getPageSize())
-                .doSelectPage(() -> sysLogMapper.selectByExample(example));
-
-        PageDTO<SysLog> pageDTO = new PageDTO<>();
+        Page<SysLoginLog> logs = PageHelper.startPage(sysLogConditionDTO.getPageNum(), sysLogConditionDTO.getPageSize())
+                .doSelectPage(() -> sysLoginLogMapper.selectByExample(example));
+        PageDTO<SysLoginLog> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(logs, pageDTO);
         pageDTO.setList(logs);
         return pageDTO;

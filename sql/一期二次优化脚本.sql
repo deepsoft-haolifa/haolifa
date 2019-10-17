@@ -13,19 +13,16 @@ alter table hl_mail
 add column `send_user` varchar(255) DEFAULT '' COMMENT '发送人',
 add column `rev_user` varchar(255) DEFAULT '' COMMENT '收件人姓名';
 
--- 操作日志表
-drop table sys_log;
-CREATE TABLE `sys_log` (
+-- 登录日志表
+drop table sys_login_log;
+CREATE TABLE `sys_login_log` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	`user_id` int(11) NOT NULL DEFAULT 0 COMMENT '用户ID',
   `real_name` varchar(64) NOT NULL DEFAULT '' COMMENT '用户真实名称',
-  `type` tinyint(4) NOT NULL DEFAULT 0 COMMENT '1.登录',
-  `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   INDEX idx_real_name (`real_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统操作日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='登录日志表';
 
 
 -- 成品价格管理表

@@ -10,8 +10,4 @@ public class SysLogConditionDTO extends PageParam {
      */
     private String realName;
 
-    /**
-     * 类型（1.登录）
-     */
-    private Byte type;
 }
