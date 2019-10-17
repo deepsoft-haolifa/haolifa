@@ -34,4 +34,7 @@ public class FlowProcesserDTO {
   @ApiModelProperty("审批时间")
   private Date auditTime;
 
+  @ApiModelProperty("审核时间")
+  private Date auditTime;
+
 }

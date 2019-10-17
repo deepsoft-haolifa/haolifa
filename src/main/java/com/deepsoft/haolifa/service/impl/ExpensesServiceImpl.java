@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ExpensesClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
 import com.deepsoft.haolifa.model.domain.Expenses;
@@ -33,13 +34,31 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean save(ExpensesDTO model) {
+    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
+        || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    }
     Expenses expenses = new Expenses();
     BeanUtils.copyProperties(model, expenses);
     expenses.setCreateUserId(getLoginUserId());
     expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
     expensesMapper.insertSelective(expenses);
-    return ResultBean.success(0);
+    return ResultBean.success(expenses.getId());
   }
+
+  @Override
+  public ResultBean info(Integer id) {
+    return ResultBean.success(expensesMapper.selectByPrimaryKey(id));
+  }
+
+//  @Override
+//  public ResultBean getClassify() {
+//    return  ResultBean.success(expensesMapper.getClassify());
+//  }
+//  @Override
+//  public ResultBean classifyByDepartment() {
+//    return  ResultBean.success(expensesMapper.classifyByDepartment());
+//  }
 
   @Override
   public ResultBean delete(Integer id) {
@@ -53,6 +72,10 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean update(ExpensesDTO model) {
+    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
+        || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    }
     Expenses expenses = new Expenses();
     BeanUtils.copyProperties(model, expenses);
     expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
@@ -62,19 +85,23 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
   @Override
   public ResultBean getList(Integer pageNum, Integer pageSize, String classifyName,
-      String secondClassifyName, String department) {
+      String secondClassifyName, String department, String voucherNo) {
     ExpensesExample expensesExample = new ExpensesExample();
     ExpensesExample.Criteria criteria = expensesExample.createCriteria();
     if (StringUtils.isNotEmpty(classifyName) && !"全部".equals(classifyName)) {
       criteria.andExpensesClassifyEqualTo(classifyName);
     }
-    if(StringUtils.isNotEmpty(secondClassifyName) && !"全部".equals(secondClassifyName)) {
+    if (StringUtils.isNotEmpty(secondClassifyName) && !"全部".equals(secondClassifyName)) {
       criteria.andSecondClassifyEqualTo(secondClassifyName);
     }
     if (StringUtils.isNotEmpty(department)) {
       criteria.andDepartmentLike("%" + department + "%");
     }
+    if (StringUtils.isNotEmpty(voucherNo)) {
+      criteria.andVoucherNoLike("%" + voucherNo + "%");
+    }
     criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+    expensesExample.setOrderByClause("id desc");
     Page<Expenses> page = PageHelper.startPage(pageNum, pageSize)
         .doSelectPage(() -> expensesMapper.selectByExample(expensesExample));
     PageDTO<Expenses> pageDTO = new PageDTO<>();
@@ -90,11 +117,6 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     return ResultBean.success(classifyMapper.selectByExample(classifyExample));
   }
   @Override
-  public ResultBean info(Integer id) {
-    return ResultBean.success(expensesMapper.selectByPrimaryKey(id));
-  }
-
-  @Override
   public ResultBean getClassify() {
     return  ResultBean.success(expensesMapper.getClassify());
   }
@@ -102,5 +124,20 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
   public ResultBean classifyByDepartment() {
     return  ResultBean.success(expensesMapper.classifyByDepartment());
   }
-
+  @Override
+  public ResultBean getAllClassify() {
+    return  ResultBean.success(expensesMapper.getAllClassify());
+  }
+  @Override
+  public ResultBean classifyByDepartmentAll() {
+    return  ResultBean.success(expensesMapper.classifyByDepartmentAll());
+  }
+  @Override
+  public ResultBean getAllClassifyWithDepartment(String department) {
+    return  ResultBean.success(expensesMapper.getAllClassifyWithDepartment( department));
+  }
+  @Override
+  public ResultBean getAllClassifyWithFirstClassify(String classify) {
+    return  ResultBean.success(expensesMapper.getAllClassifyWithFirstClassify( classify));
+  }
 }

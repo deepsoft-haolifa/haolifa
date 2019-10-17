@@ -18,6 +18,7 @@
       <arg column="complete_time" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="batch_number" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -81,7 +82,7 @@
   <sql id="Base_Column_List" >
     id, spray_no, material_graph_no, specifications, model, material_classify_name, material, 
     special_requires, spray_color, number, qualified_number, remark, complete_time, create_time, 
-    update_time
+    update_time, batch_number
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayItemExample" >
     select
@@ -121,12 +122,14 @@
       model, material_classify_name, material, 
       special_requires, spray_color, number, 
       qualified_number, remark, complete_time, 
-      create_time, update_time)
+      create_time, update_time, batch_number
+      )
     values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
       #{model,jdbcType=VARCHAR}, #{materialClassifyName,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
       #{specialRequires,jdbcType=VARCHAR}, #{sprayColor,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
       #{qualifiedNumber,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{completeTime,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{batchNumber,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SprayItem" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -176,6 +179,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="batchNumber != null" >
+        batch_number,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sprayNo != null" >
@@ -219,6 +225,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -276,6 +285,9 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.batchNumber != null" >
+        batch_number = #{record.batchNumber,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -297,7 +309,8 @@
       remark = #{record.remark,jdbcType=VARCHAR},
       complete_time = #{record.completeTime,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      batch_number = #{record.batchNumber,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -347,6 +360,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="batchNumber != null" >
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -365,7 +381,8 @@
       remark = #{remark,jdbcType=VARCHAR},
       complete_time = #{completeTime,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      batch_number = #{batchNumber,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

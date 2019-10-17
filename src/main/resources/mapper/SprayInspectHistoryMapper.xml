@@ -5,7 +5,6 @@
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="spray_no" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="original_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_graph_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="test_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -14,8 +13,11 @@
       <arg column="handling_suggestion" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="original_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="reasons" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -77,9 +79,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, spray_no, original_graph_no, material_graph_no, material_graph_name, test_number, 
-    qualified_number, unqualified_number, handling_suggestion, remark, status, create_time, 
-    update_time
+    id, spray_no, material_graph_no, material_graph_name, test_number, qualified_number, 
+    unqualified_number, handling_suggestion, remark, status, original_graph_no, create_time, 
+    update_time, accessory, reasons
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" >
     select
@@ -115,16 +117,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into spray_inspect_history (spray_no, original_graph_no, material_graph_no, 
-      material_graph_name, test_number, qualified_number, 
-      unqualified_number, handling_suggestion, 
-      remark, status, create_time, 
-      update_time)
-    values (#{sprayNo,jdbcType=VARCHAR}, #{originalGraphNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, 
-      #{materialGraphName,jdbcType=VARCHAR}, #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
-      #{unqualifiedNumber,jdbcType=INTEGER}, #{handlingSuggestion,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into spray_inspect_history (spray_no, material_graph_no, material_graph_name, 
+      test_number, qualified_number, unqualified_number, 
+      handling_suggestion, remark, status, 
+      original_graph_no, create_time, update_time, 
+      accessory, reasons)
+    values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
+      #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
+      #{handlingSuggestion,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{originalGraphNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{accessory,jdbcType=VARCHAR}, #{reasons,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -134,9 +136,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sprayNo != null" >
         spray_no,
-      </if>
-      <if test="originalGraphNo != null" >
-        original_graph_no,
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no,
@@ -162,19 +161,25 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="originalGraphNo != null" >
+        original_graph_no,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
+      <if test="reasons != null" >
+        reasons,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sprayNo != null" >
         #{sprayNo,jdbcType=VARCHAR},
-      </if>
-      <if test="originalGraphNo != null" >
-        #{originalGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null" >
         #{materialGraphNo,jdbcType=VARCHAR},
@@ -200,11 +205,20 @@
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
       </if>
+      <if test="originalGraphNo != null" >
+        #{originalGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
+      </if>
+      <if test="reasons != null" >
+        #{reasons,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -222,9 +236,6 @@
       </if>
       <if test="record.sprayNo != null" >
         spray_no = #{record.sprayNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.originalGraphNo != null" >
-        original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="record.materialGraphNo != null" >
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
@@ -250,11 +261,20 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.originalGraphNo != null" >
+        original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reasons != null" >
+        reasons = #{record.reasons,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -265,7 +285,6 @@
     update spray_inspect_history
     set id = #{record.id,jdbcType=INTEGER},
       spray_no = #{record.sprayNo,jdbcType=VARCHAR},
-      original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
       test_number = #{record.testNumber,jdbcType=INTEGER},
@@ -274,8 +293,11 @@
       handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
+      original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      accessory = #{record.accessory,jdbcType=VARCHAR},
+      reasons = #{record.reasons,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -285,9 +307,6 @@
     <set >
       <if test="sprayNo != null" >
         spray_no = #{sprayNo,jdbcType=VARCHAR},
-      </if>
-      <if test="originalGraphNo != null" >
-        original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
@@ -313,11 +332,20 @@
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="originalGraphNo != null" >
+        original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
+      <if test="reasons != null" >
+        reasons = #{reasons,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -325,7 +353,6 @@
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
     update spray_inspect_history
     set spray_no = #{sprayNo,jdbcType=VARCHAR},
-      original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
       material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
       test_number = #{testNumber,jdbcType=INTEGER},
@@ -334,8 +361,11 @@
       handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
+      original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      accessory = #{accessory,jdbcType=VARCHAR},
+      reasons = #{reasons,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

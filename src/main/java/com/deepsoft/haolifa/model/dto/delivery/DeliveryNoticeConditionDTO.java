@@ -20,4 +20,6 @@ public class DeliveryNoticeConditionDTO {
     private String deliveryNo;
     @ApiModelProperty(value = "订单号")
     private String contractOrderNo;
+    @ApiModelProperty(value = "发货状态:-1 全部 0 待发货（默认） 1 部分发货 2 发货完成")
+    private Byte deliverStatus = -1;
 }

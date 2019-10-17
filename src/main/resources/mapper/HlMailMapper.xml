@@ -5,6 +5,8 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="send_user" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="rev_user" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="users" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
@@ -19,13 +21,15 @@
     <result column="create_time" javaType="java.util.Date" property="createTime"/>
     <result column="update_time" javaType="java.util.Date" property="updateTime"/>
     <result column="users" javaType="java.lang.String" property="users"/>
+    <result column="send_user" javaType="java.lang.String" property="sendUser"/>
+    <result column="rev_user" javaType="java.lang.String" property="revUser"/>
 
   </resultMap>
 
 
   <select id="selectHlMails"  resultMap="hlMailMap">
     select
-    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users
+    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users,hl.send_user,hl.rev_user
 
     from hl_mail hl
 
@@ -35,7 +39,7 @@
 
   <select id="selectHlMailsByUserId" parameterType="String" resultMap="hlMailMap">
     select
-    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users
+    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users,hl.send_user,hl.rev_user
 
     from hl_mail hl where  users LIKE CONCAT('%',#{param},'%')
 
@@ -49,9 +53,19 @@
     </selectKey>
     insert into hl_mail (title,users, content,
       create_time,
-      update_time)
+      update_time,send_user,rev_user)
     values (#{title,jdbcType=VARCHAR},#{users,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP},#{sendUser,jdbcType=TIMESTAMP},#{revUser,jdbcType=TIMESTAMP})
   </insert>
+  <select id="selectsendHlMails" parameterType="String" resultMap="hlMailMap">
+    select
+    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users,hl.send_user,hl.rev_user
+
+    from hl_mail hl where  send_user =#{userName}
+
+    order by hl.create_time desc
+
+  </select>
+
 
 </mapper>

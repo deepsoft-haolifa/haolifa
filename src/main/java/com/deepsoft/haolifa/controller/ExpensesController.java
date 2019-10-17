@@ -25,6 +25,12 @@ public class ExpensesController {
         return expensesService.save(model);
     }
 
+    @ApiOperation("查询费用记录详情")
+    @GetMapping("/info/{id}")
+    public ResultBean info(@PathVariable("id") Integer id) {
+        return expensesService.info(id);
+    }
+
     @ApiOperation("删除费用记录")
     @GetMapping("delete/{id}")
     public ResultBean delete(@PathVariable("id") Integer id) {
@@ -44,8 +50,9 @@ public class ExpensesController {
                               @RequestParam(defaultValue = "10") Integer pageSize,
         @ApiParam("一级分类名称, 搜索全部时值：全部") @RequestParam(required = false) String classifyName,
         @ApiParam("二级分类名称，搜索全部时值：全部") @RequestParam(required = false) String secondClassifyName,
-        @RequestParam(required = false) String department) {
-        return expensesService.getList(pageNum, pageSize, classifyName, secondClassifyName, department);
+        @ApiParam("部门")@RequestParam(required = false) String department,
+        @RequestParam(required = false) String voucherNo) {
+        return expensesService.getList(pageNum, pageSize, classifyName, secondClassifyName, department, voucherNo);
     }
 
    @ApiOperation("费用类别")

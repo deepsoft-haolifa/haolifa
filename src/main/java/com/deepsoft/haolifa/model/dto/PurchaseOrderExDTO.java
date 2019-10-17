@@ -70,4 +70,9 @@ public class PurchaseOrderExDTO {
   private Integer orderType;
 
   private String fileUrl;
+
+  /**
+   * 人民币大写金额
+   */
+  private String totalPriceCN;
 }

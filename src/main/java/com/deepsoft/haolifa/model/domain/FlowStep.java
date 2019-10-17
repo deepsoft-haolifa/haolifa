@@ -27,7 +27,9 @@ public class FlowStep {
 
     private String formShowStepId;
 
-    public FlowStep(Integer id, Date createTime, Date updateTime, Integer createUserId, Integer flowId, Integer stepId, String userId, Integer roleId, Integer prevStepId, Integer conditionTrue, Integer conditionFalse, String formShowStepId) {
+    private Integer stepOrder;
+
+    public FlowStep(Integer id, Date createTime, Date updateTime, Integer createUserId, Integer flowId, Integer stepId, String userId, Integer roleId, Integer prevStepId, Integer conditionTrue, Integer conditionFalse, String formShowStepId, Integer stepOrder) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -40,6 +42,7 @@ public class FlowStep {
         this.conditionTrue = conditionTrue;
         this.conditionFalse = conditionFalse;
         this.formShowStepId = formShowStepId;
+        this.stepOrder = stepOrder;
     }
 
     public FlowStep() {
@@ -140,5 +143,13 @@ public class FlowStep {
 
     public void setFormShowStepId(String formShowStepId) {
         this.formShowStepId = formShowStepId == null ? null : formShowStepId.trim();
+    }
+
+    public Integer getStepOrder() {
+        return stepOrder;
+    }
+
+    public void setStepOrder(Integer stepOrder) {
+        this.stepOrder = stepOrder;
     }
 }

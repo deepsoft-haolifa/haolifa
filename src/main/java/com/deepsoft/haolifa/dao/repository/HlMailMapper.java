@@ -9,6 +9,7 @@ public interface HlMailMapper {
     int insert(HlMail hlMail);
 
     List<HlMail> selectHlMails();
+    List<HlMail> selectsendHlMails(String userName);
     List<HlMail> selectHlMailsByUserId(String param);
 
 }

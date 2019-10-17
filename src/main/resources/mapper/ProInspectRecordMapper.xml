@@ -16,6 +16,7 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -79,7 +80,7 @@
   <sql id="Base_Column_List" >
     id, order_no, product_no, product_model, product_specifications, testing_number, 
     qualified_number, unqualified_number, reason, storage_status, create_time, update_time, 
-    create_user_id
+    create_user_id, accessory
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecordExample" >
     select
@@ -118,13 +119,13 @@
     insert into pro_inspect_record (order_no, product_no, product_model, 
       product_specifications, testing_number, qualified_number, 
       unqualified_number, reason, storage_status, 
-      create_time, update_time, create_user_id
-      )
+      create_time, update_time, create_user_id, 
+      accessory)
     values (#{orderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
       #{productSpecifications,jdbcType=VARCHAR}, #{testingNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
       #{unqualifiedNumber,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{storageStatus,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{accessory,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecord" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -168,6 +169,9 @@
       <if test="createUserId != null" >
         create_user_id,
       </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
@@ -205,6 +209,9 @@
       </if>
       <if test="createUserId != null" >
         #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -256,6 +263,9 @@
       <if test="record.createUserId != null" >
         create_user_id = #{record.createUserId,jdbcType=INTEGER},
       </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -275,7 +285,8 @@
       storage_status = #{record.storageStatus,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{record.createUserId,jdbcType=INTEGER}
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -319,6 +330,9 @@
       <if test="createUserId != null" >
         create_user_id = #{createUserId,jdbcType=INTEGER},
       </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -335,7 +349,8 @@
       storage_status = #{storageStatus,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user_id = #{createUserId,jdbcType=INTEGER}
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      accessory = #{accessory,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

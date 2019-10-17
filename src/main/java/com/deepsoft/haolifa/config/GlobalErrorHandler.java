@@ -15,16 +15,22 @@ import org.springframework.web.context.request.NativeWebRequest;
 @ControllerAdvice
 @Slf4j
 public class GlobalErrorHandler {
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public ResultBean processException(NativeWebRequest request, Exception e) {
-        if (e instanceof BaseException) {
-            BaseException e2 = (BaseException) e;
-            return new ResultBean(e2.getCode(), e2.getMessage(), null);
-        } else {
-            log.error("system error *--*--*", e);
-            return  ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_ERROR);
-        }
+
+  @ExceptionHandler(Exception.class)
+  @ResponseBody
+  public ResultBean processException(NativeWebRequest request, Exception e) {
+    ResultBean resultBean = new ResultBean();
+    if (e instanceof BaseException) {
+      BaseException e2 = (BaseException) e;
+      resultBean.setCode(e2.getCode());
+      resultBean.setMessage(e2.getMessage());
+      return resultBean;
+    } else {
+      log.error("system error *--*--*", e);
+      resultBean.setCode(CommonEnum.ResponseEnum.SYSTEM_ERROR.getCode());
+      resultBean.setMessage(CommonEnum.ResponseEnum.SYSTEM_ERROR.getMsg() + ": " + e.getMessage());
+      return resultBean;
     }
+  }
 }
 

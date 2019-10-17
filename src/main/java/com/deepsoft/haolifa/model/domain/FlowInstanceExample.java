@@ -984,6 +984,66 @@ public class FlowInstanceExample {
             addCriterion("accessory not between", value1, value2, "accessory");
             return (Criteria) this;
         }
+
+        public Criteria andFormTypeIsNull() {
+            addCriterion("form_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeIsNotNull() {
+            addCriterion("form_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeEqualTo(Byte value) {
+            addCriterion("form_type =", value, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeNotEqualTo(Byte value) {
+            addCriterion("form_type <>", value, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeGreaterThan(Byte value) {
+            addCriterion("form_type >", value, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("form_type >=", value, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeLessThan(Byte value) {
+            addCriterion("form_type <", value, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("form_type <=", value, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeIn(List<Byte> values) {
+            addCriterion("form_type in", values, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeNotIn(List<Byte> values) {
+            addCriterion("form_type not in", values, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeBetween(Byte value1, Byte value2) {
+            addCriterion("form_type between", value1, value2, "formType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFormTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("form_type not between", value1, value2, "formType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

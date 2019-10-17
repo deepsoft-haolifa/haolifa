@@ -7,8 +7,6 @@ public class SprayInspectHistory {
 
     private String sprayNo;
 
-    private String originalGraphNo;
-
     private String materialGraphNo;
 
     private String materialGraphName;
@@ -25,14 +23,19 @@ public class SprayInspectHistory {
 
     private Byte status;
 
+    private String originalGraphNo;
+
     private Date createTime;
 
     private Date updateTime;
 
-    public SprayInspectHistory(Integer id, String sprayNo, String originalGraphNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status, Date createTime, Date updateTime) {
+    private String accessory;
+
+    private String reasons;
+
+    public SprayInspectHistory(Integer id, String sprayNo, String materialGraphNo, String materialGraphName, Integer testNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String handlingSuggestion, String remark, Byte status, String originalGraphNo, Date createTime, Date updateTime, String accessory, String reasons) {
         this.id = id;
         this.sprayNo = sprayNo;
-        this.originalGraphNo = originalGraphNo;
         this.materialGraphNo = materialGraphNo;
         this.materialGraphName = materialGraphName;
         this.testNumber = testNumber;
@@ -41,8 +44,11 @@ public class SprayInspectHistory {
         this.handlingSuggestion = handlingSuggestion;
         this.remark = remark;
         this.status = status;
+        this.originalGraphNo = originalGraphNo;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.accessory = accessory;
+        this.reasons = reasons;
     }
 
     public SprayInspectHistory() {
@@ -63,14 +69,6 @@ public class SprayInspectHistory {
 
     public void setSprayNo(String sprayNo) {
         this.sprayNo = sprayNo == null ? null : sprayNo.trim();
-    }
-
-    public String getOriginalGraphNo() {
-        return originalGraphNo;
-    }
-
-    public void setOriginalGraphNo(String originalGraphNo) {
-        this.originalGraphNo = originalGraphNo == null ? null : originalGraphNo.trim();
     }
 
     public String getMaterialGraphNo() {
@@ -137,6 +135,14 @@ public class SprayInspectHistory {
         this.status = status;
     }
 
+    public String getOriginalGraphNo() {
+        return originalGraphNo;
+    }
+
+    public void setOriginalGraphNo(String originalGraphNo) {
+        this.originalGraphNo = originalGraphNo == null ? null : originalGraphNo.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -151,5 +157,21 @@ public class SprayInspectHistory {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
+    }
+
+    public String getReasons() {
+        return reasons;
+    }
+
+    public void setReasons(String reasons) {
+        this.reasons = reasons == null ? null : reasons.trim();
     }
 }

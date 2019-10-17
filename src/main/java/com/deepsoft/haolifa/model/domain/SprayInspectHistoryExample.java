@@ -235,76 +235,6 @@ public class SprayInspectHistoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andOriginalGraphNoIsNull() {
-            addCriterion("original_graph_no is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoIsNotNull() {
-            addCriterion("original_graph_no is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoEqualTo(String value) {
-            addCriterion("original_graph_no =", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoNotEqualTo(String value) {
-            addCriterion("original_graph_no <>", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoGreaterThan(String value) {
-            addCriterion("original_graph_no >", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoGreaterThanOrEqualTo(String value) {
-            addCriterion("original_graph_no >=", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoLessThan(String value) {
-            addCriterion("original_graph_no <", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoLessThanOrEqualTo(String value) {
-            addCriterion("original_graph_no <=", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoLike(String value) {
-            addCriterion("original_graph_no like", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoNotLike(String value) {
-            addCriterion("original_graph_no not like", value, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoIn(List<String> values) {
-            addCriterion("original_graph_no in", values, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoNotIn(List<String> values) {
-            addCriterion("original_graph_no not in", values, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoBetween(String value1, String value2) {
-            addCriterion("original_graph_no between", value1, value2, "originalGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andOriginalGraphNoNotBetween(String value1, String value2) {
-            addCriterion("original_graph_no not between", value1, value2, "originalGraphNo");
-            return (Criteria) this;
-        }
-
         public Criteria andMaterialGraphNoIsNull() {
             addCriterion("material_graph_no is null");
             return (Criteria) this;
@@ -825,6 +755,76 @@ public class SprayInspectHistoryExample {
             return (Criteria) this;
         }
 
+        public Criteria andOriginalGraphNoIsNull() {
+            addCriterion("original_graph_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoIsNotNull() {
+            addCriterion("original_graph_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoEqualTo(String value) {
+            addCriterion("original_graph_no =", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotEqualTo(String value) {
+            addCriterion("original_graph_no <>", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoGreaterThan(String value) {
+            addCriterion("original_graph_no >", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("original_graph_no >=", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoLessThan(String value) {
+            addCriterion("original_graph_no <", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("original_graph_no <=", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoLike(String value) {
+            addCriterion("original_graph_no like", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotLike(String value) {
+            addCriterion("original_graph_no not like", value, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoIn(List<String> values) {
+            addCriterion("original_graph_no in", values, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotIn(List<String> values) {
+            addCriterion("original_graph_no not in", values, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoBetween(String value1, String value2) {
+            addCriterion("original_graph_no between", value1, value2, "originalGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalGraphNoNotBetween(String value1, String value2) {
+            addCriterion("original_graph_no not between", value1, value2, "originalGraphNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -942,6 +942,146 @@ public class SprayInspectHistoryExample {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryIsNull() {
+            addCriterion("accessory is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryIsNotNull() {
+            addCriterion("accessory is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryEqualTo(String value) {
+            addCriterion("accessory =", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotEqualTo(String value) {
+            addCriterion("accessory <>", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryGreaterThan(String value) {
+            addCriterion("accessory >", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryGreaterThanOrEqualTo(String value) {
+            addCriterion("accessory >=", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryLessThan(String value) {
+            addCriterion("accessory <", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryLessThanOrEqualTo(String value) {
+            addCriterion("accessory <=", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryLike(String value) {
+            addCriterion("accessory like", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotLike(String value) {
+            addCriterion("accessory not like", value, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryIn(List<String> values) {
+            addCriterion("accessory in", values, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotIn(List<String> values) {
+            addCriterion("accessory not in", values, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryBetween(String value1, String value2) {
+            addCriterion("accessory between", value1, value2, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAccessoryNotBetween(String value1, String value2) {
+            addCriterion("accessory not between", value1, value2, "accessory");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsIsNull() {
+            addCriterion("reasons is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsIsNotNull() {
+            addCriterion("reasons is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsEqualTo(String value) {
+            addCriterion("reasons =", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotEqualTo(String value) {
+            addCriterion("reasons <>", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsGreaterThan(String value) {
+            addCriterion("reasons >", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsGreaterThanOrEqualTo(String value) {
+            addCriterion("reasons >=", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsLessThan(String value) {
+            addCriterion("reasons <", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsLessThanOrEqualTo(String value) {
+            addCriterion("reasons <=", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsLike(String value) {
+            addCriterion("reasons like", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotLike(String value) {
+            addCriterion("reasons not like", value, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsIn(List<String> values) {
+            addCriterion("reasons in", values, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotIn(List<String> values) {
+            addCriterion("reasons not in", values, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsBetween(String value1, String value2) {
+            addCriterion("reasons between", value1, value2, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andReasonsNotBetween(String value1, String value2) {
+            addCriterion("reasons not between", value1, value2, "reasons");
             return (Criteria) this;
         }
     }

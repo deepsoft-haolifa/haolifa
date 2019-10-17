@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface FlowStepMapper {
-    long countByExample(FlowStepExample example);
+    int countByExample(FlowStepExample example);
 
     int deleteByExample(FlowStepExample example);
 

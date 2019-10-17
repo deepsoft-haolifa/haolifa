@@ -33,7 +33,9 @@ public class SprayItem {
 
     private Date updateTime;
 
-    public SprayItem(Integer id, String sprayNo, String materialGraphNo, String specifications, String model, String materialClassifyName, String material, String specialRequires, String sprayColor, Integer number, Integer qualifiedNumber, String remark, String completeTime, Date createTime, Date updateTime) {
+    private String batchNumber;
+
+    public SprayItem(Integer id, String sprayNo, String materialGraphNo, String specifications, String model, String materialClassifyName, String material, String specialRequires, String sprayColor, Integer number, Integer qualifiedNumber, String remark, String completeTime, Date createTime, Date updateTime, String batchNumber) {
         this.id = id;
         this.sprayNo = sprayNo;
         this.materialGraphNo = materialGraphNo;
@@ -49,6 +51,7 @@ public class SprayItem {
         this.completeTime = completeTime;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.batchNumber = batchNumber;
     }
 
     public SprayItem() {
@@ -173,5 +176,13 @@ public class SprayItem {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getBatchNumber() {
+        return batchNumber;
+    }
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber == null ? null : batchNumber.trim();
     }
 }

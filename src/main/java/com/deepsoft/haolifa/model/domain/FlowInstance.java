@@ -31,7 +31,9 @@ public class FlowInstance {
 
     private String accessory;
 
-    public FlowInstance(Integer id, String summary, String formNo, Integer formId, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime, String accessory) {
+    private Byte formType;
+
+    public FlowInstance(Integer id, String summary, String formNo, Integer formId, Integer flowId, Integer currentStepId, String userId, Integer roleId, Byte isOver, Byte isBack, Integer createUserId, Date createTime, Date updateTime, String accessory, Byte formType) {
         this.id = id;
         this.summary = summary;
         this.formNo = formNo;
@@ -46,6 +48,7 @@ public class FlowInstance {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.accessory = accessory;
+        this.formType = formType;
     }
 
     public FlowInstance() {
@@ -162,5 +165,13 @@ public class FlowInstance {
 
     public void setAccessory(String accessory) {
         this.accessory = accessory == null ? null : accessory.trim();
+    }
+
+    public Byte getFormType() {
+        return formType;
+    }
+
+    public void setFormType(Byte formType) {
+        this.formType = formType;
     }
 }

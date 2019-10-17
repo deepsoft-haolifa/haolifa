@@ -4,11 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import lombok.EqualsAndHashCode;
 
 /**
  * 出库成品实体
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class OutProductStorageDTO extends BaseStorageDTO {
     @ApiModelProperty(value = "成品号", required = true)
     private String productNo;

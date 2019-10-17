@@ -29,7 +29,9 @@ public class ProInspectRecord {
 
     private Integer createUserId;
 
-    public ProInspectRecord(Integer id, String orderNo, String productNo, String productModel, String productSpecifications, Integer testingNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String reason, Byte storageStatus, Date createTime, Date updateTime, Integer createUserId) {
+    private String accessory;
+
+    public ProInspectRecord(Integer id, String orderNo, String productNo, String productModel, String productSpecifications, Integer testingNumber, Integer qualifiedNumber, Integer unqualifiedNumber, String reason, Byte storageStatus, Date createTime, Date updateTime, Integer createUserId, String accessory) {
         this.id = id;
         this.orderNo = orderNo;
         this.productNo = productNo;
@@ -43,6 +45,7 @@ public class ProInspectRecord {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.createUserId = createUserId;
+        this.accessory = accessory;
     }
 
     public ProInspectRecord() {
@@ -151,5 +154,13 @@ public class ProInspectRecord {
 
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
     }
 }

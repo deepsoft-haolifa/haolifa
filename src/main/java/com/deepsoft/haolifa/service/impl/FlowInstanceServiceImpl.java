@@ -66,20 +66,21 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
   @Override
   public ResultBean create(FlowInstanceDTO model) {
     // 判断该表单是否存在处于审批中的流程
-//    FlowInstanceExample preInstanceExample = new FlowInstanceExample();
-//    FlowInstanceExample.Criteria criteria = preInstanceExample.createCriteria();
-//    criteria.andIsOverEqualTo(Consts.NO.code).andFormIdEqualTo(model.getFlowId());
-//    if (StringUtils.isEmpty(model.getFormNo()) && model.getFormId() == null) {
-//      return new ResultBean(ResponseEnum.PARAM_ERROR);
-//    } else if (StringUtils.isNotEmpty(model.getFormNo())) {
-//      criteria.andFormNoEqualTo(model.getFormNo());
-//    } else if (model.getFormId() != null) {
-//      criteria.andFormIdEqualTo(4).andFormIdEqualTo(model.getFormId());
-//    }
-//    List<FlowInstance> flowInstances = instanceMapper.selectByExample(preInstanceExample);
-//    if (flowInstances != null && flowInstances.size() > 0) {
-//      return new ResultBean(ResponseEnum.FLOW_EXIST);
-//    }
+    FlowInstanceExample preInstanceExample = new FlowInstanceExample();
+    FlowInstanceExample.Criteria criteria = preInstanceExample.createCriteria();
+    criteria.andIsOverEqualTo(Consts.NO.code).andFlowIdEqualTo(model.getFlowId());
+    if (StringUtils.isEmpty(model.getFormNo()) && model.getFormId() == null) {
+      throw new BaseException(ResponseEnum.PARAM_ERROR);
+    } else if (StringUtils.isNotEmpty(model.getFormNo())) {
+      criteria.andFormNoEqualTo(model.getFormNo());
+    } else if(model.getFormId() != null) {
+      criteria.andFormIdEqualTo(model.getFormId());
+    }
+    criteria.andFormTypeEqualTo(model.getFormType().byteValue());
+    List<FlowInstance> flowInstances = instanceMapper.selectByExample(preInstanceExample);
+    if (flowInstances != null && flowInstances.size() > 0) {
+      throw new BaseException(ResponseEnum.FLOW_EXIST);
+    }
     //1、 添加一条初始化历史记录（流程节点表单内容通过单独的接口，前端调用添加）
     //2、添加实例信息，当前节点为初始化后节点
     //3、返回实例id
@@ -111,6 +112,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     flowInstance.setCurrentStepId(currentStep.getStepId());
     flowInstance.setFormNo(model.getFormNo());// 流程初始化关联的主表单编号（采购单、生产订单、发票编号、机加工等）
     flowInstance.setFormId(model.getFormId());
+    flowInstance.setFormType(model.getFormType().byteValue());
     instanceMapper.insertSelective(flowInstance);
     // 添加初始化流程实例历史（默认第一条已处理）
     FlowHistory flowHistory = new FlowHistory();
@@ -424,6 +426,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     FlowInstance flowInstance = flowInstances.get(0);
     FlowStepExample flowStepExample = new FlowStepExample();
     flowStepExample.or().andFlowIdEqualTo(flowInstance.getFlowId());
+    flowStepExample.setOrderByClause("step_order asc");
     List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
     int preStepId = 0;
     List<Integer> existStepId = new ArrayList<>();
@@ -477,7 +480,6 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       processerDTO.setAuditUserName(historyInfo.getAuditUserName());
       processerDTO.setAuditResult(historyInfo.getAuditResult());
       processerDTO.setAuditTime(historyInfo.getCreateTime());
-
     } else {
       processerDTO.setAuditUserName("");
     }

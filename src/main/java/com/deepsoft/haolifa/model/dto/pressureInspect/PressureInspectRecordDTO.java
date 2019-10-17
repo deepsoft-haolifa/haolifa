@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.model.dto.pressureInspect;
 
+import com.deepsoft.haolifa.model.dto.Accessory;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 import java.util.List;
@@ -27,5 +29,6 @@ public class PressureInspectRecordDTO {
     private Integer unqualifiedNumber;
     @ApiModelProperty(value = "不合格原因")
     private String reason;
-
+    @ApiModelProperty(value = "质检附件")
+    private List<Accessory> accessoryList;
 }

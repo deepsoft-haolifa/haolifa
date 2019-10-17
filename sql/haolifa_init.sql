@@ -1010,27 +1010,32 @@ DROP TABLE IF EXISTS `price_product`;
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品价格管理表';
 
-DROP TABLE IF EXISTS `price_material`;
-	CREATE TABLE `price_material` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `material_classify_name` char(36) NOT NULL DEFAULT '' COMMENT '零件分类名称',
-	  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
-	  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '图号',
-	   `model` varchar(64) NOT NULL DEFAULT '' COMMENT '型号',
-	  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '规格',
-	  `material` varchar(64) NOT NULL DEFAULT '' COMMENT '材料',
-	  `unit` varchar(64) NOT NULL DEFAULT '' COMMENT '单位(如：根，个)',
-	  `actual_weight` varchar(32) NOT NULL DEFAULT '' COMMENT '实际重量',
-	  `ton_price` varchar(32) NOT NULL DEFAULT '' COMMENT '吨价(元)',
-	  `blank_cost` varchar(32) NOT NULL DEFAULT '' COMMENT '毛坯费（元）',
-	  `process_cost` varchar(32) NOT NULL DEFAULT '' COMMENT '加工费（元）',
-	  `product_price` varchar(32) NOT NULL DEFAULT '' COMMENT '成品价（元）',
-	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  `create_user` int(11) NOT NULL COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零件价格管理表';
+DROP TABLE if EXISTS `price_material` ;
+CREATE TABLE `price_material` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	`material_classify_id` int(11) NOT NULL DEFAULT '0' COMMENT '零件分类Id',
+  `material_classify_name` char(36) NOT NULL DEFAULT '' COMMENT '零件分类名称',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
+  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '图号',
+  `model` varchar(64) NOT NULL DEFAULT '' COMMENT '型号',
+  `specifications` varchar(64) NOT NULL DEFAULT '' COMMENT '规格',
+  `material` varchar(64) NOT NULL DEFAULT '' COMMENT '材料',
+  `unit` varchar(64) NOT NULL DEFAULT '' COMMENT '单位(如：根，个)',
+  `actual_weight` varchar(32) NOT NULL DEFAULT '' COMMENT '实际重量',
+	`tax_rate` varchar(32) NOT NULL DEFAULT '' COMMENT '税率',
+  `ton_price` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '吨价(元)',
+  `blank_cost` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '毛坯费不含税（元）',
+  `blank_cost_tax` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '毛坯费含税（元）',
+  `process_cost` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '加工费（元）',
+  `spray_cost` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '喷涂费（元）',
+  `price` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '成品价不含税（元）',
+  `price_tax` decimal(12,4) NOT NULL DEFAULT 0 COMMENT '成品价含税（元）',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_user` int(11) NOT NULL COMMENT '创建用户',
+  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零件价格管理表';
 
 DROP TABLE IF EXISTS `spray`;
 CREATE TABLE `spray` (
@@ -1110,3 +1115,35 @@ CREATE TABLE `sys_dict` (
   `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='系统字典表';
+
+DROP TABLE IF EXISTS `spray_color_relation`;
+create table spray_color_relation(
+ id int(11) UNSIGNED not null AUTO_INCREMENT comment '主键',
+ color VARCHAR(64) not null default '' comment '喷涂颜色',
+ relation_no varchar(64) not null default '' comment '颜色编号',
+ create_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+ update_time TIMESTAMP not null default CURRENT_TIMESTAMP COMMENT '更新时间',
+ PRIMARY key (id) USING BTREE
+) engine innodb DEFAULT CHARSET=utf8 COMMENT='喷涂加工颜色编号对照表';
+
+DROP TABLE IF EXISTS `entrust_graph_no_relation`;
+create table entrust_graph_no_relation(
+ id int(11) UNSIGNED not null auto_increment comment '主键',
+ material_name VARCHAR(32) not null default '' comment '图号名称',
+ original_graph_no VARCHAR(64) not null default '' comment '毛坯图号',
+ processed_graph_no VARCHAR(64) not null default '' comment '加工后图号',
+ create_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+ update_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+ PRIMARY key (id) using BTREE
+) engine innodb default CHARSET=utf8 COMMENT='机加工图号对照表';
+
+DROP TABLE IF EXISTS `customer_model_relation`;
+CREATE table customer_model_relation(
+	id int(11) UNSIGNED not null auto_increment comment '主键',
+	customer_no VARCHAR(32) not null default '' comment '客户编号',
+	customer_model_no varchar(64) not null default '客户产品型号',
+	haoli_model_no VARCHAR(64) not null default '好利产品型号',
+	create_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '创建时间',
+	update_time TIMESTAMP not null default CURRENT_TIMESTAMP comment '更新时间',
+	PRIMARY KEY (id) using BTREE
+) ENGINE = innodb default charset=utf8 comment='大客户-好利产品型号对照表';

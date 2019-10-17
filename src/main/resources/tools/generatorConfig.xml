@@ -85,6 +85,12 @@
       <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
+    <table tableName="check_material_lock" domainObjectName="CheckMaterialLock">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>
+    <!--<table tableName="graph_no_rel" domainObjectName="GraphNoRel">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
 
     <!--<table tableName="flow" domainObjectName="Flow"></table>-->
 
@@ -97,6 +103,18 @@
 
     <!--<table tableName="flow_instance" domainObjectName="FlowInstance">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="spray_color_relation" domainObjectName="SprayColorRelation">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="entrust_graph_no_relation" domainObjectName="EntrustGraphNoRelation">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
+
+    <!--<table tableName="customer_model_relation" domainObjectName="CustomerModelRelation">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
     <!--<table tableName="sys_department" domainObjectName="SysDepartment"></table>-->
@@ -117,9 +135,9 @@
 
     <!--<table tableName="material_classify" domainObjectName="MaterialClassify"></table>-->
 
-    <!--<table tableName="order_product" domainObjectName="OrderProduct">-->
-    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+    <!--<table tableName="order_product" domainObjectName="OrderProduct">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
 
     <!--<table tableName="order_material" domainObjectName="OrderMaterial">-->
     <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
@@ -135,6 +153,9 @@
     <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
     <!--</table>-->
 
+    <!--<table tableName="reject_material_record" domainObjectName="RejectMaterialRecord">-->
+    <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+    <!--</table>-->
     <!--<table tableName="replace_material_list" domainObjectName="ReplaceMaterialList"></table>-->
 
     <!--<table tableName="replace_material" domainObjectName="ReplaceMaterial"></table>-->
@@ -191,11 +212,11 @@
     <!--<table tableName="invoice" domainObjectName="Invoice">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
-    <!--<table tableName="expenses" domainObjectName="Expenses">-->
-    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+    <!--<table tableName="expenses" domainObjectName="Expenses">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
     <!--<table tableName="expenses_classify" domainObjectName="ExpensesClassify"></table>-->
-    <!--<table tableName="payment_management" domainObjectName="PaymentManagement"></table>-->
+<!--    <table tableName="payment_management" domainObjectName="PaymentManagement"></table>-->
     <!--<table tableName="contract" domainObjectName="Contract">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
@@ -205,17 +226,17 @@
     <!--</table>-->
     <!--<table tableName="inspect_item" domainObjectName="InspectItem">-->
     <!--</table>-->
-    <!--<table tableName="inspect_history" domainObjectName="InspectHistory">-->
-    <!--</table>-->
+<!--    <table tableName="inspect_history" domainObjectName="InspectHistory">-->
+<!--    </table>-->
 
 
     <!--<table tableName="material_inspect_result" domainObjectName="MaterialInspectResult">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
 
-    <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">-->
-    <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+    <!--<table tableName="purchase_order" domainObjectName="PurchaseOrder">
+    <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
 
     <!--<table tableName="spray" domainObjectName="Spray">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
@@ -223,13 +244,13 @@
     <!--<table tableName="spray_item" domainObjectName="SprayItem">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
-    <!--<table tableName="spray_inspect_history" domainObjectName="SprayInspectHistory">-->
-      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+<!--    <table tableName="spray_inspect_history" domainObjectName="SprayInspectHistory">-->
+<!--      <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--    </table>-->
 
-    <!--<table tableName="price_material" domainObjectName="PriceMaterial">-->
-      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    <!--</table>-->
+<!--    <table tableName="price_material" domainObjectName="PriceMaterial">-->
+<!--      <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--    </table>-->
     <!--<table tableName="purchase_order_item" domainObjectName="PurchaseOrderItem"></table>-->
 
     <!--<table tableName="supplier_evaluation_record" domainObjectName="SupplierEvaluationRecord"></table>-->
@@ -238,9 +259,12 @@
 
     <!--<table tableName="supplier_product" domainObjectName="SupplierProduct"></table>-->
 
-    <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">-->
+    <!--<table tableName="pro_inspect_record" domainObjectName="ProInspectRecord">-->
     <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
+    <!--<table tableName="pro_inspect_result" domainObjectName="ProInspectResult">
+      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>-->
     <!--<table tableName="pro_inspect_unqualified" domainObjectName="ProInspectUnqualified">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
@@ -250,6 +274,7 @@
     <!--<table tableName="equipment_maintain_record" domainObjectName="EquipmentMaintainRecord"></table>-->
     <!--<table tableName="sys_message" domainObjectName="SysMessage"></table>-->
     <!--<table tableName="pressure_inspect_result" domainObjectName="PressureInspectResult"></table>-->
+    <!--<table tableName="pressure_inspect_record" domainObjectName="PressureInspectRecord"></table>-->
     <!--<table tableName="pressure_inspect_unqualified" domainObjectName="PressureInspectUnqualified"></table>-->
 
 

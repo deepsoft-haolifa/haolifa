@@ -17,7 +17,7 @@ public class DateFormatterUtils {
     public static LocalDateTime getLocalDateTime(Date date) {
         if (date == null)
             return LocalDateTime.now();
-        return date.toInstant().atOffset(ZoneOffset.UTC).toLocalDateTime();
+        return date.toInstant().atZone(ZoneOffset.systemDefault()).toLocalDateTime();
     }
 
     public static DateTimeFormatter getDateTimeFormatter(String formatter) {

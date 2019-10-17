@@ -58,7 +58,6 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
       invoiceMapper.insertSelective(invoice);
       result.put("formId", invoice.getId());
       result.put("formNo", invoice.getInvoiceNo());
-      result.put("formType", CommonEnum.FormType.INVOICE_TYPE.code);
     }
     return ResultBean.success(result);
   }
@@ -133,7 +132,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
       criteria.andTypeEqualTo(modelList.getType().byteValue());
     }
     criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-    Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize())
+    Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize(),"create_time desc")
         .doSelectPage(() -> invoiceMapper.selectByExample(invoiceExample));
     PageDTO<Invoice> pageDTO = new PageDTO<>();
     BeanUtils.copyProperties(pageData, pageDTO);
