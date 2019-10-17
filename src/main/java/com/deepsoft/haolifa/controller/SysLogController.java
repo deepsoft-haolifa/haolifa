@@ -16,9 +16,9 @@ public class SysLogController {
     @Resource
     private SysLogService sysLogService;
 
-    @PostMapping("page-list")
+    @PostMapping("page-login-list")
     @ApiOperation("获取登录日志分页列表")
-    public ResultBean pageList(@RequestBody SysLogConditionDTO sysLogConditionDTO) {
+    public ResultBean pageLoginList(@RequestBody SysLogConditionDTO sysLogConditionDTO) {
         return ResultBean.success(sysLogService.pageLoginList(sysLogConditionDTO));
     }
 }
