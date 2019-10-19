@@ -10,9 +10,7 @@ public class HlMail {
     private String title;
     private String users;
     private String content;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     private String sendUser;
     private String revUser;
