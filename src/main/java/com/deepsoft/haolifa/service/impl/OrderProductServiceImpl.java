@@ -648,17 +648,17 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             cellValue7 = cellValue7.replaceAll("￥", "");
                         }
                         orderProductAssociate.setPrice(new BigDecimal(cellValue7));
-                        // 根据产品ID 获取成品价格，如果小于这个成品价格或者价格库中无此产品，拒绝上传订单
-                        String productNo = orderProductAssociate.getProductNo().replaceAll(" ","");
-                        PriceProduct priceProduct = priceProductService.getInfoByProductId(productNo, orderProductAssociate.getProductModel());
-                        if (null == priceProduct) {
-                            throw new BaseException(ResponseEnum.PARAM_ERROR.code, "[" + productNo + "] 这个产品的在成品价格库里面没有数据，不允许提交");
-                        } else {
-                            BigDecimal exFactoryPrice = priceProduct.getExFactoryPrice();
-                            if (new BigDecimal(cellValue7).compareTo(exFactoryPrice) == -1) {
-                                throw new BaseException(ResponseEnum.PARAM_ERROR.code, "[" + productNo + "] 这个产品的价格小于在成品价格库的价格，不允许提交");
-                            }
-                        }
+//                        // 根据产品ID 获取成品价格，如果小于这个成品价格或者价格库中无此产品，拒绝上传订单
+//                        String productNo = orderProductAssociate.getProductNo().replaceAll(" ","");
+//                        PriceProduct priceProduct = priceProductService.getInfoByProductId(productNo, orderProductAssociate.getProductModel());
+//                        if (null == priceProduct) {
+//                            throw new BaseException(ResponseEnum.PARAM_ERROR.code, "[" + productNo + "] 这个产品的在成品价格库里面没有数据，不允许提交");
+//                        } else {
+//                            BigDecimal exFactoryPrice = priceProduct.getExFactoryPrice();
+//                            if (new BigDecimal(cellValue7).compareTo(exFactoryPrice) == -1) {
+//                                throw new BaseException(ResponseEnum.PARAM_ERROR.code, "[" + productNo + "] 这个产品的价格小于在成品价格库的价格，不允许提交");
+//                            }
+//                        }
                     } else {
                         throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，单价不能为空");
                     }
