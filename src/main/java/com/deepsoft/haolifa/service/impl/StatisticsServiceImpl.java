@@ -5,12 +5,10 @@ import static com.deepsoft.haolifa.constant.CacheKey.TOTAL_MONEY_ORDER;
 
 import com.deepsoft.haolifa.cache.redis.RedisDaoImpl;
 import com.deepsoft.haolifa.constant.CommonEnum.Consts;
+import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
-import com.deepsoft.haolifa.model.domain.Material;
-import com.deepsoft.haolifa.model.domain.MaterialExample;
-import com.deepsoft.haolifa.model.domain.OrderProduct;
-import com.deepsoft.haolifa.model.domain.OrderProductExample;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.StatisticsService;
 import java.util.List;
@@ -28,6 +26,8 @@ public class StatisticsServiceImpl implements StatisticsService {
   private MaterialMapper materialMapper;
   @Autowired
   private OrderProductMapper orderProductMapper;
+  @Autowired
+  private InvoiceMapper invoiceMapper;
   @Autowired
   private RedisDaoImpl redisDao;
 
@@ -63,5 +63,13 @@ public class StatisticsServiceImpl implements StatisticsService {
       }
     }
     return ResultBean.success(totalMoney);
+  }
+
+  @Override
+  public Double totalInvoice() {
+    InvoiceExample invoiceExample = new InvoiceExample();
+    List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
+
+    return null;
   }
 }

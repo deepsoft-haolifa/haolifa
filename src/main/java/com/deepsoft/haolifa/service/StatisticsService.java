@@ -7,4 +7,6 @@ public interface StatisticsService {
   ResultBean totalInventory();
 
   ResultBean totalOrders();
+
+  Double totalInvoice();
 }

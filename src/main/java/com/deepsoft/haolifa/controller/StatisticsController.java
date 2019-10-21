@@ -30,6 +30,10 @@ public class StatisticsController {
   }
 
 
-
+  @ApiOperation("发票总金额")
+  @GetMapping("/money/invoice")
+  public ResultBean totalInvoice(){
+    return ResultBean.success(statisticsService.totalInvoice());
+  }
 
 }
