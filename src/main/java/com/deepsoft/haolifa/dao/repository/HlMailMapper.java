@@ -10,6 +10,7 @@ public interface HlMailMapper {
 
     List<HlMail> selectHlMails();
     List<HlMail> selectsendHlMails(String userName);
+    List<HlMail> selectHlMailsByUserName(String userName);
     List<HlMail> selectHlMailsByUserId(String param);
 
 }

@@ -37,4 +37,9 @@ public class HlMailServiceImpl implements HlMailService {
         List<HlMail> hlMails = hlMailMapper.selectsendHlMails(userName);
         return hlMails;
     }
+    @Override
+    public  List<HlMail> selectHlMailsByUserName(String userName) {
+        List<HlMail> hlMails = hlMailMapper.selectHlMailsByUserName(userName);
+        return hlMails;
+    }
 }

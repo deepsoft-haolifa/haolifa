@@ -66,6 +66,14 @@
     order by hl.create_time desc
 
   </select>
+  <select id="selectHlMailsByUserName"  resultMap="hlMailMap" parameterType="String">
+    select
+    hl.id,hl.title,hl.content,hl.create_time,hl.update_time,hl.users,hl.send_user,hl.rev_user
 
+    from hl_mail hl where  send_user =#{userName}
+
+    order by hl.create_time desc
+
+  </select>
 
 </mapper>

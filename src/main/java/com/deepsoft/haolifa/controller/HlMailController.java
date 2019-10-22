@@ -35,11 +35,16 @@ public class HlMailController {
     @GetMapping("/getMails")
     @ApiOperation("获取所有站内信")
     public ResultBean getHlMails(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
-                                 @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize){
+                                 @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,@ApiParam("userName") @RequestParam(value = "userName",required = false) String userName){
         System.out.println(pageNum);
         PageDTO<HlMail> pageDTO = new PageDTO<>();
+        List<HlMail> hlMails = null;
+        if(userName !=null&&!userName.trim().equals("")){
+            hlMails = hlMailService.selectHlMailsByUserName(userName);
+        }else{
+            hlMails = hlMailService.selectHlMails();
+        }
 
-        List<HlMail> hlMails = hlMailService.selectHlMails();
         pageDTO.setTotal(hlMails.size());
         hlMails = getList(pageNum,pageSize,hlMails);
         pageDTO.setList(hlMails);
@@ -124,5 +129,34 @@ public class HlMailController {
 
         return ResultBean.success(hlMailReseService.selectHlMailReves(mailId));
     }
+    @GetMapping("/getsendMailsByUser")
+    @ApiOperation("根据用户获取已发送站内信")
+    public ResultBean getsendMailsByUser(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
+                                         @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize, @ApiParam("userName") @RequestParam(value = "userName") String userName){
 
+        PageDTO<HlMail> pageDTO = new PageDTO<>();
+        List<HlMail> hlMails = hlMailService.selectsendHlMails(userName);
+        pageDTO.setTotal(hlMails.size());
+        hlMails = getList(pageNum,pageSize,hlMails);
+        pageDTO.setList(hlMails);
+        pageDTO.setPageNum(pageNum);
+
+        return ResultBean.success(pageDTO);
+    }
+
+    @GetMapping("/getMailsByUser")
+    @ApiOperation("根据用户获取所有站内信")
+    public ResultBean getMailsByUser(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
+                                 @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,@ApiParam("userName") @RequestParam(value = "userName") String userName){
+        System.out.println(pageNum);
+        PageDTO<HlMail> pageDTO = new PageDTO<>();
+
+        List<HlMail> hlMails = hlMailService.selectHlMailsByUserName(userName);
+        pageDTO.setTotal(hlMails.size());
+        hlMails = getList(pageNum,pageSize,hlMails);
+        pageDTO.setList(hlMails);
+        pageDTO.setPageNum(pageNum);
+        System.out.println(hlMails.size());
+        return ResultBean.success(pageDTO);
+    }
 }
