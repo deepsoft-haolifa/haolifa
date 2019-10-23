@@ -1,13 +1,13 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.StatisticsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = {"统计类管理"})
 @RestController
@@ -30,10 +30,10 @@ public class StatisticsController {
   }
 
 
-  @ApiOperation("发票总金额")
-  @GetMapping("/money/invoice")
-  public ResultBean totalInvoice(){
-    return ResultBean.success(statisticsService.totalInvoice());
+  @ApiOperation("发票总金额(1.经管；2. 财务)")
+  @GetMapping("/money/invoice/{type}")
+  public ResultBean totalInvoice(@PathVariable Byte type){
+    return ResultBean.success(statisticsService.totalInvoice(type));
   }
 
 }
