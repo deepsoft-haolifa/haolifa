@@ -13,6 +13,7 @@ public class MessageVO {
     @ApiModelProperty(value = "信息id")
     private Integer id;
     @ApiModelProperty(value = "展示日期")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Date showTime;
     @ApiModelProperty(value = "标题", required = true)
     private String title;

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
@@ -33,6 +34,7 @@ public class FlowProcesserDTO {
   private List<FlowProcesserDTO> child;
 
   @ApiModelProperty("审核时间")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
   private Date auditTime;
 
 }

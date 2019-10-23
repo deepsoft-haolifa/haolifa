@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -18,6 +20,7 @@ public class DeliveryRecord {
 
     private String contractOrderNo;
 
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Date deliveryTime;
 
     private String operationNo;
