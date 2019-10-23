@@ -18,8 +18,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,21 +36,26 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
     SupplierProductExtendMapper supplierProductExample;
 
     @Override
-    public ResultBean save(SupplierPorductDTO model) {
-        SupplierProduct supplierProduct = new SupplierProduct();
-        BeanUtils.copyProperties(model, supplierProduct);
-        supplierProduct.setMaterialType(model.getMaterialType().byteValue());
-        if (model.getMaterialType() == null
-                || (model.getMaterialType().equals(0) && StringUtils.isEmpty(model.getMaterialGraphNo()))
-                || StringUtils
-                .isEmpty(model.getSupplierNo())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+    public ResultBean save(List<SupplierPorductDTO> listModel) {
+        int insert = 0;
+        if (CollectionUtils.isEmpty(listModel)) {
+            for (SupplierPorductDTO model : listModel) {
+                SupplierProduct supplierProduct = new SupplierProduct();
+                BeanUtils.copyProperties(model, supplierProduct);
+                supplierProduct.setMaterialType(model.getMaterialType().byteValue());
+                if (model.getMaterialType() == null
+                        || (model.getMaterialType().equals(0) && StringUtils.isEmpty(model.getMaterialGraphNo()))
+                        || StringUtils
+                        .isEmpty(model.getSupplierNo())) {
+                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+                }
+                if (model.getMaterialType().equals(1)) {
+                    supplierProduct.setMaterialGraphNo("");
+                }
+                supplierProduct.setCreateUserId(getLoginUserId());
+                insert = supplierProductMapper.insertSelective(supplierProduct);
+            }
         }
-        if(model.getMaterialType().equals(1)) {
-            supplierProduct.setMaterialGraphNo("");
-        }
-        supplierProduct.setCreateUserId(getLoginUserId());
-        int insert = supplierProductMapper.insertSelective(supplierProduct);
         return ResultBean.success(insert);
     }
 
@@ -80,8 +88,9 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
         if (model.getPageSize() == null || model.getPageSize() == 0) {
             model.setPageSize(10);
         }
+
         Page<SupplierProduct> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->
-            supplierProductExample.getSupplierProList(model));
+                supplierProductExample.getSupplierProList(model));
         PageDTO<SupplierProduct> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());

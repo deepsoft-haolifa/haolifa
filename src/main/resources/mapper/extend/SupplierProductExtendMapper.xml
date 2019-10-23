@@ -6,9 +6,11 @@
     resultType="com.deepsoft.haolifa.model.dto.SupplierProductResDTO">
     select sp.id id, s.suppiler_name supplierName,sp.material_type materialType, s.suppiler_no supplierNo,
      sp.material_graph_no materialGraphNo,
-    sp.material_name materialName
+    sp.material_name materialName,
+    m.material_classify_name materialClassifyName
     from supplier_product sp
     left join supplier s on s.suppiler_no = sp.supplier_no
+    left join material m on sp.material_graph_no=m.graph_no
     where
     s.is_delete = 0 and sp.is_delete = 0
     <if test="materialType != null and materialType !=''">
@@ -22,6 +24,9 @@
     </if>
     <if test="materialGraphNo != null and materialGraphNo !=''">
       and sp.material_graph_no like CONCAT('%',#{materialGraphNo},'%')
+    </if>
+    <if test="materialName != null and materialName !=''">
+      and sp.material_name like CONCAT('%',#{materialName},'%')
     </if>
   </select>
 

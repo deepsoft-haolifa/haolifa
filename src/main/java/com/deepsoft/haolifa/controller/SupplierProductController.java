@@ -29,10 +29,10 @@ public class SupplierProductController {
     @Autowired
     SupplierProductService supplierProductService;
 
-    @ApiOperation("产品添加")
+    @ApiOperation("产品添加(多个添加)")
     @PostMapping("save")
-    public ResultBean save(@RequestBody SupplierPorductDTO model) {
-        return supplierProductService.save(model);
+    public ResultBean save(@RequestBody List<SupplierPorductDTO> listModel) {
+        return supplierProductService.save(listModel);
     }
 
     @ApiOperation("删除产品")

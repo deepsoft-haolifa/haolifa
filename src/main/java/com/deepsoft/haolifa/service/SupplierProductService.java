@@ -4,13 +4,15 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierPorductDTO;
 import com.deepsoft.haolifa.model.dto.SupplierProductListDTO;
 
+import java.util.List;
+
 public interface SupplierProductService {
     /**
      * 添加产品
-     * @param model
+     * @param listModel
      * @return
      */
-    ResultBean save(SupplierPorductDTO model);
+    ResultBean save(List<SupplierPorductDTO> listModel) ;
 
     /**
      * 删除产品

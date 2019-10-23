@@ -5,12 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class SupplierProductListDTO {
+public class SupplierProductListDTO extends PageParam{
 
-    @ApiModelProperty(required = true,value = "页码")
-    private Integer pageNum;
-    @ApiModelProperty(required = true,value = "页数")
-    private Integer pageSize;
     @ApiModelProperty(value = "供应商编号")
     private String supplierNo;
     @ApiModelProperty(value = "供应商名称")
@@ -19,4 +15,6 @@ public class SupplierProductListDTO {
     private Integer materialType;
     @ApiModelProperty(value = "原料图号")
     private String materialGraphNo;
+    @ApiModelProperty(value = "原料名称")
+    private String materialName;
 }
