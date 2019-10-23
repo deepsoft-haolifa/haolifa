@@ -44,7 +44,7 @@ public class JacksonConfig {
         MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         //设置日期格式
         ObjectMapper objectMapper = new ObjectMapper();
-        SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd");
         objectMapper.setDateFormat(smt);
         mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
         //设置中文编码格式
