@@ -304,6 +304,10 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                     if (purchaseOrder.getTotalCount() < order.getQualifiedNumber()) {
                         throw new BaseException(PURCHASE_PRO_INSPECT_NUM_ERROR);
                     }
+                    // 当合同检验合格数等于合同数自动更新采购合同为“完成”状态
+                    if(purchaseOrder.getTotalCount().equals(order.getQualifiedNumber())){
+                        order.setStatus((byte) 5);
+                    }
                     purchaseOrderMapper.updateByExampleSelective(order, orderExample);
                 }
             }
