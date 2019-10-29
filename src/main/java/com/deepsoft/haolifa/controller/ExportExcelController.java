@@ -1155,6 +1155,9 @@ public class ExportExcelController {
         Cell cell_18 = columnTitle.createCell(8);
         cell_18.setCellValue("提交日期");
         cell_18.setCellStyle(center);
+        Cell cell_19 = columnTitle.createCell(9);
+        cell_19.setCellValue("凭证号");
+        cell_19.setCellStyle(center);
 
         List<Expenses> expensesList = expensesMapper.selectByExample(expensesExample);
         for (int i = 0; i < expensesList.size(); i++) {
@@ -1188,6 +1191,9 @@ public class ExportExcelController {
             cell_8.setCellValue(
                     DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, expenses.getCreateTime()));
             cell_8.setCellStyle(center);
+            Cell cell_9 = row_value.createCell(9);
+            cell_9.setCellValue(expenses.getVoucherNo());
+            cell_9.setCellStyle(center);
         }
 
         OutputStream outputStream = response.getOutputStream();
