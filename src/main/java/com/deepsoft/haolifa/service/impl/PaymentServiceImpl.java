@@ -72,7 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
         paymentManagement.setOrderNo(model.getOrderNo());
         Date payTime = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getPayTime());
         paymentManagement.setPayTime(payTime);
-
+        paymentManagement.setInvoiceNo(model.getInvoiceNo());
         // 同步更新已付/已收货款
         if (model.getOrderType() == 1) {
             // 采购
