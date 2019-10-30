@@ -13,6 +13,7 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="inspect_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="bus_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, spray_no, planner, total_number, qualified_number, status, file_url, create_time, 
-    update_time, inspect_status
+    update_time, inspect_status, bus_type
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayExample" >
     select
@@ -113,12 +114,12 @@
     </selectKey>
     insert into spray (spray_no, planner, total_number, 
       qualified_number, status, file_url, 
-      create_time, update_time, inspect_status
-      )
+      create_time, update_time, inspect_status, 
+      bus_type)
     values (#{sprayNo,jdbcType=VARCHAR}, #{planner,jdbcType=VARCHAR}, #{totalNumber,jdbcType=INTEGER}, 
       #{qualifiedNumber,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{fileUrl,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{inspectStatus,jdbcType=TINYINT}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{inspectStatus,jdbcType=TINYINT}, 
+      #{busType,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Spray" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -153,6 +154,9 @@
       <if test="inspectStatus != null" >
         inspect_status,
       </if>
+      <if test="busType != null" >
+        bus_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sprayNo != null" >
@@ -181,6 +185,9 @@
       </if>
       <if test="inspectStatus != null" >
         #{inspectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="busType != null" >
+        #{busType,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -223,6 +230,9 @@
       <if test="record.inspectStatus != null" >
         inspect_status = #{record.inspectStatus,jdbcType=TINYINT},
       </if>
+      <if test="record.busType != null" >
+        bus_type = #{record.busType,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -239,7 +249,8 @@
       file_url = #{record.fileUrl,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      inspect_status = #{record.inspectStatus,jdbcType=TINYINT}
+      inspect_status = #{record.inspectStatus,jdbcType=TINYINT},
+      bus_type = #{record.busType,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -274,6 +285,9 @@
       <if test="inspectStatus != null" >
         inspect_status = #{inspectStatus,jdbcType=TINYINT},
       </if>
+      <if test="busType != null" >
+        bus_type = #{busType,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -287,7 +301,8 @@
       file_url = #{fileUrl,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      inspect_status = #{inspectStatus,jdbcType=TINYINT}
+      inspect_status = #{inspectStatus,jdbcType=TINYINT},
+      bus_type = #{busType,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

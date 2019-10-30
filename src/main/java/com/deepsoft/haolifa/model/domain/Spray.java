@@ -23,7 +23,9 @@ public class Spray {
 
     private Byte inspectStatus;
 
-    public Spray(Integer id, String sprayNo, String planner, Integer totalNumber, Integer qualifiedNumber, Byte status, String fileUrl, Date createTime, Date updateTime, Byte inspectStatus) {
+    private Byte busType;
+
+    public Spray(Integer id, String sprayNo, String planner, Integer totalNumber, Integer qualifiedNumber, Byte status, String fileUrl, Date createTime, Date updateTime, Byte inspectStatus, Byte busType) {
         this.id = id;
         this.sprayNo = sprayNo;
         this.planner = planner;
@@ -34,6 +36,7 @@ public class Spray {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.inspectStatus = inspectStatus;
+        this.busType = busType;
     }
 
     public Spray() {
@@ -118,5 +121,13 @@ public class Spray {
 
     public void setInspectStatus(Byte inspectStatus) {
         this.inspectStatus = inspectStatus;
+    }
+
+    public Byte getBusType() {
+        return busType;
+    }
+
+    public void setBusType(Byte busType) {
+        this.busType = busType;
     }
 }

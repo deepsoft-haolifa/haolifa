@@ -69,6 +69,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         spray.setSprayNo(sprayNo);
         spray.setPlanner(sprayDto.getPlanner());
         spray.setTotalNumber(0);
+        spray.setBusType(sprayDto.getBusType());
         sprayMapper.insertSelective(spray);
         sprayDto.getItems().forEach(sprayItemDto -> {
             SprayItem sprayItem = new SprayItem();

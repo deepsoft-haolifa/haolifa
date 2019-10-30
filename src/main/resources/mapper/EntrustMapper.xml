@@ -8,7 +8,6 @@
       <arg column="purchase_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="entrust_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="processed_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="workShop_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="supplier_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="supplier_no" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -23,6 +22,8 @@
       <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="inspect_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="processed_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bus_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -84,10 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, material_graph_name, purchase_no, entrust_no, material_graph_no, processed_graph_no, 
-    workShop_type, supplier_name, supplier_no, batch_number, number, purchase_price, 
-    status, entrust_person, is_delete, create_time, update_time, create_user_id, inspect_status, 
-    qualified_number
+    id, material_graph_name, purchase_no, entrust_no, material_graph_no, workShop_type, 
+    supplier_name, supplier_no, batch_number, number, purchase_price, status, entrust_person, 
+    is_delete, create_time, update_time, create_user_id, inspect_status, qualified_number, 
+    processed_graph_no, bus_type
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" >
     select
@@ -124,19 +125,19 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into entrust (material_graph_name, purchase_no, entrust_no, 
-      material_graph_no, processed_graph_no, workShop_type, 
-      supplier_name, supplier_no, batch_number, 
-      number, purchase_price, status, 
-      entrust_person, is_delete, create_time, 
-      update_time, create_user_id, inspect_status, 
-      qualified_number)
+      material_graph_no, workShop_type, supplier_name, 
+      supplier_no, batch_number, number, 
+      purchase_price, status, entrust_person, 
+      is_delete, create_time, update_time, 
+      create_user_id, inspect_status, qualified_number, 
+      processed_graph_no, bus_type)
     values (#{materialGraphName,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{entrustNo,jdbcType=VARCHAR}, 
-      #{materialGraphNo,jdbcType=VARCHAR}, #{processedGraphNo,jdbcType=VARCHAR}, #{workshopType,jdbcType=TINYINT}, 
-      #{supplierName,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, 
-      #{number,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
-      #{entrustPerson,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{inspectStatus,jdbcType=TINYINT}, 
-      #{qualifiedNumber,jdbcType=INTEGER})
+      #{materialGraphNo,jdbcType=VARCHAR}, #{workshopType,jdbcType=TINYINT}, #{supplierName,jdbcType=VARCHAR}, 
+      #{supplierNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{purchasePrice,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{entrustPerson,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{inspectStatus,jdbcType=TINYINT}, #{qualifiedNumber,jdbcType=INTEGER}, 
+      #{processedGraphNo,jdbcType=VARCHAR}, #{busType,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -155,9 +156,6 @@
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no,
-      </if>
-      <if test="processedGraphNo != null" >
-        processed_graph_no,
       </if>
       <if test="workshopType != null" >
         workShop_type,
@@ -201,6 +199,12 @@
       <if test="qualifiedNumber != null" >
         qualified_number,
       </if>
+      <if test="processedGraphNo != null" >
+        processed_graph_no,
+      </if>
+      <if test="busType != null" >
+        bus_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="materialGraphName != null" >
@@ -214,9 +218,6 @@
       </if>
       <if test="materialGraphNo != null" >
         #{materialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="processedGraphNo != null" >
-        #{processedGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="workshopType != null" >
         #{workshopType,jdbcType=TINYINT},
@@ -260,6 +261,12 @@
       <if test="qualifiedNumber != null" >
         #{qualifiedNumber,jdbcType=INTEGER},
       </if>
+      <if test="processedGraphNo != null" >
+        #{processedGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="busType != null" >
+        #{busType,jdbcType=TINYINT},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" resultType="java.lang.Integer" >
@@ -285,9 +292,6 @@
       </if>
       <if test="record.materialGraphNo != null" >
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.processedGraphNo != null" >
-        processed_graph_no = #{record.processedGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="record.workshopType != null" >
         workShop_type = #{record.workshopType,jdbcType=TINYINT},
@@ -331,6 +335,12 @@
       <if test="record.qualifiedNumber != null" >
         qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       </if>
+      <if test="record.processedGraphNo != null" >
+        processed_graph_no = #{record.processedGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.busType != null" >
+        bus_type = #{record.busType,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -343,7 +353,6 @@
       purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       entrust_no = #{record.entrustNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
-      processed_graph_no = #{record.processedGraphNo,jdbcType=VARCHAR},
       workShop_type = #{record.workshopType,jdbcType=TINYINT},
       supplier_name = #{record.supplierName,jdbcType=VARCHAR},
       supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
@@ -357,7 +366,9 @@
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
       inspect_status = #{record.inspectStatus,jdbcType=TINYINT},
-      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER}
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      processed_graph_no = #{record.processedGraphNo,jdbcType=VARCHAR},
+      bus_type = #{record.busType,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -376,9 +387,6 @@
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
-      </if>
-      <if test="processedGraphNo != null" >
-        processed_graph_no = #{processedGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="workshopType != null" >
         workShop_type = #{workshopType,jdbcType=TINYINT},
@@ -422,6 +430,12 @@
       <if test="qualifiedNumber != null" >
         qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       </if>
+      <if test="processedGraphNo != null" >
+        processed_graph_no = #{processedGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="busType != null" >
+        bus_type = #{busType,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -431,7 +445,6 @@
       purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       entrust_no = #{entrustNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
-      processed_graph_no = #{processedGraphNo,jdbcType=VARCHAR},
       workShop_type = #{workshopType,jdbcType=TINYINT},
       supplier_name = #{supplierName,jdbcType=VARCHAR},
       supplier_no = #{supplierNo,jdbcType=VARCHAR},
@@ -445,7 +458,9 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       inspect_status = #{inspectStatus,jdbcType=TINYINT},
-      qualified_number = #{qualifiedNumber,jdbcType=INTEGER}
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      processed_graph_no = #{processedGraphNo,jdbcType=VARCHAR},
+      bus_type = #{busType,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

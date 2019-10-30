@@ -446,76 +446,6 @@ public class EntrustExample {
             return (Criteria) this;
         }
 
-        public Criteria andProcessedGraphNoIsNull() {
-            addCriterion("processed_graph_no is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoIsNotNull() {
-            addCriterion("processed_graph_no is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoEqualTo(String value) {
-            addCriterion("processed_graph_no =", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoNotEqualTo(String value) {
-            addCriterion("processed_graph_no <>", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoGreaterThan(String value) {
-            addCriterion("processed_graph_no >", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoGreaterThanOrEqualTo(String value) {
-            addCriterion("processed_graph_no >=", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoLessThan(String value) {
-            addCriterion("processed_graph_no <", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoLessThanOrEqualTo(String value) {
-            addCriterion("processed_graph_no <=", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoLike(String value) {
-            addCriterion("processed_graph_no like", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoNotLike(String value) {
-            addCriterion("processed_graph_no not like", value, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoIn(List<String> values) {
-            addCriterion("processed_graph_no in", values, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoNotIn(List<String> values) {
-            addCriterion("processed_graph_no not in", values, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoBetween(String value1, String value2) {
-            addCriterion("processed_graph_no between", value1, value2, "processedGraphNo");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcessedGraphNoNotBetween(String value1, String value2) {
-            addCriterion("processed_graph_no not between", value1, value2, "processedGraphNo");
-            return (Criteria) this;
-        }
-
         public Criteria andWorkshopTypeIsNull() {
             addCriterion("workShop_type is null");
             return (Criteria) this;
@@ -1393,6 +1323,136 @@ public class EntrustExample {
 
         public Criteria andQualifiedNumberNotBetween(Integer value1, Integer value2) {
             addCriterion("qualified_number not between", value1, value2, "qualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoIsNull() {
+            addCriterion("processed_graph_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoIsNotNull() {
+            addCriterion("processed_graph_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoEqualTo(String value) {
+            addCriterion("processed_graph_no =", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoNotEqualTo(String value) {
+            addCriterion("processed_graph_no <>", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoGreaterThan(String value) {
+            addCriterion("processed_graph_no >", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("processed_graph_no >=", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoLessThan(String value) {
+            addCriterion("processed_graph_no <", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("processed_graph_no <=", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoLike(String value) {
+            addCriterion("processed_graph_no like", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoNotLike(String value) {
+            addCriterion("processed_graph_no not like", value, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoIn(List<String> values) {
+            addCriterion("processed_graph_no in", values, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoNotIn(List<String> values) {
+            addCriterion("processed_graph_no not in", values, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoBetween(String value1, String value2) {
+            addCriterion("processed_graph_no between", value1, value2, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProcessedGraphNoNotBetween(String value1, String value2) {
+            addCriterion("processed_graph_no not between", value1, value2, "processedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeIsNull() {
+            addCriterion("bus_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeIsNotNull() {
+            addCriterion("bus_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeEqualTo(Byte value) {
+            addCriterion("bus_type =", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeNotEqualTo(Byte value) {
+            addCriterion("bus_type <>", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeGreaterThan(Byte value) {
+            addCriterion("bus_type >", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("bus_type >=", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeLessThan(Byte value) {
+            addCriterion("bus_type <", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("bus_type <=", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeIn(List<Byte> values) {
+            addCriterion("bus_type in", values, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeNotIn(List<Byte> values) {
+            addCriterion("bus_type not in", values, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeBetween(Byte value1, Byte value2) {
+            addCriterion("bus_type between", value1, value2, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("bus_type not between", value1, value2, "busType");
             return (Criteria) this;
         }
     }

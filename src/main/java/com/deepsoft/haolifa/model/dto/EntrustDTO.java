@@ -22,4 +22,7 @@ public class EntrustDTO {
     private Integer actionType;
 
 
+    @ApiModelProperty(value = "1订单需求;2生产库存",allowableValues = "1,2")
+    private Byte busType;
+
 }

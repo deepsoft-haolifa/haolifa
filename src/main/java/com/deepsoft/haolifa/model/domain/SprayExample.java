@@ -734,6 +734,66 @@ public class SprayExample {
             addCriterion("inspect_status not between", value1, value2, "inspectStatus");
             return (Criteria) this;
         }
+
+        public Criteria andBusTypeIsNull() {
+            addCriterion("bus_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeIsNotNull() {
+            addCriterion("bus_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeEqualTo(Byte value) {
+            addCriterion("bus_type =", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeNotEqualTo(Byte value) {
+            addCriterion("bus_type <>", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeGreaterThan(Byte value) {
+            addCriterion("bus_type >", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("bus_type >=", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeLessThan(Byte value) {
+            addCriterion("bus_type <", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("bus_type <=", value, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeIn(List<Byte> values) {
+            addCriterion("bus_type in", values, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeNotIn(List<Byte> values) {
+            addCriterion("bus_type not in", values, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeBetween(Byte value1, Byte value2) {
+            addCriterion("bus_type between", value1, value2, "busType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("bus_type not between", value1, value2, "busType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

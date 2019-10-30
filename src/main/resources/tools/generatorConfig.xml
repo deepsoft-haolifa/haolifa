@@ -85,8 +85,11 @@
       <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
-    <table tableName="sys_login_log" domainObjectName="SysLoginLog">
+    <table tableName="spray" domainObjectName="Spray">
     <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+    </table>
+    <table tableName="entrust" domainObjectName="Entrust">
+      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
     </table>
     <!--<table tableName="graph_no_rel" domainObjectName="GraphNoRel">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
