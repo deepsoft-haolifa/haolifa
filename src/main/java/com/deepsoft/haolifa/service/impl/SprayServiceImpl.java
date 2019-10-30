@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
 import com.deepsoft.haolifa.model.dto.spray.*;
+import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.SprayService;
 import com.github.pagehelper.Page;
@@ -276,9 +277,28 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         Page<SprayInspectHistory> page = PageHelper
                 .startPage(inspectListDto.getPageNum(), inspectListDto.getPageSize(), "id desc")
                 .doSelectPage(() -> inspectHistoryMapper.selectByExample(historyExample));
-        PageDTO<SprayInspectHistory> sprayInspectHistoryPageDTO = new PageDTO<>();
+
+        List<SprayInspectHistoryVo> resultList = new ArrayList<>();
+        // 将批次号返回，从spray_item 表中获取，根据spray_no 和 图号
+        List<SprayInspectHistory> result = page.getResult();
+        if (!CollectionUtils.isEmpty(result)) {
+            for (SprayInspectHistory sprayInspectHistory : result) {
+                String materialGraphNo = sprayInspectHistory.getOriginalGraphNo();
+                String sprayNo = sprayInspectHistory.getSprayNo();
+                SprayItemExample sprayItemExample = new SprayItemExample();
+                sprayItemExample.or().andSprayNoEqualTo(sprayNo).andMaterialGraphNoEqualTo(materialGraphNo);
+                List<SprayItem> sprayItems = sprayItemMapper.selectByExample(sprayItemExample);
+                String batchNo = CollectionUtils.isEmpty(sprayItems) ? "" : sprayItems.get(0).getBatchNumber();
+                SprayInspectHistoryVo inspectHistoryVo = new SprayInspectHistoryVo();
+                BeanUtils.copyProperties(sprayInspectHistory, inspectHistoryVo);
+                inspectHistoryVo.setBatchNumber(batchNo);
+                resultList.add(inspectHistoryVo);
+            }
+        }
+
+        PageDTO<SprayInspectHistoryVo> sprayInspectHistoryPageDTO = new PageDTO<>();
         BeanUtils.copyProperties(page, sprayInspectHistoryPageDTO);
-        sprayInspectHistoryPageDTO.setList(page.getResult());
+        sprayInspectHistoryPageDTO.setList(resultList);
         return ResultBean.success(sprayInspectHistoryPageDTO);
     }
 
