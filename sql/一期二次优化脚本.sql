@@ -2,19 +2,18 @@
 INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (144, 'm', '报表管理', 'parent-bjgl', 0, 0, '2019-09-16 11:06:46', '2019-09-16 11:06:46');
 INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (145, 'm', '财务报表', 'bjcwbj', 144, 0, '2019-09-16 11:07:37', '2019-09-16 11:07:37');
 INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (146, 'm', '已发站内信', 'yfznx', 140, 0, '2019-10-14 22:02:06', '2019-10-14 22:02:06');
+-- 零件待出库
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (147, 'm', '零件待出库', 'ljdck', 50, 0, NOW(), NOW());
 
 INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 144, NOW(), NOW());
 INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 145,  NOW(), NOW());
 INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 146,  NOW(), NOW());
-
+INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 147,  NOW(), NOW());
 
 -- 站内信添加字段
 alter table hl_mail
 add column `send_user` varchar(255) DEFAULT '' COMMENT '发送人',
 add column `rev_user` varchar(255) DEFAULT '' COMMENT '收件人姓名';
-
-
-
 
 -- 添加委托类型
 alter table entrust add column `bus_type` tinyint(4) NOT NULL DEFAULT 0  COMMENT '1订单需求;2生产库存';
@@ -31,6 +30,22 @@ CREATE TABLE `sys_login_log` (
   INDEX idx_real_name (`real_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='登录日志表';
 
+  DROP TABLE IF EXISTS `material_requisition`;
+	CREATE TABLE `material_requisition` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `receive_no` char(36) NOT NULL COMMENT '领料单号',
+	  `order_no` varchar(64) NOT NULL default '' COMMENT '订单号/委托单号',
+	  `receive_department` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
+	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
+	  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
+	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '所需数量',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  PRIMARY KEY (`id`),
+	  UNIQUE KEY `uk_receive_no` (`receive_no`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料单表';
 
 -- 成品价格管理表
 DROP TABLE IF EXISTS `price_product` ;
