@@ -33,4 +33,6 @@ public class SprayItemDto {
 
   private String batchNumber;
 
+  @ApiModelProperty("喷涂后的图号")
+  private String sprayedGraphNo;
 }
