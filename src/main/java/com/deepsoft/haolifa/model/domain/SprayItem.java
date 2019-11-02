@@ -9,6 +9,8 @@ public class SprayItem {
 
     private String materialGraphNo;
 
+    private String sprayedGraphNo;
+
     private String specifications;
 
     private String model;
@@ -35,10 +37,11 @@ public class SprayItem {
 
     private String batchNumber;
 
-    public SprayItem(Integer id, String sprayNo, String materialGraphNo, String specifications, String model, String materialClassifyName, String material, String specialRequires, String sprayColor, Integer number, Integer qualifiedNumber, String remark, String completeTime, Date createTime, Date updateTime, String batchNumber) {
+    public SprayItem(Integer id, String sprayNo, String materialGraphNo, String sprayedGraphNo, String specifications, String model, String materialClassifyName, String material, String specialRequires, String sprayColor, Integer number, Integer qualifiedNumber, String remark, String completeTime, Date createTime, Date updateTime, String batchNumber) {
         this.id = id;
         this.sprayNo = sprayNo;
         this.materialGraphNo = materialGraphNo;
+        this.sprayedGraphNo = sprayedGraphNo;
         this.specifications = specifications;
         this.model = model;
         this.materialClassifyName = materialClassifyName;
@@ -80,6 +83,14 @@ public class SprayItem {
 
     public void setMaterialGraphNo(String materialGraphNo) {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public String getSprayedGraphNo() {
+        return sprayedGraphNo;
+    }
+
+    public void setSprayedGraphNo(String sprayedGraphNo) {
+        this.sprayedGraphNo = sprayedGraphNo == null ? null : sprayedGraphNo.trim();
     }
 
     public String getSpecifications() {

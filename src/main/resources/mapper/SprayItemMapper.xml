@@ -6,6 +6,7 @@
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="spray_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sprayed_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="model" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_classify_name" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -80,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, spray_no, material_graph_no, specifications, model, material_classify_name, material, 
-    special_requires, spray_color, number, qualified_number, remark, complete_time, create_time, 
-    update_time, batch_number
+    id, spray_no, material_graph_no, sprayed_graph_no, specifications, model, material_classify_name, 
+    material, special_requires, spray_color, number, qualified_number, remark, complete_time, 
+    create_time, update_time, batch_number
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayItemExample" >
     select
@@ -118,18 +119,18 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into spray_item (spray_no, material_graph_no, specifications, 
-      model, material_classify_name, material, 
-      special_requires, spray_color, number, 
-      qualified_number, remark, complete_time, 
-      create_time, update_time, batch_number
-      )
-    values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
-      #{model,jdbcType=VARCHAR}, #{materialClassifyName,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, 
-      #{specialRequires,jdbcType=VARCHAR}, #{sprayColor,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
-      #{qualifiedNumber,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{completeTime,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{batchNumber,jdbcType=VARCHAR}
-      )
+    insert into spray_item (spray_no, material_graph_no, sprayed_graph_no, 
+      specifications, model, material_classify_name, 
+      material, special_requires, spray_color, 
+      number, qualified_number, remark, 
+      complete_time, create_time, update_time, 
+      batch_number)
+    values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{sprayedGraphNo,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{materialClassifyName,jdbcType=VARCHAR}, 
+      #{material,jdbcType=VARCHAR}, #{specialRequires,jdbcType=VARCHAR}, #{sprayColor,jdbcType=VARCHAR}, 
+      #{number,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{completeTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{batchNumber,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SprayItem" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -142,6 +143,9 @@
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no,
+      </if>
+      <if test="sprayedGraphNo != null" >
+        sprayed_graph_no,
       </if>
       <if test="specifications != null" >
         specifications,
@@ -189,6 +193,9 @@
       </if>
       <if test="materialGraphNo != null" >
         #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sprayedGraphNo != null" >
+        #{sprayedGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="specifications != null" >
         #{specifications,jdbcType=VARCHAR},
@@ -249,6 +256,9 @@
       <if test="record.materialGraphNo != null" >
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.sprayedGraphNo != null" >
+        sprayed_graph_no = #{record.sprayedGraphNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.specifications != null" >
         specifications = #{record.specifications,jdbcType=VARCHAR},
       </if>
@@ -298,6 +308,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       spray_no = #{record.sprayNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      sprayed_graph_no = #{record.sprayedGraphNo,jdbcType=VARCHAR},
       specifications = #{record.specifications,jdbcType=VARCHAR},
       model = #{record.model,jdbcType=VARCHAR},
       material_classify_name = #{record.materialClassifyName,jdbcType=VARCHAR},
@@ -323,6 +334,9 @@
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sprayedGraphNo != null" >
+        sprayed_graph_no = #{sprayedGraphNo,jdbcType=VARCHAR},
       </if>
       <if test="specifications != null" >
         specifications = #{specifications,jdbcType=VARCHAR},
@@ -370,6 +384,7 @@
     update spray_item
     set spray_no = #{sprayNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      sprayed_graph_no = #{sprayedGraphNo,jdbcType=VARCHAR},
       specifications = #{specifications,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
       material_classify_name = #{materialClassifyName,jdbcType=VARCHAR},

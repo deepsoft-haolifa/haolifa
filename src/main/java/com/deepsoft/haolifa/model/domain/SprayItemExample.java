@@ -305,6 +305,76 @@ public class SprayItemExample {
             return (Criteria) this;
         }
 
+        public Criteria andSprayedGraphNoIsNull() {
+            addCriterion("sprayed_graph_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoIsNotNull() {
+            addCriterion("sprayed_graph_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoEqualTo(String value) {
+            addCriterion("sprayed_graph_no =", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoNotEqualTo(String value) {
+            addCriterion("sprayed_graph_no <>", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoGreaterThan(String value) {
+            addCriterion("sprayed_graph_no >", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoGreaterThanOrEqualTo(String value) {
+            addCriterion("sprayed_graph_no >=", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoLessThan(String value) {
+            addCriterion("sprayed_graph_no <", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoLessThanOrEqualTo(String value) {
+            addCriterion("sprayed_graph_no <=", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoLike(String value) {
+            addCriterion("sprayed_graph_no like", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoNotLike(String value) {
+            addCriterion("sprayed_graph_no not like", value, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoIn(List<String> values) {
+            addCriterion("sprayed_graph_no in", values, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoNotIn(List<String> values) {
+            addCriterion("sprayed_graph_no not in", values, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoBetween(String value1, String value2) {
+            addCriterion("sprayed_graph_no between", value1, value2, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSprayedGraphNoNotBetween(String value1, String value2) {
+            addCriterion("sprayed_graph_no not between", value1, value2, "sprayedGraphNo");
+            return (Criteria) this;
+        }
+
         public Criteria andSpecificationsIsNull() {
             addCriterion("specifications is null");
             return (Criteria) this;

@@ -19,6 +19,7 @@ add column `rev_user` varchar(255) DEFAULT '' COMMENT '收件人姓名';
 -- 添加委托类型
 alter table entrust add column `bus_type` tinyint(4) NOT NULL DEFAULT 0  COMMENT '1订单需求;2生产库存';
 alter table spray add column `bus_type` tinyint(4) NOT NULL DEFAULT 0  COMMENT '1订单需求;2生产库存';
+alter table spray_item add column `sprayed_graph_no` varchar(64) NOT NULL DEFAULT ''  COMMENT '喷涂后的加工图号' after material_graph_no;
 
 -- 登录日志表
 drop table sys_login_log;
