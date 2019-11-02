@@ -35,18 +35,18 @@ CREATE TABLE `sys_login_log` (
   DROP TABLE IF EXISTS `material_requisition`;
 	CREATE TABLE `material_requisition` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-	  `receive_no` char(36) NOT NULL COMMENT '领料单号',
+	  `requisition_no` char(36) NOT NULL default '' COMMENT '领料单号',
 	  `order_no` varchar(64) NOT NULL default '' COMMENT '订单号/委托单号',
-	  `receive_department` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
+	  `dept` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
 	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
 	  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '所需数量',
+	  `batch_number` varchar(64) NOT NULL DEFAULT '' COMMENT '批次号',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	  `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
 	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  PRIMARY KEY (`id`),
-	  UNIQUE KEY `uk_receive_no` (`receive_no`)
+	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料单表';
 
 -- 成品价格管理表

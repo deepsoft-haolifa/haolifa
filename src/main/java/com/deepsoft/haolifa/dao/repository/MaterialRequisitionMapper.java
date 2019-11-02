@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface MaterialRequisitionMapper {
-    long countByExample(MaterialRequisitionExample example);
+    int countByExample(MaterialRequisitionExample example);
 
     int deleteByExample(MaterialRequisitionExample example);
 
