@@ -293,6 +293,14 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                 SprayInspectHistoryVo inspectHistoryVo = new SprayInspectHistoryVo();
                 BeanUtils.copyProperties(sprayInspectHistory, inspectHistoryVo);
                 inspectHistoryVo.setBatchNumber(batchNo);
+
+                // 从spray 获取busType字段
+                SprayExample sprayExample = new SprayExample();
+                sprayExample.or().andSprayNoEqualTo(sprayNo);
+                List<Spray> sprays = sprayMapper.selectByExample(sprayExample);
+                Byte busType = CollectionUtils.isEmpty(sprays) ? (byte) 0 : sprays.get(0).getBusType();
+                inspectHistoryVo.setBusType(busType);
+
                 resultList.add(inspectHistoryVo);
             }
         }

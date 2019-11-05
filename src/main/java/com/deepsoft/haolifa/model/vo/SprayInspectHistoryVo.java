@@ -12,4 +12,7 @@ public class SprayInspectHistoryVo extends SprayInspectHistory {
 
     @ApiModelProperty(value = "批次号")
     private String batchNumber;
+
+    @ApiModelProperty(value = "委托单类型")
+    private Byte busType;
 }
