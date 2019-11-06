@@ -8,6 +8,7 @@ SET order_product.delivered_number = b.productSum;
 -- 更新附件的url字段
 update order_product set order_contract_extend_url=replace(order_contract_extend_url,'d.miaojiebei.com','upload.haolifa.com');
 update order_product set order_contract_url=replace(order_contract_url,'d.miaojiebei.com','upload.haolifa.com');
+update order_product set accessory=replace(accessory,'d.miaojiebei.com','upload.haolifa.com');
 update file_record set file_url=replace(file_url,'d.miaojiebei.com','upload.haolifa.com');
 update purchase_order set file_url=replace(file_url,'d.miaojiebei.com','upload.haolifa.com');
 update flow_instance set accessory=replace(accessory,'d.miaojiebei.com','upload.haolifa.com');

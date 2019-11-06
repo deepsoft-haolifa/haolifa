@@ -76,26 +76,26 @@ public class StatisticsServiceImpl implements StatisticsService {
         InvoiceStatisticVo invoiceStatisticVo = new InvoiceStatisticVo();
         InvoiceExample invoiceExample = new InvoiceExample();
         InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
-        if (type != null && type > 0) {
+        // 经管 查 生产订单， 财务查所有
+        if (type != null && type == 1) {
             criteria.andTypeEqualTo(type);
         }
         List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
-        Double totalAmount = 0D, notInvoicedAmount = 0D, invoicedAmount = 0D;
+        BigDecimal totalAmount = BigDecimal.ZERO, notInvoicedAmount = BigDecimal.ZERO, invoicedAmount = BigDecimal.ZERO;
         for (Invoice invoice : invoices) {
             BigDecimal itotalAmount = invoice.getTotalAmount();
             if (itotalAmount != null) {
-                double doubleValue = itotalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                totalAmount += doubleValue;
+                totalAmount = totalAmount.add(itotalAmount);
                 if (invoice.getStatus().equals((byte) 1)) {
-                    notInvoicedAmount += doubleValue;
+                    notInvoicedAmount = notInvoicedAmount.add(itotalAmount);
                 } else if (invoice.getStatus().equals((byte) 2)) {
-                    invoicedAmount += doubleValue;
+                    invoicedAmount = invoicedAmount.add(itotalAmount);
                 }
             }
         }
-        invoiceStatisticVo.setTotalAmount(totalAmount);
-        invoiceStatisticVo.setInvoicedAmount(invoicedAmount);
-        invoiceStatisticVo.setNotInvoicedAmount(notInvoicedAmount);
+        invoiceStatisticVo.setTotalAmount(totalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        invoiceStatisticVo.setInvoicedAmount(invoicedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        invoiceStatisticVo.setNotInvoicedAmount(notInvoicedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         return invoiceStatisticVo;
     }
 }

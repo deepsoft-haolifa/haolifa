@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
 import com.deepsoft.haolifa.model.dto.spray.*;
 import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
+import com.deepsoft.haolifa.model.vo.SprayVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.SprayService;
 import com.github.pagehelper.Page;
@@ -163,11 +164,31 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         if (StringUtils.isNotEmpty(listDto.getSprayNo())) {
             criteria.andSprayNoLike("%" + listDto.getSprayNo() + "%");
         }
-        Page<Spray> sprayList = PageHelper.startPage(listDto.getPageNum(), listDto.getPageSize(), "create_time desc")
+        Page<Spray> sprayList = PageHelper.startPage(listDto.getPageNum(), listDto.getPageSize(), "id desc")
                 .doSelectPage(() -> sprayMapper.selectByExample(example));
-        PageDTO<Spray> sprayPageDTOs = new PageDTO<>();
+        List<Spray> result = sprayList.getResult();
+        List<SprayVo> resultList = new ArrayList<>();
+
+        if (!CollectionUtils.isEmpty(result)) {
+            for (Spray spray : result) {
+                String sprayNo = spray.getSprayNo();
+                SprayItemExample sprayItemExample = new SprayItemExample();
+                sprayItemExample.or().andSprayNoEqualTo(sprayNo);
+                List<SprayItem> sprayItems = sprayItemMapper.selectByExample(sprayItemExample);
+                SprayItem sprayItem = CollectionUtils.isEmpty(sprayItems) ? new SprayItem() : sprayItems.get(0);
+                String originGraphNo = sprayItem.getMaterialGraphNo();
+                String sprayedGraphNo = sprayItem.getSprayedGraphNo();
+                SprayVo sprayVo = new SprayVo();
+                BeanUtils.copyProperties(spray, sprayVo);
+                sprayVo.setOrignGraphNo(originGraphNo);
+                sprayVo.setSprayedGraphNo(sprayedGraphNo);
+                resultList.add(sprayVo);
+            }
+        }
+
+        PageDTO<SprayVo> sprayPageDTOs = new PageDTO<>();
         BeanUtils.copyProperties(sprayList, sprayPageDTOs);
-        sprayPageDTOs.setList(sprayList.getResult());
+        sprayPageDTOs.setList(resultList);
         return ResultBean.success(sprayPageDTOs);
     }
 
