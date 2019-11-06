@@ -38,7 +38,7 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
     @Override
     public ResultBean save(List<SupplierPorductDTO> listModel) {
         int insert = 0;
-        if (CollectionUtils.isEmpty(listModel)) {
+        if (!CollectionUtils.isEmpty(listModel)) {
             for (SupplierPorductDTO model : listModel) {
                 SupplierProduct supplierProduct = new SupplierProduct();
                 BeanUtils.copyProperties(model, supplierProduct);
