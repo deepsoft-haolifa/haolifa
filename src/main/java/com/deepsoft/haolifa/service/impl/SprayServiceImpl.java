@@ -178,10 +178,12 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                 SprayItem sprayItem = CollectionUtils.isEmpty(sprayItems) ? new SprayItem() : sprayItems.get(0);
                 String originGraphNo = sprayItem.getMaterialGraphNo();
                 String sprayedGraphNo = sprayItem.getSprayedGraphNo();
+                String batchNumber = sprayItem.getBatchNumber();
                 SprayVo sprayVo = new SprayVo();
                 BeanUtils.copyProperties(spray, sprayVo);
                 sprayVo.setOrignGraphNo(originGraphNo);
                 sprayVo.setSprayedGraphNo(sprayedGraphNo);
+                sprayVo.setBatchNumber(batchNumber);
                 resultList.add(sprayVo);
             }
         }

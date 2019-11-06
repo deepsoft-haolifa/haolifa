@@ -14,4 +14,6 @@ public class SprayVo extends Spray {
     private String orignGraphNo;
     @ApiModelProperty(value = "加工后图号")
     private String sprayedGraphNo;
+    @ApiModelProperty(value = "批次号")
+    private String batchNumber;
 }
