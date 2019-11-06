@@ -82,14 +82,7 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
 
     @Override
     public ResultBean getList(SupplierProductListDTO model) {
-        if (model.getPageNum() == null || model.getPageNum() == 0) {
-            model.setPageNum(1);
-        }
-        if (model.getPageSize() == null || model.getPageSize() == 0) {
-            model.setPageSize(10);
-        }
-
-        Page<SupplierProduct> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() ->
+        Page<SupplierProduct> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "id desc").doSelectPage(() ->
                 supplierProductExample.getSupplierProList(model));
         PageDTO<SupplierProduct> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
