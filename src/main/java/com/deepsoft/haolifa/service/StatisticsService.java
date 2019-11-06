@@ -8,7 +8,9 @@ public interface StatisticsService {
 
   ResultBean totalInventory();
 
-  ResultBean totalOrders();
+  Double totalOrders();
+
+  Double totalPurchase();
 
   InvoiceStatisticVo totalInvoice(Byte type);
 }

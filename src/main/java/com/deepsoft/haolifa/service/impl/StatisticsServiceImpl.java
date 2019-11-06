@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.constant.CommonEnum.Consts;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.extend.StatisticsExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -36,6 +37,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     private InvoiceMapper invoiceMapper;
     @Autowired
     private RedisDaoImpl redisDao;
+    @Autowired
+    private StatisticsExtendMapper statisticsExtendMapper;
 
     @Override
     public ResultBean totalInventory() {
@@ -57,18 +60,13 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public ResultBean totalOrders() {
-        Double totalMoney = 0.0;
-        String redisTotalMoney = redisDao.get(TOTAL_MONEY_ORDER);
-        if (StringUtils.isNotEmpty(redisTotalMoney)) {
-            return ResultBean.success(Double.valueOf(redisTotalMoney));
-        } else {
-            List<OrderProduct> orderProducts = orderProductMapper.selectByExample(new OrderProductExample());
-            for (int i = 0; i < orderProducts.size(); i++) {
-                totalMoney += orderProducts.get(i).getTotalPrice().doubleValue();
-            }
-        }
-        return ResultBean.success(totalMoney);
+    public Double totalOrders() {
+        return statisticsExtendMapper.sumOrderTotal();
+    }
+
+    @Override
+    public Double totalPurchase() {
+        return statisticsExtendMapper.sumPurchaseTotal();
     }
 
     @Override

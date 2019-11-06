@@ -14,26 +14,32 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("statistics")
 public class StatisticsController {
 
-  @Autowired
-  private StatisticsService statisticsService;
+    @Autowired
+    private StatisticsService statisticsService;
 
-  @ApiOperation("库房零件总金额")
-  @GetMapping("/money/inventory")
-  public ResultBean totalInventory() {
-    return statisticsService.totalInventory();
-  }
+    @ApiOperation("库房零件总金额")
+    @GetMapping("/money/inventory")
+    public ResultBean totalInventory() {
+        return statisticsService.totalInventory();
+    }
 
-  @ApiOperation("生产订单总金额")
-  @GetMapping("/money/orders")
-  public ResultBean totalOrders(){
-    return statisticsService.totalOrders();
-  }
+    @ApiOperation("生产订单总金额")
+    @GetMapping("/money/orders")
+    public ResultBean totalOrders() {
+        return ResultBean.success(statisticsService.totalOrders());
+    }
+
+    @ApiOperation("采购订单总金额")
+    @GetMapping("/money/purchase")
+    public ResultBean totalPurchase() {
+        return ResultBean.success(statisticsService.totalPurchase());
+    }
 
 
-  @ApiOperation("发票总金额(1.经管；2. 财务)")
-  @GetMapping("/money/invoice/{type}")
-  public ResultBean totalInvoice(@PathVariable Byte type){
-    return ResultBean.success(statisticsService.totalInvoice(type));
-  }
+    @ApiOperation("发票总金额(1.经管；2. 财务)")
+    @GetMapping("/money/invoice/{type}")
+    public ResultBean totalInvoice(@PathVariable Byte type) {
+        return ResultBean.success(statisticsService.totalInvoice(type));
+    }
 
 }
