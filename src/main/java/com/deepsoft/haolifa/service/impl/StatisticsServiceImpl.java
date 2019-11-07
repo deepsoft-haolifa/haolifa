@@ -54,7 +54,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 Material material = materials.get(i);
                 totalInvertory += material.getPrice().doubleValue() * (material.getCurrentQuantity() + material.getLockQuantity());
             }
-            redisDao.set(TOTAL_INVENTORY_MATERIAL, totalInvertory.toString(), 12L, TimeUnit.HOURS);
+            redisDao.set(TOTAL_INVENTORY_MATERIAL, totalInvertory.toString(), 1L, TimeUnit.HOURS);
         }
         return ResultBean.success(totalInvertory);
     }
