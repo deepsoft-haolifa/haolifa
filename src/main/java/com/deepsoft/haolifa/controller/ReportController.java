@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.ExpensesService;
+import com.deepsoft.haolifa.service.ReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class ReportController {
     @Autowired
     private ExpensesService expensesService;
+
+    @Autowired
+    private ReportService reportService;
 
     @ApiOperation("费用每月汇总--一级部门")
     @GetMapping("/expense/classify")
@@ -52,4 +56,18 @@ public class ReportController {
         System.out.println(classify);
         return expensesService.getAllClassifyWithFirstClassify(classify);
     }
+    @ApiOperation("根据供应商查询采购报表")
+    @RequestMapping(value = "/purchase/selectBySupplierName",method = RequestMethod.GET)
+    public ResultBean selectBySupplierName(@RequestParam(value ="purchase") String purchase) {
+
+        return reportService.selectBySupplierName(purchase);
+    }
+    @ApiOperation("采购报表")
+    @RequestMapping(value = "/purchase/getPurchases",method = RequestMethod.GET)
+    public ResultBean getPurchases() {
+
+        return reportService.selectPurchase();
+    }
+
+
 }
