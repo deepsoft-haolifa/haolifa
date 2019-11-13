@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.SaleReportMapper" >
+    <resultMap id="reportMap" type="com.deepsoft.haolifa.model.domain.SaleReport">
+    <result column="tatal_num" property="tatalNum" jdbcType="INTEGER" javaType="java.lang.Integer"></result>
+    <result column="product_no" property="productNo" jdbcType="VARCHAR" javaType="java.lang.String"></result>
+    <result column="product_model" property="productModel" jdbcType="VARCHAR" javaType="java.lang.String"></result>
+    <result column="total_price" property="totalPrice" jdbcType="DOUBLE" javaType="java.lang.Double"></result>
+    </resultMap>
+    <select id="selectAll" resultMap="reportMap" parameterType="java.lang.String">
+    select sum(pro_inspect_record.`qualified_number`) tatal_num,pro_inspect_record.product_no,pro_inspect_record.product_model,order_product_associate.price*sum(pro_inspect_record.`qualified_number`) total_price
+    from pro_inspect_record ,order_product_associate where  pro_inspect_record.product_no = order_product_associate.product_no
+    </select>
+    <select id="selectByMonth" resultMap="reportMap" >
+      select sum(pro_inspect_record.`qualified_number`) tatal_num,pro_inspect_record.product_no,pro_inspect_record.product_model,order_product_associate.price*sum(pro_inspect_record.`qualified_number`) total_price
+      from pro_inspect_record ,order_product_associate where  pro_inspect_record.product_no = order_product_associate.product_no    and  pro_inspect_record.create_time BETWEEN #{startTime} and #{endTime}
+    </select>
+    <select id="selectByModel" resultMap="reportMap" parameterType="java.lang.String">
+     select sum(pro_inspect_record.`qualified_number`) tatal_num,pro_inspect_record.create_time ,pro_inspect_record.product_no,pro_inspect_record.product_model,order_product_associate.price*sum(pro_inspect_record.`qualified_number`) total_price
+     from pro_inspect_record ,order_product_associate where  pro_inspect_record.product_no = order_product_associate.product_no
+     group by pro_inspect_record.product_model
+    </select>
+</mapper>

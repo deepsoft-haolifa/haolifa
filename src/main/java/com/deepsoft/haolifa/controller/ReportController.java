@@ -1,13 +1,21 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.ReportService;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 @Api(tags = {"报表"})
 @RestController
@@ -18,6 +26,7 @@ public class ReportController {
 
     @Autowired
     private ReportService reportService;
+
 
     @ApiOperation("费用每月汇总--一级部门")
     @GetMapping("/expense/classify")
@@ -68,6 +77,49 @@ public class ReportController {
 
         return reportService.selectPurchase();
     }
+    @ApiOperation("销售报表-目前生产总金额")
+    @RequestMapping(value = "/sale/getSaleAll",method = RequestMethod.GET)
+    public ResultBean getSaleAll() {
 
+       List<ExportSaleDTO>  exportSaleDTOS = reportService.selectAll();
+       return  ResultBean.success(exportSaleDTOS);
+    }
+    @ApiOperation("销售报表-每月生产总金额")
+    @RequestMapping(value = "/sale/getSaleAllByMonth",method = RequestMethod.GET)
+    public ResultBean getSaleAllByMonth(@RequestParam(value ="year") String year) {
+        Calendar cal = Calendar.getInstance();
+        List list = new ArrayList();
+        int month = cal.get(Calendar.MONTH) + 1;
+        for(int i= 1;i<month;i++){
+            JsonObject jsonObject = new JsonObject();
+            String startTime = "";
+            String endTime = "";
+            if(i<10){
+                startTime = year+"-0"+i+"-26";
+                int j = i+1;
+                if(j<10){
+                    endTime = year+"-0"+j+"-25";
+                }else {
+                    endTime = year+"-"+j+"-25";
+                }
+
+            }else {
+                startTime = year+"-"+i+"-26";
+                int j=i+1;
+                endTime = year+"-"+j+"-25";
+            }
+            List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByMonth(startTime,endTime);
+            list.add(exportSaleDTOS);
+        }
+        return  ResultBean.success(list);
+    }
+
+    @ApiOperation("销售报表-根据产品型号统计")
+    @RequestMapping(value = "/sale/getSaleByModel",method = RequestMethod.GET)
+    public ResultBean getSaleByModel() {
+
+        List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByModel();
+        return  ResultBean.success(exportSaleDTOS);
+    }
 
 }
