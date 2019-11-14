@@ -44,7 +44,7 @@ public class ProInspectController {
         int num = 0;
         for(OrderProductAssociate orderProductAssociate:orderProductAssociates){
             if(orderProductAssociate.getProductNo().equals(model.getProductNo())&&orderProductAssociate.getProductModel().equals(model.getProductModel())){
-                num = orderProductAssociate.getProductNumber();
+                num = num + orderProductAssociate.getProductNumber();
             }
         }
         //得到质检结果
