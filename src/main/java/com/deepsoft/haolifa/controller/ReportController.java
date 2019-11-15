@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Api(tags = {"报表"})
 @RestController
@@ -90,6 +88,7 @@ public class ReportController {
         Calendar cal = Calendar.getInstance();
         List list = new ArrayList();
         int month = cal.get(Calendar.MONTH) + 1;
+        Map map = new HashMap();
         for(int i= 1;i<month;i++){
             JsonObject jsonObject = new JsonObject();
             String startTime = "";
@@ -109,9 +108,12 @@ public class ReportController {
                 endTime = year+"-"+j+"-25";
             }
             List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByMonth(startTime,endTime);
-            list.add(exportSaleDTOS);
+            if(exportSaleDTOS != null && exportSaleDTOS.get(0)!=null){
+                System.out.println(exportSaleDTOS);
+                map.put(i,exportSaleDTOS);
+            }
         }
-        return  ResultBean.success(list);
+        return  ResultBean.success(map);
     }
 
     @ApiOperation("销售报表-根据产品型号统计")
