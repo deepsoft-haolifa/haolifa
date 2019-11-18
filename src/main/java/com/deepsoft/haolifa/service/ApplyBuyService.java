@@ -52,7 +52,7 @@ public interface ApplyBuyService {
     /**
      * 列表
      */
-    ResultBean list(int pageNum, int pageSize, int status, String materialName,String materialGraphNo);
+    ResultBean list(int pageNum, int pageSize, int status, String materialName,String materialGraphNo,String orderNo);
 
     /**
      * 生产订单 关联的请购列表

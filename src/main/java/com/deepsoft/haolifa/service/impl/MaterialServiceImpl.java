@@ -326,6 +326,7 @@ public class MaterialServiceImpl implements MaterialService {
     public List<String> getGraphNoList(MaterialListDTO materialListDTO) {
         MaterialExample example = new MaterialExample();
         MaterialExample.Criteria criteria = example.createCriteria();
+        MaterialExample.Criteria bcriteria = example.createCriteria();
         if (StringUtils.isNotBlank(materialListDTO.getMaterialName())) {
             criteria.andNameEqualTo(materialListDTO.getMaterialName());
         }
@@ -336,6 +337,8 @@ public class MaterialServiceImpl implements MaterialService {
         if (type != null && type > 0) {
             if (type.equals(CommonEnum.MaterialGraphType.J.type)) {
                 criteria.andGraphNoLike("%J");
+                bcriteria.andGraphNoLike("%B");
+                example.or(bcriteria);
             } else if (type.equals(CommonEnum.MaterialGraphType.M.type)) {
                 criteria.andGraphNoLike("%M");
             }

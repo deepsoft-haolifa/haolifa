@@ -114,7 +114,7 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
   }
 
   @Override
-  public ResultBean list(int pageNum, int pageSize, int status, String materialName, String materialGraphNo) {
+  public ResultBean list(int pageNum, int pageSize, int status, String materialName, String materialGraphNo,String orderNo) {
     ApplyBuyExample example = new ApplyBuyExample();
     ApplyBuyExample.Criteria criteria = example.createCriteria();
     if (status != -1) {
@@ -125,6 +125,9 @@ public class ApplyBuyServiceImpl extends BaseService implements ApplyBuyService 
     }
     if(StringUtils.isNotEmpty(materialGraphNo)) {
       criteria.andMaterialGraphNoLike("%"+materialGraphNo+"%");
+    }
+    if(StringUtils.isNotEmpty(orderNo)) {
+      criteria.andProductOrderNoLike("%"+orderNo+"%");
     }
     Page pageData = PageHelper.startPage(pageNum, pageSize,"create_time desc").doSelectPage(() -> applyBuyMapper.selectByExample(example));
     List<ApplyBuy> applyBuyList = pageData.getResult();

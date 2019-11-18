@@ -75,8 +75,8 @@ public class ApplyBuyController {
   public ResultBean list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
       @ApiParam("展示数量") @RequestParam(defaultValue = "10") int pageSize,
       @ApiParam("查询条件：-1 全部 0未处理  1 待审批 2 待采购 3 已处理 4 审批不通过") @RequestParam(defaultValue = "-1") int status,
-      @ApiParam("物料名称") @RequestParam(required = false) String materialName,@ApiParam("图号") @RequestParam(required = false) String materialGraphNo) {
-        return applyBuyService.list(pageNum,pageSize,status,materialName,materialGraphNo);
+      @ApiParam("物料名称") @RequestParam(required = false) String materialName,@ApiParam("图号") @RequestParam(required = false) String materialGraphNo,@ApiParam("订单号") @RequestParam(required = false) String orderNo) {
+        return applyBuyService.list(pageNum,pageSize,status,materialName,materialGraphNo,orderNo);
   }
 
   @ApiOperation("生产订单关联的待采购列表")
