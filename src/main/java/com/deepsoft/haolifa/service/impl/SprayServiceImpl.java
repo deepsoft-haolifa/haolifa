@@ -374,7 +374,8 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         }
         // 根据查出状态为 加工中和暂停加工的spray
         SprayExample example = new SprayExample();
-        example.or().andStatusIn(Arrays.asList(CommonEnum.SprayStatus.SPRAY_MACHINE.code, CommonEnum.SprayStatus.SPRAY_STOP_MACHINE.code));
+        example.or().andBusTypeEqualTo(CommonEnum.BusType.PRODUCT_INVENTORY.type)
+                .andStatusIn(Arrays.asList(CommonEnum.SprayStatus.SPRAY_MACHINE.code, CommonEnum.SprayStatus.SPRAY_STOP_MACHINE.code));
         List<Spray> sprays = sprayMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(sprays)) {
             List<String> sprayNoList = sprays.stream().map(Spray::getSprayNo).collect(Collectors.toList());
