@@ -219,6 +219,8 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         if (StringUtils.isNotBlank(processedGraphNo)) {
             criteria.andProcessedGraphNoEqualTo(processedGraphNo);
         }
+        // 查询生产库存的单
+        criteria.andBusTypeEqualTo(CommonEnum.BusType.PRODUCT_INVENTORY.type);
 
         criteria.andStatusIn(Arrays
                 .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.cache.CacheKeyManager;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MyUserMapper;
@@ -98,6 +99,15 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public int insertSysUser(UserBaseDTO user) {
+        // 判断username 不能重复
+        String username = user.getUsername();
+        SysUserExample example = new SysUserExample();
+        example.or().andUsernameEqualTo(username);
+        long count = userMapper.countByExample(example);
+        if (count > 0) {
+            ResultBean.error(CommonEnum.ResponseEnum.USER_NAME_EXISTS);
+        }
+
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
         if (StringUtils.isNotBlank(user.getPassword())) {
