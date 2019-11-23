@@ -1,17 +1,17 @@
 package com.deepsoft.haolifa.model.domain;
 
 public class SaleReport {
-    private int tatalNum;
+    private int totalNum;
     private String productNo;
     private String productModel;
     private double totalPrice;
 
-    public int getTatalNum() {
-        return tatalNum;
+    public int getTotalNum() {
+        return totalNum;
     }
 
-    public void setTatalNum(int tatalNum) {
-        this.tatalNum = tatalNum;
+    public void setTotalNum(int totalNum) {
+        this.totalNum = totalNum;
     }
 
     public String getProductNo() {
@@ -38,8 +38,8 @@ public class SaleReport {
         this.totalPrice = totalPrice;
     }
 
-    public SaleReport(int tatalNum, String productNo, String productModel, double totalPrice) {
-        this.tatalNum = tatalNum;
+    public SaleReport(int totalNum, String productNo, String productModel, double totalPrice) {
+        this.totalNum = totalNum;
         this.productNo = productNo;
         this.productModel = productModel;
         this.totalPrice = totalPrice;
