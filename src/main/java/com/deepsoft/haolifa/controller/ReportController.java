@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
@@ -116,12 +117,92 @@ public class ReportController {
         return  ResultBean.success(map);
     }
 
-    @ApiOperation("销售报表-根据产品型号统计")
+    @ApiOperation("销售报表-根据产品型号统计生产金额")
     @RequestMapping(value = "/sale/getSaleByModel",method = RequestMethod.GET)
     public ResultBean getSaleByModel() {
 
         List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByModel();
         return  ResultBean.success(exportSaleDTOS);
     }
+    @ApiOperation("销售报表-目前合同总金额")
+    @RequestMapping(value = "/sale/getSaleAllContract",method = RequestMethod.GET)
+    public ResultBean getSaleAllContract() {
 
+        List<ExportSaleDTO>  exportSaleDTOS = reportService.selectAllContract();
+        return  ResultBean.success(exportSaleDTOS);
+    }
+    @ApiOperation("销售报表-每月合同总金额")
+    @RequestMapping(value = "/sale/getSaleAllByMonthContract",method = RequestMethod.GET)
+    public ResultBean getSaleAllByMonthContract(@RequestParam(value ="year") String year) {
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH) + 1;
+        Map map = new HashMap();
+        for(int i= 1;i<month;i++){
+            String startTime;
+            String endTime;
+            if(i<10){
+                startTime = year+"-0"+i+"-26";
+                int j = i+1;
+                if(j<10){
+                    endTime = year+"-0"+j+"-25";
+                }else {
+                    endTime = year+"-"+j+"-25";
+                }
+
+            }else {
+                startTime = year+"-"+i+"-26";
+                int j=i+1;
+                endTime = year+"-"+j+"-25";
+            }
+            List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByMonthContract(startTime,endTime);
+            if(exportSaleDTOS != null && exportSaleDTOS.get(0)!=null){
+                System.out.println(exportSaleDTOS);
+                map.put(i,exportSaleDTOS);
+            }
+        }
+        return  ResultBean.success(map);
+    }
+
+    @ApiOperation("销售报表-根据产品型号统计合同金额")
+    @RequestMapping(value = "/sale/getSaleByModelContract",method = RequestMethod.GET)
+    public ResultBean getSaleByModelContract() {
+
+        List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByModelContract();
+        return  ResultBean.success(exportSaleDTOS);
+    }
+
+    @ApiOperation("喷涂质量报表")
+    @RequestMapping(value = "/quality/getSpray",method = RequestMethod.GET)
+    public ResultBean getSpray() {
+
+       QualitySprayReport qualitySprayReport = reportService.selectSpray();
+        return  ResultBean.success(qualitySprayReport);
+    }
+    @ApiOperation("采购质量报表")
+    @RequestMapping(value = "/quality/getInspect",method = RequestMethod.GET)
+    public ResultBean getInspect() {
+
+        QualityInspectReport qualityInspectReport = reportService.selectInspect();
+        return  ResultBean.success(qualityInspectReport);
+    }
+    @ApiOperation("压力质量报表")
+    @RequestMapping(value = "/quality/getPressure",method = RequestMethod.GET)
+    public ResultBean getPressure() {
+
+        QualityPressureReport qualityPressureReport = reportService.selectPressure();
+        return  ResultBean.success(qualityPressureReport);
+    }
+    @ApiOperation("根据机加工类型查询 1 内部 2外部")
+    @RequestMapping(value = "/expense/getEntrustt",method = RequestMethod.GET)
+    public ResultBean getEntrustt(@RequestParam(value ="type") Integer type) {
+        QualityEntrustReport qualityEntrustReport = reportService.selectByType(type);
+        return ResultBean.success(qualityEntrustReport);
+    }
+    @ApiOperation("更换料质量报表")
+    @RequestMapping(value = "/quality/getAudit",method = RequestMethod.GET)
+    public ResultBean getAudit() {
+
+        List<QualityAuditReport> qualityAuditReports = reportService.selectAudit();
+        return  ResultBean.success(qualityAuditReports);
+    }
 }

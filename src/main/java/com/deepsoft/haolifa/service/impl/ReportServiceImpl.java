@@ -1,7 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
-import com.deepsoft.haolifa.dao.repository.PurchaseReportMapper;
-import com.deepsoft.haolifa.dao.repository.SaleReportMapper;
+import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
 import com.deepsoft.haolifa.service.ReportService;
@@ -19,6 +19,16 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   private PurchaseReportMapper purchaseReportMapper;
   @Autowired
   private SaleReportMapper saleReportMapper;
+  @Autowired
+  private QualityEntrustReportMapper qualityEntrustReportMapper;
+  @Autowired
+  private QualityPressureReportMapper qualityPressureReportMapper;
+  @Autowired
+  private QualitySprayReportMapper qualitySprayReportMapper;
+  @Autowired
+  private QualityAuditReportMapper qualityAuditReportMapper;
+  @Autowired
+  private QualityInspecReportMapper qualityInspecReportMapper;
   @Override
   public ResultBean selectBySupplierName(String supplierName){
     return  ResultBean.success(purchaseReportMapper.selectBySupplierName(supplierName));
@@ -41,5 +51,44 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   @Override
   public List<ExportSaleDTO> selectByModel() {
     return saleReportMapper.selectByModel();
+  }
+
+  @Override
+  public QualityEntrustReport selectByType(Integer type) {
+    return qualityEntrustReportMapper.selectByType(type);
+  }
+
+  @Override
+  public QualitySprayReport selectSpray() {
+    return qualitySprayReportMapper.selectSpray();
+  }
+
+  @Override
+  public QualityPressureReport selectPressure() {
+    return qualityPressureReportMapper.selectPressure();
+  }
+
+  @Override
+  public List<QualityAuditReport> selectAudit() {
+    return qualityAuditReportMapper.selectAudit();
+  }
+
+  @Override
+  public QualityInspectReport selectInspect() {
+    return qualityInspecReportMapper.selectInspect();
+  }
+  @Override
+  public List<ExportSaleDTO> selectAllContract() {
+    return saleReportMapper.selectAllContract();
+  }
+
+  @Override
+  public List<ExportSaleDTO> selectByMonthContract(String startTime, String endTime) {
+    return saleReportMapper.selectByMonthContract(startTime,endTime);
+  }
+
+  @Override
+  public List<ExportSaleDTO> selectByModelContract() {
+    return saleReportMapper.selectByModelContract();
   }
 }
