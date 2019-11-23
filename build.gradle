@@ -66,6 +66,14 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.16'
     ///// qiniu //////
     compile 'com.qiniu:qiniu-java-sdk:7.2.+'
+
+    ///// hutool //////
+    compile 'cn.hutool:hutool-all:5.0.6'
+
+    ///// mybatis-plus //////
+    compile 'com.baomidou:mybatis-plus-boot-starter:3.2.0'
+    compile 'com.baomidou:mybatis-plus-generator:3.2.0'
+    compile 'com.ibeetl:beetl:2.7.3'
 }
 
 //mybatis generator plugin ------ start
