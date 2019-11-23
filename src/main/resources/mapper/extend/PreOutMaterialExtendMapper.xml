@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.mapper.MaterialRequisitionMapper">
+
+    <select id="pagePreOutMaterial" parameterType="com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo"
+            resultType="com.deepsoft.haolifa.model.vo.PreOutMaterialVo">
+        select * from (
+        SELECT 1 type,order_no busNo,graph_no graphNo,material_name materialName,quantity outQuantity,batch_number batchNumber,dept_name deptName FROM `material_requisition` a
+
+        union all
+
+        SELECT 2 type,entrust_no busNo,material_graph_no graphNo,material_graph_name materialName,number outQuantity,batch_number batchNumber,'' deptName  from entrust b
+
+        union all
+
+        select 3 type,spray_no busNo,material_graph_no graphNo,'' materialName,number outQuantity,batch_number batchNumber,'' deptName from spray_item b
+        ) un
+        where 1=1
+
+        <if test="type!= null">
+            and un.type = #{type}
+        </if>
+        <if test="busNo != null and sbusNo  !=''">
+            and un.busNo like CONCAT('%',#{busNo},'%')
+        </if>
+        <if test="graphNo != null and graphNo !=''">
+            and un.graphNo like CONCAT('%',#{graphNo},'%')
+        </if>
+        <if test="batchNumber != null and batchNumber !=''">
+            and un.batchNumber like CONCAT('%',#{batchNumber},'%')
+        </if>
+        <if test="materialName != null and materialName !=''">
+            and sp.material_name like CONCAT('%',#{materialName},'%')
+        </if>
+    </select>
+
+</mapper>

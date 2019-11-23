@@ -85,7 +85,7 @@ public class CommonEnum {
         ORDER_SIGLE_PRO_INSPECT_NUM_ERROR("4022", "检验合格数单项已超出订单单项总数量"),
         USER_NAME_EXISTS("4023", "不能添加重复的用户名称"),
 
-        MATERIAL_GRAPH_NO_NOT_EXIST_1("5001","{0} 不存在零件库中，请确认")
+        MATERIAL_GRAPH_NO_NOT_EXIST_1("5001","【{0}】 不存在零件库中，请确认")
 
         ;
 

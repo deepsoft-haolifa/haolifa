@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * 自定义响应结构
  */
-public class ResultBean implements Serializable {
+public class ResultBean<T> implements Serializable {
 
     /**
      * 响应业务状态
@@ -24,21 +24,21 @@ public class ResultBean implements Serializable {
     /**
      * 响应中的数据
      */
-    private Object result;
+    private T result;
 
 
     public ResultBean() {
         super();
     }
 
-    public ResultBean(String code, String message, Object result) {
+    public ResultBean(String code, String message, T result) {
         super();
         this.code = code;
         this.message = message;
         this.result = result;
     }
 
-    public ResultBean(Object result) {
+    public ResultBean(T result) {
         this.result = result;
         this.code = CommonEnum.ResponseEnum.SUCCESS.code;
         this.message = CommonEnum.ResponseEnum.SUCCESS.msg;
@@ -86,7 +86,7 @@ public class ResultBean implements Serializable {
         return result;
     }
 
-    public void setResult(Object result) {
+    public void setResult(T result) {
         this.result = result;
     }
 

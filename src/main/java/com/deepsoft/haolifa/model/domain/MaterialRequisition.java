@@ -35,7 +35,7 @@ public class MaterialRequisition implements Serializable {
     private String orderNo;
 
     @ApiModelProperty(value = "领料部门")
-    private String dept;
+    private String deptName;
 
     @ApiModelProperty(value = "零件名称")
     private String materialName;

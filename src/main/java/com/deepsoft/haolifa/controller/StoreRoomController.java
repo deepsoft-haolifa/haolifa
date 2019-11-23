@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
@@ -8,10 +9,9 @@ import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
 import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRackRequestDTO;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRequestDTO;
-import com.deepsoft.haolifa.service.EntryOutStoreRecordService;
-import com.deepsoft.haolifa.service.StockService;
-import com.deepsoft.haolifa.service.StoreRoomRackService;
-import com.deepsoft.haolifa.service.StoreRoomService;
+import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
+import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
+import com.deepsoft.haolifa.service.*;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,9 @@ public class StoreRoomController {
     private EntryOutStoreRecordService entryOutStoreRecordService;
     @Autowired
     private StockService stockService;
+
+    @Autowired
+    private MaterialRequisitionService materialRequisitionService;
 
     @ApiOperation("新增库房信息")
     @PostMapping("/save")
@@ -210,5 +213,13 @@ public class StoreRoomController {
                                              @RequestParam(required = false) String orderNo) {
         return entryOutStoreRecordService.pageInfoEntryOutRecord(currentPage, pageSize, type, operationType, productNo, materialGraphNo, orderNo);
     }
+
+
+    @PostMapping("/pre-material-out/page")
+    @ApiOperation("零件待出库列表")
+    public ResultBean<IPage<PreOutMaterialVo>> pageInfoEntryOutRecord(@RequestBody PreOutMaterialPageVo preOutMaterialPageVo) {
+        return ResultBean.success(materialRequisitionService.preOutMaterialPage(preOutMaterialPageVo));
+    }
+
 
 }

@@ -37,7 +37,7 @@ CREATE TABLE `sys_login_log` (
 	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
 	  `requisition_no` char(36) NOT NULL default '' COMMENT '领料单号',
 	  `order_no` varchar(64) NOT NULL default '' COMMENT '订单号/委托单号',
-	  `dept` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
+	  `dept_name` varchar(36) NOT NULL DEFAULT '' COMMENT '领料部门',
 	  `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
 	  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '所需数量',
@@ -47,7 +47,9 @@ CREATE TABLE `sys_login_log` (
 	  `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
 	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	  PRIMARY KEY (`id`)
+	  PRIMARY KEY (`id`),
+	  INDEX idx_order_no (`order_no`),
+	  UNIQUE KEY  uk_multi (`order_no`,graph_no)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料单表';
 
 -- 成品价格管理表

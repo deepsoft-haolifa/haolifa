@@ -2,6 +2,10 @@ package com.deepsoft.haolifa.dao.mapper;
 
 import com.deepsoft.haolifa.model.domain.MaterialRequisition;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
+import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface MaterialRequisitionMapper extends BaseMapper<MaterialRequisition> {
 
+    List<PreOutMaterialVo> pagePreOutMaterial(PreOutMaterialPageVo vo);
 }
