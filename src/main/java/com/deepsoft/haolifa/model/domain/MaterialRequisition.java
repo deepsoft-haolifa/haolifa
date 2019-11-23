@@ -1,144 +1,64 @@
 package com.deepsoft.haolifa.model.domain;
-
+import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+/**
+ * <p>
+ * 领料单表
+ * </p>
+ *
+ * @author murphy.he
+ * @since 2019-11-23
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@ApiModel(value="MaterialRequisition对象", description="领料单表")
+public class MaterialRequisition implements Serializable {
 
-public class MaterialRequisition {
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "主键id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    @ApiModelProperty(value = "领料单号")
     private String requisitionNo;
 
+    @ApiModelProperty(value = "订单号/委托单号")
     private String orderNo;
 
+    @ApiModelProperty(value = "领料部门")
     private String dept;
 
+    @ApiModelProperty(value = "零件名称")
     private String materialName;
 
+    @ApiModelProperty(value = "零件图号")
     private String graphNo;
 
+    @ApiModelProperty(value = "所需数量")
     private Integer quantity;
 
+    @ApiModelProperty(value = "批次号")
     private String batchNumber;
 
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
+    @ApiModelProperty(value = "创建用户")
     private Integer createUser;
 
+    @ApiModelProperty(value = "更新用户")
     private Integer updateUser;
 
+    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
-    public MaterialRequisition(Integer id, String requisitionNo, String orderNo, String dept, String materialName, String graphNo, Integer quantity, String batchNumber, Date createTime, Integer createUser, Integer updateUser, Date updateTime) {
-        this.id = id;
-        this.requisitionNo = requisitionNo;
-        this.orderNo = orderNo;
-        this.dept = dept;
-        this.materialName = materialName;
-        this.graphNo = graphNo;
-        this.quantity = quantity;
-        this.batchNumber = batchNumber;
-        this.createTime = createTime;
-        this.createUser = createUser;
-        this.updateUser = updateUser;
-        this.updateTime = updateTime;
-    }
-
-    public MaterialRequisition() {
-        super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getRequisitionNo() {
-        return requisitionNo;
-    }
-
-    public void setRequisitionNo(String requisitionNo) {
-        this.requisitionNo = requisitionNo == null ? null : requisitionNo.trim();
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo == null ? null : orderNo.trim();
-    }
-
-    public String getDept() {
-        return dept;
-    }
-
-    public void setDept(String dept) {
-        this.dept = dept == null ? null : dept.trim();
-    }
-
-    public String getMaterialName() {
-        return materialName;
-    }
-
-    public void setMaterialName(String materialName) {
-        this.materialName = materialName == null ? null : materialName.trim();
-    }
-
-    public String getGraphNo() {
-        return graphNo;
-    }
-
-    public void setGraphNo(String graphNo) {
-        this.graphNo = graphNo == null ? null : graphNo.trim();
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getBatchNumber() {
-        return batchNumber;
-    }
-
-    public void setBatchNumber(String batchNumber) {
-        this.batchNumber = batchNumber == null ? null : batchNumber.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }
