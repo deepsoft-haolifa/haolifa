@@ -42,6 +42,7 @@ CREATE TABLE `sys_login_log` (
 	  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零件图号',
 	  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '所需数量',
 	  `batch_number` varchar(64) NOT NULL DEFAULT '' COMMENT '批次号',
+	  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出库状态（0 未出库；1.出库完成）',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	  `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
 	  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',

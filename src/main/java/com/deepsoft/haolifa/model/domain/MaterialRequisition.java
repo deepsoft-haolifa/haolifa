@@ -31,7 +31,7 @@ public class MaterialRequisition implements Serializable {
     @ApiModelProperty(value = "领料单号")
     private String requisitionNo;
 
-    @ApiModelProperty(value = "订单号/委托单号")
+    @ApiModelProperty(value = "订单号")
     private String orderNo;
 
     @ApiModelProperty(value = "领料部门")
@@ -48,6 +48,9 @@ public class MaterialRequisition implements Serializable {
 
     @ApiModelProperty(value = "批次号")
     private String batchNumber;
+
+    @ApiModelProperty(value = "出库状态（0 未出库；1.出库完成）")
+    private Integer outRoomStatus;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
