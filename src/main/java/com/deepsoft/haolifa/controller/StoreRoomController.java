@@ -31,7 +31,7 @@ public class StoreRoomController {
     private StockService stockService;
 
 //    @Autowired
-//    private MaterialRequisitionService materialRequisitionService;
+//    private MaterialRequisitionService123 materialRequisitionService;
 
     @ApiOperation("新增库房信息")
     @PostMapping("/save")

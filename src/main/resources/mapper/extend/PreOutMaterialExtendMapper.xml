@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.mapper.MaterialRequisitionMapper">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.CommonExtendMapper">
 
     <select id="pagePreOutMaterial" parameterType="com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo"
             resultType="com.deepsoft.haolifa.model.vo.PreOutMaterialVo">

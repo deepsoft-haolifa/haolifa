@@ -305,73 +305,73 @@ public class MaterialRequisitionExample {
             return (Criteria) this;
         }
 
-        public Criteria andDeptIsNull() {
-            addCriterion("dept is null");
+        public Criteria andDeptNameIsNull() {
+            addCriterion("dept_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIsNotNull() {
-            addCriterion("dept is not null");
+        public Criteria andDeptNameIsNotNull() {
+            addCriterion("dept_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDeptEqualTo(String value) {
-            addCriterion("dept =", value, "dept");
+        public Criteria andDeptNameEqualTo(String value) {
+            addCriterion("dept_name =", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptNotEqualTo(String value) {
-            addCriterion("dept <>", value, "dept");
+        public Criteria andDeptNameNotEqualTo(String value) {
+            addCriterion("dept_name <>", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptGreaterThan(String value) {
-            addCriterion("dept >", value, "dept");
+        public Criteria andDeptNameGreaterThan(String value) {
+            addCriterion("dept_name >", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptGreaterThanOrEqualTo(String value) {
-            addCriterion("dept >=", value, "dept");
+        public Criteria andDeptNameGreaterThanOrEqualTo(String value) {
+            addCriterion("dept_name >=", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptLessThan(String value) {
-            addCriterion("dept <", value, "dept");
+        public Criteria andDeptNameLessThan(String value) {
+            addCriterion("dept_name <", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptLessThanOrEqualTo(String value) {
-            addCriterion("dept <=", value, "dept");
+        public Criteria andDeptNameLessThanOrEqualTo(String value) {
+            addCriterion("dept_name <=", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptLike(String value) {
-            addCriterion("dept like", value, "dept");
+        public Criteria andDeptNameLike(String value) {
+            addCriterion("dept_name like", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptNotLike(String value) {
-            addCriterion("dept not like", value, "dept");
+        public Criteria andDeptNameNotLike(String value) {
+            addCriterion("dept_name not like", value, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIn(List<String> values) {
-            addCriterion("dept in", values, "dept");
+        public Criteria andDeptNameIn(List<String> values) {
+            addCriterion("dept_name in", values, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptNotIn(List<String> values) {
-            addCriterion("dept not in", values, "dept");
+        public Criteria andDeptNameNotIn(List<String> values) {
+            addCriterion("dept_name not in", values, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptBetween(String value1, String value2) {
-            addCriterion("dept between", value1, value2, "dept");
+        public Criteria andDeptNameBetween(String value1, String value2) {
+            addCriterion("dept_name between", value1, value2, "deptName");
             return (Criteria) this;
         }
 
-        public Criteria andDeptNotBetween(String value1, String value2) {
-            addCriterion("dept not between", value1, value2, "dept");
+        public Criteria andDeptNameNotBetween(String value1, String value2) {
+            addCriterion("dept_name not between", value1, value2, "deptName");
             return (Criteria) this;
         }
 
@@ -642,6 +642,66 @@ public class MaterialRequisitionExample {
 
         public Criteria andBatchNumberNotBetween(String value1, String value2) {
             addCriterion("batch_number not between", value1, value2, "batchNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusIsNull() {
+            addCriterion("out_room_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusIsNotNull() {
+            addCriterion("out_room_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusEqualTo(Byte value) {
+            addCriterion("out_room_status =", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusNotEqualTo(Byte value) {
+            addCriterion("out_room_status <>", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusGreaterThan(Byte value) {
+            addCriterion("out_room_status >", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("out_room_status >=", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusLessThan(Byte value) {
+            addCriterion("out_room_status <", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("out_room_status <=", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusIn(List<Byte> values) {
+            addCriterion("out_room_status in", values, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusNotIn(List<Byte> values) {
+            addCriterion("out_room_status not in", values, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusBetween(Byte value1, Byte value2) {
+            addCriterion("out_room_status between", value1, value2, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("out_room_status not between", value1, value2, "outRoomStatus");
             return (Criteria) this;
         }
 
