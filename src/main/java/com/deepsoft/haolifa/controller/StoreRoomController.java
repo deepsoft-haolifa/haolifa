@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
@@ -31,8 +30,8 @@ public class StoreRoomController {
     @Autowired
     private StockService stockService;
 
-    @Autowired
-    private MaterialRequisitionService materialRequisitionService;
+//    @Autowired
+//    private MaterialRequisitionService materialRequisitionService;
 
     @ApiOperation("新增库房信息")
     @PostMapping("/save")
@@ -215,11 +214,11 @@ public class StoreRoomController {
     }
 
 
-    @PostMapping("/pre-material-out/page")
-    @ApiOperation("零件待出库列表")
-    public ResultBean<IPage<PreOutMaterialVo>> pageInfoEntryOutRecord(@RequestBody PreOutMaterialPageVo preOutMaterialPageVo) {
-        return ResultBean.success(materialRequisitionService.preOutMaterialPage(preOutMaterialPageVo));
-    }
+//    @PostMapping("/pre-material-out/page")
+//    @ApiOperation("零件待出库列表")
+//    public ResultBean<IPage<PreOutMaterialVo>> pageInfoEntryOutRecord(@RequestBody PreOutMaterialPageVo preOutMaterialPageVo) {
+//        return ResultBean.success(materialRequisitionService.preOutMaterialPage(preOutMaterialPageVo));
+//    }
 
 
 }

@@ -71,9 +71,9 @@ dependencies {
     compile 'cn.hutool:hutool-all:5.0.6'
 
     ///// mybatis-plus //////
-    compile 'com.baomidou:mybatis-plus-boot-starter:3.2.0'
-    compile 'com.baomidou:mybatis-plus-generator:3.2.0'
-    compile 'com.ibeetl:beetl:2.7.3'
+//    compile 'com.baomidou:mybatis-plus-boot-starter:3.2.0'
+//    compile 'com.baomidou:mybatis-plus-generator:3.2.0'
+//    compile 'com.ibeetl:beetl:2.7.3'
 }
 
 //mybatis generator plugin ------ start
