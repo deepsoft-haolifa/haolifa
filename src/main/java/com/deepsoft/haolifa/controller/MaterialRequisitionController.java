@@ -1,10 +1,9 @@
 package com.deepsoft.haolifa.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.MaterialRequisition;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.service.MaterialRequisitionService123;
+import com.deepsoft.haolifa.service.MaterialRequisitionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +19,10 @@ import java.util.List;
 @Api(tags = {"领料单管理"})
 @RestController
 @RequestMapping("/material-requisition")
-public class MaterialRequisitionController123 {
+public class MaterialRequisitionController {
 
     @Resource
-    private MaterialRequisitionService123 materialRequisitionService;
+    private MaterialRequisitionService materialRequisitionService;
 
     @PostMapping("save")
     @ApiOperation(value = "保存领料单")
@@ -36,10 +35,10 @@ public class MaterialRequisitionController123 {
 
     }
 
-//    @GetMapping("info")
-//    @ApiOperation(value = "领料单详情")
-//    public ResultBean info(@RequestParam("orderNo") String orderNo) {
-//        return ResultBean.success(materialRequisitionService.list(new LambdaQueryWrapper<MaterialRequisition>().eq(MaterialRequisition::getOrderNo, orderNo)));
-//    }
+    @GetMapping("info")
+    @ApiOperation(value = "领料单详情")
+    public ResultBean info(@RequestParam("orderNo") String orderNo) {
+        return ResultBean.success(materialRequisitionService.detailList(orderNo));
+    }
 
 }

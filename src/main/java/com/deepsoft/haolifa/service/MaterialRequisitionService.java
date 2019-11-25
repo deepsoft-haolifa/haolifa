@@ -1,10 +1,9 @@
 package com.deepsoft.haolifa.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.deepsoft.haolifa.model.domain.MaterialRequisition;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
+import com.github.pagehelper.Page;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
  * @author murphy.he
  * @since 2019-11-23
  */
-public interface MaterialRequisitionService123 {
+public interface MaterialRequisitionService {
 
     /**
      * 核料清单-- 保存领料单
@@ -26,6 +25,13 @@ public interface MaterialRequisitionService123 {
      */
     boolean addBatch(List<MaterialRequisition> list);
 
+    /**
+     * 领料单详情
+     * @param orderNo
+     * @return
+     */
+    List<MaterialRequisition> detailList(String orderNo);
+
 
     /**
      * 零件待出库分页列表
@@ -33,5 +39,5 @@ public interface MaterialRequisitionService123 {
      * @param list
      * @return
      */
-    IPage<PreOutMaterialVo> preOutMaterialPage(PreOutMaterialPageVo vo);
+    Page<PreOutMaterialVo> preOutMaterialPage(PreOutMaterialPageVo vo);
 }

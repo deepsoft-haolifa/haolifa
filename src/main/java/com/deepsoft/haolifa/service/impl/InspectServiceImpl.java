@@ -18,6 +18,8 @@ import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
+import com.deepsoft.haolifa.model.vo.InspectHistoryVo;
+import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.InspectService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
@@ -27,6 +29,8 @@ import com.github.pagehelper.PageHelper;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -63,7 +67,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         Inspect inspect = new Inspect();
         BeanUtils.copyProperties(model, inspect);
         inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size() == 0 ? ""
-                : JSON.toJSONString(model.getAccessorys()));
+            : JSON.toJSONString(model.getAccessorys()));
         inspect.setCreateUserId(createUserId);
         inspect.setInspectNo(inspectNo);
         inspect.setBatchNumber(batchNumer);
@@ -73,7 +77,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         }
         if (StringUtils.isNotEmpty(model.getArrivalTime())) {
             inspect.setArrivalTime(
-                    DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime()));
+                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime()));
         }
         inspectMapper.insertSelective(inspect);
         List<InspectItemDTO> items = model.getItems();
@@ -130,12 +134,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         inspect.setSupplierName(model.getSupplierName());
         if (StringUtils.isNotEmpty(model.getArrivalTime())) {
             Date arrivalTime = DateFormatterUtils
-                    .parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime());
+                .parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime());
             inspect.setArrivalTime(arrivalTime);
         }
         inspect.setBatchNumber(model.getBatchNumber());
         inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size() == 0 ? ""
-                : JSON.toJSONString(model.getAccessorys()));
+            : JSON.toJSONString(model.getAccessorys()));
         inspectMapper.updateByPrimaryKeySelective(inspect);
         InspectItemExample itemExample = new InspectItemExample();
         itemExample.or().andInspectIdEqualTo(inspect.getId());
@@ -169,7 +173,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     }
 
     @Override
-    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo,String supplierName,String batchNumber) {
+    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo, String supplierName, String batchNumber) {
         InspectExample example = new InspectExample();
         InspectExample.Criteria criteria = example.createCriteria();
 //    if (type == 0) {
@@ -194,7 +198,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             criteria.andSupplierNameLike("%" + supplierName + "%");
         }
         Page pageData = PageHelper.startPage(pageNum, pageSize, "create_time desc")
-                .doSelectPage(() -> inspectMapper.selectByExample(example));
+            .doSelectPage(() -> inspectMapper.selectByExample(example));
         PageDTO pageDTO = new PageDTO();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
@@ -305,7 +309,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                         throw new BaseException(PURCHASE_PRO_INSPECT_NUM_ERROR);
                     }
                     // 当合同检验合格数等于合同数自动更新采购合同为“完成”状态
-                    if(purchaseOrder.getTotalCount().equals(order.getQualifiedNumber())){
+                    if (purchaseOrder.getTotalCount().equals(order.getQualifiedNumber())) {
                         order.setStatus((byte) 5);
                     }
                     purchaseOrderMapper.updateByExampleSelective(order, orderExample);
@@ -367,15 +371,34 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         InspectHistoryExample example = new InspectHistoryExample();
         InspectHistoryExample.Criteria criteria = example.createCriteria();
         if (InspectHistoryStatus.BEEN_STORE_2.code == status
-                || InspectHistoryStatus.WAITING_STORE_1.code == status) {
+            || InspectHistoryStatus.WAITING_STORE_1.code == status) {
             criteria.andStatusEqualTo(status.byteValue());
         }
         criteria.andQualifiedNumberGreaterThan(0);
         Page<InspectHistory> histories = PageHelper.startPage(pageNum, pageSize, "id desc")
-                .doSelectPage(() -> historyMapper.selectByExample(example));
-        PageDTO pageDTO = new PageDTO();
+            .doSelectPage(() -> historyMapper.selectByExample(example));
+        List<InspectHistoryVo> resultList = new ArrayList<>();
+        List<InspectHistory> result = histories.getResult();
+        if (!CollectionUtils.isEmpty(result)) {
+            // 从entrust 获取 busType(1.订单需求；2.生产库存)
+            List<String> entrustNoSet = result.stream().filter(e -> e.getType().equals(CommonEnum.InspectHistoryType.ENTRUST.code))
+                .map(InspectHistory::getInspectNo).collect(Collectors.toList());
+            EntrustExample entrustExample = new EntrustExample();
+            entrustExample.or().andEntrustNoIn(entrustNoSet);
+            List<Entrust> entrusts = entrustMapper.selectByExample(entrustExample);
+            Map<String, Byte> entrustMap = Optional.ofNullable(entrusts).orElse(Collections.emptyList()).stream()
+                .collect(Collectors.toMap(Entrust::getEntrustNo, Entrust::getBusType));
+
+            for (InspectHistory inspectHistory : result) {
+                InspectHistoryVo inspectHistoryVo = new InspectHistoryVo();
+                BeanUtils.copyProperties(inspectHistory, inspectHistoryVo);
+                inspectHistoryVo.setBusType(entrustMap.get(inspectHistory.getInspectNo()));
+                resultList.add(inspectHistoryVo);
+            }
+        }
+        PageDTO pageDTO = new PageDTO()                                                                                                                                                                                                                                                                                              ;
         BeanUtils.copyProperties(histories, pageDTO);
-        pageDTO.setList(histories.getResult());
+        pageDTO.setList(resultList);
         return ResultBean.success(pageDTO);
     }
 

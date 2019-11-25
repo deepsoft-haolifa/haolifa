@@ -1,9 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
-import static com.deepsoft.haolifa.constant.CommonEnum.OrderStatus.PRODUCTION_FINISH;
-
-import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.OperationType;
 import com.deepsoft.haolifa.constant.CommonEnum.StorageType;
 import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
@@ -13,28 +11,14 @@ import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.ProductStorageListDTO;
+import com.deepsoft.haolifa.model.dto.storage.*;
 import com.deepsoft.haolifa.service.EntryOutStoreRecordService;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.StockService;
-import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -42,6 +26,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.deepsoft.haolifa.constant.CommonEnum.OrderStatus.PRODUCTION_FINISH;
 
 
 @Slf4j
@@ -115,8 +108,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
         EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
         criteria.andOrderNoEqualTo(orderNo)
-                .andOperationTypeEqualTo(CommonEnum.OperationType.ENTRY.code)
-                .andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
+            .andOperationTypeEqualTo(CommonEnum.OperationType.ENTRY.code)
+            .andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
         if (StringUtils.isNotBlank(productNo)) {
             criteria.andProductNoEqualTo(productNo);
         }
@@ -133,8 +126,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
         EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
         criteria.andOrderNoEqualTo(orderNo)
-                .andOperationTypeEqualTo(CommonEnum.OperationType.OUT.code)
-                .andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
+            .andOperationTypeEqualTo(CommonEnum.OperationType.OUT.code)
+            .andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
         if (StringUtils.isNotBlank(productNo)) {
             criteria.andProductNoEqualTo(productNo);
         }
@@ -160,9 +153,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         // 已经出库数量
         int outOrderProductCount = getOutProductCountByOrderNo(orderNo, productNo);
 
-        log.info("outProduct productNo already count:{},out count:{},orderNo:{},productNo:{}", outOrderProductCount, outProductCount, orderNo,productNo);
+        log.info("outProduct productNo already count:{},out count:{},orderNo:{},productNo:{}", outOrderProductCount, outProductCount, orderNo, productNo);
         if (outOrderProductCount + outProductCount > entryOrderProductCount) {
-            log.error("outProduct productNo out count more than entry count，orderNo:{},productNo:{}", orderNo,productNo);
+            log.error("outProduct productNo out count more than entry count，orderNo:{},productNo:{}", orderNo, productNo);
             return ResultBean.error(CommonEnum.ResponseEnum.OUT_PRODUCT_NO_COUNT_ERROR);
         }
 
@@ -176,7 +169,6 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             log.error("outProduct out count more than entry count，orderNo:{}", orderNo);
             return ResultBean.error(CommonEnum.ResponseEnum.OUT_PRODUCT_COUNT_ERROR);
         }
-
 
 
         // 保证数量是负数
@@ -198,7 +190,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         criteria.andProductNoEqualTo(entryOutStoreRecord.getProductNo())
 //        .andProductModelEqualTo(entryOutStoreRecord.getProductModel())
 //        .andSpecificationsEqualTo(entryOutStoreRecord.getProductSpecifications())
-                .andOrderNoEqualTo(entryOutStoreRecord.getOrderNo());
+            .andOrderNoEqualTo(entryOutStoreRecord.getOrderNo());
         List<OrderProductAssociate> associates = associateMapper.selectByExample(associateExample);
         if (!CollectionUtils.isEmpty(associates)) {
             entryOutStoreRecord.setPrice(associates.get(0).getPrice());
@@ -266,8 +258,13 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }};
             // 增加库存
             stockService.addStock(entryOutStorageDTO);
-            // 更新零件的当前库存量
-            materialService.updateCurrentQuantity(materialGraphNo, quantity);
+            // 更新零件的当前库存量(如果是订单需求的入库，则将其入锁定料，不能再次被核料)
+            if (model.getBusType() != null && model.getBusType().equals(CommonEnum.BusType.ORDER_REQUIRE.type)) {
+                log.info("material entry busNo:{},batchNumber:{},graphNo:{},quantity:{}", model.getBusNo(), model.getMaterialBatchNo(), materialGraphNo, quantity);
+                materialService.updateLockQuantity(materialGraphNo, quantity);
+            } else {
+                materialService.updateCurrentQuantity(materialGraphNo, quantity);
+            }
         }
         return insert;
     }
@@ -294,12 +291,12 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         Stock stock = stockService.infoStocks(roomNo, rackNo, materialGraphNo, materialBatchNo);
         if (stock == null) {
             log.error("not stock record by roomNo:{},rackNo:{},materialGraphNo:{},materialBatchNo:{}", roomNo, rackNo,
-                    materialGraphNo, materialBatchNo);
+                materialGraphNo, materialBatchNo);
             return 0;
         }
         if (stock.getQuantity() < Math.abs(quantity)) {
             log.warn("not enough quantity  by roomNo:{},rackNo:{},materialGraphNo:{},materialBatchNo:{}", roomNo, rackNo,
-                    materialGraphNo, materialBatchNo);
+                materialGraphNo, materialBatchNo);
             return 0;
         }
 
@@ -328,7 +325,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             // 减少库存
             boolean reduceStock = stockService.reduceStock(entryOutStorageDTO);
             log.info("material reduce stock result:{},materialNo:{},batchNo:{},rackNo:{},quantity:{}", reduceStock,
-                    materialGraphNo, materialBatchNo, rackNo, quantity);
+                materialGraphNo, materialBatchNo, rackNo, quantity);
             // 如果该零件有锁定数量，先减少锁定数量，在减少当前库存量
             Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
             Integer lockQuantity = infoByGraphNo.getLockQuantity();
@@ -342,7 +339,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 } else {
                     int needCurrentQuantity = Math.abs(quantity) - lockQuantity;
                     log.info("this not appear material reduce lock quantity:{},needCurrentQuantity:{},graphNo:{}", lockQuantity,
-                            needCurrentQuantity, materialGraphNo);
+                        needCurrentQuantity, materialGraphNo);
                     materialService.updateLockQuantity(materialGraphNo, -lockQuantity);
                     materialService.updateCurrentQuantity(materialGraphNo, -needCurrentQuantity);
                 }
@@ -377,7 +374,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         }
         example.setOrderByClause("create_time desc");
         Page<EntryOutStoreRecord> entryOutStoreRecords = PageHelper.startPage(currentPage, pageSize)
-                .doSelectPage(() -> entryOutStoreRecordMapper.selectByExample(example));
+            .doSelectPage(() -> entryOutStoreRecordMapper.selectByExample(example));
 
         if (type.byteValue() == StorageType.PRODUCT.code) {
             // 成品
@@ -394,9 +391,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         productStorageListDTO.setExecute(executeMap.get(oneOrderNo));
                     } else {
                         // 入库数量
-                        int entryProductCount = getEntryProductCountByOrderNo(oneOrderNo,"");
+                        int entryProductCount = getEntryProductCountByOrderNo(oneOrderNo, "");
                         // 已经出库数量
-                        int storeCount = getOutProductCountByOrderNo(oneOrderNo,"");
+                        int storeCount = getOutProductCountByOrderNo(oneOrderNo, "");
                         int isExecute = 0; // 默认可出库
                         if (entryProductCount <= storeCount) {
                             isExecute = 1;// 不可出库

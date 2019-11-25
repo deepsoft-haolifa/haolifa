@@ -1,16 +1,17 @@
 package com.deepsoft.haolifa.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialRequisitionMapper;
 import com.deepsoft.haolifa.dao.repository.extend.CommonExtendMapper;
 import com.deepsoft.haolifa.model.domain.MaterialRequisition;
+import com.deepsoft.haolifa.model.domain.MaterialRequisitionExample;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
-import com.deepsoft.haolifa.service.MaterialRequisitionService123;
+import com.deepsoft.haolifa.service.MaterialRequisitionService;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.util.RandomUtils;
+import com.github.pagehelper.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ import java.util.List;
  * @since 2019-11-23
  */
 @Service
-public class MaterialRequisitionServiceImpl123 implements MaterialRequisitionService123 {
+public class MaterialRequisitionServiceImpl implements MaterialRequisitionService {
 
     @Resource
     private MaterialService materialService;
@@ -55,7 +56,15 @@ public class MaterialRequisitionServiceImpl123 implements MaterialRequisitionSer
     }
 
     @Override
-    public IPage<PreOutMaterialVo> preOutMaterialPage(PreOutMaterialPageVo vo) {
+    public List<MaterialRequisition> detailList(String orderNo) {
+        MaterialRequisitionExample example = new MaterialRequisitionExample();
+        example.or().andOrderNoEqualTo(orderNo);
+        List<MaterialRequisition> materialRequisitions = materialRequisitionMapper.selectByExample(example);
+        return materialRequisitions;
+    }
+
+    @Override
+    public Page<PreOutMaterialVo> preOutMaterialPage(PreOutMaterialPageVo vo) {
         commonExtendMapper.pagePreOutMaterial(vo);
         return null;
     }
