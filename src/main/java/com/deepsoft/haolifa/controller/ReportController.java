@@ -192,9 +192,9 @@ public class ReportController {
         QualityPressureReport qualityPressureReport = reportService.selectPressure();
         return  ResultBean.success(qualityPressureReport);
     }
-    @ApiOperation("根据机加工类型查询 1 内部 2外部")
-    @RequestMapping(value = "/expense/getEntrustt",method = RequestMethod.GET)
-    public ResultBean getEntrustt(@RequestParam(value ="type") Integer type) {
+    @ApiOperation("机加工质量报表根据机加工类型查询 1 内部 ")
+    @RequestMapping(value = "/quality/getEntrust",method = RequestMethod.GET)
+    public ResultBean getEntrust(@RequestParam(value ="type") Integer type) {
         QualityEntrustReport qualityEntrustReport = reportService.selectByType(type);
         return ResultBean.success(qualityEntrustReport);
     }
@@ -204,5 +204,12 @@ public class ReportController {
 
         List<QualityAuditReport> qualityAuditReports = reportService.selectAudit();
         return  ResultBean.success(qualityAuditReports);
+    }
+    @ApiOperation("成品质量报表")
+    @RequestMapping(value = "/quality/getProduct",method = RequestMethod.GET)
+    public ResultBean getProduct() {
+
+        QualityProductReport qualityProductReport = reportService.selectProduct();
+        return  ResultBean.success(qualityProductReport);
     }
 }

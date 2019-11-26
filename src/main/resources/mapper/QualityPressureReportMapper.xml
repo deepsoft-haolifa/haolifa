@@ -12,8 +12,8 @@
   </resultMap>
 
   <select id="selectPressure" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-     select sum(qualified_number+unqualified_number) total_num,sum(qualified_number) qualified_number,sum(unqualified_number) unqualified_number
-     from pressure_inspect_record
+     select sum(qualified_number) total_num,sum(pressure_qualified_number) qualified_number,sum(qualified_number-pressure_qualified_number) unqualified_number
+     from order_product
   </select>
 
 </mapper>

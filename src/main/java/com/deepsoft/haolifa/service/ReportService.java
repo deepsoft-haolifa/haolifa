@@ -39,5 +39,7 @@ public interface ReportService {
   List<QualityAuditReport> selectAudit();
   //零件采购质量报表
   QualityInspectReport selectInspect();
+  //成品质量报表
+  QualityProductReport selectProduct();
 
 }

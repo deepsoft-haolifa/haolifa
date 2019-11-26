@@ -29,6 +29,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   private QualityAuditReportMapper qualityAuditReportMapper;
   @Autowired
   private QualityInspecReportMapper qualityInspecReportMapper;
+  @Autowired
+  private QualityProductReportMapper qualityProductReportMapper;
   @Override
   public ResultBean selectBySupplierName(String supplierName){
     return  ResultBean.success(purchaseReportMapper.selectBySupplierName(supplierName));
@@ -91,4 +93,9 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   public List<ExportSaleDTO> selectByModelContract() {
     return saleReportMapper.selectByModelContract();
   }
+
+    @Override
+    public QualityProductReport selectProduct() {
+        return qualityProductReportMapper.selectProduct();
+    }
 }
