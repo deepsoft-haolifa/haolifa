@@ -31,7 +31,7 @@ public class EntryMaterialStorageDTO extends BaseStorageDTO {
     private String materialBatchNo;
 
     @ApiModelProperty(value = "类别（1订单需求;2生产库存）")
-    private Integer busType;
+    private Byte busType;
 
     @ApiModelProperty(value = "委托单号(包括机加工或者喷涂)")
     private String busNo;
