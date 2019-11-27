@@ -380,12 +380,15 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         List<InspectHistoryVo> resultList = new ArrayList<>();
         List<InspectHistory> result = histories.getResult();
         if (!CollectionUtils.isEmpty(result)) {
+            List<Entrust> entrusts = new ArrayList<>();
             // 从entrust 获取 busType(1.订单需求；2.生产库存)
             List<String> entrustNoSet = result.stream().filter(e -> e.getType().equals(CommonEnum.InspectHistoryType.ENTRUST.code))
                 .map(InspectHistory::getInspectNo).collect(Collectors.toList());
-            EntrustExample entrustExample = new EntrustExample();
-            entrustExample.or().andEntrustNoIn(entrustNoSet);
-            List<Entrust> entrusts = entrustMapper.selectByExample(entrustExample);
+            if (!CollectionUtils.isEmpty(entrustNoSet)) {
+                EntrustExample entrustExample = new EntrustExample();
+                entrustExample.or().andEntrustNoIn(entrustNoSet);
+                 entrusts = entrustMapper.selectByExample(entrustExample);
+            }
             Map<String, Byte> entrustMap = Optional.ofNullable(entrusts).orElse(Collections.emptyList()).stream()
                 .collect(Collectors.toMap(Entrust::getEntrustNo, Entrust::getBusType));
 
@@ -396,7 +399,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 resultList.add(inspectHistoryVo);
             }
         }
-        PageDTO pageDTO = new PageDTO()                                                                                                                                                                                                                                                                                              ;
+        PageDTO pageDTO = new PageDTO();
         BeanUtils.copyProperties(histories, pageDTO);
         pageDTO.setList(resultList);
         return ResultBean.success(pageDTO);
