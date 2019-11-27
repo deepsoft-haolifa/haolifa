@@ -24,6 +24,7 @@
       <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="processed_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="bus_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="out_room_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -88,7 +89,7 @@
     id, material_graph_name, purchase_no, entrust_no, material_graph_no, workShop_type, 
     supplier_name, supplier_no, batch_number, number, purchase_price, status, entrust_person, 
     is_delete, create_time, update_time, create_user_id, inspect_status, qualified_number, 
-    processed_graph_no, bus_type
+    processed_graph_no, bus_type, out_room_status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" >
     select
@@ -130,14 +131,16 @@
       purchase_price, status, entrust_person, 
       is_delete, create_time, update_time, 
       create_user_id, inspect_status, qualified_number, 
-      processed_graph_no, bus_type)
+      processed_graph_no, bus_type, out_room_status
+      )
     values (#{materialGraphName,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{entrustNo,jdbcType=VARCHAR}, 
       #{materialGraphNo,jdbcType=VARCHAR}, #{workshopType,jdbcType=TINYINT}, #{supplierName,jdbcType=VARCHAR}, 
       #{supplierNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
       #{purchasePrice,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{entrustPerson,jdbcType=VARCHAR}, 
       #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{inspectStatus,jdbcType=TINYINT}, #{qualifiedNumber,jdbcType=INTEGER}, 
-      #{processedGraphNo,jdbcType=VARCHAR}, #{busType,jdbcType=TINYINT})
+      #{processedGraphNo,jdbcType=VARCHAR}, #{busType,jdbcType=TINYINT}, #{outRoomStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -205,6 +208,9 @@
       <if test="busType != null" >
         bus_type,
       </if>
+      <if test="outRoomStatus != null" >
+        out_room_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="materialGraphName != null" >
@@ -266,6 +272,9 @@
       </if>
       <if test="busType != null" >
         #{busType,jdbcType=TINYINT},
+      </if>
+      <if test="outRoomStatus != null" >
+        #{outRoomStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -341,6 +350,9 @@
       <if test="record.busType != null" >
         bus_type = #{record.busType,jdbcType=TINYINT},
       </if>
+      <if test="record.outRoomStatus != null" >
+        out_room_status = #{record.outRoomStatus,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -368,7 +380,8 @@
       inspect_status = #{record.inspectStatus,jdbcType=TINYINT},
       qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       processed_graph_no = #{record.processedGraphNo,jdbcType=VARCHAR},
-      bus_type = #{record.busType,jdbcType=TINYINT}
+      bus_type = #{record.busType,jdbcType=TINYINT},
+      out_room_status = #{record.outRoomStatus,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -436,6 +449,9 @@
       <if test="busType != null" >
         bus_type = #{busType,jdbcType=TINYINT},
       </if>
+      <if test="outRoomStatus != null" >
+        out_room_status = #{outRoomStatus,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -460,7 +476,8 @@
       inspect_status = #{inspectStatus,jdbcType=TINYINT},
       qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       processed_graph_no = #{processedGraphNo,jdbcType=VARCHAR},
-      bus_type = #{busType,jdbcType=TINYINT}
+      bus_type = #{busType,jdbcType=TINYINT},
+      out_room_status = #{outRoomStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

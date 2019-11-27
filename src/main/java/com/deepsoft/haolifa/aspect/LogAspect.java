@@ -71,10 +71,10 @@ public class LogAspect implements ThrowsAdvice {
         }
     }
 
-    @AfterReturning(value = "webLog()", returning = "rvt")
-    public void after(JoinPoint joinPoint, Object rvt) {
-        log.info("【Response】 {}/{}|{} ", joinPoint.getTarget().getClass().getName(), joinPoint.getSignature().getName(), JSONObject.toJSONString(rvt,SerializerFeature.PrettyFormat));
-    }
+//    @AfterReturning(value = "webLog()", returning = "rvt")
+//    public void after(JoinPoint joinPoint, Object rvt) {
+////        log.info("【Response】 {}/{}|{} ", joinPoint.getTarget().getClass().getName(), joinPoint.getSignature().getName(), JSONObject.toJSONString(rvt,SerializerFeature.PrettyFormat));
+//    }
 
     /**
      * 获取请求参数

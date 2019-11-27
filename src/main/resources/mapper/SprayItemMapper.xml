@@ -20,6 +20,7 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="batch_number" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="out_room_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -83,7 +84,7 @@
   <sql id="Base_Column_List" >
     id, spray_no, material_graph_no, sprayed_graph_no, specifications, model, material_classify_name, 
     material, special_requires, spray_color, number, qualified_number, remark, complete_time, 
-    create_time, update_time, batch_number
+    create_time, update_time, batch_number, out_room_status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayItemExample" >
     select
@@ -124,13 +125,13 @@
       material, special_requires, spray_color, 
       number, qualified_number, remark, 
       complete_time, create_time, update_time, 
-      batch_number)
+      batch_number, out_room_status)
     values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{sprayedGraphNo,jdbcType=VARCHAR}, 
       #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{materialClassifyName,jdbcType=VARCHAR}, 
       #{material,jdbcType=VARCHAR}, #{specialRequires,jdbcType=VARCHAR}, #{sprayColor,jdbcType=VARCHAR}, 
       #{number,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{completeTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{batchNumber,jdbcType=VARCHAR})
+      #{batchNumber,jdbcType=VARCHAR}, #{outRoomStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SprayItem" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -186,6 +187,9 @@
       <if test="batchNumber != null" >
         batch_number,
       </if>
+      <if test="outRoomStatus != null" >
+        out_room_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sprayNo != null" >
@@ -235,6 +239,9 @@
       </if>
       <if test="batchNumber != null" >
         #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="outRoomStatus != null" >
+        #{outRoomStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -298,6 +305,9 @@
       <if test="record.batchNumber != null" >
         batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       </if>
+      <if test="record.outRoomStatus != null" >
+        out_room_status = #{record.outRoomStatus,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -321,7 +331,8 @@
       complete_time = #{record.completeTime,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      batch_number = #{record.batchNumber,jdbcType=VARCHAR}
+      batch_number = #{record.batchNumber,jdbcType=VARCHAR},
+      out_room_status = #{record.outRoomStatus,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -377,6 +388,9 @@
       <if test="batchNumber != null" >
         batch_number = #{batchNumber,jdbcType=VARCHAR},
       </if>
+      <if test="outRoomStatus != null" >
+        out_room_status = #{outRoomStatus,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -397,7 +411,8 @@
       complete_time = #{completeTime,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      batch_number = #{batchNumber,jdbcType=VARCHAR}
+      batch_number = #{batchNumber,jdbcType=VARCHAR},
+      out_room_status = #{outRoomStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

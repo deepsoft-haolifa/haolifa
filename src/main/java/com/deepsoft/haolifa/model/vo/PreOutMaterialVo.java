@@ -32,6 +32,6 @@ public class PreOutMaterialVo {
     @ApiModelProperty(value = "类型（1.领料单出库；2.机加工委托；3.喷涂委托）")
     private Integer type;
 
-    @ApiModelProperty(value = "状态")
-    private Integer status;
+    @ApiModelProperty(value = "出库状态")
+    private Integer outRoomStatus;
 }

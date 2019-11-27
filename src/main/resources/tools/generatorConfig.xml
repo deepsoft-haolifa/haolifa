@@ -86,12 +86,12 @@
             <property name="enableSubPackages" value="true"/>
 
         </javaClientGenerator>
-        <javaServiceGenerator targetPackage="com.deepsoft.haolifa.service" targetProject="src/main/java"
-                              implementationPackage="com.deepsoft.haolifa.service">
-        </javaServiceGenerator>
-        <javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">
+        <!--<javaServiceGenerator targetPackage="com.deepsoft.haolifa.service" targetProject="src/main/java"-->
+                              <!--implementationPackage="com.deepsoft.haolifa.service">-->
+        <!--</javaServiceGenerator>-->
+        <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
-        </javaControllerGenerator>
+        <!--</javaControllerGenerator>-->
         <table tableName="material_requisition" domainObjectName="MaterialRequisition">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

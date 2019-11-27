@@ -584,4 +584,18 @@ public class CommonEnum {
         }
     }
 
+    /**
+     * 出库状态
+     */
+    public enum OutRoomStatus {
+        NOT_OUT((byte) 1, "未出库"),
+        OUT((byte) 2, "已出库");
+        public final byte type;
+        public final String name;
+
+        OutRoomStatus(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
 }

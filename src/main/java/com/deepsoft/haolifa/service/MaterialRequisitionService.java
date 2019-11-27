@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.MaterialRequisition;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
 import com.github.pagehelper.Page;
@@ -36,8 +37,8 @@ public interface MaterialRequisitionService {
     /**
      * 零件待出库分页列表
      *
-     * @param list
+     * @param vo
      * @return
      */
-    Page<PreOutMaterialVo> preOutMaterialPage(PreOutMaterialPageVo vo);
+    PageDTO<PreOutMaterialVo> preOutMaterialPage(PreOutMaterialPageVo vo);
 }

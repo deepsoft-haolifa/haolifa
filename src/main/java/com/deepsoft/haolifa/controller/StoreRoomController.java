@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRequestDTO;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
 import com.deepsoft.haolifa.service.*;
+import com.github.pagehelper.Page;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,11 +215,11 @@ public class StoreRoomController {
     }
 
 
-//    @PostMapping("/pre-material-out/page")
-//    @ApiOperation("零件待出库列表")
-//    public ResultBean<IPage<PreOutMaterialVo>> pageInfoEntryOutRecord(@RequestBody PreOutMaterialPageVo preOutMaterialPageVo) {
-//        return ResultBean.success(materialRequisitionService.preOutMaterialPage(preOutMaterialPageVo));
-//    }
+    @PostMapping("/pre-material-out/page")
+    @ApiOperation("零件待出库列表")
+    public ResultBean<Page<PreOutMaterialVo>> pageInfoEntryOutRecord(@RequestBody PreOutMaterialPageVo preOutMaterialPageVo) {
+        return ResultBean.success(materialRequisitionService.preOutMaterialPage(preOutMaterialPageVo));
+    }
 
 
 }

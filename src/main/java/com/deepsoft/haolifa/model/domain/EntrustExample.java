@@ -1455,6 +1455,66 @@ public class EntrustExample {
             addCriterion("bus_type not between", value1, value2, "busType");
             return (Criteria) this;
         }
+
+        public Criteria andOutRoomStatusIsNull() {
+            addCriterion("out_room_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusIsNotNull() {
+            addCriterion("out_room_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusEqualTo(Byte value) {
+            addCriterion("out_room_status =", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusNotEqualTo(Byte value) {
+            addCriterion("out_room_status <>", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusGreaterThan(Byte value) {
+            addCriterion("out_room_status >", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("out_room_status >=", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusLessThan(Byte value) {
+            addCriterion("out_room_status <", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("out_room_status <=", value, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusIn(List<Byte> values) {
+            addCriterion("out_room_status in", values, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusNotIn(List<Byte> values) {
+            addCriterion("out_room_status not in", values, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusBetween(Byte value1, Byte value2) {
+            addCriterion("out_room_status between", value1, value2, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutRoomStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("out_room_status not between", value1, value2, "outRoomStatus");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
