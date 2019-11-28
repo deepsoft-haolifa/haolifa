@@ -65,7 +65,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
             return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_NUMBER_ERROR);
         }
         if (StringUtils.isAnyBlank(model.getMaterialGraphName(), model.getMaterialGraphNo(), model.getProcessedGraphNo(),
-                model.getBatchNumber())) {
+            model.getBatchNumber())) {
             return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
         }
         validateService.validateIsExistMaterialGraphNo(model.getProcessedGraphNo());
@@ -79,6 +79,8 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         } else {
             entrust.setStatus((byte) 1);
         }
+        entrust.setOutRoomStatus(CommonEnum.OutRoomStatus.NOT_OUT.type);
+
 //    entrust.setBatchNumber(createSerialNumber(BATCH_NUMBER_PREFIX_PC, BATCH_NUM_KEY));
         entrustMapper.insertSelective(entrust);
         return ResultBean.success(entrustNo);
@@ -100,7 +102,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
             return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_NUMBER_ERROR);
         }
         if (StringUtils.isAnyBlank(model.getMaterialGraphName(), model.getMaterialGraphNo(), model.getProcessedGraphNo(),
-                model.getBatchNumber())) {
+            model.getBatchNumber())) {
             return ResultBean.error(ResponseEnum.ENTRUST_PARAMS_VALIDATE_ERROR);
         }
         Entrust entrust = new Entrust();
@@ -146,30 +148,30 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         if (model.getType() == 2) {
             // 车间
             List<Byte> statusList = Arrays
-                    .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code);
+                .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code);
             criteria.andStatusNotIn(statusList);
 
             List<Byte> workShopTypeList = Arrays
-                    .asList(CommonEnum.WorkshopType.INTERNAL_1.type,CommonEnum.WorkshopType.INTERNAL_2.type);
+                .asList(CommonEnum.WorkshopType.INTERNAL_1.type, CommonEnum.WorkshopType.INTERNAL_2.type);
             criteria.andWorkshopTypeIn(workShopTypeList);// 内部车间1,内部车间2
         }
         if (model.getType() == 3) {
             // 质检
             List<Byte> statusList = Arrays
-                    .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code,
-                            EntrustStatus.AUDIT_PASS_WAITING_2.code);
+                .asList(EntrustStatus.NO_COMMIT_0.code, EntrustStatus.AUDITING_1.code, EntrustStatus.AUDIT_NO_PASS_5.code,
+                    EntrustStatus.AUDIT_PASS_WAITING_2.code);
             criteria.andStatusNotIn(statusList);
 
             List<Byte> workShopTypeList = Arrays
-                    .asList(CommonEnum.WorkshopType.INTERNAL_1.type,CommonEnum.WorkshopType.INTERNAL_2.type);
+                .asList(CommonEnum.WorkshopType.INTERNAL_1.type, CommonEnum.WorkshopType.INTERNAL_2.type);
             criteria.andWorkshopTypeIn(workShopTypeList);// 内部车间1,内部车间2
         }
         if (model.getStatus() != -1) {
             criteria.andStatusEqualTo(model.getStatus().byteValue());
         }
         Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "create_time desc")
-                .doSelectPage(() ->
-                        entrustMapper.selectByExample(entrustExample));
+            .doSelectPage(() ->
+                entrustMapper.selectByExample(entrustExample));
         PageDTO<Entrust> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
@@ -223,7 +225,7 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         criteria.andBusTypeEqualTo(CommonEnum.BusType.PRODUCT_INVENTORY.type);
 
         criteria.andStatusIn(Arrays
-                .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));
+            .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));
         List<Entrust> entrusts = entrustMapper.selectByExample(entrustExample);
         int number = entrusts.stream().map(Entrust::getNumber).reduce(0, (a, b) -> a + b);
 

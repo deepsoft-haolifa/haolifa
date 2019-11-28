@@ -35,5 +35,5 @@ public class OutMaterialStorageDTO extends BaseStorageDTO{
 
 
     @ApiModelProperty(value = "出库类型（1.领料单出库；2.机加工委托；3.喷涂委托）")
-    private Integer type;
+    private Byte type;
 }

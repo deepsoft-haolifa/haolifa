@@ -4,8 +4,7 @@ import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.OperationType;
 import com.deepsoft.haolifa.constant.CommonEnum.StorageType;
-import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
@@ -43,7 +42,6 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
 
     @Autowired
     private EntryOutStoreRecordMapper entryOutStoreRecordMapper;
-
     @Autowired
     private StockService stockService;
     @Autowired
@@ -54,7 +52,12 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     private OrderProductService orderProductService;
 
     @Autowired
-    private RedisDao redisDao;
+    private EntrustMapper entrustMapper;
+    @Autowired
+    private MaterialRequisitionMapper materialRequisitionMapper;
+    @Autowired
+    private SprayItemMapper sprayItemMapper;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -342,6 +345,29 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         needCurrentQuantity, materialGraphNo);
                     materialService.updateLockQuantity(materialGraphNo, -lockQuantity);
                     materialService.updateCurrentQuantity(materialGraphNo, -needCurrentQuantity);
+                }
+            }
+
+            // 如果是有单号的入库，将其出库状态修改
+            if (StringUtils.isNotBlank(model.getBusNo()) && model.getType() != null && model.getType() > 0) {
+                if (model.getType().equals(CommonEnum.materialOutType.MATERIAL_REQUISITION.type)) {
+                    MaterialRequisitionExample requisitionExample = new MaterialRequisitionExample();
+                    requisitionExample.or().andOrderNoEqualTo(model.getBusNo());
+                    MaterialRequisition materialRequisition = new MaterialRequisition();
+                    materialRequisition.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                    materialRequisitionMapper.updateByExampleSelective(materialRequisition, requisitionExample);
+                } else if (model.getType().equals(CommonEnum.materialOutType.ENTRUST.type)) {
+                    EntrustExample entrustExample = new EntrustExample();
+                    entrustExample.or().andEntrustNoEqualTo(model.getBusNo());
+                    Entrust entrust = new Entrust();
+                    entrust.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                    entrustMapper.updateByExample(entrust, entrustExample);
+                } else if (model.getType().equals(CommonEnum.materialOutType.SPRAY.type)) {
+                    SprayItemExample sprayItemExample = new SprayItemExample();
+                    sprayItemExample.or().andSprayNoEqualTo(model.getBusNo());
+                    SprayItem sprayItem = new SprayItem();
+                    sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                    sprayItemMapper.updateByExample(sprayItem, sprayItemExample);
                 }
             }
         }

@@ -76,6 +76,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
             SprayItem sprayItem = new SprayItem();
             BeanUtils.copyProperties(sprayItemDto, sprayItem);
             sprayItem.setSprayNo(sprayNo);
+            sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.NOT_OUT.type);
             spray.setTotalNumber(spray.getTotalNumber() + sprayItemDto.getNumber());
             sprayItemMapper.insertSelective(sprayItem);
         });
