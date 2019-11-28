@@ -20,7 +20,7 @@
         <if test="type!= null">
             and un.type = #{type}
         </if>
-        <if test="busNo != null and sbusNo  !=''">
+        <if test="busNo != null and busNo  !=''">
             and un.busNo like CONCAT('%',#{busNo},'%')
         </if>
         <if test="graphNo != null and graphNo !=''">
