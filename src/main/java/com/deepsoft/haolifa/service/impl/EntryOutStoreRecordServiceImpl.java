@@ -361,13 +361,13 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                     entrustExample.or().andEntrustNoEqualTo(model.getBusNo());
                     Entrust entrust = new Entrust();
                     entrust.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
-                    entrustMapper.updateByExample(entrust, entrustExample);
+                    entrustMapper.updateByExampleSelective(entrust, entrustExample);
                 } else if (model.getType().equals(CommonEnum.materialOutType.SPRAY.type)) {
                     SprayItemExample sprayItemExample = new SprayItemExample();
                     sprayItemExample.or().andSprayNoEqualTo(model.getBusNo());
                     SprayItem sprayItem = new SprayItem();
                     sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
-                    sprayItemMapper.updateByExample(sprayItem, sprayItemExample);
+                    sprayItemMapper.updateByExampleSelective(sprayItem, sprayItemExample);
                 }
             }
         }
