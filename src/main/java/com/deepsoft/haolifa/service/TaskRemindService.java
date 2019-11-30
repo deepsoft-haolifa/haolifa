@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.TaskRemind;
+import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.PageParam;
 
 import java.util.List;
 
@@ -21,14 +23,14 @@ public interface TaskRemindService {
      *
      * @return
      */
-    List<TaskRemind> taskRemindList();
+    PageDTO<TaskRemind> taskRemindList(PageParam pageParam);
 
     /**
      * 添加任务提醒
      *
      * @return
      */
-    void taskRemindList(TaskRemind taskRemind);
+    void addTask(TaskRemind taskRemind);
 
 
 }
