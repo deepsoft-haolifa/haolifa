@@ -45,12 +45,36 @@ CREATE TABLE `sys_login_log` (
 	  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出库状态（1 未出库；2.出库完成）',
 	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 	  `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
-	  `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
 	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 	  PRIMARY KEY (`id`),
 	  INDEX idx_order_no (`order_no`),
 	  UNIQUE KEY  uk_multi (`order_no`,graph_no)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领料单表';
+
+-- entrust 添加出库状态
+alter table entrust add COLUMN  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出库状态（1 未出库；2.出库完成）';
+
+-- spray 添加出库状态
+alter table spray_item add COLUMN  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出库状态（1 未出库；2.出库完成）';
+
+
+-- 任务提醒表
+    DROP TABLE IF EXISTS `task_remind`;
+	CREATE TABLE `task_remind` (
+	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+	  `title` varchar(64) NOT NULL DEFAULT '' COMMENT '提醒标题',
+	  `content` varchar(512) NOT NULL DEFAULT '' COMMENT '提醒内容',
+	  `role_id` int(11) NOT NULL COMMENT '角色Id（哪个角色能看到这条内容）',
+	  `read_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0 未读；1 已读',
+	  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	  `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
+	  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+	  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	  PRIMARY KEY (`id`),
+	  INDEX idx_role_id (`role_id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务提醒表';
+
 
 -- 成品价格管理表
 DROP TABLE IF EXISTS `price_product` ;
@@ -65,14 +89,6 @@ CREATE TABLE `price_product` (
   `update_user` int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品价格管理表';
-
--- entrust 添加出库状态
-alter table entrust add COLUMN  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出库状态（1 未出库；2.出库完成）';
-
--- spray 添加出库状态
-alter table spray_item add COLUMN  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出库状态（1 未出库；2.出库完成）';
-
-
 insert into price_product (product_no,product_model,ex_factory_price) values ('D7A1X3D-16Z-DN50','D220A',61);
 insert into price_product (product_no,product_model,ex_factory_price) values ('D7A1X3D-16Z-DN65','D220A',72);
 insert into price_product (product_no,product_model,ex_factory_price) values ('D7A1X3D-16Z-DN80','D220A',79);

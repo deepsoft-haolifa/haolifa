@@ -92,7 +92,7 @@
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-        <table tableName="material_requisition" domainObjectName="MaterialRequisition">
+        <table tableName="task_remind" domainObjectName="TaskRemind">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 

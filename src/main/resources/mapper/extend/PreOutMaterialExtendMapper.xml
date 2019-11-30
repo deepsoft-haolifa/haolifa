@@ -17,7 +17,7 @@
         ) un
         where 1=1
 
-        <if test="outRoomStatus!= null">
+        <if test="outRoomStatus!= null and outRoomStatus>0">
             and un.outRoomStatus = #{outRoomStatus}
         </if>
         <if test="type!= null">
