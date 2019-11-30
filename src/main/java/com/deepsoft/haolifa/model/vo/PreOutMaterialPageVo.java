@@ -26,4 +26,7 @@ public class PreOutMaterialPageVo extends PageParam {
 
     @ApiModelProperty(value = "类型（1.领料单出库；2.机加工委托；3.喷涂委托）")
     private Integer type;
+
+    @ApiModelProperty(value = "出库状态（1.未出库；2.已出库）")
+    private Integer outRoomStatus;
 }
