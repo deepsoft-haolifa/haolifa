@@ -4,8 +4,6 @@ import com.deepsoft.haolifa.model.domain.TaskRemind;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.PageParam;
 
-import java.util.List;
-
 /**
  * 任务提醒
  *

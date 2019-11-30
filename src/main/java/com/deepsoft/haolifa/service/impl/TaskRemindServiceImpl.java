@@ -61,6 +61,7 @@ public class TaskRemindServiceImpl implements TaskRemindService {
 
         PageDTO<TaskRemind> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(page, pageDTO);
+        pageDTO.setList(page.getResult());
         return pageDTO;
     }
 
