@@ -1,73 +1,25 @@
 package com.deepsoft.haolifa.controller;
 
 
-import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.MATERIAL;
-import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.PRODUCT;
-
 import com.deepsoft.haolifa.annotation.LogNotPrint;
-import com.deepsoft.haolifa.dao.repository.EntryOutStoreRecordMapper;
-import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
-import com.deepsoft.haolifa.dao.repository.InspectHistoryMapper;
-import com.deepsoft.haolifa.dao.repository.MaterialMapper;
-import com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper;
-import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
-import com.deepsoft.haolifa.model.domain.Entrust;
-import com.deepsoft.haolifa.model.domain.EntryOutStoreRecord;
-import com.deepsoft.haolifa.model.domain.EntryOutStoreRecordExample;
-import com.deepsoft.haolifa.model.domain.Expenses;
-import com.deepsoft.haolifa.model.domain.ExpensesExample;
-import com.deepsoft.haolifa.model.domain.InspectHistory;
-import com.deepsoft.haolifa.model.domain.InspectHistoryExample;
-import com.deepsoft.haolifa.model.domain.Material;
-import com.deepsoft.haolifa.model.domain.MaterialExample;
-import com.deepsoft.haolifa.model.domain.ProInspectRecord;
-import com.deepsoft.haolifa.model.domain.ProInspectRecordExample;
-import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
-import com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample;
+import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.export.ExportExpensesDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportMaterialEntryRoomDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportMaterialRecordDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportProductEntryRoomDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportProductOutRoomDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportSprayEntryRoomDTO;
-import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
+import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
-import com.deepsoft.haolifa.service.EntrustService;
-import com.deepsoft.haolifa.service.OrderProductService;
-import com.deepsoft.haolifa.service.PurcahseOrderService;
-import com.deepsoft.haolifa.service.SprayService;
+import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -75,6 +27,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.MATERIAL;
+import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.PRODUCT;
 
 @LogNotPrint
 @RestController
@@ -109,6 +73,9 @@ public class ExportExcelController {
 
     @Autowired
     private MaterialMapper materialMapper;
+
+    @Autowired
+    private MaterialRequisitionService materialRequisitionService;
 
     @ApiOperation("导出采购订单")
     @GetMapping("/purchaseOrder/{formId}")
@@ -777,24 +744,24 @@ public class ExportExcelController {
         cellTitle2.setCellValue("零件名称");
         Cell cellTitle3 = rowTitle.createCell(3);
         cellTitle3.setCellValue("需要的零件数量");
-        Cell cellTitle4 = rowTitle.createCell(4);
-        cellTitle4.setCellValue("缺少的零件数量");
+//        Cell cellTitle4 = rowTitle.createCell(4);
+//        cellTitle4.setCellValue("缺少的零件数量");
 //        Cell cellTitle5 = rowTitle.createCell(5);
 //        cellTitle5.setCellValue("状态");
 
-        List<OrderMaterialDTO> orderMaterialDTOS = orderProductService.listOrderMaterial(orderNo);
-        for (OrderMaterialDTO orderMaterialDTO : orderMaterialDTOS) {
+        List<MaterialRequisition> orderMaterialDTOS = materialRequisitionService.detailList(orderNo);
+        for (MaterialRequisition orderMaterialDTO : orderMaterialDTOS) {
             Row row = sheet.createRow(++rowIdx);
             Cell cell = row.createCell(0);
             cell.setCellValue(orderMaterialDTO.getOrderNo());
             Cell cell1 = row.createCell(1);
-            cell1.setCellValue(orderMaterialDTO.getMaterialGraphNo());
+            cell1.setCellValue(orderMaterialDTO.getGraphNo());
             Cell cell2 = row.createCell(2);
             cell2.setCellValue(orderMaterialDTO.getMaterialName());
             Cell cell3 = row.createCell(3);
-            cell3.setCellValue(orderMaterialDTO.getMaterialCount());
-            Cell cell4 = row.createCell(4);
-            cell4.setCellValue(orderMaterialDTO.getLackMaterialCount());
+            cell3.setCellValue(orderMaterialDTO.getQuantity());
+//            Cell cell4 = row.createCell(4);
+//            cell4.setCellValue(orderMaterialDTO.getLackMaterialCount());
 //            Cell cell5 = row.createCell(5);
 //            cell5.setCellValue(orderMaterialDTO.getCheckStatus());
         }
