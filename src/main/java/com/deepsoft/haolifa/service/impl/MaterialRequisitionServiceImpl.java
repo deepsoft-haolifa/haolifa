@@ -47,13 +47,23 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
     @Transactional(rollbackFor = Exception.class)
     public boolean addBatch(List<MaterialRequisition> list) {
         // 判断图号是否在图号库中
+        String orderNo = "";
         for (MaterialRequisition materialRequisition : list) {
+            orderNo = materialRequisition.getOrderNo();
             String graphNo = materialRequisition.getGraphNo();
             boolean existsGraphNo = materialService.existsGraphNo(graphNo);
             if (!existsGraphNo) {
                 throw new BaseException(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_NOT_EXIST_1, (Object) graphNo);
             }
         }
+        // 判断是否已经保存过领料单
+        MaterialRequisitionExample materialRequisitionExample = new MaterialRequisitionExample();
+        materialRequisitionExample.or().andOrderNoEqualTo(orderNo);
+        int count = materialRequisitionMapper.countByExample(materialRequisitionExample);
+        if (count > 0) {
+            throw new BaseException(CommonEnum.ResponseEnum.MATERIAL_REQUISITION_EXIST);
+        }
+
         for (MaterialRequisition materialRequisition : list) {
             materialRequisition.setRequisitionNo("ll_" + RandomUtils.orderNoStr());
             materialRequisition.setOutRoomStatus(CommonEnum.OutRoomStatus.NOT_OUT.type);
