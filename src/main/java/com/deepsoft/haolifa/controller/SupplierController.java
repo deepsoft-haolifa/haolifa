@@ -4,10 +4,7 @@ package com.deepsoft.haolifa.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.model.domain.Supplier;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.SupplierListDTO;
-import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.SupplierService;
 import io.swagger.annotations.*;
 import org.omg.PortableInterceptor.INACTIVE;
@@ -97,5 +94,9 @@ public class SupplierController {
     }
 
 
-
+    @ApiOperation("查询供应商列表")
+    @PostMapping("supplier-list")
+    public ResultBean supplierList(@RequestBody SupplierReqDTO supplierReqDTO) {
+        return ResultBean.success(supplierService.supplierList(supplierReqDTO));
+    }
 }

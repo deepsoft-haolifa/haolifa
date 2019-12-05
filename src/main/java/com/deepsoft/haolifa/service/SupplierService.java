@@ -1,8 +1,12 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.Supplier;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierListDTO;
+import com.deepsoft.haolifa.model.dto.SupplierReqDTO;
 import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
+
+import java.util.List;
 
 public interface SupplierService {
 
@@ -42,4 +46,12 @@ public interface SupplierService {
   void updateSupplierStatus(String supplierNo,Integer status, Integer instanceId);
 
   ResultBean evaluationRecords(String supplierNo);
+
+
+    /**
+     * 根据图号获取供应商列表
+     * @param supplierReqDTO
+     * @return
+     */
+    List<Supplier> supplierList(SupplierReqDTO supplierReqDTO);
 }

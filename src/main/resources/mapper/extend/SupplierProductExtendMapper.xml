@@ -30,4 +30,26 @@
     </if>
   </select>
 
+    <select id="getSupplierList" parameterType="com.deepsoft.haolifa.model.dto.SupplierReqDTO"
+            resultType="com.deepsoft.haolifa.model.domain.Supplier">
+    SELECT
+    *
+    FROM
+    supplier
+    WHERE
+    is_delete = 0
+    AND suppiler_no IN (
+    SELECT
+    supplier_no
+    FROM
+    ( SELECT supplier_no, count( 1 ) cou FROM `supplier_product` WHERE material_graph_no IN
+        <foreach collection="graphNos" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    GROUP BY supplier_no ) a
+    WHERE
+    a.cou >= #{materialCount}
+    );
+</select>
+
 </mapper>
