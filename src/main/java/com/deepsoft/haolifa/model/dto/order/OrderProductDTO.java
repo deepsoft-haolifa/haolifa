@@ -94,4 +94,7 @@ public class OrderProductDTO {
     @ApiModelProperty(value = "装配小组")
     private String assemblyGroup;
 
+    @ApiModelProperty(value = "是否生成了领料单")
+    private Byte genPickingList;
+
 }
