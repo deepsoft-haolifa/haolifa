@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
 import com.deepsoft.haolifa.service.MaterialRequisitionService;
 import com.deepsoft.haolifa.service.MaterialService;
+import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -35,7 +36,8 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
 
     @Resource
     private MaterialService materialService;
-
+    @Resource
+    private OrderProductService orderProductService;
     @Resource
     private MaterialRequisitionMapper materialRequisitionMapper;
 
@@ -69,6 +71,9 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
             materialRequisition.setOutRoomStatus(CommonEnum.OutRoomStatus.NOT_OUT.type);
             materialRequisitionMapper.insertSelective(materialRequisition);
         }
+
+        // 将订单的 是否生成领料单状态修改
+        orderProductService.updateGenPickList(orderNo, CommonEnum.Consts.YES.code);
 
         return true;
     }

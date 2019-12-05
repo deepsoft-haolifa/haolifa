@@ -100,7 +100,9 @@ public class OrderProduct {
 
     private BigDecimal receivedAccount;
 
-    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String orderContractExtendUrl, String technicalRequire, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String assemblyShop, String assemblyGroup, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String remark, Byte deliverStatus, String accessory, Integer qualifiedNumber, Integer pressureQualifiedNumber, Integer deliveredNumber, BigDecimal receivedAccount) {
+    private Byte genPickingList;
+
+    public OrderProduct(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String orderNo, String orderContractNo, Byte orderStatus, String orderContractUrl, String orderContractExtendUrl, String technicalRequire, String finishFeedbackTime, String feedbackTimeConfirmUser, String purchaseFeedbackTime, String productionFeedbackTime, String assemblyShop, String assemblyGroup, String demandName, String demandAgentName, String demandPhone, String demandFax, String demandBankName, String demandBankCardNo, String supplyName, String supplyAgentName, String supplyPhone, String supplyFax, String supplyBankName, String contractBankCardNo, String deliveryPlace, String deliveryDate, String contractSignDate, Integer totalCount, BigDecimal discountTotalPrice, BigDecimal totalPrice, String specialRequire, String cargoInformation, String signBoard, String acceptanceCriteria, String warrantyPeriod, String packagingSpecification, String remark, Byte deliverStatus, String accessory, Integer qualifiedNumber, Integer pressureQualifiedNumber, Integer deliveredNumber, BigDecimal receivedAccount, Byte genPickingList) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -149,6 +151,7 @@ public class OrderProduct {
         this.pressureQualifiedNumber = pressureQualifiedNumber;
         this.deliveredNumber = deliveredNumber;
         this.receivedAccount = receivedAccount;
+        this.genPickingList = genPickingList;
     }
 
     public OrderProduct() {
@@ -537,5 +540,13 @@ public class OrderProduct {
 
     public void setReceivedAccount(BigDecimal receivedAccount) {
         this.receivedAccount = receivedAccount;
+    }
+
+    public Byte getGenPickingList() {
+        return genPickingList;
+    }
+
+    public void setGenPickingList(Byte genPickingList) {
+        this.genPickingList = genPickingList;
     }
 }

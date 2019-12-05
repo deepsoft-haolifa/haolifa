@@ -51,6 +51,7 @@
       <arg column="pressure_qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="delivered_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="received_account" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="gen_picking_list" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -120,7 +121,8 @@
     contract_bank_card_no, delivery_place, delivery_date, contract_sign_date, total_count, 
     discount_total_price, total_price, special_require, cargo_information, sign_board, 
     acceptance_criteria, warranty_period, packaging_specification, remark, deliver_status, 
-    accessory, qualified_number, pressure_qualified_number, delivered_number, received_account
+    accessory, qualified_number, pressure_qualified_number, delivered_number, received_account, 
+    gen_picking_list
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" >
     select
@@ -172,7 +174,8 @@
       warranty_period, packaging_specification, 
       remark, deliver_status, accessory, 
       qualified_number, pressure_qualified_number, 
-      delivered_number, received_account)
+      delivered_number, received_account, gen_picking_list
+      )
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
       #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR}, 
       #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{orderContractExtendUrl,jdbcType=VARCHAR}, 
@@ -189,7 +192,8 @@
       #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{deliverStatus,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR}, 
       #{qualifiedNumber,jdbcType=INTEGER}, #{pressureQualifiedNumber,jdbcType=INTEGER}, 
-      #{deliveredNumber,jdbcType=INTEGER}, #{receivedAccount,jdbcType=DECIMAL})
+      #{deliveredNumber,jdbcType=INTEGER}, #{receivedAccount,jdbcType=DECIMAL}, #{genPickingList,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -338,6 +342,9 @@
       <if test="receivedAccount != null" >
         received_account,
       </if>
+      <if test="genPickingList != null" >
+        gen_picking_list,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="createTime != null" >
@@ -480,6 +487,9 @@
       </if>
       <if test="receivedAccount != null" >
         #{receivedAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="genPickingList != null" >
+        #{genPickingList,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -636,6 +646,9 @@
       <if test="record.receivedAccount != null" >
         received_account = #{record.receivedAccount,jdbcType=DECIMAL},
       </if>
+      <if test="record.genPickingList != null" >
+        gen_picking_list = #{record.genPickingList,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -690,7 +703,8 @@
       qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
       pressure_qualified_number = #{record.pressureQualifiedNumber,jdbcType=INTEGER},
       delivered_number = #{record.deliveredNumber,jdbcType=INTEGER},
-      received_account = #{record.receivedAccount,jdbcType=DECIMAL}
+      received_account = #{record.receivedAccount,jdbcType=DECIMAL},
+      gen_picking_list = #{record.genPickingList,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -839,6 +853,9 @@
       <if test="receivedAccount != null" >
         received_account = #{receivedAccount,jdbcType=DECIMAL},
       </if>
+      <if test="genPickingList != null" >
+        gen_picking_list = #{genPickingList,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -890,7 +907,8 @@
       qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
       pressure_qualified_number = #{pressureQualifiedNumber,jdbcType=INTEGER},
       delivered_number = #{deliveredNumber,jdbcType=INTEGER},
-      received_account = #{receivedAccount,jdbcType=DECIMAL}
+      received_account = #{receivedAccount,jdbcType=DECIMAL},
+      gen_picking_list = #{genPickingList,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

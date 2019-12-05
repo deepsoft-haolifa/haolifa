@@ -3325,6 +3325,66 @@ public class OrderProductExample {
             addCriterion("received_account not between", value1, value2, "receivedAccount");
             return (Criteria) this;
         }
+
+        public Criteria andGenPickingListIsNull() {
+            addCriterion("gen_picking_list is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListIsNotNull() {
+            addCriterion("gen_picking_list is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListEqualTo(Byte value) {
+            addCriterion("gen_picking_list =", value, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListNotEqualTo(Byte value) {
+            addCriterion("gen_picking_list <>", value, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListGreaterThan(Byte value) {
+            addCriterion("gen_picking_list >", value, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListGreaterThanOrEqualTo(Byte value) {
+            addCriterion("gen_picking_list >=", value, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListLessThan(Byte value) {
+            addCriterion("gen_picking_list <", value, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListLessThanOrEqualTo(Byte value) {
+            addCriterion("gen_picking_list <=", value, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListIn(List<Byte> values) {
+            addCriterion("gen_picking_list in", values, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListNotIn(List<Byte> values) {
+            addCriterion("gen_picking_list not in", values, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListBetween(Byte value1, Byte value2) {
+            addCriterion("gen_picking_list between", value1, value2, "genPickingList");
+            return (Criteria) this;
+        }
+
+        public Criteria andGenPickingListNotBetween(Byte value1, Byte value2) {
+            addCriterion("gen_picking_list not between", value1, value2, "genPickingList");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
