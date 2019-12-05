@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderCompleteDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,6 +22,8 @@ public class PurchaseOrderController {
 
   @Autowired
   private PurcahseOrderService purcahseOrderService;
+  @Autowired
+  private ApplyBuyService applyBuyService;
 
   @ApiOperation("创建采购订单")
   @PostMapping("save/{orderType}")
@@ -81,4 +84,14 @@ public class PurchaseOrderController {
   public ResultBean createInspect(@PathVariable("formId") Integer formId) {
     return purcahseOrderService.createInspect(formId);
   }
+    @ApiOperation("合并待采购之后进行创建采购订单--applyBuyIds表示待采购列表等id 多个逗号分隔")
+    @PostMapping("save/{orderType}/{applyBuyIds}")
+    public ResultBean save(@RequestBody PurchaseOrderDTO model,@PathVariable("orderType") Integer orderType,@PathVariable("applyBuyIds") String applyBuyIds) {
+        String[] strings =applyBuyIds.split(",");
+        for(String string : strings){
+            Integer itemId = Integer.parseInt(string);
+            applyBuyService.updateStatus(itemId);
+        }
+        return purcahseOrderService.save(model, orderType);
+    }
 }
