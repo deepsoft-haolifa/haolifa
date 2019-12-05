@@ -869,7 +869,7 @@ public class ExportExcelController {
         for (SprayItemDto itemDto : sprayDto.getItems()) {
             Row row = sheet.createRow(++rowIdx);
             Cell cell = row.createCell(0);
-            cell.setCellValue(itemDto.getMaterialClassifyName());
+            cell.setCellValue(itemDto.getMaterialName());
             cell.setCellStyle(border);
 
             Cell cell1 = row.createCell(1);

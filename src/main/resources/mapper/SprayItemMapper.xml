@@ -9,7 +9,7 @@
       <arg column="sprayed_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="model" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="material_classify_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="special_requires" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="spray_color" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -82,7 +82,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, spray_no, material_graph_no, sprayed_graph_no, specifications, model, material_classify_name, 
+    id, spray_no, material_graph_no, sprayed_graph_no, specifications, model, material_name, 
     material, special_requires, spray_color, number, qualified_number, remark, complete_time, 
     create_time, update_time, batch_number, out_room_status
   </sql>
@@ -121,13 +121,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into spray_item (spray_no, material_graph_no, sprayed_graph_no, 
-      specifications, model, material_classify_name, 
+      specifications, model, material_name, 
       material, special_requires, spray_color, 
       number, qualified_number, remark, 
       complete_time, create_time, update_time, 
       batch_number, out_room_status)
     values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{sprayedGraphNo,jdbcType=VARCHAR}, 
-      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{materialClassifyName,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
       #{material,jdbcType=VARCHAR}, #{specialRequires,jdbcType=VARCHAR}, #{sprayColor,jdbcType=VARCHAR}, 
       #{number,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{completeTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
@@ -154,8 +154,8 @@
       <if test="model != null" >
         model,
       </if>
-      <if test="materialClassifyName != null" >
-        material_classify_name,
+      <if test="materialName != null" >
+        material_name,
       </if>
       <if test="material != null" >
         material,
@@ -207,8 +207,8 @@
       <if test="model != null" >
         #{model,jdbcType=VARCHAR},
       </if>
-      <if test="materialClassifyName != null" >
-        #{materialClassifyName,jdbcType=VARCHAR},
+      <if test="materialName != null" >
+        #{materialName,jdbcType=VARCHAR},
       </if>
       <if test="material != null" >
         #{material,jdbcType=VARCHAR},
@@ -272,8 +272,8 @@
       <if test="record.model != null" >
         model = #{record.model,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialClassifyName != null" >
-        material_classify_name = #{record.materialClassifyName,jdbcType=VARCHAR},
+      <if test="record.materialName != null" >
+        material_name = #{record.materialName,jdbcType=VARCHAR},
       </if>
       <if test="record.material != null" >
         material = #{record.material,jdbcType=VARCHAR},
@@ -321,7 +321,7 @@
       sprayed_graph_no = #{record.sprayedGraphNo,jdbcType=VARCHAR},
       specifications = #{record.specifications,jdbcType=VARCHAR},
       model = #{record.model,jdbcType=VARCHAR},
-      material_classify_name = #{record.materialClassifyName,jdbcType=VARCHAR},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
       material = #{record.material,jdbcType=VARCHAR},
       special_requires = #{record.specialRequires,jdbcType=VARCHAR},
       spray_color = #{record.sprayColor,jdbcType=VARCHAR},
@@ -355,8 +355,8 @@
       <if test="model != null" >
         model = #{model,jdbcType=VARCHAR},
       </if>
-      <if test="materialClassifyName != null" >
-        material_classify_name = #{materialClassifyName,jdbcType=VARCHAR},
+      <if test="materialName != null" >
+        material_name = #{materialName,jdbcType=VARCHAR},
       </if>
       <if test="material != null" >
         material = #{material,jdbcType=VARCHAR},
@@ -401,7 +401,7 @@
       sprayed_graph_no = #{sprayedGraphNo,jdbcType=VARCHAR},
       specifications = #{specifications,jdbcType=VARCHAR},
       model = #{model,jdbcType=VARCHAR},
-      material_classify_name = #{materialClassifyName,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
       material = #{material,jdbcType=VARCHAR},
       special_requires = #{specialRequires,jdbcType=VARCHAR},
       spray_color = #{sprayColor,jdbcType=VARCHAR},

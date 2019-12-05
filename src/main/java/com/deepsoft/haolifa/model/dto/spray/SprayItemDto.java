@@ -14,7 +14,7 @@ public class SprayItemDto {
 
   private String model;
 
-  private String materialClassifyName;
+  private String materialName;
 
   private String material;
 

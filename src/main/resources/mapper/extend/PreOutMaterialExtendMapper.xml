@@ -13,7 +13,7 @@
 
         union all
 
-        select 3 type,id busId,spray_no busNo,material_graph_no graphNo,'' materialName,number outQuantity,batch_number batchNumber,'' deptName,out_room_status outRoomStatus,create_time createTime from spray_item b
+        select 3 type,id busId,spray_no busNo,material_graph_no graphNo,material_name materialName,number outQuantity,batch_number batchNumber,'' deptName,out_room_status outRoomStatus,create_time createTime from spray_item b
         ) un
         where 1=1
 

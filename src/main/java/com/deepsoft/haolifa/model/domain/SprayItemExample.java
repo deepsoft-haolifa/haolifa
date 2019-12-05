@@ -515,73 +515,73 @@ public class SprayItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameIsNull() {
-            addCriterion("material_classify_name is null");
+        public Criteria andMaterialNameIsNull() {
+            addCriterion("material_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameIsNotNull() {
-            addCriterion("material_classify_name is not null");
+        public Criteria andMaterialNameIsNotNull() {
+            addCriterion("material_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameEqualTo(String value) {
-            addCriterion("material_classify_name =", value, "materialClassifyName");
+        public Criteria andMaterialNameEqualTo(String value) {
+            addCriterion("material_name =", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameNotEqualTo(String value) {
-            addCriterion("material_classify_name <>", value, "materialClassifyName");
+        public Criteria andMaterialNameNotEqualTo(String value) {
+            addCriterion("material_name <>", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameGreaterThan(String value) {
-            addCriterion("material_classify_name >", value, "materialClassifyName");
+        public Criteria andMaterialNameGreaterThan(String value) {
+            addCriterion("material_name >", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameGreaterThanOrEqualTo(String value) {
-            addCriterion("material_classify_name >=", value, "materialClassifyName");
+        public Criteria andMaterialNameGreaterThanOrEqualTo(String value) {
+            addCriterion("material_name >=", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameLessThan(String value) {
-            addCriterion("material_classify_name <", value, "materialClassifyName");
+        public Criteria andMaterialNameLessThan(String value) {
+            addCriterion("material_name <", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameLessThanOrEqualTo(String value) {
-            addCriterion("material_classify_name <=", value, "materialClassifyName");
+        public Criteria andMaterialNameLessThanOrEqualTo(String value) {
+            addCriterion("material_name <=", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameLike(String value) {
-            addCriterion("material_classify_name like", value, "materialClassifyName");
+        public Criteria andMaterialNameLike(String value) {
+            addCriterion("material_name like", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameNotLike(String value) {
-            addCriterion("material_classify_name not like", value, "materialClassifyName");
+        public Criteria andMaterialNameNotLike(String value) {
+            addCriterion("material_name not like", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameIn(List<String> values) {
-            addCriterion("material_classify_name in", values, "materialClassifyName");
+        public Criteria andMaterialNameIn(List<String> values) {
+            addCriterion("material_name in", values, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameNotIn(List<String> values) {
-            addCriterion("material_classify_name not in", values, "materialClassifyName");
+        public Criteria andMaterialNameNotIn(List<String> values) {
+            addCriterion("material_name not in", values, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameBetween(String value1, String value2) {
-            addCriterion("material_classify_name between", value1, value2, "materialClassifyName");
+        public Criteria andMaterialNameBetween(String value1, String value2) {
+            addCriterion("material_name between", value1, value2, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialClassifyNameNotBetween(String value1, String value2) {
-            addCriterion("material_classify_name not between", value1, value2, "materialClassifyName");
+        public Criteria andMaterialNameNotBetween(String value1, String value2) {
+            addCriterion("material_name not between", value1, value2, "materialName");
             return (Criteria) this;
         }
 

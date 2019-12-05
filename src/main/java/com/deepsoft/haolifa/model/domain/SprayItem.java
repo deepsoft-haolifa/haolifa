@@ -15,7 +15,7 @@ public class SprayItem {
 
     private String model;
 
-    private String materialClassifyName;
+    private String materialName;
 
     private String material;
 
@@ -39,14 +39,14 @@ public class SprayItem {
 
     private Byte outRoomStatus;
 
-    public SprayItem(Integer id, String sprayNo, String materialGraphNo, String sprayedGraphNo, String specifications, String model, String materialClassifyName, String material, String specialRequires, String sprayColor, Integer number, Integer qualifiedNumber, String remark, String completeTime, Date createTime, Date updateTime, String batchNumber, Byte outRoomStatus) {
+    public SprayItem(Integer id, String sprayNo, String materialGraphNo, String sprayedGraphNo, String specifications, String model, String materialName, String material, String specialRequires, String sprayColor, Integer number, Integer qualifiedNumber, String remark, String completeTime, Date createTime, Date updateTime, String batchNumber, Byte outRoomStatus) {
         this.id = id;
         this.sprayNo = sprayNo;
         this.materialGraphNo = materialGraphNo;
         this.sprayedGraphNo = sprayedGraphNo;
         this.specifications = specifications;
         this.model = model;
-        this.materialClassifyName = materialClassifyName;
+        this.materialName = materialName;
         this.material = material;
         this.specialRequires = specialRequires;
         this.sprayColor = sprayColor;
@@ -112,12 +112,12 @@ public class SprayItem {
         this.model = model == null ? null : model.trim();
     }
 
-    public String getMaterialClassifyName() {
-        return materialClassifyName;
+    public String getMaterialName() {
+        return materialName;
     }
 
-    public void setMaterialClassifyName(String materialClassifyName) {
-        this.materialClassifyName = materialClassifyName == null ? null : materialClassifyName.trim();
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName == null ? null : materialName.trim();
     }
 
     public String getMaterial() {
