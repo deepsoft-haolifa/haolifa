@@ -1604,7 +1604,10 @@ public class ExportExcelController {
             criteria.andUpdateTimeLessThanOrEqualTo(endDate);
         }
         if (StringUtils.isNotEmpty(dto.getMaterialGraphNo())) {
-            criteria.andMaterialGraphNoEqualTo("%" + dto.getMaterialGraphNo() + "%");
+            criteria.andMaterialGraphNoLike("%" + dto.getMaterialGraphNo() + "%");
+        }
+        if (StringUtils.isNotEmpty(dto.getOrderNo())) {
+            criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
         }
         if (dto.getOperationType() != null) {
             criteria.andOperationTypeEqualTo(dto.getOperationType().byteValue());
