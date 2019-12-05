@@ -304,13 +304,12 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         }
 
         // 插入出入库记录表
-        EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord() {{
-            setOperationType(operationType);
-            setType(storageType);
-            setCreateUser(getLoginUserId());
-            setRecordId(RandomUtils.uuidStr());
-        }};
+        EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord();
         BeanUtils.copyProperties(model, entryOutStoreRecord);
+        entryOutStoreRecord.setOperationType(operationType);
+        entryOutStoreRecord.setType(storageType);
+        entryOutStoreRecord.setCreateUser(getLoginUserId());
+        entryOutStoreRecord.setRecordId(RandomUtils.uuidStr());
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
 
         if (insert > 0) {
@@ -349,22 +348,26 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }
 
             // 如果是有单号的入库，将其出库状态修改
-            if (StringUtils.isNotBlank(model.getBusNo()) && model.getType() != null && model.getType() > 0) {
+            String busNo = model.getBusNo();
+            Integer busId = model.getBusId();
+            if (StringUtils.isNotBlank(busNo) && model.getType() != null && model.getType() > 0) {
                 if (model.getType().equals(CommonEnum.materialOutType.MATERIAL_REQUISITION.type)) {
                     MaterialRequisitionExample requisitionExample = new MaterialRequisitionExample();
-                    requisitionExample.or().andOrderNoEqualTo(model.getBusNo());
+                    requisitionExample.or().andOrderNoEqualTo(busNo).andIdEqualTo(busId);
                     MaterialRequisition materialRequisition = new MaterialRequisition();
                     materialRequisition.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
                     materialRequisitionMapper.updateByExampleSelective(materialRequisition, requisitionExample);
                 } else if (model.getType().equals(CommonEnum.materialOutType.ENTRUST.type)) {
                     EntrustExample entrustExample = new EntrustExample();
-                    entrustExample.or().andEntrustNoEqualTo(model.getBusNo());
+                    entrustExample.or().andEntrustNoEqualTo(busNo).andIdEqualTo(busId);
+                    ;
                     Entrust entrust = new Entrust();
                     entrust.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
                     entrustMapper.updateByExampleSelective(entrust, entrustExample);
                 } else if (model.getType().equals(CommonEnum.materialOutType.SPRAY.type)) {
                     SprayItemExample sprayItemExample = new SprayItemExample();
-                    sprayItemExample.or().andSprayNoEqualTo(model.getBusNo());
+                    sprayItemExample.or().andSprayNoEqualTo(busNo).andIdEqualTo(busId);
+                    ;
                     SprayItem sprayItem = new SprayItem();
                     sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
                     sprayItemMapper.updateByExampleSelective(sprayItem, sprayItemExample);

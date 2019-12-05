@@ -11,6 +11,9 @@ import lombok.Data;
 @Data
 public class PreOutMaterialVo {
 
+    @ApiModelProperty(value = "业务Id")
+    private Integer busId;
+
     @ApiModelProperty(value = "订单号、委托单号")
     private String busNo;
 

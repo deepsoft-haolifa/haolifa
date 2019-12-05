@@ -11,7 +11,8 @@ import lombok.Data;
  **/
 @Data
 public class PreOutMaterialPageVo extends PageParam {
-    
+
+
     @ApiModelProperty(value = "订单号、委托单号")
     private String busNo;
 

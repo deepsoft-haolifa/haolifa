@@ -57,9 +57,9 @@ public class MaterialController {
 
     @ApiOperation("零件类别分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "分类名称", name = "classifyNameLike", dataType = "string", paramType = "query")
+        @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(value = "分类名称", name = "classifyNameLike", dataType = "string", paramType = "query")
     })
     @GetMapping("/classify/pageInfo")
     public ResultBean pageInfoClassify(@RequestParam(defaultValue = "1") Integer currentPage,
@@ -94,6 +94,12 @@ public class MaterialController {
     @ApiImplicitParam(name = "id", value = "主键id", dataType = "int", paramType = "path", required = true)
     public ResultBean getInfo(@PathVariable int id) {
         return ResultBean.success(materialService.getInfoById(id));
+    }
+
+    @ApiOperation("根据图号查询零件详情")
+    @GetMapping("/getInfoByNo")
+    public ResultBean getInfo(@RequestParam String graphNo) {
+        return ResultBean.success(materialService.getInfoByGraphNo(graphNo));
     }
 
 
