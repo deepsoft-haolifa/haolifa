@@ -26,6 +26,7 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
@@ -51,6 +52,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @Slf4j
@@ -79,7 +81,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     private InspectItemMapper inspectItemMapper;
 
     @Autowired
-    private FlowInstanceMapper flowInstanceMapper;
+    private ApplyBuyService applyBuyService;
 
     @Autowired
     private SupplierMapper supplierMapper;
@@ -128,6 +130,14 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         log.info("添加订单单项：{}", JSON.toJSONString(items));
         itemExtendMapper.batchInsertPurchaseOrderItem(items);
         uploadPurchaseExcelService.uploadPurchaseOrderExcel(purchaseOrder.getId());
+        // 如果带了待采购的Id，将其更新成已完成
+        List<Integer> applyBuyIds = model.getApplyBuyIds();
+        if(!CollectionUtils.isEmpty(applyBuyIds)){
+            for (Integer applyBuyId : applyBuyIds) {
+                applyBuyService.updateStatus(applyBuyId);
+            }
+        }
+
         Map<String, Object> result = new HashMap<>(8);
         result.put("formId", purchaseOrder.getId());
         result.put("formType", PURCHASE_TYPE.code);

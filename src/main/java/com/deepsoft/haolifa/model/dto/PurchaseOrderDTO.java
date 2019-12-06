@@ -47,4 +47,7 @@ public class PurchaseOrderDTO {
     @ApiModelProperty(required = true,value = "采购单项")
     private List<PurchaseOrderItem> itemList;
 
+    @ApiModelProperty(value = "从待采购列表带过来的ID")
+    private List<Integer> applyBuyIds;
+
 }
