@@ -34,6 +34,9 @@
             resultType="com.deepsoft.haolifa.model.dto.SupplierRespDTO">
     SELECT
         s.id id, s.suppiler_name supplierName, s.suppiler_no suppilerNo
+        s.phone,s.address,
+        s.legal_person legalPerson,s.legal_person_phone legalPersonPhone,
+        s.responsible_person responsiblePerson
     FROM
     supplier s
     WHERE

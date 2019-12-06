@@ -14,4 +14,16 @@ public class SupplierRespDTO {
     private String supplierName;
     @ApiModelProperty(value = "id")
     private Integer id;
+
+    private String phone;
+
+    private String address;
+
+    private String legalPerson;
+
+    private String legalPersonPhone;
+
+    private String responsiblePerson;
+
+
 }
