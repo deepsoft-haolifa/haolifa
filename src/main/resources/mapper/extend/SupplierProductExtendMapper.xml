@@ -31,14 +31,14 @@
   </select>
 
     <select id="getSupplierList" parameterType="com.deepsoft.haolifa.model.dto.SupplierReqDTO"
-            resultType="com.deepsoft.haolifa.model.domain.Supplier">
+            resultType="com.deepsoft.haolifa.model.dto.SupplierRespDTO">
     SELECT
-    *
+        s.id id, s.suppiler_name supplierName, s.suppiler_no suppilerNo
     FROM
-    supplier
+    supplier s
     WHERE
-    is_delete = 0
-    AND suppiler_no IN (
+    s.is_delete = 0
+    AND s.suppiler_no IN (
     SELECT
     supplier_no
     FROM

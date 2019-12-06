@@ -1,10 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.Supplier;
-import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.SupplierListDTO;
-import com.deepsoft.haolifa.model.dto.SupplierReqDTO;
-import com.deepsoft.haolifa.model.dto.SupplierRequestDTO;
+import com.deepsoft.haolifa.model.dto.*;
 
 import java.util.List;
 
@@ -53,5 +50,5 @@ public interface SupplierService {
      * @param supplierReqDTO
      * @return
      */
-    List<Supplier> supplierList(SupplierReqDTO supplierReqDTO);
+    List<SupplierRespDTO> supplierList(SupplierReqDTO supplierReqDTO);
 }

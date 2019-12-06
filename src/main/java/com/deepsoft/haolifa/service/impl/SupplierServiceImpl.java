@@ -206,7 +206,7 @@ public class SupplierServiceImpl extends BaseService implements SupplierService 
     }
 
     @Override
-    public List<Supplier> supplierList(SupplierReqDTO supplierReqDTO) {
+    public List<SupplierRespDTO> supplierList(SupplierReqDTO supplierReqDTO) {
         List<String> graphNos = supplierReqDTO.getGraphNos();
         supplierReqDTO.setMaterialCount(graphNos.size());
         return supplierProductExtendMapper.getSupplierList(supplierReqDTO);
