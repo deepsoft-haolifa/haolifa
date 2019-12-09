@@ -60,7 +60,13 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public CustomUser selectLoginUser() {
         //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = null;
+        try {
+            principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
         if ("anonymousUser".equals(principal))
             return (CustomUser) customUserService.loadUserByUsername("admin");
         else
@@ -71,7 +77,7 @@ public class SysUserServiceImpl implements SysUserService {
     public UserInfoVO selectUserInfo() {
         CustomUser customUser = selectLoginUser();
         UserInfoVO userInfoVO = new UserInfoVO(customUser.getUsername(), customUser.getRealName(),
-                customUser.getId(), customUser.getAuthorities(), permissionService.getMenu("m"));
+            customUser.getId(), customUser.getAuthorities(), permissionService.getMenu("m"));
         return userInfoVO;
     }
 
@@ -119,7 +125,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public PageDTO<UserPageVO> getUserList(Integer pageNum, Integer pageSize) {
         Page<SysUser> users = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPage(() -> userMapper.selectByExample(new SysUserExample()));
+            .doSelectPage(() -> userMapper.selectByExample(new SysUserExample()));
         log.info("users:{}", users);
         List<UserPageVO> userPageVOS = users.stream().map(u -> {
             UserCacheDTO sysUser = (UserCacheDTO) getSysUser(u.getId());
