@@ -173,7 +173,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     }
 
     @Override
-    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo, String supplierName, String batchNumber) {
+    public ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo, String supplierName, String batchNumber, Byte status) {
         InspectExample example = new InspectExample();
         InspectExample.Criteria criteria = example.createCriteria();
 //    if (type == 0) {
@@ -184,6 +184,9 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         }
         if (type == 2) {
             criteria.andStatusIn(Arrays.asList(InspectStatus.STOCK_PENDING.code, InspectStatus.STOCKED.code));
+        }
+        if (status > 0) {
+            criteria.andStatusEqualTo(status);
         }
         if (StringUtils.isNotEmpty(purchaseOrderNo)) {
             criteria.andPurchaseNoLike("%" + purchaseOrderNo + "%");
@@ -387,7 +390,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             if (!CollectionUtils.isEmpty(entrustNoSet)) {
                 EntrustExample entrustExample = new EntrustExample();
                 entrustExample.or().andEntrustNoIn(entrustNoSet);
-                 entrusts = entrustMapper.selectByExample(entrustExample);
+                entrusts = entrustMapper.selectByExample(entrustExample);
             }
             Map<String, Byte> entrustMap = Optional.ofNullable(entrusts).orElse(Collections.emptyList()).stream()
                 .collect(Collectors.toMap(Entrust::getEntrustNo, Entrust::getBusType));

@@ -51,6 +51,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         if (invoice.getId() != null) {
             invoiceMapper.updateByPrimaryKeySelective(invoice);
         } else {
+            invoice.setStatus((byte)0);
             invoiceMapper.insertSelective(invoice);
             result.put("formId", invoice.getId());
             result.put("formNo", invoice.getInvoiceNo());
