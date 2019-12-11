@@ -57,10 +57,12 @@ alter table entrust add COLUMN  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 
 
 -- spray 添加出库状态
 alter table spray_item add COLUMN  `out_room_status` tinyint(4) NOT NULL DEFAULT 0 COMMENT '出库状态（1 未出库；2.出库完成）';
+alter table spray_item change   `material_classify_id`  `material_name` `material_name` varchar(255) NOT NULL DEFAULT '' COMMENT '物料名称';
 
 -- 订单表添加是否生成领料单标识
 alter table order_product add column gen_picking_list tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否生成了领料单（0 否；1.是）';
 
+alter table spray_item change material_classify_name material_name  varchar(255) NOT NULL DEFAULT '' COMMENT '物料名称';
 -- 任务提醒表
     DROP TABLE IF EXISTS `task_remind`;
 	CREATE TABLE `task_remind` (

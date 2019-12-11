@@ -1,10 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
-import com.deepsoft.haolifa.model.dto.InvoiceCreateDTO;
-import com.deepsoft.haolifa.model.dto.InvoiceDTO;
-import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.InvoiceService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +43,12 @@ public class InvoiceController {
     @ApiOperation("查询发票记录列表")
     @PostMapping("list/{origin}")
     public ResultBean getList(@ApiParam("来源 0 经管 1 财务") @PathVariable("origin") int origin, @RequestBody InvoiceListDTO modelList) {
-        return invoiceService.getList(origin,modelList);
+        return invoiceService.getList(origin, modelList);
     }
 
-
+    @ApiOperation("更改发票状态")
+    @PostMapping("/updateStatus")
+    public ResultBean updateStatus(@RequestBody InvoiceStatusDTO statusDTO) {
+        return ResultBean.success(invoiceService.updateStatus(statusDTO));
+    }
 }

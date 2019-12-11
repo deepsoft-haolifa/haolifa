@@ -1,9 +1,6 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.InvoiceCreateDTO;
-import com.deepsoft.haolifa.model.dto.InvoiceDTO;
-import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 
 public interface InvoiceService {
     /**
@@ -49,4 +46,11 @@ public interface InvoiceService {
      * @return
      */
     ResultBean info(Integer id);
+
+    /**
+     * 更新发票状态
+     * @param statusDTO
+     * @return
+     */
+    int updateStatus(InvoiceStatusDTO statusDTO);
 }
