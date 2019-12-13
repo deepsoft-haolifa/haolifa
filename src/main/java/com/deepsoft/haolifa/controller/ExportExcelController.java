@@ -1663,7 +1663,7 @@ public class ExportExcelController {
         Cell cell_18 = columnTitle.createCell(8);
         cell_18.setCellValue("单价");
         cell_18.setCellStyle(center);
-        Cell cell_19 = columnTitle.createCell(19);
+        Cell cell_19 = columnTitle.createCell(9);
         cell_19.setCellValue("金额");
         cell_19.setCellStyle(center);
 
@@ -1762,7 +1762,7 @@ public class ExportExcelController {
         Cell cell_15 = columnTitle.createCell(5);
         cell_15.setCellValue("单价");
         cell_15.setCellStyle(center);
-        Cell cell_16 = columnTitle.createCell(16);
+        Cell cell_16 = columnTitle.createCell(6);
         cell_16.setCellValue("金额");
         cell_16.setCellStyle(center);
         List<Material> materials = materialMapper.selectByExample(new MaterialExample());
