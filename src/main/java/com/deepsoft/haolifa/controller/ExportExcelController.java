@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
@@ -923,7 +924,7 @@ public class ExportExcelController {
         CellStyle left2 = workbook.createCellStyle();
         left2.setAlignment(HorizontalAlignment.LEFT);
         cellsC.setCellValue("日 期：" + DateFormatterUtils
-                .formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayDto.getCreateTime()));
+            .formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayDto.getCreateTime()));
         cellsC.setCellStyle(left2);
 
         OutputStream outputStream = response.getOutputStream();
@@ -935,7 +936,7 @@ public class ExportExcelController {
     @ApiOperation("机加委托单下载")
     @GetMapping("entrust/excel/{entrustNo}")
     public void entrustExcel(@PathVariable("entrustNo") String entrustNo, HttpServletResponse response)
-            throws IOException {
+        throws IOException {
         response.setHeader("Content-Disposition", "attachment;filename=" + entrustNo + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
@@ -1043,7 +1044,7 @@ public class ExportExcelController {
         CellStyle left2 = workbook.createCellStyle();
         left2.setAlignment(HorizontalAlignment.LEFT);
         cellsC.setCellValue("日 期：" + DateFormatterUtils
-                .formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entrust.getCreateTime()));
+            .formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entrust.getCreateTime()));
         cellsC.setCellStyle(left2);
 
         OutputStream outputStream = response.getOutputStream();
@@ -1156,7 +1157,7 @@ public class ExportExcelController {
             cell_7.setCellStyle(center);
             Cell cell_8 = row_value.createCell(8);
             cell_8.setCellValue(
-                    DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, expenses.getCreateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, expenses.getCreateTime()));
             cell_8.setCellStyle(center);
             Cell cell_9 = row_value.createCell(9);
             cell_9.setCellValue(expenses.getVoucherNo());
@@ -1270,7 +1271,7 @@ public class ExportExcelController {
             cell_8.setCellStyle(center);
             Cell cell_9 = row_value.createCell(9);
             cell_9.setCellValue(
-                    DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, inspectHistory.getUpdateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, inspectHistory.getUpdateTime()));
             cell_9.setCellStyle(center);
         }
 
@@ -1366,7 +1367,7 @@ public class ExportExcelController {
             cell_5.setCellStyle(center);
             Cell cell_6 = row_value.createCell(6);
             cell_6.setCellValue(
-                    DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, proInspectRecord.getUpdateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, proInspectRecord.getUpdateTime()));
             cell_6.setCellStyle(center);
         }
 
@@ -1462,7 +1463,7 @@ public class ExportExcelController {
             cell_5.setCellStyle(center);
             Cell cell_6 = row_value.createCell(6);
             cell_6.setCellValue(
-                    DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayInspectHistory.getUpdateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayInspectHistory.getUpdateTime()));
             cell_6.setCellStyle(center);
         }
 
@@ -1572,7 +1573,7 @@ public class ExportExcelController {
             cell_6.setCellStyle(center);
             Cell cell_7 = row_value.createCell(7);
             cell_7.setCellValue(
-                    DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entryOutStoreRecord.getCreateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entryOutStoreRecord.getCreateTime()));
             cell_7.setCellStyle(center);
             Cell cell_8 = row_value.createCell(8);
             cell_8.setCellValue(Math.abs(entryOutStoreRecord.getQuantity()));
@@ -1659,6 +1660,12 @@ public class ExportExcelController {
         Cell cell_17 = columnTitle.createCell(7);
         cell_17.setCellValue("领料部门");
         cell_17.setCellStyle(center);
+        Cell cell_18 = columnTitle.createCell(8);
+        cell_18.setCellValue("单价");
+        cell_18.setCellStyle(center);
+        Cell cell_19 = columnTitle.createCell(19);
+        cell_19.setCellValue("金额");
+        cell_19.setCellStyle(center);
 
         for (int i = 0; i < entryOutStoreRecordList.size(); i++) {
             EntryOutStoreRecord entryOutStoreRecord = entryOutStoreRecordList.get(i);
@@ -1681,7 +1688,7 @@ public class ExportExcelController {
             cell_4.setCellStyle(center);
             Cell cell_5 = row_value.createCell(5);
             cell_5.setCellValue(
-                    DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entryOutStoreRecord.getCreateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, entryOutStoreRecord.getCreateTime()));
             cell_5.setCellStyle(center);
             Cell cell_6 = row_value.createCell(6);
             cell_6.setCellValue(Math.abs(entryOutStoreRecord.getQuantity()));
@@ -1689,6 +1696,13 @@ public class ExportExcelController {
             Cell cell_7 = row_value.createCell(7);
             cell_7.setCellValue(entryOutStoreRecord.getReceiveDepartment());
             cell_7.setCellStyle(center);
+            Cell cell_8 = row_value.createCell(8);
+            cell_8.setCellValue(String.valueOf(entryOutStoreRecord.getPrice()));
+            cell_8.setCellStyle(center);
+            Cell cell_9 = row_value.createCell(9);
+            cell_9.setCellValue(String.valueOf(entryOutStoreRecord.getAmount()));
+            cell_9.setCellStyle(center);
+
         }
         sheet.autoSizeColumn(0, true);
         sheet.autoSizeColumn(1, true);
@@ -1709,7 +1723,7 @@ public class ExportExcelController {
     @ApiOperation("导出零件结存数据")
     @GetMapping("/material/surplus")
     public void materialSurplus(HttpServletResponse response, HttpServletRequest request)
-            throws IOException {
+        throws IOException {
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件结存明细", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
@@ -1745,7 +1759,12 @@ public class ExportExcelController {
         Cell cell_14 = columnTitle.createCell(4);
         cell_14.setCellValue("单位");
         cell_14.setCellStyle(center);
-
+        Cell cell_15 = columnTitle.createCell(5);
+        cell_15.setCellValue("单价");
+        cell_15.setCellStyle(center);
+        Cell cell_16 = columnTitle.createCell(16);
+        cell_16.setCellValue("金额");
+        cell_16.setCellStyle(center);
         List<Material> materials = materialMapper.selectByExample(new MaterialExample());
         for (int i = 0; i < materials.size(); i++) {
             Material material = materials.get(i);
@@ -1765,6 +1784,13 @@ public class ExportExcelController {
             Cell cell_4 = row_value.createCell(4);
             cell_4.setCellValue(material.getUnit());
             cell_4.setCellStyle(center);
+            Cell cell_5 = row_value.createCell(5);
+            cell_5.setCellValue(String.valueOf(material.getPrice()));
+            cell_5.setCellStyle(center);
+            BigDecimal amount = material.getPrice().multiply(new BigDecimal(material.getCurrentQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP);
+            Cell cell_6 = row_value.createCell(6);
+            cell_6.setCellValue(String.valueOf(amount));
+            cell_6.setCellStyle(center);
         }
 
         sheet.autoSizeColumn(1, true);
