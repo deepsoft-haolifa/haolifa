@@ -55,7 +55,6 @@ public class SyncEventListener {
             invoiceCreateDTO.setInvoiceCompany(demandName);
             invoiceCreateDTO.setInvoiceIssuing(supplyName);
             invoiceCreateDTO.setTotalAmount(orderProductInfo.getTotalPrice().doubleValue());
-            invoiceCreateDTO.setStatus(0);
             invoiceCreateDTO.setType(1);
 
             log.info("delivery complete async add invoice record model:{}", JSONObject.toJSONString(invoiceCreateDTO));
