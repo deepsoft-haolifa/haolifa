@@ -1699,8 +1699,9 @@ public class ExportExcelController {
             Cell cell_8 = row_value.createCell(8);
             cell_8.setCellValue(String.valueOf(entryOutStoreRecord.getPrice()));
             cell_8.setCellStyle(center);
+            BigDecimal amount = entryOutStoreRecord.getPrice().multiply(new BigDecimal(entryOutStoreRecord.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP);
             Cell cell_9 = row_value.createCell(9);
-            cell_9.setCellValue(String.valueOf(entryOutStoreRecord.getAmount()));
+            cell_9.setCellValue(String.valueOf(amount));
             cell_9.setCellStyle(center);
 
         }
