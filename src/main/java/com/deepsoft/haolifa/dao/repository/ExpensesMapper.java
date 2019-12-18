@@ -29,11 +29,4 @@ public interface ExpensesMapper {
     int updateByPrimaryKeySelective(Expenses record);
 
     int updateByPrimaryKey(Expenses record);
-    List<ExpensesReport> getClassify();
-    List<ExpensesReport> classifyByDepartment();
-    List<ExpensesReport> classifyBySecondDepartment();
-    List<ExpensesReport> getAllClassify();
-    List<ExpensesReport> classifyByDepartmentAll();
-    List<ExpensesReport> getAllClassifyWithDepartment(String department);
-    List<ExpensesReport> getAllClassifyWithFirstClassify(String classify);
 }

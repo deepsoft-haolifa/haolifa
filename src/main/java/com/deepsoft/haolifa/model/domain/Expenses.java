@@ -8,8 +8,6 @@ public class Expenses {
 
     private BigDecimal totalAmount;
 
-    private String secondClassify;
-
     private String expensesClassify;
 
     private Integer createUserId;
@@ -22,6 +20,8 @@ public class Expenses {
 
     private Date updateTime;
 
+    private String secondClassify;
+
     private String department;
 
     private String summary;
@@ -30,20 +30,26 @@ public class Expenses {
 
     private String voucherNo;
 
-    public Expenses(Integer id, BigDecimal totalAmount, String secondClassify, String expensesClassify, Integer createUserId, String commitUser, Byte isDelete, Date createTime, Date updateTime, String department, String summary, String remark, String voucherNo) {
+    private String dataYear;
+
+    private String dataMonth;
+
+    public Expenses(Integer id, BigDecimal totalAmount, String expensesClassify, Integer createUserId, String commitUser, Byte isDelete, Date createTime, Date updateTime, String secondClassify, String department, String summary, String remark, String voucherNo, String dataYear, String dataMonth) {
         this.id = id;
         this.totalAmount = totalAmount;
-        this.secondClassify = secondClassify;
         this.expensesClassify = expensesClassify;
         this.createUserId = createUserId;
         this.commitUser = commitUser;
         this.isDelete = isDelete;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.secondClassify = secondClassify;
         this.department = department;
         this.summary = summary;
         this.remark = remark;
         this.voucherNo = voucherNo;
+        this.dataYear = dataYear;
+        this.dataMonth = dataMonth;
     }
 
     public Expenses() {
@@ -64,14 +70,6 @@ public class Expenses {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public String getSecondClassify() {
-        return secondClassify;
-    }
-
-    public void setSecondClassify(String secondClassify) {
-        this.secondClassify = secondClassify == null ? null : secondClassify.trim();
     }
 
     public String getExpensesClassify() {
@@ -122,6 +120,14 @@ public class Expenses {
         this.updateTime = updateTime;
     }
 
+    public String getSecondClassify() {
+        return secondClassify;
+    }
+
+    public void setSecondClassify(String secondClassify) {
+        this.secondClassify = secondClassify == null ? null : secondClassify.trim();
+    }
+
     public String getDepartment() {
         return department;
     }
@@ -152,5 +158,21 @@ public class Expenses {
 
     public void setVoucherNo(String voucherNo) {
         this.voucherNo = voucherNo == null ? null : voucherNo.trim();
+    }
+
+    public String getDataYear() {
+        return dataYear;
+    }
+
+    public void setDataYear(String dataYear) {
+        this.dataYear = dataYear == null ? null : dataYear.trim();
+    }
+
+    public String getDataMonth() {
+        return dataMonth;
+    }
+
+    public void setDataMonth(String dataMonth) {
+        this.dataMonth = dataMonth == null ? null : dataMonth.trim();
     }
 }

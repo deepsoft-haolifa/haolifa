@@ -226,76 +226,6 @@ public class ExpensesExample {
             return (Criteria) this;
         }
 
-        public Criteria andSecondClassifyIsNull() {
-            addCriterion("second_classify is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyIsNotNull() {
-            addCriterion("second_classify is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyEqualTo(String value) {
-            addCriterion("second_classify =", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyNotEqualTo(String value) {
-            addCriterion("second_classify <>", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyGreaterThan(String value) {
-            addCriterion("second_classify >", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyGreaterThanOrEqualTo(String value) {
-            addCriterion("second_classify >=", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyLessThan(String value) {
-            addCriterion("second_classify <", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyLessThanOrEqualTo(String value) {
-            addCriterion("second_classify <=", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyLike(String value) {
-            addCriterion("second_classify like", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyNotLike(String value) {
-            addCriterion("second_classify not like", value, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyIn(List<String> values) {
-            addCriterion("second_classify in", values, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyNotIn(List<String> values) {
-            addCriterion("second_classify not in", values, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyBetween(String value1, String value2) {
-            addCriterion("second_classify between", value1, value2, "secondClassify");
-            return (Criteria) this;
-        }
-
-        public Criteria andSecondClassifyNotBetween(String value1, String value2) {
-            addCriterion("second_classify not between", value1, value2, "secondClassify");
-            return (Criteria) this;
-        }
-
         public Criteria andExpensesClassifyIsNull() {
             addCriterion("expenses_classify is null");
             return (Criteria) this;
@@ -676,6 +606,76 @@ public class ExpensesExample {
             return (Criteria) this;
         }
 
+        public Criteria andSecondClassifyIsNull() {
+            addCriterion("second_classify is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyIsNotNull() {
+            addCriterion("second_classify is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyEqualTo(String value) {
+            addCriterion("second_classify =", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyNotEqualTo(String value) {
+            addCriterion("second_classify <>", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyGreaterThan(String value) {
+            addCriterion("second_classify >", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyGreaterThanOrEqualTo(String value) {
+            addCriterion("second_classify >=", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyLessThan(String value) {
+            addCriterion("second_classify <", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyLessThanOrEqualTo(String value) {
+            addCriterion("second_classify <=", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyLike(String value) {
+            addCriterion("second_classify like", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyNotLike(String value) {
+            addCriterion("second_classify not like", value, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyIn(List<String> values) {
+            addCriterion("second_classify in", values, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyNotIn(List<String> values) {
+            addCriterion("second_classify not in", values, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyBetween(String value1, String value2) {
+            addCriterion("second_classify between", value1, value2, "secondClassify");
+            return (Criteria) this;
+        }
+
+        public Criteria andSecondClassifyNotBetween(String value1, String value2) {
+            addCriterion("second_classify not between", value1, value2, "secondClassify");
+            return (Criteria) this;
+        }
+
         public Criteria andDepartmentIsNull() {
             addCriterion("department is null");
             return (Criteria) this;
@@ -953,6 +953,146 @@ public class ExpensesExample {
 
         public Criteria andVoucherNoNotBetween(String value1, String value2) {
             addCriterion("voucher_no not between", value1, value2, "voucherNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearIsNull() {
+            addCriterion("data_year is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearIsNotNull() {
+            addCriterion("data_year is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearEqualTo(String value) {
+            addCriterion("data_year =", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearNotEqualTo(String value) {
+            addCriterion("data_year <>", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearGreaterThan(String value) {
+            addCriterion("data_year >", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearGreaterThanOrEqualTo(String value) {
+            addCriterion("data_year >=", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearLessThan(String value) {
+            addCriterion("data_year <", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearLessThanOrEqualTo(String value) {
+            addCriterion("data_year <=", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearLike(String value) {
+            addCriterion("data_year like", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearNotLike(String value) {
+            addCriterion("data_year not like", value, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearIn(List<String> values) {
+            addCriterion("data_year in", values, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearNotIn(List<String> values) {
+            addCriterion("data_year not in", values, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearBetween(String value1, String value2) {
+            addCriterion("data_year between", value1, value2, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataYearNotBetween(String value1, String value2) {
+            addCriterion("data_year not between", value1, value2, "dataYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthIsNull() {
+            addCriterion("data_month is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthIsNotNull() {
+            addCriterion("data_month is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthEqualTo(String value) {
+            addCriterion("data_month =", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthNotEqualTo(String value) {
+            addCriterion("data_month <>", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthGreaterThan(String value) {
+            addCriterion("data_month >", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthGreaterThanOrEqualTo(String value) {
+            addCriterion("data_month >=", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthLessThan(String value) {
+            addCriterion("data_month <", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthLessThanOrEqualTo(String value) {
+            addCriterion("data_month <=", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthLike(String value) {
+            addCriterion("data_month like", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthNotLike(String value) {
+            addCriterion("data_month not like", value, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthIn(List<String> values) {
+            addCriterion("data_month in", values, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthNotIn(List<String> values) {
+            addCriterion("data_month not in", values, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthBetween(String value1, String value2) {
+            addCriterion("data_month between", value1, value2, "dataMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andDataMonthNotBetween(String value1, String value2) {
+            addCriterion("data_month not between", value1, value2, "dataMonth");
             return (Criteria) this;
         }
     }

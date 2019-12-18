@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ExpensesClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
+import com.deepsoft.haolifa.dao.repository.extend.CommonExtendMapper;
 import com.deepsoft.haolifa.model.domain.Expenses;
 import com.deepsoft.haolifa.model.domain.ExpensesClassifyExample;
 import com.deepsoft.haolifa.model.domain.ExpensesExample;
@@ -25,31 +26,41 @@ import java.math.BigDecimal;
 @Slf4j
 public class ExpensesServiceImpl extends BaseService implements ExpensesService {
 
-  @Autowired
-  private ExpensesMapper expensesMapper;
+    @Autowired
+    private ExpensesMapper expensesMapper;
+    @Autowired
+    private CommonExtendMapper commonExtendMapper;
+    @Autowired
+    private ExpensesClassifyMapper classifyMapper;
 
-  @Autowired
-  private ExpensesClassifyMapper classifyMapper;
 
+    @Override
+    public ResultBean save(ExpensesDTO model) {
+        if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
+            || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+            return ResultBean.error(ResponseEnum.PARAM_ERROR);
+        }
+        Expenses expenses = new Expenses();
+        BeanUtils.copyProperties(model, expenses);
+        // 费用年月处理
+        if (StringUtils.isNotBlank(model.getDataDate())) {
+            String dataYear = model.getDataDate().substring(0, 4);
+            expenses.setDataYear(dataYear);
+            String dataMonth = model.getDataDate().substring(5,7);
+            expenses.setDataMonth(dataMonth);
+        }
 
-  @Override
-  public ResultBean save(ExpensesDTO model) {
-    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
-        || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
-      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+        expenses.setCreateUserId(getLoginUserId());
+        expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
+        expensesMapper.insertSelective(expenses);
+        return ResultBean.success(expenses.getId());
     }
-    Expenses expenses = new Expenses();
-    BeanUtils.copyProperties(model, expenses);
-    expenses.setCreateUserId(getLoginUserId());
-    expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
-    expensesMapper.insertSelective(expenses);
-    return ResultBean.success(expenses.getId());
-  }
 
-  @Override
-  public ResultBean info(Integer id) {
-    return ResultBean.success(expensesMapper.selectByPrimaryKey(id));
-  }
+
+    @Override
+    public ResultBean info(Integer id) {
+        return ResultBean.success(expensesMapper.selectByPrimaryKey(id));
+    }
 
 //  @Override
 //  public ResultBean getClassify() {
@@ -60,84 +71,97 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 //    return  ResultBean.success(expensesMapper.classifyByDepartment());
 //  }
 
-  @Override
-  public ResultBean delete(Integer id) {
-    ExpensesExample expensesExample = new ExpensesExample();
-    expensesExample.or().andIdEqualTo(id);
-    Expenses expenses = new Expenses();
-    expenses.setIsDelete(CommonEnum.Consts.YES.code);
-    expensesMapper.updateByExampleSelective(expenses, expensesExample);
-    return ResultBean.success(0);
-  }
+    @Override
+    public ResultBean delete(Integer id) {
+        ExpensesExample expensesExample = new ExpensesExample();
+        expensesExample.or().andIdEqualTo(id);
+        Expenses expenses = new Expenses();
+        expenses.setIsDelete(CommonEnum.Consts.YES.code);
+        expensesMapper.updateByExampleSelective(expenses, expensesExample);
+        return ResultBean.success(0);
+    }
 
-  @Override
-  public ResultBean update(ExpensesDTO model) {
-    if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
-        || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
-      return ResultBean.error(ResponseEnum.PARAM_ERROR);
+    @Override
+    public ResultBean update(ExpensesDTO model) {
+        if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
+            || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+            return ResultBean.error(ResponseEnum.PARAM_ERROR);
+        }
+        Expenses expenses = new Expenses();
+        BeanUtils.copyProperties(model, expenses);
+        // 费用年月处理
+        if (StringUtils.isNotBlank(model.getDataDate())) {
+            String dataYear = model.getDataDate().substring(0, 4);
+            expenses.setDataYear(dataYear);
+            String dataMonth = model.getDataDate().substring(5,7);
+            expenses.setDataMonth(dataMonth);
+        }
+        expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
+        expensesMapper.updateByPrimaryKeySelective(expenses);
+        return ResultBean.success(0);
     }
-    Expenses expenses = new Expenses();
-    BeanUtils.copyProperties(model, expenses);
-    expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
-    expensesMapper.updateByPrimaryKeySelective(expenses);
-    return ResultBean.success(0);
-  }
 
-  @Override
-  public ResultBean getList(Integer pageNum, Integer pageSize, String classifyName,
-      String secondClassifyName, String department, String voucherNo) {
-    ExpensesExample expensesExample = new ExpensesExample();
-    ExpensesExample.Criteria criteria = expensesExample.createCriteria();
-    if (StringUtils.isNotEmpty(classifyName) && !"全部".equals(classifyName)) {
-      criteria.andExpensesClassifyEqualTo(classifyName);
+    @Override
+    public ResultBean getList(Integer pageNum, Integer pageSize, String classifyName,
+                              String secondClassifyName, String department, String voucherNo) {
+        ExpensesExample expensesExample = new ExpensesExample();
+        ExpensesExample.Criteria criteria = expensesExample.createCriteria();
+        if (StringUtils.isNotEmpty(classifyName) && !"全部".equals(classifyName)) {
+            criteria.andExpensesClassifyEqualTo(classifyName);
+        }
+        if (StringUtils.isNotEmpty(secondClassifyName) && !"全部".equals(secondClassifyName)) {
+            criteria.andSecondClassifyEqualTo(secondClassifyName);
+        }
+        if (StringUtils.isNotEmpty(department)) {
+            criteria.andDepartmentLike("%" + department + "%");
+        }
+        if (StringUtils.isNotEmpty(voucherNo)) {
+            criteria.andVoucherNoLike("%" + voucherNo + "%");
+        }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        expensesExample.setOrderByClause("id desc");
+        Page<Expenses> page = PageHelper.startPage(pageNum, pageSize)
+            .doSelectPage(() -> expensesMapper.selectByExample(expensesExample));
+        PageDTO<Expenses> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(page, pageDTO);
+        pageDTO.setList(page.getResult());
+        return ResultBean.success(pageDTO);
     }
-    if (StringUtils.isNotEmpty(secondClassifyName) && !"全部".equals(secondClassifyName)) {
-      criteria.andSecondClassifyEqualTo(secondClassifyName);
-    }
-    if (StringUtils.isNotEmpty(department)) {
-      criteria.andDepartmentLike("%" + department + "%");
-    }
-    if (StringUtils.isNotEmpty(voucherNo)) {
-      criteria.andVoucherNoLike("%" + voucherNo + "%");
-    }
-    criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-    expensesExample.setOrderByClause("id desc");
-    Page<Expenses> page = PageHelper.startPage(pageNum, pageSize)
-        .doSelectPage(() -> expensesMapper.selectByExample(expensesExample));
-    PageDTO<Expenses> pageDTO = new PageDTO<>();
-    BeanUtils.copyProperties(page, pageDTO);
-    pageDTO.setList(page.getResult());
-    return ResultBean.success(pageDTO);
-  }
 
-  @Override
-  public ResultBean classify(Integer pId) {
-    ExpensesClassifyExample classifyExample = new ExpensesClassifyExample();
-    classifyExample.createCriteria().andClassifyPidEqualTo(pId);
-    return ResultBean.success(classifyMapper.selectByExample(classifyExample));
-  }
-  @Override
-  public ResultBean getClassify() {
-    return  ResultBean.success(expensesMapper.getClassify());
-  }
-  @Override
-  public ResultBean classifyByDepartment() {
-    return  ResultBean.success(expensesMapper.classifyByDepartment());
-  }
-  @Override
-  public ResultBean getAllClassify() {
-    return  ResultBean.success(expensesMapper.getAllClassify());
-  }
-  @Override
-  public ResultBean classifyByDepartmentAll() {
-    return  ResultBean.success(expensesMapper.classifyByDepartmentAll());
-  }
-  @Override
-  public ResultBean getAllClassifyWithDepartment(String department) {
-    return  ResultBean.success(expensesMapper.getAllClassifyWithDepartment( department));
-  }
-  @Override
-  public ResultBean getAllClassifyWithFirstClassify(String classify) {
-    return  ResultBean.success(expensesMapper.getAllClassifyWithFirstClassify( classify));
-  }
+    @Override
+    public ResultBean classify(Integer pId) {
+        ExpensesClassifyExample classifyExample = new ExpensesClassifyExample();
+        classifyExample.createCriteria().andClassifyPidEqualTo(pId);
+        return ResultBean.success(classifyMapper.selectByExample(classifyExample));
+    }
+
+    @Override
+    public ResultBean getClassify() {
+        return ResultBean.success(commonExtendMapper.getClassify());
+    }
+
+    @Override
+    public ResultBean classifyByDepartment() {
+        return ResultBean.success(commonExtendMapper.classifyByDepartment());
+    }
+
+    @Override
+    public ResultBean getAllClassify() {
+        return ResultBean.success(commonExtendMapper.getAllClassify());
+    }
+
+    @Override
+    public ResultBean classifyByDepartmentAll() {
+        return ResultBean.success(commonExtendMapper.classifyByDepartmentAll());
+    }
+
+    @Override
+    public ResultBean getAllClassifyWithDepartment(String department) {
+        return ResultBean.success(commonExtendMapper.getAllClassifyWithDepartment(department));
+    }
+
+    @Override
+    public ResultBean getAllClassifyWithFirstClassify(String classify) {
+        return ResultBean.success(commonExtendMapper.getAllClassifyWithFirstClassify(classify));
+    }
 }
