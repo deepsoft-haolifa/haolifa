@@ -16,4 +16,6 @@ public class SprayVo extends Spray {
     private String sprayedGraphNo;
     @ApiModelProperty(value = "批次号")
     private String batchNumber;
+    @ApiModelProperty(value = "出库状态（1未出库；2已出库）")
+    private Byte outRoomStatus;
 }

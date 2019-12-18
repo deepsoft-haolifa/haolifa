@@ -185,6 +185,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                 sprayVo.setOrignGraphNo(originGraphNo);
                 sprayVo.setSprayedGraphNo(sprayedGraphNo);
                 sprayVo.setBatchNumber(batchNumber);
+                sprayVo.setOutRoomStatus(sprayItem.getOutRoomStatus());
                 resultList.add(sprayVo);
             }
         }
