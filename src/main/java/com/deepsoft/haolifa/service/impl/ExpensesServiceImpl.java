@@ -4,7 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ExpensesClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
-import com.deepsoft.haolifa.dao.repository.extend.CommonExtendMapper;
+import com.deepsoft.haolifa.dao.repository.extend.ExpensesExtendMapper;
 import com.deepsoft.haolifa.model.domain.Expenses;
 import com.deepsoft.haolifa.model.domain.ExpensesClassifyExample;
 import com.deepsoft.haolifa.model.domain.ExpensesExample;
@@ -29,7 +29,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     @Autowired
     private ExpensesMapper expensesMapper;
     @Autowired
-    private CommonExtendMapper commonExtendMapper;
+    private ExpensesExtendMapper expensesExtendMapper;
     @Autowired
     private ExpensesClassifyMapper classifyMapper;
 
@@ -137,31 +137,31 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
     @Override
     public ResultBean getClassify() {
-        return ResultBean.success(commonExtendMapper.getClassify());
+        return ResultBean.success(expensesExtendMapper.getClassify());
     }
 
     @Override
     public ResultBean classifyByDepartment() {
-        return ResultBean.success(commonExtendMapper.classifyByDepartment());
+        return ResultBean.success(expensesExtendMapper.classifyByDepartment());
     }
 
     @Override
     public ResultBean getAllClassify() {
-        return ResultBean.success(commonExtendMapper.getAllClassify());
+        return ResultBean.success(expensesExtendMapper.getAllClassify());
     }
 
     @Override
     public ResultBean classifyByDepartmentAll() {
-        return ResultBean.success(commonExtendMapper.classifyByDepartmentAll());
+        return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll());
     }
 
     @Override
     public ResultBean getAllClassifyWithDepartment(String department) {
-        return ResultBean.success(commonExtendMapper.getAllClassifyWithDepartment(department));
+        return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(department));
     }
 
     @Override
     public ResultBean getAllClassifyWithFirstClassify(String classify) {
-        return ResultBean.success(commonExtendMapper.getAllClassifyWithFirstClassify(classify));
+        return ResultBean.success(expensesExtendMapper.getAllClassifyWithFirstClassify(classify));
     }
 }

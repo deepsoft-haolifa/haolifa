@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="mapper.ExpensesMapper" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.ExpensesMapper" >
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Expenses" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -79,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, total_amount, expenses_classify, create_user_id, commit_user, is_delete, create_time, 
-    update_time, second_classify, department, summary, remark, voucher_no, data_year, 
+    id, total_amount, expenses_classify, create_user_id, commit_user, is_delete, create_time,
+    update_time, second_classify, department, summary, remark, voucher_no, data_year,
     data_month
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.ExpensesExample" >
@@ -98,7 +98,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from expenses
     where id = #{id,jdbcType=INTEGER}
@@ -117,15 +117,15 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into expenses (total_amount, expenses_classify, create_user_id, 
-      commit_user, is_delete, create_time, 
-      update_time, second_classify, department, 
-      summary, remark, voucher_no, 
+    insert into expenses (total_amount, expenses_classify, create_user_id,
+      commit_user, is_delete, create_time,
+      update_time, second_classify, department,
+      summary, remark, voucher_no,
       data_year, data_month)
-    values (#{totalAmount,jdbcType=DECIMAL}, #{expensesClassify,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
-      #{commitUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{secondClassify,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
-      #{summary,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{voucherNo,jdbcType=VARCHAR}, 
+    values (#{totalAmount,jdbcType=DECIMAL}, #{expensesClassify,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER},
+      #{commitUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{secondClassify,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR},
+      #{summary,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{voucherNo,jdbcType=VARCHAR},
       #{dataYear,jdbcType=VARCHAR}, #{dataMonth,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Expenses" >
