@@ -148,12 +148,20 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         int totalCount = 0;
         if (items != null && items.size() > 0) {
             for (int i = 0; i < items.size(); i++) {
+                // 判断 送检数不能大于采购数
+                InspectItemDTO inspectItemDTO = items.get(i);
+                Integer deliveryNumber = inspectItemDTO.getDeliveryNumber();
+                Integer purchaseNumber = inspectItemDTO.getPurchaseNumber();
+                if (deliveryNumber > purchaseNumber) {
+                    throw new BaseException(ResponseEnum.DELIVERY_COUNT_LESS_THAN_PURCHASE_COUNT, (Object) inspectItemDTO.getMaterialGraphNo());
+                }
+
                 InspectItem inspectItem = new InspectItem();
-                BeanUtils.copyProperties(items.get(i), inspectItem);
-                inspectItem.setPurchasePrice(new BigDecimal(items.get(i).getPurchasePrice()));
+                BeanUtils.copyProperties(inspectItemDTO, inspectItem);
+                inspectItem.setPurchasePrice(new BigDecimal(inspectItemDTO.getPurchasePrice()));
                 inspectItem.setInspectId(inspect.getId());
                 inspectItemMapper.insertSelective(inspectItem);
-                totalCount += items.get(i).getDeliveryNumber();
+                totalCount += deliveryNumber;
             }
             Inspect inspectCount = new Inspect();
             inspectCount.setId(inspect.getId());

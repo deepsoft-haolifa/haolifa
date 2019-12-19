@@ -416,20 +416,27 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 BeanUtils.copyProperties(entryOutStoreRecord, productStorageListDTO);
                 if (entryOutStoreRecord.getOperationType() == OperationType.ENTRY.code) {
                     String oneOrderNo = entryOutStoreRecord.getOrderNo();
-                    if (executeMap.containsKey(oneOrderNo)) {
-                        productStorageListDTO.setExecute(executeMap.get(oneOrderNo));
+                    int storeCount = getOutProductCountByOrderNo(oneOrderNo, entryOutStoreRecord.getProductNo());
+                    if (storeCount < entryOutStoreRecord.getQuantity()) {
+                        productStorageListDTO.setExecute(0);
                     } else {
-                        // 入库数量
-                        int entryProductCount = getEntryProductCountByOrderNo(oneOrderNo, "");
-                        // 已经出库数量
-                        int storeCount = getOutProductCountByOrderNo(oneOrderNo, "");
-                        int isExecute = 0; // 默认可出库
-                        if (entryProductCount <= storeCount) {
-                            isExecute = 1;// 不可出库
-                        }
-                        productStorageListDTO.setExecute(isExecute);
-                        executeMap.put(oneOrderNo, isExecute);
+                        productStorageListDTO.setExecute(1);
                     }
+//
+//                    if (executeMap.containsKey(oneOrderNo)) {
+//                        productStorageListDTO.setExecute(executeMap.get(oneOrderNo));
+//                    } else {
+//                        // 入库数量
+//                        int entryProductCount = getEntryProductCountByOrderNo(oneOrderNo, "");
+//                        // 已经出库数量
+//                        int storeCount = getOutProductCountByOrderNo(oneOrderNo, "");
+//                        int isExecute = 0; // 默认可出库
+//                        if (entryProductCount <= storeCount) {
+//                            isExecute = 1;// 不可出库
+//                        }
+//                        productStorageListDTO.setExecute(isExecute);
+//                        executeMap.put(oneOrderNo, isExecute);
+//                    }
                 } else {
                     productStorageListDTO.setExecute(0);
                 }
