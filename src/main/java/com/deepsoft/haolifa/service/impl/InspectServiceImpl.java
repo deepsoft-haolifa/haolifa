@@ -15,6 +15,8 @@ import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.dao.repository.extend.CommonExtendMapper;
+import com.deepsoft.haolifa.model.domain.PurchaseOrderItem;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
@@ -56,7 +58,11 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     @Autowired
     PurchaseOrderMapper purchaseOrderMapper;
     @Autowired
+    PurchaseOrderItemMapper purchaseOrderItemMapper;
+    @Autowired
     CheckMaterialLockService checkMaterialLockService;
+    @Autowired
+    CommonExtendMapper commonExtendMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -151,8 +157,18 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 // 判断 送检数不能大于采购数
                 InspectItemDTO inspectItemDTO = items.get(i);
                 Integer deliveryNumber = inspectItemDTO.getDeliveryNumber();
+                // 获取这个合同，这个图号已经送检的数量
+                int sumDeliveryInspectItem = commonExtendMapper.sumDeliveryInspectItem(inspectItemDTO.getPurchaseNo(), inspectItemDTO.getMaterialGraphNo());
+
+                // 获取这个合同，这个图号的采购数量（先从送检单中填写的那个获取，再从采购合同表中获取）
                 Integer purchaseNumber = inspectItemDTO.getPurchaseNumber();
-                if (deliveryNumber > purchaseNumber) {
+                PurchaseOrderItemExample example = new PurchaseOrderItemExample();
+                example.or().andPurchaseOrderNoEqualTo(inspectItemDTO.getPurchaseNo()).andMaterialGraphNoEqualTo(inspectItemDTO.getMaterialGraphNo());
+                List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemMapper.selectByExample(example);
+                if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+                    purchaseNumber = purchaseOrderItems.get(0).getNumber();
+                }
+                if (deliveryNumber + sumDeliveryInspectItem > purchaseNumber) {
                     throw new BaseException(ResponseEnum.DELIVERY_COUNT_LESS_THAN_PURCHASE_COUNT, (Object) inspectItemDTO.getMaterialGraphNo());
                 }
 
@@ -170,6 +186,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         }
         return ResultBean.success(1);
     }
+
 
     @Override
     public ResultBean updateItem(int itemId, InspectItemUpdateDTO model) {
