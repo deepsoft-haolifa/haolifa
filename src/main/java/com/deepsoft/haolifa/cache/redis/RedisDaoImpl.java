@@ -257,12 +257,6 @@ public class RedisDaoImpl implements RedisDao {
 
 
     @Override
-    public void removesetkv(String key, String... values) {
-        log.info("removesetkv==>key={}; values={}", key, Arrays.toString(values));
-        TryBase.ofc(RETRY_TIMES, () -> stringRedisTemplate.opsForSet().remove(key, values));
-    }
-
-    @Override
     public long setsize(String key) {
         log.info("setsize==>key={}", key);
         return stringRedisTemplate.opsForSet().size(key);

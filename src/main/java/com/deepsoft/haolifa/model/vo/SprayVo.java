@@ -3,11 +3,13 @@ package com.deepsoft.haolifa.model.vo;
 import com.deepsoft.haolifa.model.domain.Spray;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author murphy.he
  **/
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class SprayVo extends Spray {
 
     @ApiModelProperty(value = "加工前图号")

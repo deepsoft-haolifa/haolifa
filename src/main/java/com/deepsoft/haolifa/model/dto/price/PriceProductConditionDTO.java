@@ -3,8 +3,10 @@ package com.deepsoft.haolifa.model.dto.price;
 import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class PriceProductConditionDTO extends PageParam {
 
     @ApiModelProperty(value = "型号")

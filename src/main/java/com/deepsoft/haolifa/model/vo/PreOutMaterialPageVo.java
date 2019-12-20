@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.model.vo;
 import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 零件待出库 实体
@@ -10,6 +11,7 @@ import lombok.Data;
  * @author murphy.he
  **/
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class PreOutMaterialPageVo extends PageParam {
 
 

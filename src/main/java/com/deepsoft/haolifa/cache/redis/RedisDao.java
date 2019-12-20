@@ -75,8 +75,6 @@ public interface RedisDao {
 
     List<String> scanParams(String pattern);
 
-    void removesetkv(String key, String... values);
-
     long setsize(String key);
 
     void convertAndSend(String channel, String message);

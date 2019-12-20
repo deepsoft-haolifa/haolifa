@@ -3,8 +3,10 @@ package com.deepsoft.haolifa.model.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class SupplierProductListDTO extends PageParam{
 
     @ApiModelProperty(value = "供应商编号")
