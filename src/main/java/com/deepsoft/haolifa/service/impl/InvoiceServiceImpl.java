@@ -144,7 +144,6 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     @Override
     public int updateStatus(InvoiceStatusDTO statusDTO) {
         Invoice invoice = new Invoice();
-        invoice.setInvoiceNo(statusDTO.getInvoiceNo());
         invoice.setId(statusDTO.getId());
         invoice.setStatus(statusDTO.getStatus());
         return invoiceMapper.updateByPrimaryKeySelective(invoice);
