@@ -65,9 +65,6 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         if (model.getTotalAmount() == null || model.getTotalAmount() == 0) {
             return true;
         }
-        if (model.getStatus() == null) {
-            return true;
-        }
         if (model.getType() == null) {
             return true;
         }
