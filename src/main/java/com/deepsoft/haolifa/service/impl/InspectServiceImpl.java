@@ -157,7 +157,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 // 判断 送检数不能大于采购数
                 InspectItemDTO inspectItemDTO = items.get(i);
                 Integer deliveryNumber = inspectItemDTO.getDeliveryNumber();
-                // 获取这个合同，这个图号已经送检的数量
+                // 获取这个合同，这个图号已经送检的数量(状态不是保存状态)
                 int sumDeliveryInspectItem = commonExtendMapper.sumDeliveryInspectItem(inspectItemDTO.getPurchaseNo(), inspectItemDTO.getMaterialGraphNo());
 
                 // 获取这个合同，这个图号的采购数量（先从送检单中填写的那个获取，再从采购合同表中获取）
