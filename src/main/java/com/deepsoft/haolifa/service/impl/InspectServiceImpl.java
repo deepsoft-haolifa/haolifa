@@ -90,13 +90,17 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         int totalCount = 0;
         if (items != null && items.size() > 0) {
             for (int i = 0; i < items.size(); i++) {
+                InspectItemDTO inspectItemDTO = items.get(i);
+                //判断送检数不能大于合同数
+                judgeDeliveryCount(inspectItemDTO);
+
                 InspectItem inspectItem = new InspectItem();
-                BeanUtils.copyProperties(items.get(i), inspectItem);
+                BeanUtils.copyProperties(inspectItemDTO, inspectItem);
                 inspectItem.setInspectId(inspect.getId());
-                inspectItem.setPurchasePrice(new BigDecimal(items.get(i).getPurchasePrice()));
+                inspectItem.setPurchasePrice(new BigDecimal(inspectItemDTO.getPurchasePrice()));
                 inspectItem.setPurchaseNo(model.getPurchaseNo());
                 inspectItemMapper.insertSelective(inspectItem);
-                totalCount += items.get(i).getDeliveryNumber();
+                totalCount += inspectItemDTO.getDeliveryNumber();
             }
             Inspect inspectCount = new Inspect();
             inspectCount.setId(inspect.getId());
@@ -154,23 +158,10 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         int totalCount = 0;
         if (items != null && items.size() > 0) {
             for (int i = 0; i < items.size(); i++) {
-                // 判断 送检数不能大于采购数
                 InspectItemDTO inspectItemDTO = items.get(i);
+                // 判断送检数不能大于合同数
+                judgeDeliveryCount(inspectItemDTO);
                 Integer deliveryNumber = inspectItemDTO.getDeliveryNumber();
-                // 获取这个合同，这个图号已经送检的数量(状态不是保存状态)
-                int sumDeliveryInspectItem = commonExtendMapper.sumDeliveryInspectItem(inspectItemDTO.getPurchaseNo(), inspectItemDTO.getMaterialGraphNo());
-
-                // 获取这个合同，这个图号的采购数量（先从送检单中填写的那个获取，再从采购合同表中获取）
-                Integer purchaseNumber = inspectItemDTO.getPurchaseNumber();
-                PurchaseOrderItemExample example = new PurchaseOrderItemExample();
-                example.or().andPurchaseOrderNoEqualTo(inspectItemDTO.getPurchaseNo()).andMaterialGraphNoEqualTo(inspectItemDTO.getMaterialGraphNo());
-                List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemMapper.selectByExample(example);
-                if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
-                    purchaseNumber = purchaseOrderItems.get(0).getNumber();
-                }
-                if (deliveryNumber + sumDeliveryInspectItem > purchaseNumber) {
-                    throw new BaseException(ResponseEnum.DELIVERY_COUNT_LESS_THAN_PURCHASE_COUNT, (Object) inspectItemDTO.getMaterialGraphNo());
-                }
 
                 InspectItem inspectItem = new InspectItem();
                 BeanUtils.copyProperties(inspectItemDTO, inspectItem);
@@ -187,6 +178,24 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         return ResultBean.success(1);
     }
 
+    private void judgeDeliveryCount(InspectItemDTO inspectItemDTO) {
+        // 判断 送检数不能大于采购数
+        Integer deliveryNumber = inspectItemDTO.getDeliveryNumber();
+        // 获取这个合同，这个图号已经送检的数量,不合格数
+        InspectItemSumDto inspectItemSumDto = commonExtendMapper.sumDeliveryInspectItem(inspectItemDTO.getPurchaseNo(), inspectItemDTO.getMaterialGraphNo());
+        // 获取这个合同，这个图号的采购数量（先从送检单中填写的那个获取，再从采购合同表中获取）
+        Integer purchaseNumber = 0;
+        PurchaseOrderItemExample example = new PurchaseOrderItemExample();
+        example.or().andPurchaseOrderNoEqualTo(inspectItemDTO.getPurchaseNo()).andMaterialGraphNoEqualTo(inspectItemDTO.getMaterialGraphNo());
+        List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+            purchaseNumber = purchaseOrderItems.get(0).getNumber();
+        }
+        // 此次送检数+历史送检数-不合格数 不能大于合同的采购数
+        if (deliveryNumber + inspectItemSumDto.getDeliveryNumber() - inspectItemSumDto.getUnqualifiedNumber() > purchaseNumber) {
+            throw new BaseException(ResponseEnum.DELIVERY_COUNT_LESS_THAN_PURCHASE_COUNT, (Object) inspectItemDTO.getMaterialGraphNo());
+        }
+    }
 
     @Override
     public ResultBean updateItem(int itemId, InspectItemUpdateDTO model) {

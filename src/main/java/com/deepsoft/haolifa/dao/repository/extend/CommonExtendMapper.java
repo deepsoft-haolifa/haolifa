@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.dao.repository.extend;
 
+import com.deepsoft.haolifa.model.dto.InspectItemSumDto;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
 import org.apache.ibatis.annotations.Param;
@@ -26,6 +27,6 @@ public interface CommonExtendMapper {
     /**
      * 查询零件送检的总数
      */
-    @Select("SELECT IFNULL(sum(delivery_number),0)  from `inspect_item` a left join `inspect` b on a.inspect_id = b.id where a.purchase_no=#{purchaseNo} and a.material_graph_no=#{graphNo} and b.status!=1")
-    int sumDeliveryInspectItem(@Param("purchaseNo") String purchaseNo, @Param("graphNo") String graphNo);
+    @Select("SELECT IFNULL(sum(delivery_number),0) as deliveryNumber, IFNULL(sum(unqualified_number),0) as unqualifiedNumber,from `inspect_item` a where a.purchase_no=#{purchaseNo} and a.material_graph_no=#{graphNo}")
+    InspectItemSumDto sumDeliveryInspectItem(@Param("purchaseNo") String purchaseNo, @Param("graphNo") String graphNo);
 }
