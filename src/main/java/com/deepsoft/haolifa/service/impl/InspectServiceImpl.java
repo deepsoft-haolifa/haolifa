@@ -97,6 +97,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 InspectItem inspectItem = new InspectItem();
                 BeanUtils.copyProperties(inspectItemDTO, inspectItem);
                 inspectItem.setInspectId(inspect.getId());
+                inspectItem.setInspectNo(inspect.getInspectNo());
                 inspectItem.setPurchasePrice(new BigDecimal(inspectItemDTO.getPurchasePrice()));
                 inspectItem.setPurchaseNo(model.getPurchaseNo());
                 inspectItemMapper.insertSelective(inspectItem);
@@ -320,21 +321,35 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         InspectHistory inspectHistory = new InspectHistory();
         BeanUtils.copyProperties(model, inspectHistory);
         historyMapper.insertSelective(inspectHistory);
-        String orderNo = "";
+        String inspectNo = model.getInspectNo();
         if (model.getType() == PURCHASE_MATERIAL_TYPE_1.getCode()) {
             // 采购零件 质检
             InspectExample example = new InspectExample();
-            example.createCriteria().andInspectNoEqualTo(model.getInspectNo());
+            example.createCriteria().andInspectNoEqualTo(inspectNo);
             List<Inspect> inspectList = inspectMapper.selectByExample(example);
-            Inspect inspect = new Inspect();
             if (!CollectionUtils.isEmpty(inspectList) && inspectList.size() > 0) {
+                // 更新采购零件送检 inspect 表
                 Inspect inspectRecord = inspectList.get(0);
-                inspect.setQualifiedNumber(inspectRecord.getQualifiedNumber() + model.getQualifiedNumber());
-                inspect.setUnqualifiedNumber(inspectRecord.getUnqualifiedNumber() + model.getUnqualifiedNumber());
-                if (inspectRecord.getTotalCount() < inspect.getQualifiedNumber()) {
+                Inspect updateInspect = new Inspect();
+                updateInspect.setQualifiedNumber(inspectRecord.getQualifiedNumber() + model.getQualifiedNumber());
+                updateInspect.setUnqualifiedNumber(inspectRecord.getUnqualifiedNumber() + model.getUnqualifiedNumber());
+                if (inspectRecord.getTotalCount() < updateInspect.getQualifiedNumber()) {
                     throw new BaseException(ResponseEnum.INSPECT_QUALIFIED_NUMBER_ERROR);
                 }
-                inspectMapper.updateByExampleSelective(inspect, example);
+                inspectMapper.updateByExampleSelective(updateInspect, example);
+                // 更新采购零件送检子表 inspect_item 表
+                InspectItemExample inspectItemExample = new InspectItemExample();
+                inspectItemExample.or().andInspectNoEqualTo(inspectNo).andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
+                List<InspectItem> inspectItems = inspectItemMapper.selectByExample(inspectItemExample);
+                if (!CollectionUtils.isEmpty(inspectItems)) {
+                    InspectItem inspectItem = inspectItems.get(0);
+                    InspectItem updateInspectItem = new InspectItem();
+                    updateInspectItem.setQualifiedNumber(inspectItem.getQualifiedNumber() + model.getQualifiedNumber());
+                    updateInspectItem.setUnqualifiedNumber(inspectItem.getUnqualifiedNumber() + model.getUnqualifiedNumber());
+                    inspectItemMapper.updateByExampleSelective(updateInspectItem, inspectItemExample);
+                }
+
+                // 更新采购合同表
                 PurchaseOrderExample orderExample = new PurchaseOrderExample();
                 orderExample.createCriteria().andPurchaseOrderNoEqualTo(inspectRecord.getPurchaseNo());
                 List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(orderExample);
@@ -356,7 +371,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
             // 机加工 质检
             EntrustExample entrustExample = new EntrustExample();
-            entrustExample.createCriteria().andEntrustNoEqualTo(model.getInspectNo());
+            entrustExample.createCriteria().andEntrustNoEqualTo(inspectNo);
             List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
             Entrust entrust = new Entrust();
             if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {

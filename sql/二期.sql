@@ -8,4 +8,8 @@ alter table expenses add COLUMN  `data_year` varchar(32) NOT NULL DEFAULT '' COM
 
 -- 采购合同添加合同盖章审批流程
 INSERT INTO `step`(`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (82, NOW(), NOW(), 1, '总经理秘书合同盖章审批', '采购合同审批');
-INSERT INTO `haolifa`.`flow_step`(`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (56, NOW(), NOW(), 1, 2, 82, '85', 40, 39, 0, 0, '77', 1);
+INSERT INTO `flow_step`(`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (56, NOW(), NOW(), 1, 2, 82, '85', 40, 39, 0, 0, '77', 1);
+
+
+-- inspect_item 添加inspect_no 字段
+alter table inspect_ietm add column `inspect_no` varchar(32) NOT NULL DEFAULT '' COMMENT '送检单编号';

@@ -295,6 +295,76 @@ public class InspectItemExample {
             return (Criteria) this;
         }
 
+        public Criteria andInspectNoIsNull() {
+            addCriterion("inspect_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoIsNotNull() {
+            addCriterion("inspect_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoEqualTo(String value) {
+            addCriterion("inspect_no =", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoNotEqualTo(String value) {
+            addCriterion("inspect_no <>", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoGreaterThan(String value) {
+            addCriterion("inspect_no >", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoGreaterThanOrEqualTo(String value) {
+            addCriterion("inspect_no >=", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoLessThan(String value) {
+            addCriterion("inspect_no <", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoLessThanOrEqualTo(String value) {
+            addCriterion("inspect_no <=", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoLike(String value) {
+            addCriterion("inspect_no like", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoNotLike(String value) {
+            addCriterion("inspect_no not like", value, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoIn(List<String> values) {
+            addCriterion("inspect_no in", values, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoNotIn(List<String> values) {
+            addCriterion("inspect_no not in", values, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoBetween(String value1, String value2) {
+            addCriterion("inspect_no between", value1, value2, "inspectNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andInspectNoNotBetween(String value1, String value2) {
+            addCriterion("inspect_no not between", value1, value2, "inspectNo");
+            return (Criteria) this;
+        }
+
         public Criteria andMaterialGraphNoIsNull() {
             addCriterion("material_graph_no is null");
             return (Criteria) this;

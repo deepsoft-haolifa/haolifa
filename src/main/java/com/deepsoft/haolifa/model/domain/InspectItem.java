@@ -9,6 +9,8 @@ public class InspectItem {
 
     private Integer inspectId;
 
+    private String inspectNo;
+
     private String materialGraphNo;
 
     private String materialName;
@@ -35,10 +37,11 @@ public class InspectItem {
 
     private String remark;
 
-    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, BigDecimal purchasePrice, String requirements, String unit, String supplierName, String supplierNo, String remark) {
+    public InspectItem(Integer id, String purchaseNo, Integer inspectId, String inspectNo, String materialGraphNo, String materialName, String specification, Integer purchaseNumber, Integer deliveryNumber, Integer unqualifiedNumber, Integer qualifiedNumber, BigDecimal purchasePrice, String requirements, String unit, String supplierName, String supplierNo, String remark) {
         this.id = id;
         this.purchaseNo = purchaseNo;
         this.inspectId = inspectId;
+        this.inspectNo = inspectNo;
         this.materialGraphNo = materialGraphNo;
         this.materialName = materialName;
         this.specification = specification;
@@ -80,6 +83,14 @@ public class InspectItem {
 
     public void setInspectId(Integer inspectId) {
         this.inspectId = inspectId;
+    }
+
+    public String getInspectNo() {
+        return inspectNo;
+    }
+
+    public void setInspectNo(String inspectNo) {
+        this.inspectNo = inspectNo == null ? null : inspectNo.trim();
     }
 
     public String getMaterialGraphNo() {
