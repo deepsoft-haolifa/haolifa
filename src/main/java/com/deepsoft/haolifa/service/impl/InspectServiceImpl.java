@@ -140,6 +140,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (model.getStatus() == 2 && (model.getAccessorys() == null || model.getAccessorys().size() == 0)) {
             return new ResultBean(MATERIAL_REPORT_IS_NULL);
         }
+        Inspect inspectInfo = inspectMapper.selectByPrimaryKey(inspectId);
         Inspect inspect = new Inspect();
         inspect.setId(inspectId);
         inspect.setSupplierName(model.getSupplierName());
@@ -168,6 +169,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 BeanUtils.copyProperties(inspectItemDTO, inspectItem);
                 inspectItem.setPurchasePrice(new BigDecimal(inspectItemDTO.getPurchasePrice()));
                 inspectItem.setInspectId(inspect.getId());
+                inspectItem.setInspectNo(inspectInfo.getInspectNo());
                 inspectItemMapper.insertSelective(inspectItem);
                 totalCount += deliveryNumber;
             }
