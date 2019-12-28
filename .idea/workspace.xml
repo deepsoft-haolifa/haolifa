@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1387ba3-ca1f-4538-9be3-d7848857ce8a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/sql/二期.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/二期.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/deepsoft/haolifa/controller/ExportExcelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/deepsoft/haolifa/controller/ExportExcelController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -661,7 +660,7 @@
       <workItem from="1576768194454" duration="907000" />
       <workItem from="1577108641133" duration="2102000" />
       <workItem from="1577244105706" duration="7816000" />
-      <workItem from="1577534960610" duration="7097000" />
+      <workItem from="1577534960610" duration="7414000" />
     </task>
     <task id="LOCAL-00127" summary="change order material sort">
       <created>1558454426043</created>

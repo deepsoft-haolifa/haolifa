@@ -24,3 +24,6 @@ gradle/wrapper/
 /dist/
 /nbdist/
 /.nb-gradle/
+/out/
+/build/
+/.gradle/
