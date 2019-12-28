@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.DeliveryNoticeExtendMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeListDTO">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+      <arg column="create_user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <arg column="delivery_url" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="contract_order_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="delivery_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="audit_user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <arg column="audit_info" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <arg column="audit_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+      <arg column="audit_result" javaType="java.lang.Byte" jdbcType="TINYINT"/>
+      <arg column="deliver_status" javaType="java.lang.Byte" jdbcType="TINYINT"/>
+      <arg column="delivered_number" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <arg column="total_count" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+    </constructor>
+  </resultMap>
+
+  <select id="selectDeliverNoticeList" parameterType="com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeConditionDTO" resultMap="BaseResultMap">
+    select dn.*,op.deliver_status,op.delivered_number,op.total_count from delivery_notice dn left join order_product op on op.order_contract_no = dn.contract_order_no
+    <where>
+      <if test="deliveryNo != null and deliveryNo != ''">
+        and dn.delivery_no like concat('%',#{deliveryNo},'%')
+      </if>
+      <if test="contractOrderNo != null and contractOrderNo != ''">
+        and dn.contract_order_no like concat('%',#{contractOrderNo},'%')
+      </if>
+      <if test="deliverStatus > -1" >
+        and op.deliver_status = #{deliverStatus}
+      </if>
+    </where>
+    order by dn.id desc
+  </select>
+</mapper>

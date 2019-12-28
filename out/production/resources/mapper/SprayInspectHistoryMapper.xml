@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="spray_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_graph_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="test_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="unqualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="handling_suggestion" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="original_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="reasons" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, spray_no, material_graph_no, material_graph_name, test_number, qualified_number, 
+    unqualified_number, handling_suggestion, remark, status, original_graph_no, create_time, 
+    update_time, accessory, reasons
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from spray_inspect_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from spray_inspect_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from spray_inspect_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" >
+    delete from spray_inspect_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into spray_inspect_history (spray_no, material_graph_no, material_graph_name, 
+      test_number, qualified_number, unqualified_number, 
+      handling_suggestion, remark, status, 
+      original_graph_no, create_time, update_time, 
+      accessory, reasons)
+    values (#{sprayNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
+      #{testNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, 
+      #{handlingSuggestion,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{originalGraphNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{accessory,jdbcType=VARCHAR}, #{reasons,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into spray_inspect_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sprayNo != null" >
+        spray_no,
+      </if>
+      <if test="materialGraphNo != null" >
+        material_graph_no,
+      </if>
+      <if test="materialGraphName != null" >
+        material_graph_name,
+      </if>
+      <if test="testNumber != null" >
+        test_number,
+      </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number,
+      </if>
+      <if test="unqualifiedNumber != null" >
+        unqualified_number,
+      </if>
+      <if test="handlingSuggestion != null" >
+        handling_suggestion,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="originalGraphNo != null" >
+        original_graph_no,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
+      <if test="reasons != null" >
+        reasons,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sprayNo != null" >
+        #{sprayNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphNo != null" >
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null" >
+        #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="testNumber != null" >
+        #{testNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null" >
+        #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null" >
+        #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="handlingSuggestion != null" >
+        #{handlingSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="originalGraphNo != null" >
+        #{originalGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
+      </if>
+      <if test="reasons != null" >
+        #{reasons,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistoryExample" resultType="java.lang.Integer" >
+    select count(*) from spray_inspect_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update spray_inspect_history
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.sprayNo != null" >
+        spray_no = #{record.sprayNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGraphNo != null" >
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGraphName != null" >
+        material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testNumber != null" >
+        test_number = #{record.testNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.qualifiedNumber != null" >
+        qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unqualifiedNumber != null" >
+        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.handlingSuggestion != null" >
+        handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.originalGraphNo != null" >
+        original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reasons != null" >
+        reasons = #{record.reasons,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update spray_inspect_history
+    set id = #{record.id,jdbcType=INTEGER},
+      spray_no = #{record.sprayNo,jdbcType=VARCHAR},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      test_number = #{record.testNumber,jdbcType=INTEGER},
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      handling_suggestion = #{record.handlingSuggestion,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      original_graph_no = #{record.originalGraphNo,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      accessory = #{record.accessory,jdbcType=VARCHAR},
+      reasons = #{record.reasons,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
+    update spray_inspect_history
+    <set >
+      <if test="sprayNo != null" >
+        spray_no = #{sprayNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphNo != null" >
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null" >
+        material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="testNumber != null" >
+        test_number = #{testNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null" >
+        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="handlingSuggestion != null" >
+        handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="originalGraphNo != null" >
+        original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
+      <if test="reasons != null" >
+        reasons = #{reasons,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.SprayInspectHistory" >
+    update spray_inspect_history
+    set spray_no = #{sprayNo,jdbcType=VARCHAR},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      test_number = #{testNumber,jdbcType=INTEGER},
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      handling_suggestion = #{handlingSuggestion,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      original_graph_no = #{originalGraphNo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      accessory = #{accessory,jdbcType=VARCHAR},
+      reasons = #{reasons,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

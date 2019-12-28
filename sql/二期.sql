@@ -40,4 +40,5 @@ INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_u
 -- 订单表添加不需要核料字段
 alter table order_product add column is_check_material tinyint(4) not null default 1 comment '此订单是否需要核料（0 不需要；1 需要）'
 -- inspect_item 添加inspect_no 字段
-alter table inspect_ietm add column `inspect_no` varchar(32) NOT NULL DEFAULT '' COMMENT '送检单编号';
+alter table inspect_item add column `inspect_no` varchar(32) NOT NULL DEFAULT '' COMMENT '送检单编号';
+update inspect_item ii,(select b.id,b.inspect_no,a.qualified_number,a.unqualified_number from inspect_history a left join inspect b on a.inspect_no=b.inspect_no where a.type=1) hh set ii.inspect_no=hh.inspect_no,ii.unqualified_number=hh.unqualified_number,ii.qualified_number=hh.qualified_number where ii.inspect_id=hh.id;

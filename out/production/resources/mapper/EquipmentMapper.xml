@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.EquipmentMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Equipment" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="equipment_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="equipment_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="specification" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="supplier_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_factory" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="serviced_years" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="is_delete" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="purchase_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, equipment_no, equipment_status, name, number, type, specification, supplier_no, 
+    product_factory, serviced_years, create_time, update_time, is_delete, create_user_id, 
+    price, purchase_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.EquipmentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from equipment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from equipment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.EquipmentExample" >
+    delete from equipment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Equipment" >
+    insert into equipment (id, equipment_no, equipment_status, 
+      name, number, type, 
+      specification, supplier_no, product_factory, 
+      serviced_years, create_time, update_time, 
+      is_delete, create_user_id, price, 
+      purchase_time)
+    values (#{id,jdbcType=INTEGER}, #{equipmentNo,jdbcType=VARCHAR}, #{equipmentStatus,jdbcType=TINYINT}, 
+      #{name,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, 
+      #{specification,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{productFactory,jdbcType=VARCHAR}, 
+      #{servicedYears,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
+      #{purchaseTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Equipment" >
+    insert into equipment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="equipmentNo != null" >
+        equipment_no,
+      </if>
+      <if test="equipmentStatus != null" >
+        equipment_status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="specification != null" >
+        specification,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="productFactory != null" >
+        product_factory,
+      </if>
+      <if test="servicedYears != null" >
+        serviced_years,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="purchaseTime != null" >
+        purchase_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="equipmentNo != null" >
+        #{equipmentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentStatus != null" >
+        #{equipmentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="specification != null" >
+        #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productFactory != null" >
+        #{productFactory,jdbcType=VARCHAR},
+      </if>
+      <if test="servicedYears != null" >
+        #{servicedYears,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="purchaseTime != null" >
+        #{purchaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.EquipmentExample" resultType="java.lang.Integer" >
+    select count(*) from equipment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update equipment
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.equipmentNo != null" >
+        equipment_no = #{record.equipmentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentStatus != null" >
+        equipment_status = #{record.equipmentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.specification != null" >
+        specification = #{record.specification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierNo != null" >
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productFactory != null" >
+        product_factory = #{record.productFactory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servicedYears != null" >
+        serviced_years = #{record.servicedYears,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.purchaseTime != null" >
+        purchase_time = #{record.purchaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update equipment
+    set id = #{record.id,jdbcType=INTEGER},
+      equipment_no = #{record.equipmentNo,jdbcType=VARCHAR},
+      equipment_status = #{record.equipmentStatus,jdbcType=TINYINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=TINYINT},
+      specification = #{record.specification,jdbcType=VARCHAR},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      product_factory = #{record.productFactory,jdbcType=VARCHAR},
+      serviced_years = #{record.servicedYears,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      purchase_time = #{record.purchaseTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Equipment" >
+    update equipment
+    <set >
+      <if test="equipmentNo != null" >
+        equipment_no = #{equipmentNo,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentStatus != null" >
+        equipment_status = #{equipmentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="specification != null" >
+        specification = #{specification,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productFactory != null" >
+        product_factory = #{productFactory,jdbcType=VARCHAR},
+      </if>
+      <if test="servicedYears != null" >
+        serviced_years = #{servicedYears,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="purchaseTime != null" >
+        purchase_time = #{purchaseTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Equipment" >
+    update equipment
+    set equipment_no = #{equipmentNo,jdbcType=VARCHAR},
+      equipment_status = #{equipmentStatus,jdbcType=TINYINT},
+      name = #{name,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      specification = #{specification,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      product_factory = #{productFactory,jdbcType=VARCHAR},
+      serviced_years = #{servicedYears,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      purchase_time = #{purchaseTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

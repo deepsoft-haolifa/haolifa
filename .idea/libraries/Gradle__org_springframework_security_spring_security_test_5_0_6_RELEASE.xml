@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.security:spring-security-test:5.0.6.RELEASE">
+    <CLASSES>
+      <root url="jar://D:/tools/apache-maven-3.5.4/repo/caches/modules-2/files-2.1/org.springframework.security/spring-security-test/5.0.6.RELEASE/ffdccf0dacbe2fed270c2a7ddf8cd8eafa44f8b6/spring-security-test-5.0.6.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://D:/tools/apache-maven-3.5.4/repo/caches/modules-2/files-2.1/org.springframework.security/spring-security-test/5.0.6.RELEASE/c2f3f61bf9692398aa6f01dd514b46a016d3316f/spring-security-test-5.0.6.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

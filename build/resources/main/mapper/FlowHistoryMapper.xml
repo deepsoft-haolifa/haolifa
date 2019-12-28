@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.FlowHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.FlowHistory">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="instance_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="step_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="audit_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="audit_info" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="allot_user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="audit_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="audit_result" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="form_type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="form_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="form_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accessory" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, create_time, update_time, instance_id, step_id, audit_user_id, audit_info, allot_user_id, 
+    audit_time, audit_result, form_type, form_id, form_no, accessory
+  </sql>
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowHistoryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from flow_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from flow_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowHistoryExample">
+    delete from flow_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
+    insert into flow_history (id, create_time, update_time, 
+      instance_id, step_id, audit_user_id, 
+      audit_info, allot_user_id, audit_time, 
+      audit_result, form_type, form_id, 
+      form_no, accessory)
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{instanceId,jdbcType=INTEGER}, #{stepId,jdbcType=INTEGER}, #{auditUserId,jdbcType=INTEGER}, 
+      #{auditInfo,jdbcType=VARCHAR}, #{allotUserId,jdbcType=INTEGER}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{auditResult,jdbcType=TINYINT}, #{formType,jdbcType=TINYINT}, #{formId,jdbcType=INTEGER}, 
+      #{formNo,jdbcType=VARCHAR}, #{accessory,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
+    insert into flow_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="instanceId != null">
+        instance_id,
+      </if>
+      <if test="stepId != null">
+        step_id,
+      </if>
+      <if test="auditUserId != null">
+        audit_user_id,
+      </if>
+      <if test="auditInfo != null">
+        audit_info,
+      </if>
+      <if test="allotUserId != null">
+        allot_user_id,
+      </if>
+      <if test="auditTime != null">
+        audit_time,
+      </if>
+      <if test="auditResult != null">
+        audit_result,
+      </if>
+      <if test="formType != null">
+        form_type,
+      </if>
+      <if test="formId != null">
+        form_id,
+      </if>
+      <if test="formNo != null">
+        form_no,
+      </if>
+      <if test="accessory != null">
+        accessory,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="instanceId != null">
+        #{instanceId,jdbcType=INTEGER},
+      </if>
+      <if test="stepId != null">
+        #{stepId,jdbcType=INTEGER},
+      </if>
+      <if test="auditUserId != null">
+        #{auditUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditInfo != null">
+        #{auditInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="allotUserId != null">
+        #{allotUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditResult != null">
+        #{auditResult,jdbcType=TINYINT},
+      </if>
+      <if test="formType != null">
+        #{formType,jdbcType=TINYINT},
+      </if>
+      <if test="formId != null">
+        #{formId,jdbcType=INTEGER},
+      </if>
+      <if test="formNo != null">
+        #{formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accessory != null">
+        #{accessory,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.FlowHistoryExample" resultType="java.lang.Long">
+    select count(*) from flow_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update flow_history
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.instanceId != null">
+        instance_id = #{record.instanceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stepId != null">
+        step_id = #{record.stepId,jdbcType=INTEGER},
+      </if>
+      <if test="record.auditUserId != null">
+        audit_user_id = #{record.auditUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.auditInfo != null">
+        audit_info = #{record.auditInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.allotUserId != null">
+        allot_user_id = #{record.allotUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.auditTime != null">
+        audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.auditResult != null">
+        audit_result = #{record.auditResult,jdbcType=TINYINT},
+      </if>
+      <if test="record.formType != null">
+        form_type = #{record.formType,jdbcType=TINYINT},
+      </if>
+      <if test="record.formId != null">
+        form_id = #{record.formId,jdbcType=INTEGER},
+      </if>
+      <if test="record.formNo != null">
+        form_no = #{record.formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessory != null">
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update flow_history
+    set id = #{record.id,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      instance_id = #{record.instanceId,jdbcType=INTEGER},
+      step_id = #{record.stepId,jdbcType=INTEGER},
+      audit_user_id = #{record.auditUserId,jdbcType=INTEGER},
+      audit_info = #{record.auditInfo,jdbcType=VARCHAR},
+      allot_user_id = #{record.allotUserId,jdbcType=INTEGER},
+      audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      audit_result = #{record.auditResult,jdbcType=TINYINT},
+      form_type = #{record.formType,jdbcType=TINYINT},
+      form_id = #{record.formId,jdbcType=INTEGER},
+      form_no = #{record.formNo,jdbcType=VARCHAR},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
+    update flow_history
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="instanceId != null">
+        instance_id = #{instanceId,jdbcType=INTEGER},
+      </if>
+      <if test="stepId != null">
+        step_id = #{stepId,jdbcType=INTEGER},
+      </if>
+      <if test="auditUserId != null">
+        audit_user_id = #{auditUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditInfo != null">
+        audit_info = #{auditInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="allotUserId != null">
+        allot_user_id = #{allotUserId,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditResult != null">
+        audit_result = #{auditResult,jdbcType=TINYINT},
+      </if>
+      <if test="formType != null">
+        form_type = #{formType,jdbcType=TINYINT},
+      </if>
+      <if test="formId != null">
+        form_id = #{formId,jdbcType=INTEGER},
+      </if>
+      <if test="formNo != null">
+        form_no = #{formNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accessory != null">
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.FlowHistory">
+    update flow_history
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      instance_id = #{instanceId,jdbcType=INTEGER},
+      step_id = #{stepId,jdbcType=INTEGER},
+      audit_user_id = #{auditUserId,jdbcType=INTEGER},
+      audit_info = #{auditInfo,jdbcType=VARCHAR},
+      allot_user_id = #{allotUserId,jdbcType=INTEGER},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      audit_result = #{auditResult,jdbcType=TINYINT},
+      form_type = #{formType,jdbcType=TINYINT},
+      form_id = #{formId,jdbcType=INTEGER},
+      form_no = #{formNo,jdbcType=VARCHAR},
+      accessory = #{accessory,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

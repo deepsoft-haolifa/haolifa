@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.pagehelper:pagehelper:5.1.4">
+    <CLASSES>
+      <root url="jar://D:/tools/apache-maven-3.5.4/repo/caches/modules-2/files-2.1/com.github.pagehelper/pagehelper/5.1.4/e58b01d0c58a202a3f38e6461585bea9eb4e4ebf/pagehelper-5.1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://D:/tools/apache-maven-3.5.4/repo/caches/modules-2/files-2.1/com.github.pagehelper/pagehelper/5.1.4/89c780384fc148b4b8abc6379016448cfe0efc0a/pagehelper-5.1.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

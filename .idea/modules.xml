@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/haolifa.iml" filepath="$PROJECT_DIR$/haolifa.iml" group="haolifa" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/haolifa_main.iml" filepath="$PROJECT_DIR$/.idea/modules/haolifa_main.iml" group="haolifa" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/haolifa_test.iml" filepath="$PROJECT_DIR$/.idea/modules/haolifa_test.iml" group="haolifa" />
+    </modules>
+  </component>
+</project>

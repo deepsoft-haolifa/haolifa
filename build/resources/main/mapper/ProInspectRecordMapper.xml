@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.ProInspectRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.ProInspectRecord" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="testing_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="unqualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="reason" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="storage_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="accessory" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, order_no, product_no, product_model, product_specifications, testing_number, 
+    qualified_number, unqualified_number, reason, storage_status, create_time, update_time, 
+    create_user_id, accessory
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pro_inspect_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pro_inspect_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pro_inspect_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecordExample" >
+    delete from pro_inspect_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pro_inspect_record (order_no, product_no, product_model, 
+      product_specifications, testing_number, qualified_number, 
+      unqualified_number, reason, storage_status, 
+      create_time, update_time, create_user_id, 
+      accessory)
+    values (#{orderNo,jdbcType=VARCHAR}, #{productNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, 
+      #{productSpecifications,jdbcType=VARCHAR}, #{testingNumber,jdbcType=INTEGER}, #{qualifiedNumber,jdbcType=INTEGER}, 
+      #{unqualifiedNumber,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{storageStatus,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{accessory,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pro_inspect_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="productNo != null" >
+        product_no,
+      </if>
+      <if test="productModel != null" >
+        product_model,
+      </if>
+      <if test="productSpecifications != null" >
+        product_specifications,
+      </if>
+      <if test="testingNumber != null" >
+        testing_number,
+      </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number,
+      </if>
+      <if test="unqualifiedNumber != null" >
+        unqualified_number,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="storageStatus != null" >
+        storage_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="accessory != null" >
+        accessory,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productModel != null" >
+        #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null" >
+        #{productSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="testingNumber != null" >
+        #{testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null" >
+        #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null" >
+        #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="storageStatus != null" >
+        #{storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="accessory != null" >
+        #{accessory,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecordExample" resultType="java.lang.Integer" >
+    select count(*) from pro_inspect_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pro_inspect_record
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productNo != null" >
+        product_no = #{record.productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productModel != null" >
+        product_model = #{record.productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productSpecifications != null" >
+        product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testingNumber != null" >
+        testing_number = #{record.testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.qualifiedNumber != null" >
+        qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unqualifiedNumber != null" >
+        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageStatus != null" >
+        storage_status = #{record.storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.accessory != null" >
+        accessory = #{record.accessory,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pro_inspect_record
+    set id = #{record.id,jdbcType=INTEGER},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      product_no = #{record.productNo,jdbcType=VARCHAR},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      product_specifications = #{record.productSpecifications,jdbcType=VARCHAR},
+      testing_number = #{record.testingNumber,jdbcType=INTEGER},
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      storage_status = #{record.storageStatus,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      accessory = #{record.accessory,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecord" >
+    update pro_inspect_record
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null" >
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productModel != null" >
+        product_model = #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="productSpecifications != null" >
+        product_specifications = #{productSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="testingNumber != null" >
+        testing_number = #{testingNumber,jdbcType=INTEGER},
+      </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null" >
+        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="storageStatus != null" >
+        storage_status = #{storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="accessory != null" >
+        accessory = #{accessory,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.ProInspectRecord" >
+    update pro_inspect_record
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      product_no = #{productNo,jdbcType=VARCHAR},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      product_specifications = #{productSpecifications,jdbcType=VARCHAR},
+      testing_number = #{testingNumber,jdbcType=INTEGER},
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      reason = #{reason,jdbcType=VARCHAR},
+      storage_status = #{storageStatus,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      accessory = #{accessory,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,22 @@
+server:
+  port: 8087
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+    username: haolifa
+    password: haolifa3306
+    hikari:
+      maximum-pool-size: 15
+      idle-timeout: 30000
+      auto-commit: true
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+  redis:
+    database: 0
+    host: 47.105.36.56
+    port: 6379
+    password: haolifa6379
+    timeout: 10000ms
+  session:
+    store-type: redis

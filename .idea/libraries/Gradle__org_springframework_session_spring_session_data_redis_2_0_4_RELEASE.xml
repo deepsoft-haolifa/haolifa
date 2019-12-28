@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.session:spring-session-data-redis:2.0.4.RELEASE">
+    <CLASSES>
+      <root url="jar://D:/tools/apache-maven-3.5.4/repo/caches/modules-2/files-2.1/org.springframework.session/spring-session-data-redis/2.0.4.RELEASE/3bc7d8ac9f593223852eb8f148cf71f507ebcece/spring-session-data-redis-2.0.4.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://D:/tools/apache-maven-3.5.4/repo/caches/modules-2/files-2.1/org.springframework.session/spring-session-data-redis/2.0.4.RELEASE/8e8daf92a4499fe729c8c974c4f36ff82d1b7b35/spring-session-data-redis-2.0.4.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

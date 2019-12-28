@@ -67,6 +67,9 @@ public class ExportExcelController {
     private InspectHistoryMapper inspectHistoryMapper;
 
     @Autowired
+    private InspectService inspectService;
+
+    @Autowired
     private ProInspectRecordMapper proInspectRecordMapper;
 
     @Autowired
@@ -74,6 +77,8 @@ public class ExportExcelController {
 
     @Autowired
     private MaterialMapper materialMapper;
+    @Autowired
+    private MaterialService materialService;
 
     @Autowired
     private MaterialRequisitionService materialRequisitionService;
@@ -1675,7 +1680,7 @@ public class ExportExcelController {
             cell_0.setCellValue(i + 1);
             cell_0.setCellStyle(center);
             Cell cell_1 = row_value.createCell(1);
-            cell_1.setCellValue(getMaterial(entryOutStoreRecord.getMaterialGraphNo()).getName());
+            cell_1.setCellValue(materialService.getInfoByGraphNo(entryOutStoreRecord.getMaterialGraphNo()).getName());
             cell_1.setCellStyle(center);
             Cell cell_2 = row_value.createCell(2);
             cell_2.setCellValue(entryOutStoreRecord.getMaterialGraphNo());
@@ -1803,14 +1808,164 @@ public class ExportExcelController {
         outputStream.close();
     }
 
-    private Material getMaterial(String materialGraphNo) {
-        MaterialExample example = new MaterialExample();
-        example.createCriteria().andGraphNoEqualTo(materialGraphNo);
-        List<Material> materials = materialMapper.selectByExample(example);
-        if (!CollectionUtils.isEmpty(materials)) {
-            return materials.get(0);
+
+    @ApiOperation("导出零件报检单")
+    @GetMapping("/material-inspect/{inspectId}")
+    public void materialInspect(HttpServletResponse response, @PathVariable("inspectId") Integer inspectId)
+        throws IOException {
+        // 根据id获取报检单
+        ResultBean resultBean = inspectService.getInfo(inspectId);
+        Map result = (Map<String, Object>) resultBean.getResult();
+        Inspect inspect = (Inspect) result.get("inspect");
+        List<InspectItem> inspectItemList = (List<InspectItem>) result.get("items");
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件报检单", "utf-8") + ".xls");
+        response.setContentType("application/octet-stream;");
+        Workbook workbook = new HSSFWorkbook();
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setWrapText(true);
+        Sheet sheet = workbook.createSheet("零件报检单");
+        // 单元格样式
+        CellStyle center = workbook.createCellStyle();
+        center.setAlignment(HorizontalAlignment.CENTER);
+        center.setVerticalAlignment(VerticalAlignment.CENTER);
+        center.setWrapText(true);
+
+        Row rtitle = sheet.createRow(0);
+        CellRangeAddress cra = new CellRangeAddress(0, 0, 0, 11);
+        sheet.addMergedRegion(cra);
+        Cell rtitle_cell = rtitle.createCell(0);
+        rtitle_cell.setCellValue("零 件 报 检 单");
+        rtitle_cell.setCellStyle(center);
+
+        Row row1 = sheet.createRow(1);
+        CellRangeAddress cra1_1 = new CellRangeAddress(1, 1, 0, 4);
+        sheet.addMergedRegion(cra1_1);
+        Cell cell_1_1 = row1.createCell(0);
+        cell_1_1.setCellValue("送检单号：" + inspect.getInspectNo());
+        CellRangeAddress cra1_2 = new CellRangeAddress(1, 1, 5, 11);
+        sheet.addMergedRegion(cra1_2);
+        Cell cell_1_2 = row1.createCell(5);
+        Date createTime = inspect.getCreateTime();
+        String createTimeStr = "";
+        if (createTime != null) {
+            createTimeStr = DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, createTime);
         }
-        return new Material();
+        cell_1_2.setCellValue("发起日期：" + createTimeStr);
+
+        Row row2 = sheet.createRow(2);
+        CellRangeAddress cra2_1 = new CellRangeAddress(2, 2, 0, 4);
+        sheet.addMergedRegion(cra2_1);
+        Cell cell_2_1 = row2.createCell(0);
+        cell_2_1.setCellValue("采购合同号：" + inspect.getPurchaseNo());
+        CellRangeAddress cra2_2 = new CellRangeAddress(2, 2, 5, 11);
+        sheet.addMergedRegion(cra2_2);
+        Cell cell_2_2 = row2.createCell(5);
+        cell_2_2.setCellValue("批次号：" + inspect.getBatchNumber());
+
+        Row row3 = sheet.createRow(3);
+        CellRangeAddress cra3_1 = new CellRangeAddress(3, 3, 0, 4);
+        sheet.addMergedRegion(cra3_1);
+        Cell cell_3_1 = row3.createCell(0);
+        cell_3_1.setCellValue("供应商：" + inspect.getSupplierName());
+        CellRangeAddress cra3_2 = new CellRangeAddress(3, 3, 5, 11);
+        sheet.addMergedRegion(cra3_2);
+        Cell cell_3_2 = row3.createCell(5);
+        Date arrivalTime = inspect.getArrivalTime();
+        String arrivalTimeStr = "";
+        if (arrivalTime != null) {
+            arrivalTimeStr = DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, arrivalTime);
+        }
+        cell_3_2.setCellValue("到货日期：" + arrivalTimeStr);
+
+        Row columnTitle = sheet.createRow(4);
+        Cell cell_10 = columnTitle.createCell(0);
+        cell_10.setCellValue("序号");
+        cell_10.setCellStyle(center);
+        Cell cell_11 = columnTitle.createCell(1);
+        cell_11.setCellValue("合同编号");
+        cell_11.setCellStyle(center);
+        Cell cell_12 = columnTitle.createCell(2);
+        cell_12.setCellValue("物料名称");
+        cell_12.setCellStyle(center);
+        Cell cell_13 = columnTitle.createCell(3);
+        cell_13.setCellValue("物料图号");
+        cell_13.setCellStyle(center);
+        Cell cell_14 = columnTitle.createCell(4);
+        cell_14.setCellValue("规格");
+        cell_14.setCellStyle(center);
+        Cell cell_15 = columnTitle.createCell(5);
+        cell_15.setCellValue("材质与标准要求");
+        cell_15.setCellStyle(center);
+        Cell cell_16 = columnTitle.createCell(6);
+        cell_16.setCellValue("单位");
+        cell_16.setCellStyle(center);
+        Cell cell_17 = columnTitle.createCell(7);
+        cell_17.setCellValue("采购数");
+        cell_17.setCellStyle(center);
+        Cell cell_18 = columnTitle.createCell(8);
+        cell_18.setCellValue("送货数");
+        cell_18.setCellStyle(center);
+        Cell cell_19 = columnTitle.createCell(9);
+        cell_19.setCellValue("合格数");
+        cell_19.setCellStyle(center);
+        Cell cell_110 = columnTitle.createCell(10);
+        cell_110.setCellValue("不合格数");
+        cell_110.setCellStyle(center);
+        Cell cell_111 = columnTitle.createCell(11);
+        cell_111.setCellValue("备注");
+        cell_111.setCellStyle(center);
+        for (int i = 0; i < inspectItemList.size(); i++) {
+            InspectItem inspectItem = inspectItemList.get(i);
+            Row row_value = sheet.createRow(i + 5);
+            Cell cell_0 = row_value.createCell(0);
+            cell_0.setCellValue(i + 1);
+            cell_0.setCellStyle(center);
+            Cell cell_1 = row_value.createCell(1);
+            cell_1.setCellValue(inspectItem.getPurchaseNo());
+            cell_1.setCellStyle(center);
+            Cell cell_2 = row_value.createCell(2);
+            cell_2.setCellValue(inspectItem.getMaterialName());
+            cell_2.setCellStyle(center);
+            Cell cell_3 = row_value.createCell(3);
+            cell_3.setCellValue(inspectItem.getMaterialGraphNo());
+            cell_3.setCellStyle(center);
+            Cell cell_4 = row_value.createCell(4);
+            cell_4.setCellValue(inspectItem.getSpecification());
+            cell_4.setCellStyle(center);
+            Cell cell_5 = row_value.createCell(5);
+            cell_5.setCellValue(String.valueOf(inspectItem.getRequirements()));
+            cell_5.setCellStyle(center);
+            Cell cell_6 = row_value.createCell(6);
+            cell_6.setCellValue(inspectItem.getUnit());
+            cell_6.setCellStyle(center);
+            Cell cell_7 = row_value.createCell(7);
+            cell_7.setCellValue(inspectItem.getPurchaseNumber());
+            cell_7.setCellStyle(center);
+
+            Cell cell_8 = row_value.createCell(8);
+            cell_8.setCellValue(inspectItem.getDeliveryNumber());
+            cell_8.setCellStyle(center);
+            Cell cell_9 = row_value.createCell(9);
+            cell_9.setCellValue(inspectItem.getQualifiedNumber());
+            cell_9.setCellStyle(center);
+            Cell cell_data_10 = row_value.createCell(10);
+            cell_data_10.setCellValue(inspectItem.getUnqualifiedNumber());
+            cell_data_10.setCellStyle(center);
+            Cell cell_data_11 = row_value.createCell(11);
+            cell_data_11.setCellValue(inspectItem.getRemark());
+            cell_data_11.setCellStyle(center);
+        }
+
+        sheet.autoSizeColumn(1, true);
+        sheet.autoSizeColumn(2, true);
+        sheet.autoSizeColumn(3, true);
+        sheet.autoSizeColumn(4, true);
+
+
+        OutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
     }
 
 

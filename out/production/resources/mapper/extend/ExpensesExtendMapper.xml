@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.ExpensesExtendMapper">
+
+    <resultMap id="reportMap" type="com.deepsoft.haolifa.model.domain.ExpensesReport">
+        <result column="total_amount" property="totalAmount" jdbcType="DECIMAL"
+                javaType="java.math.BigDecimal"></result>
+        <result column="second_classify" property="secondClassify" jdbcType="VARCHAR"
+                javaType="java.lang.String"></result>
+        <result column="expenses_classify" property="expensesClassify" jdbcType="VARCHAR"
+                javaType="java.lang.String"></result>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" javaType="java.lang.String"></result>
+        <result column="department" property="department" jdbcType="VARCHAR" javaType="java.lang.String"></result>
+    </resultMap>
+    <select id="getClassify" resultMap="reportMap" parameterType="java.lang.Integer">
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by expenses_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+    </select>
+    <select id="classifyByDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by expenses_classify,department
+    </select>
+    <select id="classifyBySecondDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by second_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+    </select>
+    <select id="getAllClassify" resultMap="reportMap" parameterType="java.lang.Integer">
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by expenses_classify
+    </select>
+    <select id="classifyByDepartmentAll" resultMap="reportMap" parameterType="java.lang.Integer">
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by department
+    </select>
+    <select id="getAllClassifyWithDepartment" resultMap="reportMap" parameterType="java.lang.String">
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses  where department = #{department,jdbcType=VARCHAR}
+        group by expenses_classify
+    </select>
+    <select id="getAllClassifyWithFirstClassify" resultMap="reportMap" parameterType="java.lang.String">
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where  expenses_classify =  #{classify,jdbcType=VARCHAR} group by second_classify
+    </select>
+
+
+
+</mapper>
