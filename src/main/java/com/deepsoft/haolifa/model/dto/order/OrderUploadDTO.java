@@ -11,4 +11,6 @@ public class OrderUploadDTO {
     private String base64Source;
     @ApiModelProperty(value = "发货时间")
     private String deliveryDate;
+    @ApiModelProperty(value = "订单是否核料流程；1.走核料；0 不核料")
+    private Byte isCheckMaterial;
 }

@@ -717,6 +717,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             orderProductDTO.setDemandName(demandName);
             orderProductDTO.setSupplyName(supplyName);
             orderProductDTO.setOrderContractNo(orderContractNo);
+            orderProductDTO.setIsCheckMaterial(orderUploadDTO.getIsCheckMaterial());
             orderProductDTO.setOrderProductAssociates(orderProductAssociates);
             //将合同上传到7牛文件服务器
             String fileUrl = QiniuUtil.uploadFile(base64Source, fileName);

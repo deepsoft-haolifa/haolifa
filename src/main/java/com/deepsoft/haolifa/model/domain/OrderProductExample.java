@@ -3385,6 +3385,66 @@ public class OrderProductExample {
             addCriterion("gen_picking_list not between", value1, value2, "genPickingList");
             return (Criteria) this;
         }
+
+        public Criteria andIsCheckMaterialIsNull() {
+            addCriterion("is_check_material is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialIsNotNull() {
+            addCriterion("is_check_material is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialEqualTo(Byte value) {
+            addCriterion("is_check_material =", value, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialNotEqualTo(Byte value) {
+            addCriterion("is_check_material <>", value, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialGreaterThan(Byte value) {
+            addCriterion("is_check_material >", value, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialGreaterThanOrEqualTo(Byte value) {
+            addCriterion("is_check_material >=", value, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialLessThan(Byte value) {
+            addCriterion("is_check_material <", value, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialLessThanOrEqualTo(Byte value) {
+            addCriterion("is_check_material <=", value, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialIn(List<Byte> values) {
+            addCriterion("is_check_material in", values, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialNotIn(List<Byte> values) {
+            addCriterion("is_check_material not in", values, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialBetween(Byte value1, Byte value2) {
+            addCriterion("is_check_material between", value1, value2, "isCheckMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsCheckMaterialNotBetween(Byte value1, Byte value2) {
+            addCriterion("is_check_material not between", value1, value2, "isCheckMaterial");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

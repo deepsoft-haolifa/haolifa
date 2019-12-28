@@ -64,6 +64,7 @@ public class FlowServiceImpl implements FlowService {
   public ResultBean steps(int flowId) {
     FlowStepExample example = new FlowStepExample();
     example.or().andFlowIdEqualTo(flowId);
+    example.setOrderByClause("step_order asc");
     List<FlowStep> flowSteps = flowStepMapper.selectByExample(example);
     List<FlowStepListDTO> flowStepListDTOS = new ArrayList<>();
     for (int i = 0; i < flowSteps.size(); i++) {

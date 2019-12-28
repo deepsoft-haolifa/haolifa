@@ -97,4 +97,6 @@ public class OrderProductDTO {
     @ApiModelProperty(value = "是否生成了领料单")
     private Byte genPickingList;
 
+    @ApiModelProperty(value = "订单是否核料流程；1.走核料；0 不核料")
+    private Byte isCheckMaterial;
 }
