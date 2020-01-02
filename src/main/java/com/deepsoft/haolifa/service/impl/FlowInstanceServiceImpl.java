@@ -253,13 +253,24 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         // 生产
         if (auditRes == 1) {
           // 审核通过
-          orderProductService.updateOrderProductStatus(formNo, (byte) 7);
+          orderProductService.updateOrderProductStatus(formNo, CommonEnum.OrderStatus.PRODUCTION.code);
         } else if (auditRes == 0) {
           // 审核不通过
-          orderProductService.updateOrderProductStatus(formNo, (byte) 14);
+          orderProductService.updateOrderProductStatus(formNo,  CommonEnum.OrderStatus.AUDIT_ORDER_CLOSE.code);
           orderProductService.releaseMaterial(formNo);
         }
         break;
+        case 6:
+            // 不核料生产订单审批
+            if (auditRes == 1) {
+                // 审核通过
+                orderProductService.updateOrderProductStatus(formNo, CommonEnum.OrderStatus.PRODUCTION.code);
+            } else if (auditRes == 0) {
+                // 审核不通过
+                orderProductService.updateOrderProductStatus(formNo,  CommonEnum.OrderStatus.AUDIT_ORDER_CLOSE.code);
+                orderProductService.releaseMaterial(formNo);
+            }
+            break;
       case 2:
         // 采购
         if (auditRes == 1) {
