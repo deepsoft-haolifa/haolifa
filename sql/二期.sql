@@ -42,3 +42,22 @@ alter table order_product add column is_check_material tinyint(4) not null defau
 -- inspect_item 添加inspect_no 字段
 alter table inspect_item add column `inspect_no` varchar(32) NOT NULL DEFAULT '' COMMENT '送检单编号';
 update inspect_item ii,(select b.id,b.inspect_no,a.qualified_number,a.unqualified_number from inspect_history a left join inspect b on a.inspect_no=b.inspect_no where a.type=1) hh set ii.inspect_no=hh.inspect_no,ii.unqualified_number=hh.unqualified_number,ii.qualified_number=hh.qualified_number where ii.inspect_id=hh.id;
+
+
+DROP TABLE IF EXISTS `sporadic_material`;
+CREATE TABLE `sporadic_material` (
+ `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+ `classify_name` varchar(64) NOT NULL default '' COMMENT '物料分类',
+ `material_name` varchar(64) NOT NULL DEFAULT '' COMMENT '零件名称',
+ `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零星零件图号，自定义',
+ `unit` varchar(64) NOT NULL DEFAULT '' COMMENT '单位(如：根，个)',
+ `model` varchar(64) NOT NULL DEFAULT '' COMMENT '型号',
+ `price` DECIMAL (12, 4) NOT NULL DEFAULT '0.0000' COMMENT '单价',
+ `specifications` VARCHAR ( 64 ) NOT NULL DEFAULT '' COMMENT '规格',
+ `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '库存数量',
+ `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
+ `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+ `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零星零件表';
