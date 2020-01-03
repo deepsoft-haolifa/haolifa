@@ -69,7 +69,7 @@ dependencies {
     compile 'com.qiniu:qiniu-java-sdk:7.2.+'
 
     ///// hutool //////
-    compile 'cn.hutool:hutool-all:5.0.6'
+    compile 'cn.hutool:hutool-all:5.1.0'
 
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
     ///// mybatis-plus //////

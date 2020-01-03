@@ -25,6 +25,7 @@ public class CommonEnum {
         SYSTEM_EXCEPTION("0004", "系统异常"),
         UPLOAD_PIC_EXT_ERROR("0005", "图片上传参数格式有误"),
 
+        DATA_NOT_FOUND("0006", "数据不存在"),
         //用户登陆错误
         LOGIN_ERROR("1001", "登陆错误"),
         //生产订单重复
@@ -200,6 +201,22 @@ public class CommonEnum {
         public final byte code;
 
         StorageType(byte code) {
+            this.code = code;
+        }
+    }
+
+    /**
+     * 出入库零件类型
+     */
+    public enum MaterialType {
+        // 成品
+        MATERIAL((byte) 0),
+        // 零星零件
+        SPRADIC((byte) 1);
+
+        public final byte code;
+
+        MaterialType(byte code) {
             this.code = code;
         }
     }

@@ -61,3 +61,19 @@ CREATE TABLE `sporadic_material` (
  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零星零件表';
+
+-- 零星物料的出入库记录
+DROP TABLE IF EXISTS `sporadic_entry_out_record`;
+CREATE TABLE `sporadic_entry_out_record` (
+ `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+ `sporadic_id` int(11) NOT NULL COMMENT '零星物料Id',
+ `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零星零件图号，自定义',
+ `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1.出库；2.入库',
+ `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '出入库数量',
+ `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+ `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
+ `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',
+ `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零星零件出入库记录表';
+

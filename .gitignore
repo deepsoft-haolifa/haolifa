@@ -18,7 +18,7 @@ gradle/wrapper/
 *.ipr
 /out/
 gradlew
-gradle.bat
+gradlew.bat
 
 ### NetBeans ###
 /nbproject/private/
