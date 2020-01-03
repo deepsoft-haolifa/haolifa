@@ -17,6 +17,8 @@ gradle/wrapper/
 *.iml
 *.ipr
 /out/
+gradlew
+gradle.bat
 
 ### NetBeans ###
 /nbproject/private/
