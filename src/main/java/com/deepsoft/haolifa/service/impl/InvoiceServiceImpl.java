@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
 import com.deepsoft.haolifa.model.domain.Invoice;
@@ -116,7 +117,10 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
             criteria.andOrderNoLike("%" + modelList.getOrderNo() + "%");
         }
         if (modelList.getStatus() > -1) {
-            criteria.andStatusEqualTo(modelList.getStatus().byteValue());
+            criteria.andStatusEqualTo(modelList.getStatus());
+        }
+        if (CollectionUtil.isNotEmpty(modelList.getStatusList())) {
+            criteria.andStatusIn(modelList.getStatusList());
         }
         if (StringUtils.isNotEmpty(modelList.getConstractParty())) {
             criteria.andConstractPartyLike("%" + modelList.getConstractParty() + "%");

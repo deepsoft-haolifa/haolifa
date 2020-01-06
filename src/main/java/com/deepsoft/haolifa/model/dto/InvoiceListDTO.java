@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.model.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class InvoiceListDTO {
 
@@ -12,8 +14,10 @@ public class InvoiceListDTO {
     private Integer pageSize;
     @ApiModelProperty(value = "订单编号")
     private String orderNo;
-    @ApiModelProperty(value = "发票状态：-1全部，0 待申请 1 待开票 2 已开票")
-    private Integer status;
+    @ApiModelProperty(value = "发票状态：-1全部，0 待开票 1 已申请 2 已开票")
+    private Byte status;
+    @ApiModelProperty(value = "发票状态：-1全部，0 待开票 1 已申请 2 已开票")
+    private List<Byte> statusList;
     @ApiModelProperty(value = "发票类型：类型：0 全部 1 开出（生产） 2 开入（采购）")
     private Integer type;
     @ApiModelProperty(value = "合同方")
