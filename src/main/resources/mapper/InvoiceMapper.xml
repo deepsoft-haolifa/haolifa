@@ -11,6 +11,7 @@
       <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="invoice_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="is_delete" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -78,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, order_no, invoice_no, invoice_company, total_amount, remark, type, status, is_delete, 
-    create_time, update_time, create_user_id, invoice_issuing, constract_party
+    id, order_no, invoice_no, invoice_company, total_amount, remark, type, status, invoice_date, 
+    is_delete, create_time, update_time, create_user_id, invoice_issuing, constract_party
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.InvoiceExample" >
     select
@@ -117,14 +118,14 @@
     </selectKey>
     insert into invoice (order_no, invoice_no, invoice_company, 
       total_amount, remark, type, 
-      status, is_delete, create_time, 
-      update_time, create_user_id, invoice_issuing, 
-      constract_party)
+      status, invoice_date, is_delete, 
+      create_time, update_time, create_user_id, 
+      invoice_issuing, constract_party)
     values (#{orderNo,jdbcType=VARCHAR}, #{invoiceNo,jdbcType=VARCHAR}, #{invoiceCompany,jdbcType=VARCHAR}, 
       #{totalAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{status,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{invoiceIssuing,jdbcType=VARCHAR}, 
-      #{constractParty,jdbcType=VARCHAR})
+      #{status,jdbcType=TINYINT}, #{invoiceDate,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{invoiceIssuing,jdbcType=VARCHAR}, #{constractParty,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Invoice" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -152,6 +153,9 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="invoiceDate != null" >
+        invoice_date,
       </if>
       <if test="isDelete != null" >
         is_delete,
@@ -193,6 +197,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="invoiceDate != null" >
+        #{invoiceDate,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=TINYINT},
@@ -247,6 +254,9 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.invoiceDate != null" >
+        invoice_date = #{record.invoiceDate,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.isDelete != null" >
         is_delete = #{record.isDelete,jdbcType=TINYINT},
       </if>
@@ -280,6 +290,7 @@
       remark = #{record.remark,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
+      invoice_date = #{record.invoiceDate,jdbcType=TIMESTAMP},
       is_delete = #{record.isDelete,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -314,6 +325,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="invoiceDate != null" >
+        invoice_date = #{invoiceDate,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -344,6 +358,7 @@
       remark = #{remark,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
+      invoice_date = #{invoiceDate,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

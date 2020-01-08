@@ -89,11 +89,12 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     }
 
     @Override
-    public ResultBean updateInvoiceNo(Integer id, String invoiceNo) {
+    public ResultBean updateInvoiceNo(InvoiceStatusDTO statusDTO) {
         Invoice invoice = new Invoice();
-        invoice.setInvoiceNo(invoiceNo);
-        invoice.setId(id);
+        invoice.setInvoiceNo(statusDTO.getInvoiceNo());
+        invoice.setId(statusDTO.getId());
         invoice.setStatus((byte) 2);// 已开票
+        invoice.setInvoiceDate(statusDTO.getInvoiceDate());// 开票日期
         invoiceMapper.updateByPrimaryKeySelective(invoice);
         return ResultBean.success(1);
     }

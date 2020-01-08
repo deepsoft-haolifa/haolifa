@@ -626,6 +626,66 @@ public class InvoiceExample {
             return (Criteria) this;
         }
 
+        public Criteria andInvoiceDateIsNull() {
+            addCriterion("invoice_date is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateIsNotNull() {
+            addCriterion("invoice_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateEqualTo(Date value) {
+            addCriterion("invoice_date =", value, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateNotEqualTo(Date value) {
+            addCriterion("invoice_date <>", value, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateGreaterThan(Date value) {
+            addCriterion("invoice_date >", value, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateGreaterThanOrEqualTo(Date value) {
+            addCriterion("invoice_date >=", value, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateLessThan(Date value) {
+            addCriterion("invoice_date <", value, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateLessThanOrEqualTo(Date value) {
+            addCriterion("invoice_date <=", value, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateIn(List<Date> values) {
+            addCriterion("invoice_date in", values, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateNotIn(List<Date> values) {
+            addCriterion("invoice_date not in", values, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateBetween(Date value1, Date value2) {
+            addCriterion("invoice_date between", value1, value2, "invoiceDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvoiceDateNotBetween(Date value1, Date value2) {
+            addCriterion("invoice_date not between", value1, value2, "invoiceDate");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDeleteIsNull() {
             addCriterion("is_delete is null");
             return (Criteria) this;

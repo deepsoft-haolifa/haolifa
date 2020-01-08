@@ -20,6 +20,8 @@ public class Invoice {
 
     private Byte status;
 
+    private Date invoiceDate;
+
     private Byte isDelete;
 
     private Date createTime;
@@ -32,7 +34,7 @@ public class Invoice {
 
     private String constractParty;
 
-    public Invoice(Integer id, String orderNo, String invoiceNo, String invoiceCompany, BigDecimal totalAmount, String remark, Byte type, Byte status, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, String invoiceIssuing, String constractParty) {
+    public Invoice(Integer id, String orderNo, String invoiceNo, String invoiceCompany, BigDecimal totalAmount, String remark, Byte type, Byte status, Date invoiceDate, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, String invoiceIssuing, String constractParty) {
         this.id = id;
         this.orderNo = orderNo;
         this.invoiceNo = invoiceNo;
@@ -41,6 +43,7 @@ public class Invoice {
         this.remark = remark;
         this.type = type;
         this.status = status;
+        this.invoiceDate = invoiceDate;
         this.isDelete = isDelete;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -115,6 +118,14 @@ public class Invoice {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Date getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public void setInvoiceDate(Date invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
     public Byte getIsDelete() {

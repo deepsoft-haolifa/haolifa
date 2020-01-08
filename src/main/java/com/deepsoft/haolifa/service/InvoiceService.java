@@ -34,11 +34,9 @@ public interface InvoiceService {
 
     /**
      * 填写发票编号
-     * @param id
-     * @param invoiceNo
      * @return
      */
-    ResultBean updateInvoiceNo(Integer id, String invoiceNo);
+    ResultBean updateInvoiceNo(InvoiceStatusDTO statusDTO);
 
     /**
      * 查询发票详情

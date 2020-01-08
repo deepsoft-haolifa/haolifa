@@ -9,14 +9,6 @@ alter table expenses add COLUMN  `data_year` varchar(32) NOT NULL DEFAULT '' COM
 -- 采购合同添加采购经理审批，合同盖章审批流程
 INSERT INTO `step`(`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (83, NOW(), NOW(), 1, '采购部经理审批', '采购合同审批');
 INSERT INTO `step`(`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (82, NOW(), NOW(), 1, '合同盖章', '采购合同审批');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('56', '2019-12-19 11:37:33', '2019-12-28 17:25:58', '1', '2', '82', '85', '40', '39', '0', '0', '77', '8');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('35', '2018-11-07 11:45:35', '2019-12-28 17:27:26', '1', '2', '39', '49', '4', '83', '82', '0', '77', '7');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('57', '2019-12-28 17:24:39', '2019-12-28 17:31:28', '1', '2', '83', '110', '9', '38', '39', '0', '77', '6');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('34', '2018-11-07 11:45:35', '2019-08-08 09:35:26', '1', '2', '38', '87', '42', '37', '39', '0', '77', '5');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('33', '2018-11-07 11:45:35', '2019-08-08 09:35:26', '1', '2', '37', '79', '34', '36', '38', '0', '77', '4');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('32', '2018-11-07 11:45:35', '2019-08-08 09:35:26', '1', '2', '36', '51', '6', '35', '37', '0', '77', '3');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('31', '2018-11-07 11:45:35', '2019-08-08 09:35:26', '1', '2', '35', '76', '31', '77', '36', '0', '77', '2');
-INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('30', '2018-11-07 11:45:35', '2019-01-15 10:52:32', '1', '2', '77', '77', '32', '0', '35', '0', '', '1');
 
 INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('2019-12-19 11:37:33', '2019-12-28 17:25:58', '1', '2', '82', '85', '40', '39', '0', '0', '77', '8');
 INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ('2018-11-07 11:45:35', '2019-12-28 17:27:26', '1', '2', '39', '49', '4', '83', '82', '0', '77', '7');
@@ -76,4 +68,8 @@ CREATE TABLE `sporadic_entry_out_record` (
  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零星零件出入库记录表';
+
+===================
+-- invoice 添加开票日期
+alter table invoice add column invoice_date datetime default null comment '开票日期' after status;
 
