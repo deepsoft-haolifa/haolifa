@@ -37,4 +37,7 @@ public class FlowProcesserDTO {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone="GMT+8")
   private Date auditTime;
 
+  @ApiModelProperty("审核备注")
+  private String auditInfo;
+
 }

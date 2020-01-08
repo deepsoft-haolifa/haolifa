@@ -28,7 +28,7 @@ public class InvoiceController {
     }
 
     @ApiOperation("流程中财务审批完成-填写发票编号")
-    @PostMapping("updateInvoiceNo/{id}/{invoiceNo}")
+    @PostMapping("updateInvoiceNo")
     public ResultBean updateInvoiceNo(@RequestBody InvoiceStatusDTO statusDTO) {
         return invoiceService.updateInvoiceNo(statusDTO);
     }

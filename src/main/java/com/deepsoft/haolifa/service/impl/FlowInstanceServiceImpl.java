@@ -491,6 +491,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
       processerDTO.setAuditUserName(historyInfo.getAuditUserName());
       processerDTO.setAuditResult(historyInfo.getAuditResult());
       processerDTO.setAuditTime(historyInfo.getCreateTime());
+      processerDTO.setAuditInfo(historyInfo.getAuditInfo());
     } else {
       processerDTO.setAuditUserName("");
     }
