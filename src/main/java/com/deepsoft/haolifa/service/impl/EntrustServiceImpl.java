@@ -11,10 +11,7 @@ import com.deepsoft.haolifa.constant.CommonEnum.EntrustStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.Inspect2Status;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.EntrustMapper;
-import com.deepsoft.haolifa.model.domain.CheckMaterialLock;
-import com.deepsoft.haolifa.model.domain.Entrust;
-import com.deepsoft.haolifa.model.domain.EntrustExample;
-import com.deepsoft.haolifa.model.domain.InspectHistory;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.AllotEntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustDTO;
 import com.deepsoft.haolifa.model.dto.EntrustListDTO;
@@ -88,11 +85,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
 
     @Override
     public ResultBean delete(String entrustNo) {
-        Entrust entrust = new Entrust();
-        entrust.setIsDelete(CommonEnum.Consts.YES.code);
         EntrustExample entrustExample = new EntrustExample();
         entrustExample.or().andEntrustNoEqualTo(entrustNo);
-        entrustMapper.updateByExampleSelective(entrust, entrustExample);
+        entrustMapper.deleteByExample(entrustExample);
         return ResultBean.success(1);
     }
 

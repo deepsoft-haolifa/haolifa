@@ -73,3 +73,5 @@ CREATE TABLE `sporadic_entry_out_record` (
 -- invoice 添加开票日期
 alter table invoice add column invoice_date datetime default null comment '开票日期' after status;
 
+INSERT INTO `sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (154, 'm', '零星物资管理', 'lxwzgl', 50, 0, NOW(), NOW());
+INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 154, NOW(), NOW());
