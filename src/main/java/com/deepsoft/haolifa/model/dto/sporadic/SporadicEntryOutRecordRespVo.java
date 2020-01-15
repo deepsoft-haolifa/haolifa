@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 public class SporadicEntryOutRecordRespVo extends SporadicEntryOutRecord {
 
     private String materialName;
-
+    private String classifyName;
     private String graphNo;
 
     private String model;

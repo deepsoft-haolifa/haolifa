@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SporadicEntryOutRecordMapper;
 import com.deepsoft.haolifa.dao.repository.SporadicMaterialMapper;
+import com.deepsoft.haolifa.dao.repository.extend.SporadicMaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -38,7 +39,8 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
     private SporadicMaterialMapper sporadicMaterialMapper;
     @Autowired
     private SporadicEntryOutRecordMapper sporadicEntryOutRecordMapper;
-
+    @Autowired
+    private SporadicMaterialExtendMapper sporadicMaterialExtendMapper;
     @Override
     public int add(SporadicMaterial material) {
         if (StrUtil.hasBlank(material.getMaterialName())) {
@@ -164,31 +166,17 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
         if (pageDto.getSporadicId() == null || pageDto.getSporadicId() <= 0) {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        // 根据id获取零星详情
-        SporadicMaterial sporadicMaterial = sporadicMaterialMapper.selectByPrimaryKey(pageDto.getSporadicId());
-        if (sporadicMaterial == null) {
-            throw new BaseException(CommonEnum.ResponseEnum.DATA_NOT_FOUND);
-        }
-        criteria.andSporadicIdEqualTo(pageDto.getSporadicId());
-        if (pageDto.getType() != null && pageDto.getType() > 0) {
-            criteria.andTypeEqualTo(pageDto.getType());
-        }
+
         example.setOrderByClause("id desc");
-        Page<SporadicEntryOutRecord> sporadicMaterials = PageHelper.startPage(pageDto.getPageNum(), pageDto.getPageSize())
-            .doSelectPage(() -> sporadicEntryOutRecordMapper.selectByExample(example));
+        Page<SporadicEntryOutRecordRespVo> sporadicMaterials = PageHelper.startPage(pageDto.getPageNum(), pageDto.getPageSize())
+            .doSelectPage(() -> sporadicMaterialExtendMapper.pageRecord(pageDto));
         if (CollectionUtil.isEmpty(sporadicMaterials)) {
             return new PageDTO<>();
         }
-        List<SporadicEntryOutRecordRespVo> list = new ArrayList<>();
-        sporadicMaterials.forEach(e -> {
-            SporadicEntryOutRecordRespVo model = new SporadicEntryOutRecordRespVo();
-            BeanUtil.copyProperties(e, model);
-            model.setMaterialName(sporadicMaterial.getMaterialName());
-            list.add(model);
-        });
+
         PageDTO<SporadicEntryOutRecordRespVo> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(sporadicMaterials, pageDTO);
-        pageDTO.setList(list);
+        pageDTO.setList(sporadicMaterials.getResult());
         return pageDTO;
     }
 

@@ -4,7 +4,37 @@
 
     <select id="pageRecord" parameterType="com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutPage"
             resultType="com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutRecordRespVo">
-         SELECT * FROM `sporadic_entry_out_record`
+        SELECT
+          a.id,
+          a.quantity,
+          a.type,
+          a.sporadic_id sporadicId,
+          a.update_time updateTime,
+          b.classify_name classifyName,
+          b.graph_no graphNo,
+          b.material_name materialName,
+          b.model,
+          b.specifications
+        FROM
+            `sporadic_entry_out_record` a
+        INNER JOIN sporadic_material b ON a.sporadic_id = b.id
+        WHERE 1=1
+        <if test="sporadicId!= null and sporadicId>0">
+            and a.sporadicId = #{sporadicId}
+        </if>
+        <if test="type!= null">
+            and a.type = #{type}
+        </if>
+        <if test="materialName != null and materialName !=''">
+            and b.material_name like CONCAT('%',#{materialName},'%')
+        </if>
+        <if test="startDate != null and startDate !=''">
+            and a.updateTime &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            and a.updateTime &lt;= #{endDate}
+        </if>
+        order by update_time desc
     </select>
 
 </mapper>
