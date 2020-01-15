@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.OperationType;
@@ -416,13 +417,27 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 BeanUtils.copyProperties(entryOutStoreRecord, productStorageListDTO);
                 if (entryOutStoreRecord.getOperationType() == OperationType.ENTRY.code) {
                     String oneOrderNo = entryOutStoreRecord.getOrderNo();
-                    int storeCount = getOutProductCountByOrderNo(oneOrderNo, entryOutStoreRecord.getProductNo());
-                    if (storeCount < entryOutStoreRecord.getQuantity()) {
-                        productStorageListDTO.setExecute(0);
+                    String oneProductNo = entryOutStoreRecord.getProductNo();
+                    // 已经入库
+                    int entryStoreCount = getEntryProductCountByOrderNo(oneOrderNo, oneProductNo);
+                    // 已经出库数量
+                    int outStoreCount = getOutProductCountByOrderNo(oneOrderNo, oneProductNo);
+                    String mapKey = oneOrderNo + ":" + oneProductNo;
+                    Integer mapValue = executeMap.get(mapKey);
+                    if (ObjectUtil.isNotNull(mapValue)) {
+                        outStoreCount += mapValue;
                     } else {
-                        productStorageListDTO.setExecute(1);
+                        mapValue = 0;
                     }
-//
+                    int isExecute = 0;// 默认可出库
+                    if (entryStoreCount <= outStoreCount) {
+                        isExecute = 1;// 不可出库
+                    } else {
+                        mapValue += entryOutStoreRecord.getQuantity();
+                        executeMap.put(mapKey, mapValue);
+                    }
+                    productStorageListDTO.setExecute(isExecute);
+
 //                    if (executeMap.containsKey(oneOrderNo)) {
 //                        productStorageListDTO.setExecute(executeMap.get(oneOrderNo));
 //                    } else {

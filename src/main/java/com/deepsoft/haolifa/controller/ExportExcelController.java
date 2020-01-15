@@ -23,10 +23,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -729,9 +726,9 @@ public class ExportExcelController {
 
 
     @ApiOperation("下载领料单")
-    @GetMapping("/requisition/{orderNo}")
+    @GetMapping("/requisition")
     public void requisition(HttpServletResponse response,
-                            @ApiParam(value = "订单No", required = true) @PathVariable("orderNo") String orderNo) throws IOException {
+                            @ApiParam(value = "订单No", required = true) @RequestParam("orderNo") String orderNo) throws IOException {
         response.setHeader("Content-Disposition", "attachment;filename=requisition_" + orderNo + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
