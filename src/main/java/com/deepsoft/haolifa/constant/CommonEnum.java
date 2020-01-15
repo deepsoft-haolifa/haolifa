@@ -45,6 +45,7 @@ public class CommonEnum {
         MATERIAL_HANDLED_GRAPH_NO_NOT_EXIST("2008", "零件库中无此加工后图号"),
         ORDER_NO_NOT_EXIST("2009", "库中无此订单"),
         OUT_PRODUCT_NO_COUNT_ERROR("2010", "这个订单号，这个成品号的出库数量不能大于它的入库数量"),
+        OUT_PRODUCT_QUANTITY_LIMIT("2011", "成品出库数量不能大于入库记录数量，请确认"),
 
 
         // 采购计划、请购单、采购单模块错误码开头3***

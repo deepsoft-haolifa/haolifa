@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -148,8 +149,17 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         byte storageType = CommonEnum.StorageType.PRODUCT.code;
         String orderNo = model.getOrderNo();
         String productNo = model.getProductNo();
+        final Integer quantity = model.getQuantity();
         // 待出库数量
-        int outProductCount = Math.abs(model.getQuantity());
+        int outProductCount = Math.abs(quantity);
+
+        // 只能小于入库数量，不能合并出库
+        EntryOutStoreRecord storeRecord = entryOutStoreRecordMapper.selectByPrimaryKey(model.getId());
+        if (ObjectUtil.isNotNull(storeRecord)) {
+            if (outProductCount > storeRecord.getQuantity()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.OUT_PRODUCT_QUANTITY_LIMIT);
+            }
+        }
         // 获取这个订单，这个成品号的入库数量，出库数量不能大于入库数量
         // 入库数量
         int entryOrderProductCount = getEntryProductCountByOrderNo(orderNo, productNo);
@@ -211,7 +221,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setProductSpecifications(model.getProductSpecifications());
                 setOperationType(operationType);
                 setType(storageType);
-                setQuantity(model.getQuantity());
+                setQuantity(quantity);
             }};
             // 减少库存
             stockService.reduceStock(entryOutStorageDTO);
@@ -407,38 +417,29 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             // 成品
             List<ProductStorageListDTO> productStorageListDTOS = new ArrayList<>();
             PageDTO<ProductStorageListDTO> pageDTO = new PageDTO<>();
-            Map<String, Integer> executeMap = new HashMap<>();
             for (int i = 0; i < entryOutStoreRecords.size(); i++) {
                 EntryOutStoreRecord entryOutStoreRecord = entryOutStoreRecords.get(i);
                 ProductStorageListDTO productStorageListDTO = new ProductStorageListDTO();
                 BeanUtils.copyProperties(entryOutStoreRecord, productStorageListDTO);
                 if (entryOutStoreRecord.getOperationType() == OperationType.ENTRY.code) {
-                    String oneOrderNo = entryOutStoreRecord.getOrderNo();
-                    String oneProductNo = entryOutStoreRecord.getProductNo();
-                    // 已经入库
-                    int entryStoreCount = getEntryProductCountByOrderNo(oneOrderNo, oneProductNo);
-                    // 已经出库数量
-                    int outStoreCount = getOutProductCountByOrderNo(oneOrderNo, oneProductNo);
                     int isExecute = 0;// 默认可出库
-                    if (entryStoreCount <= outStoreCount) {
+                    // 获取已经出库的数量
+                    Integer id = entryOutStoreRecord.getId();
+                    Integer quantity = entryOutStoreRecord.getQuantity();
+                    if (this.outProductCount(id) >= quantity) {
                         isExecute = 1;// 不可出库
+                    } else {
+                        String oneOrderNo = entryOutStoreRecord.getOrderNo();
+                        String oneProductNo = entryOutStoreRecord.getProductNo();
+                        // 已经入库
+                        int entryStoreCount = getEntryProductCountByOrderNo(oneOrderNo, oneProductNo);
+                        // 已经出库数量
+                        int outStoreCount = getOutProductCountByOrderNo(oneOrderNo, oneProductNo);
+                        if (entryStoreCount <= outStoreCount) {
+                            isExecute = 1;// 不可出库
+                        }
                     }
                     productStorageListDTO.setExecute(isExecute);
-
-//                    if (executeMap.containsKey(oneOrderNo)) {
-//                        productStorageListDTO.setExecute(executeMap.get(oneOrderNo));
-//                    } else {
-//                        // 入库数量
-//                        int entryProductCount = getEntryProductCountByOrderNo(oneOrderNo, "");
-//                        // 已经出库数量
-//                        int storeCount = getOutProductCountByOrderNo(oneOrderNo, "");
-//                        int isExecute = 0; // 默认可出库
-//                        if (entryProductCount <= storeCount) {
-//                            isExecute = 1;// 不可出库
-//                        }
-//                        productStorageListDTO.setExecute(isExecute);
-//                        executeMap.put(oneOrderNo, isExecute);
-//                    }
                 } else {
                     productStorageListDTO.setExecute(0);
                 }
@@ -455,5 +456,19 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             return ResultBean.success(pageDTO);
         }
 
+    }
+
+    /**
+     * 判断是否展示出库按钮（成品出库列表）
+     */
+    private int outProductCount(int recordId) {
+        EntryOutStoreRecordExample example = new EntryOutStoreRecordExample();
+        example.or().andRecordIdEqualTo(recordId);
+        List<EntryOutStoreRecord> entryOutStoreRecords = entryOutStoreRecordMapper.selectByExample(example);
+        if (CollectionUtil.isNotEmpty(entryOutStoreRecords)) {
+            int sum = entryOutStoreRecords.stream().mapToInt(EntryOutStoreRecord::getQuantity).sum();
+            return Math.abs(sum);
+        }
+        return 0;
     }
 }
