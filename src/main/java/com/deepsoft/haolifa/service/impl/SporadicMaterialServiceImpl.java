@@ -145,6 +145,7 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
             // 更新库存数据
             Integer quantity = sporadicMaterial.getQuantity();
             SporadicMaterial updateSp = new SporadicMaterial();
+            updateSp.setId(sporadicId);
             updateSp.setQuantity(quantity - entryOutDto.getQuantity());
             // 扣减的数量要小于等于库存数量
             SporadicMaterialExample example = new SporadicMaterialExample();

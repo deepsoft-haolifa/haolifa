@@ -23,4 +23,10 @@ public class SporadicEntryOutPage extends PageParam {
 
     @ApiModelProperty(value = "1出库；2入库", allowableValues = "1,2")
     private Byte type;
+
+    @ApiModelProperty("开始时间")
+    private String startDate;
+
+    @ApiModelProperty("结束时间")
+    private String endDate;
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.SporadicMaterialExtendMapper">
+
+    <select id="pageRecord" parameterType="com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutPage"
+            resultType="com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutRecordRespVo">
+         SELECT * FROM `sporadic_entry_out_record`
+    </select>
+
+</mapper>
