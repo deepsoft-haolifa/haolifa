@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface EntryOutStoreRecordMapper {
-    long countByExample(EntryOutStoreRecordExample example);
+    int countByExample(EntryOutStoreRecordExample example);
 
     int deleteByExample(EntryOutStoreRecordExample example);
 

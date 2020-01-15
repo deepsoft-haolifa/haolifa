@@ -14,7 +14,7 @@ public class EntryOutStoreRecord {
 
     private Integer updateUser;
 
-    private String recordId;
+    private Integer recordId;
 
     private String rackNo;
 
@@ -54,7 +54,7 @@ public class EntryOutStoreRecord {
 
     private String remark;
 
-    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String recordId, String rackNo, String orderNo, String productNo, String productModel, String productSpecifications, String materialBatchNo, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
+    public EntryOutStoreRecord(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer recordId, String rackNo, String orderNo, String productNo, String productModel, String productSpecifications, String materialBatchNo, String materialGraphNo, Byte operationType, Byte type, Integer quantity, BigDecimal amount, String productDepartment, String customerNo, String customerName, String supplier, String receiveDepartment, BigDecimal price, Byte status, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -126,12 +126,12 @@ public class EntryOutStoreRecord {
         this.updateUser = updateUser;
     }
 
-    public String getRecordId() {
+    public Integer getRecordId() {
         return recordId;
     }
 
-    public void setRecordId(String recordId) {
-        this.recordId = recordId == null ? null : recordId.trim();
+    public void setRecordId(Integer recordId) {
+        this.recordId = recordId;
     }
 
     public String getRackNo() {

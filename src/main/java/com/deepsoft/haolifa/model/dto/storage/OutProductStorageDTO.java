@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+
 import lombok.EqualsAndHashCode;
 
 /**
@@ -12,6 +13,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class OutProductStorageDTO extends BaseStorageDTO {
+    @ApiModelProperty(value = "出入库记录Id", required = true)
+    private Integer id;
+
     @ApiModelProperty(value = "成品号", required = true)
     private String productNo;
     @ApiModelProperty(value = "成品型号")

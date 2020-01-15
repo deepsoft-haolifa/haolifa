@@ -73,7 +73,6 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setOperationType(operationType);
             setType(storageType);
             setCreateUser(getLoginUserId());
-            setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
         // 插入出入库记录表
@@ -185,7 +184,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setCreateUser(getLoginUserId());
             setCustomerName(customerName);
             setCustomerNo(customerNo);
-            setRecordId(RandomUtils.uuidStr());
+            setRecordId(model.getId());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
         // 查询单价
@@ -245,7 +244,6 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setOperationType(operationType);
             setType(storageType);
             setCreateUser(getLoginUserId());
-            setRecordId(RandomUtils.uuidStr());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
         // 插入出入库记录表
@@ -310,7 +308,6 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         entryOutStoreRecord.setOperationType(operationType);
         entryOutStoreRecord.setType(storageType);
         entryOutStoreRecord.setCreateUser(getLoginUserId());
-        entryOutStoreRecord.setRecordId(RandomUtils.uuidStr());
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
 
         if (insert > 0) {
@@ -422,19 +419,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                     int entryStoreCount = getEntryProductCountByOrderNo(oneOrderNo, oneProductNo);
                     // 已经出库数量
                     int outStoreCount = getOutProductCountByOrderNo(oneOrderNo, oneProductNo);
-                    String mapKey = oneOrderNo + ":" + oneProductNo;
-                    Integer mapValue = executeMap.get(mapKey);
-                    if (ObjectUtil.isNotNull(mapValue)) {
-                        outStoreCount += mapValue;
-                    } else {
-                        mapValue = 0;
-                    }
                     int isExecute = 0;// 默认可出库
                     if (entryStoreCount <= outStoreCount) {
                         isExecute = 1;// 不可出库
-                    } else {
-                        mapValue += entryOutStoreRecord.getQuantity();
-                        executeMap.put(mapKey, mapValue);
                     }
                     productStorageListDTO.setExecute(isExecute);
 

@@ -416,62 +416,52 @@ public class EntryOutStoreRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdEqualTo(String value) {
+        public Criteria andRecordIdEqualTo(Integer value) {
             addCriterion("record_id =", value, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdNotEqualTo(String value) {
+        public Criteria andRecordIdNotEqualTo(Integer value) {
             addCriterion("record_id <>", value, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdGreaterThan(String value) {
+        public Criteria andRecordIdGreaterThan(Integer value) {
             addCriterion("record_id >", value, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdGreaterThanOrEqualTo(String value) {
+        public Criteria andRecordIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("record_id >=", value, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdLessThan(String value) {
+        public Criteria andRecordIdLessThan(Integer value) {
             addCriterion("record_id <", value, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdLessThanOrEqualTo(String value) {
+        public Criteria andRecordIdLessThanOrEqualTo(Integer value) {
             addCriterion("record_id <=", value, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdLike(String value) {
-            addCriterion("record_id like", value, "recordId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecordIdNotLike(String value) {
-            addCriterion("record_id not like", value, "recordId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRecordIdIn(List<String> values) {
+        public Criteria andRecordIdIn(List<Integer> values) {
             addCriterion("record_id in", values, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdNotIn(List<String> values) {
+        public Criteria andRecordIdNotIn(List<Integer> values) {
             addCriterion("record_id not in", values, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdBetween(String value1, String value2) {
+        public Criteria andRecordIdBetween(Integer value1, Integer value2) {
             addCriterion("record_id between", value1, value2, "recordId");
             return (Criteria) this;
         }
 
-        public Criteria andRecordIdNotBetween(String value1, String value2) {
+        public Criteria andRecordIdNotBetween(Integer value1, Integer value2) {
             addCriterion("record_id not between", value1, value2, "recordId");
             return (Criteria) this;
         }
