@@ -4,9 +4,9 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.SporadicMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.extend.SporadicMaterialExtendMapper;
-import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.domain.SporadicMaterial;
+import com.deepsoft.haolifa.model.domain.SporadicMaterialExample;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.export.ExportMaterialRecordDTO;
 import com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutDto;
 import com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutPage;
 import com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutRecordRespVo;
@@ -17,12 +17,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,10 +32,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
-
-import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.MATERIAL;
 
 /**
  * @author murphy.he
@@ -108,9 +107,9 @@ public class SporadicMaterialController {
     }
 
     @ApiOperation("导出零星零件入库记录")
-    @GetMapping("material-entry-record")
+    @PostMapping("material-entry-record")
     public void exportMaterialEntryRoom(HttpServletResponse response, HttpServletRequest request,
-                                        SporadicEntryOutPage dto) throws IOException {
+                                        @RequestBody SporadicEntryOutPage dto) throws IOException {
 
 
         // 类型为 入库
@@ -193,9 +192,9 @@ public class SporadicMaterialController {
 
 
     @ApiOperation("导出零星零件出库记录")
-    @GetMapping("/material-out-record")
+    @PostMapping("/material-out-record")
     public void materialRecord(HttpServletResponse response, HttpServletRequest request,
-                               SporadicEntryOutPage dto) throws IOException {
+                               @RequestBody SporadicEntryOutPage dto) throws IOException {
 
         // 类型为 入库
         dto.setType(CommonEnum.OperationType.OUT.code);
@@ -278,7 +277,7 @@ public class SporadicMaterialController {
 
 
     @ApiOperation("导出零星零件结存数据")
-    @GetMapping("/material/surplus")
+    @PostMapping("/material/surplus")
     public void materialSurplus(HttpServletResponse response, HttpServletRequest request)
         throws IOException {
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件结存明细", "utf-8") + ".xls");

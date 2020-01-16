@@ -20,7 +20,7 @@
         INNER JOIN sporadic_material b ON a.sporadic_id = b.id
         WHERE 1=1
         <if test="sporadicId!= null and sporadicId>0">
-            and a.sporadicId = #{sporadicId}
+            and a.sporadic_id = #{sporadicId}
         </if>
         <if test="type!= null">
             and a.type = #{type}
@@ -29,12 +29,12 @@
             and b.material_name like CONCAT('%',#{materialName},'%')
         </if>
         <if test="startDate != null and startDate !=''">
-            and a.updateTime &gt;= #{startDate}
+            and a.update_time &gt;= #{startDate}
         </if>
         <if test="endDate != null and endDate !=''">
-            and a.updateTime &lt;= #{endDate}
+            and a.update_time &lt;= #{endDate}
         </if>
-        order by update_time desc
+        order by a.update_time desc
     </select>
 
 </mapper>
