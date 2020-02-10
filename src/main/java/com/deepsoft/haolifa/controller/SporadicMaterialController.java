@@ -21,10 +21,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -107,12 +104,20 @@ public class SporadicMaterialController {
     }
 
     @ApiOperation("导出零星零件入库记录")
-    @PostMapping("material-entry-record")
+    @GetMapping("material-entry-record")
     public void exportMaterialEntryRoom(HttpServletResponse response, HttpServletRequest request,
-                                        @RequestBody SporadicEntryOutPage dto) throws IOException {
+                                        @RequestParam("materialName") String materialName,
+                                        @RequestParam("sporadicId") Integer sporadicId,
+                                        @RequestParam("startDate") String startDate,
+                                        @RequestParam("endDate") String endDate) throws IOException {
 
 
         // 类型为 入库
+        SporadicEntryOutPage dto=new SporadicEntryOutPage();
+        dto.setSporadicId(sporadicId);
+        dto.setMaterialName(materialName);
+        dto.setEndDate(endDate);
+        dto.setStartDate(startDate);
         dto.setType(CommonEnum.OperationType.ENTRY.code);
         dto.setPageNum(1);
         dto.setPageNum(Constant.EXPORT_MAX_COUNT);
@@ -194,9 +199,17 @@ public class SporadicMaterialController {
     @ApiOperation("导出零星零件出库记录")
     @PostMapping("/material-out-record")
     public void materialRecord(HttpServletResponse response, HttpServletRequest request,
-                               @RequestBody SporadicEntryOutPage dto) throws IOException {
+                               @RequestParam("materialName") String materialName,
+                               @RequestParam("sporadicId") Integer sporadicId,
+                               @RequestParam("startDate") String startDate,
+                               @RequestParam("endDate") String endDate) throws IOException {
 
         // 类型为 入库
+        SporadicEntryOutPage dto=new SporadicEntryOutPage();
+        dto.setSporadicId(sporadicId);
+        dto.setMaterialName(materialName);
+        dto.setEndDate(endDate);
+        dto.setStartDate(startDate);
         dto.setType(CommonEnum.OperationType.OUT.code);
         dto.setPageNum(1);
         dto.setPageNum(Constant.EXPORT_MAX_COUNT);
@@ -277,7 +290,7 @@ public class SporadicMaterialController {
 
 
     @ApiOperation("导出零星零件结存数据")
-    @PostMapping("/material/surplus")
+    @GetMapping("/material/surplus")
     public void materialSurplus(HttpServletResponse response, HttpServletRequest request)
         throws IOException {
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件结存明细", "utf-8") + ".xls");
