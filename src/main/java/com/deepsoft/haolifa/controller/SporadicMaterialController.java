@@ -106,18 +106,10 @@ public class SporadicMaterialController {
     @ApiOperation("导出零星零件入库记录")
     @GetMapping("material-entry-record")
     public void exportMaterialEntryRoom(HttpServletResponse response, HttpServletRequest request,
-                                        @RequestParam("materialName") String materialName,
-                                        @RequestParam("sporadicId") Integer sporadicId,
-                                        @RequestParam("startDate") String startDate,
-                                        @RequestParam("endDate") String endDate) throws IOException {
+                                        SporadicEntryOutPage dto) throws IOException {
 
 
         // 类型为 入库
-        SporadicEntryOutPage dto=new SporadicEntryOutPage();
-        dto.setSporadicId(sporadicId);
-        dto.setMaterialName(materialName);
-        dto.setEndDate(endDate);
-        dto.setStartDate(startDate);
         dto.setType(CommonEnum.OperationType.ENTRY.code);
         dto.setPageNum(1);
         dto.setPageNum(Constant.EXPORT_MAX_COUNT);
@@ -199,17 +191,9 @@ public class SporadicMaterialController {
     @ApiOperation("导出零星零件出库记录")
     @GetMapping("/material-out-record")
     public void materialRecord(HttpServletResponse response, HttpServletRequest request,
-                               @RequestParam("materialName") String materialName,
-                               @RequestParam("sporadicId") Integer sporadicId,
-                               @RequestParam("startDate") String startDate,
-                               @RequestParam("endDate") String endDate) throws IOException {
+                               SporadicEntryOutPage dto) throws IOException {
 
         // 类型为 入库
-        SporadicEntryOutPage dto=new SporadicEntryOutPage();
-        dto.setSporadicId(sporadicId);
-        dto.setMaterialName(materialName);
-        dto.setEndDate(endDate);
-        dto.setStartDate(startDate);
         dto.setType(CommonEnum.OperationType.OUT.code);
         dto.setPageNum(1);
         dto.setPageNum(Constant.EXPORT_MAX_COUNT);
