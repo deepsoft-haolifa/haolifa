@@ -197,7 +197,7 @@ public class SporadicMaterialController {
 
 
     @ApiOperation("导出零星零件出库记录")
-    @PostMapping("/material-out-record")
+    @GetMapping("/material-out-record")
     public void materialRecord(HttpServletResponse response, HttpServletRequest request,
                                @RequestParam("materialName") String materialName,
                                @RequestParam("sporadicId") Integer sporadicId,
