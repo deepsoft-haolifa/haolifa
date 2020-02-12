@@ -4,6 +4,8 @@ import com.deepsoft.haolifa.model.domain.SporadicEntryOutRecord;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
+
 /**
  * @author murphy.he
  **/
@@ -18,4 +20,6 @@ public class SporadicEntryOutRecordRespVo extends SporadicEntryOutRecord {
     private String model;
 
     private String specifications;
+
+    private BigDecimal price;
 }

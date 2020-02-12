@@ -23,5 +23,7 @@ public class SporadicEntryOutDto {
     @ApiModelProperty(value = "1出库；2入库", allowableValues = "1,2")
     private Byte type;
 
+    @ApiModelProperty(value = "领料部门")
+    private String receiveDepartment;
 
 }

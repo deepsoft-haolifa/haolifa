@@ -62,6 +62,7 @@ CREATE TABLE `sporadic_entry_out_record` (
  `graph_no` varchar(64) NOT NULL DEFAULT '' COMMENT '零星零件图号，自定义',
  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1.出库；2.入库',
  `quantity` int(11) NOT NULL DEFAULT 0 COMMENT '出入库数量',
+ `receive_department` varchar(32) NOT NULL DEFAULT '' COMMENT '领料部门',
  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
  `create_user` int(11) NOT NULL DEFAULT 0 COMMENT '创建用户',
  `update_user` int(11) NOT NULL DEFAULT 0 COMMENT '更新用户',

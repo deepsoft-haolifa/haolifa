@@ -13,6 +13,8 @@ public class SporadicEntryOutRecord {
 
     private Integer quantity;
 
+    private String receiveDepartment;
+
     private Date createTime;
 
     private Integer createUser;
@@ -21,12 +23,13 @@ public class SporadicEntryOutRecord {
 
     private Date updateTime;
 
-    public SporadicEntryOutRecord(Integer id, Integer sporadicId, String graphNo, Byte type, Integer quantity, Date createTime, Integer createUser, Integer updateUser, Date updateTime) {
+    public SporadicEntryOutRecord(Integer id, Integer sporadicId, String graphNo, Byte type, Integer quantity, String receiveDepartment, Date createTime, Integer createUser, Integer updateUser, Date updateTime) {
         this.id = id;
         this.sporadicId = sporadicId;
         this.graphNo = graphNo;
         this.type = type;
         this.quantity = quantity;
+        this.receiveDepartment = receiveDepartment;
         this.createTime = createTime;
         this.createUser = createUser;
         this.updateUser = updateUser;
@@ -75,6 +78,14 @@ public class SporadicEntryOutRecord {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getReceiveDepartment() {
+        return receiveDepartment;
+    }
+
+    public void setReceiveDepartment(String receiveDepartment) {
+        this.receiveDepartment = receiveDepartment == null ? null : receiveDepartment.trim();
     }
 
     public Date getCreateTime() {

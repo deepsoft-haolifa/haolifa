@@ -156,6 +156,12 @@ public class SporadicMaterialController {
         Cell cell_16 = columnTitle.createCell(6);
         cell_16.setCellValue("入库时间");
         cell_16.setCellStyle(center);
+        Cell cell_17 = columnTitle.createCell(7);
+        cell_17.setCellValue("单价");
+        cell_17.setCellStyle(center);
+        Cell cell_18 = columnTitle.createCell(8);
+        cell_18.setCellValue("金额");
+        cell_18.setCellStyle(center);
         for (int i = 0; i < result.size(); i++) {
             SporadicEntryOutRecordRespVo record = result.get(i);
             Row row_value = sheet.createRow(i + 2);
@@ -180,6 +186,16 @@ public class SporadicMaterialController {
             Cell cell_6 = row_value.createCell(6);
             cell_6.setCellValue(DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, record.getUpdateTime()));
             cell_6.setCellStyle(center);
+            Cell cell_7 = row_value.createCell(7);
+            cell_7.setCellValue(record.getPrice().doubleValue());
+            cell_7.setCellStyle(center);
+            Cell cell_8 = row_value.createCell(8);
+            BigDecimal totalAmount = record.getPrice().multiply(new BigDecimal(record.getQuantity()));
+            cell_8.setCellValue(totalAmount.doubleValue());
+            cell_8.setCellStyle(center);
+            Cell cell_9 = row_value.createCell(9);
+            cell_9.setCellValue(record.getReceiveDepartment());
+            cell_9.setCellStyle(center);
         }
         OutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
@@ -240,6 +256,15 @@ public class SporadicMaterialController {
         Cell cell_16 = columnTitle.createCell(6);
         cell_16.setCellValue("出库时间");
         cell_16.setCellStyle(center);
+        Cell cell_17 = columnTitle.createCell(7);
+        cell_17.setCellValue("单价");
+        cell_17.setCellStyle(center);
+        Cell cell_18 = columnTitle.createCell(8);
+        cell_18.setCellValue("金额");
+        cell_18.setCellStyle(center);
+        Cell cell_19 = columnTitle.createCell(9);
+        cell_19.setCellValue("领料部门");
+        cell_19.setCellStyle(center);
         for (int i = 0; i < result.size(); i++) {
             SporadicEntryOutRecordRespVo record = result.get(i);
             Row row_value = sheet.createRow(i + 2);
@@ -264,6 +289,16 @@ public class SporadicMaterialController {
             Cell cell_6 = row_value.createCell(6);
             cell_6.setCellValue(DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, record.getUpdateTime()));
             cell_6.setCellStyle(center);
+            Cell cell_7 = row_value.createCell(7);
+            cell_7.setCellValue(record.getPrice().doubleValue());
+            cell_7.setCellStyle(center);
+            Cell cell_8 = row_value.createCell(8);
+            BigDecimal totalAmount = record.getPrice().multiply(new BigDecimal(record.getQuantity()));
+            cell_8.setCellValue(totalAmount.doubleValue());
+            cell_8.setCellStyle(center);
+            Cell cell_9 = row_value.createCell(9);
+            cell_9.setCellValue(record.getReceiveDepartment());
+            cell_9.setCellStyle(center);
         }
         OutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);

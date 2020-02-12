@@ -10,11 +10,13 @@
           a.type,
           a.sporadic_id sporadicId,
           a.update_time updateTime,
+          a.receive_department receiveDepartment,
           b.classify_name classifyName,
           b.graph_no graphNo,
           b.material_name materialName,
           b.model,
-          b.specifications
+          b.specifications,
+          b.price
         FROM
             `sporadic_entry_out_record` a
         INNER JOIN sporadic_material b ON a.sporadic_id = b.id

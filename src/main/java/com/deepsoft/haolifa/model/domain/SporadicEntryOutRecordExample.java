@@ -415,6 +415,76 @@ public class SporadicEntryOutRecordExample {
             return (Criteria) this;
         }
 
+        public Criteria andReceiveDepartmentIsNull() {
+            addCriterion("receive_department is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentIsNotNull() {
+            addCriterion("receive_department is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentEqualTo(String value) {
+            addCriterion("receive_department =", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentNotEqualTo(String value) {
+            addCriterion("receive_department <>", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentGreaterThan(String value) {
+            addCriterion("receive_department >", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentGreaterThanOrEqualTo(String value) {
+            addCriterion("receive_department >=", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentLessThan(String value) {
+            addCriterion("receive_department <", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentLessThanOrEqualTo(String value) {
+            addCriterion("receive_department <=", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentLike(String value) {
+            addCriterion("receive_department like", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentNotLike(String value) {
+            addCriterion("receive_department not like", value, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentIn(List<String> values) {
+            addCriterion("receive_department in", values, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentNotIn(List<String> values) {
+            addCriterion("receive_department not in", values, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentBetween(String value1, String value2) {
+            addCriterion("receive_department between", value1, value2, "receiveDepartment");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveDepartmentNotBetween(String value1, String value2) {
+            addCriterion("receive_department not between", value1, value2, "receiveDepartment");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
