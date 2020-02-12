@@ -44,6 +44,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         invoice.setCreateUserId(getLoginUserId());
         invoice.setInvoiceCompany(model.getInvoiceCompany());
         invoice.setInvoiceIssuing(model.getInvoiceIssuing());
+        invoice.setInvoiceDate(model.getInvoiceDate());
         if (model.getType() == 1) {
             invoice.setConstractParty(model.getInvoiceCompany());
         } else {

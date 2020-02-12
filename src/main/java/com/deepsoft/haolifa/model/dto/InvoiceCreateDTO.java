@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @ApiModel("申请发票实体")
 public class InvoiceCreateDTO {
@@ -32,4 +34,7 @@ public class InvoiceCreateDTO {
 
   @ApiModelProperty(value = "需方单位")
   private String invoiceCompany;
+
+    @ApiModelProperty(value = "开票日期")
+    private Date invoiceDate;
 }
