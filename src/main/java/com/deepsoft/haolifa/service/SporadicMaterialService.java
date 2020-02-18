@@ -22,7 +22,10 @@ public interface SporadicMaterialService {
      * 编辑零星物资
      */
     int update(SporadicMaterial material);
-
+    /**
+     * 删除零星物资
+     */
+    int del(int id);
     /**
      * 零星物资分页列表
      */

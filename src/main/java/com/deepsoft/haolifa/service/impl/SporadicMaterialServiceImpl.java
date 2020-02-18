@@ -41,6 +41,7 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
     private SporadicEntryOutRecordMapper sporadicEntryOutRecordMapper;
     @Autowired
     private SporadicMaterialExtendMapper sporadicMaterialExtendMapper;
+
     @Override
     public int add(SporadicMaterial material) {
         if (StrUtil.hasBlank(material.getMaterialName())) {
@@ -58,6 +59,11 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
         }
         material.setUpdateUser(getLoginUserId());
         return sporadicMaterialMapper.updateByPrimaryKeySelective(material);
+    }
+
+    @Override
+    public int del(int id) {
+        return sporadicMaterialMapper.deleteByPrimaryKey(id);
     }
 
     @Override

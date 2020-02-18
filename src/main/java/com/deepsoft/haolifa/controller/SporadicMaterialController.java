@@ -69,6 +69,17 @@ public class SporadicMaterialController {
         }
     }
 
+    @PostMapping("/del/{id}")
+    @ApiOperation("删除")
+    public ResultBean del(@PathVariable Integer id) {
+        int del = sporadicMaterialService.del(id);
+        if (del > 0) {
+            return ResultBean.success(del);
+        } else {
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
+    }
+
     @PostMapping("/page")
     @ApiOperation("零星物料分页列表")
     public ResultBean<SporadicMaterial> pageList(@RequestBody SporadicMaterialPageDto sporadicMaterial) {
