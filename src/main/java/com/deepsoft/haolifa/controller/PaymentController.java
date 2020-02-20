@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.dto.PaymentDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.PaymentService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,9 @@ public class PaymentController {
   }
 
   @ApiOperation("记录列表")
-  @GetMapping("list/{orderNo}")
-  public ResultBean list(@ApiParam("合同编号")@PathVariable("orderNo") String orderNo) {
+  @GetMapping("list")
+  @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+  public ResultBean list(String orderNo) {
     return paymentService.list(orderNo);
   }
 
