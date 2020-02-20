@@ -41,8 +41,9 @@ public class OrderProductController {
 
     @Deprecated
     @ApiOperation("上传订单附件数据")
-    @PostMapping("/uploadOrderFile/{orderNo}")
-    public ResultBean uploadOrderFile(@PathVariable String orderNo, @RequestBody List<OrderUploadDTO> orderUploadDTOs) {
+    @PostMapping("/uploadOrderFile")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean uploadOrderFile(String orderNo, @RequestBody List<OrderUploadDTO> orderUploadDTOs) {
         return orderProductService.uploadOrderFiles(orderNo, orderUploadDTOs);
     }
 
@@ -55,20 +56,23 @@ public class OrderProductController {
 
     @Deprecated
     @ApiOperation("获取订单附件列表")
-    @GetMapping("/getOrderFiles/{orderNo}")
-    public ResultBean getOrderFiles(@PathVariable String orderNo) {
+    @GetMapping("/getOrderFiles")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean getOrderFiles(String orderNo) {
         return orderProductService.getOrderFiles(orderNo);
     }
 
     @ApiOperation("上传订单附件")
-    @PostMapping("/accessory/{orderNo}")
-    public ResultBean uploadAccessory(@PathVariable String orderNo, @RequestBody List<Accessory> orderUploadDTOs) {
+    @PostMapping("/accessory-upload")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean uploadAccessory(String orderNo, @RequestBody List<Accessory> orderUploadDTOs) {
         return orderProductService.uploadAccessory(orderNo, orderUploadDTOs);
     }
 
     @ApiOperation("获取订单附件")
-    @GetMapping("/accessory/{orderNo}")
-    public ResultBean getAccessory(@PathVariable String orderNo) {
+    @GetMapping("/accessory")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean getAccessory(String orderNo) {
         return orderProductService.getAccessory(orderNo);
     }
 
@@ -139,7 +143,7 @@ public class OrderProductController {
     }
 
     @ApiOperation("释放锁住的零件（综合计划不同意）")
-    @PostMapping("/release-material/")
+    @PostMapping("/release-material")
     @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
     public ResultBean releaseMaterial(String orderNo) {
         return ResultBean.success(orderProductService.releaseMaterial(orderNo));
