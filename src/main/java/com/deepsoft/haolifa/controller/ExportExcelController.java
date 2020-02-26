@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 
+import cn.hutool.core.collection.CollUtil;
 import com.deepsoft.haolifa.annotation.LogNotPrint;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
@@ -31,9 +32,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.MATERIAL;
 import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.PRODUCT;
@@ -1193,6 +1193,13 @@ public class ExportExcelController {
         }
         List<InspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(example);
 
+        if (CollUtil.isNotEmpty(inspectHistories)) {
+            Set<String> graphNoSet = inspectHistories.stream().map(InspectHistory::getMaterialGraphNo).collect(Collectors.toSet());
+            ArrayList<String> arrayList = new ArrayList<>(graphNoSet);
+            MaterialExample example1 = new MaterialExample();
+            example1.or().andGraphNoIn(arrayList);
+            materialMapper.selectByExample(example1);
+        }
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件入库报表", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
@@ -1241,6 +1248,12 @@ public class ExportExcelController {
         Cell cell_19 = columnTitle.createCell(9);
         cell_19.setCellValue("入库日期");
         cell_19.setCellStyle(center);
+        Cell cell_20 = columnTitle.createCell(10);
+        cell_19.setCellValue("单价");
+        cell_19.setCellStyle(center);
+        Cell cell_21 = columnTitle.createCell(11);
+        cell_19.setCellValue("金额");
+        cell_19.setCellStyle(center);
         for (int i = 0; i < inspectHistories.size(); i++) {
             InspectHistory inspectHistory = inspectHistories.get(i);
             Row row_value = sheet.createRow(i + 2);
@@ -1275,6 +1288,14 @@ public class ExportExcelController {
             cell_9.setCellValue(
                 DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, inspectHistory.getUpdateTime()));
             cell_9.setCellStyle(center);
+            Cell cell_110 = row_value.createCell(8);
+
+            cell_110.setCellValue(String.valueOf(inspectHistory));
+            cell_110.setCellStyle(center);
+            BigDecimal amount = entryOutStoreRecord.getPrice().multiply(new BigDecimal(entryOutStoreRecord.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP);
+            Cell cell_111 = row_value.createCell(9);
+            cell_111.setCellValue(String.valueOf(amount));
+            cell_111.setCellStyle(center);
         }
 
         OutputStream outputStream = response.getOutputStream();
@@ -1677,7 +1698,9 @@ public class ExportExcelController {
             cell_0.setCellValue(i + 1);
             cell_0.setCellStyle(center);
             Cell cell_1 = row_value.createCell(1);
-            cell_1.setCellValue(materialService.getInfoByGraphNo(entryOutStoreRecord.getMaterialGraphNo()).getName());
+
+            Material infoByGraphNo = materialService.getInfoByGraphNo(entryOutStoreRecord.getMaterialGraphNo());
+            cell_1.setCellValue(infoByGraphNo != null ? infoByGraphNo.getName() : "");
             cell_1.setCellStyle(center);
             Cell cell_2 = row_value.createCell(2);
             cell_2.setCellValue(entryOutStoreRecord.getMaterialGraphNo());
