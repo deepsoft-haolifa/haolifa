@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
@@ -152,10 +153,12 @@ public class MaterialServiceImpl implements MaterialService {
     public ResultBean update(MaterialRequestDTO model) {
         Material record = new Material();
         String graphNo = model.getGraphNo();
-        boolean existGraphNo = judgeGraphNo(graphNo, model.getId());
-        log.info("update material existGraphNo graphNo:{},result:{}", graphNo, existGraphNo);
-        if (existGraphNo) {
-            return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_EXISTS);
+        MaterialExample example = new MaterialExample();
+        MaterialExample.Criteria criteria = example.createCriteria();
+        criteria.andGraphNoEqualTo(graphNo);
+        List<Material> materials = materialMapper.selectByExample(example);
+        if (CollUtil.isEmpty(materials) || !materials.get(0).getGraphNo().equals(graphNo)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_CAN_NOT_MODIFY);
         }
         CustomUser customUser = sysUserService.selectLoginUser();
         int updateUser = customUser != null ? customUser.getId() : 1;
