@@ -1193,12 +1193,14 @@ public class ExportExcelController {
         }
         List<InspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(example);
 
+        Map<String, BigDecimal> priceMap = new HashMap<>();
         if (CollUtil.isNotEmpty(inspectHistories)) {
             Set<String> graphNoSet = inspectHistories.stream().map(InspectHistory::getMaterialGraphNo).collect(Collectors.toSet());
             ArrayList<String> arrayList = new ArrayList<>(graphNoSet);
             MaterialExample example1 = new MaterialExample();
             example1.or().andGraphNoIn(arrayList);
-            materialMapper.selectByExample(example1);
+            List<Material> materials = materialMapper.selectByExample(example1);
+            priceMap.putAll(materials.stream().collect(Collectors.toMap(Material::getGraphNo, Material::getPrice)));
         }
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件入库报表", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
@@ -1249,11 +1251,11 @@ public class ExportExcelController {
         cell_19.setCellValue("入库日期");
         cell_19.setCellStyle(center);
         Cell cell_20 = columnTitle.createCell(10);
-        cell_19.setCellValue("单价");
-        cell_19.setCellStyle(center);
+        cell_20.setCellValue("单价");
+        cell_20.setCellStyle(center);
         Cell cell_21 = columnTitle.createCell(11);
-        cell_19.setCellValue("金额");
-        cell_19.setCellStyle(center);
+        cell_21.setCellValue("金额");
+        cell_21.setCellStyle(center);
         for (int i = 0; i < inspectHistories.size(); i++) {
             InspectHistory inspectHistory = inspectHistories.get(i);
             Row row_value = sheet.createRow(i + 2);
@@ -1288,12 +1290,15 @@ public class ExportExcelController {
             cell_9.setCellValue(
                 DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, inspectHistory.getUpdateTime()));
             cell_9.setCellStyle(center);
-            Cell cell_110 = row_value.createCell(8);
-
-            cell_110.setCellValue(String.valueOf(inspectHistory));
+            Cell cell_110 = row_value.createCell(10);
+            BigDecimal price = priceMap.get(inspectHistory.getMaterialGraphNo());
+            if (price == null) {
+                price = BigDecimal.ZERO;
+            }
+            cell_110.setCellValue(String.valueOf(price));
             cell_110.setCellStyle(center);
-            BigDecimal amount = entryOutStoreRecord.getPrice().multiply(new BigDecimal(entryOutStoreRecord.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP);
-            Cell cell_111 = row_value.createCell(9);
+            BigDecimal amount = price.multiply(new BigDecimal(inspectHistory.getQualifiedNumber())).setScale(2, BigDecimal.ROUND_HALF_UP);
+            Cell cell_111 = row_value.createCell(11);
             cell_111.setCellValue(String.valueOf(amount));
             cell_111.setCellStyle(center);
         }
@@ -1422,8 +1427,16 @@ public class ExportExcelController {
         }
 
         List<SprayInspectHistory> sprayInspectHistoryList = sprayInspectHistoryMapper.selectByExample(example);
-
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件入库报表", "utf-8") + ".xls");
+        Map<String, BigDecimal> priceMap = new HashMap<>();
+        if (CollUtil.isNotEmpty(sprayInspectHistoryList)) {
+            Set<String> graphNoSet = sprayInspectHistoryList.stream().map(SprayInspectHistory::getMaterialGraphNo).collect(Collectors.toSet());
+            ArrayList<String> arrayList = new ArrayList<>(graphNoSet);
+            MaterialExample example1 = new MaterialExample();
+            example1.or().andGraphNoIn(arrayList);
+            List<Material> materials = materialMapper.selectByExample(example1);
+            priceMap.putAll(materials.stream().collect(Collectors.toMap(Material::getGraphNo, Material::getPrice)));
+        }
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("喷涂入库报表", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
         CellStyle cellStyle = workbook.createCellStyle();
@@ -1462,7 +1475,12 @@ public class ExportExcelController {
         Cell cell_16 = columnTitle.createCell(6);
         cell_16.setCellValue("入库日期");
         cell_16.setCellStyle(center);
-
+        Cell cell_17 = columnTitle.createCell(7);
+        cell_17.setCellValue("单价");
+        cell_17.setCellStyle(center);
+        Cell cell_18 = columnTitle.createCell(8);
+        cell_18.setCellValue("金额");
+        cell_18.setCellStyle(center);
         for (int i = 0; i < sprayInspectHistoryList.size(); i++) {
             SprayInspectHistory sprayInspectHistory = sprayInspectHistoryList.get(i);
             Row row_value = sheet.createRow(i + 2);
@@ -1488,6 +1506,17 @@ public class ExportExcelController {
             cell_6.setCellValue(
                 DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, sprayInspectHistory.getUpdateTime()));
             cell_6.setCellStyle(center);
+            Cell cell_7 = row_value.createCell(7);
+            BigDecimal price = priceMap.get(sprayInspectHistory.getMaterialGraphNo());
+            if (price == null) {
+                price = BigDecimal.ZERO;
+            }
+            cell_7.setCellValue(String.valueOf(price));
+            cell_7.setCellStyle(center);
+            BigDecimal amount = price.multiply(new BigDecimal(sprayInspectHistory.getQualifiedNumber())).setScale(2, BigDecimal.ROUND_HALF_UP);
+            Cell cell_8 = row_value.createCell(8);
+            cell_8.setCellValue(String.valueOf(amount));
+            cell_8.setCellStyle(center);
         }
 
         OutputStream outputStream = response.getOutputStream();
