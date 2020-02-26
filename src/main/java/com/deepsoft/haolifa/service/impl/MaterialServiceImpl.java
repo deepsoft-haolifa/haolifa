@@ -4,14 +4,12 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MaterialExtendMapper;
-import com.deepsoft.haolifa.model.domain.Material;
-import com.deepsoft.haolifa.model.domain.MaterialClassify;
-import com.deepsoft.haolifa.model.domain.MaterialClassifyExample;
-import com.deepsoft.haolifa.model.domain.MaterialExample;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.material.MaterialConditionDTO;
 import com.deepsoft.haolifa.model.dto.material.MaterialListDTO;
 import com.deepsoft.haolifa.service.MaterialService;
+import com.deepsoft.haolifa.service.PriceMaterialService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -43,7 +41,8 @@ public class MaterialServiceImpl implements MaterialService {
     private SysUserService sysUserService;
     @Autowired
     private MaterialExtendMapper materialExtendMapper;
-
+    @Autowired
+    private PriceMaterialService priceMaterialService;
 
     @Override
     public ResultBean saveClassify(MaterialClassifyRequestDTO model) {
@@ -116,7 +115,7 @@ public class MaterialServiceImpl implements MaterialService {
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("create_time desc");
         Page<MaterialClassify> materialClassifies = PageHelper.startPage(currentPage, pageSize)
-                .doSelectPage(() -> materialClassifyMapper.selectByExample(example));
+            .doSelectPage(() -> materialClassifyMapper.selectByExample(example));
 
         PageDTO<MaterialClassify> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materialClassifies, pageDTO);
@@ -137,10 +136,15 @@ public class MaterialServiceImpl implements MaterialService {
             return ResultBean.error(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_EXISTS);
         }
         BeanUtils.copyProperties(model, record);
-        // 不更新价格
-//        record.setPrice(null);
         record.setCreateUser(createUser);
         int insert = materialMapper.insertSelective(record);
+        if (insert > 0) {
+            // 新增零件价格管理的数据
+            PriceMaterial priceMaterial = new PriceMaterial();
+            BeanUtils.copyProperties(record, priceMaterial);
+            priceMaterialService.saveInfo(priceMaterial);
+        }
+
         return ResultBean.success(insert);
     }
 
@@ -161,6 +165,10 @@ public class MaterialServiceImpl implements MaterialService {
         // 不更新价格
         record.setPrice(null);
         int update = materialMapper.updateByPrimaryKeySelective(record);
+        if (update > 0) {
+            // 更新零件价格表的数据
+            priceMaterialService.updatePriceByMaterial(record);
+        }
         return ResultBean.success(update);
     }
 
@@ -219,7 +227,7 @@ public class MaterialServiceImpl implements MaterialService {
 //        }
         example.setOrderByClause("id desc");
         Page<Material> materials = PageHelper.startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
-                .doSelectPage(() -> materialMapper.selectByExample(example));
+            .doSelectPage(() -> materialMapper.selectByExample(example));
 
         PageDTO<Material> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materials, pageDTO);
@@ -304,7 +312,7 @@ public class MaterialServiceImpl implements MaterialService {
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         example.setOrderByClause("id desc");
         Page<Material> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
-                .doSelectPage(() -> materialMapper.selectByExample(example));
+            .doSelectPage(() -> materialMapper.selectByExample(example));
 
         PageDTO<Material> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materials, pageDTO);

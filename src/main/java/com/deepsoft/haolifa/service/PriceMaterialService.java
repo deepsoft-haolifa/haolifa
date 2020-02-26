@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.Material;
 import com.deepsoft.haolifa.model.domain.PriceMaterial;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.price.PriceMaterialConditionDTO;
@@ -45,4 +46,12 @@ public interface PriceMaterialService {
      * @return
      */
     ResultBean pageInfo(PriceMaterialConditionDTO priceMaterialConditionDTO);
+
+    /**
+     * 更新
+     *
+     * @param model
+     * @return
+     */
+    void updatePriceByMaterial(Material model);
 }

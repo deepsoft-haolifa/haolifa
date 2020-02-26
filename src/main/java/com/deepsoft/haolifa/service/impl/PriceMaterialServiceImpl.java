@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.PriceMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.PriceProductMapper;
+import com.deepsoft.haolifa.model.domain.Material;
 import com.deepsoft.haolifa.model.domain.PriceMaterial;
 import com.deepsoft.haolifa.model.domain.PriceMaterialExample;
 import com.deepsoft.haolifa.model.domain.PriceProductExample;
@@ -49,7 +50,7 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         int createUser = customUser != null ? customUser.getId() : 1;
         model.setCreateUser(createUser);
         int insert = priceMaterialMapper.insertSelective(model);
-        if (insert > 0) {
+        if (insert > 0 && model.getPrice() != null) {
             // 更新零件价格(价格表的成品不含税 更新为零件表的价格)
             materialService.updateMaterialPrice(model.getGraphNo(), model.getPrice());
             return ResultBean.success(insert);
@@ -115,10 +116,24 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         example.setOrderByClause("id desc");
 
         Page<PriceMaterial> products = PageHelper.startPage(priceMaterialConditionDTO.getPageNum(), priceMaterialConditionDTO.getPageSize())
-                .doSelectPage(() -> priceMaterialMapper.selectByExample(example));
+            .doSelectPage(() -> priceMaterialMapper.selectByExample(example));
         PageDTO<PriceMaterial> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(products, pageDTO);
         pageDTO.setList(products);
         return ResultBean.success(pageDTO);
     }
+
+    @Override
+    public void updatePriceByMaterial(Material model) {
+        String graphNo = model.getGraphNo();
+        PriceMaterialExample example = new PriceMaterialExample();
+        example.or().andGraphNoEqualTo(graphNo);
+
+        PriceMaterial priceMaterial = new PriceMaterial();
+        BeanUtils.copyProperties(model, priceMaterial);
+        priceMaterial.setId(null);
+        priceMaterialMapper.updateByExampleSelective(priceMaterial, example);
+    }
+
+
 }
