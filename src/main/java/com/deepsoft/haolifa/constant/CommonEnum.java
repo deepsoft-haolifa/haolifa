@@ -435,7 +435,7 @@ public class CommonEnum {
     }
 
     public enum Inspect2Status {
-        // 喷涂状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工
+        // 喷涂质检状态：0 创建 1 加工中 2 质检完成
         waiting_handle((byte) 0),
         handling((byte) 1),
         handled((byte) 2);

@@ -166,7 +166,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
             criteria.andSprayNoLike("%" + listDto.getSprayNo() + "%");
         }
         Page<Spray> sprayList = PageHelper.startPage(listDto.getPageNum(), listDto.getPageSize(), "id desc")
-                .doSelectPage(() -> sprayMapper.selectByExample(example));
+            .doSelectPage(() -> sprayMapper.selectByExample(example));
         List<Spray> result = sprayList.getResult();
         List<SprayVo> resultList = new ArrayList<>();
 
@@ -301,8 +301,8 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         }
         criteria.andQualifiedNumberGreaterThan(0);
         Page<SprayInspectHistory> page = PageHelper
-                .startPage(inspectListDto.getPageNum(), inspectListDto.getPageSize(), "id desc")
-                .doSelectPage(() -> inspectHistoryMapper.selectByExample(historyExample));
+            .startPage(inspectListDto.getPageNum(), inspectListDto.getPageSize(), "id desc")
+            .doSelectPage(() -> inspectHistoryMapper.selectByExample(historyExample));
 
         List<SprayInspectHistoryVo> resultList = new ArrayList<>();
         // 将批次号返回，从spray_item 表中获取，根据spray_no 和 图号
@@ -359,6 +359,11 @@ public class SprayServiceImpl extends BaseService implements SprayService {
 
     @Override
     public ResultBean updateInspectStatus(String sprayNo, int status) {
+        // 点击质检完成的时候，判断检验合格数+不合格数 <总数，不能点击
+//        if (status == CommonEnum.Inspect2Status.handled.code) {
+//            sprayNo
+//        }
+
         SprayExample example = new SprayExample();
         SprayExample.Criteria criteria = example.createCriteria();
         criteria.andSprayNoEqualTo(sprayNo);
@@ -377,7 +382,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         // 根据查出状态为 加工中和暂停加工的spray
         SprayExample example = new SprayExample();
         example.or().andBusTypeEqualTo(CommonEnum.BusType.PRODUCT_INVENTORY.type)
-                .andStatusIn(Arrays.asList(CommonEnum.SprayStatus.SPRAY_MACHINE.code, CommonEnum.SprayStatus.SPRAY_STOP_MACHINE.code));
+            .andStatusIn(Arrays.asList(CommonEnum.SprayStatus.SPRAY_MACHINE.code, CommonEnum.SprayStatus.SPRAY_STOP_MACHINE.code));
         List<Spray> sprays = sprayMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(sprays)) {
             List<String> sprayNoList = sprays.stream().map(Spray::getSprayNo).collect(Collectors.toList());
