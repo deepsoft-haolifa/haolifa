@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.MATERIAL;
 import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.PRODUCT;
 
-@LogNotPrint
 @RestController
 @RequestMapping("/export")
 @Api(tags = "excel导出")
@@ -1063,11 +1062,11 @@ public class ExportExcelController {
         ExpensesExample.Criteria criteria = expensesExample.createCriteria();
         if (StringUtils.isNotEmpty(dto.getStartDate())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
-            criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+            criteria.andCreateTimeGreaterThanOrEqualTo(startDate);
         }
         if (StringUtils.isNotEmpty(dto.getEndDate())) {
             Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
-            criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+            criteria.andCreateTimeLessThanOrEqualTo(endDate);
         }
         if (StringUtils.isNotEmpty(dto.getDepartment())) {
             criteria.andDepartmentLike("%" + dto.getDepartment() + "%");
@@ -1534,11 +1533,11 @@ public class ExportExcelController {
         criteria.andTypeEqualTo(PRODUCT.code);
         if (StringUtils.isNotEmpty(dto.getStartDate())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
-            criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+            criteria.andCreateTimeGreaterThanOrEqualTo(startDate);
         }
         if (StringUtils.isNotEmpty(dto.getEndDate())) {
             Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
-            criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+            criteria.andCreateTimeLessThanOrEqualTo(endDate);
         }
         if (StringUtils.isNotEmpty(dto.getOrderNo())) {
             criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
@@ -1650,11 +1649,11 @@ public class ExportExcelController {
         criteria.andTypeEqualTo(MATERIAL.code);
         if (StringUtils.isNotEmpty(dto.getStartDate())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
-            criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
+            criteria.andCreateTimeGreaterThanOrEqualTo(startDate);
         }
         if (StringUtils.isNotEmpty(dto.getEndDate())) {
             Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
-            criteria.andUpdateTimeLessThanOrEqualTo(endDate);
+            criteria.andCreateTimeLessThanOrEqualTo(endDate);
         }
         if (StringUtils.isNotEmpty(dto.getMaterialGraphNo())) {
             criteria.andMaterialGraphNoLike("%" + dto.getMaterialGraphNo() + "%");
