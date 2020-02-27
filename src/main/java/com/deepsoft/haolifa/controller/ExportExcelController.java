@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.MATERIAL;
 import static com.deepsoft.haolifa.constant.CommonEnum.StorageType.PRODUCT;
 
+
 @RestController
 @RequestMapping("/export")
 @Api(tags = "excel导出")
@@ -1667,6 +1668,15 @@ public class ExportExcelController {
 
         List<EntryOutStoreRecord> entryOutStoreRecordList = entryOutStoreRecordMapper.selectByExample(example);
 
+        Map<String, String> nameMap = new HashMap();
+        if (CollUtil.isNotEmpty(entryOutStoreRecordList)) {
+            Set<String> graphNoSet = entryOutStoreRecordList.stream().map(EntryOutStoreRecord::getMaterialGraphNo).collect(Collectors.toSet());
+            ArrayList<String> arrayList = new ArrayList<>(graphNoSet);
+            MaterialExample example1 = new MaterialExample();
+            example1.or().andGraphNoIn(arrayList);
+            List<Material> materials = materialMapper.selectByExample(example1);
+            nameMap.putAll(materials.stream().collect(Collectors.toMap(Material::getGraphNo, Material::getName)));
+        }
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件出库明细", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
@@ -1727,8 +1737,7 @@ public class ExportExcelController {
             cell_0.setCellStyle(center);
             Cell cell_1 = row_value.createCell(1);
 
-            Material infoByGraphNo = materialService.getInfoByGraphNo(entryOutStoreRecord.getMaterialGraphNo());
-            cell_1.setCellValue(infoByGraphNo != null ? infoByGraphNo.getName() : "");
+            cell_1.setCellValue(nameMap.getOrDefault(entryOutStoreRecord.getMaterialGraphNo(), ""));
             cell_1.setCellStyle(center);
             Cell cell_2 = row_value.createCell(2);
             cell_2.setCellValue(entryOutStoreRecord.getMaterialGraphNo());
