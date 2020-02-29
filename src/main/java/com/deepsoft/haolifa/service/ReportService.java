@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
 import io.swagger.models.auth.In;
 
@@ -17,6 +18,8 @@ public interface ReportService {
   List<ExportSaleDTO> selectAll();
   //根据月份获取总金额 总数量
   List<ExportSaleDTO> selectByMonth(String startTime,String endTime);
+  List<ExportContractDTO> selectContractByDemandName(String year);
+  List<ExportContractDTO> selectshouhuiContractByDemandName(String year);
 
   //根据产品型号获取金额数量
   List<ExportSaleDTO> selectByModel();
@@ -35,10 +38,14 @@ public interface ReportService {
   QualitySprayReport selectSpray();
   //压力质量报表
   QualityPressureReport selectPressure();
+  List<QualityPressureReport> selectPressureByReason();
   //更换料报表
   List<QualityAuditReport> selectAudit();
   //零件采购质量报表
   QualityInspectReport selectInspect();
+
+  List<QualityInspectReport> selectInspectBySupplierName();
+  List<QualityInspectReport> selectInspectByMaterialName();
   //成品质量报表
   QualityProductReport selectProduct();
 

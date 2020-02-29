@@ -14,7 +14,7 @@
 
          and purchase_order.supplier_name = #{supplierName,jdbcType=VARCHAR}
 
-         group by supplier_name
+         group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
     <select id="selectPurchase" resultMap="reportMap" parameterType="java.lang.String">
         select supplier_name ,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order

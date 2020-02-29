@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.ReportService;
@@ -27,10 +28,10 @@ public class ReportController {
     private ReportService reportService;
 
 
-    @ApiOperation("费用每月汇总--一级部门")
+    @ApiOperation("获取一级费用分类每月的支出")
     @GetMapping("/expense/classify")
-    public ResultBean getcClassify() {
-        return expensesService.getClassify();
+    public ResultBean getcClassify(@RequestParam(value ="expensesClassify") String expensesClassify) {
+        return expensesService.getClassify(expensesClassify);
     }
     @ApiOperation("费用每月汇总--部门明细")
     @GetMapping("/expense/classifyByDepartment")
@@ -57,6 +58,11 @@ public class ReportController {
     @RequestMapping(value = "/expense/getAllClassifyWithDepartment",method = RequestMethod.GET)
     public ResultBean getAllClassifyWithDepartment(@RequestParam(value ="department") String department) {
         return expensesService.getAllClassifyWithDepartment(department);
+    }
+    @ApiOperation("获取一级部门下面每月的支出")
+    @RequestMapping(value = "/expense/getMonthByDepartment",method = RequestMethod.GET)
+    public ResultBean getMonthByDepartment(@RequestParam(value ="department") String department) {
+        return expensesService.getMonthByDepartment(department);
     }
     @ApiOperation("每项费用中费用二级占比")
     @RequestMapping(value = "/expense/getAllClassifyWithFirstClassify",method = RequestMethod.GET)
@@ -185,11 +191,32 @@ public class ReportController {
         QualityInspectReport qualityInspectReport = reportService.selectInspect();
         return  ResultBean.success(qualityInspectReport);
     }
+    @ApiOperation("采购质量报表,不同供应商的数据对比")
+    @RequestMapping(value = "/quality/getInspectBysupplierName",method = RequestMethod.GET)
+    public ResultBean getInspectBysupplierName() {
+
+        List<QualityInspectReport> qualityInspectReport = reportService.selectInspectBySupplierName();
+        return  ResultBean.success(qualityInspectReport);
+    }
+    @ApiOperation("采购质量报表,不同类型零件的数据对比")
+    @RequestMapping(value = "/quality/selectInspectByMaterialName",method = RequestMethod.GET)
+    public ResultBean selectInspectByMaterialName() {
+
+        List<QualityInspectReport> qualityInspectReport = reportService.selectInspectByMaterialName();
+        return  ResultBean.success(qualityInspectReport);
+    }
     @ApiOperation("压力质量报表")
     @RequestMapping(value = "/quality/getPressure",method = RequestMethod.GET)
     public ResultBean getPressure() {
 
         QualityPressureReport qualityPressureReport = reportService.selectPressure();
+        return  ResultBean.success(qualityPressureReport);
+    }
+    @ApiOperation("压力质量报表--根据不同原因统计")
+    @RequestMapping(value = "/quality/selectPressureByReason",method = RequestMethod.GET)
+    public ResultBean selectPressureByReason() {
+
+        List<QualityPressureReport> qualityPressureReport = reportService.selectPressureByReason();
         return  ResultBean.success(qualityPressureReport);
     }
     @ApiOperation("机加工质量报表根据机加工类型查询 1 内部 ")
@@ -211,5 +238,19 @@ public class ReportController {
 
         QualityProductReport qualityProductReport = reportService.selectProduct();
         return  ResultBean.success(qualityProductReport);
+    }
+
+
+    @ApiOperation("销售报表-获取按需方总额饼图")
+    @RequestMapping(value = "/sale/selectContractByDemandName",method = RequestMethod.GET)
+    public ResultBean selectContractByDemandName(@RequestParam(value ="year") String year) {
+        List<ExportContractDTO>  exportSaleDTOS = reportService.selectContractByDemandName(year);
+        return  ResultBean.success(exportSaleDTOS);
+    }
+    @ApiOperation("销售报表-获取按需方回款总额饼图")
+    @RequestMapping(value = "/sale/selectshouhuiContractByDemandName",method = RequestMethod.GET)
+    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value ="year") String year) {
+        List<ExportContractDTO>  exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
+        return  ResultBean.success(exportSaleDTOS);
     }
 }

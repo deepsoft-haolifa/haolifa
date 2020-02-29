@@ -7,6 +7,23 @@ public class QualityPressureReport {
     private Integer totalNum;
     private Integer qualifiedNumber;
     private Integer unqualifiedNumber;
+    private String reason;
+
+    public QualityPressureReport(Integer totalNum, Integer qualifiedNumber, Integer unqualifiedNumber, String reason) {
+        this.totalNum = totalNum;
+        this.qualifiedNumber = qualifiedNumber;
+        this.unqualifiedNumber = unqualifiedNumber;
+        this.reason = reason;
+    }
+
+    public String getReason() {
+
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
     public Integer getTotalNum() {
         return totalNum;
