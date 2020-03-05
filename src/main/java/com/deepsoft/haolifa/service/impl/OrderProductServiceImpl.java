@@ -636,14 +636,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     // 第六列，数量
                     Cell cell6 = row.getCell(6);
                     String cellValue6 = getCellValue(cell6);
-                    if (Objects.isNull(getCellValue(cell6))) {
+                    if (StringUtils.isEmpty(cellValue6)||cellValue6.equals("0")) {
                         throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，数量不能为空");
                     }
                     orderProductAssociate.setProductNumber(Integer.valueOf(cellValue6));
                     // 第7列，单价
                     Cell cell7 = row.getCell(7);
                     String cellValue7 = getCellValue(cell7);
-                    if (StringUtils.isNotBlank(cellValue7)) {
+                    if (StringUtils.isNotBlank(cellValue7)&&!cellValue7.equals("0")) {
                         if (cellValue7.contains("￥")) {
                             cellValue7 = cellValue7.replaceAll("￥", "");
                         }
