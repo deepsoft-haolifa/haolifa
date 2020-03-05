@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
 import com.deepsoft.haolifa.service.ReportService;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,15 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     return saleReportMapper.selectByMonth(startTime,endTime);
   }
 
-  @Override
+    @Override
+    public List<ExportContractDTO> selectContractByDemandName(String year) {
+        return saleReportMapper.selectContractByDemandName(year);
+    }
+    @Override
+    public List<ExportContractDTO> selectshouhuiContractByDemandName(String year) {
+        return saleReportMapper.selectshouhuiContractByDemandName(year);
+    }
+    @Override
   public List<ExportSaleDTO> selectByModel() {
     return saleReportMapper.selectByModel();
   }
@@ -69,6 +78,10 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   public QualityPressureReport selectPressure() {
     return qualityPressureReportMapper.selectPressure();
   }
+  @Override
+  public List<QualityPressureReport> selectPressureByReason() {
+    return qualityPressureReportMapper.selectPressureByReason();
+  }
 
   @Override
   public List<QualityAuditReport> selectAudit() {
@@ -78,6 +91,14 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   @Override
   public QualityInspectReport selectInspect() {
     return qualityInspecReportMapper.selectInspect();
+  }
+  @Override
+  public List<QualityInspectReport> selectInspectBySupplierName() {
+    return qualityInspecReportMapper.selectInspectBySupplierName();
+  }
+  @Override
+  public List<QualityInspectReport> selectInspectByMaterialName() {
+    return qualityInspecReportMapper.selectInspectByMaterialName();
   }
   @Override
   public List<ExportSaleDTO> selectAllContract() {

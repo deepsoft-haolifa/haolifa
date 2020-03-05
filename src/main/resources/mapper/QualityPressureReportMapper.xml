@@ -10,10 +10,24 @@
 
     </constructor>
   </resultMap>
+    <resultMap id="reasonResultMap" type="com.deepsoft.haolifa.model.domain.QualityPressureReport" >
+        <constructor >
+
+            <arg column="total_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="unqualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="reason" jdbcType="VARCHAR" javaType="java.lang.String" />
+
+        </constructor>
+    </resultMap>
 
   <select id="selectPressure" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
      select sum(qualified_number+unqualified_number) total_num,sum(qualified_number) qualified_number,sum(unqualified_number) unqualified_number
      from pressure_inspect_record
+  </select>
+    <select id="selectPressureByReason" resultMap="reasonResultMap" parameterType="java.lang.Integer" >
+     select sum(qualified_number+unqualified_number) total_num,sum(qualified_number) qualified_number,sum(unqualified_number) unqualified_number,reason
+     from pressure_inspect_record group by reason
   </select>
 
 </mapper>

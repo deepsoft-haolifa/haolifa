@@ -7,6 +7,11 @@
         <result column="product_model" property="productModel" jdbcType="VARCHAR" javaType="java.lang.String"></result>
         <result column="total_price" property="totalPrice" jdbcType="DOUBLE" javaType="java.lang.Double"></result>
     </resultMap>
+    <resultMap id="contractMap" type="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
+        <result column="year" property="year" jdbcType="INTEGER" javaType="java.lang.Integer"></result>
+        <result column="demand_name" property="demandName" jdbcType="VARCHAR" javaType="java.lang.String"></result>
+        <result column="total_price" property="totalPrice" jdbcType="DOUBLE" javaType="java.lang.Double"></result>
+    </resultMap>
     <select id="selectAll" resultMap="reportMap" parameterType="java.lang.String">
     select sum(inspect.total_num) total_num,inspect.product_no,inspect.product_model,sum(inspect.total_num*associate.price) total_price  from
     (select
@@ -56,5 +61,13 @@
     <select id="selectByModelContract" resultMap="reportMap" parameterType="java.lang.String">
      select sum(order_product_associate.product_number) total_num,order_product_associate.product_no,order_product_associate.product_model,sum(order_product_associate.product_number*order_product_associate.price) total_price
     from order_product_associate  GROUP BY order_product_associate.product_model
+    </select>
+
+
+    <select id="selectContractByDemandName" resultMap="contractMap" parameterType="java.lang.String">
+              select sum(`total_price`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from order_product where FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year} group by demand_name
+    </select>
+    <select id="selectshouhuiContractByDemandName" resultMap="contractMap" parameterType="java.lang.String">
+              select sum(`received_account`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from order_product where FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year} group by demand_name
     </select>
 </mapper>

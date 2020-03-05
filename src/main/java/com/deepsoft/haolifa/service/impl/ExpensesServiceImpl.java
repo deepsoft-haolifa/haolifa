@@ -136,8 +136,8 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getClassify() {
-        return ResultBean.success(expensesExtendMapper.getClassify());
+    public ResultBean getClassify(String expensesClassify) {
+        return ResultBean.success(expensesExtendMapper.getClassify(expensesClassify));
     }
 
     @Override
@@ -158,6 +158,11 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     @Override
     public ResultBean getAllClassifyWithDepartment(String department) {
         return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(department));
+    }
+
+    @Override
+    public ResultBean getMonthByDepartment(String department) {
+        return ResultBean.success(expensesExtendMapper.getMonthByDepartment(department));
     }
 
     @Override

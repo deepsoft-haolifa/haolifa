@@ -11,11 +11,12 @@ import java.util.List;
  **/
 public interface ExpensesExtendMapper {
 
-    List<ExpensesReport> getClassify();
+    List<ExpensesReport> getClassify(String expensesClassify);
     List<ExpensesReport> classifyByDepartment();
     List<ExpensesReport> classifyBySecondDepartment();
     List<ExpensesReport> getAllClassify();
     List<ExpensesReport> classifyByDepartmentAll();
     List<ExpensesReport> getAllClassifyWithDepartment(String department);
     List<ExpensesReport> getAllClassifyWithFirstClassify(String classify);
+    List<ExpensesReport> getMonthByDepartment(String department);
 }

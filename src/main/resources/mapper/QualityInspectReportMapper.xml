@@ -5,6 +5,8 @@
     <result column="total_num" property="totalNum" jdbcType="INTEGER" javaType="java.lang.Integer"></result>
     <result column="qualified_number" property="qualifiedNumber" jdbcType="INTEGER" javaType="java.lang.Integer"></result>
     <result column="unqualified_number" property="unqualifiedNumber" jdbcType="INTEGER" javaType="java.lang.Integer"></result>
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" javaType="java.lang.String"></result>
+    <result column="material_graph_name" property="materialGraphName" jdbcType="VARCHAR" javaType="java.lang.String"></result>
    <!-- <constructor >
 
       <arg column="total_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -19,4 +21,13 @@
      from inspect_history where type = 1
   </select>
 
+    <select id="selectInspectBySupplierName" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+     select  sum(qualified_number+unqualified_number) total_num,sum(qualified_number) qualified_number,sum(unqualified_number) unqualified_number,
+    supplier_name from inspect_history where type = 1 group by `supplier_name`
+  </select>
+
+    <select id="selectInspectByMaterialName" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+     select  sum(qualified_number+unqualified_number) total_num,sum(qualified_number) qualified_number,sum(unqualified_number) unqualified_number,
+    material_graph_name,supplier_name from inspect_history where type = 1 group by `material_graph_name`
+  </select>
 </mapper>
