@@ -9,6 +9,7 @@ import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PURCHASE_PRO
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
@@ -320,6 +321,15 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (!CollectionUtils.isEmpty(model.getAccessoryList())) {
             model.setAccessory(JSON.toJSONString(model.getAccessoryList()));
         }
+        // 查询已经提交的质检记录
+        int historyQuantityNum = 0, historyUnQuantityNum = 0;
+        InspectHistoryExample historyExample = new InspectHistoryExample();
+        historyExample.or().andInspectNoEqualTo(model.getInspectNo()).andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
+        List<InspectHistory> inspectHistories = historyMapper.selectByExample(historyExample);
+        if (CollUtil.isNotEmpty(inspectHistories)) {
+            historyQuantityNum = inspectHistories.stream().mapToInt(InspectHistory::getQualifiedNumber).sum();
+            historyUnQuantityNum = inspectHistories.stream().mapToInt(InspectHistory::getUnqualifiedNumber).sum();
+        }
         InspectHistory inspectHistory = new InspectHistory();
         BeanUtils.copyProperties(model, inspectHistory);
         historyMapper.insertSelective(inspectHistory);
@@ -345,6 +355,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 List<InspectItem> inspectItems = inspectItemMapper.selectByExample(inspectItemExample);
                 if (!CollectionUtils.isEmpty(inspectItems)) {
                     InspectItem inspectItem = inspectItems.get(0);
+                    // 判断这个图号的检验数量是否大于所有历史合格+历史不合格
+                    Integer itemDeliveryNumber = inspectItem.getDeliveryNumber();
+                    int count = historyQuantityNum + historyUnQuantityNum + model.getUnqualifiedNumber() + model.getQualifiedNumber();
+                    if (count > itemDeliveryNumber) {
+                        throw new BaseException(ResponseEnum.DELIVERY_COUNT_THAN_PURCHASE_COUNT_HISTORY);
+                    }
                     InspectItem updateInspectItem = new InspectItem();
                     updateInspectItem.setQualifiedNumber(inspectItem.getQualifiedNumber() + model.getQualifiedNumber());
                     updateInspectItem.setUnqualifiedNumber(inspectItem.getUnqualifiedNumber() + model.getUnqualifiedNumber());

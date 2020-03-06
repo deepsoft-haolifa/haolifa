@@ -88,6 +88,7 @@ public class CommonEnum {
         ORDER_SIGLE_PRO_INSPECT_NUM_ERROR("4022", "检验合格数单项已超出订单单项总数量"),
         USER_NAME_EXISTS("4023", "不能添加重复的用户名称"),
         DELIVERY_COUNT_LESS_THAN_PURCHASE_COUNT("4024", "【{0}】 送检数量不能大于采购数量"),
+        DELIVERY_COUNT_THAN_PURCHASE_COUNT_HISTORY("4025", "该图号检验合格数+不合格数不能大于送检单上的送检数量"),
 
         MATERIAL_GRAPH_NO_NOT_EXIST_1("5001", "【{0}】 不存在零件库中，请确认"),
         MATERIAL_REQUISITION_EXIST("5002", "这个订单的领料单已经保存过，请确认");
