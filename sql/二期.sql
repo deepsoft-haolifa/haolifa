@@ -69,6 +69,9 @@ CREATE TABLE `sporadic_entry_out_record` (
  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='零星零件出入库记录表';
+ALTER TABLE sporadic_material MODIFY COLUMN quantity float NOT NULL DEFAULT '0' COMMENT '所需数量';
+ALTER TABLE sporadic_entry_out_record MODIFY COLUMN quantity float NOT NULL DEFAULT '0' COMMENT '出入库数量';
+
 
 ===================
 -- invoice 添加开票日期
