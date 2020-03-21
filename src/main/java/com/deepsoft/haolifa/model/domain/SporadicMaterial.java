@@ -20,7 +20,7 @@ public class SporadicMaterial {
 
     private String specifications;
 
-    private Integer quantity;
+    private Float quantity;
 
     private Date createTime;
 
@@ -30,7 +30,7 @@ public class SporadicMaterial {
 
     private Date updateTime;
 
-    public SporadicMaterial(Integer id, String classifyName, String materialName, String graphNo, String unit, String model, BigDecimal price, String specifications, Integer quantity, Date createTime, Integer createUser, Integer updateUser, Date updateTime) {
+    public SporadicMaterial(Integer id, String classifyName, String materialName, String graphNo, String unit, String model, BigDecimal price, String specifications, Float quantity, Date createTime, Integer createUser, Integer updateUser, Date updateTime) {
         this.id = id;
         this.classifyName = classifyName;
         this.materialName = materialName;
@@ -114,11 +114,11 @@ public class SporadicMaterial {
         this.specifications = specifications == null ? null : specifications.trim();
     }
 
-    public Integer getQuantity() {
+    public Float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Float quantity) {
         this.quantity = quantity;
     }
 

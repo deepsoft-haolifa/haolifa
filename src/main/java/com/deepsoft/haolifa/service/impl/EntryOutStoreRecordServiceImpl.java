@@ -254,9 +254,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setOperationType(operationType);
             setType(storageType);
             setCreateUser(getLoginUserId());
-            setPrice(material.getPrice());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
+        entryOutStoreRecord.setPrice(material.getPrice());
         // 插入出入库记录表
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {

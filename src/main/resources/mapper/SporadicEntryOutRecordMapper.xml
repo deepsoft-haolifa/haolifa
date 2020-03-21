@@ -7,7 +7,7 @@
       <arg column="sporadic_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
-      <arg column="quantity" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="quantity" jdbcType="REAL" javaType="java.lang.Float" />
       <arg column="receive_department" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="create_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -116,7 +116,7 @@
       create_user, update_user, update_time
       )
     values (#{sporadicId,jdbcType=INTEGER}, #{graphNo,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{quantity,jdbcType=INTEGER}, #{receiveDepartment,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{quantity,jdbcType=REAL}, #{receiveDepartment,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -165,7 +165,7 @@
         #{type,jdbcType=TINYINT},
       </if>
       <if test="quantity != null" >
-        #{quantity,jdbcType=INTEGER},
+        #{quantity,jdbcType=REAL},
       </if>
       <if test="receiveDepartment != null" >
         #{receiveDepartment,jdbcType=VARCHAR},
@@ -206,7 +206,7 @@
         type = #{record.type,jdbcType=TINYINT},
       </if>
       <if test="record.quantity != null" >
-        quantity = #{record.quantity,jdbcType=INTEGER},
+        quantity = #{record.quantity,jdbcType=REAL},
       </if>
       <if test="record.receiveDepartment != null" >
         receive_department = #{record.receiveDepartment,jdbcType=VARCHAR},
@@ -234,7 +234,7 @@
       sporadic_id = #{record.sporadicId,jdbcType=INTEGER},
       graph_no = #{record.graphNo,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
-      quantity = #{record.quantity,jdbcType=INTEGER},
+      quantity = #{record.quantity,jdbcType=REAL},
       receive_department = #{record.receiveDepartment,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
@@ -257,7 +257,7 @@
         type = #{type,jdbcType=TINYINT},
       </if>
       <if test="quantity != null" >
-        quantity = #{quantity,jdbcType=INTEGER},
+        quantity = #{quantity,jdbcType=REAL},
       </if>
       <if test="receiveDepartment != null" >
         receive_department = #{receiveDepartment,jdbcType=VARCHAR},
@@ -282,7 +282,7 @@
     set sporadic_id = #{sporadicId,jdbcType=INTEGER},
       graph_no = #{graphNo,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
-      quantity = #{quantity,jdbcType=INTEGER},
+      quantity = #{quantity,jdbcType=REAL},
       receive_department = #{receiveDepartment,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},

@@ -365,52 +365,52 @@ public class SporadicEntryOutRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andQuantityEqualTo(Integer value) {
+        public Criteria andQuantityEqualTo(Float value) {
             addCriterion("quantity =", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotEqualTo(Integer value) {
+        public Criteria andQuantityNotEqualTo(Float value) {
             addCriterion("quantity <>", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityGreaterThan(Integer value) {
+        public Criteria andQuantityGreaterThan(Float value) {
             addCriterion("quantity >", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityGreaterThanOrEqualTo(Integer value) {
+        public Criteria andQuantityGreaterThanOrEqualTo(Float value) {
             addCriterion("quantity >=", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityLessThan(Integer value) {
+        public Criteria andQuantityLessThan(Float value) {
             addCriterion("quantity <", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityLessThanOrEqualTo(Integer value) {
+        public Criteria andQuantityLessThanOrEqualTo(Float value) {
             addCriterion("quantity <=", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityIn(List<Integer> values) {
+        public Criteria andQuantityIn(List<Float> values) {
             addCriterion("quantity in", values, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotIn(List<Integer> values) {
+        public Criteria andQuantityNotIn(List<Float> values) {
             addCriterion("quantity not in", values, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityBetween(Integer value1, Integer value2) {
+        public Criteria andQuantityBetween(Float value1, Float value2) {
             addCriterion("quantity between", value1, value2, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotBetween(Integer value1, Integer value2) {
+        public Criteria andQuantityNotBetween(Float value1, Float value2) {
             addCriterion("quantity not between", value1, value2, "quantity");
             return (Criteria) this;
         }

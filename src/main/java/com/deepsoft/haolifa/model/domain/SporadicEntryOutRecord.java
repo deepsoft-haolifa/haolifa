@@ -11,7 +11,7 @@ public class SporadicEntryOutRecord {
 
     private Byte type;
 
-    private Integer quantity;
+    private Float quantity;
 
     private String receiveDepartment;
 
@@ -23,7 +23,7 @@ public class SporadicEntryOutRecord {
 
     private Date updateTime;
 
-    public SporadicEntryOutRecord(Integer id, Integer sporadicId, String graphNo, Byte type, Integer quantity, String receiveDepartment, Date createTime, Integer createUser, Integer updateUser, Date updateTime) {
+    public SporadicEntryOutRecord(Integer id, Integer sporadicId, String graphNo, Byte type, Float quantity, String receiveDepartment, Date createTime, Integer createUser, Integer updateUser, Date updateTime) {
         this.id = id;
         this.sporadicId = sporadicId;
         this.graphNo = graphNo;
@@ -72,11 +72,11 @@ public class SporadicEntryOutRecord {
         this.type = type;
     }
 
-    public Integer getQuantity() {
+    public Float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Float quantity) {
         this.quantity = quantity;
     }
 

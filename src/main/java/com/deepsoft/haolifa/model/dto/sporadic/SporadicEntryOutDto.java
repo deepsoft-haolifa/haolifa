@@ -18,7 +18,7 @@ public class SporadicEntryOutDto {
     private String graphNo;
 
     @ApiModelProperty(value = "数量(入库是正数；出库是负数)", required = true)
-    private Integer quantity;
+    private Float quantity;
 
     @ApiModelProperty(value = "1出库；2入库", allowableValues = "1,2")
     private Byte type;

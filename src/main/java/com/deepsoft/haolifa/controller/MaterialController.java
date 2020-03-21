@@ -96,7 +96,7 @@ public class MaterialController {
         return ResultBean.success(materialService.getInfoById(id));
     }
 
-    @ApiOperation("根据图号查询零件详情")
+    @ApiOperation(" ")
     @GetMapping("/getInfoByNo")
     public ResultBean getInfo(@RequestParam String graphNo) {
         return ResultBean.success(materialService.getInfoByGraphNo(graphNo));

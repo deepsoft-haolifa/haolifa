@@ -11,7 +11,7 @@
       <arg column="model" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="quantity" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="quantity" jdbcType="REAL" javaType="java.lang.Float" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="create_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="update_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -121,7 +121,7 @@
       )
     values (#{classifyName,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{graphNo,jdbcType=VARCHAR}, 
       #{unit,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{specifications,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{specifications,jdbcType=VARCHAR}, #{quantity,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -191,7 +191,7 @@
         #{specifications,jdbcType=VARCHAR},
       </if>
       <if test="quantity != null" >
-        #{quantity,jdbcType=INTEGER},
+        #{quantity,jdbcType=REAL},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -241,7 +241,7 @@
         specifications = #{record.specifications,jdbcType=VARCHAR},
       </if>
       <if test="record.quantity != null" >
-        quantity = #{record.quantity,jdbcType=INTEGER},
+        quantity = #{record.quantity,jdbcType=REAL},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -270,7 +270,7 @@
       model = #{record.model,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=DECIMAL},
       specifications = #{record.specifications,jdbcType=VARCHAR},
-      quantity = #{record.quantity,jdbcType=INTEGER},
+      quantity = #{record.quantity,jdbcType=REAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=INTEGER},
       update_user = #{record.updateUser,jdbcType=INTEGER},
@@ -304,7 +304,7 @@
         specifications = #{specifications,jdbcType=VARCHAR},
       </if>
       <if test="quantity != null" >
-        quantity = #{quantity,jdbcType=INTEGER},
+        quantity = #{quantity,jdbcType=REAL},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -330,7 +330,7 @@
       model = #{model,jdbcType=VARCHAR},
       price = #{price,jdbcType=DECIMAL},
       specifications = #{specifications,jdbcType=VARCHAR},
-      quantity = #{quantity,jdbcType=INTEGER},
+      quantity = #{quantity,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=INTEGER},
       update_user = #{updateUser,jdbcType=INTEGER},

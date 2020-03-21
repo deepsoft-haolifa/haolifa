@@ -122,7 +122,7 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
         int insert = sporadicEntryOutRecordMapper.insertSelective(record);
         if (insert > 0) {
             // 更新库存数据
-            Integer quantity = sporadicMaterial.getQuantity();
+            Float quantity = sporadicMaterial.getQuantity();
             SporadicMaterial updateSp = new SporadicMaterial();
             updateSp.setQuantity(entryOutDto.getQuantity() + quantity);
             updateSp.setId(sporadicId);
@@ -151,7 +151,7 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
         int insert = sporadicEntryOutRecordMapper.insertSelective(record);
         if (insert > 0) {
             // 更新库存数据
-            Integer quantity = sporadicMaterial.getQuantity();
+            Float quantity = sporadicMaterial.getQuantity();
             SporadicMaterial updateSp = new SporadicMaterial();
             updateSp.setId(sporadicId);
             updateSp.setQuantity(quantity - entryOutDto.getQuantity());

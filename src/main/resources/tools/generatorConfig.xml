@@ -95,7 +95,9 @@
         <table tableName="sporadic_entry_out_record" domainObjectName="SporadicEntryOutRecord">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-
+        <table tableName="sporadic_material" domainObjectName="SporadicMaterial">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         <!--<table tableName="graph_no_rel" domainObjectName="GraphNoRel">-->
         <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
