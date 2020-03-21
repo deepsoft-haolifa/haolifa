@@ -268,6 +268,9 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             InspectHistoryExample historyExample = new InspectHistoryExample();
             historyExample.or().andInspectNoEqualTo(inspect1.getInspectNo());
             List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
+            if (status.byteValue() == InspectStatus.INSPECTED.code && CollUtil.isEmpty(histories)) {
+                throw new BaseException(ResponseEnum.ADD_INSPECT_RECORD);
+            }
             Map<String, InspectItem> updateItem = new HashMap<>();
             for (int i = 0; i < histories.size(); i++) {
                 InspectHistory history = histories.get(i);

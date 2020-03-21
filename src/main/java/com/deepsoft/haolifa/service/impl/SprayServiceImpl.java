@@ -359,10 +359,15 @@ public class SprayServiceImpl extends BaseService implements SprayService {
 
     @Override
     public ResultBean updateInspectStatus(String sprayNo, int status) {
-        // 点击质检完成的时候，判断检验合格数+不合格数 <总数，不能点击
-//        if (status == CommonEnum.Inspect2Status.handled.code) {
-//            sprayNo
-//        }
+        // 点击质检完成的时候，判断是否提交了检验记录，不能点击
+        if (status == CommonEnum.Inspect2Status.handled.code) {
+            SprayInspectHistoryExample example = new SprayInspectHistoryExample();
+            example.or().andSprayNoEqualTo(sprayNo);
+            int count = inspectHistoryMapper.countByExample(example);
+            if (count == 0) {
+                throw new BaseException(ResponseEnum.ADD_INSPECT_RECORD);
+            }
+        }
 
         SprayExample example = new SprayExample();
         SprayExample.Criteria criteria = example.createCriteria();
