@@ -123,7 +123,7 @@ public class SporadicMaterialController {
         // 类型为 入库
         dto.setType(CommonEnum.OperationType.ENTRY.code);
         dto.setPageNum(1);
-        dto.setPageNum(Constant.EXPORT_MAX_COUNT);
+        dto.setPageSize(Constant.EXPORT_MAX_COUNT);
 
         Page<SporadicEntryOutRecordRespVo> page = PageHelper.startPage(dto.getPageNum(), dto.getPageSize())
             .doSelectPage(() -> sporadicMaterialExtendMapper.pageRecord(dto));
@@ -223,7 +223,7 @@ public class SporadicMaterialController {
         // 类型为 入库
         dto.setType(CommonEnum.OperationType.OUT.code);
         dto.setPageNum(1);
-        dto.setPageNum(Constant.EXPORT_MAX_COUNT);
+        dto.setPageSize(Constant.EXPORT_MAX_COUNT);
 
         Page<SporadicEntryOutRecordRespVo> page = PageHelper.startPage(dto.getPageNum(), dto.getPageSize())
             .doSelectPage(() -> sporadicMaterialExtendMapper.pageRecord(dto));

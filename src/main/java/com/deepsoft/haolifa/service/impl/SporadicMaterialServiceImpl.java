@@ -48,8 +48,20 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         material.setGraphNo("lx_" + RandomUtils.orderNoStr());
-        material.setCreateUser(getLoginUserId());
-        return sporadicMaterialMapper.insertSelective(material);
+        int loginUserId = getLoginUserId();
+        material.setCreateUser(loginUserId);
+        int i = sporadicMaterialMapper.insertSelective(material);
+        if (i > 0) {
+            // 添加入库详情
+            SporadicEntryOutRecord record = new SporadicEntryOutRecord();
+            record.setType(CommonEnum.OperationType.ENTRY.code);
+            record.setSporadicId(material.getId());
+            record.setGraphNo(material.getGraphNo());
+            record.setQuantity(material.getQuantity());
+            record.setCreateUser(loginUserId);
+            sporadicEntryOutRecordMapper.insertSelective(record);
+        }
+        return i;
     }
 
     @Override
