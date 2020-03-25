@@ -51,7 +51,7 @@ public class SporadicMaterialServiceImpl extends BaseService implements Sporadic
         int loginUserId = getLoginUserId();
         material.setCreateUser(loginUserId);
         int i = sporadicMaterialMapper.insertSelective(material);
-        if (i > 0) {
+        if (i > 0 && material.getQuantity() > 0f) {
             // 添加入库详情
             SporadicEntryOutRecord record = new SporadicEntryOutRecord();
             record.setType(CommonEnum.OperationType.ENTRY.code);
