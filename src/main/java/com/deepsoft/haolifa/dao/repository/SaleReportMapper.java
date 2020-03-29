@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SaleReportMapper {
     //获取目前生产总金额总数量
-    List<ExportSaleDTO> selectAll();
+    List<ExportSaleDTO> selectAll(@Param("year") String year);
     //根据月份获取生产总金额 总数量
     List<ExportSaleDTO> selectByMonth(@Param("startTime") String startTime,@Param("endTime") String endTime);
     List<ExportContractDTO> selectContractByDemandName(@Param("year") String year);

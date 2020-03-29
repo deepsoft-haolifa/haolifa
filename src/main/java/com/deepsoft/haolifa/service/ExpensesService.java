@@ -21,10 +21,10 @@ public interface ExpensesService {
   ResultBean getClassify(String expensesClassify);
   ResultBean classifyByDepartment();
   //获取费用统计表
-  ResultBean getAllClassify();
+  ResultBean getAllClassify(String year,String month);
 //查询部门费用总计
-  ResultBean classifyByDepartmentAll();
-  ResultBean getAllClassifyWithDepartment(String department);
+  ResultBean classifyByDepartmentAll(String year,String month);
+  ResultBean getAllClassifyWithDepartment(String department,String year, String month);
   //获取一级部门每月的费用支出
   ResultBean getMonthByDepartment(String department);
   ResultBean getAllClassifyWithFirstClassify(String classify);

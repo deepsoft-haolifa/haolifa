@@ -42,8 +42,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   }
 
   @Override
-  public List<ExportSaleDTO> selectAll() {
-    return saleReportMapper.selectAll();
+  public List<ExportSaleDTO> selectAll(String year) {
+    return saleReportMapper.selectAll(year);
   }
 
   @Override

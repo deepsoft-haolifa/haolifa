@@ -30,14 +30,16 @@ public class ReportController {
 
     @ApiOperation("获取一级费用分类每月的支出")
     @GetMapping("/expense/classify")
-    public ResultBean getcClassify(@RequestParam(value ="expensesClassify") String expensesClassify) {
+    public ResultBean getcClassify(@RequestParam(value = "expensesClassify") String expensesClassify) {
         return expensesService.getClassify(expensesClassify);
     }
+
     @ApiOperation("费用每月汇总--部门明细")
     @GetMapping("/expense/classifyByDepartment")
     public ResultBean classifyByDepartment() {
         return expensesService.classifyByDepartment();
     }
+
     @ApiOperation("费用每月汇总--二级部门")
     @GetMapping("/expense/classifyBySecondDepartment")
     public ResultBean classifyBySecondDepartment() {
@@ -46,211 +48,233 @@ public class ReportController {
 
     @ApiOperation("费用整体分类汇总")
     @GetMapping("/expense/getAllClassify")
-    public ResultBean getAllClassify() {
-        return expensesService.getAllClassify();
+    public ResultBean getAllClassify(@RequestParam(value = "year",required = false) String year,
+                                     @RequestParam(value = "month",required = false) String month) {
+        return expensesService.getAllClassify(year,month);
     }
+
     @ApiOperation("费用整体部门汇总")
     @GetMapping("/expense/classifyByDepartmentAll")
-    public ResultBean classifyByDepartmentAll() {
-        return expensesService.classifyByDepartmentAll();
+    public ResultBean classifyByDepartmentAll(@RequestParam(value = "year",required = false) String year,
+                                              @RequestParam(value = "month",required = false) String month) {
+        return expensesService.classifyByDepartmentAll(year,month);
     }
+
     @ApiOperation("某个部门下面的分类统计")
-    @RequestMapping(value = "/expense/getAllClassifyWithDepartment",method = RequestMethod.GET)
-    public ResultBean getAllClassifyWithDepartment(@RequestParam(value ="department") String department) {
-        return expensesService.getAllClassifyWithDepartment(department);
+    @RequestMapping(value = "/expense/getAllClassifyWithDepartment", method = RequestMethod.GET)
+    public ResultBean getAllClassifyWithDepartment(@RequestParam(value = "department") String department,
+                                                   @RequestParam(value = "year",required = false) String year,
+                                                   @RequestParam(value = "month",required = false) String month) {
+        return expensesService.getAllClassifyWithDepartment(department,year,month);
     }
+
     @ApiOperation("获取一级部门下面每月的支出")
-    @RequestMapping(value = "/expense/getMonthByDepartment",method = RequestMethod.GET)
-    public ResultBean getMonthByDepartment(@RequestParam(value ="department") String department) {
+    @RequestMapping(value = "/expense/getMonthByDepartment", method = RequestMethod.GET)
+    public ResultBean getMonthByDepartment(@RequestParam(value = "department") String department) {
         return expensesService.getMonthByDepartment(department);
     }
+
     @ApiOperation("每项费用中费用二级占比")
-    @RequestMapping(value = "/expense/getAllClassifyWithFirstClassify",method = RequestMethod.GET)
-    public ResultBean getAllClassifyWithFirstClassify(@RequestParam(value ="classify") String classify) {
+    @RequestMapping(value = "/expense/getAllClassifyWithFirstClassify", method = RequestMethod.GET)
+    public ResultBean getAllClassifyWithFirstClassify(@RequestParam(value = "classify") String classify) {
         System.out.println(classify);
         return expensesService.getAllClassifyWithFirstClassify(classify);
     }
+
     @ApiOperation("根据供应商查询采购报表")
-    @RequestMapping(value = "/purchase/selectBySupplierName",method = RequestMethod.GET)
-    public ResultBean selectBySupplierName(@RequestParam(value ="purchase") String purchase) {
+    @RequestMapping(value = "/purchase/selectBySupplierName", method = RequestMethod.GET)
+    public ResultBean selectBySupplierName(@RequestParam(value = "purchase") String purchase) {
 
         return reportService.selectBySupplierName(purchase);
     }
+
     @ApiOperation("采购报表")
-    @RequestMapping(value = "/purchase/getPurchases",method = RequestMethod.GET)
+    @RequestMapping(value = "/purchase/getPurchases", method = RequestMethod.GET)
     public ResultBean getPurchases() {
 
         return reportService.selectPurchase();
     }
-    @ApiOperation("销售报表-目前生产总金额")
-    @RequestMapping(value = "/sale/getSaleAll",method = RequestMethod.GET)
-    public ResultBean getSaleAll() {
 
-       List<ExportSaleDTO>  exportSaleDTOS = reportService.selectAll();
-       return  ResultBean.success(exportSaleDTOS);
+    @ApiOperation("销售报表-目前生产总金额")
+    @RequestMapping(value = "/sale/getSaleAll", method = RequestMethod.GET)
+    public ResultBean getSaleAll(@RequestParam(value = "year") String year) {
+
+        List<ExportSaleDTO> exportSaleDTOS = reportService.selectAll(year);
+        return ResultBean.success(exportSaleDTOS);
     }
+
     @ApiOperation("销售报表-每月生产总金额")
-    @RequestMapping(value = "/sale/getSaleAllByMonth",method = RequestMethod.GET)
-    public ResultBean getSaleAllByMonth(@RequestParam(value ="year") String year) {
+    @RequestMapping(value = "/sale/getSaleAllByMonth", method = RequestMethod.GET)
+    public ResultBean getSaleAllByMonth(@RequestParam(value = "year") String year) {
         Calendar cal = Calendar.getInstance();
         List list = new ArrayList();
         int month = cal.get(Calendar.MONTH) + 1;
         Map map = new HashMap();
-        for(int i= 1;i<month;i++){
+        for (int i = 1; i < month; i++) {
             JsonObject jsonObject = new JsonObject();
             String startTime = "";
             String endTime = "";
-            if(i<10){
-                startTime = year+"-0"+i+"-26";
-                int j = i+1;
-                if(j<10){
-                    endTime = year+"-0"+j+"-25";
-                }else {
-                    endTime = year+"-"+j+"-25";
+            if (i < 10) {
+                startTime = year + "-0" + i + "-26";
+                int j = i + 1;
+                if (j < 10) {
+                    endTime = year + "-0" + j + "-25";
+                } else {
+                    endTime = year + "-" + j + "-25";
                 }
 
-            }else {
-                startTime = year+"-"+i+"-26";
-                int j=i+1;
-                endTime = year+"-"+j+"-25";
+            } else {
+                startTime = year + "-" + i + "-26";
+                int j = i + 1;
+                endTime = year + "-" + j + "-25";
             }
-            List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByMonth(startTime,endTime);
-            if(exportSaleDTOS != null && exportSaleDTOS.get(0)!=null){
-                System.out.println(exportSaleDTOS);
-                map.put(i,exportSaleDTOS);
+            List<ExportSaleDTO> exportSaleDTOS = reportService.selectByMonth(startTime, endTime);
+            if (exportSaleDTOS != null && exportSaleDTOS.get(0) != null) {
+                map.put(i, exportSaleDTOS);
             }
         }
-        return  ResultBean.success(map);
+        return ResultBean.success(map);
     }
 
     @ApiOperation("销售报表-根据产品型号统计生产金额")
-    @RequestMapping(value = "/sale/getSaleByModel",method = RequestMethod.GET)
+    @RequestMapping(value = "/sale/getSaleByModel", method = RequestMethod.GET)
     public ResultBean getSaleByModel() {
 
-        List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByModel();
-        return  ResultBean.success(exportSaleDTOS);
+        List<ExportSaleDTO> exportSaleDTOS = reportService.selectByModel();
+        return ResultBean.success(exportSaleDTOS);
     }
+
     @ApiOperation("销售报表-目前合同总金额")
-    @RequestMapping(value = "/sale/getSaleAllContract",method = RequestMethod.GET)
+    @RequestMapping(value = "/sale/getSaleAllContract", method = RequestMethod.GET)
     public ResultBean getSaleAllContract() {
 
-        List<ExportSaleDTO>  exportSaleDTOS = reportService.selectAllContract();
-        return  ResultBean.success(exportSaleDTOS);
+        List<ExportSaleDTO> exportSaleDTOS = reportService.selectAllContract();
+        return ResultBean.success(exportSaleDTOS);
     }
+
     @ApiOperation("销售报表-每月合同总金额")
-    @RequestMapping(value = "/sale/getSaleAllByMonthContract",method = RequestMethod.GET)
-    public ResultBean getSaleAllByMonthContract(@RequestParam(value ="year") String year) {
+    @RequestMapping(value = "/sale/getSaleAllByMonthContract", method = RequestMethod.GET)
+    public ResultBean getSaleAllByMonthContract(@RequestParam(value = "year") String year) {
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH) + 1;
         Map map = new HashMap();
-        for(int i= 1;i<month;i++){
+        for (int i = 1; i < month; i++) {
             String startTime;
             String endTime;
-            if(i<10){
-                startTime = year+"-0"+i+"-26";
-                int j = i+1;
-                if(j<10){
-                    endTime = year+"-0"+j+"-25";
-                }else {
-                    endTime = year+"-"+j+"-25";
+            if (i < 10) {
+                startTime = year + "-0" + i + "-26";
+                int j = i + 1;
+                if (j < 10) {
+                    endTime = year + "-0" + j + "-25";
+                } else {
+                    endTime = year + "-" + j + "-25";
                 }
 
-            }else {
-                startTime = year+"-"+i+"-26";
-                int j=i+1;
-                endTime = year+"-"+j+"-25";
+            } else {
+                startTime = year + "-" + i + "-26";
+                int j = i + 1;
+                endTime = year + "-" + j + "-25";
             }
-            List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByMonthContract(startTime,endTime);
-            if(exportSaleDTOS != null && exportSaleDTOS.get(0)!=null){
+            List<ExportSaleDTO> exportSaleDTOS = reportService.selectByMonthContract(startTime, endTime);
+            if (exportSaleDTOS != null && exportSaleDTOS.get(0) != null) {
                 System.out.println(exportSaleDTOS);
-                map.put(i,exportSaleDTOS);
+                map.put(i, exportSaleDTOS);
             }
         }
-        return  ResultBean.success(map);
+        return ResultBean.success(map);
     }
 
     @ApiOperation("销售报表-根据产品型号统计合同金额")
-    @RequestMapping(value = "/sale/getSaleByModelContract",method = RequestMethod.GET)
+    @RequestMapping(value = "/sale/getSaleByModelContract", method = RequestMethod.GET)
     public ResultBean getSaleByModelContract() {
 
-        List<ExportSaleDTO>  exportSaleDTOS = reportService.selectByModelContract();
-        return  ResultBean.success(exportSaleDTOS);
+        List<ExportSaleDTO> exportSaleDTOS = reportService.selectByModelContract();
+        return ResultBean.success(exportSaleDTOS);
     }
 
     @ApiOperation("喷涂质量报表")
-    @RequestMapping(value = "/quality/getSpray",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/getSpray", method = RequestMethod.GET)
     public ResultBean getSpray() {
 
-       QualitySprayReport qualitySprayReport = reportService.selectSpray();
-        return  ResultBean.success(qualitySprayReport);
+        QualitySprayReport qualitySprayReport = reportService.selectSpray();
+        return ResultBean.success(qualitySprayReport);
     }
+
     @ApiOperation("采购质量报表")
-    @RequestMapping(value = "/quality/getInspect",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/getInspect", method = RequestMethod.GET)
     public ResultBean getInspect() {
 
         QualityInspectReport qualityInspectReport = reportService.selectInspect();
-        return  ResultBean.success(qualityInspectReport);
+        return ResultBean.success(qualityInspectReport);
     }
+
     @ApiOperation("采购质量报表,不同供应商的数据对比")
-    @RequestMapping(value = "/quality/getInspectBysupplierName",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/getInspectBysupplierName", method = RequestMethod.GET)
     public ResultBean getInspectBysupplierName() {
 
         List<QualityInspectReport> qualityInspectReport = reportService.selectInspectBySupplierName();
-        return  ResultBean.success(qualityInspectReport);
+        return ResultBean.success(qualityInspectReport);
     }
+
     @ApiOperation("采购质量报表,不同类型零件的数据对比")
-    @RequestMapping(value = "/quality/selectInspectByMaterialName",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/selectInspectByMaterialName", method = RequestMethod.GET)
     public ResultBean selectInspectByMaterialName() {
 
         List<QualityInspectReport> qualityInspectReport = reportService.selectInspectByMaterialName();
-        return  ResultBean.success(qualityInspectReport);
+        return ResultBean.success(qualityInspectReport);
     }
+
     @ApiOperation("压力质量报表")
-    @RequestMapping(value = "/quality/getPressure",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/getPressure", method = RequestMethod.GET)
     public ResultBean getPressure() {
 
         QualityPressureReport qualityPressureReport = reportService.selectPressure();
-        return  ResultBean.success(qualityPressureReport);
+        return ResultBean.success(qualityPressureReport);
     }
+
     @ApiOperation("压力质量报表--根据不同原因统计")
-    @RequestMapping(value = "/quality/selectPressureByReason",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/selectPressureByReason", method = RequestMethod.GET)
     public ResultBean selectPressureByReason() {
 
         List<QualityPressureReport> qualityPressureReport = reportService.selectPressureByReason();
-        return  ResultBean.success(qualityPressureReport);
+        return ResultBean.success(qualityPressureReport);
     }
+
     @ApiOperation("机加工质量报表根据机加工类型查询 1 内部 ")
-    @RequestMapping(value = "/quality/getEntrust",method = RequestMethod.GET)
-    public ResultBean getEntrust(@RequestParam(value ="type") Integer type) {
+    @RequestMapping(value = "/quality/getEntrust", method = RequestMethod.GET)
+    public ResultBean getEntrust(@RequestParam(value = "type") Integer type) {
         QualityEntrustReport qualityEntrustReport = reportService.selectByType(type);
         return ResultBean.success(qualityEntrustReport);
     }
+
     @ApiOperation("更换料质量报表")
-    @RequestMapping(value = "/quality/getAudit",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/getAudit", method = RequestMethod.GET)
     public ResultBean getAudit() {
 
         List<QualityAuditReport> qualityAuditReports = reportService.selectAudit();
-        return  ResultBean.success(qualityAuditReports);
+        return ResultBean.success(qualityAuditReports);
     }
+
     @ApiOperation("成品质量报表")
-    @RequestMapping(value = "/quality/getProduct",method = RequestMethod.GET)
+    @RequestMapping(value = "/quality/getProduct", method = RequestMethod.GET)
     public ResultBean getProduct() {
 
         QualityProductReport qualityProductReport = reportService.selectProduct();
-        return  ResultBean.success(qualityProductReport);
+        return ResultBean.success(qualityProductReport);
     }
 
 
     @ApiOperation("销售报表-获取按需方总额饼图")
-    @RequestMapping(value = "/sale/selectContractByDemandName",method = RequestMethod.GET)
-    public ResultBean selectContractByDemandName(@RequestParam(value ="year") String year) {
-        List<ExportContractDTO>  exportSaleDTOS = reportService.selectContractByDemandName(year);
-        return  ResultBean.success(exportSaleDTOS);
+    @RequestMapping(value = "/sale/selectContractByDemandName", method = RequestMethod.GET)
+    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectContractByDemandName(year);
+        return ResultBean.success(exportSaleDTOS);
     }
+
     @ApiOperation("销售报表-获取按需方回款总额饼图")
-    @RequestMapping(value = "/sale/selectshouhuiContractByDemandName",method = RequestMethod.GET)
-    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value ="year") String year) {
-        List<ExportContractDTO>  exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
-        return  ResultBean.success(exportSaleDTOS);
+    @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)
+    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year") String year) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
+        return ResultBean.success(exportSaleDTOS);
     }
 }

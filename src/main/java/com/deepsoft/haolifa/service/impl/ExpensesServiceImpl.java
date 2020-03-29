@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ExpensesClassifyMapper;
@@ -21,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -46,7 +49,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         if (StringUtils.isNotBlank(model.getDataDate())) {
             String dataYear = model.getDataDate().substring(0, 4);
             expenses.setDataYear(dataYear);
-            String dataMonth = model.getDataDate().substring(5,7);
+            String dataMonth = model.getDataDate().substring(5, 7);
             expenses.setDataMonth(dataMonth);
         }
 
@@ -93,7 +96,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         if (StringUtils.isNotBlank(model.getDataDate())) {
             String dataYear = model.getDataDate().substring(0, 4);
             expenses.setDataYear(dataYear);
-            String dataMonth = model.getDataDate().substring(5,7);
+            String dataMonth = model.getDataDate().substring(5, 7);
             expenses.setDataMonth(dataMonth);
         }
         expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
@@ -146,18 +149,42 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getAllClassify() {
-        return ResultBean.success(expensesExtendMapper.getAllClassify());
+    public ResultBean getAllClassify(String year,String month) {
+        Map<String, String> paramMap = new HashMap<>();
+        if(StrUtil.isNotBlank(year)){
+            paramMap.put("year", year);
+        }
+        if(StrUtil.isNotBlank(month)){
+            paramMap.put("month", month);
+        }
+        return ResultBean.success(expensesExtendMapper.getAllClassify(paramMap));
     }
 
     @Override
-    public ResultBean classifyByDepartmentAll() {
-        return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll());
+    public ResultBean classifyByDepartmentAll(String year, String month) {
+        Map<String, String> paramMap = new HashMap<>();
+        if(StrUtil.isNotBlank(year)){
+            paramMap.put("year", year);
+        }
+        if(StrUtil.isNotBlank(month)){
+            paramMap.put("month", month);
+        }
+        return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll(paramMap));
     }
 
     @Override
-    public ResultBean getAllClassifyWithDepartment(String department) {
-        return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(department));
+    public ResultBean getAllClassifyWithDepartment(String department,String year, String month) {
+        Map<String, String> paramMap = new HashMap<>();
+        if(StrUtil.isNotBlank(department)){
+            paramMap.put("department", department);
+        }
+        if(StrUtil.isNotBlank(year)){
+            paramMap.put("year", year);
+        }
+        if(StrUtil.isNotBlank(month)){
+            paramMap.put("month", month);
+        }
+        return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(paramMap));
     }
 
     @Override

@@ -15,7 +15,7 @@ public interface ReportService {
   ResultBean selectPurchase();
   //销售报表
   //获取目前总金额总数量
-  List<ExportSaleDTO> selectAll();
+  List<ExportSaleDTO> selectAll(String year);
   //根据月份获取总金额 总数量
   List<ExportSaleDTO> selectByMonth(String startTime,String endTime);
   List<ExportContractDTO> selectContractByDemandName(String year);
