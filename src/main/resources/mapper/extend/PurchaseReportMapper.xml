@@ -8,17 +8,22 @@
     <result column="unpay" property="unpay" jdbcType="VARCHAR" javaType="java.lang.String"></result>
     <result column="createTime" property="createTime" jdbcType="VARCHAR" javaType="java.lang.String"></result>
   </resultMap>
-  <select id="selectBySupplierName" resultMap="reportMap" parameterType="java.lang.String">
+  <select id="selectBySupplierName" resultMap="reportMap">
          select supplier_name ,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
          where status = 5
 
-         and purchase_order.supplier_name = #{supplierName,jdbcType=VARCHAR}
-
+         and purchase_order.supplier_name = #{supplierName}
+      <if test="year != null and year != ''">
+          and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+      </if>
          group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
-    <select id="selectPurchase" resultMap="reportMap" parameterType="java.lang.String">
+    <select id="selectPurchase" resultMap="reportMap">
         select supplier_name ,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
         where status = 5
+        <if test="year != null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
         group by supplier_name
     </select>
 </mapper>

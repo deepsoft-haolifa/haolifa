@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -10,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -33,12 +36,23 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   @Autowired
   private QualityProductReportMapper qualityProductReportMapper;
   @Override
-  public ResultBean selectBySupplierName(String supplierName){
-    return  ResultBean.success(purchaseReportMapper.selectBySupplierName(supplierName));
+  public ResultBean selectBySupplierName(String supplierName,String year){
+      Map<String, String> paramMap = new HashMap<>();
+      if(StrUtil.isNotBlank(supplierName)){
+          paramMap.put("supplierName", supplierName);
+      }
+      if(StrUtil.isNotBlank(year)){
+          paramMap.put("month", year);
+      }
+    return  ResultBean.success(purchaseReportMapper.selectBySupplierName(paramMap));
   }
   @Override
-  public ResultBean selectPurchase(){
-    return  ResultBean.success(purchaseReportMapper.selectPurchase());
+  public ResultBean selectPurchase(String year){
+      Map<String, String> paramMap = new HashMap<>();
+      if(StrUtil.isNotBlank(year)){
+          paramMap.put("month", year);
+      }
+    return  ResultBean.success(purchaseReportMapper.selectPurchase(paramMap));
   }
 
   @Override
@@ -59,9 +73,19 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     public List<ExportContractDTO> selectshouhuiContractByDemandName(String year) {
         return saleReportMapper.selectshouhuiContractByDemandName(year);
     }
+
     @Override
-  public List<ExportSaleDTO> selectByModel() {
-    return saleReportMapper.selectByModel();
+    public List<ExportContractDTO> selectInvoiceAmountByDemandName(String year) {
+        return saleReportMapper.selectInvoiceAmountByDemandName(year);
+    }
+
+    @Override
+    public List<ExportContractDTO> selectDeliveryAmountByDemandName(String year) {
+        return saleReportMapper.selectDeliveryAmountByDemandName(year);
+    }
+    @Override
+  public List<ExportSaleDTO> selectByModel(String year) {
+    return saleReportMapper.selectByModel(year);
   }
 
   @Override

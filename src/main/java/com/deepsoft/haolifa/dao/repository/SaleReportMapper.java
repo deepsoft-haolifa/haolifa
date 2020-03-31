@@ -16,7 +16,7 @@ public interface SaleReportMapper {
     List<ExportContractDTO> selectshouhuiContractByDemandName(@Param("year") String year);
 
     //根据产品型号获取生产金额数量
-    List<ExportSaleDTO> selectByModel();
+    List<ExportSaleDTO> selectByModel(@Param("year") String year);
 
     //获取目前合同总金额总数量
     List<ExportSaleDTO> selectAllContract();
@@ -25,4 +25,13 @@ public interface SaleReportMapper {
 
     //根据产品型号获取生产金额数量
     List<ExportSaleDTO> selectByModelContract();
+
+    /**
+     * 按需方统计的开票总金额
+     */
+    List<ExportContractDTO> selectInvoiceAmountByDemandName(@Param("year") String year);
+    /**
+     * 按需方统计的发货总金额
+     */
+    List<ExportContractDTO> selectDeliveryAmountByDemandName(@Param("year") String year);
 }
