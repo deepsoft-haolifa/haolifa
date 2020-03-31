@@ -50,7 +50,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
   public ResultBean selectPurchase(String year){
       Map<String, String> paramMap = new HashMap<>();
       if(StrUtil.isNotBlank(year)){
-          paramMap.put("year""", year);
+          paramMap.put("year", year);
       }
     return  ResultBean.success(purchaseReportMapper.selectPurchase(paramMap));
   }
