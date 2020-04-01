@@ -48,17 +48,19 @@ public class ExpensesController {
     @GetMapping("list")
     public ResultBean getList(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
-        @ApiParam("一级分类名称, 搜索全部时值：全部") @RequestParam(required = false) String classifyName,
-        @ApiParam("二级分类名称，搜索全部时值：全部") @RequestParam(required = false) String secondClassifyName,
-        @ApiParam("部门")@RequestParam(required = false) String department,
-        @RequestParam(required = false) String voucherNo) {
-        return expensesService.getList(pageNum, pageSize, classifyName, secondClassifyName, department, voucherNo);
+                              @ApiParam("一级分类名称, 搜索全部时值：全部") @RequestParam(required = false) String classifyName,
+                              @ApiParam("二级分类名称，搜索全部时值：全部") @RequestParam(required = false) String secondClassifyName,
+                              @ApiParam("部门") @RequestParam(required = false) String department,
+                              @RequestParam(required = false) String voucherNo,
+                              @RequestParam(required = false) String year,
+                              @RequestParam(required = false) String month) {
+        return expensesService.getList(pageNum, pageSize, classifyName, secondClassifyName, department, voucherNo,year,month);
     }
 
-   @ApiOperation("费用类别")
+    @ApiOperation("费用类别")
     @GetMapping("/classify")
     public ResultBean classify(@RequestParam(defaultValue = "0") Integer pId) {
         return expensesService.classify(pId);
-   }
+    }
 
 }

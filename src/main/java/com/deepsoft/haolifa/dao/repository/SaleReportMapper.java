@@ -2,7 +2,8 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportpPurchaseDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
+import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface SaleReportMapper {
     List<ExportSaleDTO> selectByModel(@Param("year") String year);
 
     //获取目前合同总金额总数量
-    List<ExportSaleDTO> selectAllContract();
+    List<ExportSaleDTO> selectAllContract(String year);
     //根据月份获取生产总金额 总数量
     List<ExportSaleDTO> selectByMonthContract(@Param("startTime") String startTime,@Param("endTime") String endTime);
 
@@ -34,4 +35,7 @@ public interface SaleReportMapper {
      * 按需方统计的发货总金额
      */
     List<ExportContractDTO> selectDeliveryAmountByDemandName(@Param("year") String year);
+
+
+
 }

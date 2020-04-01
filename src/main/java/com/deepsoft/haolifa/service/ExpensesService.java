@@ -12,7 +12,7 @@ public interface ExpensesService {
   ResultBean update(ExpensesDTO model);
 
   ResultBean getList(Integer pageNum, Integer pageSize, String classifyName, String secondClassifyName,
-      String department, String voucherNo);
+      String department, String voucherNo,String year,String month);
 
   ResultBean classify(Integer pId);
 

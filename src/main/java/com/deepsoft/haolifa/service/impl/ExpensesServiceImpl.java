@@ -106,7 +106,8 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
     @Override
     public ResultBean getList(Integer pageNum, Integer pageSize, String classifyName,
-                              String secondClassifyName, String department, String voucherNo) {
+                              String secondClassifyName, String department, String voucherNo
+        , String year, String month) {
         ExpensesExample expensesExample = new ExpensesExample();
         ExpensesExample.Criteria criteria = expensesExample.createCriteria();
         if (StringUtils.isNotEmpty(classifyName) && !"全部".equals(classifyName)) {
@@ -120,6 +121,12 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         }
         if (StringUtils.isNotEmpty(voucherNo)) {
             criteria.andVoucherNoLike("%" + voucherNo + "%");
+        }
+        if (StrUtil.isNotEmpty(year)) {
+            criteria.andDataYearEqualTo(year);
+        }
+        if (StrUtil.isNotEmpty(month)) {
+            criteria.andDataMonthEqualTo(month);
         }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         expensesExample.setOrderByClause("id desc");
@@ -149,12 +156,12 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getAllClassify(String year,String month) {
+    public ResultBean getAllClassify(String year, String month) {
         Map<String, String> paramMap = new HashMap<>();
-        if(StrUtil.isNotBlank(year)){
+        if (StrUtil.isNotBlank(year)) {
             paramMap.put("year", year);
         }
-        if(StrUtil.isNotBlank(month)){
+        if (StrUtil.isNotBlank(month)) {
             paramMap.put("month", month);
         }
         return ResultBean.success(expensesExtendMapper.getAllClassify(paramMap));
@@ -163,25 +170,25 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     @Override
     public ResultBean classifyByDepartmentAll(String year, String month) {
         Map<String, String> paramMap = new HashMap<>();
-        if(StrUtil.isNotBlank(year)){
+        if (StrUtil.isNotBlank(year)) {
             paramMap.put("year", year);
         }
-        if(StrUtil.isNotBlank(month)){
+        if (StrUtil.isNotBlank(month)) {
             paramMap.put("month", month);
         }
         return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll(paramMap));
     }
 
     @Override
-    public ResultBean getAllClassifyWithDepartment(String department,String year, String month) {
+    public ResultBean getAllClassifyWithDepartment(String department, String year, String month) {
         Map<String, String> paramMap = new HashMap<>();
-        if(StrUtil.isNotBlank(department)){
+        if (StrUtil.isNotBlank(department)) {
             paramMap.put("department", department);
         }
-        if(StrUtil.isNotBlank(year)){
+        if (StrUtil.isNotBlank(year)) {
             paramMap.put("year", year);
         }
-        if(StrUtil.isNotBlank(month)){
+        if (StrUtil.isNotBlank(month)) {
             paramMap.put("month", month);
         }
         return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(paramMap));

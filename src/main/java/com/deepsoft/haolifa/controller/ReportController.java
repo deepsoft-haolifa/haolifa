@@ -2,8 +2,10 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
+import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.ReportService;
 import com.google.gson.JsonArray;
@@ -147,15 +149,15 @@ public class ReportController {
 
     @ApiOperation("销售报表-目前合同总金额")
     @RequestMapping(value = "/sale/getSaleAllContract", method = RequestMethod.GET)
-    public ResultBean getSaleAllContract() {
+    public ResultBean getSaleAllContract(@RequestParam(value = "year",required = false) String year) {
 
-        List<ExportSaleDTO> exportSaleDTOS = reportService.selectAllContract();
+        List<ExportSaleDTO> exportSaleDTOS = reportService.selectAllContract(year);
         return ResultBean.success(exportSaleDTOS);
     }
 
     @ApiOperation("销售报表-每月合同总金额")
     @RequestMapping(value = "/sale/getSaleAllByMonthContract", method = RequestMethod.GET)
-    public ResultBean getSaleAllByMonthContract(@RequestParam(value = "year") String year) {
+    public ResultBean getSaleAllByMonthContract(@RequestParam(value = "year",required = false) String year) {
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH) + 1;
         Map map = new HashMap();
@@ -292,4 +294,11 @@ public class ReportController {
         List<ExportContractDTO> exportSaleDTOS = reportService.selectDeliveryAmountByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
+    @ApiOperation("销售报表-按需方统计的发货总金额,开票总金额,回款总额,销售总金额")
+    @GetMapping(value = "/sale/selectAllAmountByDemandName")
+    public ResultBean selectAllAmountByDemandName(@RequestParam(value = "year",required = false) String year) {
+        List<DemandAmountDto> exportSaleDTOS = reportService.selectAllAmountByDemandName(year);
+        return ResultBean.success(exportSaleDTOS);
+    }
+
 }

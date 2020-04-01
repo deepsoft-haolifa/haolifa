@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.deepsoft.haolifa.dao.repository.PurchaseReportMapper" >
-  <resultMap id="reportMap" type="com.deepsoft.haolifa.model.domain.PurchaseReport">
-    <result column="total" property="total" jdbcType="VARCHAR" javaType="java.lang.String"></result>
-    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" javaType="java.lang.String"></result>
-    <result column="payTotal" property="payTotal" jdbcType="VARCHAR" javaType="java.lang.String"></result>
-    <result column="unpay" property="unpay" jdbcType="VARCHAR" javaType="java.lang.String"></result>
-    <result column="createTime" property="createTime" jdbcType="VARCHAR" javaType="java.lang.String"></result>
-  </resultMap>
-  <select id="selectBySupplierName" resultMap="reportMap">
-         select supplier_name ,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
-         where status = 5
 
+  <select id="selectBySupplierName" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
+         select supplier_name supplierName,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
+         where 1=1
+      <if test="status!=null and status>0">
+          and status=#{status}
+      </if>
          and purchase_order.supplier_name = #{supplierName}
       <if test="year != null and year != ''">
           and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
       </if>
          group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
-    <select id="selectPurchase" resultMap="reportMap">
-        select supplier_name ,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
-        where status = 5
+    <select id="selectPurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
+        select supplier_name supplierName ,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
+        where 1=1
+        <if test="status!=null and status>0">
+        and status=#{status}
+        </if>
         <if test="year != null and year != ''">
             and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
         </if>

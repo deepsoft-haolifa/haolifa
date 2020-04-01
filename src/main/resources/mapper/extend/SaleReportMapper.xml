@@ -46,24 +46,32 @@
         where inspect.product_no = associate.product_no and inspect.order_no = associate.order_no  and inspect.create_time  BETWEEN #{startTime} and #{endTime}
     </select>
     <select id="selectByModel" resultMap="reportMap" parameterType="java.lang.String">
-     select sum(inspect.total_num) total_num,inspect.product_no,inspect.product_model,sum(inspect.total_num*associate.price) total_price  from
-    (select
-       sum(pro_inspect_record.`qualified_number`)  total_num,pro_inspect_record.product_no,pro_inspect_record.product_model,pro_inspect_record.order_no
-    from pro_inspect_record  where product_no !=''
-    <if test="year!=null and year != ''">
-        and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-    </if>
-    group by pro_inspect_record.product_no,pro_inspect_record.order_no) as inspect,
-    (select order_product_associate.`product_no`,order_product_associate.`price`,order_product_associate.`order_no`
-    from order_product_associate
-    group by order_product_associate.`product_no`,order_product_associate.`order_no`
-    order by order_no) as associate
-    where inspect.product_no = associate.product_no and inspect.order_no = associate.order_no group by inspect.product_model
+        select sum(inspect.total_num)
+        total_num,inspect.product_no,inspect.product_model,sum(inspect.total_num*associate.price) total_price from
+        (select
+        sum(pro_inspect_record.`qualified_number`)
+        total_num,pro_inspect_record.product_no,pro_inspect_record.product_model,pro_inspect_record.order_no
+        from pro_inspect_record where product_no !=''
+        <if test="year!=null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by pro_inspect_record.product_no,pro_inspect_record.order_no) as inspect,
+        (select order_product_associate.`product_no`,order_product_associate.`price`,order_product_associate.`order_no`
+        from order_product_associate
+        group by order_product_associate.`product_no`,order_product_associate.`order_no`
+        order by order_no) as associate
+        where inspect.product_no = associate.product_no and inspect.order_no = associate.order_no group by
+        inspect.product_model
     </select>
 
     <select id="selectAllContract" resultMap="reportMap" parameterType="java.lang.String">
-    select sum(order_product_associate.product_number) total_num,order_product_associate.product_no,order_product_associate.product_model,sum(order_product_associate.product_number*order_product_associate.price) total_price
-    from order_product_associate
+        select sum(order_product_associate.product_number)
+        total_num,order_product_associate.product_no,order_product_associate.product_model,sum(order_product_associate.product_number*order_product_associate.price)
+        total_price
+        from order_product_associate where 1=1
+        <if test="year!=null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
     </select>
 
     <select id="selectByMonthContract" resultMap="reportMap" parameterType="java.lang.String">
@@ -84,18 +92,21 @@
     </select>
 
     <select id="selectInvoiceAmountByDemandName" resultMap="contractMap" parameterType="java.lang.String">
-              select sum(`total_amount`) total_price,invoice_company as demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from invoice where  type=1 and status in(2)
-                <if test="year!=null and year != ''">
-                        and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-                </if>
+        select sum(`total_amount`) total_price,invoice_company as
+        demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") as year from invoice where type=1 and status in(2)
+        <if test="year!=null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
         group by invoice_company
     </select>
 
     <select id="selectDeliveryAmountByDemandName" resultMap="contractMap" parameterType="java.lang.String">
-              select sum(`total_amount`) total_price,invoice_company as demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from invoice where  type=1 and status in(1,2)
-                <if test="year!=null and year != ''">
-                     and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-                 </if>
-              group by invoice_company
+        select ifnull(sum(`total_amount`),0) total_price,invoice_company as
+        demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from invoice where type=1 and status in(1,2)
+        <if test="year!=null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by invoice_company
     </select>
+
 </mapper>

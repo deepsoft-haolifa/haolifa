@@ -7,7 +7,7 @@ import lombok.Data;
  * 采购报表
  */
 @Data
-public class ExportpPurchaseDTO {
+public class ExportPurchaseDTO {
 
   @ApiModelProperty("供应商名称")
   private String supplierName;
@@ -23,5 +23,8 @@ public class ExportpPurchaseDTO {
 
   @ApiModelProperty("未付款")
   private String unpay;
+
+  @ApiModelProperty(value = "已挂账金额")
+  private String registered;
 
 }
