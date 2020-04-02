@@ -25,4 +25,27 @@
         </if>
         group by supplier_name
     </select>
+    <select id="selectAllPurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
+        select sum(total_price) total,sum(paid_account) payTotal, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
+        from purchase_order
+        where 1=1
+        <if test="status!=null and status>0">
+            and status=#{status}
+        </if>
+        <if test="year != null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+
+    </select>
+    <select id="selectInvoicePurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
+        select sum(total_amount) collected, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
+        from invoice
+        where  type=2 and status=2
+
+        <if test="year != null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+    </select>
 </mapper>

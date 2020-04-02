@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.QualityReportMapper">
+
+    <select id="selectAssemblingReason" resultType="java.lang.String">
+    select reason from pro_inspect_record where unqualified_number>0
+  </select>
+    <select id="selectInspectHistoryByType" resultType="com.deepsoft.haolifa.model.domain.QualityProductReport">
+        select sum(qualified_number+unqualified_number) totalNum,
+        sum(qualified_number) qualifiedNumber
+        ,sum(unqualified_number) unqualifiedNumber
+        from inspect_history
+        where 1=1
+        <if test="type!=null and type > 0">
+            and type=#{type}
+        </if>
+
+    </select>
+</mapper>

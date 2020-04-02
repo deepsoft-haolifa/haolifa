@@ -2,15 +2,14 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
-import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
+import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.ReportService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +95,13 @@ public class ReportController {
     public ResultBean getPurchases(@RequestParam(value = "year",required = false) String year) {
 
         return reportService.selectPurchase(year);
+    }
+
+    @ApiOperation("采购报表--按月查询采购物资")
+    @RequestMapping(value = "/purchase/getAllPurchase", method = RequestMethod.GET)
+    public ResultBean getAllPurchase(@RequestParam(value = "year",required = false) String year) {
+
+        return reportService.selectAllPurchase(year);
     }
 
     @ApiOperation("销售报表-目前生产总金额")
@@ -227,7 +233,7 @@ public class ReportController {
         return ResultBean.success(qualityInspectReport);
     }
 
-    @ApiOperation("压力质量报表")
+    @ApiOperation("质量报表-压力质量报表")
     @RequestMapping(value = "/quality/getPressure", method = RequestMethod.GET)
     public ResultBean getPressure() {
 
@@ -250,7 +256,7 @@ public class ReportController {
         return ResultBean.success(qualityEntrustReport);
     }
 
-    @ApiOperation("更换料质量报表")
+    @ApiOperation("质量报表-更换料质量报表")
     @RequestMapping(value = "/quality/getAudit", method = RequestMethod.GET)
     public ResultBean getAudit() {
 
@@ -258,7 +264,7 @@ public class ReportController {
         return ResultBean.success(qualityAuditReports);
     }
 
-    @ApiOperation("成品质量报表")
+    @ApiOperation("质量报表-成品检验质量报表")
     @RequestMapping(value = "/quality/getProduct", method = RequestMethod.GET)
     public ResultBean getProduct() {
 
@@ -266,6 +272,23 @@ public class ReportController {
         return ResultBean.success(qualityProductReport);
     }
 
+    @ApiOperation("质量报表-机加工/报检 质量报表")
+    @ApiImplicitParam(required = true, value = "1 采购零件送检  2 机加工", name = "type", dataType = "int", paramType = "query")
+    @GetMapping(value = "/quality/getInspectByType")
+    public ResultBean getInspectByType(@RequestParam(value = "type") Integer type) {
+
+        QualityProductReport qualityProductReport = reportService.selectProduct();
+        return ResultBean.success(qualityProductReport);
+    }
+
+
+    @ApiOperation("质量报表-阀门装配不合格原因")
+    @RequestMapping(value = "/quality/assemblingReason", method = RequestMethod.GET)
+    public ResultBean assemblingReason() {
+
+        List<ReportAssemblingReasonDto> result = reportService.assemblingReason();
+        return ResultBean.success(result);
+    }
 
     @ApiOperation("销售报表-获取按需方总额饼图")
     @RequestMapping(value = "/sale/selectContractByDemandName", method = RequestMethod.GET)
@@ -300,5 +323,7 @@ public class ReportController {
         List<DemandAmountDto> exportSaleDTOS = reportService.selectAllAmountByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
+
+
 
 }

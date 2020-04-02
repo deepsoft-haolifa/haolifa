@@ -2,20 +2,22 @@ package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.dao.repository.extend.QualityReportMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
-import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
+import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.service.ReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Struct;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,6 +42,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     private QualityInspecReportMapper qualityInspecReportMapper;
     @Autowired
     private QualityProductReportMapper qualityProductReportMapper;
+    @Autowired
+    private QualityReportMapper qualityReportMapper;
 
     @Override
     public ResultBean selectBySupplierName(String supplierName, String year) {
@@ -55,8 +59,10 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectPurchase(paramMap);
         if (CollUtil.isNotEmpty(exportPurchaseDTOS)) {
             for (ExportPurchaseDTO i : exportPurchaseDTOS) {
-                String stringStream = exportPurchaseDTOS1.stream().filter(e -> e.getCreateTime().equals(i.getCreateTime())).map(ExportPurchaseDTO::getTotal).collect(Collectors.joining());
-                i.setRegistered(stringStream);
+                List<String> collect = exportPurchaseDTOS1.stream().filter(e -> e.getCreateTime().equals(i.getCreateTime())).map(ExportPurchaseDTO::getTotal).collect(Collectors.toList());
+                if (CollUtil.isNotEmpty(collect)) {
+                    i.setRegistered(collect.get(0));
+                }
             }
         }
         return ResultBean.success(exportPurchaseDTOS);
@@ -74,8 +80,38 @@ public class ReportServiceImpl extends BaseService implements ReportService {
 
         if (CollUtil.isNotEmpty(exportPurchaseDTOS)) {
             for (ExportPurchaseDTO i : exportPurchaseDTOS) {
-                String stringStream = exportPurchaseDTOS1.stream().filter(e -> e.getSupplierName().equals(i.getSupplierName())).map(ExportPurchaseDTO::getTotal).collect(Collectors.joining());
-                i.setRegistered(stringStream);
+                List<String> collect = exportPurchaseDTOS1.stream().filter(e -> e.getSupplierName().equals(i.getSupplierName())).map(ExportPurchaseDTO::getTotal).collect(Collectors.toList());
+                if (CollUtil.isNotEmpty(collect)) {
+                    i.setRegistered(collect.get(0));
+                }
+            }
+        }
+        return ResultBean.success(exportPurchaseDTOS);
+    }
+
+    @Override
+    public ResultBean selectAllPurchase(String year) {
+        Map<String, Object> paramMap = new HashMap<>();
+        if (StrUtil.isNotBlank(year)) {
+            paramMap.put("year", year);
+        }
+        // 查询合同总金额和已付总金额
+        List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectAllPurchase(paramMap);
+        paramMap.put("status", 5);
+        // 查询已挂账金额
+        List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectAllPurchase(paramMap);
+        // 查询已回款金额
+        List<ExportPurchaseDTO> exportPurchaseDTOS2 = purchaseReportMapper.selectInvoicePurchase(paramMap);
+        if (CollUtil.isNotEmpty(exportPurchaseDTOS)) {
+            for (ExportPurchaseDTO i : exportPurchaseDTOS) {
+                List<String> collect = exportPurchaseDTOS1.stream().filter(e -> e.getCreateTime().equals(i.getCreateTime())).map(ExportPurchaseDTO::getTotal).collect(Collectors.toList());
+                if (CollUtil.isNotEmpty(collect)) {
+                    i.setRegistered(collect.get(0));
+                }
+                List<String> collect1 = exportPurchaseDTOS2.stream().filter(e -> e.getCreateTime().equals(i.getCreateTime())).map(ExportPurchaseDTO::getCollected).collect(Collectors.toList());
+                if (CollUtil.isNotEmpty(collect1)) {
+                    i.setCollected(collect1.get(0));
+                }
             }
         }
         return ResultBean.success(exportPurchaseDTOS);
@@ -171,6 +207,51 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
+    public List<ReportAssemblingReasonDto> assemblingReason() {
+        List<String> list = qualityReportMapper.selectAssemblingReason();
+
+        Map<String, Integer> haspMap = new HashMap<>();
+        for (String s : list) {
+            boolean b = JSONUtil.isJsonArray(s);
+            if (!b) {
+                continue;
+            }
+            JSONArray jsonArray = JSONUtil.parseArray(s);
+            for (Object o : jsonArray) {
+                JSONObject jsonObject = JSONUtil.parseObj(o);
+                String reason = jsonObject.getStr("reason");
+                if (reason.contains(",")) {
+                    String[] split = reason.split(",");
+                    reason = split[0];
+                }
+                if (StrUtil.isBlank(reason)) {
+                    continue;
+                }
+                Integer number = jsonObject.getInt("number");
+                if (!haspMap.containsKey(reason)) {
+                    haspMap.put(reason, number);
+                } else {
+                    Integer num = haspMap.get(reason);
+                    haspMap.put(reason, num + number);
+                }
+            }
+        }
+        List<ReportAssemblingReasonDto> resultList = new ArrayList<>();
+
+        Iterator it = haspMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String key = (String) entry.getKey();
+            Integer number = (Integer) entry.getValue();
+            ReportAssemblingReasonDto reportAssemblingReasonDto = new ReportAssemblingReasonDto();
+            reportAssemblingReasonDto.setReason(key);
+            reportAssemblingReasonDto.setQty(number);
+            resultList.add(reportAssemblingReasonDto);
+        }
+        return resultList;
+    }
+
+    @Override
     public QualityInspectReport selectInspect() {
         return qualityInspecReportMapper.selectInspect();
     }
@@ -204,4 +285,12 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     public QualityProductReport selectProduct() {
         return qualityProductReportMapper.selectProduct();
     }
+
+    @Override
+    public QualityProductReport selectInspectByType(int type) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("type", type);
+        return qualityReportMapper.selectInspectHistoryByType(paramMap);
+    }
+
 }

@@ -64,7 +64,7 @@
         inspect.product_model
     </select>
 
-    <select id="selectAllContract" resultMap="reportMap" parameterType="java.lang.String">
+    <select id="selectAllContract" resultMap="reportMap">
         select sum(order_product_associate.product_number)
         total_num,order_product_associate.product_no,order_product_associate.product_model,sum(order_product_associate.product_number*order_product_associate.price)
         total_price

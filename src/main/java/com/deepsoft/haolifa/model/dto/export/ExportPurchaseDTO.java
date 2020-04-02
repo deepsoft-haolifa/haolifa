@@ -27,4 +27,7 @@ public class ExportPurchaseDTO {
   @ApiModelProperty(value = "已挂账金额")
   private String registered;
 
+    @ApiModelProperty(value = "供应商已回款金额")
+    private String collected;
+
 }
