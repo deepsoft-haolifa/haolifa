@@ -26,4 +26,31 @@ public interface QualityReportMapper {
      * @return
      */
     QualityProductReport selectInspectHistoryByType(Map<String, Object> paramMap);
+
+    /**
+     * 按月统计零件采购合格率
+     *
+     * @return
+     */
+    List<QualityProductReport> selectPurchasePassByMonth(Map<String, Object> paramMap);
+
+    /**
+     * 按月统计零件加工合格率
+     *
+     * @return
+     */
+    List<QualityProductReport> selectInspectPassByMonth(Map<String, Object> paramMap);
+    /**
+     * 按月统计喷涂合格率
+     *
+     * @return
+     */
+    List<QualityProductReport> selectSparyPassByMonth(Map<String, Object> paramMap);
+    /**
+     * 按月统计成品合格率
+     *
+     * @return
+     */
+    List<QualityProductReport> selectProInspectPassByMonth(Map<String, Object> paramMap);
+
 }

@@ -12,18 +12,22 @@ import java.util.List;
 public interface ReportService {
 
     //获取采购合同报表
-    ResultBean selectBySupplierName(String purchase,String year);
+    ResultBean selectBySupplierName(String purchase, String year);
 
     /**
      * 采购报表--采购统计
+     *
      * @return
      */
     ResultBean selectPurchase(String year);
+
     /**
      * 采购报表--好利公司按月采购统计
+     *
      * @return
      */
     ResultBean selectAllPurchase(String year);
+
     //销售报表
     //获取目前总金额总数量
     List<ExportSaleDTO> selectAll(String year);
@@ -37,12 +41,15 @@ public interface ReportService {
 
     /**
      * 按需方统计的开票总金额
+     *
      * @param year
      * @return
      */
     List<ExportContractDTO> selectInvoiceAmountByDemandName(String year);
+
     /**
      * 按需方统计的发货总金额
+     *
      * @param year
      * @return
      */
@@ -83,7 +90,7 @@ public interface ReportService {
 
     /**
      * 阀门装配不合格报表
-      */
+     */
     List<ReportAssemblingReasonDto> assemblingReason();
 
     //零件采购质量报表
@@ -100,4 +107,9 @@ public interface ReportService {
      * 成品质量报表
      */
     QualityProductReport selectInspectByType(int type);
+
+    /**
+     * 按月统计质量质量报表
+     */
+    List<TotalQualityReportDto> selectAllQuality(String year);
 }

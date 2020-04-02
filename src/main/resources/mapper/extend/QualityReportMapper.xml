@@ -7,13 +7,64 @@
   </select>
     <select id="selectInspectHistoryByType" resultType="com.deepsoft.haolifa.model.domain.QualityProductReport">
         select sum(qualified_number+unqualified_number) totalNum,
-        sum(qualified_number) qualifiedNumber
-        ,sum(unqualified_number) unqualifiedNumber
+        sum(qualified_number) qualifiedNumber,
+        sum(unqualified_number) unqualifiedNumber
         from inspect_history
         where 1=1
         <if test="type!=null and type > 0">
             and type=#{type}
         </if>
 
+    </select>
+    <select id="selectPurchasePassByMonth" resultType="com.deepsoft.haolifa.model.domain.QualityProductReport">
+        select sum(qualified_number+unqualified_number) totalNum,
+        sum(qualified_number) qualifiedNumber,
+        sum(unqualified_number) unqualifiedNumber,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
+        from inspect_history
+        where 1=1 and type = 1
+        <if test="year != null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+    </select>
+    <select id="selectInspectPassByMonth" resultType="com.deepsoft.haolifa.model.domain.QualityProductReport">
+         select sum(qualified_number+unqualified_number) totalNum,
+        sum(qualified_number) qualifiedNumber,
+        sum(unqualified_number) unqualifiedNumber,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
+        from inspect_history
+        where 1=1 and type = 2
+        <if test="year != null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+    </select>
+
+    <select id="selectSparyPassByMonth" resultType="com.deepsoft.haolifa.model.domain.QualityProductReport">
+        select sum(qualified_number+unqualified_number) totalNum,
+        sum(qualified_number) qualifiedNumber,
+        sum(unqualified_number) unqualifiedNumber,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
+        from spray_inspect_history
+        where 1=1
+        <if test="year != null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+    </select>
+
+    <select id="selectProInspectPassByMonth"
+            resultType="com.deepsoft.haolifa.model.domain.QualityProductReport">
+        select sum(qualified_number+unqualified_number) totalNum,
+        sum(qualified_number) qualifiedNumber,
+        sum(unqualified_number) unqualifiedNumber,
+        FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
+        from pro_inspect_record
+        where 1=1
+        <if test="year != null and year != ''">
+            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
 </mapper>

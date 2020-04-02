@@ -293,4 +293,47 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         return qualityReportMapper.selectInspectHistoryByType(paramMap);
     }
 
+    @Override
+    public List<TotalQualityReportDto> selectAllQuality(String year) {
+        List<TotalQualityReportDto> list = new ArrayList<>();
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("year", year);
+        List<QualityProductReport> purchasePass = qualityReportMapper.selectPurchasePassByMonth(paramMap);
+        List<QualityProductReport> inspectPass = qualityReportMapper.selectInspectPassByMonth(paramMap);
+        List<QualityProductReport> sparyPass = qualityReportMapper.selectSparyPassByMonth(paramMap);
+        List<QualityProductReport> proInspectPass = qualityReportMapper.selectProInspectPassByMonth(paramMap);
+        Set<String> createTime = purchasePass.stream().map(QualityProductReport::getCreateTime).collect(Collectors.toSet());
+        Set<String> createTime1 = inspectPass.stream().map(QualityProductReport::getCreateTime).collect(Collectors.toSet());
+        Set<String> createTime2 = sparyPass.stream().map(QualityProductReport::getCreateTime).collect(Collectors.toSet());
+        Set<String> createTime3 = proInspectPass.stream().map(QualityProductReport::getCreateTime).collect(Collectors.toSet());
+        if (CollUtil.isEmpty(createTime)) {
+            createTime = new HashSet<>();
+        }
+        createTime.addAll(createTime1);
+        createTime.addAll(createTime2);
+        createTime.addAll(createTime3);
+        for (String month : createTime) {
+            TotalQualityReportDto totalQualityReportDto = new TotalQualityReportDto();
+            totalQualityReportDto.setCreateTime(month);
+            List<QualityProductReport> collect1 = purchasePass.stream().filter(e -> e.getCreateTime().equals(month)).collect(Collectors.toList());
+            if (CollUtil.isNotEmpty(collect1)) {
+                totalQualityReportDto.setPurchasePass(collect1.get(0));
+            }
+            List<QualityProductReport> collect2 = inspectPass.stream().filter(e -> e.getCreateTime().equals(month)).collect(Collectors.toList());
+            if (CollUtil.isNotEmpty(collect2)) {
+                totalQualityReportDto.setInspectPass(collect2.get(0));
+            }
+            List<QualityProductReport> collect3 = sparyPass.stream().filter(e -> e.getCreateTime().equals(month)).collect(Collectors.toList());
+            if (CollUtil.isNotEmpty(collect3)) {
+                totalQualityReportDto.setSprayPass(collect3.get(0));
+            }
+            List<QualityProductReport> collect4 = proInspectPass.stream().filter(e -> e.getCreateTime().equals(month)).collect(Collectors.toList());
+            if (CollUtil.isNotEmpty(collect4)) {
+                totalQualityReportDto.setProInspectPass(collect4.get(0));
+            }
+            list.add(totalQualityReportDto);
+        }
+        return list;
+    }
+
 }

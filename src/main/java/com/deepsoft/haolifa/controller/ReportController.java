@@ -85,28 +85,28 @@ public class ReportController {
     @ApiOperation("根据供应商查询采购报表")
     @RequestMapping(value = "/purchase/selectBySupplierName", method = RequestMethod.GET)
     public ResultBean selectBySupplierName(@RequestParam(value = "purchase") String purchase,
-                                           @RequestParam(value = "year" ,required = false) String year) {
+                                           @RequestParam(value = "year", required = false) String year) {
 
-        return reportService.selectBySupplierName(purchase,year);
+        return reportService.selectBySupplierName(purchase, year);
     }
 
     @ApiOperation("采购报表")
     @RequestMapping(value = "/purchase/getPurchases", method = RequestMethod.GET)
-    public ResultBean getPurchases(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean getPurchases(@RequestParam(value = "year", required = false) String year) {
 
         return reportService.selectPurchase(year);
     }
 
     @ApiOperation("采购报表--按月查询采购物资")
     @RequestMapping(value = "/purchase/getAllPurchase", method = RequestMethod.GET)
-    public ResultBean getAllPurchase(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean getAllPurchase(@RequestParam(value = "year", required = false) String year) {
 
         return reportService.selectAllPurchase(year);
     }
 
     @ApiOperation("销售报表-目前生产总金额")
     @RequestMapping(value = "/sale/getSaleAll", method = RequestMethod.GET)
-    public ResultBean getSaleAll(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean getSaleAll(@RequestParam(value = "year", required = false) String year) {
 
         List<ExportSaleDTO> exportSaleDTOS = reportService.selectAll(year);
         return ResultBean.success(exportSaleDTOS);
@@ -147,7 +147,7 @@ public class ReportController {
 
     @ApiOperation("销售报表-根据产品型号统计生产金额")
     @RequestMapping(value = "/sale/getSaleByModel", method = RequestMethod.GET)
-    public ResultBean getSaleByModel(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean getSaleByModel(@RequestParam(value = "year", required = false) String year) {
 
         List<ExportSaleDTO> exportSaleDTOS = reportService.selectByModel(year);
         return ResultBean.success(exportSaleDTOS);
@@ -155,7 +155,7 @@ public class ReportController {
 
     @ApiOperation("销售报表-目前合同总金额")
     @RequestMapping(value = "/sale/getSaleAllContract", method = RequestMethod.GET)
-    public ResultBean getSaleAllContract(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean getSaleAllContract(@RequestParam(value = "year", required = false) String year) {
 
         List<ExportSaleDTO> exportSaleDTOS = reportService.selectAllContract(year);
         return ResultBean.success(exportSaleDTOS);
@@ -163,7 +163,7 @@ public class ReportController {
 
     @ApiOperation("销售报表-每月合同总金额")
     @RequestMapping(value = "/sale/getSaleAllByMonthContract", method = RequestMethod.GET)
-    public ResultBean getSaleAllByMonthContract(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean getSaleAllByMonthContract(@RequestParam(value = "year", required = false) String year) {
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH) + 1;
         Map map = new HashMap();
@@ -201,7 +201,7 @@ public class ReportController {
         return ResultBean.success(exportSaleDTOS);
     }
 
-    @ApiOperation("喷涂质量报表")
+    @ApiOperation("质量报表-喷涂")
     @RequestMapping(value = "/quality/getSpray", method = RequestMethod.GET)
     public ResultBean getSpray() {
 
@@ -209,7 +209,7 @@ public class ReportController {
         return ResultBean.success(qualitySprayReport);
     }
 
-    @ApiOperation("采购质量报表")
+    @ApiOperation("质量报表-采购")
     @RequestMapping(value = "/quality/getInspect", method = RequestMethod.GET)
     public ResultBean getInspect() {
 
@@ -217,7 +217,7 @@ public class ReportController {
         return ResultBean.success(qualityInspectReport);
     }
 
-    @ApiOperation("采购质量报表,不同供应商的数据对比")
+    @ApiOperation("质量报表-采购,不同供应商的数据对比")
     @RequestMapping(value = "/quality/getInspectBysupplierName", method = RequestMethod.GET)
     public ResultBean getInspectBysupplierName() {
 
@@ -225,7 +225,7 @@ public class ReportController {
         return ResultBean.success(qualityInspectReport);
     }
 
-    @ApiOperation("采购质量报表,不同类型零件的数据对比")
+    @ApiOperation("质量报表-采购,不同类型零件的数据对比")
     @RequestMapping(value = "/quality/selectInspectByMaterialName", method = RequestMethod.GET)
     public ResultBean selectInspectByMaterialName() {
 
@@ -241,7 +241,7 @@ public class ReportController {
         return ResultBean.success(qualityPressureReport);
     }
 
-    @ApiOperation("压力质量报表--根据不同原因统计")
+    @ApiOperation("质量报表-压力--根据不同原因统计")
     @RequestMapping(value = "/quality/selectPressureByReason", method = RequestMethod.GET)
     public ResultBean selectPressureByReason() {
 
@@ -285,9 +285,15 @@ public class ReportController {
     @ApiOperation("质量报表-阀门装配不合格原因")
     @RequestMapping(value = "/quality/assemblingReason", method = RequestMethod.GET)
     public ResultBean assemblingReason() {
-
         List<ReportAssemblingReasonDto> result = reportService.assemblingReason();
         return ResultBean.success(result);
+    }
+
+    @ApiOperation("质量报表-质量统计")
+    @RequestMapping(value = "/quality/getAllQuality", method = RequestMethod.GET)
+    public ResultBean getAllQuality(@RequestParam(value = "year", required = false) String year) {
+        List<TotalQualityReportDto> totalQualityReportDtos = reportService.selectAllQuality(year);
+        return ResultBean.success(totalQualityReportDtos);
     }
 
     @ApiOperation("销售报表-获取按需方总额饼图")
@@ -299,31 +305,31 @@ public class ReportController {
 
     @ApiOperation("销售报表-获取按需方回款总额饼图")
     @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year) {
         List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
 
     @ApiOperation("销售报表-按需方统计的开票总金额")
     @GetMapping(value = "/sale/selectInvoiceAmountByDemandName")
-    public ResultBean selectInvoiceAmountByDemandName(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean selectInvoiceAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
         List<ExportContractDTO> exportSaleDTOS = reportService.selectInvoiceAmountByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
 
     @ApiOperation("销售报表-按需方统计的发货总金额")
     @GetMapping(value = "/sale/selectDeliveryAmountByDemandName")
-    public ResultBean selectDeliveryAmountByDemandName(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean selectDeliveryAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
         List<ExportContractDTO> exportSaleDTOS = reportService.selectDeliveryAmountByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
+
     @ApiOperation("销售报表-按需方统计的发货总金额,开票总金额,回款总额,销售总金额")
     @GetMapping(value = "/sale/selectAllAmountByDemandName")
-    public ResultBean selectAllAmountByDemandName(@RequestParam(value = "year",required = false) String year) {
+    public ResultBean selectAllAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
         List<DemandAmountDto> exportSaleDTOS = reportService.selectAllAmountByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
-
 
 
 }
