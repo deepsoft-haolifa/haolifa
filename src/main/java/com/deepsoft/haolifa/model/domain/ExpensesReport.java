@@ -14,6 +14,8 @@ public class ExpensesReport {
     @DateTimeFormat(pattern = "yyyy-MM")
     private String createTime;
 
+    private String dataMonth;
+
 
     private String department;
 

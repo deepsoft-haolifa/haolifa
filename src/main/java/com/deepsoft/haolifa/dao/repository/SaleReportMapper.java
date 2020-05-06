@@ -7,13 +7,21 @@ import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SaleReportMapper {
     //获取目前生产总金额总数量
     List<ExportSaleDTO> selectAll(@Param("year") String year);
     //根据月份获取生产总金额 总数量
     List<ExportSaleDTO> selectByMonth(@Param("startTime") String startTime,@Param("endTime") String endTime);
-    List<ExportContractDTO> selectContractByDemandName(@Param("year") String year);
+
+    /**
+     * 根据年份，月份获取按照需求的订货总额
+     * @param haspMap
+     * @return
+     */
+    List<ExportContractDTO> selectContractByDemandName(Map<String, String> haspMap);
+
     List<ExportContractDTO> selectshouhuiContractByDemandName(@Param("year") String year);
 
     //根据产品型号获取生产金额数量

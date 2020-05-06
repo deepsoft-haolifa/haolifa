@@ -203,4 +203,13 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     public ResultBean getAllClassifyWithFirstClassify(String classify) {
         return ResultBean.success(expensesExtendMapper.getAllClassifyWithFirstClassify(classify));
     }
+
+    @Override
+    public ResultBean expenseTotalByMonth(String year) {
+        Map<String, String> paramMap = new HashMap<>();
+        if (StrUtil.isNotBlank(year)) {
+            paramMap.put("year", year);
+        }
+        return ResultBean.success(expensesExtendMapper.expenseTotalByMonth(paramMap));
+    }
 }

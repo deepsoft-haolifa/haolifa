@@ -35,7 +35,7 @@ public interface ReportService {
     //根据月份获取总金额 总数量
     List<ExportSaleDTO> selectByMonth(String startTime, String endTime);
 
-    List<ExportContractDTO> selectContractByDemandName(String year);
+    List<ExportContractDTO> selectContractByDemandName(String year,String month);
 
     List<ExportContractDTO> selectshouhuiContractByDemandName(String year);
 

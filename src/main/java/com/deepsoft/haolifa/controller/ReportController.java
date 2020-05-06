@@ -29,39 +29,45 @@ public class ReportController {
     private ReportService reportService;
 
 
-    @ApiOperation("获取一级费用分类每月的支出")
+    @ApiOperation("费用报表--按照月份统计总的费用")
+    @GetMapping("/expense/total-by-month")
+    public ResultBean expenseTotalByMonth(@RequestParam(value = "year") String year) {
+        return expensesService.expenseTotalByMonth(year);
+    }
+
+    @ApiOperation("费用报表--获取一级费用分类每月的支出")
     @GetMapping("/expense/classify")
     public ResultBean getcClassify(@RequestParam(value = "expensesClassify") String expensesClassify) {
         return expensesService.getClassify(expensesClassify);
     }
 
-    @ApiOperation("费用每月汇总--部门明细")
+    @ApiOperation("费用报表--费用每月汇总--部门明细")
     @GetMapping("/expense/classifyByDepartment")
     public ResultBean classifyByDepartment() {
         return expensesService.classifyByDepartment();
     }
 
-    @ApiOperation("费用每月汇总--二级部门")
+    @ApiOperation("费用报表--费用每月汇总--二级部门")
     @GetMapping("/expense/classifyBySecondDepartment")
     public ResultBean classifyBySecondDepartment() {
         return expensesService.classifyByDepartment();
     }
 
-    @ApiOperation("费用整体分类汇总")
+    @ApiOperation("费用报表--费用整体分类汇总")
     @GetMapping("/expense/getAllClassify")
     public ResultBean getAllClassify(@RequestParam(value = "year", required = false) String year,
                                      @RequestParam(value = "month", required = false) String month) {
         return expensesService.getAllClassify(year, month);
     }
 
-    @ApiOperation("费用整体部门汇总")
+    @ApiOperation("费用报表--费用整体部门汇总")
     @GetMapping("/expense/classifyByDepartmentAll")
     public ResultBean classifyByDepartmentAll(@RequestParam(value = "year", required = false) String year,
                                               @RequestParam(value = "month", required = false) String month) {
         return expensesService.classifyByDepartmentAll(year, month);
     }
 
-    @ApiOperation("某个部门下面的分类统计")
+    @ApiOperation("费用报表--某个部门下面的分类统计")
     @RequestMapping(value = "/expense/getAllClassifyWithDepartment", method = RequestMethod.GET)
     public ResultBean getAllClassifyWithDepartment(@RequestParam(value = "department") String department,
                                                    @RequestParam(value = "year", required = false) String year,
@@ -69,20 +75,20 @@ public class ReportController {
         return expensesService.getAllClassifyWithDepartment(department, year, month);
     }
 
-    @ApiOperation("获取一级部门下面每月的支出")
+    @ApiOperation("费用报表--获取一级部门下面每月的支出")
     @RequestMapping(value = "/expense/getMonthByDepartment", method = RequestMethod.GET)
     public ResultBean getMonthByDepartment(@RequestParam(value = "department") String department) {
         return expensesService.getMonthByDepartment(department);
     }
 
-    @ApiOperation("每项费用中费用二级占比")
+    @ApiOperation("费用报表--每项费用中费用二级占比")
     @RequestMapping(value = "/expense/getAllClassifyWithFirstClassify", method = RequestMethod.GET)
     public ResultBean getAllClassifyWithFirstClassify(@RequestParam(value = "classify") String classify) {
         System.out.println(classify);
         return expensesService.getAllClassifyWithFirstClassify(classify);
     }
 
-    @ApiOperation("根据供应商查询采购报表")
+    @ApiOperation("采购报表--根据供应商查询采购报表")
     @RequestMapping(value = "/purchase/selectBySupplierName", method = RequestMethod.GET)
     public ResultBean selectBySupplierName(@RequestParam(value = "purchase") String purchase,
                                            @RequestParam(value = "year", required = false) String year) {
@@ -201,6 +207,42 @@ public class ReportController {
         return ResultBean.success(exportSaleDTOS);
     }
 
+
+    @ApiOperation("销售报表-获取按需方总额饼图")
+    @RequestMapping(value = "/sale/selectContractByDemandName", method = RequestMethod.GET)
+    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year,@RequestParam(value = "month") String month) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectContractByDemandName(year,month);
+        return ResultBean.success(exportSaleDTOS);
+    }
+
+    @ApiOperation("销售报表-获取按需方回款总额饼图")
+    @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)
+    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
+        return ResultBean.success(exportSaleDTOS);
+    }
+
+    @ApiOperation("销售报表-按需方统计的开票总金额")
+    @GetMapping(value = "/sale/selectInvoiceAmountByDemandName")
+    public ResultBean selectInvoiceAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectInvoiceAmountByDemandName(year);
+        return ResultBean.success(exportSaleDTOS);
+    }
+
+    @ApiOperation("销售报表-按需方统计的发货总金额")
+    @GetMapping(value = "/sale/selectDeliveryAmountByDemandName")
+    public ResultBean selectDeliveryAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectDeliveryAmountByDemandName(year);
+        return ResultBean.success(exportSaleDTOS);
+    }
+
+    @ApiOperation("销售报表-按需方统计的发货总金额,开票总金额,回款总额,销售总金额")
+    @GetMapping(value = "/sale/selectAllAmountByDemandName")
+    public ResultBean selectAllAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
+        List<DemandAmountDto> exportSaleDTOS = reportService.selectAllAmountByDemandName(year);
+        return ResultBean.success(exportSaleDTOS);
+    }
+
     @ApiOperation("质量报表-喷涂")
     @RequestMapping(value = "/quality/getSpray", method = RequestMethod.GET)
     public ResultBean getSpray() {
@@ -296,40 +338,6 @@ public class ReportController {
         return ResultBean.success(totalQualityReportDtos);
     }
 
-    @ApiOperation("销售报表-获取按需方总额饼图")
-    @RequestMapping(value = "/sale/selectContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectContractByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
-    }
-
-    @ApiOperation("销售报表-获取按需方回款总额饼图")
-    @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
-    }
-
-    @ApiOperation("销售报表-按需方统计的开票总金额")
-    @GetMapping(value = "/sale/selectInvoiceAmountByDemandName")
-    public ResultBean selectInvoiceAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectInvoiceAmountByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
-    }
-
-    @ApiOperation("销售报表-按需方统计的发货总金额")
-    @GetMapping(value = "/sale/selectDeliveryAmountByDemandName")
-    public ResultBean selectDeliveryAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectDeliveryAmountByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
-    }
-
-    @ApiOperation("销售报表-按需方统计的发货总金额,开票总金额,回款总额,销售总金额")
-    @GetMapping(value = "/sale/selectAllAmountByDemandName")
-    public ResultBean selectAllAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
-        List<DemandAmountDto> exportSaleDTOS = reportService.selectAllAmountByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
-    }
 
 
 }

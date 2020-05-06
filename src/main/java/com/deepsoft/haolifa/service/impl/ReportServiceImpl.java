@@ -128,8 +128,25 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public List<ExportContractDTO> selectContractByDemandName(String year) {
-        return saleReportMapper.selectContractByDemandName(year);
+    public List<ExportContractDTO> selectContractByDemandName(String year, String month) {
+        Map<String, String> haspMap = new HashMap<>();
+        if (StrUtil.isNotBlank(year)) {
+            haspMap.put("year", year);
+            if (StrUtil.isNotBlank(month)) {
+                int iMonth = Integer.parseInt(month);
+                if (iMonth == 1) {
+                    haspMap.put("startTime", Integer.parseInt(year) - 1 + "-12-26");
+                }
+                haspMap.put("startTime", year + "-" + (iMonth - 1) + "-26");
+                haspMap.put("endTime", year + "-" + month + "-25");
+            }
+        }
+        return saleReportMapper.selectContractByDemandName(haspMap);
+    }
+
+    public static void main(String[] args) {
+        String month = "02";
+        System.out.println(Integer.parseInt(month));
     }
 
     @Override
@@ -153,7 +170,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(year);
         List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(year);
         List<ExportContractDTO> refund = saleReportMapper.selectshouhuiContractByDemandName(year);
-        List<ExportContractDTO> sale = saleReportMapper.selectContractByDemandName(year);
+        List<ExportContractDTO> sale = this.selectContractByDemandName(year, "");
 
         Set<String> demandSet = invoice.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
         Set<String> demand1Set = delivery.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());

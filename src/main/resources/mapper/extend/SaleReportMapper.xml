@@ -84,8 +84,16 @@
     </select>
 
 
-    <select id="selectContractByDemandName" resultMap="contractMap" parameterType="java.lang.String">
-              select sum(`total_price`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from order_product where FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year} group by demand_name
+    <select id="selectContractByDemandName" resultMap="contractMap">
+        select sum(`total_price`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from
+        order_product where FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        <if test="startTime!=null and startTime != ''">
+            and create_time&gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime != ''">
+            and create_time&lt;=#{endTime}
+        </if>
+        group by demand_name
     </select>
     <select id="selectshouhuiContractByDemandName" resultMap="contractMap" parameterType="java.lang.String">
               select sum(`received_account`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from order_product where FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year} group by demand_name

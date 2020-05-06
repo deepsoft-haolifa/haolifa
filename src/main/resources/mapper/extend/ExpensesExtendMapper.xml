@@ -61,5 +61,12 @@
     <select id="getMonthByDepartment" resultMap="reportMap" parameterType="java.lang.String">
         select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where department=  #{department,jdbcType=VARCHAR}  group by  FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
+    <select id="expenseTotalByMonth" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
+        select sum(total_amount) totalAmount,data_month dataMonth from expenses  where  is_delete=0
+        <if test="year!=null and year!=''">
+            and data_year=#{year}
+        </if>
+        group by data_month
+    </select>
 
 </mapper>
