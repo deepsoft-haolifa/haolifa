@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.service.ReportService;
+import com.deepsoft.haolifa.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,29 +130,15 @@ public class ReportServiceImpl extends BaseService implements ReportService {
 
     @Override
     public List<ExportContractDTO> selectContractByDemandName(String year, String month) {
-        Map<String, String> haspMap = new HashMap<>();
-        if (StrUtil.isNotBlank(year)) {
-            haspMap.put("year", year);
-            if (StrUtil.isNotBlank(month)) {
-                int iMonth = Integer.parseInt(month);
-                if (iMonth == 1) {
-                    haspMap.put("startTime", Integer.parseInt(year) - 1 + "-12-26");
-                }
-                haspMap.put("startTime", year + "-" + (iMonth - 1) + "-26");
-                haspMap.put("endTime", year + "-" + month + "-25");
-            }
-        }
-        return saleReportMapper.selectContractByDemandName(haspMap);
+        Map<String, Object> packMapParam = CommonUtil.packMapParam(year, month);
+        return saleReportMapper.selectContractByDemandName(packMapParam);
     }
 
-    public static void main(String[] args) {
-        String month = "02";
-        System.out.println(Integer.parseInt(month));
-    }
 
     @Override
-    public List<ExportContractDTO> selectshouhuiContractByDemandName(String year) {
-        return saleReportMapper.selectshouhuiContractByDemandName(year);
+    public List<ExportContractDTO> selectshouhuiContractByDemandName(String year, String month) {
+        Map<String, Object> packMapParam = CommonUtil.packMapParam(year, month);
+        return saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
     }
 
     @Override
@@ -169,7 +156,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         List<DemandAmountDto> list = new ArrayList<>();
         List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(year);
         List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(year);
-        List<ExportContractDTO> refund = saleReportMapper.selectshouhuiContractByDemandName(year);
+        List<ExportContractDTO> refund = this.selectshouhuiContractByDemandName(year, "");
         List<ExportContractDTO> sale = this.selectContractByDemandName(year, "");
 
         Set<String> demandSet = invoice.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());

@@ -37,7 +37,7 @@ public interface ReportService {
 
     List<ExportContractDTO> selectContractByDemandName(String year,String month);
 
-    List<ExportContractDTO> selectshouhuiContractByDemandName(String year);
+    List<ExportContractDTO> selectshouhuiContractByDemandName(String year,String month);
 
     /**
      * 按需方统计的开票总金额

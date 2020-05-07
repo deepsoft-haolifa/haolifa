@@ -210,15 +210,15 @@ public class ReportController {
 
     @ApiOperation("销售报表-获取按需方总额饼图")
     @RequestMapping(value = "/sale/selectContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year,@RequestParam(value = "month") String month) {
+    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year,@RequestParam(value = "month",required = false) String month) {
         List<ExportContractDTO> exportSaleDTOS = reportService.selectContractByDemandName(year,month);
         return ResultBean.success(exportSaleDTOS);
     }
 
     @ApiOperation("销售报表-获取按需方回款总额饼图")
     @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
+    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year,@RequestParam(value = "month",required = false) String month) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year,month);
         return ResultBean.success(exportSaleDTOS);
     }
 

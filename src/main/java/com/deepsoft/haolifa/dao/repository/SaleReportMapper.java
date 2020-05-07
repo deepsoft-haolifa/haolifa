@@ -20,9 +20,9 @@ public interface SaleReportMapper {
      * @param haspMap
      * @return
      */
-    List<ExportContractDTO> selectContractByDemandName(Map<String, String> haspMap);
+    List<ExportContractDTO> selectContractByDemandName(Map<String, Object> haspMap);
 
-    List<ExportContractDTO> selectshouhuiContractByDemandName(@Param("year") String year);
+    List<ExportContractDTO> selectshouhuiContractByDemandName(Map<String, Object> haspMap);
 
     //根据产品型号获取生产金额数量
     List<ExportSaleDTO> selectByModel(@Param("year") String year);
