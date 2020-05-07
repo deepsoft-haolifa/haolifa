@@ -19,7 +19,7 @@ public interface ReportService {
      *
      * @return
      */
-    ResultBean selectPurchase(String year);
+    ResultBean selectPurchase(String year,String month);
 
     /**
      * 采购报表--好利公司按月采购统计
@@ -32,8 +32,8 @@ public interface ReportService {
     //获取目前总金额总数量
     List<ExportSaleDTO> selectAll(String year);
 
-    //根据月份获取总金额 总数量
-    List<ExportSaleDTO> selectByMonth(String startTime, String endTime);
+    //根据月份获取总金额
+    String selectByMonth(String startTime, String endTime);
 
     List<ExportContractDTO> selectContractByDemandName(String year,String month);
 

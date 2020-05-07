@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
@@ -98,9 +99,9 @@ public class ReportController {
 
     @ApiOperation("采购报表")
     @RequestMapping(value = "/purchase/getPurchases", method = RequestMethod.GET)
-    public ResultBean getPurchases(@RequestParam(value = "year", required = false) String year) {
+    public ResultBean getPurchases(@RequestParam(value = "year", required = false) String year, @RequestParam(value = "month", required = false) String month) {
 
-        return reportService.selectPurchase(year);
+        return reportService.selectPurchase(year, month);
     }
 
     @ApiOperation("采购报表--按月查询采购物资")
@@ -143,9 +144,9 @@ public class ReportController {
                 int j = i + 1;
                 endTime = year + "-" + j + "-25";
             }
-            List<ExportSaleDTO> exportSaleDTOS = reportService.selectByMonth(startTime, endTime);
-            if (exportSaleDTOS != null && exportSaleDTOS.get(0) != null) {
-                map.put(i, exportSaleDTOS);
+            String totalPrice = reportService.selectByMonth(startTime, endTime);
+            if (StrUtil.isNotBlank(totalPrice)) {
+                map.put(i, totalPrice);
             }
         }
         return ResultBean.success(map);
@@ -210,15 +211,15 @@ public class ReportController {
 
     @ApiOperation("销售报表-获取按需方总额饼图")
     @RequestMapping(value = "/sale/selectContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year,@RequestParam(value = "month",required = false) String month) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectContractByDemandName(year,month);
+    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year, @RequestParam(value = "month", required = false) String month) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectContractByDemandName(year, month);
         return ResultBean.success(exportSaleDTOS);
     }
 
     @ApiOperation("销售报表-获取按需方回款总额饼图")
     @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year,@RequestParam(value = "month",required = false) String month) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year,month);
+    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year, @RequestParam(value = "month", required = false) String month) {
+        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year, month);
         return ResultBean.success(exportSaleDTOS);
     }
 
@@ -337,7 +338,6 @@ public class ReportController {
         List<TotalQualityReportDto> totalQualityReportDtos = reportService.selectAllQuality(year);
         return ResultBean.success(totalQualityReportDtos);
     }
-
 
 
 }

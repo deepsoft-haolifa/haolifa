@@ -70,7 +70,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public ResultBean selectPurchase(String year) {
+    public ResultBean selectPurchase(String year,String month) {
         Map<String, Object> paramMap = new HashMap<>();
         if (StrUtil.isNotBlank(year)) {
             paramMap.put("year", year);
@@ -117,14 +117,13 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         }
         return ResultBean.success(exportPurchaseDTOS);
     }
-
     @Override
     public List<ExportSaleDTO> selectAll(String year) {
         return saleReportMapper.selectAll(year);
     }
 
     @Override
-    public List<ExportSaleDTO> selectByMonth(String startTime, String endTime) {
+    public String selectByMonth(String startTime, String endTime) {
         return saleReportMapper.selectByMonth(startTime, endTime);
     }
 
@@ -337,6 +336,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
             }
             list.add(totalQualityReportDto);
         }
+        list.sort(Comparator.comparing(TotalQualityReportDto::getCreateTime));
         return list;
     }
 
