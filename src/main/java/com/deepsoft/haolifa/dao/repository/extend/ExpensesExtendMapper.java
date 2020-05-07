@@ -20,4 +20,5 @@ public interface ExpensesExtendMapper {
     List<ExpensesReport> getAllClassifyWithDepartment(Map<String, String> paramMap);
     List<ExpensesReport> getAllClassifyWithFirstClassify(String classify);
     List<ExpensesReport> getMonthByDepartment(String department);
+    List<ExpensesReport> expenseTotalByMonth(Map<String, String> paramMap);
 }

@@ -8,17 +8,15 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 
 /**
- * @author zhaozhihong
- * @create 2018-07-05 21:35
- * @desc
- **/
+ * 零件相关定时任务
+ */
 @Component
-public class DemoTask {
+public class MaterialTask {
     @Resource
     private DistributedLocker distributedLocker;
 
     /**
-     * 示例定时任务
+     * 计算期初库存数据
      */
     @Scheduled(cron = "0 0 0/1 * * ?")
     public void task() {
@@ -28,5 +26,5 @@ public class DemoTask {
         }
     }
 
-    // 定时计算期初库存数据
+
 }

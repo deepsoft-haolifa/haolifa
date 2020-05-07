@@ -58,6 +58,7 @@ public class CommonEnum {
         RESOURCE_NOT_EXIST("3404", "资源不存在"),
 
         SUPPLIER_NO_WRONG("3002", "供应商编号格式不正确"),
+        SUPPLIER_GRAPH_NO_ERROR("3003", "供应商添加产品图号不在零件库中"),
 
         STEP_INCONFORMITY("4001", "处理节点与当前节点不一致"),
         STEP_BACK_ERROR("4002", "无可退回节点"),

@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.service.ReportService;
+import com.deepsoft.haolifa.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,11 +70,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public ResultBean selectPurchase(String year) {
-        Map<String, Object> paramMap = new HashMap<>();
-        if (StrUtil.isNotBlank(year)) {
-            paramMap.put("year", year);
-        }
+    public ResultBean selectPurchase(String year, String month) {
+        Map<String, Object> paramMap = CommonUtil.packMapParam(year, month);
         List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectPurchase(paramMap);
         paramMap.put("status", 5);
         List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectPurchase(paramMap);
@@ -123,18 +121,21 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public List<ExportSaleDTO> selectByMonth(String startTime, String endTime) {
+    public String selectByMonth(String startTime, String endTime) {
         return saleReportMapper.selectByMonth(startTime, endTime);
     }
 
     @Override
-    public List<ExportContractDTO> selectContractByDemandName(String year) {
-        return saleReportMapper.selectContractByDemandName(year);
+    public List<ExportContractDTO> selectContractByDemandName(String year, String month) {
+        Map<String, Object> packMapParam = CommonUtil.packMapParam(year, month);
+        return saleReportMapper.selectContractByDemandName(packMapParam);
     }
 
+
     @Override
-    public List<ExportContractDTO> selectshouhuiContractByDemandName(String year) {
-        return saleReportMapper.selectshouhuiContractByDemandName(year);
+    public List<ExportContractDTO> selectshouhuiContractByDemandName(String year, String month) {
+        Map<String, Object> packMapParam = CommonUtil.packMapParam(year, month);
+        return saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
     }
 
     @Override
@@ -152,8 +153,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         List<DemandAmountDto> list = new ArrayList<>();
         List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(year);
         List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(year);
-        List<ExportContractDTO> refund = saleReportMapper.selectshouhuiContractByDemandName(year);
-        List<ExportContractDTO> sale = saleReportMapper.selectContractByDemandName(year);
+        List<ExportContractDTO> refund = this.selectshouhuiContractByDemandName(year, "");
+        List<ExportContractDTO> sale = this.selectContractByDemandName(year, "");
 
         Set<String> demandSet = invoice.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
         Set<String> demand1Set = delivery.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
@@ -333,6 +334,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
             }
             list.add(totalQualityReportDto);
         }
+        list.sort(Comparator.comparing(TotalQualityReportDto::getCreateTime));
         return list;
     }
 

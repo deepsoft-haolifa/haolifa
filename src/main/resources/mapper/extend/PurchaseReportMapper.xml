@@ -23,6 +23,12 @@
         <if test="year != null and year != ''">
             and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
         </if>
+        <if test="startTime!=null and startTime != ''">
+            and create_time&gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime != ''">
+            and create_time&lt;=#{endTime}
+        </if>
         group by supplier_name
     </select>
     <select id="selectAllPurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">

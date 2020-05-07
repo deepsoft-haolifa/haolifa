@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.SupplierPorductDTO;
 import com.deepsoft.haolifa.model.dto.SupplierProductListDTO;
+import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.SupplierProductService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -31,7 +32,8 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
 
     @Autowired
     SupplierProductMapper supplierProductMapper;
-
+    @Autowired
+    MaterialService materialService;
     @Autowired
     SupplierProductExtendMapper supplierProductExample;
 
@@ -44,11 +46,17 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
                 BeanUtils.copyProperties(model, supplierProduct);
                 supplierProduct.setMaterialType(model.getMaterialType().byteValue());
                 if (model.getMaterialType() == null
-                        || (model.getMaterialType().equals(0) && StringUtils.isEmpty(model.getMaterialGraphNo()))
-                        || StringUtils
-                        .isEmpty(model.getSupplierNo())) {
+                    || (model.getMaterialType().equals(0) && StringUtils.isEmpty(model.getMaterialGraphNo()))
+                    || StringUtils
+                    .isEmpty(model.getSupplierNo())) {
                     return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
                 }
+                // 判断添加的图号是否在图号库里面
+                boolean existsGraphNo = materialService.existsGraphNo(supplierProduct.getMaterialGraphNo());
+                if (!existsGraphNo) {
+                    return ResultBean.error(CommonEnum.ResponseEnum.SUPPLIER_GRAPH_NO_ERROR, "供应商添加的这个产品不存着零件库，" + supplierProduct.getMaterialGraphNo());
+                }
+
                 if (model.getMaterialType().equals(1)) {
                     supplierProduct.setMaterialGraphNo("");
                 }
@@ -83,7 +91,7 @@ public class SupplierProductServiceImpl extends BaseService implements SupplierP
     @Override
     public ResultBean getList(SupplierProductListDTO model) {
         Page<SupplierProduct> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "id desc").doSelectPage(() ->
-                supplierProductExample.getSupplierProList(model));
+            supplierProductExample.getSupplierProList(model));
         PageDTO<SupplierProduct> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
