@@ -101,12 +101,22 @@
     </select>
 
     <select id="selectDeliveryAmountByDemandName" resultMap="contractMap" parameterType="java.lang.String">
-        select ifnull(sum(`total_amount`),0) total_price,invoice_company as
-        demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from invoice where type=1 and status in(1,2)
-        <if test="year!=null and year != ''">
-            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-        </if>
-        group by invoice_company
+        SELECT o.demand_name, ifnull(SUM(c.price), 0) total_price
+        FROM order_product o
+            INNER JOIN (
+                SELECT order_no, price
+                FROM entry_out_store_record e
+                WHERE ( e.type = 1
+                    AND e.operation_type = 1
+                    AND e.price > 0
+                    <if test="year!=null and year != ''">
+                        and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+                    </if>
+                    )
+            ) c
+            ON c.order_no = o.order_no
+        WHERE o.demand_name != ''
+        GROUP BY o.demand_name
     </select>
 
 </mapper>
