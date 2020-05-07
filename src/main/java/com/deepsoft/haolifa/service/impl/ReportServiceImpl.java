@@ -70,11 +70,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public ResultBean selectPurchase(String year,String month) {
-        Map<String, Object> paramMap = new HashMap<>();
-        if (StrUtil.isNotBlank(year)) {
-            paramMap.put("year", year);
-        }
+    public ResultBean selectPurchase(String year, String month) {
+        Map<String, Object> paramMap = CommonUtil.packMapParam(year, month);
         List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectPurchase(paramMap);
         paramMap.put("status", 5);
         List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectPurchase(paramMap);
@@ -117,6 +114,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         }
         return ResultBean.success(exportPurchaseDTOS);
     }
+
     @Override
     public List<ExportSaleDTO> selectAll(String year) {
         return saleReportMapper.selectAll(year);
