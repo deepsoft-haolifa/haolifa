@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import com.deepsoft.haolifa.annotation.LogNotPrint;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
@@ -1078,6 +1079,7 @@ public class ExportExcelController {
         if (StringUtils.isNotEmpty(dto.getSecondClassifyName())) {
             criteria.andSecondClassifyEqualTo(dto.getSecondClassifyName());
         }
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         String fileName = URLEncoder.encode("费用报表", "utf-8");
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xls");
         response.setContentType("application/octet-stream;");
