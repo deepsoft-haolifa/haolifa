@@ -18,7 +18,7 @@ public class MaterialTask {
     /**
      * 计算期初库存数据
      */
-    @Scheduled(cron = "0 0 0/1 * * ?")
+//    @Scheduled(cron = "0 0 0/1 * * ?")
     public void task() {
         String task = distributedLocker.lock("task", 3);
         if (!StringUtils.isEmpty(task)) {
