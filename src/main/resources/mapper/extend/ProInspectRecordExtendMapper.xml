@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.ProInspectRecordExtendMapper">
+    <select id="selectDeliverNoticeList"
+            parameterType="com.deepsoft.haolifa.model.dto.delivery.DeliveryNoticeConditionDTO"
+            resultMap="BaseResultMap">
+        select dn.*,op.deliver_status,op.delivered_number,op.total_count from delivery_notice dn left join order_product
+        op on op.order_contract_no = dn.contract_order_no
+        <where>
+            <if test="deliveryNo != null and deliveryNo != ''">
+                and dn.delivery_no like concat('%',#{deliveryNo},'%')
+            </if>
+            <if test="contractOrderNo != null and contractOrderNo != ''">
+                and dn.contract_order_no like concat('%',#{contractOrderNo},'%')
+            </if>
+            <if test="deliverStatus > -1">
+                and op.deliver_status = #{deliverStatus}
+            </if>
+        </where>
+        order by dn.id desc
+    </select>
+    <select id="listProInspectRecord" resultType="com.deepsoft.haolifa.model.dto.export.ProInspectRecordDto">
+        SELECT
+        a.order_no,
+        a.product_no,
+        a.product_model,
+        a.product_specifications,
+        a.qualified_number,
+        a.update_time,
+        opa.price
+        FROM
+        `pro_inspect_record` a
+        LEFT JOIN order_product_associate opa ON a.order_no = opa.order_no
+        where 1=1
+        <if test="orderNo!=null and orderNo!=''">
+            and a.order_no = #{orderNo}
+        </if>
+        <if test="startDate!= null">
+            and a.update_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and a.update_time &lt;= #{endDate}
+        </if>
+        <if test="entryStatus != null">
+            and a.storage_status = #{entryStatus}
+        </if>
+        order by a.id desc
+    </select>
+</mapper>

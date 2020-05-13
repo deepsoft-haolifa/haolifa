@@ -1,10 +1,14 @@
 package com.deepsoft.haolifa.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.annotation.LogNotPrint;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.dao.repository.extend.ProInspectRecordExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
@@ -68,7 +72,7 @@ public class ExportExcelController {
     private InspectService inspectService;
 
     @Autowired
-    private ProInspectRecordMapper proInspectRecordMapper;
+    private ProInspectRecordExtendMapper proInspectRecordExtendMapper;
 
     @Autowired
     private EntryOutStoreRecordMapper entryOutStoreRecordMapper;
@@ -1312,6 +1316,14 @@ public class ExportExcelController {
 
     }
 
+    public static void main(String[] args) {
+        ExportProductEntryRoomDTO dto=new ExportProductEntryRoomDTO();
+        dto.setEndDate("2015");
+
+        Map<String, Object> stringObjectMap = BeanUtil.beanToMap(dto);
+        System.out.println(stringObjectMap);
+    }
+
     @ApiOperation("导出成品待入库")
     @GetMapping("product-entry")
     public void exportProductEntryRoom(HttpServletResponse response, HttpServletRequest request,
@@ -1333,7 +1345,8 @@ public class ExportExcelController {
             criteria.andStorageStatusEqualTo(dto.getEntryStatus().byteValue());
         }
 
-        List<ProInspectRecord> proInspectRecordList = proInspectRecordMapper.selectByExample(example);
+
+        List<ProInspectRecordDto> proInspectRecordList = proInspectRecordExtendMapper.listProInspectRecord(BeanUtil.beanToMap(dto));
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("成品入库报表", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
@@ -1345,7 +1358,7 @@ public class ExportExcelController {
         center.setAlignment(HorizontalAlignment.CENTER);
 
         Row title_1 = sheet.createRow(0);
-        CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 6);
+        CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 8);
         sheet.addMergedRegion(cra1);
         Cell cell_title_1 = title_1.createCell(0);
         cell_title_1.setCellValue("成 品 入 库 报 表");
@@ -1373,9 +1386,15 @@ public class ExportExcelController {
         Cell cell_16 = columnTitle.createCell(6);
         cell_16.setCellValue("入库日期");
         cell_16.setCellStyle(center);
+        Cell cell_17 = columnTitle.createCell(6);
+        cell_17.setCellValue("单价");
+        cell_17.setCellStyle(center);
+        Cell cell_18 = columnTitle.createCell(6);
+        cell_18.setCellValue("金额");
+        cell_18.setCellStyle(center);
 
         for (int i = 0; i < proInspectRecordList.size(); i++) {
-            ProInspectRecord proInspectRecord = proInspectRecordList.get(i);
+            ProInspectRecordDto proInspectRecord = proInspectRecordList.get(i);
             Row row_value = sheet.createRow(i + 2);
             Cell cell_0 = row_value.createCell(0);
             cell_0.setCellValue(i + 1);
@@ -1399,6 +1418,17 @@ public class ExportExcelController {
             cell_6.setCellValue(
                 DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, proInspectRecord.getUpdateTime()));
             cell_6.setCellStyle(center);
+            Cell cell_7 = row_value.createCell(6);
+            BigDecimal price = proInspectRecord.getPrice();
+            if (price == null) {
+                price = BigDecimal.ZERO;
+            }
+            cell_7.setCellValue(String.valueOf(price));
+            cell_7.setCellStyle(center);
+            Cell cell_8 = row_value.createCell(6);
+            BigDecimal amount = price.multiply(new BigDecimal(proInspectRecord.getQualifiedNumber())).setScale(2, BigDecimal.ROUND_HALF_UP);
+            cell_8.setCellValue(String.valueOf(amount));
+            cell_8.setCellStyle(center);
         }
 
         OutputStream outputStream = response.getOutputStream();
