@@ -1386,10 +1386,10 @@ public class ExportExcelController {
         Cell cell_16 = columnTitle.createCell(6);
         cell_16.setCellValue("入库日期");
         cell_16.setCellStyle(center);
-        Cell cell_17 = columnTitle.createCell(6);
+        Cell cell_17 = columnTitle.createCell(7);
         cell_17.setCellValue("单价");
         cell_17.setCellStyle(center);
-        Cell cell_18 = columnTitle.createCell(6);
+        Cell cell_18 = columnTitle.createCell(8);
         cell_18.setCellValue("金额");
         cell_18.setCellStyle(center);
 
@@ -1418,14 +1418,14 @@ public class ExportExcelController {
             cell_6.setCellValue(
                 DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, proInspectRecord.getUpdateTime()));
             cell_6.setCellStyle(center);
-            Cell cell_7 = row_value.createCell(6);
+            Cell cell_7 = row_value.createCell(7);
             BigDecimal price = proInspectRecord.getPrice();
             if (price == null) {
                 price = BigDecimal.ZERO;
             }
             cell_7.setCellValue(String.valueOf(price));
             cell_7.setCellStyle(center);
-            Cell cell_8 = row_value.createCell(6);
+            Cell cell_8 = row_value.createCell(8);
             BigDecimal amount = price.multiply(new BigDecimal(proInspectRecord.getQualifiedNumber())).setScale(2, BigDecimal.ROUND_HALF_UP);
             cell_8.setCellValue(String.valueOf(amount));
             cell_8.setCellStyle(center);
