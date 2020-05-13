@@ -124,26 +124,35 @@ public class ReportController {
     public ResultBean getSaleAllByMonth(@RequestParam(value = "year") String year) {
         Calendar cal = Calendar.getInstance();
         List list = new ArrayList();
-        int month = cal.get(Calendar.MONTH) + 1;
+        int month = 12;
+        int yearNow = cal.get(Calendar.YEAR);
+        if (yearNow == Integer.parseInt(year)) {
+            month = cal.get(Calendar.MONTH) + 1;
+        }
         Map map = new HashMap();
-        for (int i = 1; i < month; i++) {
-            JsonObject jsonObject = new JsonObject();
+        for (int i = 1; i <= month; i++) {
             String startTime = "";
             String endTime = "";
-            if (i < 10) {
-                startTime = year + "-0" + i + "-26";
-                int j = i + 1;
-                if (j < 10) {
-                    endTime = year + "-0" + j + "-25";
-                } else {
-                    endTime = year + "-" + j + "-25";
-                }
-
+            if (i == 1) {
+                startTime = Integer.parseInt(year) - 1 + "-12-26";
             } else {
-                startTime = year + "-" + i + "-26";
-                int j = i + 1;
-                endTime = year + "-" + j + "-25";
+                startTime = year + "-" + (i - 1) + "-26";
             }
+            endTime = year + "-" + i + "-25";
+//            if (i < 10) {
+//                startTime = year + "-0" + i + "-26";
+//                int j = i + 1;
+//                if (j < 10) {
+//                    endTime = year + "-0" + j + "-25";
+//                } else {
+//                    endTime = year + "-" + j + "-25";
+//                }
+//
+//            } else {
+//                startTime = year + "-" + i + "-26";
+//                int j = i + 1;
+//                endTime = year + "-" + j + "-25";
+//            }
             String totalPrice = reportService.selectByMonth(startTime, endTime);
             if (StrUtil.isNotBlank(totalPrice)) {
                 map.put(i, totalPrice);
