@@ -11,7 +11,7 @@ import java.util.Date;
  * @author murphy.he
  **/
 @Data
-public class ProInspectRecordDto {
+public class ExportEntryOutRecordDto {
 
     private String orderNo;
 
@@ -21,15 +21,7 @@ public class ProInspectRecordDto {
 
     private String productSpecifications;
 
-    private Integer testingNumber;
-
-    private Integer qualifiedNumber;
-
-    private Integer unqualifiedNumber;
-
-    private String reason;
-
-    private Byte storageStatus;
+    private Integer quantity;
 
     private Date createTime;
 

@@ -85,7 +85,6 @@ public class ReportController {
     @ApiOperation("费用报表--每项费用中费用二级占比")
     @RequestMapping(value = "/expense/getAllClassifyWithFirstClassify", method = RequestMethod.GET)
     public ResultBean getAllClassifyWithFirstClassify(@RequestParam(value = "classify") String classify) {
-        System.out.println(classify);
         return expensesService.getAllClassifyWithFirstClassify(classify);
     }
 

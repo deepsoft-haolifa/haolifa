@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.ProInspectRecordExtendMapper">
-    <select id="listProInspectRecord" resultType="com.deepsoft.haolifa.model.dto.export.ProInspectRecordDto">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.EntryOutRecordExtendMapper">
+    <select id="listProductRecord" resultType="com.deepsoft.haolifa.model.dto.export.ExportEntryOutRecordDto">
         SELECT
         a.order_no orderNo,
         a.product_no  productNo,
         a.product_model productModel,
         a.product_specifications productSpecifications,
-        a.qualified_number qualifiedNumber,
-        a.update_time updateTime,
+        a.quantity quantity,
+        a.create_time createTime,
         opa.price
         FROM
-        `pro_inspect_record` a
+        `entry_out_store_record` a
         LEFT JOIN order_product_associate opa ON a.order_no = opa.order_no
-        where 1=1
+        where 1=1 and a.type=1 and a.operation_type=2
         <if test="orderNo!=null and orderNo!=''">
             and a.order_no = #{orderNo}
         </if>
         <if test="startDate!= null">
-            and a.update_time &gt;= #{startDate}
+            and a.create_time &gt;= #{startDate}
         </if>
         <if test="endDate != null">
-            and a.update_time &lt;= #{endDate}
-        </if>
-        <if test="entryStatus != null">
-            and a.storage_status = #{entryStatus}
+            and a.create_time &lt;= #{endDate}
         </if>
         order by a.id desc
     </select>

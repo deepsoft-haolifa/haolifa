@@ -3,12 +3,9 @@ package com.deepsoft.haolifa.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.ObjectUtil;
-import com.deepsoft.haolifa.annotation.LogNotPrint;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
-import com.deepsoft.haolifa.dao.repository.extend.ProInspectRecordExtendMapper;
+import com.deepsoft.haolifa.dao.repository.extend.EntryOutRecordExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
@@ -28,7 +25,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +68,7 @@ public class ExportExcelController {
     private InspectService inspectService;
 
     @Autowired
-    private ProInspectRecordExtendMapper proInspectRecordExtendMapper;
+    private EntryOutRecordExtendMapper entryOutRecordExtendMapper;
 
     @Autowired
     private EntryOutStoreRecordMapper entryOutStoreRecordMapper;
@@ -1328,25 +1324,7 @@ public class ExportExcelController {
     @GetMapping("product-entry")
     public void exportProductEntryRoom(HttpServletResponse response, HttpServletRequest request,
                                        ExportProductEntryRoomDTO dto) throws IOException {
-        ProInspectRecordExample example = new ProInspectRecordExample();
-        ProInspectRecordExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotEmpty(dto.getStartDate())) {
-            Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
-            criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
-        }
-        if (StringUtils.isNotEmpty(dto.getEndDate())) {
-            Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
-            criteria.andUpdateTimeLessThanOrEqualTo(endDate);
-        }
-        if (StringUtils.isNotEmpty(dto.getOrderNo())) {
-            criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
-        }
-        if (dto.getEntryStatus() != null && dto.getEntryStatus() > 0) {
-            criteria.andStorageStatusEqualTo(dto.getEntryStatus().byteValue());
-        }
-
-
-        List<ProInspectRecordDto> proInspectRecordList = proInspectRecordExtendMapper.listProInspectRecord(BeanUtil.beanToMap(dto));
+        List<ExportEntryOutRecordDto> exportEntryOutRecordDtos = entryOutRecordExtendMapper.listProductRecord(BeanUtil.beanToMap(dto));
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("成品入库报表", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
@@ -1393,40 +1371,40 @@ public class ExportExcelController {
         cell_18.setCellValue("金额");
         cell_18.setCellStyle(center);
 
-        for (int i = 0; i < proInspectRecordList.size(); i++) {
-            ProInspectRecordDto proInspectRecord = proInspectRecordList.get(i);
+        for (int i = 0; i < exportEntryOutRecordDtos.size(); i++) {
+            ExportEntryOutRecordDto exportEntryOutRecordDto = exportEntryOutRecordDtos.get(i);
             Row row_value = sheet.createRow(i + 2);
             Cell cell_0 = row_value.createCell(0);
             cell_0.setCellValue(i + 1);
             cell_0.setCellStyle(center);
             Cell cell_1 = row_value.createCell(1);
-            cell_1.setCellValue(proInspectRecord.getOrderNo());
+            cell_1.setCellValue(exportEntryOutRecordDto.getOrderNo());
             cell_1.setCellStyle(center);
             Cell cell_2 = row_value.createCell(2);
-            cell_2.setCellValue(proInspectRecord.getProductNo());
+            cell_2.setCellValue(exportEntryOutRecordDto.getProductNo());
             cell_2.setCellStyle(center);
             Cell cell_3 = row_value.createCell(3);
-            cell_3.setCellValue(proInspectRecord.getProductModel());
+            cell_3.setCellValue(exportEntryOutRecordDto.getProductModel());
             cell_3.setCellStyle(center);
             Cell cell_4 = row_value.createCell(4);
-            cell_4.setCellValue(proInspectRecord.getProductSpecifications());
+            cell_4.setCellValue(exportEntryOutRecordDto.getProductSpecifications());
             cell_4.setCellStyle(center);
             Cell cell_5 = row_value.createCell(5);
-            cell_5.setCellValue(proInspectRecord.getQualifiedNumber());
+            cell_5.setCellValue(exportEntryOutRecordDto.getQuantity());
             cell_5.setCellStyle(center);
             Cell cell_6 = row_value.createCell(6);
             cell_6.setCellValue(
-                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, proInspectRecord.getUpdateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, exportEntryOutRecordDto.getUpdateTime()));
             cell_6.setCellStyle(center);
             Cell cell_7 = row_value.createCell(7);
-            BigDecimal price = proInspectRecord.getPrice();
+            BigDecimal price = exportEntryOutRecordDto.getPrice();
             if (price == null) {
                 price = BigDecimal.ZERO;
             }
             cell_7.setCellValue(String.valueOf(price));
             cell_7.setCellStyle(center);
             Cell cell_8 = row_value.createCell(8);
-            BigDecimal amount = price.multiply(new BigDecimal(proInspectRecord.getQualifiedNumber())).setScale(2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal amount = price.multiply(new BigDecimal(exportEntryOutRecordDto.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP);
             cell_8.setCellValue(String.valueOf(amount));
             cell_8.setCellStyle(center);
         }
