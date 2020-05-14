@@ -1394,7 +1394,7 @@ public class ExportExcelController {
             cell_5.setCellStyle(center);
             Cell cell_6 = row_value.createCell(6);
             cell_6.setCellValue(
-                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, exportEntryOutRecordDto.getUpdateTime()));
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, exportEntryOutRecordDto.getCreateTime()));
             cell_6.setCellStyle(center);
             Cell cell_7 = row_value.createCell(7);
             BigDecimal price = exportEntryOutRecordDto.getPrice();
