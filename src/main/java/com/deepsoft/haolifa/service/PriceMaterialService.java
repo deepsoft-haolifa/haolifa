@@ -16,7 +16,6 @@ public interface PriceMaterialService {
      */
     ResultBean saveInfo(PriceMaterial model);
 
-
     /**
      * 更新
      *

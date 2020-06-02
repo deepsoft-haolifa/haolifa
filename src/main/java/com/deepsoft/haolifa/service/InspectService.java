@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
 import com.deepsoft.haolifa.model.dto.InspectResDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.vo.InspectItemQtyVo;
 
 import java.util.List;
 
@@ -98,4 +99,10 @@ public interface InspectService {
      * @return
      */
     InspectHistory getHistoryInfo(Integer historyId);
+    /**
+     * 根据采购订单号获取质检的相关数量
+     *
+     * @return
+     */
+    List<InspectItemQtyVo> getPurchaseAllQty(String purchaseNo);
 }

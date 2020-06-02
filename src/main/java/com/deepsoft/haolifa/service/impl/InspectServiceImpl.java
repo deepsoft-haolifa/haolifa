@@ -9,7 +9,10 @@ import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PURCHASE_PRO
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
@@ -22,6 +25,7 @@ import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
 import com.deepsoft.haolifa.model.vo.InspectHistoryVo;
+import com.deepsoft.haolifa.model.vo.InspectItemQtyVo;
 import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.InspectService;
@@ -502,6 +506,23 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     @Override
     public InspectHistory getHistoryInfo(Integer historyId) {
         return historyMapper.selectByPrimaryKey(historyId);
+    }
+
+    @Override
+    public List<InspectItemQtyVo> getPurchaseAllQty(String purchaseNo) {
+        List<InspectItemQtyVo> list = commonExtendMapper.inspectItemQty(purchaseNo);
+        if (CollectionUtil.isNotEmpty(list)) {
+            PurchaseOrderItemExample example = new PurchaseOrderItemExample();
+            example.or().andPurchaseOrderNoEqualTo(purchaseNo);
+            List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemMapper.selectByExample(example);
+            list.forEach(qty -> {
+                List<PurchaseOrderItem> orderItems = purchaseOrderItems.stream().filter(e -> e.getMaterialGraphNo().equals(qty.getMaterialGraphNo())).collect(Collectors.toList());
+                if (CollectionUtil.isNotEmpty(orderItems)) {
+                    qty.setPurchaseNumber(orderItems.get(0).getNumber());
+                }
+            });
+        }
+        return list;
     }
 
     @Override

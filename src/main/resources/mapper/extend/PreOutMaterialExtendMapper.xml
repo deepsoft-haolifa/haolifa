@@ -5,15 +5,21 @@
     <select id="pagePreOutMaterial" parameterType="com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo"
             resultType="com.deepsoft.haolifa.model.vo.PreOutMaterialVo">
         select * from (
-        SELECT 1 type,id busId,order_no busNo,graph_no graphNo,material_name materialName,quantity outQuantity,batch_number batchNumber,dept_name deptName,out_room_status outRoomStatus,create_time createTime FROM `material_requisition` a
+        SELECT 1 type,id busId,order_no busNo,graph_no graphNo,material_name materialName,quantity
+        outQuantity,batch_number batchNumber,dept_name deptName,out_room_status outRoomStatus,create_time createTime
+        FROM `material_requisition` a
 
         union all
 
-        SELECT 2 type,id busId,entrust_no busNo,material_graph_no graphNo,material_graph_name materialName,number outQuantity,batch_number batchNumber,'' deptName,out_room_status outRoomStatus,create_time createTime  from entrust b
+        SELECT 2 type,id busId,entrust_no busNo,material_graph_no graphNo,material_graph_name materialName,number
+        outQuantity,batch_number batchNumber,'' deptName,out_room_status outRoomStatus,create_time createTime from
+        entrust b
 
         union all
 
-        select 3 type,id busId,spray_no busNo,material_graph_no graphNo,material_name materialName,number outQuantity,batch_number batchNumber,'' deptName,out_room_status outRoomStatus,create_time createTime from spray_item b
+        select 3 type,id busId,spray_no busNo,material_graph_no graphNo,material_name materialName,number
+        outQuantity,batch_number batchNumber,'' deptName,out_room_status outRoomStatus,create_time createTime from
+        spray_item b
         ) un
         where 1=1
 
@@ -37,6 +43,10 @@
         </if>
 
         order by un.createTime desc
+    </select>
+    <select id="inspectItemQty" resultType="com.deepsoft.haolifa.model.vo.InspectItemQtyVo">
+        SELECT material_graph_no materialGraphNo,material_name materialName,sum(delivery_number) deliveryNumber,sum(qualified_number) qualifiedNumber,sum(unqualified_number) unqualifiedNumber
+        from `inspect_item` where purchase_no=#{purchaseNo} group by material_graph_no;
     </select>
 
 </mapper>

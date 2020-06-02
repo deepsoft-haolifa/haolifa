@@ -164,6 +164,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         if (model.getStatus() != -1) {
             criteria.andStatusEqualTo(model.getStatus().byteValue());
         }
+        if (model.getInspectStatus() != null && model.getInspectStatus() > 0) {
+            criteria.andInspectStatusEqualTo(model.getInspectStatus().byteValue());
+        }
         Page<Entrust> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "create_time desc")
             .doSelectPage(() ->
                 entrustMapper.selectByExample(entrustExample));

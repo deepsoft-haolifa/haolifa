@@ -4,6 +4,7 @@ package com.deepsoft.haolifa.controller;
 import com.deepsoft.haolifa.model.dto.InspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.vo.InspectItemQtyVo;
 import com.deepsoft.haolifa.service.InspectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(tags = {"零件送检管理"})
 @RestController
-@RequestMapping("material-inspect")
+@RequestMapping("" +
+    "")
 public class InspectController {
 
     @Autowired
@@ -100,6 +102,12 @@ public class InspectController {
     @GetMapping("history-info/{historyId}")
     public ResultBean getHistoryStatus(@ApiParam("记录标示") @PathVariable("historyId") Integer historyId) {
         return ResultBean.success(inspectService.getHistoryInfo(historyId));
+    }
+
+    @ApiOperation("根据采购订单号获取报检相关数量(用于采购合同，点击合格数，展示的信息)")
+    @GetMapping("purchase-all-qty")
+    public ResultBean<InspectItemQtyVo> getPurchaseAllQty(@RequestParam("purchaseNo") String purchaseNo) {
+        return ResultBean.success(inspectService.getPurchaseAllQty(purchaseNo));
     }
 
 }

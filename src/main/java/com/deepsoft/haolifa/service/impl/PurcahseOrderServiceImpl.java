@@ -11,6 +11,7 @@ import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYP
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -26,10 +27,7 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.service.ApplyBuyService;
-import com.deepsoft.haolifa.service.FlowInstanceService;
-import com.deepsoft.haolifa.service.PurcahseOrderService;
-import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
+import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
 import com.github.pagehelper.Page;
@@ -49,6 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +85,12 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     @Autowired
     private SupplierMapper supplierMapper;
 
+    @Autowired
+    private PriceMaterialMapper priceMaterialMapper;
+
+    @Autowired
+    private PriceMaterialService priceMaterialService;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean save(PurchaseOrderDTO model, Integer orderType) {
@@ -102,11 +107,11 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         purchaseOrder.setPurchaseOrderNo(model.getOrderNo());
         purchaseOrder.setCreateUserId(getLoginUserId());
         purchaseOrder.setDeliveryTime(
-                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getDeliveryTime()));
+            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getDeliveryTime()));
         purchaseOrder.setOperateTime(
-                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
+            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
         purchaseOrder.setConfirmTime(
-                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
+            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
 
         // 插入单项
         double totalPrice = 0.0;
@@ -132,7 +137,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         uploadPurchaseExcelService.uploadPurchaseOrderExcel(purchaseOrder.getId());
         // 如果带了待采购的Id，将其更新成已完成
         List<Integer> applyBuyIds = model.getApplyBuyIds();
-        if(!CollectionUtils.isEmpty(applyBuyIds)){
+        if (!CollectionUtils.isEmpty(applyBuyIds)) {
             for (Integer applyBuyId : applyBuyIds) {
                 applyBuyService.updateStatus(applyBuyId);
             }
@@ -178,11 +183,11 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         BeanUtils.copyProperties(model, purchaseOrder);
         purchaseOrder.setPurchaseOrderNo(model.getOrderNo());
         purchaseOrder.setDeliveryTime(
-                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getDeliveryTime()));
+            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getDeliveryTime()));
         purchaseOrder.setOperateTime(
-                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
+            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
         purchaseOrder.setConfirmTime(
-                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
+            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
         PurchaseOrderItemExample example = new PurchaseOrderItemExample();
         example.or().andPurchaseOrderNoEqualTo(model.getOrderNo());
         purchaseOrderItemMapper.deleteByExample(example);
@@ -266,7 +271,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             criteria.andPurchaseOrderNoLike("%" + model.getPurchaseOrderNo() + "%");
         }
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(model.getPageNum(), model.getPageSize())
-                .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
+            .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
         PageDTO<PurchaseOrder> purchaseOrderPageDTO = new PageDTO<>();
         BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
         purchaseOrderPageDTO.setList(purchaseOrderList.getResult());
@@ -306,7 +311,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             return ResultBean.success(purchaseOrderPageDTO);
         }
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(pageNum, pageSize, "create_time desc")
-                .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
+            .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
         purchaseOrderPageDTO = new PageDTO<>();
         BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
         purchaseOrderPageDTO.setList(purchaseOrderList.getResult());
@@ -387,7 +392,6 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             for (int i = 0; i < purchaseOrderItemList.size(); i++) {
                 InspectItem inspectItem = new InspectItem();
                 PurchaseOrderItem orderItem = purchaseOrderItemList.get(i);
-                inspectItem.setInspectId(inspect.getId());
                 inspectItem.setPurchaseNumber(orderItem.getNumber());
                 inspectItem.setPurchaseNo(purchaseOrder.getPurchaseOrderNo());
                 inspectItem.setMaterialGraphNo(orderItem.getMaterialGraphNo());
@@ -412,5 +416,35 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         purchaseOrder.setId(formId);
         purchaseOrder.setStatus(status.byteValue());
         purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
+
+        // 如果采购流程审核完成，将这个采购订单中高于零件库的价格，进行更新
+        if (status.equals(3)) {
+            PurchaseOrder order = purchaseOrderMapper.selectByPrimaryKey(formId);
+            String purchaseOrderNo = order.getPurchaseOrderNo();
+            PurchaseOrderItemExample itemExample = new PurchaseOrderItemExample();
+            itemExample.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
+            List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemMapper.selectByExample(itemExample);
+            if (CollectionUtil.isNotEmpty(purchaseOrderItems)) {
+                List<String> graphNoList = purchaseOrderItems.stream().map(PurchaseOrderItem::getMaterialGraphNo).collect(Collectors.toList());
+                PriceMaterialExample priceMaterialExample = new PriceMaterialExample();
+                priceMaterialExample.or().andGraphNoIn(graphNoList);
+                List<PriceMaterial> priceMaterialList = priceMaterialMapper.selectByExample(priceMaterialExample);
+                Map<String, PriceMaterial> priceMap = priceMaterialList.stream().collect(Collectors.toMap(PriceMaterial::getGraphNo, Function.identity()));
+                purchaseOrderItems.forEach(item -> {
+                    BigDecimal unitPrice = item.getUnitPrice();
+                    PriceMaterial priceMaterial = priceMap.get(item.getMaterialGraphNo());
+                    if (unitPrice != null && priceMaterial.getPrice() != null) {
+                        // 如果采购订单中的价格高于零件库中的价格
+                        if (unitPrice.compareTo(priceMaterial.getPrice()) == 1) {
+                            PriceMaterial updatePrice = new PriceMaterial();
+                            updatePrice.setId(priceMaterial.getId());
+                            updatePrice.setPrice(unitPrice);
+                            priceMaterialService.updateInfo(updatePrice);
+                        }
+                    }
+                });
+            }
+
+        }
     }
 }
