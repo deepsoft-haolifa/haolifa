@@ -135,6 +135,9 @@
           <if test="userId &gt; 0">
           AND fi.`user_id` = #{userId}
 		  </if>
+          <if test="formNo!=null and formNo!=''">
+            and fi.form_no like CONCAT('%',#{formNo},'%')
+          </if>
         JOIN `sys_user` u
           ON fi.`create_user_id` = u.`id`
         JOIN `flow` f
@@ -157,6 +160,9 @@
 			JOIN sys_user u ON fi.`create_user_id` = u.`id`
 		WHERE
 			fh.audit_user_id = #{userId}
+			<if test="formNo!=null and formNo!=''">
+			and fi.form_no like CONCAT('%',#{formNo},'%')
+            </if>
 	</select>
 
     <select id="selectFlowStepByStepId" parameterType="int"

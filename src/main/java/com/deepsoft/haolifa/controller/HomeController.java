@@ -22,31 +22,33 @@ public class HomeController {
 
     @ApiOperation("获取发起流程的快捷入口")
     @GetMapping("/quick-start")
-    public ResultBean getQuickStartMenu(){
+    public ResultBean getQuickStartMenu() {
         return ResultBean.success(homeApiService.getQuickStartMenu());
     }
 
     @ApiOperation("待办事项")
     @GetMapping("/todo")
     public ResultBean getTodoItems(
-        @ApiParam(required = true,value = "页码，默认1") @RequestParam(defaultValue = "1") Integer pageNum,
-        @ApiParam(required = true,value = "展示数量，默认10") @RequestParam(defaultValue = "10")Integer pageSize){
-        return homeApiService.getTodoItems(pageNum, pageSize);
+        @ApiParam(required = true, value = "页码，默认1") @RequestParam(defaultValue = "1") Integer pageNum,
+        @ApiParam(required = true, value = "展示数量，默认10") @RequestParam(defaultValue = "10") Integer pageSize,
+        @ApiParam(required = false, value = "订单号") @RequestParam(value = "formNo", required = false) String formNo) {
+        return homeApiService.getTodoItems(pageNum, pageSize, formNo);
     }
 
     @ApiOperation("采购员列表")
     @GetMapping("/buyers")
-    public ResultBean getBuyerList(){
+    public ResultBean getBuyerList() {
         return ResultBean.success(roleService.getBuyers());
     }
 
     @ApiOperation("已办事项")
     @GetMapping("/done")
     public ResultBean getDoneItems(
-        @ApiParam(required = true,value = "页码，默认1") @RequestParam(defaultValue = "1") Integer pageNum,
-        @ApiParam(required = true,value = "展示数量，默认10") @RequestParam(defaultValue = "10")Integer pageSize
+        @ApiParam(required = true, value = "页码，默认1") @RequestParam(defaultValue = "1") Integer pageNum,
+        @ApiParam(required = true, value = "展示数量，默认10") @RequestParam(defaultValue = "10") Integer pageSize,
+        @ApiParam(required = false, value = "订单号") @RequestParam(value = "formNo", required = false) String formNo
     ) {
-        return homeApiService.getDoneItems(pageNum,pageSize);
+        return homeApiService.getDoneItems(pageNum, pageSize, formNo);
     }
 
 }

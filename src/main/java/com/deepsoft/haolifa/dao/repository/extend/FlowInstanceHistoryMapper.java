@@ -20,13 +20,13 @@ public interface FlowInstanceHistoryMapper {
 
     List<BackStepDTO> selectBackStepsByFlowId(@Param("flowId") Integer flowId);
 
-    List<QuickStartVO> selectFlowByUserRoles(@Param("userId")Integer userId);
+    List<QuickStartVO> selectFlowByUserRoles(@Param("userId") Integer userId);
 
-    List<TodoItemVO> selectToDoItems(@Param("userId")Integer userId);
+    List<TodoItemVO> selectToDoItems(@Param("userId") Integer userId, @Param("formNo") String formNo);
 
     FlowStep selectFlowStepByStepId(@Param("flowId") Integer flowId, @Param("stepId") Integer currentStepId);
 
-    List<DoneItemVO> selectDoneItems(@Param("userId") Integer userId);
+    List<DoneItemVO> selectDoneItems(@Param("userId") Integer userId, @Param("formNo") String formNo);
 
     HistoryInfo selectHistoryDetails(@Param("stepId") Integer stepId, @Param("instanceId") Integer instanceId);
 }

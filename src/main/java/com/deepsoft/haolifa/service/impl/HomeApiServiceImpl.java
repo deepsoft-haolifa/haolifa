@@ -56,7 +56,7 @@ public class HomeApiServiceImpl implements HomeApiService {
   }
 
   @Override
-  public ResultBean getTodoItems(Integer pageNum, Integer pageSize) {
+  public ResultBean getTodoItems(Integer pageNum, Integer pageSize,String formNo) {
     CustomUser customUser = userService.selectLoginUser();
     List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
     Integer userId = customUser.getId();
@@ -67,7 +67,7 @@ public class HomeApiServiceImpl implements HomeApiService {
     final int tempUserId = userId;
     Page<TodoItemVO> todoItemVOPage = PageHelper.startPage(pageNum, pageSize)
         .setOrderBy("fi.create_time desc")
-        .doSelectPage(() -> flowInstanceHistoryMapper.selectToDoItems(tempUserId));
+        .doSelectPage(() -> flowInstanceHistoryMapper.selectToDoItems(tempUserId,formNo));
     PageDTO<TodoItemVO> pageDTO = new PageDTO<>();
     BeanUtils.copyProperties(todoItemVOPage, pageDTO);
     pageDTO.setList(todoItemVOPage.getResult());
@@ -75,11 +75,11 @@ public class HomeApiServiceImpl implements HomeApiService {
   }
 
   @Override
-  public ResultBean getDoneItems(Integer pageNum, Integer pageSize) {
+  public ResultBean getDoneItems(Integer pageNum, Integer pageSize,String formNo) {
     CustomUser customUser = userService.selectLoginUser();
     Page<DoneItemVO> doneItemVOPage = PageHelper.startPage(pageNum, pageSize)
         .setOrderBy("fh.create_time desc")
-        .doSelectPage(() -> flowInstanceHistoryMapper.selectDoneItems(customUser.getId()));
+        .doSelectPage(() -> flowInstanceHistoryMapper.selectDoneItems(customUser.getId(),formNo));
     PageDTO<DoneItemVO> pageDto = new PageDTO<>();
     BeanUtils.copyProperties(doneItemVOPage, pageDto);
     pageDto.setList(doneItemVOPage.getResult());
