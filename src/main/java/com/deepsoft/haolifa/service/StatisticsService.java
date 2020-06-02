@@ -12,5 +12,5 @@ public interface StatisticsService {
 
   Double totalPurchase();
 
-  InvoiceStatisticVo totalInvoice(Byte type);
+  InvoiceStatisticVo totalInvoice(Byte type,InvoiceListDTO dto);
 }

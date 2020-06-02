@@ -38,8 +38,8 @@ public class StatisticsController {
 
     @ApiOperation("发票总金额(1.经管；2. 财务)")
     @GetMapping("/money/invoice/{type}")
-    public ResultBean totalInvoice(@PathVariable Byte type) {
-        return ResultBean.success(statisticsService.totalInvoice(type));
+    public ResultBean totalInvoice(@PathVariable Byte type , @RequestBody InvoiceListDTO dto) {
+        return ResultBean.success(statisticsService.totalInvoice(type,dto));
     }
 
 }

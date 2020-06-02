@@ -19,14 +19,8 @@ import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.PurchaseOrderItemExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderCompleteDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.domain.PurchaseOrderItem;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
@@ -91,6 +85,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     @Autowired
     private PriceMaterialService priceMaterialService;
 
+    @Autowired
+    private MaterialService materialService;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean save(PurchaseOrderDTO model, Integer orderType) {
@@ -120,6 +117,10 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         for (int i = 0; i < model.getItemList().size(); i++) {
             PurchaseOrderItem orderItem = new PurchaseOrderItem();
             com.deepsoft.haolifa.model.dto.PurchaseOrderItem item = model.getItemList().get(i);
+            String graphNo = item.getMaterialGraphNo();
+            if (!materialService.existsGraphNo(graphNo)) {
+                throw new BaseException(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_NOT_EXIST_1.code, graphNo);
+            }
             BeanUtils.copyProperties(item, orderItem);
             orderItem.setUnitPrice(new BigDecimal(item.getUnitPrice()));
             orderItem.setUnitWeight(new BigDecimal(item.getUnitWeight()));

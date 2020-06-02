@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import static com.deepsoft.haolifa.constant.CacheKey.TOTAL_INVENTORY_MATERIAL;
 import static com.deepsoft.haolifa.constant.CacheKey.TOTAL_MONEY_ORDER;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.deepsoft.haolifa.cache.redis.RedisDaoImpl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.Consts;
@@ -70,13 +71,27 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public InvoiceStatisticVo totalInvoice(Byte type) {
+    public InvoiceStatisticVo totalInvoice(Byte type,InvoiceListDTO dto) {
         InvoiceStatisticVo invoiceStatisticVo = new InvoiceStatisticVo();
         InvoiceExample invoiceExample = new InvoiceExample();
         InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         // 经管 查 生产订单， 财务查所有
         if (type != null && type == 1) {
             criteria.andTypeEqualTo(type);
+        }
+
+        if (StringUtils.isNotEmpty(dto.getOrderNo())) {
+            criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
+        }
+        if (dto.getStatus() > -1) {
+            criteria.andStatusEqualTo(dto.getStatus());
+        }
+        if (CollectionUtil.isNotEmpty(dto.getStatusList())) {
+            criteria.andStatusIn(dto.getStatusList());
+        }
+        if (StringUtils.isNotEmpty(dto.getConstractParty())) {
+            criteria.andConstractPartyLike("%" + dto.getConstractParty() + "%");
         }
         List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
         BigDecimal totalAmount = BigDecimal.ZERO, notInvoicedAmount = BigDecimal.ZERO, invoicedAmount = BigDecimal.ZERO;
