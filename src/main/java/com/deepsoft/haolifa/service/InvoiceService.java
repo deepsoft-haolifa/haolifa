@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.*;
 
+import java.math.BigDecimal;
+
 public interface InvoiceService {
     /**
      * 添加财务记录
@@ -51,4 +53,9 @@ public interface InvoiceService {
      * @return
      */
     int updateStatus(InvoiceStatusDTO statusDTO);
+    /**
+     * 根据订单号获取已申请金额
+     * @return
+     */
+    BigDecimal getTotalAmount(String orderNo);
 }

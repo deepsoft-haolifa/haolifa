@@ -4,6 +4,9 @@ import static com.deepsoft.haolifa.constant.CacheKey.TOTAL_INVENTORY_MATERIAL;
 import static com.deepsoft.haolifa.constant.CacheKey.TOTAL_MONEY_ORDER;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.cache.redis.RedisDaoImpl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.Consts;
@@ -71,7 +74,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public InvoiceStatisticVo totalInvoice(Byte type,InvoiceListDTO dto) {
+    public InvoiceStatisticVo totalInvoice(Byte type, InvoiceListDTO dto) {
         InvoiceStatisticVo invoiceStatisticVo = new InvoiceStatisticVo();
         InvoiceExample invoiceExample = new InvoiceExample();
         InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
@@ -92,6 +95,14 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
         if (StringUtils.isNotEmpty(dto.getConstractParty())) {
             criteria.andConstractPartyLike("%" + dto.getConstractParty() + "%");
+        }
+        // 开票日期
+        if (ObjectUtil.isNotNull(dto.getInvoiceDate())) {
+            // 获取一个月的开始，一个月的结束
+            DateTime beginOfMonth = DateUtil.beginOfMonth(dto.getInvoiceDate());
+            DateTime endOfMonth = DateUtil.endOfMonth(dto.getInvoiceDate());
+            criteria.andInvoiceDateGreaterThanOrEqualTo(beginOfMonth);
+            criteria.andInvoiceDateLessThanOrEqualTo(endOfMonth);
         }
         List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
         BigDecimal totalAmount = BigDecimal.ZERO, notInvoicedAmount = BigDecimal.ZERO, invoicedAmount = BigDecimal.ZERO;

@@ -1,6 +1,10 @@
 package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
 import com.deepsoft.haolifa.model.domain.Invoice;
@@ -17,8 +21,11 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -110,7 +117,6 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         }
         InvoiceExample invoiceExample = new InvoiceExample();
         InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
-        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
 //    if(origin == 0) {
 ////      经管申请
 //      criteria.andCreateUserIdEqualTo(getLoginUserId());
@@ -130,6 +136,14 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         if (modelList.getType() != 0) {
             criteria.andTypeEqualTo(modelList.getType().byteValue());
         }
+        // 开票日期
+        if (ObjectUtil.isNotNull(modelList.getInvoiceDate())) {
+            // 获取一个月的开始，一个月的结束
+            DateTime beginOfMonth = DateUtil.beginOfMonth(modelList.getInvoiceDate());
+            DateTime endOfMonth = DateUtil.endOfMonth(modelList.getInvoiceDate());
+            criteria.andInvoiceDateGreaterThanOrEqualTo(beginOfMonth);
+            criteria.andInvoiceDateLessThanOrEqualTo(endOfMonth);
+        }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize(), "create_time desc")
             .doSelectPage(() -> invoiceMapper.selectByExample(invoiceExample));
@@ -137,6 +151,14 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+    public static void main(String[] args) {
+        DateTime beginOfMonth = DateUtil.beginOfMonth(new Date());
+        DateTime endOfMonth = DateUtil.endOfMonth(new Date());
+
+        System.out.println(beginOfMonth);
+        System.out.println(endOfMonth);
     }
 
     @Override
@@ -150,5 +172,15 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         invoice.setId(statusDTO.getId());
         invoice.setStatus(statusDTO.getStatus());
         return invoiceMapper.updateByPrimaryKeySelective(invoice);
+    }
+
+    @Override
+    public BigDecimal getTotalAmount(String orderNo) {
+        InvoiceExample invoiceExample = new InvoiceExample();
+        InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
+        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+        criteria.andOrderNoEqualTo(orderNo);
+        List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
+        return invoices.stream().map(Invoice::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

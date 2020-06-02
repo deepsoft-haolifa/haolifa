@@ -14,6 +14,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 /**
  * 异步监听事件
  *
@@ -54,13 +56,17 @@ public class SyncEventListener {
             String supplyName = orderProductInfo.getSupplyName();
             invoiceCreateDTO.setInvoiceCompany(demandName);
             invoiceCreateDTO.setInvoiceIssuing(supplyName);
-            invoiceCreateDTO.setTotalAmount(orderProductInfo.getTotalPrice().doubleValue());
             invoiceCreateDTO.setType(1);
             invoiceCreateDTO.setStatus(0);
-
-            log.info("delivery complete async add invoice record model:{}", JSONObject.toJSONString(invoiceCreateDTO));
-
-            invoiceService.save(invoiceCreateDTO);
+            // 根据订单查询已经生成的开票申请
+            BigDecimal totalAmount = invoiceService.getTotalAmount(orderProductInfo.getOrderNo());
+            BigDecimal multiply = orderProductInfo.getTotalPrice().multiply(totalAmount);
+            log.info("delivery complete async add invoice record orderNo:{},totalAmount:{},multiply:{}", orderProductInfo.getOrderNo(), totalAmount, multiply);
+            if (multiply.compareTo(BigDecimal.ZERO) == 1) {
+                invoiceCreateDTO.setTotalAmount(multiply.doubleValue());
+                log.info("delivery complete async add invoice record model:{}", JSONObject.toJSONString(invoiceCreateDTO));
+                invoiceService.save(invoiceCreateDTO);
+            }
         }
     }
 
