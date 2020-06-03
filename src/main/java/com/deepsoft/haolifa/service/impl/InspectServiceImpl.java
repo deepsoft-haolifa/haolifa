@@ -405,6 +405,9 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 if (entrustRecord.getNumber() < entrust.getQualifiedNumber()) {
                     throw new BaseException(ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);
                 }
+                if (ObjectUtil.isNotNull(entrust.getUnqualifiedNumber()) && entrust.getUnqualifiedNumber() > 0) {
+                    entrust.setUnqualifiedNumber(model.getUnqualifiedNumber() + entrust.getUnqualifiedNumber());
+                }
                 entrustMapper.updateByExampleSelective(entrust, entrustExample);
             }
         }

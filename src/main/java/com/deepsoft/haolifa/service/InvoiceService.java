@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.Invoice;
 import com.deepsoft.haolifa.model.dto.*;
 
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ public interface InvoiceService {
      * @param origin
      * @return
      */
-    ResultBean getList(int origin, InvoiceListDTO modelList);
+    PageDTO<Invoice> getList(int origin, InvoiceListDTO modelList);
 
     /**
      * 填写发票编号

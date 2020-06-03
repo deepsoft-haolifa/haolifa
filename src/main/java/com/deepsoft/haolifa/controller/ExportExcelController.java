@@ -7,9 +7,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.EntryOutRecordExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderExDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderItemExDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
@@ -76,7 +74,7 @@ public class ExportExcelController {
     @Autowired
     private MaterialMapper materialMapper;
     @Autowired
-    private MaterialService materialService;
+    private InvoiceService invoiceService;
 
     @Autowired
     private MaterialRequisitionService materialRequisitionService;
@@ -1313,7 +1311,7 @@ public class ExportExcelController {
     }
 
     public static void main(String[] args) {
-        ExportProductEntryRoomDTO dto=new ExportProductEntryRoomDTO();
+        ExportProductEntryRoomDTO dto = new ExportProductEntryRoomDTO();
         dto.setEndDate("2015");
 
         Map<String, Object> stringObjectMap = BeanUtil.beanToMap(dto);
@@ -2035,5 +2033,96 @@ public class ExportExcelController {
         outputStream.close();
     }
 
+    @ApiOperation("已开发票导出")
+    @GetMapping("/invoice/export")
+    public void invoiceExport(HttpServletResponse response, InvoiceListDTO dto) throws IOException {
+        // 财务的已开发票数据
+        dto.setStatus((byte) 2);
+        dto.setPageNum(1);
+        dto.setPageSize(Integer.MAX_VALUE);
+        PageDTO<Invoice> invoicePageDTO = invoiceService.getList(1, dto);
+        List<Invoice> list = invoicePageDTO.getList();
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("发票列表", "utf-8") + ".xls");
+        response.setContentType("application/octet-stream;");
+        Workbook workbook = new HSSFWorkbook();
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setWrapText(true);
+        Sheet sheet = workbook.createSheet("发票列表");
+        // 单元格样式
+        CellStyle center = workbook.createCellStyle();
+        center.setAlignment(HorizontalAlignment.CENTER);
+        center.setVerticalAlignment(VerticalAlignment.CENTER);
+        center.setWrapText(true);
 
+        Row title_1 = sheet.createRow(0);
+        CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 7);
+        sheet.addMergedRegion(cra1);
+        Cell cell_title_1 = title_1.createCell(0);
+        cell_title_1.setCellValue("已 开 发 票 列 表");
+        cell_title_1.setCellStyle(center);
+
+        Row columnTitle = sheet.createRow(1);
+        Cell cell_10 = columnTitle.createCell(0);
+        cell_10.setCellValue("序号");
+        cell_10.setCellStyle(center);
+        Cell cell_11 = columnTitle.createCell(1);
+        cell_11.setCellValue("合同编号");
+        cell_11.setCellStyle(center);
+        Cell cell_12 = columnTitle.createCell(2);
+        cell_12.setCellValue("合同方");
+        cell_12.setCellStyle(center);
+        Cell cell_13 = columnTitle.createCell(3);
+        cell_13.setCellValue("金额");
+        cell_13.setCellStyle(center);
+        Cell cell_14 = columnTitle.createCell(4);
+        cell_14.setCellValue("发票号");
+        cell_14.setCellStyle(center);
+        Cell cell_15 = columnTitle.createCell(5);
+        cell_15.setCellValue("类型");
+        cell_15.setCellStyle(center);
+        Cell cell_16 = columnTitle.createCell(6);
+        cell_16.setCellValue("开票日期");
+        cell_16.setCellStyle(center);
+
+
+        for (int i = 0; i < list.size(); i++) {
+            Invoice invoice = list.get(i);
+            Row row_value = sheet.createRow(i + 2);
+            Cell cell_0 = row_value.createCell(0);
+            cell_0.setCellValue(i + 1);
+            cell_0.setCellStyle(center);
+            Cell cell_1 = row_value.createCell(1);
+
+            cell_1.setCellValue(invoice.getOrderNo());
+            cell_1.setCellStyle(center);
+            Cell cell_2 = row_value.createCell(2);
+            cell_2.setCellValue(invoice.getConstractParty());
+            cell_2.setCellStyle(center);
+            Cell cell_3 = row_value.createCell(3);
+            cell_3.setCellValue(String.valueOf(invoice.getTotalAmount()));
+            cell_3.setCellStyle(center);
+            Cell cell_4 = row_value.createCell(4);
+            cell_4.setCellValue(invoice.getInvoiceNo());
+            cell_4.setCellStyle(center);
+            Cell cell_5 = row_value.createCell(5);
+            cell_5.setCellValue(invoice.getStatus() == 2 ? "开出（生产）" : "开入（采购）");
+            cell_5.setCellStyle(center);
+            Cell cell_6 = row_value.createCell(6);
+            cell_6.setCellValue(
+                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, invoice.getInvoiceDate()));
+            cell_6.setCellStyle(center);
+        }
+        sheet.autoSizeColumn(0, true);
+        sheet.autoSizeColumn(1, true);
+        sheet.autoSizeColumn(2, true);
+        sheet.autoSizeColumn(3, true);
+        sheet.autoSizeColumn(4, true);
+        sheet.autoSizeColumn(5, true);
+        sheet.autoSizeColumn(6, true);
+
+        OutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
 }

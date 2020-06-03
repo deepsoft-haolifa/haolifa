@@ -42,13 +42,15 @@ public class Entrust {
 
     private Integer qualifiedNumber;
 
+    private Integer unqualifiedNumber;
+
     private String processedGraphNo;
 
     private Byte busType;
 
     private Byte outRoomStatus;
 
-    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber, String processedGraphNo, Byte busType, Byte outRoomStatus) {
+    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber, Integer unqualifiedNumber, String processedGraphNo, Byte busType, Byte outRoomStatus) {
         this.id = id;
         this.materialGraphName = materialGraphName;
         this.purchaseNo = purchaseNo;
@@ -68,6 +70,7 @@ public class Entrust {
         this.createUserId = createUserId;
         this.inspectStatus = inspectStatus;
         this.qualifiedNumber = qualifiedNumber;
+        this.unqualifiedNumber = unqualifiedNumber;
         this.processedGraphNo = processedGraphNo;
         this.busType = busType;
         this.outRoomStatus = outRoomStatus;
@@ -227,6 +230,14 @@ public class Entrust {
 
     public void setQualifiedNumber(Integer qualifiedNumber) {
         this.qualifiedNumber = qualifiedNumber;
+    }
+
+    public Integer getUnqualifiedNumber() {
+        return unqualifiedNumber;
+    }
+
+    public void setUnqualifiedNumber(Integer unqualifiedNumber) {
+        this.unqualifiedNumber = unqualifiedNumber;
     }
 
     public String getProcessedGraphNo() {

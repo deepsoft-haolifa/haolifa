@@ -108,7 +108,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     }
 
     @Override
-    public ResultBean getList(int origin, InvoiceListDTO modelList) {
+    public PageDTO<Invoice> getList(int origin, InvoiceListDTO modelList) {
         if (modelList.getPageNum() == null || modelList.getPageNum() == 0) {
             modelList.setPageNum(1);
         }
@@ -133,7 +133,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         if (StringUtils.isNotEmpty(modelList.getConstractParty())) {
             criteria.andConstractPartyLike("%" + modelList.getConstractParty() + "%");
         }
-        if (modelList.getType() != 0) {
+        if (modelList.getType() != null && modelList.getType() > 0) {
             criteria.andTypeEqualTo(modelList.getType().byteValue());
         }
         // 开票日期
@@ -150,7 +150,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         PageDTO<Invoice> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
-        return ResultBean.success(pageDTO);
+        return pageDTO;
     }
 
     public static void main(String[] args) {
