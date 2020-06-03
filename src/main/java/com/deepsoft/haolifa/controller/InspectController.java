@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(tags = {"零件送检管理"})
 @RestController
-@RequestMapping("" +
-    "")
+@RequestMapping("material-inspect")
 public class InspectController {
 
     @Autowired
