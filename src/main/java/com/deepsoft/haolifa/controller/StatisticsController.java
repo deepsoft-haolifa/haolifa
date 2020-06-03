@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.service.StatisticsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,8 +39,13 @@ public class StatisticsController {
 
     @ApiOperation("发票总金额(1.经管；2. 财务)")
     @GetMapping("/money/invoice/{type}")
-    public ResultBean totalInvoice(@PathVariable Byte type , @RequestBody InvoiceListDTO dto) {
-        return ResultBean.success(statisticsService.totalInvoice(type,dto));
+    public ResultBean totalInvoice(@PathVariable Byte type, @RequestBody InvoiceListDTO dto) {
+        return ResultBean.success(statisticsService.totalInvoice(type, dto));
     }
 
+    @ApiOperation("订单列表头部统计")
+    @PostMapping("/order-product")
+    public ResultBean totalOrderProduct(@RequestBody OrderConditionDTO dto) {
+        return ResultBean.success(statisticsService.totalOrderProduct(dto));
+    }
 }

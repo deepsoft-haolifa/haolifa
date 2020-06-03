@@ -17,7 +17,9 @@ import com.deepsoft.haolifa.dao.repository.extend.StatisticsExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.vo.InvoiceStatisticVo;
+import com.deepsoft.haolifa.model.vo.OrderProductStatisticVo;
 import com.deepsoft.haolifa.service.StatisticsService;
 
 import java.math.BigDecimal;
@@ -121,5 +123,40 @@ public class StatisticsServiceImpl implements StatisticsService {
         invoiceStatisticVo.setInvoicedAmount(invoicedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         invoiceStatisticVo.setNotInvoicedAmount(notInvoicedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         return invoiceStatisticVo;
+    }
+
+    @Override
+    public OrderProductStatisticVo totalOrderProduct(OrderConditionDTO model) {
+        OrderProductExample example = new OrderProductExample();
+        OrderProductExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model.getOrderNo())) {
+            criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
+        }
+        if (model.getOrderStatus() != null && model.getOrderStatus() > -1) {
+            criteria.andOrderStatusEqualTo(model.getOrderStatus());
+        }
+        if (model.getOrderStatusList() != null && model.getOrderStatusList().size() > 0) {
+            criteria.andOrderStatusIn(model.getOrderStatusList());
+        }
+        if (model.getDeliverStatus() != null && model.getDeliverStatus() > -1) {
+            criteria.andDeliverStatusEqualTo(model.getDeliverStatus());
+        }
+        if (StringUtils.isNotBlank(model.getDemandName())) {
+            criteria.andDemandNameLike("%" + model.getDemandName() + "%");
+        }
+        if (ObjectUtil.isNotNull(model.getStartDate())) {
+            criteria.andCreateTimeGreaterThanOrEqualTo(model.getStartDate());
+        }
+        if (ObjectUtil.isNotNull(model.getEndDate())) {
+            criteria.andCreateTimeLessThanOrEqualTo(model.getEndDate());
+        }
+        OrderProductStatisticVo statisticVo = new OrderProductStatisticVo();
+        int orderQty = orderProductMapper.countByExample(example);
+        statisticVo.setOrderQty(orderQty);
+
+        criteria.andDeliverStatusEqualTo(CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
+        int deliveryOrderQty = orderProductMapper.countByExample(example);
+        statisticVo.setDeliveryOrderQty(deliveryOrderQty);
+        return statisticVo;
     }
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,6 +26,12 @@ public class OrderConditionDTO {
     private List<Byte> orderStatusList;
     @ApiModelProperty(value = "发货状态:-1 全部 0 待发货（默认） 1 部分发货 2 发货完成")
     private Byte deliverStatus = -1;
+
+    @ApiModelProperty(value = "开始时间")
+    private Date startDate;
+
+    @ApiModelProperty(value = "结束时间")
+    private Date endDate;
 }
 
 

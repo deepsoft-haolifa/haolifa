@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -974,6 +975,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         if (StringUtils.isNotBlank(model.getDemandName())) {
             criteria.andDemandNameLike("%" + model.getDemandName() + "%");
+        }
+        if (ObjectUtil.isNotNull(model.getStartDate())) {
+            criteria.andCreateTimeGreaterThanOrEqualTo(model.getStartDate());
+        }
+        if (ObjectUtil.isNotNull(model.getEndDate())) {
+            criteria.andCreateTimeLessThanOrEqualTo(model.getEndDate());
         }
         example.setOrderByClause("id desc");
         Page<OrderProduct> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())

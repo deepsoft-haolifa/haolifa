@@ -20,7 +20,7 @@ public class DemoTask {
     /**
      * 示例定时任务
      */
-    @Scheduled(cron = "0 0 0/1 * * ?")
+//    @Scheduled(cron = "0 0 0/1 * * ?")
     public void task() {
         String task = distributedLocker.lock("task", 3);
         if (!StringUtils.isEmpty(task)) {
