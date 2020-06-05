@@ -8,6 +8,7 @@ public interface FlowInstanceService {
 
     /**
      * 初始化流程
+     *
      * @param model
      * @return
      */
@@ -15,6 +16,7 @@ public interface FlowInstanceService {
 
     /**
      * 节点处理
+     *
      * @param model
      * @return
      */
@@ -22,6 +24,7 @@ public interface FlowInstanceService {
 
     /**
      * 获取流程实例审核历史
+     *
      * @param instanceId
      * @return
      */
@@ -29,14 +32,22 @@ public interface FlowInstanceService {
 
     /**
      * 获取可退回节点列表
+     *
      * @param instanceId
      * @return
      */
     ResultBean backSteps(Integer instanceId);
 
-  ResultBean flowProgress(String formNo, Integer formId);
+    ResultBean flowProgress(String formNo, Integer formId);
 
-  ResultBean accessoryInfo(String formNo, Integer formId);
+    ResultBean accessoryInfo(String formNo, Integer formId);
 
-  void deleteFlowInstance(String formNo);
+    void deleteFlowInstance(String formNo);
+
+    /**
+     * 删除流程历史附件
+     *
+     * @param historyId
+     */
+    void removeHistoryAccessory(Integer historyId);
 }
