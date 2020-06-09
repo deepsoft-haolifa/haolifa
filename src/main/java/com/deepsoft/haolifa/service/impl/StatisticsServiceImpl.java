@@ -89,7 +89,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         if (StringUtils.isNotEmpty(dto.getOrderNo())) {
             criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
         }
-        if (dto.getStatus() > -1) {
+        if (dto.getStatus() != null && dto.getStatus() > -1) {
             criteria.andStatusEqualTo(dto.getStatus());
         }
         if (CollectionUtil.isNotEmpty(dto.getStatusList())) {
