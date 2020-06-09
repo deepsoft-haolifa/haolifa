@@ -13,3 +13,8 @@ INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id
 INSERT INTO `haolifa`.`flow_step` ( `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', '1', '6', '57', '72', '27', '56', '0', '0', '', '8');
 
 
+-- 添加菜单
+INSERT INTO `sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (155, 'm', '进项发票', 'jxfp', 53, 0, NOW(),NOW());
+INSERT INTO `sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (156, 'm', '销项发票', 'xxfp', 53, 0, NOW(),NOW());
+INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 155, NOW(), NOW());
+INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 156,  NOW(), NOW());

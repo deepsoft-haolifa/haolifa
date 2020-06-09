@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderExtendMapper {
 
@@ -48,4 +49,11 @@ public interface OrderExtendMapper {
     @Select("SELECT order_no FROM `order_product` WHERE order_status in (#{orderStatus})")
     List<String> listOrderNo(@Param("orderStatus") String orderStatus);
 
+
+
+    /**
+     * 获取订单产品数量（订单页面头部展示）
+     *
+     */
+    int countProduct(Map<String, Object> paramMap);
 }
