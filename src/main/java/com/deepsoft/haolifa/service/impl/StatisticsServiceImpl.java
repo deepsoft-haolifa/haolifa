@@ -99,12 +99,11 @@ public class StatisticsServiceImpl implements StatisticsService {
             criteria.andConstractPartyLike("%" + dto.getConstractParty() + "%");
         }
         // 开票日期
-        if (ObjectUtil.isNotNull(dto.getInvoiceDate())) {
-            // 获取一个月的开始，一个月的结束
-            DateTime beginOfMonth = DateUtil.beginOfMonth(dto.getInvoiceDate());
-            DateTime endOfMonth = DateUtil.endOfMonth(dto.getInvoiceDate());
-            criteria.andInvoiceDateGreaterThanOrEqualTo(beginOfMonth);
-            criteria.andInvoiceDateLessThanOrEqualTo(endOfMonth);
+        if (ObjectUtil.isNotNull(dto.getStartInvoiceDate())) {
+            criteria.andInvoiceDateGreaterThanOrEqualTo(dto.getStartInvoiceDate());
+        }
+        if (ObjectUtil.isNotNull(dto.getEndInvoiceDate())) {
+            criteria.andInvoiceDateLessThanOrEqualTo(dto.getEndInvoiceDate());
         }
         List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
         BigDecimal totalAmount = BigDecimal.ZERO, notInvoicedAmount = BigDecimal.ZERO, invoicedAmount = BigDecimal.ZERO;

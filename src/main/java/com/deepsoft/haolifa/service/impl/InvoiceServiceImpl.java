@@ -137,12 +137,11 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
             criteria.andTypeEqualTo(modelList.getType().byteValue());
         }
         // 开票日期
-        if (ObjectUtil.isNotNull(modelList.getInvoiceDate())) {
-            // 获取一个月的开始，一个月的结束
-            DateTime beginOfMonth = DateUtil.beginOfMonth(modelList.getInvoiceDate());
-            DateTime endOfMonth = DateUtil.endOfMonth(modelList.getInvoiceDate());
-            criteria.andInvoiceDateGreaterThanOrEqualTo(beginOfMonth);
-            criteria.andInvoiceDateLessThanOrEqualTo(endOfMonth);
+        if (ObjectUtil.isNotNull(modelList.getStartInvoiceDate())) {
+            criteria.andInvoiceDateGreaterThanOrEqualTo(modelList.getStartInvoiceDate());
+        }
+        if (ObjectUtil.isNotNull(modelList.getEndInvoiceDate())) {
+            criteria.andInvoiceDateLessThanOrEqualTo(modelList.getEndInvoiceDate());
         }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize(), "create_time desc")

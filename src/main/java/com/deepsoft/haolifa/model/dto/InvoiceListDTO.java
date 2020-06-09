@@ -23,7 +23,8 @@ public class InvoiceListDTO {
     private Integer type;
     @ApiModelProperty(value = "合同方")
     private String constractParty;
-    @ApiModelProperty(value = "开票日期")
-    private Date invoiceDate;
-
+    @ApiModelProperty(value = "开票日期开始时间")
+    private Date startInvoiceDate;
+    @ApiModelProperty(value = "开票日期结束时间")
+    private Date endInvoiceDate;
 }
