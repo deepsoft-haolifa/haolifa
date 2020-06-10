@@ -540,6 +540,12 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
 
     @Override
     public void removeHistoryAccessory(Integer historyId) {
+        FlowHistory flowHistoryInfo = historyMapper.selectByPrimaryKey(historyId);
+        Integer stepId = flowHistoryInfo.getStepId();
+        // step == 51 代表技术人员节点
+        if (!stepId.equals(51)) {
+            throw new BaseException(CommonEnum.ResponseEnum.REMOVE_FILE_ONLY_TECH_FLOW);
+        }
         FlowHistory flowHistory = new FlowHistory();
         flowHistory.setId(historyId);
         flowHistory.setAccessory("[]");

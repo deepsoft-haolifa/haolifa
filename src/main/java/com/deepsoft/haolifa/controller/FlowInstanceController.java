@@ -57,7 +57,7 @@ public class FlowInstanceController {
     }
 
     @GetMapping("remove-history-accessory/{historyId}")
-    @ApiOperation("删除审批附件")
+    @ApiOperation("删除审批附件(只有技术员那个节点能删除)")
     public void removeHistoryAccessory(@PathVariable("historyId") Integer historyId) {
          flowInstanceService.removeHistoryAccessory(historyId);
     }
