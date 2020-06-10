@@ -3,9 +3,11 @@ package com.deepsoft.haolifa.service.impl;
 import static com.deepsoft.haolifa.constant.CacheKey.TOTAL_INVENTORY_MATERIAL;
 import static com.deepsoft.haolifa.constant.CacheKey.TOTAL_MONEY_ORDER;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.cache.redis.RedisDaoImpl;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -13,17 +15,20 @@ import com.deepsoft.haolifa.constant.CommonEnum.Consts;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
 import com.deepsoft.haolifa.dao.repository.MaterialMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.dao.repository.extend.StatisticsExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderStatisticDTO;
 import com.deepsoft.haolifa.model.vo.InvoiceStatisticVo;
 import com.deepsoft.haolifa.model.vo.OrderProductStatisticVo;
 import com.deepsoft.haolifa.service.StatisticsService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +44,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     private MaterialMapper materialMapper;
     @Autowired
     private OrderProductMapper orderProductMapper;
+    @Autowired
+    private OrderExtendMapper orderExtendMapper;
     @Autowired
     private InvoiceMapper invoiceMapper;
     @Autowired
@@ -125,36 +132,13 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public OrderProductStatisticVo totalOrderProduct(OrderConditionDTO model) {
-        OrderProductExample example = new OrderProductExample();
-        OrderProductExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(model.getOrderNo())) {
-            criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
-        }
-        if (model.getOrderStatus() != null && model.getOrderStatus() > -1) {
-            criteria.andOrderStatusEqualTo(model.getOrderStatus());
-        }
-        if (model.getOrderStatusList() != null && model.getOrderStatusList().size() > 0) {
-            criteria.andOrderStatusIn(model.getOrderStatusList());
-        }
-        if (model.getDeliverStatus() != null && model.getDeliverStatus() > -1) {
-            criteria.andDeliverStatusEqualTo(model.getDeliverStatus());
-        }
-        if (StringUtils.isNotBlank(model.getDemandName())) {
-            criteria.andDemandNameLike("%" + model.getDemandName() + "%");
-        }
-        if (ObjectUtil.isNotNull(model.getStartDate())) {
-            criteria.andCreateTimeGreaterThanOrEqualTo(model.getStartDate());
-        }
-        if (ObjectUtil.isNotNull(model.getEndDate())) {
-            criteria.andCreateTimeLessThanOrEqualTo(model.getEndDate());
-        }
+    public OrderProductStatisticVo totalOrderProduct(OrderStatisticDTO model) {
+        Map<String, Object> toMap = BeanUtil.beanToMap(model);
         OrderProductStatisticVo statisticVo = new OrderProductStatisticVo();
-        int orderQty = orderProductMapper.countByExample(example);
+        int orderQty = orderExtendMapper.countProduct(toMap);
         statisticVo.setOrderQty(orderQty);
-
-        criteria.andDeliverStatusEqualTo(CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
-        int deliveryOrderQty = orderProductMapper.countByExample(example);
+        toMap.put("deliverStatus", CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
+        int deliveryOrderQty = orderExtendMapper.countProduct(toMap);
         statisticVo.setDeliveryOrderQty(deliveryOrderQty);
         return statisticVo;
     }
