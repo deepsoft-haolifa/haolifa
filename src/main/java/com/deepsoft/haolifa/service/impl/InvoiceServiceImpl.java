@@ -152,14 +152,6 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         return pageDTO;
     }
 
-    public static void main(String[] args) {
-        DateTime beginOfMonth = DateUtil.beginOfMonth(new Date());
-        DateTime endOfMonth = DateUtil.endOfMonth(new Date());
-
-        System.out.println(beginOfMonth);
-        System.out.println(endOfMonth);
-    }
-
     @Override
     public ResultBean info(Integer id) {
         return ResultBean.success(invoiceMapper.selectByPrimaryKey(id));

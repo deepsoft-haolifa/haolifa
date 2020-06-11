@@ -49,5 +49,5 @@ public interface FlowInstanceService {
      *
      * @param historyId
      */
-    void removeHistoryAccessory(Integer historyId);
+    int removeHistoryAccessory(Integer historyId);
 }

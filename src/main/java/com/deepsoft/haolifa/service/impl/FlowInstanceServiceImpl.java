@@ -539,16 +539,18 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     }
 
     @Override
-    public void removeHistoryAccessory(Integer historyId) {
+    public int removeHistoryAccessory(Integer historyId) {
         FlowHistory flowHistoryInfo = historyMapper.selectByPrimaryKey(historyId);
-        Integer stepId = flowHistoryInfo.getStepId();
-        // step == 51 代表技术人员节点
-        if (!stepId.equals(51)) {
-            throw new BaseException(CommonEnum.ResponseEnum.REMOVE_FILE_ONLY_TECH_FLOW);
+        Integer auditUserId = flowHistoryInfo.getAuditUserId();
+        CustomUser customUser = sysUserService.selectLoginUser();
+        int createUser = customUser != null ? customUser.getId() : 1;
+        // 自己删除的附件
+        if (!auditUserId.equals(createUser)) {
+            throw new BaseException(ResponseEnum.REMOVE_FILE_ONLY_SELF);
         }
         FlowHistory flowHistory = new FlowHistory();
         flowHistory.setId(historyId);
         flowHistory.setAccessory("[]");
-        historyMapper.updateByPrimaryKeySelective(flowHistory);
+        return historyMapper.updateByPrimaryKeySelective(flowHistory);
     }
 }

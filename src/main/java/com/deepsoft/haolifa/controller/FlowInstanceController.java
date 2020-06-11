@@ -58,7 +58,7 @@ public class FlowInstanceController {
 
     @GetMapping("remove-history-accessory/{historyId}")
     @ApiOperation("删除审批附件(只有技术员那个节点能删除)")
-    public void removeHistoryAccessory(@PathVariable("historyId") Integer historyId) {
-         flowInstanceService.removeHistoryAccessory(historyId);
+    public ResultBean removeHistoryAccessory(@PathVariable("historyId") Integer historyId) {
+        return ResultBean.success(flowInstanceService.removeHistoryAccessory(historyId));
     }
 }

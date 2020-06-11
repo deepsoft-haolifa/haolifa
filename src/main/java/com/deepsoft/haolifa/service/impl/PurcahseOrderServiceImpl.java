@@ -440,6 +440,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                         if (unitPrice.compareTo(priceMaterial.getPrice()) == 1) {
                             PriceMaterial updatePrice = new PriceMaterial();
                             updatePrice.setId(priceMaterial.getId());
+                            updatePrice.setGraphNo(priceMaterial.getGraphNo());
                             updatePrice.setPrice(unitPrice);
                             priceMaterialService.updateInfo(updatePrice);
                         }
