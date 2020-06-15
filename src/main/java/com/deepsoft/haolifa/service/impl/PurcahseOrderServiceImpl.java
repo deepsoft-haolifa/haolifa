@@ -12,6 +12,7 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NU
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -103,13 +104,18 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         purchaseOrder.setOrderType(orderType.byteValue());
         purchaseOrder.setPurchaseOrderNo(model.getOrderNo());
         purchaseOrder.setCreateUserId(getLoginUserId());
-        purchaseOrder.setDeliveryTime(
-            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getDeliveryTime()));
-        purchaseOrder.setOperateTime(
-            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
-        purchaseOrder.setConfirmTime(
-            DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
-
+        if (StrUtil.isNotBlank(model.getDeliveryTime())) {
+            purchaseOrder.setDeliveryTime(
+                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getDeliveryTime()));
+        }
+        if (StrUtil.isNotBlank(model.getDeliveryTime())) {
+            purchaseOrder.setOperateTime(
+                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getOperateTime()));
+        }
+        if (StrUtil.isNotBlank(model.getDeliveryTime())) {
+            purchaseOrder.setConfirmTime(
+                DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getConfirmTime()));
+        }
         // 插入单项
         double totalPrice = 0.0;
         int totalCount = 0;

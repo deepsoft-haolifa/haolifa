@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -7,9 +8,13 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
+import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.model.domain.Invoice;
 import com.deepsoft.haolifa.model.domain.InvoiceExample;
+import com.deepsoft.haolifa.model.domain.OrderProduct;
+import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.vo.InvoicePageVo;
 import com.deepsoft.haolifa.service.InvoiceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -21,10 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +35,8 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
 
     @Autowired
     InvoiceMapper invoiceMapper;
+    @Autowired
+    OrderProductMapper orderProductMapper;
 
     @Override
     public ResultBean save(InvoiceCreateDTO model) {
@@ -108,7 +112,7 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     }
 
     @Override
-    public PageDTO<Invoice> getList(int origin, InvoiceListDTO modelList) {
+    public PageDTO<InvoicePageVo> getList(int origin, InvoiceListDTO modelList) {
         if (modelList.getPageNum() == null || modelList.getPageNum() == 0) {
             modelList.setPageNum(1);
         }
@@ -146,9 +150,26 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         Page<Invoice> pageData = PageHelper.startPage(modelList.getPageNum(), modelList.getPageSize(), "create_time desc")
             .doSelectPage(() -> invoiceMapper.selectByExample(invoiceExample));
-        PageDTO<Invoice> pageDTO = new PageDTO<>();
+        List<Invoice> pageDataResult = pageData.getResult();
+        List<InvoicePageVo> pageVoList = new ArrayList<>();
+        if (CollUtil.isNotEmpty(pageDataResult)) {
+            // 将合同的金额也放进去
+            List<String> orderNoSet = pageDataResult.stream().map(Invoice::getOrderNo).collect(Collectors.toList());
+            OrderProductExample example = new OrderProductExample();
+            example.or().andOrderNoIn(orderNoSet);
+            List<OrderProduct> orderProducts = orderProductMapper.selectByExample(example);
+            Map<String, BigDecimal> orderPriceMap = Optional.ofNullable(orderProducts).orElse(Collections.emptyList()).stream().collect(Collectors.toMap(OrderProduct::getOrderNo, OrderProduct::getTotalPrice));
+            pageVoList = pageDataResult.stream().map(i -> {
+                InvoicePageVo pageVo = new InvoicePageVo();
+                BeanUtils.copyProperties(i, pageVo);
+                pageVo.setOrderTotalAmount(orderPriceMap.getOrDefault(i.getOrderNo(), BigDecimal.ZERO));
+                return pageVo;
+            }).collect(Collectors.toList());
+
+        }
+        PageDTO<InvoicePageVo> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
-        pageDTO.setList(pageData.getResult());
+        pageDTO.setList(pageVoList);
         return pageDTO;
     }
 

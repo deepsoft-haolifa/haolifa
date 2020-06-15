@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.vo.InvoicePageVo;
 import com.deepsoft.haolifa.service.InvoiceService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class InvoiceController {
 
     @ApiOperation("查询发票记录列表")
     @PostMapping("list/{origin}")
-    public ResultBean getList(@ApiParam("来源 0 经管 1 财务") @PathVariable("origin") int origin, @RequestBody InvoiceListDTO modelList) {
+    public ResultBean<InvoicePageVo> getList(@ApiParam("来源 0 经管 1 财务") @PathVariable("origin") int origin, @RequestBody InvoiceListDTO modelList) {
         return ResultBean.success(invoiceService.getList(origin, modelList));
     }
 

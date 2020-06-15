@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
+import com.deepsoft.haolifa.model.vo.InvoicePageVo;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
@@ -2040,8 +2041,8 @@ public class ExportExcelController {
         dto.setStatus((byte) 2);
         dto.setPageNum(1);
         dto.setPageSize(Integer.MAX_VALUE);
-        PageDTO<Invoice> invoicePageDTO = invoiceService.getList(1, dto);
-        List<Invoice> list = invoicePageDTO.getList();
+        PageDTO<InvoicePageVo> invoicePageDTO = invoiceService.getList(1, dto);
+        List<InvoicePageVo> list = invoicePageDTO.getList();
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("发票列表", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
