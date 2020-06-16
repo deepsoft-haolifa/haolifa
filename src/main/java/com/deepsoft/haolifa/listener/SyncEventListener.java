@@ -63,7 +63,8 @@ public class SyncEventListener {
             BigDecimal subtract = orderProductInfo.getTotalPrice().subtract(totalAmount);
             log.info("delivery complete async add invoice record orderNo:{},totalAmount:{},subtract:{}", orderProductInfo.getOrderNo(), totalAmount, subtract);
             if (subtract.compareTo(BigDecimal.ZERO) == 1) {
-                invoiceCreateDTO.setTotalAmount(subtract.doubleValue());
+                invoiceCreateDTO.setTotalAmount(subtract);
+                invoiceCreateDTO.setOrderAmount(orderProductInfo.getTotalPrice());
                 log.info("delivery complete async add invoice record model:{}", JSONObject.toJSONString(invoiceCreateDTO));
                 invoiceService.save(invoiceCreateDTO);
             }

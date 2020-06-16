@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,6 +15,9 @@ public class Invoice {
     private String invoiceCompany;
 
     private BigDecimal totalAmount;
+
+    @ApiModelProperty("合同金额")
+    private BigDecimal orderAmount;
 
     private String remark;
 
@@ -34,12 +39,13 @@ public class Invoice {
 
     private String constractParty;
 
-    public Invoice(Integer id, String orderNo, String invoiceNo, String invoiceCompany, BigDecimal totalAmount, String remark, Byte type, Byte status, Date invoiceDate, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, String invoiceIssuing, String constractParty) {
+    public Invoice(Integer id, String orderNo, String invoiceNo, String invoiceCompany, BigDecimal totalAmount, BigDecimal orderAmount, String remark, Byte type, Byte status, Date invoiceDate, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, String invoiceIssuing, String constractParty) {
         this.id = id;
         this.orderNo = orderNo;
         this.invoiceNo = invoiceNo;
         this.invoiceCompany = invoiceCompany;
         this.totalAmount = totalAmount;
+        this.orderAmount = orderAmount;
         this.remark = remark;
         this.type = type;
         this.status = status;
@@ -94,6 +100,14 @@ public class Invoice {
 
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
     }
 
     public String getRemark() {

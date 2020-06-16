@@ -18,3 +18,5 @@ INSERT INTO `sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is
 INSERT INTO `sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (156, 'm', '销项发票', 'xxfp', 53, 0, NOW(),NOW());
 INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 155, NOW(), NOW());
 INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 156,  NOW(), NOW());
+
+alter table invoice add column `order_amount`  decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '合同金额' after total_amount;

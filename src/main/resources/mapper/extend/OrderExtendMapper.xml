@@ -41,25 +41,13 @@
     <select id="countProduct" resultType="java.lang.Integer">
         select IFNULL(sum(opa.product_number),0) from order_product op
         LEFT JOIN order_product_associate opa on op.order_no=opa.order_no
-        where 1=1
-        <if test="orderNo != null and orderNo != ''">
-            and op.order_no like  CONCAT('%',#{orderNo},'%')
-        </if>
-        <if test="orderStatus != null and orderStatus > 0">
-            and op.order_status = #{orderStatus}
-        </if>
-        <if test="deliverStatus != null and deliverStatus > 0">
-            and op.deliver_status = #{deliverStatus}
-        </if>
-        <if test="demandName != null and demandName != ''">
-            and op.demand_name like  CONCAT('%',#{demandName},'%')
-        </if>
-        <if test="startDate != null">
-            and op.create_time &gt;= #{startDate}
-        </if>
-        <if test="endDate != null">
-            and op.create_time &lt;= #{endDate}
-        </if>
+        <include refid="Where_Clause"/>
+    </select>
+
+    <select id="countDelivery" resultType="java.lang.Integer">
+        select IFNULL(sum(dr.product_count),0) from order_product op
+        LEFT JOIN delivery_record dr on op.order_no=dr.contract_order_no
+        <include refid="Where_Clause"/>
     </select>
 
     <insert id="insertBatchCheckLog" parameterType="java.util.List">
@@ -79,5 +67,26 @@
             )
         </foreach>
     </insert>
-
+    <sql id="Where_Clause">
+        <where>
+            <if test="orderNo != null and orderNo != ''">
+                and op.order_no like CONCAT('%',#{orderNo},'%')
+            </if>
+            <if test="orderStatus != null and orderStatus > 0">
+                and op.order_status = #{orderStatus}
+            </if>
+            <if test="deliverStatus != null and deliverStatus > 0">
+                and op.deliver_status = #{deliverStatus}
+            </if>
+            <if test="demandName != null and demandName != ''">
+                and op.demand_name like CONCAT('%',#{demandName},'%')
+            </if>
+            <if test="startDate != null">
+                and op.create_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and op.create_time &lt;= #{endDate}
+            </if>
+        </where>
+    </sql>
 </mapper>

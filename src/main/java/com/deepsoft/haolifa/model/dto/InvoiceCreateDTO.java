@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -18,7 +19,10 @@ public class InvoiceCreateDTO {
   private String orderNo;
 
   @ApiModelProperty(required = true, value = "开票金额")
-  private Double totalAmount;
+  private BigDecimal totalAmount;
+
+  @ApiModelProperty(value = "合同金额")
+  private BigDecimal orderAmount;
 
   @ApiModelProperty(value = "备注")
   private String remark;

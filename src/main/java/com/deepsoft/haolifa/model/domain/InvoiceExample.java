@@ -436,6 +436,66 @@ public class InvoiceExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderAmountIsNull() {
+            addCriterion("order_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountIsNotNull() {
+            addCriterion("order_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountEqualTo(BigDecimal value) {
+            addCriterion("order_amount =", value, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountNotEqualTo(BigDecimal value) {
+            addCriterion("order_amount <>", value, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountGreaterThan(BigDecimal value) {
+            addCriterion("order_amount >", value, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("order_amount >=", value, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountLessThan(BigDecimal value) {
+            addCriterion("order_amount <", value, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("order_amount <=", value, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountIn(List<BigDecimal> values) {
+            addCriterion("order_amount in", values, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountNotIn(List<BigDecimal> values) {
+            addCriterion("order_amount not in", values, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("order_amount between", value1, value2, "orderAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("order_amount not between", value1, value2, "orderAmount");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

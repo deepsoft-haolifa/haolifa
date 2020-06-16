@@ -56,4 +56,9 @@ public interface OrderExtendMapper {
      *
      */
     int countProduct(Map<String, Object> paramMap);
+    /**
+     * 获取订单发货数量（订单页面头部展示）
+     *
+     */
+    int countDelivery(Map<String, Object> paramMap);
 }

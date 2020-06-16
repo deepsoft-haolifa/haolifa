@@ -135,12 +135,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     public OrderProductStatisticVo totalOrderProduct(OrderStatisticDTO model) {
         Map<String, Object> toMap = BeanUtil.beanToMap(model);
         OrderProductStatisticVo statisticVo = new OrderProductStatisticVo();
+        // 获取订单的产品数量
         int orderQty = orderExtendMapper.countProduct(toMap);
         statisticVo.setOrderQty(orderQty);
-        if (!toMap.containsKey("deliverStatus") || toMap.get("deliverStatus") == null || (byte) toMap.get("deliverStatus") < 0) {
-            toMap.put("deliverStatus", CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
-        }
-        int deliveryOrderQty = orderExtendMapper.countProduct(toMap);
+        // 获取订单的发货数量
+        int deliveryOrderQty = orderExtendMapper.countDelivery(toMap);
         statisticVo.setDeliveryOrderQty(deliveryOrderQty);
         return statisticVo;
     }
