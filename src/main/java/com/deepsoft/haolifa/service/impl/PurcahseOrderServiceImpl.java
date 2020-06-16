@@ -28,6 +28,7 @@ import com.deepsoft.haolifa.util.UpperMoney;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
+import java.math.RoundingMode;
 import java.util.Date;
 
 import lombok.extern.slf4j.Slf4j;
@@ -445,13 +446,14 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                             updatePrice.setId(priceMaterial.getId());
                             updatePrice.setPriceTax(unitPrice);
                             String taxRate = priceMaterial.getTaxRate();
-                            BigDecimal taxRateBig = BigDecimal.valueOf(0.13);
+                            BigDecimal taxRateBig = BigDecimal.valueOf(0.13).add(BigDecimal.ONE);
                             if (StrUtil.isNotBlank(taxRate)) {
-                                taxRateBig = BigDecimal.valueOf(Long.parseLong(taxRate)).divide(BigDecimal.valueOf(100));
+                                taxRateBig = BigDecimal.valueOf(Long.parseLong(taxRate)).divide(BigDecimal.valueOf(100)).add(BigDecimal.ONE);
                             }
-                            updatePrice.setPrice(unitPrice.multiply(taxRateBig));
+                            updatePrice.setPrice(unitPrice.divide(taxRateBig, 2, RoundingMode.HALF_UP));
                             if (priceMaterialMapper.updateByPrimaryKeySelective(updatePrice) > 0) {
-                                materialService.updateMaterialPrice(priceMaterial.getGraphNo(), updatePrice.getPrice());                            }
+                                materialService.updateMaterialPrice(priceMaterial.getGraphNo(), updatePrice.getPrice());
+                            }
                         }
                     }
                 });
@@ -459,4 +461,8 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 
         }
     }
+
+
 }
+
+
