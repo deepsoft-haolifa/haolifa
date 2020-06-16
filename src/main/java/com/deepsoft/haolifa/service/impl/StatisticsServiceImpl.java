@@ -137,11 +137,12 @@ public class StatisticsServiceImpl implements StatisticsService {
         OrderProductStatisticVo statisticVo = new OrderProductStatisticVo();
         int orderQty = orderExtendMapper.countProduct(toMap);
         statisticVo.setOrderQty(orderQty);
-        if (!toMap.containsKey("deliverStatus") || toMap.get("deliverStatus") == null || (int) toMap.get("deliverStatus") < 0) {
+        if (!toMap.containsKey("deliverStatus") || toMap.get("deliverStatus") == null || (byte) toMap.get("deliverStatus") < 0) {
             toMap.put("deliverStatus", CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
         }
         int deliveryOrderQty = orderExtendMapper.countProduct(toMap);
         statisticVo.setDeliveryOrderQty(deliveryOrderQty);
         return statisticVo;
     }
+
 }
