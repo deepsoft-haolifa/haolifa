@@ -84,9 +84,6 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     private PriceMaterialMapper priceMaterialMapper;
 
     @Autowired
-    private PriceMaterialService priceMaterialService;
-
-    @Autowired
     private MaterialService materialService;
 
     @Transactional(rollbackFor = Exception.class)
@@ -446,9 +443,15 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                         if (unitPrice.compareTo(priceMaterial.getPrice()) == 1) {
                             PriceMaterial updatePrice = new PriceMaterial();
                             updatePrice.setId(priceMaterial.getId());
-                            updatePrice.setGraphNo(priceMaterial.getGraphNo());
-                            updatePrice.setPrice(unitPrice);
-                            priceMaterialService.updateInfo(updatePrice);
+                            updatePrice.setPriceTax(unitPrice);
+                            String taxRate = priceMaterial.getTaxRate();
+                            BigDecimal taxRateBig = BigDecimal.valueOf(0.13);
+                            if (StrUtil.isNotBlank(taxRate)) {
+                                taxRateBig = BigDecimal.valueOf(Long.parseLong(taxRate)).divide(BigDecimal.valueOf(100));
+                            }
+                            updatePrice.setPrice(unitPrice.multiply(taxRateBig));
+                            if (priceMaterialMapper.updateByPrimaryKeySelective(updatePrice) > 0) {
+                                materialService.updateMaterialPrice(priceMaterial.getGraphNo(), updatePrice.getPrice());                            }
                         }
                     }
                 });
