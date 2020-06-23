@@ -1,7 +1,5 @@
 package com.deepsoft.haolifa.model.domain;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -16,7 +14,6 @@ public class Invoice {
 
     private BigDecimal totalAmount;
 
-    @ApiModelProperty("合同金额")
     private BigDecimal orderAmount;
 
     private String remark;
