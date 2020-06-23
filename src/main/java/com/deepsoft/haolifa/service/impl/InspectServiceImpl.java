@@ -398,17 +398,17 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             EntrustExample entrustExample = new EntrustExample();
             entrustExample.createCriteria().andEntrustNoEqualTo(inspectNo);
             List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
-            Entrust entrust = new Entrust();
             if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
                 Entrust entrustRecord = entrustList.get(0);
-                entrust.setQualifiedNumber(model.getQualifiedNumber() + entrustList.get(0).getQualifiedNumber());
-                if (entrustRecord.getNumber() < entrust.getQualifiedNumber()) {
+                Entrust entrustUpdate = new Entrust();
+                entrustUpdate.setQualifiedNumber(model.getQualifiedNumber() + entrustRecord.getQualifiedNumber());
+                if (entrustRecord.getNumber() < entrustUpdate.getQualifiedNumber()) {
                     throw new BaseException(ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);
                 }
-                if (ObjectUtil.isNotNull(entrust.getUnqualifiedNumber()) && entrust.getUnqualifiedNumber() > 0) {
-                    entrust.setUnqualifiedNumber(model.getUnqualifiedNumber() + entrust.getUnqualifiedNumber());
+                if (ObjectUtil.isNotNull(model.getUnqualifiedNumber()) && model.getUnqualifiedNumber() > 0) {
+                    entrustUpdate.setUnqualifiedNumber(model.getUnqualifiedNumber() + entrustRecord.getUnqualifiedNumber());
                 }
-                entrustMapper.updateByExampleSelective(entrust, entrustExample);
+                entrustMapper.updateByExampleSelective(entrustUpdate, entrustExample);
             }
         }
         return ResultBean.success(1);
