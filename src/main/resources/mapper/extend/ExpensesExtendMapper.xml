@@ -13,17 +13,17 @@
         <result column="department" property="department" jdbcType="VARCHAR" javaType="java.lang.String"></result>
     </resultMap>
     <select id="getClassify" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where expenses_classify =  #{expensesClassify,jdbcType=VARCHAR}  group by expenses_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where is_delete=0 and expenses_classify =  #{expensesClassify,jdbcType=VARCHAR}  group by expenses_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
     <select id="classifyByDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by expenses_classify,department
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses is_delete=0 group by expenses_classify,department
     </select>
     <select id="classifyBySecondDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses group by second_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses is_delete=0 group by second_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
     <select id="getAllClassify" resultMap="reportMap" parameterType="java.lang.Integer">
         select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses
-        where 1=1
+        where 1=1 and is_delete=0
         <if test="year!=null and year!=''">
             and data_year=#{year}
         </if>
@@ -34,7 +34,7 @@
     </select>
     <select id="classifyByDepartmentAll" resultMap="reportMap" parameterType="java.lang.Integer">
         select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses
-        where 1=1
+        where 1=1 and is_delete=0
         <if test="year!=null and year!=''">
             and data_year=#{year}
         </if>
@@ -45,7 +45,7 @@
     </select>
     <select id="getAllClassifyWithDepartment" resultMap="reportMap" parameterType="java.lang.String">
         select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses
-         where department = #{department,jdbcType=VARCHAR}
+         where department = #{department,jdbcType=VARCHAR} and is_delete=0
         <if test="year!=null and year!=''">
             and data_year=#{year}
         </if>
@@ -55,11 +55,11 @@
         group by expenses_classify
     </select>
     <select id="getAllClassifyWithFirstClassify" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where  expenses_classify =  #{classify,jdbcType=VARCHAR} group by second_classify
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where is_delete=0 and expenses_classify =  #{classify,jdbcType=VARCHAR} group by second_classify
     </select>
 
     <select id="getMonthByDepartment" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where department=  #{department,jdbcType=VARCHAR}  group by  FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where  is_delete=0 and department=  #{department,jdbcType=VARCHAR}  group by  FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
     <select id="expenseTotalByMonth" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
         select sum(total_amount) totalAmount,data_month dataMonth from expenses  where  is_delete=0

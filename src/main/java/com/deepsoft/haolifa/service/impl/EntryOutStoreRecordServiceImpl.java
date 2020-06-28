@@ -76,6 +76,17 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             setCreateUser(getLoginUserId());
         }};
         BeanUtils.copyProperties(model, entryOutStoreRecord);
+        // 获取价格，根据产品Id和订单号
+        OrderProductAssociateExample associateExample = new OrderProductAssociateExample();
+        associateExample.createCriteria().andOrderNoEqualTo(model.getOrderNo())
+            .andProductNoEqualTo(model.getProductNo())
+            .andSpecificationsEqualTo(model.getProductSpecifications())
+            .andProductModelEqualTo(model.getProductModel());
+        List<OrderProductAssociate> associates = associateMapper.selectByExample(associateExample);
+        if (CollectionUtil.isNotEmpty(associates)) {
+            OrderProductAssociate orderProductAssociate = associates.get(0);
+            entryOutStoreRecord.setPrice(orderProductAssociate.getPrice());
+        }
         // 插入出入库记录表
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
@@ -94,10 +105,10 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             log.info("EntryOutStoreRecordServiceImpl entryProduct add stock result:{}", result);
             // 统计入库数量-->变更订单状态（生产完成）
             int storeCount = getEntryProductCountByOrderNo(orderNo, "");
-            OrderProductAssociateExample associateExample = new OrderProductAssociateExample();
+            OrderProductAssociateExample associateExample1 = new OrderProductAssociateExample();
             associateExample.createCriteria().andOrderNoEqualTo(model.getOrderNo());
-            List<OrderProductAssociate> associates = associateMapper.selectByExample(associateExample);
-            int orderProNumber = associates.stream().map(OrderProductAssociate::getProductNumber).reduce(0, (a, b) -> a + b);
+            List<OrderProductAssociate> associates1 = associateMapper.selectByExample(associateExample1);
+            int orderProNumber = associates1.stream().map(OrderProductAssociate::getProductNumber).reduce(0, (a, b) -> a + b);
             if (orderProNumber <= storeCount) {
                 orderProductService.updateOrderProductStatus(model.getOrderNo(), PRODUCTION_FINISH.code);
             }
