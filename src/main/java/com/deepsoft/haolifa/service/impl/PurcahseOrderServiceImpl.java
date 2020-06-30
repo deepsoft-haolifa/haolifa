@@ -439,7 +439,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                 purchaseOrderItems.forEach(item -> {
                     BigDecimal unitPrice = item.getUnitPrice();
                     PriceMaterial priceMaterial = priceMap.get(item.getMaterialGraphNo());
-                    if (unitPrice != null && priceMaterial.getPrice() != null) {
+                    if (unitPrice != null && priceMaterial!=null && priceMaterial.getPrice() != null) {
                         // 如果采购订单中的价格高于零件库中的价格
                         if (unitPrice.compareTo(priceMaterial.getPrice()) == 1) {
                             PriceMaterial updatePrice = new PriceMaterial();
