@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.extend.StatisticsExtendMapper">
+
+
+    <select id="sumOrderTotal" resultType="java.lang.Double">
+        SELECT ROUND(sum(total_price),2) FROM `order_product` op
+        where 1=1
+        <if test="orderNo != null and orderNo !=''">
+            and op.order_no like CONCAT('%',#{orderNo},'%')
+        </if>
+        <if test="demandName != null and demandName !=''">
+            and op.demand_name like CONCAT('%',#{demandName},'%')
+        </if>
+        <if test="deliverStatus != null and deliverStatus > 0">
+            and op.deliver_status = #{deliverStatus}
+        </if>
+        <if test="orderStatus != null and orderStatus > -1">
+            and op.order_status = #{orderStatus}
+        </if>
+        <if test="startDate != null">
+            and op.create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and op.create_time &lt;= #{endDate}
+        </if>
+    </select>
+    <select id="sumPurchaseTotal" resultType="java.lang.Double">
+        SELECT ROUND(sum(total_price),2) , FROM `purchase_order` op
+        where 1=1
+        <if test="purchaseNo != null and purchaseNo !=''">
+            and op.purchase_order_no like CONCAT('%',#{purchaseNo},'%')
+        </if>
+        <if test="supplierName != null and supplierName !=''">
+            and op.supplier_name like CONCAT('%',#{supplierName},'%')
+        </if>
+        <if test="status != null and status > -1">
+            and op.status = #{status}
+        </if>
+        <if test="startDate != null">
+            and op.create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and op.create_time &lt;= #{endDate}
+        </if>
+    </select>
+</mapper>

@@ -92,6 +92,7 @@ public class CommonEnum {
         DELIVERY_COUNT_LESS_THAN_PURCHASE_COUNT("4024", "【{0}】 送检数量不能大于采购数量"),
         DELIVERY_COUNT_THAN_PURCHASE_COUNT_HISTORY("4025", "该图号检验合格数+不合格数不能大于送检单上的送检数量"),
         ADD_INSPECT_RECORD("4026", "请先添加检验记录"),
+        DELIVERY_RECORD_NOT_ADD("4027", "发货通知单审核不通过不能添加发货记录"),
 
         MATERIAL_GRAPH_NO_NOT_EXIST_1("5001", "【{0}】 不存在零件库中，请确认"),
         MATERIAL_REQUISITION_EXIST("5002", "这个订单的领料单已经保存过，请确认");

@@ -1114,20 +1114,23 @@ public class ExportExcelController {
         cell_14.setCellValue("费用类别");
         cell_14.setCellStyle(center);
         Cell cell_15 = columnTitle.createCell(5);
-        cell_15.setCellValue("费用类别明细");
+        cell_15.setCellValue("凭证号");
         cell_15.setCellStyle(center);
         Cell cell_16 = columnTitle.createCell(6);
-        cell_16.setCellValue("总费用");
+        cell_16.setCellValue("费用类别明细");
         cell_16.setCellStyle(center);
         Cell cell_17 = columnTitle.createCell(7);
-        cell_17.setCellValue("备注");
+        cell_17.setCellValue("总费用");
         cell_17.setCellStyle(center);
         Cell cell_18 = columnTitle.createCell(8);
-        cell_18.setCellValue("提交日期");
+        cell_18.setCellValue("费用产生年份");
         cell_18.setCellStyle(center);
         Cell cell_19 = columnTitle.createCell(9);
-        cell_19.setCellValue("凭证号");
+        cell_19.setCellValue("费用产生月份");
         cell_19.setCellStyle(center);
+        Cell cell_20 = columnTitle.createCell(10);
+        cell_20.setCellValue("备注");
+        cell_20.setCellStyle(center);
 
         List<Expenses> expensesList = expensesMapper.selectByExample(expensesExample);
         for (int i = 0; i < expensesList.size(); i++) {
@@ -1149,21 +1152,23 @@ public class ExportExcelController {
             cell_4.setCellValue(expenses.getExpensesClassify());
             cell_4.setCellStyle(center);
             Cell cell_5 = row_value.createCell(5);
-            cell_5.setCellValue(expenses.getSecondClassify());
+            cell_5.setCellValue(expenses.getVoucherNo());
             cell_5.setCellStyle(center);
             Cell cell_6 = row_value.createCell(6);
-            cell_6.setCellValue(expenses.getTotalAmount().doubleValue());
+            cell_6.setCellValue(expenses.getSecondClassify());
             cell_6.setCellStyle(center);
             Cell cell_7 = row_value.createCell(7);
-            cell_7.setCellValue(expenses.getRemark());
+            cell_7.setCellValue(expenses.getTotalAmount().doubleValue());
             cell_7.setCellStyle(center);
             Cell cell_8 = row_value.createCell(8);
-            cell_8.setCellValue(
-                DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, expenses.getCreateTime()));
+            cell_8.setCellValue(expenses.getDataYear());
             cell_8.setCellStyle(center);
             Cell cell_9 = row_value.createCell(9);
-            cell_9.setCellValue(expenses.getVoucherNo());
+            cell_9.setCellValue(expenses.getDataMonth());
             cell_9.setCellStyle(center);
+            Cell cell_110 = row_value.createCell(10);
+            cell_110.setCellValue(expenses.getRemark());
+            cell_110.setCellStyle(center);
         }
 
         OutputStream outputStream = response.getOutputStream();

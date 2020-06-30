@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import static com.deepsoft.haolifa.constant.CacheKey.DELIVERY_NO_KEY;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.DELIVERY_NO_PREFIX_FHTZD;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.DeliverStatus;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
@@ -92,8 +93,8 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
     @Override
     public ResultBean pageNotices(DeliveryNoticeConditionDTO conditionDTO) {
         Page<DeliveryNoticeListDTO> deliveryRecordPage = PageHelper
-                .startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
-                .doSelectPage(() -> deliveryNoticeExtendMapper.selectDeliverNoticeList(conditionDTO));
+            .startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
+            .doSelectPage(() -> deliveryNoticeExtendMapper.selectDeliverNoticeList(conditionDTO));
 
         PageDTO<DeliveryNoticeListDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(deliveryRecordPage, pageDTO);
@@ -124,6 +125,17 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
 
     @Override
     public ResultBean save(DeliveryRecord model) {
+        // 审核不通过的发货通知单才能添加发货记录
+        String deliveryNoticeNo = model.getDeliveryNoticeNo();
+        DeliveryNoticeExample example = new DeliveryNoticeExample();
+        example.createCriteria().andDeliveryNoEqualTo(deliveryNoticeNo);
+        List<DeliveryNotice> deliveryNotices = deliveryNoticeMapper.selectByExample(example);
+        if (CollectionUtil.isNotEmpty(deliveryNotices)) {
+            DeliveryNotice deliveryNotice = deliveryNotices.get(0);
+            if (deliveryNotice.getAuditResult().equals((byte) 1)) {
+                return ResultBean.error(CommonEnum.ResponseEnum.DELIVERY_RECORD_NOT_ADD);
+            }
+        }
         model.setCreateUserId(getLoginUserId());
         int insert = deliveryRecordMapper.insertSelective(model);
         if (insert > 0) {
@@ -141,12 +153,11 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
                 if (count > 0 && count < productCount) {
                     // 部分发货
                     orderProductService
-                            .updateOrderDeliverStatus(contractOrderNo, DeliverStatus.DELIVER_PART_1.getCode(), count);
+                        .updateOrderDeliverStatus(contractOrderNo, DeliverStatus.DELIVER_PART_1.getCode(), count);
                 } else if (count >= productCount) {
                     // 全部发货
                     orderProductService
-                            .updateOrderDeliverStatus(contractOrderNo, DeliverStatus.DELIVER_COMPLETE_2.getCode(), productCount);
-
+                        .updateOrderDeliverStatus(contractOrderNo, DeliverStatus.DELIVER_COMPLETE_2.getCode(), productCount);
                     // 发货完成的话，将达标的订单同步到 经管下面的代开发票列表
                     InvoiceCreateDTO invoiceCreateDTO = new InvoiceCreateDTO();
                     invoiceCreateDTO.setOrderNo(contractOrderNo);
@@ -215,8 +226,8 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
         }
         example.setOrderByClause("id desc");
         Page<DeliveryRecord> deliveryRecordPage = PageHelper
-                .startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
-                .doSelectPage(() -> deliveryRecordMapper.selectByExample(example));
+            .startPage(conditionDTO.getPageNum(), conditionDTO.getPageSize())
+            .doSelectPage(() -> deliveryRecordMapper.selectByExample(example));
 
         PageDTO<DeliveryRecord> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(deliveryRecordPage, pageDTO);

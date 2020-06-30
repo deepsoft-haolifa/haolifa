@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.InvoiceListDTO;
+import com.deepsoft.haolifa.model.dto.PurchaseOrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderStatisticDTO;
@@ -9,13 +10,13 @@ import com.deepsoft.haolifa.model.vo.OrderProductStatisticVo;
 
 public interface StatisticsService {
 
-  ResultBean totalInventory();
+    ResultBean totalInventory();
 
-  Double totalOrders();
+    Double totalOrders(OrderConditionDTO model);
 
-  Double totalPurchase();
+    Double totalPurchase(PurchaseOrderConditionDTO model);
 
-  InvoiceStatisticVo totalInvoice(Byte type,InvoiceListDTO dto);
+    InvoiceStatisticVo totalInvoice(Byte type, InvoiceListDTO dto);
 
-  OrderProductStatisticVo totalOrderProduct(OrderStatisticDTO dto);
+    OrderProductStatisticVo totalOrderProduct(OrderStatisticDTO dto);
 }

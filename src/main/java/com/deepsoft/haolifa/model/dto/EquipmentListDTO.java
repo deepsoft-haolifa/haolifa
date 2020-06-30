@@ -17,4 +17,6 @@ public class EquipmentListDTO {
     private String equipmentNo;
     @ApiModelProperty(value = "供应商编号")
     private String supplierNo;
+    @ApiModelProperty(value = "生产厂家")
+    private String productFactory;
 }
