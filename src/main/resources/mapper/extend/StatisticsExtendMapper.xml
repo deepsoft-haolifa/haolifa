@@ -3,8 +3,10 @@
 <mapper namespace="com.deepsoft.haolifa.dao.repository.extend.StatisticsExtendMapper">
 
 
-    <select id="sumOrderTotal" resultType="java.lang.Double">
-        SELECT ROUND(sum(total_price),2) FROM `order_product` op
+    <select id="sumOrderTotal" resultType="com.deepsoft.haolifa.model.vo.OrderAmountStatisticVo">
+        SELECT ROUND(sum(total_price),2) orderAmount,
+        ROUND(sum(received_account),2) receivedAmount
+        FROM `order_product` op
         where 1=1
         <if test="orderNo != null and orderNo !=''">
             and op.order_no like CONCAT('%',#{orderNo},'%')
@@ -12,7 +14,7 @@
         <if test="demandName != null and demandName !=''">
             and op.demand_name like CONCAT('%',#{demandName},'%')
         </if>
-        <if test="deliverStatus != null and deliverStatus > 0">
+        <if test="deliverStatus != null and deliverStatus > -1">
             and op.deliver_status = #{deliverStatus}
         </if>
         <if test="orderStatus != null and orderStatus > -1">

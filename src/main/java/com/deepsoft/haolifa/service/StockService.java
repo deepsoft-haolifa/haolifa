@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service;
 import com.deepsoft.haolifa.model.domain.Stock;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.storage.BatchNoListDTO;
 import com.deepsoft.haolifa.model.dto.storage.MaterialBatchNoDTO;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -18,6 +19,7 @@ public interface StockService {
      * @return
      */
     boolean addStock(EntryOutStorageDTO model);
+
     /**
      * 零件，成品减少库存
      * <p>
@@ -33,13 +35,20 @@ public interface StockService {
     List<MaterialBatchNoDTO> listMaterialBatchNos(String roomNo, String rackNo, String materialGraphNo);
 
     /**
+     * 批次号列表
+     */
+    List<MaterialBatchNoDTO> batchListNo(BatchNoListDTO model);
+
+
+    /**
      * 根据 库房，库位，批次号，图号，获取信息
+     *
      * @param roomNo
      * @param rackNo
      * @param materialGraphNo
      * @return
      */
-    Stock infoStocks(String roomNo, String rackNo, String materialGraphNo,String materialBatchNo);
+    Stock infoStocks(String roomNo, String rackNo, String materialGraphNo, String materialBatchNo);
 
 
     /**

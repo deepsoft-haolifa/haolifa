@@ -6,13 +6,14 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderStatisticDTO;
 import com.deepsoft.haolifa.model.vo.InvoiceStatisticVo;
+import com.deepsoft.haolifa.model.vo.OrderAmountStatisticVo;
 import com.deepsoft.haolifa.model.vo.OrderProductStatisticVo;
 
 public interface StatisticsService {
 
     ResultBean totalInventory();
 
-    Double totalOrders(OrderConditionDTO model);
+    OrderAmountStatisticVo totalOrders(OrderConditionDTO model);
 
     Double totalPurchase(PurchaseOrderConditionDTO model);
 

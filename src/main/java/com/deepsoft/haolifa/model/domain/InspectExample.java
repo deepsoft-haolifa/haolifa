@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1062,6 +1063,66 @@ public class InspectExample {
 
         public Criteria andUnqualifiedNumberNotBetween(Integer value1, Integer value2) {
             addCriterion("unqualified_number not between", value1, value2, "unqualifiedNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightIsNull() {
+            addCriterion("freight is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightIsNotNull() {
+            addCriterion("freight is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightEqualTo(BigDecimal value) {
+            addCriterion("freight =", value, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightNotEqualTo(BigDecimal value) {
+            addCriterion("freight <>", value, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightGreaterThan(BigDecimal value) {
+            addCriterion("freight >", value, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("freight >=", value, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightLessThan(BigDecimal value) {
+            addCriterion("freight <", value, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("freight <=", value, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightIn(List<BigDecimal> values) {
+            addCriterion("freight in", values, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightNotIn(List<BigDecimal> values) {
+            addCriterion("freight not in", values, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("freight between", value1, value2, "freight");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreightNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("freight not between", value1, value2, "freight");
             return (Criteria) this;
         }
     }

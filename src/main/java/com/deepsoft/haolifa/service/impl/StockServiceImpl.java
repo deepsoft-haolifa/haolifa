@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.domain.Stock;
 import com.deepsoft.haolifa.model.domain.StockExample;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.storage.BatchNoListDTO;
 import com.deepsoft.haolifa.model.dto.storage.MaterialBatchNoDTO;
 import com.deepsoft.haolifa.service.StockService;
 import com.deepsoft.haolifa.util.RandomUtils;
@@ -88,7 +89,7 @@ public class StockServiceImpl extends BaseService implements StockService {
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
         criteria.andRoomNoEqualTo(model.getRoomNo())
-                .andRackNoEqualTo(model.getRackNo());
+            .andRackNoEqualTo(model.getRackNo());
         // 零件才有批次号的概念
         if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
             criteria.andMaterialBatchNoEqualTo(model.getMaterialBatchNo());
@@ -129,6 +130,27 @@ public class StockServiceImpl extends BaseService implements StockService {
         }
         criteria.andMaterialGraphNoEqualTo(materialGraphNo);
         criteria.andQuantityGreaterThan(0);
+        List<Stock> stocks = stockMapper.selectByExample(example);
+        if (stocks.size() > 0) {
+            return JSON.parseArray(JSON.toJSONString(stocks), MaterialBatchNoDTO.class);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<MaterialBatchNoDTO> batchListNo(BatchNoListDTO model) {
+        StockExample example = new StockExample();
+        StockExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isBlank(model.getGraphNo())) {
+            return Collections.emptyList();
+        }
+        if (model.getQty() != null) {
+            criteria.andQuantityGreaterThanOrEqualTo(model.getQty());
+        }
+        if (StringUtils.isNotBlank(model.getBatchNo())) {
+            criteria.andMaterialBatchNoEqualTo(model.getBatchNo());
+        }
+        criteria.andMaterialGraphNoEqualTo(model.getGraphNo());
         List<Stock> stocks = stockMapper.selectByExample(example);
         if (stocks.size() > 0) {
             return JSON.parseArray(JSON.toJSONString(stocks), MaterialBatchNoDTO.class);

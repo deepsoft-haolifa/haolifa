@@ -154,6 +154,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 .parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, model.getArrivalTime());
             inspect.setArrivalTime(arrivalTime);
         }
+        inspect.setFreight(model.getFreight());
         inspect.setBatchNumber(model.getBatchNumber());
         inspect.setBlueprints(model.getAccessorys() == null || model.getAccessorys().size() == 0 ? ""
             : JSON.toJSONString(model.getAccessorys()));

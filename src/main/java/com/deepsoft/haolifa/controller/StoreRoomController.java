@@ -2,10 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.dto.*;
-import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
+import com.deepsoft.haolifa.model.dto.storage.*;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRackRequestDTO;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRequestDTO;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
@@ -16,6 +13,8 @@ import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(tags = {"库房管理"})
 @RestController
@@ -71,10 +70,10 @@ public class StoreRoomController {
 
     @ApiOperation("获取库房分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "库房名称", name = "nameLike", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "库房类型（0所有，1原料库；2成品库）", name = "type", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(value = "库房名称", name = "nameLike", dataType = "string", paramType = "query"),
+        @ApiImplicitParam(value = "库房类型（0所有，1原料库；2成品库）", name = "type", dataType = "int", paramType = "query"),
     })
     @GetMapping("/pageInfo")
     public ResultBean pageInfo(@RequestParam(defaultValue = "1") Integer currentPage,
@@ -121,10 +120,10 @@ public class StoreRoomController {
 
     @ApiOperation("获取库位分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(value = "库房号", name = "roomNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "库位名称", name = "rackNameLike", dataType = "string", paramType = "query")
+        @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
+        @ApiImplicitParam(value = "库房号", name = "roomNo", dataType = "string", paramType = "query"),
+        @ApiImplicitParam(value = "库位名称", name = "rackNameLike", dataType = "string", paramType = "query")
     })
     @GetMapping("/rack/pageInfo")
     public ResultBean pageRackInfo(@RequestParam(defaultValue = "1") Integer currentPage,
@@ -137,12 +136,19 @@ public class StoreRoomController {
     @ApiOperation("批次号列表（根据库房，库位，零件图号），用于零件出库，喷涂等选择批次号")
     @GetMapping("/material-batch-nos")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roomNo", value = "库房No", dataType = "String", paramType = "query", required = false),
-            @ApiImplicitParam(name = "rackNo", value = "库位No", dataType = "String", paramType = "query", required = false),
-            @ApiImplicitParam(name = "graphNo", value = "零件图号", dataType = "String", paramType = "query", required = true)
+        @ApiImplicitParam(name = "roomNo", value = "库房No", dataType = "String", paramType = "query", required = false),
+        @ApiImplicitParam(name = "rackNo", value = "库位No", dataType = "String", paramType = "query", required = false),
+        @ApiImplicitParam(name = "graphNo", value = "零件图号", dataType = "String", paramType = "query", required = true)
     })
-    public ResultBean getMaterialBatchNos(@RequestParam(required = false) String roomNo, @RequestParam(required = false) String rackNo, @RequestParam String graphNo) {
+    public ResultBean<List<MaterialBatchNoDTO>> getMaterialBatchNos(@RequestParam(required = false) String roomNo, @RequestParam(required = false) String rackNo, @RequestParam String graphNo) {
         return new ResultBean(stockService.listMaterialBatchNos(roomNo, rackNo, graphNo));
+    }
+
+
+    @ApiOperation("批次号列表")
+    @PostMapping("/batch-no-list")
+    public ResultBean<List<MaterialBatchNoDTO>> batchNoList(@RequestBody BatchNoListDTO dto) {
+        return new ResultBean(stockService.batchListNo(dto));
     }
 
 
@@ -195,13 +201,13 @@ public class StoreRoomController {
 
     @ApiOperation("获取零件，成品出入库分页列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(value = "类型：0.全部;1.成品；2：零件;", name = "type", dataType = "int", paramType = "query", required = true),
-            @ApiImplicitParam(value = "操作类型：0.全部;1.出库；2：入库;", name = "operationType", dataType = "int", paramType = "query", required = true),
-            @ApiImplicitParam(value = "产品号", name = "productNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "零件图号", name = "materialGraphNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(value = "当前页面", name = "currentPage", dataType = "int", paramType = "query", required = true),
-            @ApiImplicitParam(value = "每页数量", name = "pageSize", dataType = "int", paramType = "query", required = true)
+        @ApiImplicitParam(value = "类型：0.全部;1.成品；2：零件;", name = "type", dataType = "int", paramType = "query", required = true),
+        @ApiImplicitParam(value = "操作类型：0.全部;1.出库；2：入库;", name = "operationType", dataType = "int", paramType = "query", required = true),
+        @ApiImplicitParam(value = "产品号", name = "productNo", dataType = "string", paramType = "query"),
+        @ApiImplicitParam(value = "零件图号", name = "materialGraphNo", dataType = "string", paramType = "query"),
+        @ApiImplicitParam(value = "订单号", name = "orderNo", dataType = "string", paramType = "query"),
+        @ApiImplicitParam(value = "当前页面", name = "currentPage", dataType = "int", paramType = "query", required = true),
+        @ApiImplicitParam(value = "每页数量", name = "pageSize", dataType = "int", paramType = "query", required = true)
     })
     @GetMapping("/entryOut/pageInfo")
     public ResultBean pageInfoEntryOutRecord(@RequestParam(defaultValue = "1") Integer currentPage,

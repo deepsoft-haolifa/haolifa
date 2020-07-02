@@ -29,9 +29,6 @@ public class OutMaterialStorageDTO extends BaseStorageDTO{
     @ApiModelProperty(value = "零件批次号")
     private String materialBatchNo;
 
-
-
-
     @ApiModelProperty(value = "出库业务单号（订单号，委托单号）")
     private String busNo;
     @ApiModelProperty(value = "业务Id")

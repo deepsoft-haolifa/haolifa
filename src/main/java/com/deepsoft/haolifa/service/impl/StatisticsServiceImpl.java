@@ -24,6 +24,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderStatisticDTO;
 import com.deepsoft.haolifa.model.vo.InvoiceStatisticVo;
+import com.deepsoft.haolifa.model.vo.OrderAmountStatisticVo;
 import com.deepsoft.haolifa.model.vo.OrderProductStatisticVo;
 import com.deepsoft.haolifa.service.StatisticsService;
 
@@ -74,7 +75,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public Double totalOrders(OrderConditionDTO model) {
+    public OrderAmountStatisticVo totalOrders(OrderConditionDTO model) {
         Map<String, Object> objectMap = BeanUtil.beanToMap(model);
         return statisticsExtendMapper.sumOrderTotal(objectMap);
     }

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Inspect {
@@ -33,7 +34,9 @@ public class Inspect {
 
     private Integer unqualifiedNumber;
 
-    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints, Integer qualifiedNumber, Integer totalCount, Integer unqualifiedNumber) {
+    private BigDecimal freight;
+
+    public Inspect(Integer id, String inspectNo, String purchaseNo, String batchNumber, Byte status, Date createTime, Date updateTime, Integer createUserId, Date arrivalTime, String supplierName, String supplierNo, String blueprints, Integer qualifiedNumber, Integer totalCount, Integer unqualifiedNumber, BigDecimal freight) {
         this.id = id;
         this.inspectNo = inspectNo;
         this.purchaseNo = purchaseNo;
@@ -49,6 +52,7 @@ public class Inspect {
         this.qualifiedNumber = qualifiedNumber;
         this.totalCount = totalCount;
         this.unqualifiedNumber = unqualifiedNumber;
+        this.freight = freight;
     }
 
     public Inspect() {
@@ -173,5 +177,13 @@ public class Inspect {
 
     public void setUnqualifiedNumber(Integer unqualifiedNumber) {
         this.unqualifiedNumber = unqualifiedNumber;
+    }
+
+    public BigDecimal getFreight() {
+        return freight;
+    }
+
+    public void setFreight(BigDecimal freight) {
+        this.freight = freight;
     }
 }

@@ -8,14 +8,14 @@ import java.math.BigDecimal;
  * @author murphy.he
  **/
 @Data
-public class PriceStatisticVo {
+public class OrderAmountStatisticVo {
     /**
      * 合同总金额
      */
     private BigDecimal orderAmount;
     /**
-     * 已收款金额
+     * 已收货款
      */
-    private BigDecimal paidAmount;
+    private BigDecimal receivedAmount;
 
 }

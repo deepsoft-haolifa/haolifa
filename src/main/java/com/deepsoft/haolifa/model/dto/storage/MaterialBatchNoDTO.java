@@ -17,4 +17,10 @@ public class MaterialBatchNoDTO {
 
     @ApiModelProperty(value = "当前数量（正数）")
     private Integer quantity;
+
+    @ApiModelProperty(value = "库房")
+    private String roomNo;
+
+    @ApiModelProperty(value = "库位")
+    private String rackNo;
 }
