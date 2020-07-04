@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 public class PurchaseOrderConditionDTO {
     @ApiModelProperty("采购订单号")
-    private String purchaseNo;
+    private String orderNo;
     @ApiModelProperty("采购订单状态")
     private Integer status;
     @ApiModelProperty("供应商名称")
