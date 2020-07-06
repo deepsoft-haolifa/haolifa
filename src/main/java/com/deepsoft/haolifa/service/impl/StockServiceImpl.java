@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -159,26 +160,16 @@ public class StockServiceImpl extends BaseService implements StockService {
     }
 
     @Override
-    public Stock infoStocks(String roomNo, String rackNo, String materialGraphNo, String materialBatchNo) {
+    public List<Stock> infoStocks(String materialGraphNo, List<String> batchNoList) {
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(roomNo)) {
-            criteria.andRoomNoEqualTo(roomNo);
-        }
-        if (StringUtils.isNotBlank(rackNo)) {
-            criteria.andRackNoEqualTo(rackNo);
-        }
         if (StringUtils.isNotBlank(materialGraphNo)) {
             criteria.andMaterialGraphNoEqualTo(materialGraphNo);
         }
-        if (StringUtils.isNotBlank(materialBatchNo)) {
-            criteria.andMaterialBatchNoEqualTo(materialBatchNo);
+        if (CollectionUtil.isNotEmpty(batchNoList)) {
+            criteria.andMaterialBatchNoIn(batchNoList);
         }
-        List<Stock> stocks = stockMapper.selectByExample(example);
-        if (stocks.size() == 1) {
-            return stocks.get(0);
-        }
-        return null;
+        return stockMapper.selectByExample(example);
     }
 
 

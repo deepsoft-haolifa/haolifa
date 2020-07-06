@@ -30,10 +30,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.OrderStatus.PRODUCTION_FINISH;
 
@@ -304,97 +301,117 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         model.setQuantity(-Math.abs(model.getQuantity()));
         final String materialGraphNo = model.getMaterialGraphNo();
         final String materialBatchNo = model.getMaterialBatchNo();
-        final String roomNo = model.getRoomNo();
-        final String rackNo = model.getRackNo();
-        if (StringUtils.isBlank(materialBatchNo)) {
+        List<String> batchNoList = model.getBatchNoList();
+        if (StringUtils.isBlank(materialBatchNo) && CollectionUtil.isEmpty(batchNoList)) {
             String pcTime = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             model.setMaterialBatchNo(pcTime);
         }
+        if (CollectionUtil.isEmpty(batchNoList)) {
+            batchNoList = Arrays.asList(materialBatchNo);
+        }
+
+        // 根据零件图号，批次号获取库房和库位
         final Integer quantity = model.getQuantity();
         // 判断库房是否有这么多数量
-        Stock stock = stockService.infoStocks(roomNo, rackNo, materialGraphNo, materialBatchNo);
-        if (stock == null) {
-            log.error("not stock record by roomNo:{},rackNo:{},materialGraphNo:{},materialBatchNo:{}", roomNo, rackNo,
-                materialGraphNo, materialBatchNo);
+        List<Stock> stockList = stockService.infoStocks(materialGraphNo, batchNoList);
+        if (CollectionUtil.isEmpty(stockList)) {
+            log.error("not stock record by materialGraphNo:{},materialBatchNo:{}", materialGraphNo, materialBatchNo);
             return 0;
+        } else {
+            int sum = stockList.stream().mapToInt(Stock::getQuantity).sum();
+            if (sum < Math.abs(quantity)) {
+                log.error("not enough quantity sum:{}, materialGraphNo:{},materialBatchNo:{}", sum, materialGraphNo, materialBatchNo);
+                return 0;
+            }
         }
-        if (stock.getQuantity() < Math.abs(quantity)) {
-            log.warn("not enough quantity  by roomNo:{},rackNo:{},materialGraphNo:{},materialBatchNo:{}", roomNo, rackNo,
-                materialGraphNo, materialBatchNo);
-            return 0;
-        }
-
-        // 插入出入库记录表
-        EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord();
-        BeanUtils.copyProperties(model, entryOutStoreRecord);
-        entryOutStoreRecord.setOperationType(operationType);
-        entryOutStoreRecord.setType(storageType);
-        entryOutStoreRecord.setCreateUser(getLoginUserId());
-        int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
-
-        if (insert > 0) {
-            EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO() {{
-                setRoomNo(roomNo);
-                setRackNo(rackNo);
-                setMaterialBatchNo(materialBatchNo);
-                setMaterialGraphNo(materialGraphNo);
-                setOperationType(operationType);
-                setType(storageType);
-                setQuantity(quantity);
-                setLockQuantity(quantity);
-
-            }};
-            // 减少库存
-            boolean reduceStock = stockService.reduceStock(entryOutStorageDTO);
-            log.info("material reduce stock result:{},materialNo:{},batchNo:{},rackNo:{},quantity:{}", reduceStock,
-                materialGraphNo, materialBatchNo, rackNo, quantity);
-            // 如果该零件有锁定数量，先减少锁定数量，在减少当前库存量
-            Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
-            Integer lockQuantity = infoByGraphNo.getLockQuantity();
-            if (lockQuantity == 0) {
-                // 更新零件的当前库存量
-                materialService.updateCurrentQuantity(materialGraphNo, quantity);
+        int absQty = Math.abs(quantity);
+        boolean isExit = false;
+        for (Stock stock : stockList) {
+            Integer stockQuantity = stock.getQuantity();
+            int needQty = 0;
+            if (absQty - stockQuantity <= 0) {
+                needQty = absQty;
+                absQty = 0;
             } else {
-                if (lockQuantity >= Math.abs(quantity)) {
-                    log.info("material reduce lockQuantity:{},quantity:{},graphNo:{}", lockQuantity, quantity, materialGraphNo);
-                    materialService.updateLockQuantity(materialGraphNo, quantity);
+                needQty = stockQuantity;
+                absQty = absQty - stockQuantity;
+            }
+            String roomNo = stock.getRoomNo();
+            String rackNo = stock.getRackNo();
+            // 插入出入库记录表
+            EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord();
+            BeanUtils.copyProperties(model, entryOutStoreRecord);
+            entryOutStoreRecord.setQuantity(-needQty);
+            entryOutStoreRecord.setRackNo(rackNo);
+            entryOutStoreRecord.setMaterialBatchNo(stock.getMaterialBatchNo());
+            entryOutStoreRecord.setOperationType(operationType);
+            entryOutStoreRecord.setType(storageType);
+            entryOutStoreRecord.setCreateUser(getLoginUserId());
+            int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
+            if (insert > 0) {
+                EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO();
+                entryOutStorageDTO.setRoomNo(roomNo);
+                entryOutStorageDTO.setRackNo(rackNo);
+                entryOutStorageDTO.setMaterialBatchNo(materialBatchNo);
+                entryOutStorageDTO.setMaterialGraphNo(materialGraphNo);
+                entryOutStorageDTO.setOperationType(operationType);
+                entryOutStorageDTO.setType(storageType);
+                entryOutStorageDTO.setQuantity(-needQty);
+                entryOutStorageDTO.setLockQuantity(-needQty);
+                // 减少库存
+                boolean reduceStock = stockService.reduceStock(entryOutStorageDTO);
+                log.info("material reduce stock result:{},materialNo:{},batchNo:{},rackNo:{},quantity:{}", reduceStock,
+                    materialGraphNo, materialBatchNo, rackNo, -needQty);
+                // 如果该零件有锁定数量，先减少锁定数量，在减少当前库存量
+                Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
+                Integer lockQuantity = infoByGraphNo.getLockQuantity();
+                if (lockQuantity == 0) {
+                    // 更新零件的当前库存量
+                    materialService.updateCurrentQuantity(materialGraphNo, -needQty);
                 } else {
-                    int needCurrentQuantity = Math.abs(quantity) - lockQuantity;
-                    log.info("this not appear material reduce lock quantity:{},needCurrentQuantity:{},graphNo:{}", lockQuantity,
-                        needCurrentQuantity, materialGraphNo);
-                    materialService.updateLockQuantity(materialGraphNo, -lockQuantity);
-                    materialService.updateCurrentQuantity(materialGraphNo, -needCurrentQuantity);
+                    if (lockQuantity >= needQty) {
+                        log.info("material reduce lockQuantity:{},quantity:{},graphNo:{}", lockQuantity, quantity, materialGraphNo);
+                        materialService.updateLockQuantity(materialGraphNo, quantity);
+                    } else {
+                        int needCurrentQuantity = needQty - lockQuantity;
+                        log.info("this not appear material reduce lock quantity:{},needCurrentQuantity:{},graphNo:{}", lockQuantity,
+                            needCurrentQuantity, materialGraphNo);
+                        materialService.updateLockQuantity(materialGraphNo, -lockQuantity);
+                        materialService.updateCurrentQuantity(materialGraphNo, -needCurrentQuantity);
+                    }
+                }
+
+                // 如果是有单号的入库，将其出库状态修改
+                String busNo = model.getBusNo();
+                Integer busId = model.getBusId();
+                if (StringUtils.isNotBlank(busNo) && model.getType() != null && model.getType() > 0) {
+                    if (model.getType().equals(CommonEnum.materialOutType.MATERIAL_REQUISITION.type)) {
+                        MaterialRequisitionExample requisitionExample = new MaterialRequisitionExample();
+                        requisitionExample.or().andOrderNoEqualTo(busNo).andIdEqualTo(busId);
+                        MaterialRequisition materialRequisition = new MaterialRequisition();
+                        materialRequisition.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                        materialRequisitionMapper.updateByExampleSelective(materialRequisition, requisitionExample);
+                    } else if (model.getType().equals(CommonEnum.materialOutType.ENTRUST.type)) {
+                        EntrustExample entrustExample = new EntrustExample();
+                        entrustExample.or().andEntrustNoEqualTo(busNo).andIdEqualTo(busId);
+                        Entrust entrust = new Entrust();
+                        entrust.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                        entrustMapper.updateByExampleSelective(entrust, entrustExample);
+                    } else if (model.getType().equals(CommonEnum.materialOutType.SPRAY.type)) {
+                        SprayItemExample sprayItemExample = new SprayItemExample();
+                        sprayItemExample.or().andSprayNoEqualTo(busNo).andIdEqualTo(busId);
+                        SprayItem sprayItem = new SprayItem();
+                        sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                        sprayItemMapper.updateByExampleSelective(sprayItem, sprayItemExample);
+                    }
                 }
             }
 
-            // 如果是有单号的入库，将其出库状态修改
-            String busNo = model.getBusNo();
-            Integer busId = model.getBusId();
-            if (StringUtils.isNotBlank(busNo) && model.getType() != null && model.getType() > 0) {
-                if (model.getType().equals(CommonEnum.materialOutType.MATERIAL_REQUISITION.type)) {
-                    MaterialRequisitionExample requisitionExample = new MaterialRequisitionExample();
-                    requisitionExample.or().andOrderNoEqualTo(busNo).andIdEqualTo(busId);
-                    MaterialRequisition materialRequisition = new MaterialRequisition();
-                    materialRequisition.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
-                    materialRequisitionMapper.updateByExampleSelective(materialRequisition, requisitionExample);
-                } else if (model.getType().equals(CommonEnum.materialOutType.ENTRUST.type)) {
-                    EntrustExample entrustExample = new EntrustExample();
-                    entrustExample.or().andEntrustNoEqualTo(busNo).andIdEqualTo(busId);
-                    ;
-                    Entrust entrust = new Entrust();
-                    entrust.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
-                    entrustMapper.updateByExampleSelective(entrust, entrustExample);
-                } else if (model.getType().equals(CommonEnum.materialOutType.SPRAY.type)) {
-                    SprayItemExample sprayItemExample = new SprayItemExample();
-                    sprayItemExample.or().andSprayNoEqualTo(busNo).andIdEqualTo(busId);
-                    ;
-                    SprayItem sprayItem = new SprayItem();
-                    sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
-                    sprayItemMapper.updateByExampleSelective(sprayItem, sprayItemExample);
-                }
+            if (isExit) {
+                break;
             }
         }
-        return insert;
+        return 1;
     }
 
 
