@@ -22,4 +22,6 @@ public class PurchaseOrderConditionDTO {
     private Date startDate;
     @ApiModelProperty(value = "结束时间")
     private Date endDate;
+    @ApiModelProperty(value = "当前用户Id")
+    private int createUserId;
 }
