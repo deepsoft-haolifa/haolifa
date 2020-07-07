@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 
 /**
@@ -12,12 +13,12 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class OutMaterialStorageDTO extends BaseStorageDTO{
+public class OutMaterialStorageDTO extends BaseStorageDTO {
 
-    @ApiModelProperty(value = "零件号",required = true)
+    @ApiModelProperty(value = "零件号", required = true)
     private String materialGraphNo;
 
-    @ApiModelProperty(value = "出库数量（负数）",required = true)
+    @ApiModelProperty(value = "出库数量（负数）", required = true)
     private Integer quantity;
 
     @ApiModelProperty(value = "零件购买单价")
@@ -28,6 +29,9 @@ public class OutMaterialStorageDTO extends BaseStorageDTO{
 
     @ApiModelProperty(value = "零件批次号")
     private String materialBatchNo;
+
+    @ApiModelProperty(value = "零件批次号(批量选择)")
+    private List<String> batchNoList;
 
     @ApiModelProperty(value = "出库业务单号（订单号，委托单号）")
     private String busNo;

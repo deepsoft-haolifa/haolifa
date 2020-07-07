@@ -41,14 +41,12 @@ public interface StockService {
 
 
     /**
-     * 根据 库房，库位，批次号，图号，获取信息
+     * 根据批次号，图号，获取库存列表信息
      *
-     * @param roomNo
-     * @param rackNo
      * @param materialGraphNo
      * @return
      */
-    Stock infoStocks(String roomNo, String rackNo, String materialGraphNo, String materialBatchNo);
+    List<Stock> infoStocks(String materialGraphNo, List<String> materialBatchNo);
 
 
     /**
