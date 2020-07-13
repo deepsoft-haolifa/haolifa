@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderStatisticDTO;
 import com.deepsoft.haolifa.model.vo.OrderAmountStatisticVo;
+import com.deepsoft.haolifa.model.vo.PurchaseAmountStatisticVo;
 import com.deepsoft.haolifa.service.StatisticsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +36,7 @@ public class StatisticsController {
 
     @ApiOperation("采购订单总金额")
     @PostMapping("/money/purchase")
-    public ResultBean totalPurchase(@RequestBody PurchaseOrderConditionDTO model) {
+    public ResultBean<PurchaseAmountStatisticVo> totalPurchase(@RequestBody PurchaseOrderConditionDTO model) {
         return ResultBean.success(statisticsService.totalPurchase(model));
     }
 

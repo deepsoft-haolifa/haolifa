@@ -26,6 +26,7 @@ import com.deepsoft.haolifa.model.dto.order.OrderStatisticDTO;
 import com.deepsoft.haolifa.model.vo.InvoiceStatisticVo;
 import com.deepsoft.haolifa.model.vo.OrderAmountStatisticVo;
 import com.deepsoft.haolifa.model.vo.OrderProductStatisticVo;
+import com.deepsoft.haolifa.model.vo.PurchaseAmountStatisticVo;
 import com.deepsoft.haolifa.service.StatisticsService;
 
 import java.math.BigDecimal;
@@ -81,7 +82,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public Double totalPurchase(PurchaseOrderConditionDTO model) {
+    public PurchaseAmountStatisticVo totalPurchase(PurchaseOrderConditionDTO model) {
         Map<String, Object> objectMap = BeanUtil.beanToMap(model);
         return statisticsExtendMapper.sumPurchaseTotal(objectMap);
     }

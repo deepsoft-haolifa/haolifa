@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.dto.order.OrderStatisticDTO;
 import com.deepsoft.haolifa.model.vo.InvoiceStatisticVo;
 import com.deepsoft.haolifa.model.vo.OrderAmountStatisticVo;
 import com.deepsoft.haolifa.model.vo.OrderProductStatisticVo;
+import com.deepsoft.haolifa.model.vo.PurchaseAmountStatisticVo;
 
 public interface StatisticsService {
 
@@ -15,7 +16,7 @@ public interface StatisticsService {
 
     OrderAmountStatisticVo totalOrders(OrderConditionDTO model);
 
-    Double totalPurchase(PurchaseOrderConditionDTO model);
+    PurchaseAmountStatisticVo totalPurchase(PurchaseOrderConditionDTO model);
 
     InvoiceStatisticVo totalInvoice(Byte type, InvoiceListDTO dto);
 
