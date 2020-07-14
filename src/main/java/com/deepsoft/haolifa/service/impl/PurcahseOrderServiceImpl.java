@@ -309,11 +309,11 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         if (status != 0) {
             criteria.andStatusEqualTo((byte) status);
         }
-        if (StrUtil.isNotBlank(startDate)) {
+        if (StrUtil.isNotBlank(startDate) && !"null".equals(startDate)) {
             DateTime startParse = DateUtil.parse(startDate, "yyyy-MM-dd");
             criteria.andCreateTimeGreaterThanOrEqualTo(startParse);
         }
-        if (StrUtil.isNotBlank(endDate)) {
+        if (StrUtil.isNotBlank(endDate) && !"null".equals(endDate)) {
             DateTime endParse = DateUtil.parse(endDate, "yyyy-MM-dd");
             criteria.andCreateTimeLessThanOrEqualTo(endParse);
         }
