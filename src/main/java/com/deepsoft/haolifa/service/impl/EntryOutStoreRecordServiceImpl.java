@@ -103,9 +103,10 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             // 统计入库数量-->变更订单状态（生产完成）
             int storeCount = getEntryProductCountByOrderNo(orderNo, "");
             OrderProductAssociateExample associateExample1 = new OrderProductAssociateExample();
-            associateExample.createCriteria().andOrderNoEqualTo(model.getOrderNo());
+            associateExample1.createCriteria().andOrderNoEqualTo(model.getOrderNo());
             List<OrderProductAssociate> associates1 = associateMapper.selectByExample(associateExample1);
             int orderProNumber = associates1.stream().map(OrderProductAssociate::getProductNumber).reduce(0, (a, b) -> a + b);
+            log.info("entry product orderNo:{},orderProNumber:{},storeCount:{}", orderNo, orderProNumber, storeCount);
             if (orderProNumber <= storeCount) {
                 orderProductService.updateOrderProductStatus(model.getOrderNo(), PRODUCTION_FINISH.code);
             }
