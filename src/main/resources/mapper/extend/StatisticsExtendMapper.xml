@@ -4,8 +4,8 @@
 
 
     <select id="sumOrderTotal" resultType="com.deepsoft.haolifa.model.vo.OrderAmountStatisticVo">
-        SELECT ROUND(sum(total_price),2) orderAmount,
-        ROUND(sum(received_account),2) receivedAmount
+        SELECT ROUND(ifnull(sum(total_price),0),2) orderAmount,
+        ROUND(ifnull(sum(received_account),0),2) receivedAmount
         FROM `order_product` op
         where 1=1
         <if test="orderNo != null and orderNo !=''">
@@ -28,7 +28,7 @@
         </if>
     </select>
     <select id="sumPurchaseTotal" resultType="com.deepsoft.haolifa.model.vo.PurchaseAmountStatisticVo">
-        SELECT ROUND(sum(total_price),2) as totalPrice,ROUND(sum(paid_account),2) as paidAccount FROM `purchase_order` op
+        SELECT ROUND(ifnull(sum(total_price),0),2) as totalPrice,ROUND(ifnull(sum(paid_account),0),2) as paidAccount FROM `purchase_order` op
         where 1=1
         <if test="orderNo != null and orderNo !=''">
             and op.purchase_order_no like CONCAT('%',#{orderNo},'%')

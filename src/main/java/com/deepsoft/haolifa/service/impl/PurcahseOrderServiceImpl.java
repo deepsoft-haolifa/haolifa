@@ -12,6 +12,8 @@ import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NU
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
@@ -285,7 +287,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 
     @Override
     public ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType,
-                           String supplierName) {
+                           String supplierName, String startDate, String endDate) {
         List<String> supplierNoList = new ArrayList<>();
         if (StringUtils.isNotEmpty(supplierName)) {
             SupplierExample supplierExample = new SupplierExample();
@@ -306,6 +308,14 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         }
         if (status != 0) {
             criteria.andStatusEqualTo((byte) status);
+        }
+        if (StrUtil.isNotBlank(startDate)) {
+            DateTime startParse = DateUtil.parse(startDate, "yyyy-MM-dd");
+            criteria.andCreateTimeGreaterThanOrEqualTo(startParse);
+        }
+        if (StrUtil.isNotBlank(endDate)) {
+            DateTime endParse = DateUtil.parse(endDate, "yyyy-MM-dd");
+            criteria.andCreateTimeLessThanOrEqualTo(endParse);
         }
         PageDTO<PurchaseOrder> purchaseOrderPageDTO;
         if (supplierNoList.size() > 0) {

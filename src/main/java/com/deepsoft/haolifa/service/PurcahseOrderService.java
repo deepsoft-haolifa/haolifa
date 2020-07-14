@@ -5,6 +5,8 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
+import java.util.Date;
+
 public interface PurcahseOrderService {
 
   /**
@@ -45,7 +47,7 @@ public interface PurcahseOrderService {
    * @param createUserId
    * @return
    */
-  ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName);
+  ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName, String startDate, String endDate);
 
   /**
    * 采购完成
