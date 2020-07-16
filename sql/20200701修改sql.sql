@@ -36,3 +36,8 @@ CREATE TABLE `product_stock_log` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='成品库存记录表';
 
+-- 添加菜单
+INSERT INTO `sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (157, 'm', '订单列表（可修改产品信息）', 'ddlbproduct', 87, 0, NOW(),NOW());
+INSERT INTO `sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (158, 'm', '成品库存列表', 'cpkclb', 50, 0, NOW(),NOW());
+INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 157, NOW(), NOW());
+INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 158,  NOW(), NOW());
