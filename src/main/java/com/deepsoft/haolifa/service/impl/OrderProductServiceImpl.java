@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -637,14 +639,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     // 第六列，数量
                     Cell cell6 = row.getCell(6);
                     String cellValue6 = getCellValue(cell6);
-                    if (StringUtils.isEmpty(cellValue6)||cellValue6.equals("0")) {
+                    if (StringUtils.isEmpty(cellValue6) || cellValue6.equals("0")) {
                         throw new BaseException(ResponseEnum.PARAM_ERROR.code, "上传的表格中，数量不能为空");
                     }
                     orderProductAssociate.setProductNumber(Integer.valueOf(cellValue6));
                     // 第7列，单价
                     Cell cell7 = row.getCell(7);
                     String cellValue7 = getCellValue(cell7);
-                    if (StringUtils.isNotBlank(cellValue7)&&!cellValue7.equals("0")) {
+                    if (StringUtils.isNotBlank(cellValue7) && !cellValue7.equals("0")) {
                         if (cellValue7.contains("￥")) {
                             cellValue7 = cellValue7.replaceAll("￥", "");
                         }
@@ -2153,5 +2155,19 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         List<String> orderNoList = orderProducts.stream().map(OrderProduct::getOrderNo).collect(Collectors.toList());
         return ResultBean.success(orderNoList);
+    }
+
+    @Override
+    public int updateAssociateInfo(OrderProductAssociateUpdateDTO model) {
+        OrderProductAssociate associate = new OrderProductAssociate();
+        BeanUtil.copyProperties(model, associate);
+        associate.setTotalPrice(associate.getPrice().multiply(BigDecimal.valueOf(associate.getProductNumber())));
+        log.info("update product associate info:{},total price:{}", JSONUtil.toJsonPrettyStr(model),associate.getTotalPrice());
+        int update = orderProductAssociateMapper.updateByPrimaryKeySelective(associate);
+        if (update > 0) {
+            // 删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(model.getOrderNo()).key);
+        }
+        return update;
     }
 }

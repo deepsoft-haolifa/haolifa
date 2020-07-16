@@ -92,7 +92,10 @@
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-        <table tableName="inspect" domainObjectName="Inspect">
+        <table tableName="product" domainObjectName="Product">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="product_stock_log" domainObjectName="ProductStockLog">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 <!--        <table tableName="sporadic_material" domainObjectName="SporadicMaterial">-->

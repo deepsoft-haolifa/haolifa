@@ -1,16 +1,21 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.ProductMapper;
 import com.deepsoft.haolifa.dao.repository.ProductMaterialMapper;
+import com.deepsoft.haolifa.dao.repository.ProductStockLogMapper;
 import com.deepsoft.haolifa.dao.repository.extend.ProductMaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.product.ProductConditionDTO;
+import com.deepsoft.haolifa.model.dto.product.ProductMaterialDTO;
+import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
 import com.deepsoft.haolifa.service.MaterialService;
 import com.deepsoft.haolifa.service.ProductMaterialService;
 import com.deepsoft.haolifa.service.ProductService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +36,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductMapper productMapper;
     @Autowired
-    private ProductMaterialExtendMapper productMaterialExtendMapper;
+    private ProductStockLogMapper productStockLogMapper;
     @Autowired
     private ProductMaterialMapper productMaterialMapper;
-    @Autowired
-    private ProductMaterialService productMaterialService;
-    @Autowired
-    private MaterialService materialService;
     @Autowired
     private SysUserService sysUserService;
 
@@ -50,9 +51,6 @@ public class ProductServiceImpl implements ProductService {
 //        if (existProductNo) {
 //            return ResultBean.error(CommonEnum.ResponseEnum.PRODUCT_NO_EXISTS);
 //        }
-        if (StringUtils.isBlank(productNo)) {
-            model.setProductNo("prod_" + RandomUtils.orderNoStr());
-        }
         CustomUser customUser = sysUserService.selectLoginUser();
         int createUser = customUser != null ? customUser.getId() : 1;
         Product product = new Product();
@@ -60,26 +58,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCreateUser(createUser);
         int insert = productMapper.insertSelective(product);
         if (insert > 0) {
-            // 批量增加成品零件配置
-            List<ProductMaterialDTO> productMaterialList = model.getProductMaterialList();
-            if (null != productMaterialList && productMaterialList.size() > 0) {
-                List<ProductMaterial> list = new ArrayList<>();
-                productMaterialList.forEach(e -> {
-                    ProductMaterial productMaterial = new ProductMaterial() {{
-                        setProductNo(productNo);
-                        setCreateUser(createUser);
-                        setMaterialGraphNo(e.getMaterialGraphNo());
-                        setMaterialCount(e.getMaterialCount());
-                        if (StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())) {
-                            setReplaceMaterialGraphNos(e.getReplaceMaterialGraphNo());
-                        } else {
-                            setReplaceMaterialGraphNos("");
-                        }
-                    }};
-                    list.add(productMaterial);
-                });
-                productMaterialExtendMapper.insertBatch(list);
-            }
+
         }
         return ResultBean.success(insert);
     }
@@ -118,27 +97,27 @@ public class ProductServiceImpl implements ProductService {
         example.or().andProductNoEqualTo(productNo);
         productMaterialMapper.deleteByExample(example);
         // 批量增加成品零件配置
-        List<ProductMaterialDTO> productMaterialList = model.getProductMaterialList();
-        if (null != productMaterialList && productMaterialList.size() > 0) {
-            List<ProductMaterial> list = new ArrayList<>();
-            productMaterialList.forEach(e -> {
-                ProductMaterial productMaterial = new ProductMaterial() {{
-                    setProductNo(productNo);
-                    setProductModel(model.getProductModel());
-                    setSpecification(model.getSpecifications());
-                    setCreateUser(updateUser);
-                    setMaterialGraphNo(e.getMaterialGraphNo());
-                    setMaterialCount(e.getMaterialCount());
-                    if (StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())) {
-                        setReplaceMaterialGraphNos(e.getReplaceMaterialGraphNo());
-                    } else {
-                        setReplaceMaterialGraphNos("");
-                    }
-                }};
-                list.add(productMaterial);
-            });
-            productMaterialExtendMapper.insertBatch(list);
-        }
+//        List<ProductMaterialDTO> productMaterialList = model.getProductMaterialList();
+//        if (null != productMaterialList && productMaterialList.size() > 0) {
+//            List<ProductMaterial> list = new ArrayList<>();
+//            productMaterialList.forEach(e -> {
+//                ProductMaterial productMaterial = new ProductMaterial() {{
+//                    setProductNo(productNo);
+//                    setProductModel(model.getProductModel());
+//                    setSpecification(model.getSpecifications());
+//                    setCreateUser(updateUser);
+//                    setMaterialGraphNo(e.getMaterialGraphNo());
+//                    setMaterialCount(e.getMaterialCount());
+//                    if (StringUtils.isNotBlank(e.getReplaceMaterialGraphNo())) {
+//                        setReplaceMaterialGraphNos(e.getReplaceMaterialGraphNo());
+//                    } else {
+//                        setReplaceMaterialGraphNos("");
+//                    }
+//                }};
+//                list.add(productMaterial);
+//            });
+//            productMaterialExtendMapper.insertBatch(list);
+//        }
         return ResultBean.success(update);
     }
 
@@ -149,10 +128,10 @@ public class ProductServiceImpl implements ProductService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         int delete = productMapper.deleteByPrimaryKey(id);
-        // 删除成功产品后，将管理的零件也删除了
-        ProductMaterialExample example = new ProductMaterialExample();
-        example.or().andProductNoEqualTo(productNo);
-        productMaterialMapper.deleteByExample(example);
+//        // 删除成功产品后，将管理的零件也删除了
+//        ProductMaterialExample example = new ProductMaterialExample();
+//        example.or().andProductNoEqualTo(productNo);
+//        productMaterialMapper.deleteByExample(example);
         return ResultBean.success(delete);
     }
 
@@ -190,52 +169,94 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
         BeanUtils.copyProperties(product, productRequestDTO);
-        // 根据产品no 查询管理的零件列表
-        List<ProductMaterial> productMaterials = productMaterialService.getMaterialListByNo(product.getProductNo());
-        List<ProductMaterialDTO> productMaterialDTOList = new ArrayList<>();
-        productMaterials.forEach(e -> {
-            ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO() {{
-                Material infoByGraphNo = materialService.getInfoByGraphNo(e.getMaterialGraphNo());
-                int classifyId = 0;
-                if (infoByGraphNo == null) {
-                    log.error("根据零件图号获取零件信息为空");
-                } else {
-                    classifyId = infoByGraphNo.getMaterialClassifyId();
-                }
-                setMaterialClassifyId(classifyId);
-                setMaterialCount(e.getMaterialCount());
-                setMaterialGraphNo(e.getMaterialGraphNo());
-                setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNos());
-            }};
-            productMaterialDTOList.add(productMaterialDTO);
-        });
-        productRequestDTO.setProductMaterialList(productMaterialDTOList);
-
+//        // 根据产品no 查询管理的零件列表
+//        List<ProductMaterial> productMaterials = productMaterialService.getMaterialListByNo(product.getProductNo());
+//        List<ProductMaterialDTO> productMaterialDTOList = new ArrayList<>();
+//        productMaterials.forEach(e -> {
+//            ProductMaterialDTO productMaterialDTO = new ProductMaterialDTO() {{
+//                Material infoByGraphNo = materialService.getInfoByGraphNo(e.getMaterialGraphNo());
+//                int classifyId = 0;
+//                if (infoByGraphNo == null) {
+//                    log.error("根据零件图号获取零件信息为空");
+//                } else {
+//                    classifyId = infoByGraphNo.getMaterialClassifyId();
+//                }
+//                setMaterialClassifyId(classifyId);
+//                setMaterialCount(e.getMaterialCount());
+//                setMaterialGraphNo(e.getMaterialGraphNo());
+//                setReplaceMaterialGraphNo(e.getReplaceMaterialGraphNos());
+//            }};
+//            productMaterialDTOList.add(productMaterialDTO);
+//        });
         return productRequestDTO;
     }
 
     @Override
-    public ResultBean pageInfo(Integer currentPage, Integer pageSize, String nameLike, String productNoLike) {
-        currentPage = currentPage == null ? 1 : currentPage;
-        pageSize = pageSize == null ? 20 : pageSize;
+    public ResultBean<Product> pageInfo(ProductConditionDTO model) {
         ProductExample example = new ProductExample();
         ProductExample.Criteria criteria = example.createCriteria();
-        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        if (StringUtils.isNotBlank(nameLike)) {
-            criteria.andNameLike("%" + nameLike + "%");
+        if (StringUtils.isNotBlank(model.getName())) {
+            criteria.andNameLike("%" + model.getName() + "%");
         }
-        if (StringUtils.isNotBlank(productNoLike)) {
-            criteria.andProductNoLike("%" + productNoLike + "%");
+        if (StringUtils.isNotBlank(model.getProductNo())) {
+            criteria.andProductNoLike("%" + model.getProductNo() + "%");
         }
-        example.setOrderByClause("create_time desc");
-        Page<Product> products = PageHelper.startPage(currentPage, pageSize)
-                .doSelectPage(() -> productMapper.selectByExample(example));
+        if (StringUtils.isNotBlank(model.getProductModel())) {
+            criteria.andProductModelLike("%" + model.getProductModel() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getSpecifications())) {
+            criteria.andSpecificationsLike("%" + model.getSpecifications() + "%");
+        }
+        example.setOrderByClause("id desc");
+        Page<Product> products = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> productMapper.selectByExample(example));
 
         PageDTO<Product> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(products, pageDTO);
         pageDTO.setList(products);
         return ResultBean.success(pageDTO);
     }
+
+    @Override
+    public boolean addOrUpdateProduct(ProductRequestDTO model) {
+        String productNo = model.getProductNo();
+        String specifications = model.getSpecifications();
+        String productModel = model.getProductModel();
+        CustomUser customUser = sysUserService.selectLoginUser();
+        int createUser = customUser != null ? customUser.getId() : 0;
+        // 通过这三个判断，是否有记录
+        ProductExample example = new ProductExample();
+        example.or().andProductNoEqualTo(productNo)
+            .andProductModelEqualTo(productModel)
+            .andSpecificationsEqualTo(specifications);
+        List<Product> productList = productMapper.selectByExample(example);
+        int operate = 0;
+        if (CollectionUtil.isNotEmpty(productList)) {
+            if (productList.size() == 1) {
+                Product product = productList.get(0);
+                Product updateProduct = new Product();
+                updateProduct.setQty(product.getQty() + model.getQty());
+                updateProduct.setId(product.getId());
+                updateProduct.setUpdateUser(createUser);
+                operate = productMapper.updateByPrimaryKeySelective(updateProduct);
+            } else {
+                log.error("add or update product record error,size more than 1");
+                return false;
+            }
+
+        } else {
+            Product product = new Product();
+            BeanUtil.copyProperties(model, product);
+            product.setCreateUser(createUser);
+            operate = productMapper.insertSelective(product);
+        }
+        if (operate > 0) {
+            // 添加成品库存
+        }
+
+        return false;
+    }
+
 
     /**
      * 判断是否有相同的图号

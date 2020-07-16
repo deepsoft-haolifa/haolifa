@@ -222,4 +222,11 @@ public class OrderProductController {
         return orderProductService.getOrderNoListByquery(type, status, orderNo);
     }
 
+
+    @ApiOperation("修改合同价格和数量")
+    @PostMapping("/update-associate-info")
+    public ResultBean updateAssociateInfo(@RequestBody OrderProductAssociateUpdateDTO model) {
+        return ResultBean.success(orderProductService.updateAssociateInfo(model));
+    }
+
 }

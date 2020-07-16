@@ -15,7 +15,6 @@ import lombok.EqualsAndHashCode;
 public class OutProductStorageDTO extends BaseStorageDTO {
     @ApiModelProperty(value = "出入库记录Id", required = true)
     private Integer id;
-
     @ApiModelProperty(value = "成品号", required = true)
     private String productNo;
     @ApiModelProperty(value = "成品型号")
@@ -33,5 +32,8 @@ public class OutProductStorageDTO extends BaseStorageDTO {
 
     @ApiModelProperty(value = "客户名称")
     private String customerName;
+
+    @ApiModelProperty(value = "成品出库目的地（0：客户；1.成品库；）")
+    private Integer outPlace = 0;
 
 }

@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.deepsoft.haolifa.dao.repository.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Product" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.ProductStockLogMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.ProductStockLog" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="entry_out_record_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="product_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="product_model" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="qty" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="create_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="update_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -76,16 +75,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_no, product_model, name, specifications, status, qty, remark, create_time, 
-    update_time, create_user, update_user
+    id, order_no, entry_out_record_id, product_no, product_model, name, specifications, 
+    qty, remark, create_time, create_user
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.ProductExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.ProductStockLogExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from product
+    from product_stock_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -96,38 +95,44 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from product
+    from product_stock_log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from product
+    delete from product_stock_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.ProductExample" >
-    delete from product
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.ProductStockLogExample" >
+    delete from product_stock_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Product" >
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.ProductStockLog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product (product_no, product_model, name, 
-      specifications, status, qty, 
-      remark, create_time, update_time, 
-      create_user, update_user)
-    values (#{productNo,jdbcType=VARCHAR}, #{productModel,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{specifications,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{qty,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=INTEGER}, #{updateUser,jdbcType=INTEGER})
+    insert into product_stock_log (order_no, entry_out_record_id, product_no, 
+      product_model, name, specifications, 
+      qty, remark, create_time, 
+      create_user)
+    values (#{orderNo,jdbcType=VARCHAR}, #{entryOutRecordId,jdbcType=INTEGER}, #{productNo,jdbcType=VARCHAR}, 
+      #{productModel,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
+      #{qty,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Product" >
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.ProductStockLog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product
+    insert into product_stock_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="entryOutRecordId != null" >
+        entry_out_record_id,
+      </if>
       <if test="productNo != null" >
         product_no,
       </if>
@@ -140,9 +145,6 @@
       <if test="specifications != null" >
         specifications,
       </if>
-      <if test="status != null" >
-        status,
-      </if>
       <if test="qty != null" >
         qty,
       </if>
@@ -152,17 +154,17 @@
       <if test="createTime != null" >
         create_time,
       </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
       <if test="createUser != null" >
         create_user,
       </if>
-      <if test="updateUser != null" >
-        update_user,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="entryOutRecordId != null" >
+        #{entryOutRecordId,jdbcType=INTEGER},
+      </if>
       <if test="productNo != null" >
         #{productNo,jdbcType=VARCHAR},
       </if>
@@ -175,9 +177,6 @@
       <if test="specifications != null" >
         #{specifications,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        #{status,jdbcType=TINYINT},
-      </if>
       <if test="qty != null" >
         #{qty,jdbcType=INTEGER},
       </if>
@@ -187,28 +186,28 @@
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="createUser != null" >
         #{createUser,jdbcType=INTEGER},
       </if>
-      <if test="updateUser != null" >
-        #{updateUser,jdbcType=INTEGER},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.ProductExample" resultType="java.lang.Integer" >
-    select count(*) from product
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.ProductStockLogExample" resultType="java.lang.Integer" >
+    select count(*) from product_stock_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update product
+    update product_stock_log
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entryOutRecordId != null" >
+        entry_out_record_id = #{record.entryOutRecordId,jdbcType=INTEGER},
       </if>
       <if test="record.productNo != null" >
         product_no = #{record.productNo,jdbcType=VARCHAR},
@@ -222,9 +221,6 @@
       <if test="record.specifications != null" >
         specifications = #{record.specifications,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=TINYINT},
-      </if>
       <if test="record.qty != null" >
         qty = #{record.qty,jdbcType=INTEGER},
       </if>
@@ -234,14 +230,8 @@
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.createUser != null" >
         create_user = #{record.createUser,jdbcType=INTEGER},
-      </if>
-      <if test="record.updateUser != null" >
-        update_user = #{record.updateUser,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -249,26 +239,31 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update product
+    update product_stock_log
     set id = #{record.id,jdbcType=INTEGER},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      entry_out_record_id = #{record.entryOutRecordId,jdbcType=INTEGER},
       product_no = #{record.productNo,jdbcType=VARCHAR},
       product_model = #{record.productModel,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       specifications = #{record.specifications,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=TINYINT},
       qty = #{record.qty,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_user = #{record.createUser,jdbcType=INTEGER},
-      update_user = #{record.updateUser,jdbcType=INTEGER}
+      create_user = #{record.createUser,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Product" >
-    update product
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.ProductStockLog" >
+    update product_stock_log
     <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="entryOutRecordId != null" >
+        entry_out_record_id = #{entryOutRecordId,jdbcType=INTEGER},
+      </if>
       <if test="productNo != null" >
         product_no = #{productNo,jdbcType=VARCHAR},
       </if>
@@ -281,9 +276,6 @@
       <if test="specifications != null" >
         specifications = #{specifications,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=TINYINT},
-      </if>
       <if test="qty != null" >
         qty = #{qty,jdbcType=INTEGER},
       </if>
@@ -293,31 +285,24 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="createUser != null" >
         create_user = #{createUser,jdbcType=INTEGER},
-      </if>
-      <if test="updateUser != null" >
-        update_user = #{updateUser,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Product" >
-    update product
-    set product_no = #{productNo,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.ProductStockLog" >
+    update product_stock_log
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      entry_out_record_id = #{entryOutRecordId,jdbcType=INTEGER},
+      product_no = #{productNo,jdbcType=VARCHAR},
       product_model = #{productModel,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       specifications = #{specifications,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
       qty = #{qty,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_user = #{createUser,jdbcType=INTEGER},
-      update_user = #{updateUser,jdbcType=INTEGER}
+      create_user = #{createUser,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -2,8 +2,12 @@ package com.deepsoft.haolifa.model.domain;
 
 import java.util.Date;
 
-public class Product {
+public class ProductStockLog {
     private Integer id;
+
+    private String orderNo;
+
+    private Integer entryOutRecordId;
 
     private String productNo;
 
@@ -13,36 +17,29 @@ public class Product {
 
     private String specifications;
 
-    private Byte status;
-
     private Integer qty;
 
     private String remark;
 
     private Date createTime;
 
-    private Date updateTime;
-
     private Integer createUser;
 
-    private Integer updateUser;
-
-    public Product(Integer id, String productNo, String productModel, String name, String specifications, Byte status, Integer qty, String remark, Date createTime, Date updateTime, Integer createUser, Integer updateUser) {
+    public ProductStockLog(Integer id, String orderNo, Integer entryOutRecordId, String productNo, String productModel, String name, String specifications, Integer qty, String remark, Date createTime, Integer createUser) {
         this.id = id;
+        this.orderNo = orderNo;
+        this.entryOutRecordId = entryOutRecordId;
         this.productNo = productNo;
         this.productModel = productModel;
         this.name = name;
         this.specifications = specifications;
-        this.status = status;
         this.qty = qty;
         this.remark = remark;
         this.createTime = createTime;
-        this.updateTime = updateTime;
         this.createUser = createUser;
-        this.updateUser = updateUser;
     }
 
-    public Product() {
+    public ProductStockLog() {
         super();
     }
 
@@ -52,6 +49,22 @@ public class Product {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public Integer getEntryOutRecordId() {
+        return entryOutRecordId;
+    }
+
+    public void setEntryOutRecordId(Integer entryOutRecordId) {
+        this.entryOutRecordId = entryOutRecordId;
     }
 
     public String getProductNo() {
@@ -86,14 +99,6 @@ public class Product {
         this.specifications = specifications == null ? null : specifications.trim();
     }
 
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
     public Integer getQty() {
         return qty;
     }
@@ -118,27 +123,11 @@ public class Product {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
     public Integer getCreateUser() {
         return createUser;
     }
 
     public void setCreateUser(Integer createUser) {
         this.createUser = createUser;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
     }
 }

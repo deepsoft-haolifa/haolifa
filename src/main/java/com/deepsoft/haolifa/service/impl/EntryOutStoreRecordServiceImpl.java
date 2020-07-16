@@ -234,6 +234,13 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }};
             // 减少库存
             stockService.reduceStock(entryOutStorageDTO);
+
+            // 如果outPlace为1 ，代表进入产品库
+            if (model.getOutPlace() != null && model.getOutPlace() == 1){
+                // 添加或者更新成品库
+
+            }
+
         }
         return ResultBean.success(null);
     }
