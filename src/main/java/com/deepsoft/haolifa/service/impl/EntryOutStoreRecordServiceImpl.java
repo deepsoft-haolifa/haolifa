@@ -12,11 +12,9 @@ import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
 import com.deepsoft.haolifa.model.dto.storage.*;
-import com.deepsoft.haolifa.service.EntryOutStoreRecordService;
-import com.deepsoft.haolifa.service.MaterialService;
-import com.deepsoft.haolifa.service.OrderProductService;
-import com.deepsoft.haolifa.service.StockService;
+import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -49,13 +47,14 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     private OrderProductAssociateMapper associateMapper;
     @Autowired
     private OrderProductService orderProductService;
-
     @Autowired
     private EntrustMapper entrustMapper;
     @Autowired
     private MaterialRequisitionMapper materialRequisitionMapper;
     @Autowired
     private SprayItemMapper sprayItemMapper;
+    @Autowired
+    private ProductService productService;
 
 
     @Override
@@ -236,11 +235,17 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             stockService.reduceStock(entryOutStorageDTO);
 
             // 如果outPlace为1 ，代表进入产品库
-            if (model.getOutPlace() != null && model.getOutPlace() == 1){
+            if (model.getOutPlace() != null && model.getOutPlace() == 1) {
                 // 添加或者更新成品库
-
+                ProductRequestDTO productRequestDTO = new ProductRequestDTO();
+                productRequestDTO.setSpecifications(model.getProductSpecifications());
+                productRequestDTO.setProductNo(model.getProductNo());
+                productRequestDTO.setProductModel(model.getProductModel());
+                productRequestDTO.setQty(model.getQuantity());
+                productRequestDTO.setOrderNo(model.getOrderNo());
+                productRequestDTO.setEntryOutRecordId(entryOutStoreRecord.getId());
+                productService.addOrUpdateProduct(productRequestDTO);
             }
-
         }
         return ResultBean.success(null);
     }

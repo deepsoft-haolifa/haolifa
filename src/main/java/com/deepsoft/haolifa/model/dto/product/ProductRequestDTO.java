@@ -12,12 +12,11 @@ import java.util.List;
 @Data
 @ApiModel(value = "成品配置对象", description = "新增，更新成品实体")
 public class ProductRequestDTO {
-
-    @ApiModelProperty(value = "主键Id", required = true)
+    @ApiModelProperty(value = "主键Id")
     private Integer id;
-    @ApiModelProperty(value = "成品名称", required = true)
+    @ApiModelProperty(value = "成品名称")
     private String name;
-    @ApiModelProperty(value = "成品号", required = true)
+    @ApiModelProperty(value = "成品号")
     private String productNo;
     @ApiModelProperty(value = "成品型号")
     private String productModel;
@@ -27,4 +26,8 @@ public class ProductRequestDTO {
     private Integer qty;
     @ApiModelProperty(value = "备注")
     private String remark;
+    @ApiModelProperty(value = "产品No")
+    private String orderNo;
+    @ApiModelProperty(value = "出入库记录Id")
+    private Integer entryOutRecordId;
 }

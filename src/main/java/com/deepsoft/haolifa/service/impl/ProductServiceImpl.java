@@ -251,9 +251,13 @@ public class ProductServiceImpl implements ProductService {
             operate = productMapper.insertSelective(product);
         }
         if (operate > 0) {
-            // 添加成品库存
+            // 添加成品库存日志记录
+            ProductStockLog productStockLog = new ProductStockLog();
+            BeanUtil.copyProperties(model, productStockLog);
+            productStockLog.setCreateUser(createUser);
+            productStockLogMapper.insertSelective(productStockLog);
+            return true;
         }
-
         return false;
     }
 
