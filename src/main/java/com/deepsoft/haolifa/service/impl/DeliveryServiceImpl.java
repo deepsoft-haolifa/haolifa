@@ -132,7 +132,7 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
         List<DeliveryNotice> deliveryNotices = deliveryNoticeMapper.selectByExample(example);
         if (CollectionUtil.isNotEmpty(deliveryNotices)) {
             DeliveryNotice deliveryNotice = deliveryNotices.get(0);
-            if (deliveryNotice.getAuditResult().equals((byte) 1)) {
+            if (deliveryNotice.getAuditResult().equals((byte) 2)) {
                 return ResultBean.error(CommonEnum.ResponseEnum.DELIVERY_RECORD_NOT_ADD);
             }
         }
