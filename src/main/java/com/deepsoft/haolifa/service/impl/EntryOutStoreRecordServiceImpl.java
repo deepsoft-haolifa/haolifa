@@ -241,7 +241,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 productRequestDTO.setSpecifications(model.getProductSpecifications());
                 productRequestDTO.setProductNo(model.getProductNo());
                 productRequestDTO.setProductModel(model.getProductModel());
-                productRequestDTO.setQty(model.getQuantity());
+                productRequestDTO.setQty(Math.abs(model.getQuantity()));
                 productRequestDTO.setOrderNo(model.getOrderNo());
                 productRequestDTO.setEntryOutRecordId(entryOutStoreRecord.getId());
                 productService.addOrUpdateProduct(productRequestDTO);

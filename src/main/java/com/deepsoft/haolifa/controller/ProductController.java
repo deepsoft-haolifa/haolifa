@@ -20,34 +20,34 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @ApiOperation("新增成品信息")
-    @PostMapping("/save")
-    public ResultBean saveProduct(@RequestBody ProductRequestDTO model) {
-        return productService.saveInfo(model);
-    }
-
-    @ApiOperation("更新成品信息")
-    @PutMapping("/update")
-    public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
-        return productService.updateInfo(model);
-    }
-
-    @ApiOperation("删除成品信息")
-    @DeleteMapping("/delete/{id}/{productNo}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true),
-            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true)
-    })
-    public ResultBean deleteProduct(@PathVariable int id, @PathVariable String productNo) {
-        return productService.delete(id, productNo);
-    }
-
-    @ApiOperation("获取成品信息（包括零件管理信息）")
-    @GetMapping("/getInfo/{id}")
-    @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
-    public ResultBean getInfoProduct(@PathVariable int id) {
-        return ResultBean.success(productService.getProductAllInfo(id));
-    }
+//    @ApiOperation("新增成品信息")
+//    @PostMapping("/save")
+//    public ResultBean saveProduct(@RequestBody ProductRequestDTO model) {
+//        return productService.saveInfo(model);
+//    }
+//
+//    @ApiOperation("更新成品信息")
+//    @PutMapping("/update")
+//    public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
+//        return productService.updateInfo(model);
+//    }
+//
+//    @ApiOperation("删除成品信息")
+//    @DeleteMapping("/delete/{id}/{productNo}")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true),
+//            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true)
+//    })
+//    public ResultBean deleteProduct(@PathVariable int id, @PathVariable String productNo) {
+//        return productService.delete(id, productNo);
+//    }
+//
+//    @ApiOperation("获取成品信息（包括零件管理信息）")
+//    @GetMapping("/getInfo/{id}")
+//    @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
+//    public ResultBean getInfoProduct(@PathVariable int id) {
+//        return ResultBean.success(productService.getProductAllInfo(id));
+//    }
 
     @ApiOperation("获取成品分页列表")
     @PostMapping("/pageInfo")

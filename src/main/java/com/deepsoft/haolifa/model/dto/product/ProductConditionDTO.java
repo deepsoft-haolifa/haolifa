@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  * @date: 2018-10-15 10:22
  **/
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class ProductConditionDTO extends PageParam {
     @ApiModelProperty(value = "成品名称", required = true)
     private String name;
