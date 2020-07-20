@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
@@ -2158,16 +2159,22 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
-    public int updateAssociateInfo(OrderProductAssociateUpdateDTO model) {
-        OrderProductAssociate associate = new OrderProductAssociate();
-        BeanUtil.copyProperties(model, associate);
-        associate.setTotalPrice(associate.getPrice().multiply(BigDecimal.valueOf(associate.getProductNumber())));
-        log.info("update product associate info:{},total price:{}", JSONUtil.toJsonPrettyStr(model),associate.getTotalPrice());
-        int update = orderProductAssociateMapper.updateByPrimaryKeySelective(associate);
-        if (update > 0) {
-            // 删除redis值
-            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(model.getOrderNo()).key);
+    @Transactional(rollbackFor = Exception.class)
+    public int updateAssociateInfo(List<OrderProductAssociateUpdateDTO> models) {
+        if (CollectionUtil.isNotEmpty(models)) {
+            for (OrderProductAssociateUpdateDTO model : models) {
+                OrderProductAssociate associate = new OrderProductAssociate();
+                BeanUtil.copyProperties(model, associate);
+                associate.setTotalPrice(associate.getPrice().multiply(BigDecimal.valueOf(associate.getProductNumber())));
+                log.info("update product associate info:{},total price:{}", JSONUtil.toJsonPrettyStr(model), associate.getTotalPrice());
+                int update = orderProductAssociateMapper.updateByPrimaryKeySelective(associate);
+                if (update > 0) {
+                    // 删除redis值
+                    redisDao.del(CacheKeyManager.cacheKeyOrderInfo(model.getOrderNo()).key);
+                }
+                return update;
+            }
         }
-        return update;
+        return 0;
     }
 }

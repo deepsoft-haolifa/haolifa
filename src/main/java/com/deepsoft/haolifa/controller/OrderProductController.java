@@ -225,8 +225,8 @@ public class OrderProductController {
 
     @ApiOperation("修改合同价格和数量")
     @PostMapping("/update-associate-info")
-    public ResultBean updateAssociateInfo(@RequestBody OrderProductAssociateUpdateDTO model) {
-        return ResultBean.success(orderProductService.updateAssociateInfo(model));
+    public ResultBean updateAssociateInfo(@RequestBody List<OrderProductAssociateUpdateDTO> models) {
+        return ResultBean.success(orderProductService.updateAssociateInfo(models));
     }
 
 }

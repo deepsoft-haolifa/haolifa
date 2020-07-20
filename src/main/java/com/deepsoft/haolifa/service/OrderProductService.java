@@ -169,5 +169,5 @@ public interface OrderProductService {
      * 更新生产订单的详情数据（单价+数量）
      * @param model
      */
-    int updateAssociateInfo(@RequestBody OrderProductAssociateUpdateDTO model);
+    int updateAssociateInfo(@RequestBody List<OrderProductAssociateUpdateDTO> model);
 }
