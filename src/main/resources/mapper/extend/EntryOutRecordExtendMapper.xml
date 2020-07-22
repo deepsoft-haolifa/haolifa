@@ -9,10 +9,10 @@
         a.product_specifications productSpecifications,
         a.quantity quantity,
         a.create_time createTime,
-        opa.price
+        a.price
         FROM
         `entry_out_store_record` a
-        LEFT JOIN order_product_associate opa ON a.order_no = opa.order_no and a.product_no=opa.product_no
+--         LEFT JOIN order_product_associate opa ON a.order_no = opa.order_no and a.product_no=opa.product_no
         where 1=1 and a.type=1 and a.operation_type=2
         <if test="orderNo!=null and orderNo!=''">
             and a.order_no = #{orderNo}

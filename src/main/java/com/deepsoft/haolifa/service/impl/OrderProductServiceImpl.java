@@ -2162,9 +2162,11 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Transactional(rollbackFor = Exception.class)
     public int updateAssociateInfo(List<OrderProductAssociateUpdateDTO> models) {
         if (CollectionUtil.isNotEmpty(models)) {
+            String orderNo = "";
             for (OrderProductAssociateUpdateDTO model : models) {
                 OrderProductAssociate associate = new OrderProductAssociate();
                 BeanUtil.copyProperties(model, associate);
+                orderNo = model.getOrderNo();
                 associate.setTotalPrice(associate.getPrice().multiply(BigDecimal.valueOf(associate.getProductNumber())));
                 log.info("update product associate info:{},total price:{}", JSONUtil.toJsonPrettyStr(model), associate.getTotalPrice());
                 int update = orderProductAssociateMapper.updateByPrimaryKeySelective(associate);
@@ -2172,7 +2174,23 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     // 删除redis值
                     redisDao.del(CacheKeyManager.cacheKeyOrderInfo(model.getOrderNo()).key);
                 }
-                return update;
+            }
+
+            // 修改订单主表的数量
+            OrderProductAssociateExample example = new OrderProductAssociateExample();
+            example.or().andOrderNoEqualTo(orderNo);
+            List<OrderProductAssociate> orderAssociates = orderProductAssociateMapper.selectByExample(example);
+            if (CollectionUtil.isNotEmpty(orderAssociates)) {
+                int sum = orderAssociates.stream().mapToInt(OrderProductAssociate::getProductNumber).sum();
+                double totalPrice = orderAssociates.stream().map(item ->
+                    item.getProductNumber().doubleValue() * item.getPrice().doubleValue()
+                ).reduce(0.0, (a, b) -> a + b);
+                OrderProductExample productExample = new OrderProductExample();
+                productExample.or().andOrderNoEqualTo(orderNo);
+                OrderProduct orderProduct = new OrderProduct();
+                orderProduct.setTotalCount(sum);
+                orderProduct.setTotalPrice(BigDecimal.valueOf(totalPrice));
+                orderProductMapper.updateByExampleSelective(orderProduct,productExample);
             }
         }
         return 0;
