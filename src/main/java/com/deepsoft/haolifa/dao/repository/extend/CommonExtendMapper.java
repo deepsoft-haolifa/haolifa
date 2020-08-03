@@ -28,8 +28,8 @@ public interface CommonExtendMapper {
     /**
      * 查询零件送检的总数
      */
-    @Select("SELECT IFNULL(sum(delivery_number),0) as deliveryNumber, IFNULL(sum(unqualified_number),0) as unqualifiedNumber from `inspect_item` a where a.purchase_no=#{purchaseNo} and a.material_graph_no=#{graphNo}")
-    InspectItemSumDto sumDeliveryInspectItem(@Param("purchaseNo") String purchaseNo, @Param("graphNo") String graphNo);
+    @Select("SELECT IFNULL(sum(delivery_number),0) as deliveryNumber, IFNULL(sum(unqualified_number),0) as unqualifiedNumber from `inspect_item` a where a.purchase_no=#{purchaseNo} and a.material_graph_no=#{graphNo} and a.specification=#{specification}")
+    InspectItemSumDto sumDeliveryInspectItem(@Param("purchaseNo") String purchaseNo, @Param("graphNo") String graphNo,@Param("specification") String specification);
 
     /**
      * 根据采购订单号，分组查询送检数，检验合格数，检验不合格数

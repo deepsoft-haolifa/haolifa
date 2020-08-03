@@ -20,3 +20,7 @@ INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `up
 INSERT INTO `sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 156,  NOW(), NOW());
 
 alter table invoice add column `order_amount`  decimal(11,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '合同金额' after total_amount;
+
+
+select * from (select a.total_count,b.qa,a.order_no from (select order_no,total_count from order_product where order_status=7) a,(select sum(quantity) qa,order_no from entry_out_store_record where order_no in(select order_no from order_product where order_status=7) and operation_type=2 and type=1 group by order_no)b where a.order_no=b.order_no)c where c.total_count=c.qa;
+
