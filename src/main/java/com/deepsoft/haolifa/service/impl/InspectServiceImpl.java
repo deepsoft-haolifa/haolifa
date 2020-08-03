@@ -191,11 +191,11 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         // 判断 送检数不能大于采购数
         Integer deliveryNumber = inspectItemDTO.getDeliveryNumber();
         // 获取这个合同，这个图号已经送检的数量,不合格数
-        InspectItemSumDto inspectItemSumDto = commonExtendMapper.sumDeliveryInspectItem(inspectItemDTO.getPurchaseNo(), inspectItemDTO.getMaterialGraphNo());
+        InspectItemSumDto inspectItemSumDto = commonExtendMapper.sumDeliveryInspectItem(inspectItemDTO.getPurchaseNo(), inspectItemDTO.getMaterialGraphNo(), inspectItemDTO.getSpecification());
         // 获取这个合同，这个图号的采购数量（先从送检单中填写的那个获取，再从采购合同表中获取）
         Integer purchaseNumber = 0;
         PurchaseOrderItemExample example = new PurchaseOrderItemExample();
-        example.or().andPurchaseOrderNoEqualTo(inspectItemDTO.getPurchaseNo()).andMaterialGraphNoEqualTo(inspectItemDTO.getMaterialGraphNo());
+        example.or().andPurchaseOrderNoEqualTo(inspectItemDTO.getPurchaseNo()).andMaterialGraphNoEqualTo(inspectItemDTO.getMaterialGraphNo()).andSpecificationEqualTo(inspectItemDTO.getSpecification());
         List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
             purchaseNumber = purchaseOrderItems.get(0).getNumber();
