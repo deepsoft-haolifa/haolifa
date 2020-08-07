@@ -260,41 +260,36 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean updateStatus(Integer inspectId, Integer status) {
-        Inspect inspect = new Inspect();
-        inspect.setId(inspectId);
-        inspect.setStatus(status.byteValue());
         Inspect inspect1 = inspectMapper.selectByPrimaryKey(inspectId);
         if (status == 2 && inspect1.getBlueprints().length() == 0) {
             return new ResultBean(MATERIAL_REPORT_IS_NULL);
         }
-        inspectMapper.updateByPrimaryKeySelective(inspect);
-        if (status == 2 || status == 3) {
-            // 更新单项合格与不合格数量
+        // 点击质检完成的条件
+        if (status == 3) {
+            // 1. 判断是否有质检记录
             InspectHistoryExample historyExample = new InspectHistoryExample();
             historyExample.or().andInspectNoEqualTo(inspect1.getInspectNo());
             List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
             if (status.byteValue() == InspectStatus.INSPECTED.code && CollUtil.isEmpty(histories)) {
                 throw new BaseException(ResponseEnum.ADD_INSPECT_RECORD);
             }
-            Map<String, InspectItem> updateItem = new HashMap<>();
-            for (int i = 0; i < histories.size(); i++) {
-                InspectHistory history = histories.get(i);
-                if (updateItem.containsKey(history.getMaterialGraphNo())) {
-                    InspectItem item = updateItem.get(history.getMaterialGraphNo());
-                    item.setUnqualifiedNumber(item.getUnqualifiedNumber() + history.getUnqualifiedNumber());
-                    updateItem.put(history.getMaterialGraphNo(), item);
-                } else {
-                    InspectItem item = new InspectItem();
-                    item.setUnqualifiedNumber(history.getUnqualifiedNumber());
-                    updateItem.put(history.getMaterialGraphNo(), item);
+            //2. 判断质检item的合格数+不合格数 是否等于送检数量
+            InspectItemExample itemExample = new InspectItemExample();
+            itemExample.or().andInspectNoEqualTo(inspect1.getInspectNo());
+            List<InspectItem> inspectItems = inspectItemMapper.selectByExample(itemExample);
+            inspectItems.forEach(item -> {
+                Integer deliveryNumber = item.getDeliveryNumber();
+                Integer unqualifiedNumber = item.getUnqualifiedNumber();
+                Integer qualifiedNumber = item.getQualifiedNumber();
+                if (deliveryNumber != unqualifiedNumber + qualifiedNumber) {
+                    throw new BaseException(ResponseEnum.INSPECT_COMPELETE_LIMIT, item.getMaterialGraphNo());
                 }
-            }
-            for (Entry en : updateItem.entrySet()) {
-                InspectItemExample itemExample = new InspectItemExample();
-                itemExample.or().andInspectIdEqualTo(inspectId).andMaterialGraphNoEqualTo(en.getKey().toString());
-                inspectItemMapper.updateByExampleSelective((InspectItem) en.getValue(), itemExample);
-            }
+            });
         }
+        Inspect inspect = new Inspect();
+        inspect.setId(inspectId);
+        inspect.setStatus(status.byteValue());
+        inspectMapper.updateByPrimaryKeySelective(inspect);
         return ResultBean.success(1);
     }
 
