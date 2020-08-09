@@ -2190,9 +2190,19 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 OrderProduct orderProduct = new OrderProduct();
                 orderProduct.setTotalCount(sum);
                 orderProduct.setTotalPrice(BigDecimal.valueOf(totalPrice));
-                orderProductMapper.updateByExampleSelective(orderProduct,productExample);
+                orderProductMapper.updateByExampleSelective(orderProduct, productExample);
             }
         }
         return 0;
+    }
+
+    @Override
+    public int updateContractUrl(OrderContractUpdateDTO dto) {
+        OrderProductExample example = new OrderProductExample();
+        example.or().andOrderNoEqualTo(dto.getOrderContractUrl());
+
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setOrderContractUrl(dto.getOrderContractUrl());
+        return  orderProductMapper.updateByExampleSelective(orderProduct, example);
     }
 }

@@ -229,4 +229,9 @@ public class OrderProductController {
         return ResultBean.success(orderProductService.updateAssociateInfo(models));
     }
 
+    @ApiOperation("修改合同价格和数量后，覆盖原来的excel")
+    @PostMapping("/cover-order-excel")
+    public ResultBean coverOrderExcel(@RequestBody OrderContractUpdateDTO dto) {
+        return ResultBean.success(orderProductService.updateContractUrl(dto));
+    }
 }
