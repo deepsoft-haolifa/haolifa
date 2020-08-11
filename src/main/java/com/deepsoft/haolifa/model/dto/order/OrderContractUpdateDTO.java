@@ -19,4 +19,7 @@ public class OrderContractUpdateDTO {
 
     @ApiModelProperty(value = "订单合同Url")
     private String orderContractUrl;
+
+    @ApiModelProperty(value = "type：1修改有价格的；0修改无价格的")
+    private Integer type;
 }

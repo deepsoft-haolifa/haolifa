@@ -2199,10 +2199,19 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Override
     public int updateContractUrl(OrderContractUpdateDTO dto) {
         OrderProductExample example = new OrderProductExample();
-        example.or().andOrderNoEqualTo(dto.getOrderContractUrl());
+        example.or().andOrderNoEqualTo(dto.getOrderNo());
 
         OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setOrderContractUrl(dto.getOrderContractUrl());
-        return  orderProductMapper.updateByExampleSelective(orderProduct, example);
+        if (dto.getType() != null && dto.getType() == 1) {
+            orderProduct.setOrderContractExtendUrl(dto.getOrderContractUrl());
+        } else {
+            orderProduct.setOrderContractUrl(dto.getOrderContractUrl());
+        }
+        int i = orderProductMapper.updateByExampleSelective(orderProduct, example);
+        if (i > 0) {
+            //删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(dto.getOrderNo()).key);
+        }
+        return i;
     }
 }
