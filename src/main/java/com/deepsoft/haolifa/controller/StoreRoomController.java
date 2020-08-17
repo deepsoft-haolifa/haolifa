@@ -154,7 +154,7 @@ public class StoreRoomController {
 
     @ApiOperation("成品入库")
     @PutMapping("/entryOut/entryProduct")
-    public ResultBean updateRack(@RequestBody EntryProductStorageDTO model) {
+    public ResultBean entryProduct(@RequestBody EntryProductStorageDTO model) {
         if (StringUtils.isAnyBlank(model.getProductNo())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
@@ -163,16 +163,25 @@ public class StoreRoomController {
 
     @ApiOperation("成品出库")
     @PutMapping("/entryOut/outProduct")
-    public ResultBean updateRack(@RequestBody OutProductStorageDTO model) {
+    public ResultBean outProduct(@RequestBody OutProductStorageDTO model) {
         if (StringUtils.isAnyBlank(model.getProductNo())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         return entryOutStoreRecordService.outProduct(model);
     }
 
+    @ApiOperation("成品出库已经数量")
+    @PutMapping("/entryOut/outProduct-already-count")
+    public ResultBean outProductAlreadyCount(@RequestBody ProductStorageDto model) {
+        if (StringUtils.isAnyBlank(model.getProductNo(), model.getOrderNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        return ResultBean.success(entryOutStoreRecordService.getOutProductCountByOrderNo(model.getOrderNo(), model.getProductNo()));
+    }
+
     @ApiOperation("零件入库")
     @PutMapping("/entryOut/entryMaterial")
-    public ResultBean updateRack(@RequestBody EntryMaterialStorageDTO model) {
+    public ResultBean entryMaterial(@RequestBody EntryMaterialStorageDTO model) {
         if (StringUtils.isAnyBlank(model.getMaterialGraphNo())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
@@ -186,7 +195,7 @@ public class StoreRoomController {
 
     @ApiOperation("零件出库")
     @PutMapping("/entryOut/outMaterial")
-    public ResultBean updateRack(@RequestBody OutMaterialStorageDTO model) {
+    public ResultBean outMaterial(@RequestBody OutMaterialStorageDTO model) {
         if (StringUtils.isAnyBlank(model.getMaterialGraphNo())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }

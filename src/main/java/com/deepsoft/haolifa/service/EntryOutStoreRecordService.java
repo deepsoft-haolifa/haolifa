@@ -23,6 +23,13 @@ public interface EntryOutStoreRecordService {
     ResultBean outProduct(OutProductStorageDTO model);
 
     /**
+     * 已经出库的数量
+     * @param orderNo
+     * @param productNo
+     * @return
+     */
+    int getOutProductCountByOrderNo(String orderNo, String productNo);
+    /**
      * 零件入库
      *
      * @return

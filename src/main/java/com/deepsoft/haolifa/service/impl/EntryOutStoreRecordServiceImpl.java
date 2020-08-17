@@ -134,7 +134,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     /**
      * 根据订单号获取成品出库数
      */
-    private int getOutProductCountByOrderNo(String orderNo, String productNo) {
+    @Override
+    public int getOutProductCountByOrderNo(String orderNo, String productNo) {
         EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
         EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
         criteria.andOrderNoEqualTo(orderNo)
