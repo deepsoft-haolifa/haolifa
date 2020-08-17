@@ -176,7 +176,7 @@ public class StoreRoomController {
         if (StringUtils.isAnyBlank(model.getProductNo(), model.getOrderNo())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        return ResultBean.success(entryOutStoreRecordService.getOutProductCountByOrderNo(model.getOrderNo(), model.getProductNo()));
+        return ResultBean.success(entryOutStoreRecordService.getOutProductCount(model));
     }
 
     @ApiOperation("零件入库")

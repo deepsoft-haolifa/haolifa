@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.OperationType;
@@ -134,7 +135,6 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     /**
      * 根据订单号获取成品出库数
      */
-    @Override
     public int getOutProductCountByOrderNo(String orderNo, String productNo) {
         EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
         EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
@@ -249,6 +249,27 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }
         }
         return ResultBean.success(null);
+    }
+
+    @Override
+    public int getOutProductCount(ProductStorageDto model) {
+        EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
+        EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
+        if (StrUtil.isNotBlank(model.getOrderNo())) {
+            criteria.andOrderNoEqualTo(model.getOrderNo());
+        }
+        if (StringUtils.isNotBlank(model.getProductNo())) {
+            criteria.andProductNoEqualTo(model.getProductNo());
+        }
+        if (model.getRecordId() != null) {
+            criteria.andRecordIdEqualTo(model.getRecordId());
+        }
+        criteria.andOperationTypeEqualTo(CommonEnum.OperationType.OUT.code);
+        criteria.andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
+        List<EntryOutStoreRecord> recordList = entryOutStoreRecordMapper.selectByExample(recordExample);
+        int storeCount = recordList.stream().map(EntryOutStoreRecord::getQuantity).reduce(0, (a, b) -> a + b);
+        storeCount = Math.abs(storeCount);
+        return storeCount;
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.storage.EntryMaterialStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
-import com.deepsoft.haolifa.model.dto.storage.OutProductStorageDTO;
+import com.deepsoft.haolifa.model.dto.storage.*;
 
 public interface EntryOutStoreRecordService {
 
@@ -24,11 +21,9 @@ public interface EntryOutStoreRecordService {
 
     /**
      * 已经出库的数量
-     * @param orderNo
-     * @param productNo
      * @return
      */
-    int getOutProductCountByOrderNo(String orderNo, String productNo);
+    int getOutProductCount(ProductStorageDto model);
     /**
      * 零件入库
      *

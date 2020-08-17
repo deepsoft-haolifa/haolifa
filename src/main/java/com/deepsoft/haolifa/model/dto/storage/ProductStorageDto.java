@@ -14,4 +14,7 @@ public class ProductStorageDto {
 
     @ApiModelProperty(value = "成品号")
     private String productNo;
+
+    @ApiModelProperty(value = "记录Id")
+    private Integer recordId;
 }
