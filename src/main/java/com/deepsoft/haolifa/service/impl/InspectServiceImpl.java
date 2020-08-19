@@ -282,7 +282,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 Integer unqualifiedNumber = item.getUnqualifiedNumber();
                 Integer qualifiedNumber = item.getQualifiedNumber();
                 if (deliveryNumber != unqualifiedNumber + qualifiedNumber) {
-                    throw new BaseException(ResponseEnum.INSPECT_COMPELETE_LIMIT, item.getMaterialGraphNo());
+                    throw new BaseException(ResponseEnum.INSPECT_COMPELETE_LIMIT, (Object) item.getMaterialGraphNo());
                 }
             });
         }

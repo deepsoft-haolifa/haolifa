@@ -125,7 +125,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             com.deepsoft.haolifa.model.dto.PurchaseOrderItem item = model.getItemList().get(i);
             String graphNo = item.getMaterialGraphNo();
             if (!materialService.existsGraphNo(graphNo)) {
-                throw new BaseException(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_NOT_EXIST_1.code, graphNo);
+                throw new BaseException(CommonEnum.ResponseEnum.MATERIAL_GRAPH_NO_NOT_EXIST_1.code, (Object) graphNo);
             }
             BeanUtils.copyProperties(item, orderItem);
             orderItem.setUnitPrice(new BigDecimal(item.getUnitPrice()));
