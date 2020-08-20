@@ -99,6 +99,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }};
             // 增加库存
             boolean result = stockService.addStock(entryOutStorageDTO);
+            if (!result) {
+                throw new BaseException(CommonEnum.ResponseEnum.FAIL, "库存增加失败");
+            }
             log.info("EntryOutStoreRecordServiceImpl entryProduct add stock result:{}", result);
             // 统计入库数量-->变更订单状态（生产完成）
             int storeCount = getEntryProductCount(new ProductStorageDto() {{
@@ -236,7 +239,10 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setQuantity(quantity);
             }};
             // 减少库存
-            stockService.reduceStock(entryOutStorageDTO);
+            boolean reduceStock = stockService.reduceStock(entryOutStorageDTO);
+            if (!reduceStock) {
+                throw new BaseException(CommonEnum.ResponseEnum.FAIL, "库存扣减失败");
+            }
 
             // 如果outPlace为1 ，代表进入产品库
             if (model.getOutPlace() != null && model.getOutPlace() == 1) {
@@ -316,7 +322,10 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 setQuantity(quantity);
             }};
             // 增加库存
-            stockService.addStock(entryOutStorageDTO);
+            boolean result = stockService.addStock(entryOutStorageDTO);
+            if (!result) {
+                throw new BaseException(CommonEnum.ResponseEnum.FAIL, "库存增加失败");
+            }
             // 更新零件的当前库存量(如果是订单需求的入库，则将其入锁定料，不能再次被核料)
             if (model.getBusType() != null && model.getBusType().equals(CommonEnum.BusType.ORDER_REQUIRE.type)) {
                 log.info("material entry busNo:{},batchNumber:{},graphNo:{},quantity:{}", model.getBusNo(), model.getMaterialBatchNo(), materialGraphNo, quantity);
@@ -399,6 +408,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 entryOutStorageDTO.setLockQuantity(-needQty);
                 // 减少库存
                 boolean reduceStock = stockService.reduceStock(entryOutStorageDTO);
+                if (!reduceStock) {
+                    throw new BaseException(CommonEnum.ResponseEnum.FAIL, "库存扣减失败");
+                }
                 log.info("material reduce stock result:{},materialNo:{},batchNo:{},rackNo:{},quantity:{}", reduceStock,
                     materialGraphNo, stockMaterialBatchNo, rackNo, -needQty);
                 // 如果该零件有锁定数量，先减少锁定数量，在减少当前库存量
