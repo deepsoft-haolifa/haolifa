@@ -376,12 +376,13 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }
             String roomNo = stock.getRoomNo();
             String rackNo = stock.getRackNo();
+            String stockMaterialBatchNo = stock.getMaterialBatchNo();
             // 插入出入库记录表
             EntryOutStoreRecord entryOutStoreRecord = new EntryOutStoreRecord();
             BeanUtils.copyProperties(model, entryOutStoreRecord);
             entryOutStoreRecord.setQuantity(-needQty);
             entryOutStoreRecord.setRackNo(rackNo);
-            entryOutStoreRecord.setMaterialBatchNo(stock.getMaterialBatchNo());
+            entryOutStoreRecord.setMaterialBatchNo(stockMaterialBatchNo);
             entryOutStoreRecord.setOperationType(operationType);
             entryOutStoreRecord.setType(storageType);
             entryOutStoreRecord.setCreateUser(getLoginUserId());
@@ -390,7 +391,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 EntryOutStorageDTO entryOutStorageDTO = new EntryOutStorageDTO();
                 entryOutStorageDTO.setRoomNo(roomNo);
                 entryOutStorageDTO.setRackNo(rackNo);
-                entryOutStorageDTO.setMaterialBatchNo(materialBatchNo);
+                entryOutStorageDTO.setMaterialBatchNo(stockMaterialBatchNo);
                 entryOutStorageDTO.setMaterialGraphNo(materialGraphNo);
                 entryOutStorageDTO.setOperationType(operationType);
                 entryOutStorageDTO.setType(storageType);
@@ -399,7 +400,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 // 减少库存
                 boolean reduceStock = stockService.reduceStock(entryOutStorageDTO);
                 log.info("material reduce stock result:{},materialNo:{},batchNo:{},rackNo:{},quantity:{}", reduceStock,
-                    materialGraphNo, materialBatchNo, rackNo, -needQty);
+                    materialGraphNo, stockMaterialBatchNo, rackNo, -needQty);
                 // 如果该零件有锁定数量，先减少锁定数量，在减少当前库存量
                 Material infoByGraphNo = materialService.getInfoByGraphNo(materialGraphNo);
                 Integer lockQuantity = infoByGraphNo.getLockQuantity();
