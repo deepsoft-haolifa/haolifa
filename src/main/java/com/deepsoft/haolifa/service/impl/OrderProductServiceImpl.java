@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.cache.NoCacheLoadCallBack;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.OrderFileMapper;
 import com.deepsoft.haolifa.dao.repository.OrderMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
@@ -1113,8 +1114,16 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<Material> fatiMaterialList = materialService
             .getListByMultiModelAndSpec(CommonEnum.ProductModelType.FATI.classifyId, smallModel, specifications);
         if (fatiMaterialList != null && fatiMaterialList.size() > 0) {
-            // 去除尾部带数字的阀体图号
-            fatiMaterialList = fatiMaterialList.stream().filter(e -> e.getGraphNo().endsWith("M") || e.getGraphNo().endsWith("J") || e.getGraphNo().endsWith("B")).collect(Collectors.toList());
+            // 获取有规则的阀体图号
+            List<String> fatisuffix = Arrays.asList(Constant.FATI_SUFFIX_CHECK);
+            fatiMaterialList.stream().filter(e -> {
+                String graphNo = e.getGraphNo();
+                graphNo = graphNo.substring(graphNo.length() - 3);
+                if (fatisuffix.contains(graphNo)) {
+                    return true;
+                }
+                return false;
+            });
             for (Material e : fatiMaterialList) {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
@@ -1378,6 +1387,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // region 核料规则
                 // 如果零件类型是阀体，需要查询零件库里面图号带J，带M的库存；
                 if (type.equals(CommonEnum.ProductModelType.FATI.code)) {
+                    if (!graphNo.endsWith("J") && !graphNo.endsWith("M")) {
+                        materialInfoWithNum = materialService.getInfoByGraphNo(graphNo);
+                        currentQuantityWithNum = materialInfoWithNum.getCurrentQuantity();
+                        currentQuantity += currentQuantityWithNum;
+                        log.info("checkMaterial fati check info,orderNo:{},needMaterialCount:{},graphNo:{},quantity:{}",
+                            orderNo, materialCount, graphNo, currentQuantity);
+                    }
+
                     graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
                     graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00M");
 

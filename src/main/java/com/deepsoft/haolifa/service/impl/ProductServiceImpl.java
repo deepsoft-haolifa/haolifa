@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.dao.repository.ProductStockLogMapper;
 import com.deepsoft.haolifa.dao.repository.extend.ProductMaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.product.OutProductDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductConditionDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductMaterialDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
@@ -254,6 +255,35 @@ public class ProductServiceImpl implements ProductService {
             // 添加成品库存日志记录
             ProductStockLog productStockLog = new ProductStockLog();
             BeanUtil.copyProperties(model, productStockLog);
+            productStockLog.setCreateUser(createUser);
+            productStockLogMapper.insertSelective(productStockLog);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean outProduct(OutProductDTO model) {
+        CustomUser customUser = sysUserService.selectLoginUser();
+        int createUser = customUser != null ? customUser.getId() : 0;
+        Integer id = model.getId();
+        Integer qty = model.getQty();
+        int reduceQty = Math.abs(qty);
+        Product product = productMapper.selectByPrimaryKey(id);
+        int resultQty = product.getQty() - reduceQty;
+        if (resultQty < 0) {
+            throw new BaseException(CommonEnum.ResponseEnum.PRODUCT_COUNT_ERROR);
+        }
+        Product updateProduct = new Product();
+        updateProduct.setId(id);
+        updateProduct.setQty(resultQty);
+        int update = productMapper.updateByPrimaryKeySelective(updateProduct);
+        if (update > 0) {
+            // 添加成品库存日志记录
+            ProductStockLog productStockLog = new ProductStockLog();
+            BeanUtil.copyProperties(product, productStockLog);
+            productStockLog.setQty(-reduceQty);
             productStockLog.setCreateUser(createUser);
             productStockLogMapper.insertSelective(productStockLog);
             return true;

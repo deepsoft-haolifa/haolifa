@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.Product;
+import com.deepsoft.haolifa.model.dto.product.OutProductDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductConditionDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -20,71 +22,21 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-//    @ApiOperation("新增成品信息")
-//    @PostMapping("/save")
-//    public ResultBean saveProduct(@RequestBody ProductRequestDTO model) {
-//        return productService.saveInfo(model);
-//    }
-//
-//    @ApiOperation("更新成品信息")
-//    @PutMapping("/update")
-//    public ResultBean updateProduct(@RequestBody ProductRequestDTO model) {
-//        return productService.updateInfo(model);
-//    }
-//
-//    @ApiOperation("删除成品信息")
-//    @DeleteMapping("/delete/{id}/{productNo}")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true),
-//            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true)
-//    })
-//    public ResultBean deleteProduct(@PathVariable int id, @PathVariable String productNo) {
-//        return productService.delete(id, productNo);
-//    }
-//
-//    @ApiOperation("获取成品信息（包括零件管理信息）")
-//    @GetMapping("/getInfo/{id}")
-//    @ApiImplicitParam(name = "id", value = "成品id", dataType = "int", paramType = "path", required = true)
-//    public ResultBean getInfoProduct(@PathVariable int id) {
-//        return ResultBean.success(productService.getProductAllInfo(id));
-//    }
-
     @ApiOperation("获取成品分页列表")
     @PostMapping("/pageInfo")
     public ResultBean<Product> pageInfoProduct(@RequestBody ProductConditionDTO model) {
         return productService.pageInfo(model);
     }
 
-
-//    @ApiOperation("（编辑成品信息时用的到）编辑成品零件关联信息")
-//    @PutMapping("/material/edit/{productNo}")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true)
-//    })
-//    public ResultBean saveProductMaterial(@PathVariable String productNo, @RequestBody ProductMaterialDTO model) {
-//        return productMaterialService.editInfo(productNo, model);
-//    }
-//
-//    @ApiOperation("（编辑成品信息时用的到）删除成品零件关联信息")
-//    @DeleteMapping("/material/delete/{productNo}/{materialGraphNo}")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "productNo", value = "成品号", dataType = "string", paramType = "path", required = true),
-//            @ApiImplicitParam(name = "materialGraphNo", value = "零件编号", dataType = "string", paramType = "path", required = true)
-//    })
-//    public ResultBean deleteProductMaterial(@PathVariable String productNo, @PathVariable String materialGraphNo) {
-//        return productMaterialService.delete(productNo, materialGraphNo);
-//    }
-
-//    @ApiOperation("获取成品零件配置分页列表")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(required = true, value = "当前页面", name = "currentPage", dataType = "int", paramType = "query"),
-//            @ApiImplicitParam(required = true, value = "每页数量", name = "pageSize", dataType = "int", paramType = "query"),
-//            @ApiImplicitParam(required = true, value = "成品编号", name = "productNo", dataType = "string", paramType = "query")
-//    })
-//    @GetMapping("/material/pageInfo")
-//    public ResultBean pageInfoProduct(@RequestParam(defaultValue = "1") Integer currentPage,
-//                                      @RequestParam(defaultValue = "20") Integer pageSize,
-//                                      @RequestParam String productNo) {
-//        return productMaterialService.pageInfo(currentPage, pageSize, productNo);
-//    }
+    @ApiOperation("成品出库")
+    @PostMapping("/out-product")
+    public ResultBean outProduct(@RequestBody OutProductDTO model) {
+        boolean outProduct = productService.outProduct(model);
+        if (outProduct) {
+            ResultBean.success(null);
+        } else {
+            ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
+        return null;
+    }
 }

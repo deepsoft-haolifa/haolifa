@@ -179,6 +179,8 @@ public class StoreRoomController {
         return ResultBean.success(entryOutStoreRecordService.getOutProductCount(model));
     }
 
+
+
     @ApiOperation("零件入库")
     @PutMapping("/entryOut/entryMaterial")
     public ResultBean entryMaterial(@RequestBody EntryMaterialStorageDTO model) {

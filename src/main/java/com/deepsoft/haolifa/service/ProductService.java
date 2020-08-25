@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.Product;
+import com.deepsoft.haolifa.model.dto.product.OutProductDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductConditionDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -70,4 +71,11 @@ public interface ProductService {
      * @return
      */
     boolean addOrUpdateProduct(ProductRequestDTO model);
+
+    /**
+     * 成品库出库
+     *
+     * @return
+     */
+    boolean outProduct(OutProductDTO model);
 }
