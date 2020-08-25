@@ -354,15 +354,21 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             String pcTime = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             model.setMaterialBatchNo(pcTime);
         }
+        // 获取batchNo list
         List<String> batchNoList = batchNoDTOList.stream().map(MaterialBatchNoDTO::getMaterialBatchNo).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(batchNoList)) {
             batchNoList = Arrays.asList(materialBatchNo);
+        }
+        // 获取rackNo list
+        List<String> rackNoList = batchNoDTOList.stream().map(MaterialBatchNoDTO::getRackNo).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(rackNoList)) {
+            rackNoList = Arrays.asList(model.getRackNo());
         }
 
         // 根据零件图号，批次号获取库房和库位
         final Integer quantity = model.getQuantity();
         // 判断库房是否有这么多数量
-        List<Stock> stockList = stockService.infoStocks(materialGraphNo, batchNoList);
+        List<Stock> stockList = stockService.infoStocks(materialGraphNo, batchNoList, rackNoList);
         if (CollectionUtil.isEmpty(stockList)) {
             log.error("not stock record by materialGraphNo:{},materialBatchNo:{}", materialGraphNo, materialBatchNo);
             return 0;

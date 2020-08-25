@@ -160,7 +160,7 @@ public class StockServiceImpl extends BaseService implements StockService {
     }
 
     @Override
-    public List<Stock> infoStocks(String materialGraphNo, List<String> batchNoList) {
+    public List<Stock> infoStocks(String materialGraphNo, List<String> batchNoList,List<String> rackNoList) {
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(materialGraphNo)) {
@@ -168,6 +168,9 @@ public class StockServiceImpl extends BaseService implements StockService {
         }
         if (CollectionUtil.isNotEmpty(batchNoList)) {
             criteria.andMaterialBatchNoIn(batchNoList);
+        }
+        if (CollectionUtil.isNotEmpty(rackNoList)) {
+            criteria.andRackNoIn(rackNoList);
         }
         return stockMapper.selectByExample(example);
     }

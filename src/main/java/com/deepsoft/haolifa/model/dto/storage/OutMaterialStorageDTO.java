@@ -30,8 +30,8 @@ public class OutMaterialStorageDTO extends BaseStorageDTO {
     @ApiModelProperty(value = "零件批次号")
     private String materialBatchNo;
 
-    @ApiModelProperty(value = "零件批次号(批量选择)")
-    private List<String> batchNoList;
+//    @ApiModelProperty(value = "零件批次号(批量选择)")
+//    private List<String> batchNoList;
 
     @ApiModelProperty(value = "零件批次号(批量选择)")
     private List<MaterialBatchNoDTO> batchNoDTOList;

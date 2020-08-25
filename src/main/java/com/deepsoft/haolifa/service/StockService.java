@@ -46,7 +46,7 @@ public interface StockService {
      * @param materialGraphNo
      * @return
      */
-    List<Stock> infoStocks(String materialGraphNo, List<String> materialBatchNo);
+    List<Stock> infoStocks(String materialGraphNo, List<String> materialBatchNo,List<String> rackNoList);
 
 
     /**
