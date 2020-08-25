@@ -30,6 +30,7 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.OrderStatus.PRODUCTION_FINISH;
 
@@ -339,11 +340,12 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         model.setQuantity(-Math.abs(model.getQuantity()));
         final String materialGraphNo = model.getMaterialGraphNo();
         final String materialBatchNo = model.getMaterialBatchNo();
-        List<String> batchNoList = model.getBatchNoList();
-        if (StringUtils.isBlank(materialBatchNo) && CollectionUtil.isEmpty(batchNoList)) {
+        List<MaterialBatchNoDTO> batchNoDTOList = model.getBatchNoDTOList();
+        if (StringUtils.isBlank(materialBatchNo) && CollectionUtil.isEmpty(batchNoDTOList)) {
             String pcTime = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             model.setMaterialBatchNo(pcTime);
         }
+        List<String> batchNoList = batchNoDTOList.stream().map(MaterialBatchNoDTO::getMaterialBatchNo).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(batchNoList)) {
             batchNoList = Arrays.asList(materialBatchNo);
         }
