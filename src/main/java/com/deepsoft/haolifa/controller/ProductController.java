@@ -33,7 +33,7 @@ public class ProductController {
     public ResultBean outProduct(@RequestBody OutProductDTO model) {
         boolean outProduct = productService.outProduct(model);
         if (outProduct) {
-            ResultBean.success(null);
+            ResultBean.success(outProduct);
         } else {
             ResultBean.error(CommonEnum.ResponseEnum.FAIL);
         }
