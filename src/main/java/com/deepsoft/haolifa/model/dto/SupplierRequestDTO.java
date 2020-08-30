@@ -34,6 +34,8 @@ public class SupplierRequestDTO {
     private String legalPerson;
     @ApiModelProperty(required = true, value = "法人联系电话")
     private String legalPersonPhone;
+    @ApiModelProperty(value = "供应商提供产品")
+    private String supplierProduct;
     @ApiModelProperty(required = true, value = "工厂总面积")
     private Integer totalFactoryArea;
     @ApiModelProperty(required = true, value = "建筑物面积")
