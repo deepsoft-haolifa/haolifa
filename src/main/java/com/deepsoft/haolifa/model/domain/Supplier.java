@@ -25,6 +25,8 @@ public class Supplier {
 
     private String legalPersonPhone;
 
+    private String supplierProduct;
+
     private Integer totalFactoryArea;
 
     private Integer totalArchitArea;
@@ -61,7 +63,7 @@ public class Supplier {
 
     private String accessory;
 
-    public Supplier(Integer id, String suppilerNo, String suppilerName, String website, Byte nature, String phone, String address, String postcode, String fax, String legalPerson, String legalPersonPhone, Integer totalFactoryArea, Integer totalArchitArea, Byte workType, String staffInfo, String credentialsInfo, String financialInfo, String mainOrgan, String qualityAssuranceInfo, String processRoute, String suppilerPreparer, String responsiblePerson, String evaluation, Byte isQualified, Integer createUserId, Date updateTime, Date createTime, Byte isDelete, String accessory) {
+    public Supplier(Integer id, String suppilerNo, String suppilerName, String website, Byte nature, String phone, String address, String postcode, String fax, String legalPerson, String legalPersonPhone, String supplierProduct, Integer totalFactoryArea, Integer totalArchitArea, Byte workType, String staffInfo, String credentialsInfo, String financialInfo, String mainOrgan, String qualityAssuranceInfo, String processRoute, String suppilerPreparer, String responsiblePerson, String evaluation, Byte isQualified, Integer createUserId, Date updateTime, Date createTime, Byte isDelete, String accessory) {
         this.id = id;
         this.suppilerNo = suppilerNo;
         this.suppilerName = suppilerName;
@@ -73,6 +75,7 @@ public class Supplier {
         this.fax = fax;
         this.legalPerson = legalPerson;
         this.legalPersonPhone = legalPersonPhone;
+        this.supplierProduct = supplierProduct;
         this.totalFactoryArea = totalFactoryArea;
         this.totalArchitArea = totalArchitArea;
         this.workType = workType;
@@ -183,6 +186,14 @@ public class Supplier {
 
     public void setLegalPersonPhone(String legalPersonPhone) {
         this.legalPersonPhone = legalPersonPhone == null ? null : legalPersonPhone.trim();
+    }
+
+    public String getSupplierProduct() {
+        return supplierProduct;
+    }
+
+    public void setSupplierProduct(String supplierProduct) {
+        this.supplierProduct = supplierProduct == null ? null : supplierProduct.trim();
     }
 
     public Integer getTotalFactoryArea() {

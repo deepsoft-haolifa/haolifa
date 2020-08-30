@@ -855,6 +855,76 @@ public class SupplierExample {
             return (Criteria) this;
         }
 
+        public Criteria andSupplierProductIsNull() {
+            addCriterion("supplier_product is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductIsNotNull() {
+            addCriterion("supplier_product is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductEqualTo(String value) {
+            addCriterion("supplier_product =", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductNotEqualTo(String value) {
+            addCriterion("supplier_product <>", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductGreaterThan(String value) {
+            addCriterion("supplier_product >", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductGreaterThanOrEqualTo(String value) {
+            addCriterion("supplier_product >=", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductLessThan(String value) {
+            addCriterion("supplier_product <", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductLessThanOrEqualTo(String value) {
+            addCriterion("supplier_product <=", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductLike(String value) {
+            addCriterion("supplier_product like", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductNotLike(String value) {
+            addCriterion("supplier_product not like", value, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductIn(List<String> values) {
+            addCriterion("supplier_product in", values, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductNotIn(List<String> values) {
+            addCriterion("supplier_product not in", values, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductBetween(String value1, String value2) {
+            addCriterion("supplier_product between", value1, value2, "supplierProduct");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplierProductNotBetween(String value1, String value2) {
+            addCriterion("supplier_product not between", value1, value2, "supplierProduct");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalFactoryAreaIsNull() {
             addCriterion("total_factory_area is null");
             return (Criteria) this;
