@@ -379,9 +379,10 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 return 0;
             }
         }
+        // 需要扣减的数量
         int absQty = Math.abs(quantity);
-        boolean isExit = false;
         for (Stock stock : stockList) {
+            // 批次号的数量
             Integer stockQuantity = stock.getQuantity();
             int needQty = 0;
             if (absQty - stockQuantity <= 0) {
@@ -466,7 +467,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 }
             }
 
-            if (isExit) {
+            if (absQty == 0) {
                 break;
             }
         }
