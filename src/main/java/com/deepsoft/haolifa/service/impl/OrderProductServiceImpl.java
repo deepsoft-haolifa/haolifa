@@ -1387,101 +1387,103 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 // region 核料规则
                 // 如果零件类型是阀体，需要查询零件库里面图号带J，带M的库存；
                 if (type.equals(CommonEnum.ProductModelType.FATI.code)) {
-                    if (!graphNo.endsWith("J") && !graphNo.endsWith("M")) {
-                        materialInfoWithNum = materialService.getInfoByGraphNo(graphNo);
-                        currentQuantityWithNum = materialInfoWithNum.getCurrentQuantity();
-                        currentQuantity += currentQuantityWithNum;
-                        log.info("checkMaterial fati check info,orderNo:{},needMaterialCount:{},graphNo:{},quantity:{}",
-                            orderNo, materialCount, graphNo, currentQuantity);
-                    }
-
-                    graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
-                    graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00M");
-
-                    if (graphNo.endsWith("M")) {
-                        List<EntrustGraphNoRelation> graphNoRels = entrustRelationService.listByGraphNoM(graphNo);
-                        if (!CollectionUtils.isEmpty(graphNoRels)) {
-                            graphNoWithJList = graphNoRels.stream().map(EntrustGraphNoRelation::getProcessedGraphNo).collect(Collectors.toList());
-                        }
-                        graphNoWithM = graphNo;
-                    } else if (graphNo.endsWith("J")) {
-                        EntrustGraphNoRelation graphNoRel = entrustRelationService.findByGraphNoJ(graphNo);
-                        if (null != graphNoRel) {
-                            graphNoWithM = graphNoRel.getOriginalGraphNo();
-                        }
-                    }
-
-
-                    // 如果是止回阀
+                    // 如果是止回阀,核带数字和带B的，需要将00Qa转成QaEa进行核料；
                     if (graphNo.startsWith(CommonEnum.ProductType.H.code)) {
+                        graphNo = graphNo.replaceAll("00Qa", "QaEa");
                         // 先核带B的，需要将图号转换成QaEa,
                         graphNoWithB = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00B").replaceAll("00Qa", "QaEa");
                         // 如果机加工，毛坯图号 需要将QaEa转换成00Qa
                         graphNoWithJ = graphNoWithJ.replaceAll("QaEa", "00Qa");
                         graphNoWithM = graphNoWithM.replaceAll("QaEa", "00Qa");
-                        materialInfoWithB = materialService.getInfoByGraphNo(graphNoWithB);
-                        currentQuantityWithB = materialInfoWithB != null ? materialInfoWithB.getCurrentQuantity() : 0;
-                        currentQuantity += currentQuantityWithB;
                     }
-
-                    // 如果选择的毛坯图号对应多个机加工图号
-                    if (!CollectionUtils.isEmpty(graphNoWithJList)) {
-                        // 如果一个毛坯件对应多个机加工件，则走这个方法的核料
-                        specialResultList = this.checkMaterialSpecial(graphNoWithJList, graphNoWithM, materialCount);
-                        // 不往下走了，直接走下一个循环
-                        continue;
+                    if (!graphNo.endsWith("J") && !graphNo.endsWith("M")) {
+                        materialInfoWithNum = materialService.getInfoByGraphNo(graphNo);
+                        currentQuantityWithNum = materialInfoWithNum.getCurrentQuantity();
+                        currentQuantity += currentQuantityWithNum;
                     }
-
+                    log.info("checkMaterial fati check info,orderNo:{},needMaterialCount:{},graphNo:{},quantity:{}",
+                        orderNo, materialCount, graphNo, currentQuantity);
                     if (currentQuantity < materialCount) {
-                        materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
-                        currentQuantityWithJ = materialInfoWithJ != null ? materialInfoWithJ.getCurrentQuantity() : 0;
-                        currentQuantity += currentQuantityWithJ;
-                        log.info("checkMaterial fati check info,orderNo:{},needMaterialCount:{},graphNo:{},graphNoJ:{},quantityJ:{},quantity:{}",
-                            orderNo, materialCount, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantity);
-                        // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
+                        if (graphNo.startsWith(CommonEnum.ProductType.H.code)) {
+                            materialInfoWithB = materialService.getInfoByGraphNo(graphNoWithB);
+                            currentQuantityWithB = materialInfoWithB != null ? materialInfoWithB.getCurrentQuantity() : 0;
+                            currentQuantity += currentQuantityWithB;
+                        }
                         if (currentQuantity < materialCount) {
-                            //查询正在机加工的数量
-                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
-                            if (jijiaCount > 0) {
-                                CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
-                                checkMaterialLockDTO.setMaterialGraphNo(graphNoWithJ);
-                                checkMaterialLockDTO.setType(CommonEnum.CheckMaterialLockType.ENTRUST.type);
-                                checkMaterialLockDTO.setLockQuantity(jijiaCount);
-                                materialLockDTOList.add(checkMaterialLockDTO);
-                            }
-                            currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
-                            currentQuantity += jijiaCount;
-                            log.info(
-                                "checkMaterial fati check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},jijiagong:{},"
-                                    + "quantity:{}",
-                                orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jijiaCount, currentQuantity);
-                            // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
-                            if (currentQuantity < materialCount) {
-                                materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
-                                if (materialInfoWithM != null) {
-                                    currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
-                                } else {
-                                    materialInfoWithM = new Material();
-                                    materialInfoWithM.setName("阀体毛坯（系统中暂无）");
+                            graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
+                            graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00M");
+
+                            if (graphNo.endsWith("M")) {
+                                List<EntrustGraphNoRelation> graphNoRels = entrustRelationService.listByGraphNoM(graphNo);
+                                if (!CollectionUtils.isEmpty(graphNoRels)) {
+                                    graphNoWithJList = graphNoRels.stream().map(EntrustGraphNoRelation::getProcessedGraphNo).collect(Collectors.toList());
                                 }
-                                currentQuantity += currentQuantityWithM;
+                                graphNoWithM = graphNo;
+                            } else if (graphNo.endsWith("J")) {
+                                EntrustGraphNoRelation graphNoRel = entrustRelationService.findByGraphNoJ(graphNo);
+                                if (null != graphNoRel) {
+                                    graphNoWithM = graphNoRel.getOriginalGraphNo();
+                                }
+                            }
+                            // 如果选择的毛坯图号对应多个机加工图号
+                            if (!CollectionUtils.isEmpty(graphNoWithJList)) {
+                                // 如果一个毛坯件对应多个机加工件，则走这个方法的核料
+                                specialResultList = this.checkMaterialSpecial(graphNoWithJList, graphNoWithM, materialCount);
+                                // 不往下走了，直接走下一个循环
+                                continue;
+                            }
+                            materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
+                            currentQuantityWithJ = materialInfoWithJ != null ? materialInfoWithJ.getCurrentQuantity() : 0;
+                            currentQuantity += currentQuantityWithJ;
+                            log.info("checkMaterial fati check info,orderNo:{},needMaterialCount:{},graphNo:{},graphNoJ:{},quantityJ:{},quantity:{}",
+                                orderNo, materialCount, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantity);
+                            // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
+                            if (currentQuantity < materialCount) {
+                                //查询正在机加工的数量
+                                int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
+                                if (jijiaCount > 0) {
+                                    CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
+                                    checkMaterialLockDTO.setMaterialGraphNo(graphNoWithJ);
+                                    checkMaterialLockDTO.setType(CommonEnum.CheckMaterialLockType.ENTRUST.type);
+                                    checkMaterialLockDTO.setLockQuantity(jijiaCount);
+                                    materialLockDTOList.add(checkMaterialLockDTO);
+                                }
+                                currentQuantityWithJ = currentQuantityWithJ + jijiaCount;
+                                currentQuantity += jijiaCount;
                                 log.info(
-                                    "checkMaterial fati check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},"
+                                    "checkMaterial fati check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},jijiagong:{},"
                                         + "quantity:{}",
-                                    orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
+                                    orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, jijiaCount, currentQuantity);
+                                // 如果库存中机加工和正在机加工的数量还小于要求的数量，查询库存中带M的库存
                                 if (currentQuantity < materialCount) {
-                                    lackMaterialCount = materialCount - currentQuantity;
+                                    materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
+                                    if (materialInfoWithM != null) {
+                                        currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                                    } else {
+                                        materialInfoWithM = new Material();
+                                        materialInfoWithM.setName("阀体毛坯（系统中暂无）");
+                                    }
+                                    currentQuantity += currentQuantityWithM;
+                                    log.info(
+                                        "checkMaterial fati check info ,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantityM:{},"
+                                            + "quantity:{}",
+                                        orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantityWithM, currentQuantity);
+                                    if (currentQuantity < materialCount) {
+                                        lackMaterialCount = materialCount - currentQuantity;
+                                    } else {
+                                        currentQuantityWithM = materialCount - currentQuantityWithJ - currentQuantityWithB - currentQuantityWithNum;
+                                    }
                                 } else {
-                                    currentQuantityWithM = materialCount - currentQuantityWithJ - currentQuantityWithB;
+                                    currentQuantityWithJ = materialCount - currentQuantityWithB - currentQuantityWithNum;
                                 }
                             } else {
-                                currentQuantityWithJ = materialCount - currentQuantityWithB;
+                                currentQuantityWithJ = materialCount - currentQuantityWithB - currentQuantityWithNum;
                             }
                         } else {
-                            currentQuantityWithJ = materialCount - currentQuantityWithB;
+                            currentQuantityWithB = materialCount - currentQuantityWithNum;
                         }
                     } else {
-                        currentQuantityWithB = materialCount;
+                        currentQuantityWithNum = materialCount;
                     }
                     // endregion
 
