@@ -26,7 +26,8 @@ public class OrderCheckMaterialDTO {
 
     @ApiModelProperty(value = "零件名称")
     private String materialName;
-
+    @ApiModelProperty(value = "零件分类")
+    private Integer materialClassifyId;
 //    @ApiModelProperty(value = "是否是替换零件（0：否，1：是）")
 //    private Byte isReplace;
 

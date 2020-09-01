@@ -1355,6 +1355,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 orderCheckMaterialDTO.setCheckResultMsg("核料成功");
                 orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
                 orderCheckMaterialDTO.setMaterialName(materialQuantityDTO.getMaterialName());
+                orderCheckMaterialDTO.setMaterialClassifyId(CommonEnum.ProductModelType.TONG_YONG.classifyId);
                 orderCheckMaterialDTO.setMaterialCount(materialQuantityDTO.getQuantity());
                 orderCheckMaterialDTO.setOrderNo(orderNo);
                 orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1620,6 +1621,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                     orderCheckMaterialDTO.setMaterialGraphNo(graphNo);
                     orderCheckMaterialDTO.setMaterialName(materialInfoWithNum.getName());
+                    orderCheckMaterialDTO.setMaterialClassifyId(materialInfoWithNum.getMaterialClassifyId());
                     orderCheckMaterialDTO.setMaterialCount(currentQuantityWithNum);
                     orderCheckMaterialDTO.setOrderNo(orderNo);
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1634,6 +1636,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                     orderCheckMaterialDTO.setMaterialGraphNo(graphNoWithB);
                     orderCheckMaterialDTO.setMaterialName(materialInfoWithB.getName());
+                    orderCheckMaterialDTO.setMaterialClassifyId(materialInfoWithB.getMaterialClassifyId());
                     orderCheckMaterialDTO.setMaterialCount(currentQuantityWithB);
                     orderCheckMaterialDTO.setOrderNo(orderNo);
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1648,6 +1651,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                     orderCheckMaterialDTO.setMaterialGraphNo(graphNoWithJ);
                     orderCheckMaterialDTO.setMaterialName(materialInfoWithJ.getName());
+                    orderCheckMaterialDTO.setMaterialClassifyId(materialInfoWithJ.getMaterialClassifyId());
                     orderCheckMaterialDTO.setMaterialCount(currentQuantityWithJ);
                     orderCheckMaterialDTO.setOrderNo(orderNo);
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1667,6 +1671,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                     orderCheckMaterialDTO.setMaterialGraphNo(graphNoWithM);
                     orderCheckMaterialDTO.setMaterialName(materialInfoWithM.getName());
+                    orderCheckMaterialDTO.setMaterialClassifyId(materialInfoWithM.getMaterialClassifyId());
                     orderCheckMaterialDTO.setMaterialCount(currentQuantityWithM + lackMaterialCount);
                     orderCheckMaterialDTO.setOrderNo(orderNo);
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1722,6 +1727,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         } catch (Exception e) {
             log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
         }
+        orderCheckMaterialDTOS.sort(Comparator.comparing(OrderCheckMaterialDTO::getMaterialClassifyId));
         return orderCheckMaterialDTOS;
     }
 
