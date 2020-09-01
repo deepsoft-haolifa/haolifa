@@ -1605,6 +1605,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                         orderCheckMaterialDTO.setMaterialGraphNo(checkMaterialDTO.getMaterialGraphNo());
                         orderCheckMaterialDTO.setMaterialName(checkMaterialDTO.getMaterialName());
+                        orderCheckMaterialDTO.setMaterialClassifyId(checkMaterialDTO.getMaterialClassifyId());
                         orderCheckMaterialDTO.setMaterialCount(checkMaterialDTO.getMaterialCount());
                         orderCheckMaterialDTO.setOrderNo(orderNo);
                         orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1715,6 +1716,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     orderCheckMaterialDTO.setCheckResultMsg(checkResult);
                     orderCheckMaterialDTO.setMaterialGraphNo(graphNo);
                     orderCheckMaterialDTO.setMaterialName(materialInfo.getName());
+                    orderCheckMaterialDTO.setMaterialClassifyId(materialInfo.getMaterialClassifyId());
                     orderCheckMaterialDTO.setMaterialCount(currentQuantity + lackMaterialCount);
                     orderCheckMaterialDTO.setOrderNo(orderNo);
                     orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
@@ -1727,7 +1729,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         } catch (Exception e) {
             log.error("核料过程中出现的异常，orderNo:{}", orderNo, e);
         }
-        orderCheckMaterialDTOS.sort(Comparator.comparing(OrderCheckMaterialDTO::getMaterialClassifyId));
+        if (CollectionUtil.isNotEmpty(orderCheckMaterialDTOS)) {
+            orderCheckMaterialDTOS.forEach(e -> {
+                if (null == e.getMaterialClassifyId()) {
+                    e.setMaterialClassifyId(0);
+                }
+            });
+            orderCheckMaterialDTOS.sort(Comparator.comparing(OrderCheckMaterialDTO::getMaterialClassifyId));
+        }
         return orderCheckMaterialDTOS;
     }
 
@@ -1768,6 +1777,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
             OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
             orderCheckMaterialDTO.setMaterialName(materialInfoWithJ.getName());
+            orderCheckMaterialDTO.setMaterialClassifyId(materialInfoWithJ.getMaterialClassifyId());
             orderCheckMaterialDTO.setMaterialCount(currentQuantityWithJ);
             resultList.add(orderCheckMaterialDTO);
         }
@@ -1789,6 +1799,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             }
             OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
             orderCheckMaterialDTO.setMaterialName(materialInfoWithM.getName());
+            orderCheckMaterialDTO.setMaterialClassifyId(materialInfoWithM.getMaterialClassifyId());
             orderCheckMaterialDTO.setMaterialCount(currentQuantityWithM + lackMaterialCount);
             orderCheckMaterialDTO.setLackMaterialCount(lackMaterialCount);
             resultList.add(orderCheckMaterialDTO);
