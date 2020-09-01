@@ -355,12 +355,12 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             model.setMaterialBatchNo(pcTime);
         }
         // 获取batchNo list
-        List<String> batchNoList = batchNoDTOList.stream().map(MaterialBatchNoDTO::getMaterialBatchNo).collect(Collectors.toList());
+        List<String> batchNoList = Optional.ofNullable(batchNoDTOList).orElse(CollectionUtil.newArrayList()).stream().map(MaterialBatchNoDTO::getMaterialBatchNo).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(batchNoList)) {
             batchNoList = Arrays.asList(materialBatchNo);
         }
         // 获取rackNo list
-        List<String> rackNoList = batchNoDTOList.stream().map(MaterialBatchNoDTO::getRackNo).collect(Collectors.toList());
+        List<String> rackNoList = Optional.ofNullable(batchNoDTOList).orElse(CollectionUtil.newArrayList()).stream().map(MaterialBatchNoDTO::getRackNo).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(rackNoList)) {
             rackNoList = Arrays.asList(model.getRackNo());
         }
