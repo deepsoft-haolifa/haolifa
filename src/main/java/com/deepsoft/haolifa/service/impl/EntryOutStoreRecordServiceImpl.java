@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.sql.Struct;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -360,7 +361,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             batchNoList = Arrays.asList(materialBatchNo);
         }
         // 获取rackNo list
-        List<String> rackNoList = Optional.ofNullable(batchNoDTOList).orElse(CollectionUtil.newArrayList()).stream().map(MaterialBatchNoDTO::getRackNo).collect(Collectors.toList());
+        List<String> rackNoList = Optional.ofNullable(batchNoDTOList).orElse(CollectionUtil.newArrayList()).stream().filter(e-> StrUtil.isNotBlank(e.getRackNo())).map(MaterialBatchNoDTO::getRackNo).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(rackNoList)) {
             rackNoList = Arrays.asList(model.getRackNo());
         }
@@ -370,7 +371,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         // 判断库房是否有这么多数量
         List<Stock> stockList = stockService.infoStocks(materialGraphNo, batchNoList, rackNoList);
         if (CollectionUtil.isEmpty(stockList)) {
-            log.error("not stock record by materialGraphNo:{},materialBatchNo:{}", materialGraphNo, materialBatchNo);
+            log.error("not stock record by materialGraphNo:{},materialBatchNo:{},rackNoList:{}", materialGraphNo, batchNoList,rackNoList);
             return 0;
         } else {
             int sum = stockList.stream().mapToInt(Stock::getQuantity).sum();
