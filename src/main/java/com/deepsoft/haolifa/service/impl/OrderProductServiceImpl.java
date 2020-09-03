@@ -1387,12 +1387,16 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 String type = materialQuantityDTO.getType();
                 // region 核料规则
                 // 如果零件类型是阀体，需要查询零件库里面图号带J，带M的库存；
+                String grapnNoSub = graphNo.substring(0, graphNo.lastIndexOf("-") + 1);
                 if (type.equals(CommonEnum.ProductModelType.FATI.code)) {
+                    graphNoWithB = grapnNoSub.concat("00B");
+                    graphNoWithJ = grapnNoSub.concat("00J");
+                    graphNoWithM = grapnNoSub.concat("00M");
                     // 如果是止回阀,核带数字和带B的，需要将00Qa转成QaEa进行核料；
                     if (graphNo.startsWith(CommonEnum.ProductType.H.code)) {
                         graphNo = graphNo.replaceAll("00Qa", "QaEa");
                         // 先核带B的，需要将图号转换成QaEa,
-                        graphNoWithB = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00B").replaceAll("00Qa", "QaEa");
+                        graphNoWithB = graphNoWithB.replaceAll("00Qa", "QaEa");
                         // 如果机加工，毛坯图号 需要将QaEa转换成00Qa
                         graphNoWithJ = graphNoWithJ.replaceAll("QaEa", "00Qa");
                         graphNoWithM = graphNoWithM.replaceAll("QaEa", "00Qa");
@@ -1411,9 +1415,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             currentQuantity += currentQuantityWithB;
                         }
                         if (currentQuantity < materialCount) {
-                            graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00J");
-                            graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("00M");
-
                             if (graphNo.endsWith("M")) {
                                 List<EntrustGraphNoRelation> graphNoRels = entrustRelationService.listByGraphNoM(graphNo);
                                 if (!CollectionUtils.isEmpty(graphNoRels)) {
@@ -1501,7 +1502,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     log.info("checkMaterial faban check info ,orderNo:{},needMaterialCount:{},graphNo:{},quantity:{}", orderNo,
                         materialCount, graphNo, currentQuantityWithNum);
                     if (currentQuantity < materialCount) {
-                        graphNoWithJ = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("0J");
+                        graphNoWithJ = grapnNoSub.concat("0J");
                         materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
                         if (materialInfoWithJ != null) {
                             currentQuantityWithJ = materialInfoWithJ.getCurrentQuantity();
@@ -1511,7 +1512,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             orderNo, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantity);
                         // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
                         if (currentQuantity < materialCount) {
-                            graphNoWithM = graphNo.substring(0, graphNo.lastIndexOf("-") + 1).concat("0M");
+                            graphNoWithM = grapnNoSub.concat("0M");
                             //查询正在机加工的数量
                             int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
                             if (jijiaCount > 0) {
