@@ -340,7 +340,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int outMaterial(OutMaterialStorageDTO model) {
+    public int  outMaterial(OutMaterialStorageDTO model) {
         log.info("EntryOutStoreRecordServiceImpl outMaterial start model:{}", model.toString());
         byte operationType = CommonEnum.OperationType.OUT.code;
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
