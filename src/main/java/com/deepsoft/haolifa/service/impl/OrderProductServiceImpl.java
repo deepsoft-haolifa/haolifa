@@ -1404,6 +1404,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     if (!graphNo.endsWith("J") && !graphNo.endsWith("M")) {
                         materialInfoWithNum = materialService.getInfoByGraphNo(graphNo);
                         currentQuantityWithNum = materialInfoWithNum.getCurrentQuantity();
+                        if (currentQuantityWithNum < 0) {
+                            currentQuantityWithNum = 0;
+                        }
                         currentQuantity += currentQuantityWithNum;
                     }
                     log.info("checkMaterial fati check info,orderNo:{},needMaterialCount:{},graphNo:{},quantity:{}",
@@ -1412,6 +1415,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         if (graphNo.startsWith(CommonEnum.ProductType.H.code)) {
                             materialInfoWithB = materialService.getInfoByGraphNo(graphNoWithB);
                             currentQuantityWithB = materialInfoWithB != null ? materialInfoWithB.getCurrentQuantity() : 0;
+                            if (currentQuantityWithB < 0) {
+                                currentQuantityWithB = 0;
+                            }
                             currentQuantity += currentQuantityWithB;
                         }
                         if (currentQuantity < materialCount) {
@@ -1436,6 +1442,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             }
                             materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
                             currentQuantityWithJ = materialInfoWithJ != null ? materialInfoWithJ.getCurrentQuantity() : 0;
+                            if (currentQuantityWithJ < 0) {
+                                currentQuantityWithJ = 0;
+                            }
                             currentQuantity += currentQuantityWithJ;
                             log.info("checkMaterial fati check info,orderNo:{},needMaterialCount:{},graphNo:{},graphNoJ:{},quantityJ:{},quantity:{}",
                                 orderNo, materialCount, graphNo, graphNoWithJ, currentQuantityWithJ, currentQuantity);
@@ -1461,6 +1470,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                     materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
                                     if (materialInfoWithM != null) {
                                         currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                                        if (currentQuantityWithM < 0) {
+                                            currentQuantityWithM = 0;
+                                        }
                                     } else {
                                         materialInfoWithM = new Material();
                                         materialInfoWithM.setName("阀体毛坯（系统中暂无）");
@@ -1756,6 +1768,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             }
             Material materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
             int currentQuantityWithJ = materialInfoWithJ != null ? materialInfoWithJ.getCurrentQuantity() : 0;
+            if (currentQuantityWithJ < 0) {
+                currentQuantityWithJ = 0;
+            }
             currentQuantity += currentQuantityWithJ;
 
             // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
@@ -1788,6 +1803,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             Material materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
             if (materialInfoWithM != null) {
                 currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                if (currentQuantityWithM < 0) {
+                    currentQuantityWithM = 0;
+                }
             } else {
                 materialInfoWithM = new Material();
                 materialInfoWithM.setName("阀体毛坯（系统中暂无）");
