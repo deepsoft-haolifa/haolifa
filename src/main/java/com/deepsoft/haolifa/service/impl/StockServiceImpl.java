@@ -142,12 +142,13 @@ public class StockServiceImpl extends BaseService implements StockService {
     public List<MaterialBatchNoDTO> batchListNo(BatchNoListDTO model) {
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
+        criteria.andQuantityGreaterThan(0);
         if (StringUtils.isBlank(model.getGraphNo())) {
             return Collections.emptyList();
         }
-        if (model.getQty() != null) {
-            criteria.andQuantityGreaterThanOrEqualTo(model.getQty());
-        }
+//        if (model.getQty() != null) {
+//            criteria.andQuantityGreaterThanOrEqualTo(model.getQty());
+//        }
         if (StringUtils.isNotBlank(model.getBatchNo())) {
             criteria.andMaterialBatchNoEqualTo(model.getBatchNo());
         }
@@ -160,7 +161,7 @@ public class StockServiceImpl extends BaseService implements StockService {
     }
 
     @Override
-    public List<Stock> infoStocks(String materialGraphNo, List<String> batchNoList,List<String> rackNoList) {
+    public List<Stock> infoStocks(String materialGraphNo, List<String> batchNoList, List<String> rackNoList) {
         StockExample example = new StockExample();
         StockExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(materialGraphNo)) {
