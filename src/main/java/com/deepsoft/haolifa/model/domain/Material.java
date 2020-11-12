@@ -52,13 +52,15 @@ public class Material {
 
     private Integer lockQuantity;
 
+    private Integer version;
+
     private Integer supportQuantity;
 
     private Byte isDelete;
 
     private String remark;
 
-    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String replaceGraphNos, String graphUrl, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Integer currentQuantity, Integer lockQuantity, Integer supportQuantity, Byte isDelete, String remark) {
+    public Material(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, Integer materialClassifyId, String materialClassifyName, String name, String material, String graphNo, String replaceGraphNos, String graphUrl, String unit, BigDecimal price, String specifications, String model, String actualWeight, String theoreticalWeight, String taxRate, Byte status, Integer safeQuantity, String safetyFactor, Integer currentQuantity, Integer lockQuantity, Integer version, Integer supportQuantity, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -83,6 +85,7 @@ public class Material {
         this.safetyFactor = safetyFactor;
         this.currentQuantity = currentQuantity;
         this.lockQuantity = lockQuantity;
+        this.version = version;
         this.supportQuantity = supportQuantity;
         this.isDelete = isDelete;
         this.remark = remark;
@@ -282,6 +285,14 @@ public class Material {
 
     public void setLockQuantity(Integer lockQuantity) {
         this.lockQuantity = lockQuantity;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Integer getSupportQuantity() {

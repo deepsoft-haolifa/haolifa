@@ -31,11 +31,13 @@ public class Stock {
 
     private Integer quantity;
 
+    private Integer version;
+
     private Byte isDelete;
 
     private String remark;
 
-    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String productModel, String productSpecifications, String materialBatchNo, String materialGraphNo, Byte type, Integer quantity, Byte isDelete, String remark) {
+    public Stock(Integer id, Date createTime, Date updateTime, Integer createUser, Integer updateUser, String roomNo, String rackNo, String productNo, String productModel, String productSpecifications, String materialBatchNo, String materialGraphNo, Byte type, Integer quantity, Integer version, Byte isDelete, String remark) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -50,6 +52,7 @@ public class Stock {
         this.materialGraphNo = materialGraphNo;
         this.type = type;
         this.quantity = quantity;
+        this.version = version;
         this.isDelete = isDelete;
         this.remark = remark;
     }
@@ -168,6 +171,14 @@ public class Stock {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Byte getIsDelete() {

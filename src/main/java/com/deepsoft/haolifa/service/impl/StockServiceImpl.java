@@ -60,11 +60,13 @@ public class StockServiceImpl extends BaseService implements StockService {
         List<Stock> stocks = stockMapper.selectByExample(example);
         // 如果有记录，更新
         if (stocks.size() > 0) {
+            stock = stocks.get(0);
+            log.info("update add stock last info,version:{},model:{}", stock.getVersion(), model.toString());
             int update = 0;
             if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
-                update = stockExtendMapper.addMaterialQuantity(model.getRoomNo(), model.getRackNo(), model.getMaterialGraphNo(), model.getMaterialBatchNo(), model.getQuantity());
+                update = stockExtendMapper.addMaterialQuantity(model.getRoomNo(), model.getRackNo(), model.getMaterialGraphNo(), model.getMaterialBatchNo(), model.getQuantity(), stock.getVersion());
             } else {
-                update = stockExtendMapper.addProductQuantity(model.getRoomNo(), model.getRackNo(), model.getProductNo(), model.getQuantity());
+                update = stockExtendMapper.addProductQuantity(model.getRoomNo(), model.getRackNo(), model.getProductNo(), model.getQuantity(), stock.getVersion());
             }
             if (update > 0) {
                 result = true;
@@ -103,11 +105,13 @@ public class StockServiceImpl extends BaseService implements StockService {
         }
         List<Stock> stocks = stockMapper.selectByExample(example);
         if (stocks.size() > 0) {
+            stock = stocks.get(0);
+            log.info("update reduce stock last info,version:{},model:{}", stock.getVersion(), model.toString());
             int update = 0;
             if (model.getType() == CommonEnum.StorageType.MATERIAL.code) {
-                update = stockExtendMapper.reduceMaterialQuantity(model.getRoomNo(), model.getRackNo(), model.getMaterialGraphNo(), model.getMaterialBatchNo(), model.getQuantity());
+                update = stockExtendMapper.reduceMaterialQuantity(model.getRoomNo(), model.getRackNo(), model.getMaterialGraphNo(), model.getMaterialBatchNo(), model.getQuantity(), stock.getVersion());
             } else {
-                update = stockExtendMapper.reduceProductQuantity(model.getRoomNo(), model.getRackNo(), model.getProductNo(), model.getQuantity());
+                update = stockExtendMapper.reduceProductQuantity(model.getRoomNo(), model.getRackNo(), model.getProductNo(), model.getQuantity(), stock.getVersion());
             }
             if (update > 0) {
                 result = true;
