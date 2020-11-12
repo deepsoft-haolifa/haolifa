@@ -1509,6 +1509,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     if (!graphNo.endsWith("J") && !graphNo.endsWith("M")) {
                         materialInfoWithNum = materialService.getInfoByGraphNo(graphNo);
                         currentQuantityWithNum = materialInfoWithNum.getCurrentQuantity();
+                        if (currentQuantityWithNum < 0) {
+                            currentQuantityWithNum = 0;
+                        }
                         currentQuantity += currentQuantityWithNum;
                     }
                     log.info("checkMaterial faban check info ,orderNo:{},needMaterialCount:{},graphNo:{},quantity:{}", orderNo,
@@ -1518,6 +1521,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
                         if (materialInfoWithJ != null) {
                             currentQuantityWithJ = materialInfoWithJ.getCurrentQuantity();
+                            if (currentQuantityWithJ < 0) {
+                                currentQuantityWithJ = 0;
+                            }
                         }
                         currentQuantity += currentQuantityWithJ;
                         log.info("checkMaterial faban check info,orderNo:{},graphNo:{},graphNoJ:{},quantityJ:{},quantity:{}",
@@ -1561,6 +1567,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                                     materialInfoWithM = materialService.getInfoByGraphNo(graphNoWithM);
                                     if (materialInfoWithM != null) {
                                         currentQuantityWithM = materialInfoWithM.getCurrentQuantity();
+                                        if (currentQuantityWithM < 0) {
+                                            currentQuantityWithM = 0;
+                                        }
                                     } else {
                                         materialInfoWithM = new Material();
                                         materialInfoWithM.setName("蝶板毛坯（系统中暂无）");
@@ -1594,6 +1603,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                     // 如果是其他类型，则按照图号查询；
                     materialInfo = materialService.getInfoByGraphNo(graphNo);
                     currentQuantity = materialInfo.getCurrentQuantity();
+                    if (currentQuantity < 0) {
+                        currentQuantity = 0;
+                    }
                     if (currentQuantity < materialCount) {
                         lackMaterialCount = materialCount - currentQuantity;
                     } else {
