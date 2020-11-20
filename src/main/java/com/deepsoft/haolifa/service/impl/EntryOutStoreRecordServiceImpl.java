@@ -341,7 +341,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int  outMaterial(OutMaterialStorageDTO model) {
+    public int outMaterial(OutMaterialStorageDTO model) {
         log.info("EntryOutStoreRecordServiceImpl outMaterial start model:{}", model.toString());
         byte operationType = CommonEnum.OperationType.OUT.code;
         byte storageType = CommonEnum.StorageType.MATERIAL.code;
@@ -361,7 +361,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             batchNoList = Arrays.asList(materialBatchNo);
         }
         // 获取rackNo list
-        List<String> rackNoList = Optional.ofNullable(batchNoDTOList).orElse(CollectionUtil.newArrayList()).stream().filter(e-> StrUtil.isNotBlank(e.getRackNo())).map(MaterialBatchNoDTO::getRackNo).collect(Collectors.toList());
+        List<String> rackNoList = Optional.ofNullable(batchNoDTOList).orElse(CollectionUtil.newArrayList()).stream().filter(e -> StrUtil.isNotBlank(e.getRackNo())).map(MaterialBatchNoDTO::getRackNo).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(rackNoList)) {
             rackNoList = Arrays.asList(model.getRackNo());
         }
@@ -371,7 +371,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         // 判断库房是否有这么多数量
         List<Stock> stockList = stockService.infoStocks(materialGraphNo, batchNoList, rackNoList);
         if (CollectionUtil.isEmpty(stockList)) {
-            log.error("not stock record by materialGraphNo:{},materialBatchNo:{},rackNoList:{}", materialGraphNo, batchNoList,rackNoList);
+            log.error("not stock record by materialGraphNo:{},materialBatchNo:{},rackNoList:{}", materialGraphNo, batchNoList, rackNoList);
             return 0;
         } else {
             int sum = stockList.stream().mapToInt(Stock::getQuantity).sum();
@@ -431,8 +431,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                     materialService.updateCurrentQuantity(materialGraphNo, -needQty);
                 } else {
                     if (lockQuantity >= needQty) {
-                        log.info("material reduce lockQuantity:{},quantity:{},graphNo:{}", lockQuantity, quantity, materialGraphNo);
-                        materialService.updateLockQuantity(materialGraphNo, quantity);
+                        log.info("material reduce lockQuantity:{},quantity:{},graphNo:{}", lockQuantity, -needQty, materialGraphNo);
+                        materialService.updateLockQuantity(materialGraphNo, -needQty);
                     } else {
                         int needCurrentQuantity = needQty - lockQuantity;
                         log.info("this not appear material reduce lock quantity:{},needCurrentQuantity:{},graphNo:{}", lockQuantity,
