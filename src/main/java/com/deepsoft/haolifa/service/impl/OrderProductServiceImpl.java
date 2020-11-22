@@ -1116,14 +1116,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (fatiMaterialList != null && fatiMaterialList.size() > 0) {
             // 获取有规则的阀体图号
             List<String> fatisuffix = Arrays.asList(Constant.FATI_SUFFIX_CHECK);
-            fatiMaterialList.stream().filter(e -> {
+            fatiMaterialList = fatiMaterialList.stream().filter(e -> {
                 String graphNo = e.getGraphNo();
                 graphNo = graphNo.substring(graphNo.length() - 3);
                 if (fatisuffix.contains(graphNo)) {
                     return true;
                 }
                 return false;
-            });
+            }).collect(Collectors.toList());
             for (Material e : fatiMaterialList) {
                 String graphNo = e.getGraphNo();
                 String name = e.getName();
