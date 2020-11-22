@@ -1421,25 +1421,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             currentQuantity += currentQuantityWithB;
                         }
                         if (currentQuantity < materialCount) {
-                            if (graphNo.endsWith("M")) {
-                                List<EntrustGraphNoRelation> graphNoRels = entrustRelationService.listByGraphNoM(graphNo);
-                                if (!CollectionUtils.isEmpty(graphNoRels)) {
-                                    graphNoWithJList = graphNoRels.stream().map(EntrustGraphNoRelation::getProcessedGraphNo).collect(Collectors.toList());
-                                }
-                                graphNoWithM = graphNo;
-                            } else if (graphNo.endsWith("J")) {
-                                EntrustGraphNoRelation graphNoRel = entrustRelationService.findByGraphNoJ(graphNo);
-                                if (null != graphNoRel) {
-                                    graphNoWithM = graphNoRel.getOriginalGraphNo();
-                                }
+                            // 判断带J的图号是否在特殊核料清单里面，找出其对应的毛坯图号
+                            EntrustGraphNoRelation graphNoRel = entrustRelationService.findByGraphNoJ(graphNoWithJ);
+                            if (null != graphNoRel) {
+                                graphNoWithM = graphNoRel.getOriginalGraphNo();
                             }
-                            // 如果选择的毛坯图号对应多个机加工图号
-                            if (!CollectionUtils.isEmpty(graphNoWithJList)) {
-                                // 如果一个毛坯件对应多个机加工件，则走这个方法的核料
-                                specialResultList = this.checkMaterialSpecial(graphNoWithJList, graphNoWithM, materialCount);
-                                // 不往下走了，直接走下一个循环
-                                continue;
-                            }
+
                             materialInfoWithJ = materialService.getInfoByGraphNo(graphNoWithJ);
                             currentQuantityWithJ = materialInfoWithJ != null ? materialInfoWithJ.getCurrentQuantity() : 0;
                             if (currentQuantityWithJ < 0) {
