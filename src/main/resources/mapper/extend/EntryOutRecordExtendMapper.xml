@@ -26,4 +26,32 @@
         </if>
         order by a.id desc
     </select>
+    <select id="listOutProductRecord"
+            resultType="com.deepsoft.haolifa.model.dto.export.ExportEntryOutRecordDto">
+        SELECT
+        a.order_no orderNo,
+        a.product_no  productNo,
+        a.product_model productModel,
+        a.product_specifications productSpecifications,
+        a.quantity quantity,
+        a.create_time createTime,
+        a.price,
+        a.product_department productDepartment,
+        op.demand_name demanName,
+        a.operation_type operationType
+        FROM
+        `entry_out_store_record` a
+        LEFT JOIN order_product op ON a.order_no = op.order_no
+        where 1=1 and a.type=1 and a.operation_type=1
+        <if test="orderNo!=null and orderNo!=''">
+            and a.order_no = #{orderNo}
+        </if>
+        <if test="startDate!= null">
+            and a.create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and a.create_time &lt;= #{endDate}
+        </if>
+        order by a.id desc
+    </select>
 </mapper>

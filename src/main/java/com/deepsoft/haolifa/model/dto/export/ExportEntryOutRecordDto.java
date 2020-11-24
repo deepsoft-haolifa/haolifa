@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.export;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -30,4 +31,8 @@ public class ExportEntryOutRecordDto {
     private BigDecimal price;
 
     private String productDepartment;
+
+    private String demandName;
+
+    private Byte operationType;
 }

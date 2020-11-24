@@ -19,5 +19,11 @@ public interface EntryOutRecordExtendMapper {
      * @return
      */
     List<ExportEntryOutRecordDto> listProductRecord(Map<String, Object> paramMap);
-
+    /**
+     * 分页查询成品出库记录，关联订单
+     *
+     * @param paramMap
+     * @return
+     */
+    List<ExportEntryOutRecordDto> listOutProductRecord(Map<String, Object> paramMap);
 }

@@ -1547,26 +1547,9 @@ public class ExportExcelController {
     @GetMapping("product-out")
     public void exportProductOutRoom(HttpServletResponse response, HttpServletRequest request,
                                      ExportProductOutRoomDTO dto) throws IOException {
-        EntryOutStoreRecordExample example = new EntryOutStoreRecordExample();
-        EntryOutStoreRecordExample.Criteria criteria = example.createCriteria();
-        criteria.andTypeEqualTo(PRODUCT.code);
-        if (StringUtils.isNotEmpty(dto.getStartDate())) {
-            Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
-            criteria.andCreateTimeGreaterThanOrEqualTo(startDate);
-        }
-        if (StringUtils.isNotEmpty(dto.getEndDate())) {
-            Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getEndDate());
-            criteria.andCreateTimeLessThanOrEqualTo(endDate);
-        }
-        if (StringUtils.isNotEmpty(dto.getOrderNo())) {
-            criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
-        }
-        if (dto.getOperationType() != null) {
-            criteria.andOperationTypeEqualTo(dto.getOperationType().byteValue());
-        }
 
-        List<EntryOutStoreRecord> entryOutStoreRecordList = entryOutStoreRecordMapper.selectByExample(example);
 
+        List<ExportEntryOutRecordDto> exportEntryOutRecordDtos = entryOutRecordExtendMapper.listOutProductRecord(BeanUtil.beanToMap(dto));
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("成品出库明细", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
@@ -1616,9 +1599,9 @@ public class ExportExcelController {
         cell_18.setCellValue("单价");
         cell_18.setCellStyle(center);
 
-        for (int i = 0; i < entryOutStoreRecordList.size(); i++) {
-            EntryOutStoreRecord entryOutStoreRecord = entryOutStoreRecordList.get(i);
-            OrderProductDTO orderProductDTO = orderProductService.getOrderProductInfo(entryOutStoreRecord.getOrderNo());
+
+        for (int i = 0; i < exportEntryOutRecordDtos.size(); i++) {
+            ExportEntryOutRecordDto entryOutStoreRecord = exportEntryOutRecordDtos.get(i);
             Row row_value = sheet.createRow(i + 2);
             Cell cell_0 = row_value.createCell(0);
             cell_0.setCellValue(i + 1);
@@ -1627,7 +1610,7 @@ public class ExportExcelController {
             cell_1.setCellValue(entryOutStoreRecord.getOrderNo());
             cell_1.setCellStyle(center);
             Cell cell_2 = row_value.createCell(2);
-            cell_2.setCellValue(orderProductDTO.getDemandName());
+            cell_2.setCellValue(entryOutStoreRecord.getDemandName());
             cell_2.setCellStyle(center);
             Cell cell_3 = row_value.createCell(3);
             cell_3.setCellValue(entryOutStoreRecord.getProductNo());
