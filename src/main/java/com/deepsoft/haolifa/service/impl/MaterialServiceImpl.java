@@ -241,6 +241,9 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public int updateCurrentQuantity(String graphNo, int quantity) {
         Material info = getInfoByGraphNo(graphNo);
+        if (info == null) {
+            return 0;
+        }
         log.info("update current quantity start,graphNo:{},quantity:{},version:{},currentQty:{}", graphNo, quantity, info.getVersion(), info.getCurrentQuantity());
 
         if (quantity < 0 && info.getCurrentQuantity() + quantity < 0) {
@@ -257,6 +260,9 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public int updateLockQuantity(String graphNo, int quantity) {
         Material info = getInfoByGraphNo(graphNo);
+        if (info == null) {
+            return 0;
+        }
         log.info("update lock quantity start,graphNo:{},quantity:{},version:{},currentLockQty:{}", graphNo, quantity, info.getVersion(), info.getLockQuantity());
 
         if (quantity < 0 && info.getLockQuantity() + quantity < 0) {
