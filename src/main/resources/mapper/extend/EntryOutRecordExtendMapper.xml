@@ -9,7 +9,8 @@
         a.product_specifications productSpecifications,
         a.quantity quantity,
         a.create_time createTime,
-        a.price
+        a.price,
+        a.product_department productDepartment
         FROM
         `entry_out_store_record` a
 --         LEFT JOIN order_product_associate opa ON a.order_no = opa.order_no and a.product_no=opa.product_no

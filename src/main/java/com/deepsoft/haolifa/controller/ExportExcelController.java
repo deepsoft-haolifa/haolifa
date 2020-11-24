@@ -1373,7 +1373,9 @@ public class ExportExcelController {
         Cell cell_18 = columnTitle.createCell(8);
         cell_18.setCellValue("金额");
         cell_18.setCellStyle(center);
-
+        Cell cell_19 = columnTitle.createCell(9);
+        cell_19.setCellValue("生产部门");
+        cell_19.setCellStyle(center);
         for (int i = 0; i < exportEntryOutRecordDtos.size(); i++) {
             ExportEntryOutRecordDto exportEntryOutRecordDto = exportEntryOutRecordDtos.get(i);
             Row row_value = sheet.createRow(i + 2);
@@ -1410,6 +1412,9 @@ public class ExportExcelController {
             BigDecimal amount = price.multiply(new BigDecimal(exportEntryOutRecordDto.getQuantity())).setScale(2, BigDecimal.ROUND_HALF_UP);
             cell_8.setCellValue(String.valueOf(amount));
             cell_8.setCellStyle(center);
+            Cell cell_9 = row_value.createCell(9);
+            cell_9.setCellValue(exportEntryOutRecordDto.getProductDepartment());
+            cell_9.setCellStyle(center);
         }
 
         OutputStream outputStream = response.getOutputStream();

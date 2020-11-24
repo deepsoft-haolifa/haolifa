@@ -28,4 +28,6 @@ public class ExportEntryOutRecordDto {
     private Date updateTime;
 
     private BigDecimal price;
+
+    private String productDepartment;
 }
