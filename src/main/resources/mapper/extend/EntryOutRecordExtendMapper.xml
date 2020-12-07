@@ -37,7 +37,7 @@
         a.create_time createTime,
         a.price,
         a.product_department productDepartment,
-        op.demand_name demanName,
+        op.demand_name demandName,
         a.operation_type operationType
         FROM
         `entry_out_store_record` a

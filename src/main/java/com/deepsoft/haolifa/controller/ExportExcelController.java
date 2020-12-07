@@ -1556,6 +1556,8 @@ public class ExportExcelController {
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.setWrapText(true);
         Sheet sheet = workbook.createSheet("成品出库明细");
+
+
         // 单元格样式
         CellStyle center = workbook.createCellStyle();
         center.setAlignment(HorizontalAlignment.CENTER);
@@ -1635,7 +1637,10 @@ public class ExportExcelController {
             cell_9.setCellValue(entryOutStoreRecord.getPrice().doubleValue());
             cell_9.setCellStyle(center);
         }
-
+        for (int i = 0; i < 9; i++) {
+            sheet.autoSizeColumn(i);
+            sheet.setColumnWidth(i,sheet.getColumnWidth(i));
+        }
         OutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         outputStream.flush();
