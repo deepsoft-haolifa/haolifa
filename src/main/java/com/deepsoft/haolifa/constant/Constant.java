@@ -43,6 +43,6 @@ public class Constant {
     /**
      * 阀体的后三位
      */
-    public static final String[] FATI_SUFFIX_CHECK = {"00J", "00B", "001", "002", "003", "004", "005", "007", "010", "012", "014", "015", "016", "017", "021"};
+    public static final String[] FATI_SUFFIX_CHECK = {"00J", "00B", "001", "002", "003", "004", "005", "007", "010", "011" , "012", "014", "015", "016", "017", "021"};
 
 }
