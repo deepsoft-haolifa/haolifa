@@ -57,6 +57,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     @Autowired
     private SprayItemMapper sprayItemMapper;
     @Autowired
+    private SprayService sprayService;
+    @Autowired
     private ProductService productService;
 
 
@@ -457,6 +459,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         entrustExample.or().andEntrustNoEqualTo(busNo).andIdEqualTo(busId);
                         Entrust entrust = new Entrust();
                         entrust.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                        // 将该订单的状态改为加工中，这样才能核料核到
+                        entrust.setStatus(CommonEnum.EntrustStatus.DEALING_3.code);
                         entrustMapper.updateByExampleSelective(entrust, entrustExample);
                     } else if (model.getType().equals(CommonEnum.materialOutType.SPRAY.type)) {
                         SprayItemExample sprayItemExample = new SprayItemExample();
@@ -464,6 +468,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         SprayItem sprayItem = new SprayItem();
                         sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
                         sprayItemMapper.updateByExampleSelective(sprayItem, sprayItemExample);
+
+                        // 将该喷涂订单的状态改为加工中，这样才能核料核到
+                        sprayService.updateStatus(busNo,CommonEnum.SprayStatus.SPRAY_MACHINE.code);
                     }
                 }
             }
