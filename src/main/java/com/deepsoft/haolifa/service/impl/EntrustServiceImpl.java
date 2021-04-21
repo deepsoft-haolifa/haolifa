@@ -231,19 +231,16 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         if (number > 0) {
             List<String> noList = entrusts.stream().map(Entrust::getEntrustNo).collect(Collectors.toList());
             List<InspectHistory> inspectHistories = inspectService.historyList(noList, CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code, CommonEnum.InspectHistoryType.ENTRUST.code);
-            if (!CollectionUtils.isEmpty(inspectHistories)) {
-                // 已经入库的数量
-                Integer storeCount = inspectHistories.stream().map(InspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
-                // 正在机加工的数据，需要减去已经入库的数量
-                number = number - storeCount;
-
-                if (number > 0) {
-                    // 获取已经核料锁定的数量
-                    List<CheckMaterialLock> checkMaterialLocks = checkMaterialLockService.findByMaterialAndType(materialGraphNo, CommonEnum.CheckMaterialLockType.ENTRUST.type);
-                    if (!CollectionUtils.isEmpty(checkMaterialLocks)) {
-                        Integer lockCount = checkMaterialLocks.stream().map(CheckMaterialLock::getLockQuantity).reduce(0, (a, b) -> a + b);
-                        number = number - lockCount;
-                    }
+            // 已经入库的数量
+            Integer storeCount = Optional.ofNullable(inspectHistories).orElse(new ArrayList<>()).stream().map(InspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
+            // 正在机加工的数据，需要减去已经入库的数量
+            number = number - storeCount;
+            if (number > 0) {
+                // 获取已经核料锁定的数量
+                List<CheckMaterialLock> checkMaterialLocks = checkMaterialLockService.findByMaterialAndType(materialGraphNo, CommonEnum.CheckMaterialLockType.ENTRUST.type);
+                if (!CollectionUtils.isEmpty(checkMaterialLocks)) {
+                    Integer lockCount = checkMaterialLocks.stream().map(CheckMaterialLock::getLockQuantity).reduce(0, (a, b) -> a + b);
+                    number = number - lockCount;
                 }
             }
         }

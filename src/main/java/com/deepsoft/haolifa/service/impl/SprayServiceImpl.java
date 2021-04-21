@@ -404,11 +404,17 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                         SprayInspectHistoryExample sprayInspectHistoryExample = new SprayInspectHistoryExample();
                         sprayInspectHistoryExample.or().andSprayNoIn(sprayNoList).andOriginalGraphNoEqualTo(materialGraphNo).andStatusEqualTo(CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code);
                         List<SprayInspectHistory> sprayInspectHistories = inspectHistoryMapper.selectByExample(sprayInspectHistoryExample);
-                        if (!CollectionUtils.isEmpty(sprayInspectHistories)) {
-                            // 已经入库的数量
-                            Integer storeCount = sprayInspectHistories.stream().map(SprayInspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
-                            // 正在喷涂的数据，需要减去已经入库的数量
-                            number = number - storeCount;
+                        // 已经入库的数量
+                        Integer storeCount = Optional.of(sprayInspectHistories).orElse(new ArrayList<>()).stream().map(SprayInspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
+                        // 正在喷涂的数据，需要减去已经入库的数量
+                        number = number - storeCount;
+                        if (number > 0) {
+                            // 获取已经核料锁定的数量
+                            List<CheckMaterialLock> checkMaterialLocks = checkMaterialLockService.findByMaterialAndType(materialGraphNo, CommonEnum.CheckMaterialLockType.SPRAY.type);
+                            if (!CollectionUtils.isEmpty(checkMaterialLocks)) {
+                                Integer lockCount = checkMaterialLocks.stream().map(CheckMaterialLock::getLockQuantity).reduce(0, (a, b) -> a + b);
+                                number = number - lockCount;
+                            }
                         }
                     }
                 }
