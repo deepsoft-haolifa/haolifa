@@ -17,6 +17,7 @@ import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.SprayService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -36,6 +37,7 @@ import static com.deepsoft.haolifa.constant.CommonEnum.SprayStatus.SPRAY_MACHINE
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.SPRAY_NO_PREFIX_PT;
 
 @Service
+@Slf4j
 public class SprayServiceImpl extends BaseService implements SprayService {
 
 
@@ -399,6 +401,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                 if (!CollectionUtils.isEmpty(sprayItemList)) {
                     // 获取正在机加工的总数量
                     number = sprayItemList.stream().map(SprayItem::getNumber).reduce(0, (a, b) -> a + b);
+                    log.info("obtainNumber 1 materialGraphNo:{},number:{}", materialGraphNo, number);
                     if (number > 0) {
                         // 获取 喷涂历史记录的合格数量
                         SprayInspectHistoryExample sprayInspectHistoryExample = new SprayInspectHistoryExample();
@@ -406,6 +409,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                         List<SprayInspectHistory> sprayInspectHistories = inspectHistoryMapper.selectByExample(sprayInspectHistoryExample);
                         // 已经入库的数量
                         Integer storeCount = Optional.of(sprayInspectHistories).orElse(new ArrayList<>()).stream().map(SprayInspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
+                        log.info("obtainNumber 2 materialGraphNo:{},storeCount:{}", materialGraphNo, storeCount);
                         // 正在喷涂的数据，需要减去已经入库的数量
                         number = number - storeCount;
                         if (number > 0) {
@@ -413,12 +417,17 @@ public class SprayServiceImpl extends BaseService implements SprayService {
                             List<CheckMaterialLock> checkMaterialLocks = checkMaterialLockService.findByMaterialAndType(materialGraphNo, CommonEnum.CheckMaterialLockType.SPRAY.type);
                             if (!CollectionUtils.isEmpty(checkMaterialLocks)) {
                                 Integer lockCount = checkMaterialLocks.stream().map(CheckMaterialLock::getLockQuantity).reduce(0, (a, b) -> a + b);
+                                log.info("obtainNumber 3 materialGraphNo:{},lockCount:{}", materialGraphNo, lockCount);
                                 number = number - lockCount;
                             }
                         }
                     }
                 }
             }
+        }
+        if (number < 0) {
+            log.info("obtainNumber 4 materialGraphNo:{},number:{}", materialGraphNo, number);
+            number = 0;
         }
         return number;
     }

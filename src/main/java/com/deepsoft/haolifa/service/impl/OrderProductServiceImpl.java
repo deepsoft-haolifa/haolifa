@@ -1438,7 +1438,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                             // 如果阀体带J的图号库存小于要求的数量，查询正在机加工中的零件数量
                             if (currentQuantity < materialCount) {
                                 //查询正在机加工的数量
-                                int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
+                                int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, graphNoWithJ);
                                 if (jijiaCount > 0) {
                                     CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
                                     checkMaterialLockDTO.setMaterialGraphNo(graphNoWithJ);
@@ -1519,7 +1519,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         if (currentQuantity < materialCount) {
                             graphNoWithM = grapnNoSub.concat("0M");
                             //查询正在机加工的数量
-                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, "");
+                            int jijiaCount = entrustService.obtainEntrustNumber(graphNoWithM, graphNoWithJ);
                             if (jijiaCount > 0) {
                                 CheckMaterialLockDTO checkMaterialLockDTO = new CheckMaterialLockDTO();
                                 checkMaterialLockDTO.setMaterialGraphNo(graphNoWithJ);
