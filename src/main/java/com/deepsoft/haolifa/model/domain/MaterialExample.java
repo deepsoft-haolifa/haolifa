@@ -1591,7 +1591,7 @@ public class MaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andCurrentQuantityLessThanOrEqualTo(String value) {
+        public Criteria andCurrentQuantityLessThanOrEqualTo(Integer value) {
             addCriterion("current_quantity <=", value, "currentQuantity");
             return (Criteria) this;
         }

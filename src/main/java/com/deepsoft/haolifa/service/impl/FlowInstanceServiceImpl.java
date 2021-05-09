@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.Consts;
@@ -132,6 +133,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean handleStep(FlowHandleStepDTO model) {
+        log.info("handleStep  params :{}", JSONUtil.toJsonStr(model));
         // 1、判断传入的处理节点和instance当前要处理的节点是否一致。
         //2、一致：判断审核结果：0 审核不通过 1 通过 2 退回
         // 审核通过：添加历史记录，并更新下一节点信息；终止添加记录，更新实例记录is_over；退回：添加审核记录,更新实例节点状态
