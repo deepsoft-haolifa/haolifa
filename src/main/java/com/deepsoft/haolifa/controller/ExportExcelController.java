@@ -1185,6 +1185,8 @@ public class ExportExcelController {
                                         ExportMaterialEntryRoomDTO dto) throws IOException {
         InspectHistoryExample example = new InspectHistoryExample();
         InspectHistoryExample.Criteria criteria = example.createCriteria();
+        // 只查询机加工的数据
+        criteria.andTypeEqualTo((byte)2);
         if (StringUtils.isNotEmpty(dto.getStartDate())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
             criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
