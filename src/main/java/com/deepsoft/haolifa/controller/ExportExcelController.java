@@ -1186,7 +1186,9 @@ public class ExportExcelController {
         InspectHistoryExample example = new InspectHistoryExample();
         InspectHistoryExample.Criteria criteria = example.createCriteria();
         // 只查询机加工的数据
-        criteria.andTypeEqualTo((byte)2);
+        if (dto.getType() != null && dto.getType() > 0) {
+            criteria.andTypeEqualTo(dto.getType().byteValue());
+        }
         if (StringUtils.isNotEmpty(dto.getStartDate())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, dto.getStartDate());
             criteria.andUpdateTimeGreaterThanOrEqualTo(startDate);
