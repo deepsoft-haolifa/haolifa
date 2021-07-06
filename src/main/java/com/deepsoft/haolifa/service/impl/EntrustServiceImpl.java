@@ -136,6 +136,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         if (StringUtils.isNotEmpty(model.getBatchNumber())) {
             criteria.andBatchNumberLike("%" + model.getBatchNumber() + "%");
         }
+        if (StringUtils.isNotEmpty(model.getProcessedGraphNo())) {
+            criteria.andProcessedGraphNoLike("%" + model.getProcessedGraphNo() + "%");
+        }
         if (model.getType() == 1) {
             // 调度
             criteria.andStatusNotEqualTo(EntrustStatus.NO_COMMIT_0.code);

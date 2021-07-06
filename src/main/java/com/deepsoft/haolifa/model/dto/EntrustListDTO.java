@@ -17,4 +17,6 @@ public class EntrustListDTO extends PageParam {
     private Integer inspectStatus;
     @ApiModelProperty(value = "批次号")
     private String batchNumber;
+    @ApiModelProperty(value = "加工后图号")
+    private String processedGraphNo;
 }
