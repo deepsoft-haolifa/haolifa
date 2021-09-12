@@ -1,0 +1,53 @@
+package com.deepsoft.haolifa.model.dto.pay;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.util.Date;
+@ApiModel(description = "考勤表")
+@Data
+@EqualsAndHashCode()
+public class PayWorkAttendanceDTO {
+    @ApiModelProperty(value = "id")
+    private Integer id;
+    @ApiModelProperty(value = "序号")
+    private Integer serial;
+    @ApiModelProperty(value = "部门")
+    private String department;
+    @ApiModelProperty(value = "姓名")
+    private String userName;
+    @ApiModelProperty(value = "出勤天数")
+    private Integer attendanceDays;
+    @ApiModelProperty(value = "迟到次数")
+    private Integer lateTimes;
+    @ApiModelProperty(value = "早退次数")
+    private Integer leaveEarlyTimes;
+    @ApiModelProperty(value = "旷工次数")
+    private Integer absenteeismTimes;
+    @ApiModelProperty(value = "中班天数")
+    private Integer middleDays;
+    @ApiModelProperty(value = "夜班天数")
+    private Integer nightDays;
+    @ApiModelProperty(value = "出差天数")
+    private Integer businessTravelDays;
+    @ApiModelProperty(value = "事假天数")
+    private Integer compassionateLeaveDays;
+    @ApiModelProperty(value = "病假天数")
+    private Integer sickLeaveDays;
+    @ApiModelProperty(value = "加班天数")
+    private Integer workOvertimeDays;
+    @ApiModelProperty(value = "迟到早退次数")
+    private Integer lateAndLeaveTimes;
+    @ApiModelProperty(value = "备注")
+    private String remark;
+    @ApiModelProperty(value = "创建人")
+    private String createUser;
+    @ApiModelProperty(value = "更新人")
+    private String updateUser;
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+    @ApiModelProperty(value = "修改时间")
+    private Date updateTime;
+}

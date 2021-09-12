@@ -97,7 +97,8 @@ public class CommonEnum {
 
         MATERIAL_GRAPH_NO_NOT_EXIST_1("5001", "【{0}】 不存在零件库中，请确认"),
         MATERIAL_REQUISITION_EXIST("5002", "这个订单的领料单已经保存过，请确认"),
-        PRODUCT_COUNT_ERROR("5003", "数量不够扣减");
+        PRODUCT_COUNT_ERROR("5003", "数量不够扣减"),
+        FILE_IS_NULL("5004", "文件为空请重新选择");
 
         public final String code;
 
