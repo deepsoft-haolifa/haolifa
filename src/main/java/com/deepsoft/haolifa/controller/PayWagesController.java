@@ -61,7 +61,7 @@ public class PayWagesController {
 
     @ApiOperation("导入工资数据")
     @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
-    public ResultBean uploadMaterial(@ApiParam(value = "考勤Excel表格", required = true) MultipartFile file) {
+    public ResultBean uploadMaterial(@ApiParam(value = "工资Excel表格", required = true) MultipartFile file) {
         try {
             if (file == null) {
                 return ResultBean.error(CommonEnum.ResponseEnum.FILE_IS_NULL);
