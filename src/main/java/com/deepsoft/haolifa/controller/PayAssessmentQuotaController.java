@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @Date create in 上午11:37 2021/9/11
  * @description 考核指标管理
  */
-@Api(tags = "考核指标管理")
+@Api(tags = "绩效考核指标管理")
 @RestController
 @RequestMapping("/pay-assessment-quota")
 public class PayAssessmentQuotaController {

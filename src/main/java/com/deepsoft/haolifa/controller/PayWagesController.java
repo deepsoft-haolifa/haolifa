@@ -20,7 +20,7 @@ import java.util.List;
  * @Date create in 上午11:37 2021/9/11
  * @description 工资管理
  */
-@Api(tags = "工资管理")
+@Api(tags = "绩效工资管理")
 @RestController
 @RequestMapping("/pay-wages")
 public class PayWagesController {

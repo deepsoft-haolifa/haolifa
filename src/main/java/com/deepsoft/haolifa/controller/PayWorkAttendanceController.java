@@ -23,7 +23,7 @@ import java.util.List;
  * @Date create in 上午11:37 2021/9/11
  * @description 考勤管理
  */
-@Api(tags = "考勤管理")
+@Api(tags = "绩效考勤管理")
 @RestController
 @RequestMapping("/pay-work-attendance")
 public class PayWorkAttendanceController {

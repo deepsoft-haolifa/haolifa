@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @Date create in 上午11:37 2021/9/11
  * @description 生产车间管理
  */
-@Api(tags = "生产车间管理")
+@Api(tags = "绩效生产车间管理")
 @RestController
 @RequestMapping("/pay-production-work-shop")
 public class PayProductionWorkShopController {

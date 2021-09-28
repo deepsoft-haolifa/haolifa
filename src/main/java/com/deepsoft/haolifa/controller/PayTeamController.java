@@ -16,7 +16,7 @@ import javax.annotation.Resource;
  * @Date create in 上午11:37 2021/9/11
  * @description 班组管理
  */
-@Api(tags = "班组管理")
+@Api(tags = "绩效班组管理")
 @RestController
 @RequestMapping("/pay-team")
 public class PayTeamController {

@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  * @Date create in 上午11:37 2021/9/11
  * @description 打分管理
  */
-@Api(tags = "打分管理")
+@Api(tags = "绩效打分管理")
 @RestController
 @RequestMapping("/pay-assessment-score")
 public class PayAssessmentScoreController {
