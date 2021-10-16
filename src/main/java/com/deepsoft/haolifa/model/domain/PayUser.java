@@ -56,6 +56,10 @@ public class PayUser {
 
     private Integer postId;
 
+    private String userType;
+
+    private Integer superiorId;
+
     private String createUser;
 
     private String updateUser;
@@ -64,7 +68,7 @@ public class PayUser {
 
     private Date updateTime;
 
-    public PayUser(Integer id, String userName, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayUser(Integer id, String userName, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, String userType, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userName = userName;
         this.onceUserName = onceUserName;
@@ -91,6 +95,8 @@ public class PayUser {
         this.basePay = basePay;
         this.meritPay = meritPay;
         this.postId = postId;
+        this.userType = userType;
+        this.superiorId = superiorId;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.createTime = createTime;
@@ -307,6 +313,22 @@ public class PayUser {
 
     public void setPostId(Integer postId) {
         this.postId = postId;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType == null ? null : userType.trim();
+    }
+
+    public Integer getSuperiorId() {
+        return superiorId;
+    }
+
+    public void setSuperiorId(Integer superiorId) {
+        this.superiorId = superiorId;
     }
 
     public String getCreateUser() {
