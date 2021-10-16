@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=true)
 @ApiModel(description = "工序明细表")
 public class PayWorkingProcedureDTO extends BaseCondition {
+    @ApiModelProperty(value = "id")
+    private Integer id;
     @ApiModelProperty(value = "序号")
     private Integer serial;
     @ApiModelProperty(value = "车间名称")
