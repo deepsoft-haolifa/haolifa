@@ -1,16 +1,10 @@
 package com.deepsoft.haolifa.controller;
 
-import com.deepsoft.haolifa.model.domain.PayAssessmentScore;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaDTO;
-import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaVO;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentScoreDTO;
-import com.deepsoft.haolifa.service.PayAssessmentQuotaService;
 import com.deepsoft.haolifa.service.PayAssessmentScoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,7 +28,6 @@ public class PayAssessmentScoreController {
                               @RequestParam(value = "pageSize", required = true, defaultValue = "20") Integer pageSize) {
         return payAssessmentScoreService.pageInfo(pageNum, pageSize);
     }
-
 
     @ApiOperation("保存")
     @PostMapping(value = "/save")

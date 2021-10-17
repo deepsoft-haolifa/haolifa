@@ -33,8 +33,8 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
     public ResultBean pageInfo(PayProductionWorkshopVO model) {
         PayProductionWorkshopExample example = new PayProductionWorkshopExample();
         PayProductionWorkshopExample.Criteria criteria = example.createCriteria();
-        if (Objects.nonNull(model.getWorkshopName())) {
-            criteria.andWorkshopNameLike("%" + model.getWorkshopName() + "%");
+        if (Objects.nonNull(model.getDepartName())) {
+            criteria.andDepartNameLike("%" + model.getDepartName() + "%");
         }
         if (StringUtils.isNotBlank(model.getWorkType())) {
             criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
