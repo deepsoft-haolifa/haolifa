@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service;
 import com.deepsoft.haolifa.model.domain.PayWages;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayWagesVO;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface PayWagesService {
     ResultBean delete(Integer wagesId);
 
     void insert(List<PayWages> objects);
+
+    ResultBean calculateSalary(PayWagesVO payWagesVO);
 }

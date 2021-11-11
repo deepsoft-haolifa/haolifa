@@ -540,4 +540,18 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
         return histories;
     }
+
+    @Override
+    public List<InspectHistory> historyList(String inspectNo, String startTime, String endTime) {
+        Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, startTime);
+        Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, endTime);
+        InspectHistoryExample historyExample = new InspectHistoryExample();
+        InspectHistoryExample.Criteria criteria = historyExample.createCriteria();
+        criteria.andInspectNoEqualTo(inspectNo)
+            .andUpdateTimeGreaterThan(startDate)
+            .andUpdateTimeLessThan(endDate)
+            .andStatusEqualTo((byte) 2);
+        List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
+        return histories;
+    }
 }

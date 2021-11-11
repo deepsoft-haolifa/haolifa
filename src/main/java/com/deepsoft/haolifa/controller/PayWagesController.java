@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.PayWages;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayWagesVO;
 import com.deepsoft.haolifa.service.PayWagesService;
 import com.deepsoft.haolifa.util.ExcelUtils;
 import io.swagger.annotations.Api;
@@ -57,6 +58,12 @@ public class PayWagesController {
     @GetMapping(value = "del/{wagesId}")
     public ResultBean del(@PathVariable("wagesId") Integer wagesId) {
         return payWagesService.delete(wagesId);
+    }
+
+    @ApiOperation("计算工资")
+    @PostMapping("/calculateSalary")
+    public ResultBean calculateSalary(@RequestBody PayWagesVO payWagesVO) {
+        return payWagesService.calculateSalary(payWagesVO);
     }
 
     @ApiOperation("导入工资数据")

@@ -92,12 +92,12 @@
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-        <table tableName="material" domainObjectName="Material">
+    <table tableName="pay_wages_relation_user" domainObjectName="PayWagesRelationUser">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="stock" domainObjectName="Stock">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+<!--        <table tableName="stock" domainObjectName="Stock">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
 <!--        <table tableName="product_stock_log" domainObjectName="ProductStockLog">-->
 <!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
 <!--        </table>-->

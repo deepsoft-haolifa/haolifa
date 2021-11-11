@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -38,7 +39,7 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
             criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
         }
         if (StringUtils.isNotBlank(model.getPostCode())) {
-            criteria.andPostCodeEqualTo("%" + model.getPostCode() + "%");
+            criteria.andPostCodeLike("%" + model.getPostCode() + "%");
         }
         example.setOrderByClause("id desc");
         Page<PayHourQuota> payTeams = PageHelper.startPage(model.getPageNum(), model.getPageSize())
@@ -80,5 +81,22 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
     public ResultBean delete(Integer id) {
         return ResultBean.success(payHourQuotaMapper.deleteByPrimaryKey(id));
 
+    }
+
+    @Override
+    public List<PayHourQuota> getList(PayHourQuotaDTO model) {
+        PayHourQuotaExample example = new PayHourQuotaExample();
+        PayHourQuotaExample.Criteria criteria = example.createCriteria();
+        if (Objects.nonNull(model.getAppModel())) {
+            criteria.andAppModelEqualTo(model.getAppModel());
+        }
+        if (StringUtils.isNotBlank(model.getAppSpecifications())) {
+            criteria.andAppSpecificationsEqualTo(model.getAppSpecifications());
+        }
+        if (StringUtils.isNotBlank(model.getWorkType())) {
+            criteria.andWorkTypeEqualTo(model.getWorkType());
+        }
+        List<PayHourQuota> list = payHourQuotaMapper.selectByExample(example);
+        return list;
     }
 }
