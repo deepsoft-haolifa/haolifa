@@ -681,6 +681,7 @@ public class CommonEnum {
         MARRIED((byte) 1, "已婚"),
         DIVORCE((byte) 1, "离异"),
         WIDOWED((byte) 1, "丧偶"),
+
         ;
         public final byte type;
         public final String name;
