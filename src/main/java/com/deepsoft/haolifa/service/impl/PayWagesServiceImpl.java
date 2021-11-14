@@ -44,6 +44,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private PayHourQuotaService payHourQuotaService;
     @Resource
     private PayWagesRelationUserService payWagesRelationUserService;
+    @Resource
+    private SprayService sprayService;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -175,12 +177,29 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 for (InspectHistory inspectHistory : inspectHistoryDtos) {
                     // 合格数量
                     qualifiedNumber = inspectHistory.getQualifiedNumber();
-                    List<PayHourQuota> list = payHourQuotaService.getList(buildPayHourQuotaDTO(inspectHistory));
+                    List<PayHourQuota> list = payHourQuotaService.getList(buildPayHourQuotaDTO(inspectHistory.getMaterialGraphNo(), inspectHistory.getMaterialGraphName()));
                     if (Objects.nonNull(list) && list.size() > 0) {
                         PayHourQuota payHourQuota = list.get(0);
                         // 价格
                         BigDecimal hourQuotaPrice = payHourQuota.getHourQuotaPrice();
                         BigDecimal amount = hourQuotaPrice.multiply(new BigDecimal(qualifiedNumber));
+                        totalAmount = totalAmount.add(amount);
+                    }
+
+                }
+            }
+            // 喷涂记录
+            List<SprayInspectHistory> inspectList = sprayService.getInspectList(orderId, payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
+            if (Objects.nonNull(inspectList) && inspectList.size() > 0) {
+                for (SprayInspectHistory sprayInspectHistory: inspectList) {
+                    // 合格数量
+                    Integer spaCount = sprayInspectHistory.getQualifiedNumber();
+                    List<PayHourQuota> list = payHourQuotaService.getList(buildPayHourQuotaDTO(sprayInspectHistory.getMaterialGraphNo(), sprayInspectHistory.getMaterialGraphName()));
+                    if (Objects.nonNull(list) && list.size() > 0) {
+                        PayHourQuota payHourQuota = list.get(0);
+                        // 价格
+                        BigDecimal hourQuotaPrice = payHourQuota.getHourQuotaPrice();
+                        BigDecimal amount = hourQuotaPrice.multiply(new BigDecimal(spaCount));
                         totalAmount = totalAmount.add(amount);
                     }
 
@@ -203,12 +222,17 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         return null;
     }
 
-    private PayHourQuotaDTO buildPayHourQuotaDTO(InspectHistory inspectHistoryDto) {
+    /**
+     * wrapper
+     * @param materialGraphNo
+     * @param getMaterialGraphName
+     * @return
+     */
+    private PayHourQuotaDTO buildPayHourQuotaDTO(String materialGraphNo, String getMaterialGraphName) {
         PayHourQuotaDTO payHourQuotaDTO = new PayHourQuotaDTO();
-        // D220-0050-01
-        String materialGraphNo = inspectHistoryDto.getMaterialGraphNo();
         // 物料名称
-        payHourQuotaDTO.setWorkType(inspectHistoryDto.getMaterialGraphName());
+        payHourQuotaDTO.setWorkType(getMaterialGraphName);
+        // D220-0050-01
         String[] split = materialGraphNo.split("-");
         // 型号
         String type = split[0];
@@ -217,15 +241,5 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         payHourQuotaDTO.setAppModel(type);
         payHourQuotaDTO.setAppSpecifications(specs);
         return payHourQuotaDTO;
-    }
-
-    public static void main(String[] args) {
-        String materialGraphNo = "D220-0050-01";
-        String[] split = materialGraphNo.split("-");
-        // 型号
-        String type = split[0];
-        // 规格
-        String specs = "DN" + Integer.parseInt(split[1]);
-        System.out.println(type + "," + specs);
     }
 }

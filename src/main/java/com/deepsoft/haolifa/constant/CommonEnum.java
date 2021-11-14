@@ -649,4 +649,44 @@ public class CommonEnum {
             this.name = name;
         }
     }
+
+    /**
+     * material_requisition
+     * 学历type 1:小学、2:初中、3:中专、4:高中、5:大专、6:本科、7:硕士、8:博士
+     */
+    public enum EducationType {
+        PRIMARY_SCHOOL((byte) 1, "小学"),
+        JUNIOR_HIGH_SCHOOL((byte) 1, "初中"),
+        SECONDARY_SPECIALIZED_SCHOOL((byte) 1, "中专"),
+        HIGH_SCHOOL((byte) 1, "高中"),
+        JUNIOR_COLLEGE((byte) 1, "大专"),
+        UNDERGRADUATE((byte) 1, "本科"),
+        MASTER((byte) 1, "硕士"),
+        DOCTOR((byte) 1, "博士"),
+        ;
+        public final byte type;
+        public final String name;
+        EducationType(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
+
+    /**
+     * marry_status
+     * 婚姻状态 1:未婚 2:已婚 3:离异 4:丧偶
+     */
+    public enum MarryStatusType {
+        UNMARRIED((byte) 1, "未婚"),
+        MARRIED((byte) 1, "已婚"),
+        DIVORCE((byte) 1, "离异"),
+        WIDOWED((byte) 1, "丧偶"),
+        ;
+        public final byte type;
+        public final String name;
+        MarryStatusType(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
 }

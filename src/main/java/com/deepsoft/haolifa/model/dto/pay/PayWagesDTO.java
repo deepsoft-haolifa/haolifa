@@ -7,10 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.util.Date;
-@ApiModel(description = "工资明细DTO")
 @Data
 @EqualsAndHashCode(callSuper=true)
+@ApiModel(description = "工资明细DTO")
 public class PayWagesDTO extends BaseCondition {
     @ApiModelProperty(name = "部门")
     private String department;

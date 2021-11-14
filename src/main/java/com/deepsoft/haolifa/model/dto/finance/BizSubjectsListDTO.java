@@ -4,11 +4,13 @@ package com.deepsoft.haolifa.model.dto.finance;
 import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 科目表
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class BizSubjectsListDTO extends PageParam {
 
     @ApiModelProperty(value = "科目名称")
