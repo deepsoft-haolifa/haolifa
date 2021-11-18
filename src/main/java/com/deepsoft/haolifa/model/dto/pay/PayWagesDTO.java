@@ -14,7 +14,7 @@ public class PayWagesDTO extends BaseCondition {
     @ApiModelProperty(value = "部门")
     private String department;
     @ApiModelProperty(value = "姓名")
-    private String uservalue;
+    private String userName;
     @ApiModelProperty(value = "应出勤天数")
     private Integer requiredAttendanceDays;
     @ApiModelProperty(value = "实出勤天数")
