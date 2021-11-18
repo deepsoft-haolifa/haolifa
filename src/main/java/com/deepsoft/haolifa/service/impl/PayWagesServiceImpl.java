@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayWagesSaveVO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesVO;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
@@ -111,12 +112,14 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     }
 
     @Override
-    public ResultBean save(PayWages model) {
-        model.setCreateUser(getLoginUserName());
-        model.setUpdateUser(getLoginUserName());
-        model.setCreateTime(new Date());
-        model.setUpdateTime(new Date());
-        payWagesMapper.insert(model);
+    public ResultBean save(PayWagesSaveVO model) {
+        PayWages payWages = new PayWages();
+        BeanUtils.copyProperties(model, payWages);
+        payWages.setCreateUser(getLoginUserName());
+        payWages.setUpdateUser(getLoginUserName());
+        payWages.setCreateTime(new Date());
+        payWages.setUpdateTime(new Date());
+        payWagesMapper.insert(payWages);
         return ResultBean.success(1);
     }
 
@@ -126,10 +129,12 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     }
 
     @Override
-    public ResultBean edit(PayWages model) {
-        model.setUpdateUser(getLoginUserName());
-        model.setUpdateTime(new Date());
-        payWagesMapper.updateByPrimaryKeySelective(model);
+    public ResultBean edit(PayWagesSaveVO model) {
+        PayWages payWages = new PayWages();
+        BeanUtils.copyProperties(model, payWages);
+        payWages.setUpdateUser(getLoginUserName());
+        payWages.setUpdateTime(new Date());
+        payWagesMapper.updateByPrimaryKeySelective(payWages);
         return ResultBean.success(1);
     }
 

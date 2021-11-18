@@ -5,7 +5,7 @@ import com.deepsoft.haolifa.model.domain.PayProductionCapacity;
 import com.deepsoft.haolifa.model.domain.PayProductionCapacityExample;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.pay.PayProductionCapacityDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
 import com.deepsoft.haolifa.service.PayProductionCapacityService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -51,7 +51,7 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     }
 
     @Override
-    public ResultBean save(PayProductionCapacityDTO model) {
+    public ResultBean save(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
         payTeam.setCreateUser(getLoginUserName());
@@ -68,7 +68,7 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     }
 
     @Override
-    public ResultBean edit(PayProductionCapacityDTO model) {
+    public ResultBean edit(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
         payTeam.setUpdateUser(getLoginUserName());

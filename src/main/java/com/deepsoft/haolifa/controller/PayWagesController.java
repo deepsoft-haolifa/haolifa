@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.PayWages;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayWagesSaveVO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesVO;
 import com.deepsoft.haolifa.service.PayWagesService;
 import com.deepsoft.haolifa.util.ExcelUtils;
@@ -38,7 +39,7 @@ public class PayWagesController {
 
     @ApiOperation("保存")
     @PostMapping(value = "/save")
-    public ResultBean save(@RequestBody PayWages model) {
+    public ResultBean save(@RequestBody PayWagesSaveVO model) {
         return payWagesService.save(model);
     }
 
@@ -50,7 +51,7 @@ public class PayWagesController {
 
     @ApiOperation("修改")
     @PostMapping(value = "/edit")
-    public ResultBean edit(@RequestBody PayWages model) {
+    public ResultBean edit(@RequestBody PayWagesSaveVO model) {
         return payWagesService.edit(model);
     }
 
