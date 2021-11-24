@@ -65,7 +65,8 @@ public class ReportController {
     @GetMapping("/expense/classifyByDepartmentAll")
     public ResultBean classifyByDepartmentAll(@RequestParam(value = "year", required = false) String year,
                                               @RequestParam(value = "month", required = false) String month) {
-        return expensesService.classifyByDepartmentAll(year, month);
+//        return expensesService.classifyByDepartmentAll(year, month);
+        return null;
     }
 
     @ApiOperation("费用报表--某个部门下面的分类统计")

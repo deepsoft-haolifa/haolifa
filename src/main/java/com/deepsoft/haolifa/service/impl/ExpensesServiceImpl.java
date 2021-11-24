@@ -168,13 +168,19 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean classifyByDepartmentAll(String year, String month) {
+    public ResultBean classifyByDepartmentAll(String year, String month,String endYear,String endMonth) {
         Map<String, String> paramMap = new HashMap<>();
         if (StrUtil.isNotBlank(year)) {
             paramMap.put("year", year);
         }
         if (StrUtil.isNotBlank(month)) {
             paramMap.put("month", month);
+        }
+        if (StrUtil.isNotBlank(endYear)) {
+            paramMap.put("endYear", endYear);
+        }
+        if (StrUtil.isNotBlank(endMonth)) {
+            paramMap.put("endMonth", endMonth);
         }
         return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll(paramMap));
     }
