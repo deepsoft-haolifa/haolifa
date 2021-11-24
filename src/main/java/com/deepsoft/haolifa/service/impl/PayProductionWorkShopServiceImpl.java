@@ -16,7 +16,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.transform.Result;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -90,5 +93,17 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
     public ResultBean delete(Integer workId) {
         return ResultBean.success(payProductionWorkshopMapper.deleteByPrimaryKey(workId));
 
+    }
+
+    @Override
+    public ResultBean getList() {
+        List<PayProductionWorkshop> payProductionWorkshops = payProductionWorkshopMapper.selectByExample(new PayProductionWorkshopExample());
+        List<PayProductionWorkshopDTO> list = new ArrayList<>();
+        for (PayProductionWorkshop payProductionWorkshop : payProductionWorkshops) {
+            PayProductionWorkshopDTO dto = new PayProductionWorkshopDTO();
+            BeanUtils.copyProperties(payProductionWorkshop, dto);
+            list.add(dto);
+        }
+        return ResultBean.success(list);
     }
 }

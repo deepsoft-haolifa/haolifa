@@ -14,4 +14,7 @@ public interface PayProductionWorkShopService {
     ResultBean edit(PayProductionWorkshopDTO model);
 
     ResultBean delete(Integer workId);
+
+    ResultBean getList();
+
 }

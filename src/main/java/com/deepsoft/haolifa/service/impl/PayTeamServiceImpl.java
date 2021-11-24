@@ -16,7 +16,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -87,5 +89,17 @@ public class PayTeamServiceImpl extends BaseService implements PayTeamService {
     @Override
     public ResultBean delete(Integer teamId) {
         return ResultBean.success(payTeamMapper.deleteByPrimaryKey(teamId));
+    }
+
+    @Override
+    public ResultBean getList() {
+        List<PayTeam> payTeams = payTeamMapper.selectByExample(new PayTeamExample());
+        List<PayTeamDTO> list = new ArrayList<>();
+        for (PayTeam payTeam : payTeams) {
+            PayTeamDTO dto = new PayTeamDTO();
+            BeanUtils.copyProperties(payTeam, dto);
+            list.add(dto);
+        }
+        return ResultBean.success(list);
     }
 }

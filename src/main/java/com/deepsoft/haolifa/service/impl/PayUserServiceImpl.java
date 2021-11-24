@@ -3,8 +3,10 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
 import com.deepsoft.haolifa.dao.repository.PayTeamMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserRelationProcedureMapper;
 import com.deepsoft.haolifa.model.domain.PayUser;
 import com.deepsoft.haolifa.model.domain.PayUserExample;
+import com.deepsoft.haolifa.model.domain.PayUserRelationProcedure;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
@@ -12,14 +14,12 @@ import com.deepsoft.haolifa.service.PayUserService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,9 +32,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     @Resource
     private PayUserMapper payUserMapper;
     @Resource
-    private PayTeamMapper payTeamMapper;
-    @Resource
-    private PayProductionWorkshopMapper payProductionWorkshopMapper;
+    private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
 
     @Override
     public ResultBean pageInfo(PayUserDTO model) {
@@ -150,5 +148,18 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     @Override
     public ResultBean delete(Integer userId) {
         return ResultBean.success(payUserMapper.deleteByPrimaryKey(userId));
+    }
+
+    @Override
+    public ResultBean saveUserRelationProcedure(Integer userId, Integer procedureId) {
+        PayUserRelationProcedure payUserRelationProcedure = new PayUserRelationProcedure();
+        payUserRelationProcedure.setUserId(userId);
+        payUserRelationProcedure.setProcedureId(procedureId);
+        payUserRelationProcedure.setCreateUser(getLoginUserName());
+        payUserRelationProcedure.setUpdateUser(getLoginUserName());
+        payUserRelationProcedure.setCreateTime(new Date());
+        payUserRelationProcedure.setUpdateTime(new Date());
+        payUserRelationProcedureMapper.insert(payUserRelationProcedure);
+        return ResultBean.success(1);
     }
 }

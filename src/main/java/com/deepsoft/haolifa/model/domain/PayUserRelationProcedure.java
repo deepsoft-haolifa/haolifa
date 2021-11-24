@@ -7,7 +7,7 @@ public class PayUserRelationProcedure {
 
     private Integer userId;
 
-    private String procedureId;
+    private Integer procedureId;
 
     private String createUser;
 
@@ -17,7 +17,7 @@ public class PayUserRelationProcedure {
 
     private Date updateTime;
 
-    public PayUserRelationProcedure(Integer id, Integer userId, String procedureId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayUserRelationProcedure(Integer id, Integer userId, Integer procedureId, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.procedureId = procedureId;
@@ -47,12 +47,12 @@ public class PayUserRelationProcedure {
         this.userId = userId;
     }
 
-    public String getProcedureId() {
+    public Integer getProcedureId() {
         return procedureId;
     }
 
-    public void setProcedureId(String procedureId) {
-        this.procedureId = procedureId == null ? null : procedureId.trim();
+    public void setProcedureId(Integer procedureId) {
+        this.procedureId = procedureId;
     }
 
     public String getCreateUser() {

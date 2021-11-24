@@ -235,62 +235,52 @@ public class PayUserRelationProcedureExample {
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdEqualTo(String value) {
+        public Criteria andProcedureIdEqualTo(Integer value) {
             addCriterion("procedure_id =", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdNotEqualTo(String value) {
+        public Criteria andProcedureIdNotEqualTo(Integer value) {
             addCriterion("procedure_id <>", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdGreaterThan(String value) {
+        public Criteria andProcedureIdGreaterThan(Integer value) {
             addCriterion("procedure_id >", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdGreaterThanOrEqualTo(String value) {
+        public Criteria andProcedureIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("procedure_id >=", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdLessThan(String value) {
+        public Criteria andProcedureIdLessThan(Integer value) {
             addCriterion("procedure_id <", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdLessThanOrEqualTo(String value) {
+        public Criteria andProcedureIdLessThanOrEqualTo(Integer value) {
             addCriterion("procedure_id <=", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdLike(String value) {
-            addCriterion("procedure_id like", value, "procedureId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcedureIdNotLike(String value) {
-            addCriterion("procedure_id not like", value, "procedureId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcedureIdIn(List<String> values) {
+        public Criteria andProcedureIdIn(List<Integer> values) {
             addCriterion("procedure_id in", values, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdNotIn(List<String> values) {
+        public Criteria andProcedureIdNotIn(List<Integer> values) {
             addCriterion("procedure_id not in", values, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdBetween(String value1, String value2) {
+        public Criteria andProcedureIdBetween(Integer value1, Integer value2) {
             addCriterion("procedure_id between", value1, value2, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdNotBetween(String value1, String value2) {
+        public Criteria andProcedureIdNotBetween(Integer value1, Integer value2) {
             addCriterion("procedure_id not between", value1, value2, "procedureId");
             return (Criteria) this;
         }

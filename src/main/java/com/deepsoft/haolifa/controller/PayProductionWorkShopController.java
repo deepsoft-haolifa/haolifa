@@ -13,9 +13,9 @@ import javax.annotation.Resource;
 /**
  * @Author liuyaofei
  * @Date create in 上午11:37 2021/9/11
- * @description 生产车间管理
+ * @description 绩效部门表
  */
-@Api(tags = "绩效生产车间管理")
+@Api(tags = "绩效部门表")
 @RestController
 @RequestMapping("/pay-production-work-shop")
 public class PayProductionWorkShopController {
@@ -28,7 +28,6 @@ public class PayProductionWorkShopController {
     public ResultBean getList(@RequestBody PayProductionWorkshopVO model) {
         return payProductionWorkShopService.pageInfo(model);
     }
-
 
     @ApiOperation("保存")
     @PostMapping(value = "/save")
@@ -54,4 +53,9 @@ public class PayProductionWorkShopController {
         return payProductionWorkShopService.delete(workId);
     }
 
+    @ApiOperation("全部列表")
+    @PostMapping("/getAllList")
+    public ResultBean getAllList() {
+        return payProductionWorkShopService.getList();
+    }
 }

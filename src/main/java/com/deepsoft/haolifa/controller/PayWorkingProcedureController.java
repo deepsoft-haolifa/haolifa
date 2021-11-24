@@ -28,7 +28,6 @@ public class PayWorkingProcedureController {
         return payWorkingProcedureService.pageInfo(model);
     }
 
-
     @ApiOperation("保存")
     @PostMapping(value = "/save")
     public ResultBean save(@RequestBody PayWorkingProcedureDTO model) {
@@ -51,6 +50,13 @@ public class PayWorkingProcedureController {
     @GetMapping(value = "del/{id}")
     public ResultBean del(@PathVariable("id") Integer id) {
         return payWorkingProcedureService.delete(id);
+    }
+
+
+    @ApiOperation("分配任务")
+    @GetMapping(value = "assignTask/{productId}")
+    public ResultBean assignTask(@PathVariable Integer productId) {
+        return payWorkingProcedureService.assignTask(productId);
     }
 
 }

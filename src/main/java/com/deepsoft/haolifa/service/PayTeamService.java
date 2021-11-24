@@ -14,4 +14,7 @@ public interface PayTeamService {
     ResultBean edit(PayTeamDTO model);
 
     ResultBean delete(Integer teamId);
+
+    ResultBean getList();
+
 }

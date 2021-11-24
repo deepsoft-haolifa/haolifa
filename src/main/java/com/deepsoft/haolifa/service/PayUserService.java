@@ -13,4 +13,6 @@ public interface PayUserService {
     ResultBean edit(PayUserDTO model);
 
     ResultBean delete(Integer userId);
+
+    ResultBean saveUserRelationProcedure(Integer userId, Integer procedureId);
 }

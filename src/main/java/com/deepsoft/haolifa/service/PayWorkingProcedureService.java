@@ -14,4 +14,6 @@ public interface PayWorkingProcedureService {
     ResultBean edit(PayWorkingProcedureDTO model);
 
     ResultBean delete(Integer id);
+
+    ResultBean assignTask(Integer productId);
 }

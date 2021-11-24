@@ -55,4 +55,11 @@ public class PayTeamController {
         return payTeamService.delete(teamId);
     }
 
+    @ApiOperation("全部列表")
+    @PostMapping("/getAllList")
+    public ResultBean getAllList() {
+        return payTeamService.getList();
+    }
+
+
 }

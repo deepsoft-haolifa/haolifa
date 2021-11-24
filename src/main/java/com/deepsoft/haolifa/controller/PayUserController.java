@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * @Author liuyaofei
@@ -53,4 +54,13 @@ public class PayUserController {
         return payUserService.delete(userId);
     }
 
+    @ApiOperation("保存人员工序关联表")
+    @PostMapping(value = "/saveUserRelationProcedure")
+    public ResultBean saveUserRelationProcedure(@RequestParam(value = "userId", required = true) Integer userId,
+                           @RequestParam(value = "procedureId", required = true) Integer procedureId) {
+        if (Objects.isNull(userId) || Objects.isNull(procedureId)) {
+            throw new RuntimeException("userId or procedureId is null");
+        }
+        return payUserService.saveUserRelationProcedure(userId, procedureId);
+    }
 }

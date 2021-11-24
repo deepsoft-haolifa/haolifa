@@ -1,21 +1,25 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserRelationProcedureMapper;
 import com.deepsoft.haolifa.dao.repository.PayWorkingProcedureMapper;
-import com.deepsoft.haolifa.model.domain.PayWorkingProcedure;
-import com.deepsoft.haolifa.model.domain.PayWorkingProcedureExample;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
+import com.deepsoft.haolifa.model.vo.PayUserProcedureVO;
 import com.deepsoft.haolifa.service.PayWorkingProcedureService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author liuyaofei
@@ -26,6 +30,12 @@ import java.util.Objects;
 public class PayWorkingProcedureServiceImpl extends BaseService implements PayWorkingProcedureService {
     @Resource
     private PayWorkingProcedureMapper payWorkingProcedureMapper;
+    @Resource
+    private OrderProductAssociateMapper orderProductAssociateMapper;
+    @Resource
+    private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
+    @Resource
+    private PayUserMapper payUserMapper;
 
     @Override
     public ResultBean pageInfo(PayWorkingProcedureDTO model) {
@@ -88,5 +98,39 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     @Override
     public ResultBean delete(Integer id) {
         return ResultBean.success(payWorkingProcedureMapper.deleteByPrimaryKey(id));
+    }
+
+    @Override
+    public ResultBean assignTask(Integer productId) {
+        OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(productId);
+        String productModel = orderProductAssociate.getProductModel();
+        PayWorkingProcedureExample example = new PayWorkingProcedureExample();
+        example.createCriteria().andProductModelEqualTo(productModel);
+        List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(payWorkingProcedures)) {
+            return ResultBean.success(null);
+        }
+        List<PayUserProcedureVO> payUserProcedureVOS = new ArrayList<>();
+        for (PayWorkingProcedure payWorkingProcedure : payWorkingProcedures) {
+            PayUserRelationProcedureExample userRelationProcedure = new PayUserRelationProcedureExample();
+            userRelationProcedure.createCriteria().andProcedureIdEqualTo(payWorkingProcedure.getId());
+            List<PayUserRelationProcedure> payUserRelationProcedures = payUserRelationProcedureMapper.selectByExample(userRelationProcedure);
+            if (CollectionUtils.isEmpty(payUserRelationProcedures)) {
+                continue;
+            }
+            PayUserRelationProcedure payUserRelationProcedure = payUserRelationProcedures.get(0);
+            PayUser payUser = payUserMapper.selectByPrimaryKey(payUserRelationProcedure.getUserId());
+            PayUserProcedureVO payUserProcedureVO = new PayUserProcedureVO();
+            payUserProcedureVO.setUserId(payUser.getId());
+            payUserProcedureVO.setUserName(payUser.getUserName());
+            payUserProcedureVO.setPostCode(payWorkingProcedure.getPostCode());
+            payUserProcedureVO.setPostName(payWorkingProcedure.getPostName());
+            payUserProcedureVOS.add(payUserProcedureVO);
+        }
+        if (CollectionUtils.isEmpty(payUserProcedureVOS)) {
+            return ResultBean.success(null);
+        }
+        Map<String, List<PayUserProcedureVO>> collect = payUserProcedureVOS.stream().collect(Collectors.groupingBy(PayUserProcedureVO::getUserName));
+        return ResultBean.success(collect);
     }
 }
