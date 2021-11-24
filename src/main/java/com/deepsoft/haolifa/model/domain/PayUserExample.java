@@ -1806,6 +1806,136 @@ public class PayUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserTypeIsNull() {
+            addCriterion("user_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeIsNotNull() {
+            addCriterion("user_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeEqualTo(String value) {
+            addCriterion("user_type =", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeNotEqualTo(String value) {
+            addCriterion("user_type <>", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeGreaterThan(String value) {
+            addCriterion("user_type >", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("user_type >=", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeLessThan(String value) {
+            addCriterion("user_type <", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeLessThanOrEqualTo(String value) {
+            addCriterion("user_type <=", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeLike(String value) {
+            addCriterion("user_type like", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeNotLike(String value) {
+            addCriterion("user_type not like", value, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeIn(List<String> values) {
+            addCriterion("user_type in", values, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeNotIn(List<String> values) {
+            addCriterion("user_type not in", values, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeBetween(String value1, String value2) {
+            addCriterion("user_type between", value1, value2, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserTypeNotBetween(String value1, String value2) {
+            addCriterion("user_type not between", value1, value2, "userType");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdIsNull() {
+            addCriterion("superior_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdIsNotNull() {
+            addCriterion("superior_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdEqualTo(Integer value) {
+            addCriterion("superior_id =", value, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdNotEqualTo(Integer value) {
+            addCriterion("superior_id <>", value, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdGreaterThan(Integer value) {
+            addCriterion("superior_id >", value, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("superior_id >=", value, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdLessThan(Integer value) {
+            addCriterion("superior_id <", value, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdLessThanOrEqualTo(Integer value) {
+            addCriterion("superior_id <=", value, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdIn(List<Integer> values) {
+            addCriterion("superior_id in", values, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdNotIn(List<Integer> values) {
+            addCriterion("superior_id not in", values, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdBetween(Integer value1, Integer value2) {
+            addCriterion("superior_id between", value1, value2, "superiorId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("superior_id not between", value1, value2, "superiorId");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateUserIsNull() {
             addCriterion("create_user is null");
             return (Criteria) this;

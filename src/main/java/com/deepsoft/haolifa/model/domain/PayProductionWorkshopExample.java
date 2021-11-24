@@ -165,73 +165,73 @@ public class PayProductionWorkshopExample {
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameIsNull() {
-            addCriterion("workshop_name is null");
+        public Criteria andDepartNameIsNull() {
+            addCriterion("depart_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameIsNotNull() {
-            addCriterion("workshop_name is not null");
+        public Criteria andDepartNameIsNotNull() {
+            addCriterion("depart_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameEqualTo(String value) {
-            addCriterion("workshop_name =", value, "workshopName");
+        public Criteria andDepartNameEqualTo(String value) {
+            addCriterion("depart_name =", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameNotEqualTo(String value) {
-            addCriterion("workshop_name <>", value, "workshopName");
+        public Criteria andDepartNameNotEqualTo(String value) {
+            addCriterion("depart_name <>", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameGreaterThan(String value) {
-            addCriterion("workshop_name >", value, "workshopName");
+        public Criteria andDepartNameGreaterThan(String value) {
+            addCriterion("depart_name >", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameGreaterThanOrEqualTo(String value) {
-            addCriterion("workshop_name >=", value, "workshopName");
+        public Criteria andDepartNameGreaterThanOrEqualTo(String value) {
+            addCriterion("depart_name >=", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameLessThan(String value) {
-            addCriterion("workshop_name <", value, "workshopName");
+        public Criteria andDepartNameLessThan(String value) {
+            addCriterion("depart_name <", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameLessThanOrEqualTo(String value) {
-            addCriterion("workshop_name <=", value, "workshopName");
+        public Criteria andDepartNameLessThanOrEqualTo(String value) {
+            addCriterion("depart_name <=", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameLike(String value) {
-            addCriterion("workshop_name like", value, "workshopName");
+        public Criteria andDepartNameLike(String value) {
+            addCriterion("depart_name like", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameNotLike(String value) {
-            addCriterion("workshop_name not like", value, "workshopName");
+        public Criteria andDepartNameNotLike(String value) {
+            addCriterion("depart_name not like", value, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameIn(List<String> values) {
-            addCriterion("workshop_name in", values, "workshopName");
+        public Criteria andDepartNameIn(List<String> values) {
+            addCriterion("depart_name in", values, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameNotIn(List<String> values) {
-            addCriterion("workshop_name not in", values, "workshopName");
+        public Criteria andDepartNameNotIn(List<String> values) {
+            addCriterion("depart_name not in", values, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameBetween(String value1, String value2) {
-            addCriterion("workshop_name between", value1, value2, "workshopName");
+        public Criteria andDepartNameBetween(String value1, String value2) {
+            addCriterion("depart_name between", value1, value2, "departName");
             return (Criteria) this;
         }
 
-        public Criteria andWorkshopNameNotBetween(String value1, String value2) {
-            addCriterion("workshop_name not between", value1, value2, "workshopName");
+        public Criteria andDepartNameNotBetween(String value1, String value2) {
+            addCriterion("depart_name not between", value1, value2, "departName");
             return (Criteria) this;
         }
 

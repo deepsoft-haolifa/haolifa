@@ -6,17 +6,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.util.Date;
 @ApiModel(description = "生产能力DTO")
 @Data
-@EqualsAndHashCode()
-public class PayProductionCapacityDTO {
-    @ApiModelProperty(name = "id")
+@EqualsAndHashCode(callSuper=false)
+public class PayProductCapacityDTO {
+    @ApiModelProperty(value = "id")
     private Integer id;
-    @ApiModelProperty(name = "能力名称")
+    @ApiModelProperty(value = "能力名称")
     private String capacityName;
-    @ApiModelProperty(name = "能力代码")
+    @ApiModelProperty(value = "能力代码")
     private String capacityCode;
-    @ApiModelProperty(name = "价格")
+    @ApiModelProperty(value = "价格")
     private BigDecimal capacityPrice;
 }

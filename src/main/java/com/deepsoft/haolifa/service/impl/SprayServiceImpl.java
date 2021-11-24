@@ -15,6 +15,7 @@ import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
 import com.deepsoft.haolifa.model.vo.SprayVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.SprayService;
+import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -435,5 +436,24 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     @Override
     public SprayInspectHistory getHistoryInfo(Integer historyId) {
         return inspectHistoryMapper.selectByPrimaryKey(historyId);
+    }
+
+    @Override
+    public List<SprayInspectHistory> getInspectList(String sprayNo, String startTime, String endTime) {
+        Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, startTime);
+        Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, endTime);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(endDate);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        if (day >= 26) {
+            cal.set(Calendar.DAY_OF_MONTH, 25);
+        }
+        Date time = cal.getTime();
+        SprayInspectHistoryExample inspectHistoryExample = new SprayInspectHistoryExample();
+        inspectHistoryExample.createCriteria().andSprayNoEqualTo(sprayNo)
+        .andUpdateTimeGreaterThanOrEqualTo(startDate)
+        .andUpdateTimeLessThanOrEqualTo(time);
+        List<SprayInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
+        return inspectHistories;
     }
 }

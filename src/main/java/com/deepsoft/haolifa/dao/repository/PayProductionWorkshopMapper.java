@@ -2,9 +2,8 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.PayProductionWorkshop;
 import com.deepsoft.haolifa.model.domain.PayProductionWorkshopExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PayProductionWorkshopMapper {
     int countByExample(PayProductionWorkshopExample example);

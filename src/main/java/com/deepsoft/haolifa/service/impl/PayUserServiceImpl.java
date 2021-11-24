@@ -106,17 +106,17 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         example.setOrderByClause("id desc");
         Page<PayUser> payUsers = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payUserMapper.selectByExample(example));
-        List<PayUserDTO> list = Lists.newArrayList();
-        payUsers.forEach(payUser -> {
-            PayUserDTO payUserDTO = new PayUserDTO();
-            BeanUtils.copyProperties(payUser, payUserDTO);
-            payUserDTO.setTeamName(payTeamMapper.selectByPrimaryKey(payUser.getTeamId()).getTeamName());
-            payUserDTO.setPostName(payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId()).getPostName());
-            list.add(payUserDTO);
-        });
-        PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(list, pageDTO);
-        pageDTO.setList(list);
+//        List<PayUserDTO> list = Lists.newArrayList();
+//        payUsers.forEach(payUser -> {
+//            PayUserDTO payUserDTO = new PayUserDTO();
+//            BeanUtils.copyProperties(payUser, payUserDTO);
+//            payUserDTO.setTeamName(payTeamMapper.selectByPrimaryKey(payUser.getTeamId()).getTeamName());
+//            payUserDTO.setPostName(payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId()).getPostName());
+//            list.add(payUserDTO);
+//        });
+        PageDTO<PayUser> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(payUsers, pageDTO);
+        pageDTO.setList(payUsers);
         return ResultBean.success(pageDTO);
     }
 

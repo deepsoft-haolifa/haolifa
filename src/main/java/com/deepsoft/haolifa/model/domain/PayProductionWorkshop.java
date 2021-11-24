@@ -5,7 +5,7 @@ import java.util.Date;
 public class PayProductionWorkshop {
     private Integer id;
 
-    private String workshopName;
+    private String departName;
 
     private String workType;
 
@@ -21,9 +21,9 @@ public class PayProductionWorkshop {
 
     private Date updateTime;
 
-    public PayProductionWorkshop(Integer id, String workshopName, String workType, String postName, String postCode, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayProductionWorkshop(Integer id, String departName, String workType, String postName, String postCode, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
-        this.workshopName = workshopName;
+        this.departName = departName;
         this.workType = workType;
         this.postName = postName;
         this.postCode = postCode;
@@ -45,12 +45,12 @@ public class PayProductionWorkshop {
         this.id = id;
     }
 
-    public String getWorkshopName() {
-        return workshopName;
+    public String getDepartName() {
+        return departName;
     }
 
-    public void setWorkshopName(String workshopName) {
-        this.workshopName = workshopName == null ? null : workshopName.trim();
+    public void setDepartName(String departName) {
+        this.departName = departName == null ? null : departName.trim();
     }
 
     public String getWorkType() {

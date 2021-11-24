@@ -7,6 +7,8 @@ import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
 
+import java.util.List;
+
 public interface SprayService {
 
     ResultBean save(SprayDto sprayDto);
@@ -43,4 +45,7 @@ public interface SprayService {
     int obtainNumber(String materialGraphNo);
 
     SprayInspectHistory getHistoryInfo(Integer historyId);
+
+    List<SprayInspectHistory> getInspectList(String sprayNo, String startTime, String endTime);
+
 }

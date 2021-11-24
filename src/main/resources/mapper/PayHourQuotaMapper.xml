@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PayHourQuotaMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PayHourQuota" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="serial" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="workshop_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="id_category" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="app_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="app_specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="work_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="procedure_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="post_code" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="hour_quota_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, serial, workshop_name, product_name, id_category, app_model, app_specifications, 
+    work_type, procedure_name, post_code, hour_quota_price, create_user, update_user, 
+    create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayHourQuotaExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pay_hour_quota
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pay_hour_quota
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pay_hour_quota
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PayHourQuotaExample" >
+    delete from pay_hour_quota
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PayHourQuota" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pay_hour_quota (serial, workshop_name, product_name, 
+      id_category, app_model, app_specifications, 
+      work_type, procedure_name, post_code, 
+      hour_quota_price, create_user, update_user, 
+      create_time, update_time)
+    values (#{serial,jdbcType=INTEGER}, #{workshopName,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{idCategory,jdbcType=VARCHAR}, #{appModel,jdbcType=VARCHAR}, #{appSpecifications,jdbcType=VARCHAR}, 
+      #{workType,jdbcType=VARCHAR}, #{procedureName,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, 
+      #{hourQuotaPrice,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayHourQuota" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pay_hour_quota
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serial != null" >
+        serial,
+      </if>
+      <if test="workshopName != null" >
+        workshop_name,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="idCategory != null" >
+        id_category,
+      </if>
+      <if test="appModel != null" >
+        app_model,
+      </if>
+      <if test="appSpecifications != null" >
+        app_specifications,
+      </if>
+      <if test="workType != null" >
+        work_type,
+      </if>
+      <if test="procedureName != null" >
+        procedure_name,
+      </if>
+      <if test="postCode != null" >
+        post_code,
+      </if>
+      <if test="hourQuotaPrice != null" >
+        hour_quota_price,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serial != null" >
+        #{serial,jdbcType=INTEGER},
+      </if>
+      <if test="workshopName != null" >
+        #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCategory != null" >
+        #{idCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="appModel != null" >
+        #{appModel,jdbcType=VARCHAR},
+      </if>
+      <if test="appSpecifications != null" >
+        #{appSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null" >
+        #{workType,jdbcType=VARCHAR},
+      </if>
+      <if test="procedureName != null" >
+        #{procedureName,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hourQuotaPrice != null" >
+        #{hourQuotaPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PayHourQuotaExample" resultType="java.lang.Integer" >
+    select count(*) from pay_hour_quota
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pay_hour_quota
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.serial != null" >
+        serial = #{record.serial,jdbcType=INTEGER},
+      </if>
+      <if test="record.workshopName != null" >
+        workshop_name = #{record.workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null" >
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCategory != null" >
+        id_category = #{record.idCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appModel != null" >
+        app_model = #{record.appModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appSpecifications != null" >
+        app_specifications = #{record.appSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workType != null" >
+        work_type = #{record.workType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.procedureName != null" >
+        procedure_name = #{record.procedureName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postCode != null" >
+        post_code = #{record.postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hourQuotaPrice != null" >
+        hour_quota_price = #{record.hourQuotaPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateUser != null" >
+        update_user = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pay_hour_quota
+    set id = #{record.id,jdbcType=INTEGER},
+      serial = #{record.serial,jdbcType=INTEGER},
+      workshop_name = #{record.workshopName,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      id_category = #{record.idCategory,jdbcType=VARCHAR},
+      app_model = #{record.appModel,jdbcType=VARCHAR},
+      app_specifications = #{record.appSpecifications,jdbcType=VARCHAR},
+      work_type = #{record.workType,jdbcType=VARCHAR},
+      procedure_name = #{record.procedureName,jdbcType=VARCHAR},
+      post_code = #{record.postCode,jdbcType=VARCHAR},
+      hour_quota_price = #{record.hourQuotaPrice,jdbcType=DECIMAL},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PayHourQuota" >
+    update pay_hour_quota
+    <set >
+      <if test="serial != null" >
+        serial = #{serial,jdbcType=INTEGER},
+      </if>
+      <if test="workshopName != null" >
+        workshop_name = #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCategory != null" >
+        id_category = #{idCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="appModel != null" >
+        app_model = #{appModel,jdbcType=VARCHAR},
+      </if>
+      <if test="appSpecifications != null" >
+        app_specifications = #{appSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="workType != null" >
+        work_type = #{workType,jdbcType=VARCHAR},
+      </if>
+      <if test="procedureName != null" >
+        procedure_name = #{procedureName,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="hourQuotaPrice != null" >
+        hour_quota_price = #{hourQuotaPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayHourQuota" >
+    update pay_hour_quota
+    set serial = #{serial,jdbcType=INTEGER},
+      workshop_name = #{workshopName,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      id_category = #{idCategory,jdbcType=VARCHAR},
+      app_model = #{appModel,jdbcType=VARCHAR},
+      app_specifications = #{appSpecifications,jdbcType=VARCHAR},
+      work_type = #{workType,jdbcType=VARCHAR},
+      procedure_name = #{procedureName,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=VARCHAR},
+      hour_quota_price = #{hourQuotaPrice,jdbcType=DECIMAL},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

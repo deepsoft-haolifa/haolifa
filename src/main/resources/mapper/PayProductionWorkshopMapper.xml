@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PayProductionWorkshop" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="workshop_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="depart_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="work_type" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="post_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="post_code" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, workshop_name, work_type, post_name, post_code, create_user, update_user, create_time, 
+    id, depart_name, work_type, post_name, post_code, create_user, update_user, create_time, 
     update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayProductionWorkshopExample" >
@@ -110,10 +110,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_production_workshop (workshop_name, work_type, post_name, 
+    insert into pay_production_workshop (depart_name, work_type, post_name, 
       post_code, create_user, update_user, 
       create_time, update_time)
-    values (#{workshopName,jdbcType=VARCHAR}, #{workType,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, 
+    values (#{departName,jdbcType=VARCHAR}, #{workType,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, 
       #{postCode,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -123,8 +123,8 @@
     </selectKey>
     insert into pay_production_workshop
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="workshopName != null" >
-        workshop_name,
+      <if test="departName != null" >
+        depart_name,
       </if>
       <if test="workType != null" >
         work_type,
@@ -149,8 +149,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="workshopName != null" >
-        #{workshopName,jdbcType=VARCHAR},
+      <if test="departName != null" >
+        #{departName,jdbcType=VARCHAR},
       </if>
       <if test="workType != null" >
         #{workType,jdbcType=VARCHAR},
@@ -187,8 +187,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.workshopName != null" >
-        workshop_name = #{record.workshopName,jdbcType=VARCHAR},
+      <if test="record.departName != null" >
+        depart_name = #{record.departName,jdbcType=VARCHAR},
       </if>
       <if test="record.workType != null" >
         work_type = #{record.workType,jdbcType=VARCHAR},
@@ -219,7 +219,7 @@
   <update id="updateByExample" parameterType="map" >
     update pay_production_workshop
     set id = #{record.id,jdbcType=INTEGER},
-      workshop_name = #{record.workshopName,jdbcType=VARCHAR},
+      depart_name = #{record.departName,jdbcType=VARCHAR},
       work_type = #{record.workType,jdbcType=VARCHAR},
       post_name = #{record.postName,jdbcType=VARCHAR},
       post_code = #{record.postCode,jdbcType=VARCHAR},
@@ -234,8 +234,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PayProductionWorkshop" >
     update pay_production_workshop
     <set >
-      <if test="workshopName != null" >
-        workshop_name = #{workshopName,jdbcType=VARCHAR},
+      <if test="departName != null" >
+        depart_name = #{departName,jdbcType=VARCHAR},
       </if>
       <if test="workType != null" >
         work_type = #{workType,jdbcType=VARCHAR},
@@ -263,7 +263,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayProductionWorkshop" >
     update pay_production_workshop
-    set workshop_name = #{workshopName,jdbcType=VARCHAR},
+    set depart_name = #{departName,jdbcType=VARCHAR},
       work_type = #{workType,jdbcType=VARCHAR},
       post_name = #{postName,jdbcType=VARCHAR},
       post_code = #{postCode,jdbcType=VARCHAR},

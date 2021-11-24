@@ -10,8 +10,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class PayProductionWorkshopVO extends BaseCondition {
-    @ApiModelProperty(value = "车间名称")
-    private String workshopName;
+    @ApiModelProperty(value = "部门名称")
+    private String departName;
     @ApiModelProperty(value = "工种类别")
     private String workType;
     @ApiModelProperty(value = "岗位名称")

@@ -1,7 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.pay.PayProductionCapacityDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
 import com.deepsoft.haolifa.service.PayProductionCapacityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +33,7 @@ public class PayProductionCapacityController {
 
     @ApiOperation("保存")
     @PostMapping(value = "/save")
-    public ResultBean save(@RequestBody PayProductionCapacityDTO model) {
+    public ResultBean save(@RequestBody PayProductCapacityDTO model) {
         return payProductionCapacityService.save(model);
     }
 
@@ -45,7 +45,7 @@ public class PayProductionCapacityController {
 
     @ApiOperation("修改")
     @PostMapping(value = "/edit")
-    public ResultBean edit(@RequestBody PayProductionCapacityDTO model) {
+    public ResultBean edit(@RequestBody PayProductCapacityDTO model) {
         return payProductionCapacityService.edit(model);
     }
 
