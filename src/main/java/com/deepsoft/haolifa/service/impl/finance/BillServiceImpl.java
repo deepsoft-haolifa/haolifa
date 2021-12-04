@@ -48,8 +48,15 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public ResultBean delete(Integer id) {
-        int delete = bizBillMapper.deleteByPrimaryKey(id);
-        return ResultBean.success(delete);
+//        int delete = bizBillMapper.deleteByPrimaryKey(id);
+//        return ResultBean.success(delete);
+        BizBill bizBill = new BizBill();
+        bizBill.setId(id);
+        bizBill.setDelFlag("1");
+        bizBill.setUpdateTime(new Date());
+        bizBill.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int update = bizBillMapper.updateByPrimaryKeySelective(bizBill);
+        return ResultBean.success(update);
     }
 
     @Override
@@ -76,6 +83,7 @@ public class BillServiceImpl implements BillService {
         }
         BizBillExample bizBillExample = new BizBillExample();
         BizBillExample.Criteria criteria = bizBillExample.createCriteria();
+        criteria.andDelFlagEqualTo("0");
         // 凭证号 ==
         if (StringUtils.isNotEmpty(model.getCertificateNumber())) {
             criteria.andCertificateNumberEqualTo(model.getCertificateNumber());

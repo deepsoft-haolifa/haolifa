@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
  * 现金日记账
  */
 @RestController
-@RequestMapping("/finance/bizbill")
+@RequestMapping("/finance/bill")
 @Api(tags = {"现金日记账管理"})
-public class BillBankController {
+public class BillController {
     @Autowired
     private BillService billService;
 
@@ -29,8 +29,8 @@ public class BillBankController {
     }
 
     @ApiOperation("删除节点")
-    @GetMapping("/delete/{bizbillId}")
-    public ResultBean delete(@PathVariable("bizbillId") int id) {
+    @GetMapping("/delete/{billId}")
+    public ResultBean delete(@PathVariable("billId") int id) {
         return billService.delete(id);
     }
 
@@ -41,8 +41,8 @@ public class BillBankController {
     }
 
     @ApiOperation("获取节点列表")
-    @PostMapping("/getBizbillList")
-    public ResultBean getBizbillList(@RequestBody BizBillDTO bizBillDTO) {
+    @PostMapping("/getBillList")
+    public ResultBean getBillList(@RequestBody BizBillDTO bizBillDTO) {
         return billService.getList(bizBillDTO);
     }
 
