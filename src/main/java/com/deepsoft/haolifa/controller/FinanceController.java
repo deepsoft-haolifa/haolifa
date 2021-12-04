@@ -38,7 +38,7 @@ public class FinanceController {
     }
 
     @ApiOperation("获取节点列表")
-    @GetMapping("/subjects/getSubjectsList")
+    @PostMapping("/subjects/getSubjectsList")
     public ResultBean getSubjectsList(@RequestBody BizSubjectsDTO bizSubjectsDTO) {
         return subjectService.getList(bizSubjectsDTO);
     }
