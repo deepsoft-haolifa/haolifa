@@ -47,4 +47,5 @@ public interface BankBillService {
      */
     ResultBean getList(BizBankBillDTO model);
 
+
 }

@@ -42,4 +42,12 @@ public interface BillService {
      */
     ResultBean getList(BizBillDTO model);
 
+
+    /**
+     * 获取详情
+     *
+     * @param id
+     * @return
+     */
+    ResultBean getBillContractDetailByBillId(int id);
 }

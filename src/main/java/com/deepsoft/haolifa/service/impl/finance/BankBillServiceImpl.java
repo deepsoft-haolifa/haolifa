@@ -127,6 +127,12 @@ public class BankBillServiceImpl implements BankBillService {
             criteria.andPaymentTypeEqualTo(model.getPaymentType());
         }
 
+        // 分解状态
+        if (StringUtils.isNotEmpty(model.getContractStatus())) {
+            criteria.andContractStatusEqualTo(model.getContractStatus());
+        }
+
+
         bizBankBillExample.setOrderByClause("id desc");
         Page<BizBankBill> pageData = PageHelper
             .startPage(model.getPageNum(), model.getPageSize())
@@ -138,4 +144,6 @@ public class BankBillServiceImpl implements BankBillService {
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
     }
+
+
 }

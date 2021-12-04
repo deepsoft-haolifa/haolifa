@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl.finance;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizBillMapper;
+import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.domain.BizBill;
 import com.deepsoft.haolifa.model.domain.BizBillExample;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -114,5 +115,18 @@ public class BillServiceImpl implements BillService {
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+
+    @Override
+    public ResultBean getBillContractDetailByBillId(int id) {
+        BizBill bizBill = bizBillMapper.selectByPrimaryKey(id);
+
+        BizBillDTO bizBillDTO = new BizBillDTO();
+        BeanUtils.copyProperties(bizBill, bizBillDTO);
+        // todo 欠缺 销售合同号saleContractNo
+
+        //
+        return ResultBean.success(bizBillDTO);
     }
 }
