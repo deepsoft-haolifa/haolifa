@@ -104,7 +104,7 @@ public class BankBillServiceImpl implements BankBillService {
         //结束时间
         if (model.getOperateDateStart()!=null && model.getOperateDateEnd()!=null) {
             // 区间
-            criteria.andOperateDateBetween(model.getOperateDateStart(),model.getOperateDateEnd()!);
+            criteria.andOperateDateBetween(model.getOperateDateStart(),model.getOperateDateEnd());
         }else if (model.getOperateDateStart()!=null ) {
             // 大于
             criteria.andOperateDateGreaterThanOrEqualTo(model.getOperateDate());
