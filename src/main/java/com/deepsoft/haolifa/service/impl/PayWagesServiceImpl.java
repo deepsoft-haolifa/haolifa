@@ -1,9 +1,13 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.dao.repository.PayWagesMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.InspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
@@ -47,6 +51,14 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private PayWagesRelationUserService payWagesRelationUserService;
     @Resource
     private SprayService sprayService;
+    @Resource
+    private PayUserMapper payUserMapper;
+    @Resource
+    private OrderProductService orderProductService;
+    @Resource
+    private PayProductionWorkshopMapper payProductionWorkshopMapper;
+    @Resource
+    private PayManagerCalService payManagerCalService;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -174,40 +186,77 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         for (PayOrderUserRelationProcedure payOrderUserRelationProcedure : payOrderUserRelationProcedureList) {
             String orderId = payOrderUserRelationProcedure.getOrderId();
             Integer userId = payOrderUserRelationProcedure.getUserId();
+            PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
+            String userType = payUser.getUserType();
+
             BigDecimal totalAmount = new BigDecimal("0");
             Integer qualifiedNumber = null;
-            // 1: 零件质检记录
-            List<InspectHistory> inspectHistoryDtos = inspectService.historyList(orderId, payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
-            if (null != inspectHistoryDtos && inspectHistoryDtos.size() > 0) {
-                for (InspectHistory inspectHistory : inspectHistoryDtos) {
-                    // 合格数量
-                    qualifiedNumber = inspectHistory.getQualifiedNumber();
-                    List<PayHourQuota> list = payHourQuotaService.getList(buildPayHourQuotaDTO(inspectHistory.getMaterialGraphNo(), inspectHistory.getMaterialGraphName()));
-                    if (Objects.nonNull(list) && list.size() > 0) {
-                        PayHourQuota payHourQuota = list.get(0);
-                        // 价格
-                        BigDecimal hourQuotaPrice = payHourQuota.getHourQuotaPrice();
-                        BigDecimal amount = hourQuotaPrice.multiply(new BigDecimal(qualifiedNumber));
-                        totalAmount = totalAmount.add(amount);
-                    }
-
+            if (CommonEnum.UserType.MARRIED.type.equals(userType)) {
+                List<OrderProductAssociate> orderProductList = orderProductService.getOrderProductList(orderId);
+                if (CollectionUtils.isEmpty(orderProductList)) {
+                    continue;
                 }
-            }
-            // 喷涂记录
-            List<SprayInspectHistory> inspectList = sprayService.getInspectList(orderId, payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
-            if (Objects.nonNull(inspectList) && inspectList.size() > 0) {
-                for (SprayInspectHistory sprayInspectHistory: inspectList) {
-                    // 合格数量
-                    Integer spaCount = sprayInspectHistory.getQualifiedNumber();
-                    List<PayHourQuota> list = payHourQuotaService.getList(buildPayHourQuotaDTO(sprayInspectHistory.getMaterialGraphNo(), sprayInspectHistory.getMaterialGraphName()));
-                    if (Objects.nonNull(list) && list.size() > 0) {
-                        PayHourQuota payHourQuota = list.get(0);
-                        // 价格
-                        BigDecimal hourQuotaPrice = payHourQuota.getHourQuotaPrice();
-                        BigDecimal amount = hourQuotaPrice.multiply(new BigDecimal(spaCount));
-                        totalAmount = totalAmount.add(amount);
-                    }
+                PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
+                if (Objects.isNull(payProductionWorkshop)) {
+                    continue;
+                }
+                String departName = payProductionWorkshop.getDepartName();
+                // 岗位名称
+                String postName = payProductionWorkshop.getPostName();
+                for (OrderProductAssociate orderProductAssociate : orderProductList) {
 
+                    PayManagerCalDTO dto = new PayManagerCalDTO();
+                    dto.setAppModel(orderProductAssociate.getProductModel());
+                    dto.setAppSpecifications(orderProductAssociate.getSpecifications());
+                    dto.setWorkType(orderProductAssociate.getProductName());
+                    dto.setPostName(postName);
+                    PayManagerCal info = payManagerCalService.getInfo(dto);
+                    if (Objects.isNull(info)) {
+                        continue;
+                    }
+                    // 合格数量
+                    Integer productNumber = orderProductAssociate.getProductNumber();
+                    // 价格
+                    BigDecimal hourQuotaPrice = info.getPrice();
+                    BigDecimal amount = hourQuotaPrice.multiply(new BigDecimal(productNumber));
+                    totalAmount = totalAmount.add(amount);
+                }
+            } else {
+                // 1: 零件质检记录
+                List<InspectHistory> inspectHistoryDtos = inspectService.historyList(orderId, payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
+                if (null != inspectHistoryDtos && inspectHistoryDtos.size() > 0) {
+                    for (InspectHistory inspectHistory : inspectHistoryDtos) {
+                        // 合格数量
+                        Integer spaCount = inspectHistory.getQualifiedNumber();
+                        qualifiedNumber = qualifiedNumber + spaCount;
+                        List<PayHourQuota> list = payHourQuotaService.getList(buildPayHourQuotaDTO(inspectHistory.getMaterialGraphNo(), inspectHistory.getMaterialGraphName()));
+                        if (Objects.nonNull(list) && list.size() > 0) {
+                            PayHourQuota payHourQuota = list.get(0);
+                            // 价格
+                            BigDecimal hourQuotaPrice = payHourQuota.getHourQuotaPrice();
+                            BigDecimal amount = hourQuotaPrice.multiply(new BigDecimal(spaCount));
+                            totalAmount = totalAmount.add(amount);
+                        }
+
+                    }
+                }
+                // 喷涂记录
+                List<SprayInspectHistory> inspectList = sprayService.getInspectList(orderId, payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
+                if (Objects.nonNull(inspectList) && inspectList.size() > 0) {
+                    for (SprayInspectHistory sprayInspectHistory : inspectList) {
+                        // 合格数量
+                        Integer spaCount = sprayInspectHistory.getQualifiedNumber();
+                        qualifiedNumber = qualifiedNumber + spaCount;
+                        List<PayHourQuota> list = payHourQuotaService.getList(buildPayHourQuotaDTO(sprayInspectHistory.getMaterialGraphNo(), sprayInspectHistory.getMaterialGraphName()));
+                        if (Objects.nonNull(list) && list.size() > 0) {
+                            PayHourQuota payHourQuota = list.get(0);
+                            // 价格
+                            BigDecimal hourQuotaPrice = payHourQuota.getHourQuotaPrice();
+                            BigDecimal amount = hourQuotaPrice.multiply(new BigDecimal(spaCount));
+                            totalAmount = totalAmount.add(amount);
+                        }
+
+                    }
                 }
             }
             PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
@@ -229,6 +278,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
 
     /**
      * wrapper
+     *
      * @param materialGraphNo
      * @param getMaterialGraphName
      * @return
