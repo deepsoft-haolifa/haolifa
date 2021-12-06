@@ -92,7 +92,7 @@
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-    <table tableName="pay_wages_relation_user" domainObjectName="PayWagesRelationUser">
+    <table tableName="expenses" domainObjectName="Expenses">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 <!--        <table tableName="stock" domainObjectName="Stock">-->

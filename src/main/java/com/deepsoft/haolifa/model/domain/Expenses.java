@@ -34,7 +34,9 @@ public class Expenses {
 
     private String dataMonth;
 
-    public Expenses(Integer id, BigDecimal totalAmount, String expensesClassify, Integer createUserId, String commitUser, Byte isDelete, Date createTime, Date updateTime, String secondClassify, String department, String summary, String remark, String voucherNo, String dataYear, String dataMonth) {
+    private String dateStr;
+
+    public Expenses(Integer id, BigDecimal totalAmount, String expensesClassify, Integer createUserId, String commitUser, Byte isDelete, Date createTime, Date updateTime, String secondClassify, String department, String summary, String remark, String voucherNo, String dataYear, String dataMonth, String dateStr) {
         this.id = id;
         this.totalAmount = totalAmount;
         this.expensesClassify = expensesClassify;
@@ -50,6 +52,7 @@ public class Expenses {
         this.voucherNo = voucherNo;
         this.dataYear = dataYear;
         this.dataMonth = dataMonth;
+        this.dateStr = dateStr;
     }
 
     public Expenses() {
@@ -174,5 +177,13 @@ public class Expenses {
 
     public void setDataMonth(String dataMonth) {
         this.dataMonth = dataMonth == null ? null : dataMonth.trim();
+    }
+
+    public String getDateStr() {
+        return dateStr;
+    }
+
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr == null ? null : dateStr.trim();
     }
 }

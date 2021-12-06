@@ -5,21 +5,18 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
+import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.ReportService;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@Api(tags = {"报表"})
+@Api(tags = {"报表(2021-12)"})
 @RestController
 @RequestMapping("/report")
 public class ReportController {
@@ -54,27 +51,22 @@ public class ReportController {
         return expensesService.classifyByDepartment();
     }
 
-    @ApiOperation("费用报表--费用整体分类汇总")
-    @GetMapping("/expense/getAllClassify")
-    public ResultBean getAllClassify(@RequestParam(value = "year", required = false) String year,
-                                     @RequestParam(value = "month", required = false) String month) {
-        return expensesService.getAllClassify(year, month);
+    @ApiOperation("费用报表--费用整体分类汇总（2021-12）")
+    @PostMapping("/expense/getAllClassify")
+    public ResultBean<List<ExpensesReport>> getAllClassify(@RequestBody ReportBaseDTO reportBaseDTO) {
+        return expensesService.getAllClassify(reportBaseDTO);
     }
 
-    @ApiOperation("费用报表--费用整体部门汇总")
-    @GetMapping("/expense/classifyByDepartmentAll")
-    public ResultBean classifyByDepartmentAll(@RequestParam(value = "year", required = false) String year,
-                                              @RequestParam(value = "month", required = false) String month) {
-//        return expensesService.classifyByDepartmentAll(year, month);
-        return null;
+    @ApiOperation("费用报表--费用整体部门汇总（2021-12）")
+    @PostMapping("/expense/classifyByDepartmentAll")
+    public ResultBean<List<ExpensesReport>> classifyByDepartmentAll(@RequestBody ReportBaseDTO reportBaseDTO){
+        return expensesService.classifyByDepartmentAll(reportBaseDTO);
     }
 
-    @ApiOperation("费用报表--某个部门下面的分类统计")
-    @RequestMapping(value = "/expense/getAllClassifyWithDepartment", method = RequestMethod.GET)
-    public ResultBean getAllClassifyWithDepartment(@RequestParam(value = "department") String department,
-                                                   @RequestParam(value = "year", required = false) String year,
-                                                   @RequestParam(value = "month", required = false) String month) {
-        return expensesService.getAllClassifyWithDepartment(department, year, month);
+    @ApiOperation("费用报表--某个部门下面的分类统计（2021-12）")
+    @PostMapping(value = "/expense/getAllClassifyWithDepartment")
+    public ResultBean<List<ExpensesReport>> getAllClassifyWithDepartment(@RequestBody ReportBaseDTO reportBaseDTO) {
+        return expensesService.getAllClassifyWithDepartment(reportBaseDTO);
     }
 
     @ApiOperation("费用报表--获取一级部门下面每月的支出")

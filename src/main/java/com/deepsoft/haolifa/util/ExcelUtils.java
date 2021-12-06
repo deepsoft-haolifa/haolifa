@@ -2,10 +2,10 @@ package com.deepsoft.haolifa.util;
 
 import cn.hutool.poi.excel.ExcelReader;
 import com.deepsoft.haolifa.annotation.ExcelHandle;
-import com.google.common.collect.Maps;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class ExcelUtils {
 
     public static List<?> importExcelReadColumn(InputStream inputStream, Class<?> clazz) {
         Field[] declaredFields = clazz.getDeclaredFields();
-        Map<String, String> headerMap = Maps.newHashMap();
+        Map<String, String> headerMap = new HashMap<>();
         for (Field field : declaredFields) {
             ExcelHandle annotation = field.getAnnotation(ExcelHandle.class);
             if (annotation == null) {

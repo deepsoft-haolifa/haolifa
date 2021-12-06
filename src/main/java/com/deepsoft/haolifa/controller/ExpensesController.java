@@ -1,8 +1,11 @@
 package com.deepsoft.haolifa.controller;
 
 
+import com.deepsoft.haolifa.model.domain.Expenses;
 import com.deepsoft.haolifa.model.dto.ExpensesDTO;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,7 +13,9 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = {"费用管理"})
+import java.util.List;
+
+@Api(tags = {"费用管理(2021-12)"})
 @RestController
 @RequestMapping("/expenses")
 public class ExpensesController {
@@ -44,18 +49,19 @@ public class ExpensesController {
     }
 
 
-    @ApiOperation("查询费用记录列表")
-    @GetMapping("list")
-    public ResultBean getList(@RequestParam(defaultValue = "1") Integer pageNum,
-                              @RequestParam(defaultValue = "10") Integer pageSize,
-                              @ApiParam("一级分类名称, 搜索全部时值：全部") @RequestParam(required = false) String classifyName,
-                              @ApiParam("二级分类名称，搜索全部时值：全部") @RequestParam(required = false) String secondClassifyName,
-                              @ApiParam("部门") @RequestParam(required = false) String department,
-                              @RequestParam(required = false) String voucherNo,
-                              @RequestParam(required = false) String year,
-                              @RequestParam(required = false) String month) {
-        return expensesService.getList(pageNum, pageSize, classifyName, secondClassifyName, department, voucherNo,year,month);
+    @ApiOperation("查询费用记录列表(2021-12)")
+    @PostMapping("list")
+    public ResultBean<PageDTO<Expenses>> getList(@RequestParam(defaultValue = "1") Integer pageNum,
+                                                 @RequestParam(defaultValue = "10") Integer pageSize, @RequestBody ExpensesConditionDTO expensesDTO) {
+        return expensesService.getList(pageNum, pageSize, expensesDTO);
     }
+
+    @ApiOperation("查询费用汇总(2021-12)")
+    @PostMapping("list-summary")
+    public ResultBean<String> listSummary(@RequestBody ExpensesConditionDTO expensesDTO) {
+        return ResultBean.success(expensesService.listSummary(expensesDTO));
+    }
+
 
     @ApiOperation("费用类别")
     @GetMapping("/classify")

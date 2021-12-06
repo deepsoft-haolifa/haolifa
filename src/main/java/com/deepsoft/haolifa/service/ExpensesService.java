@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 
 public interface ExpensesService {
 
@@ -11,8 +13,8 @@ public interface ExpensesService {
 
   ResultBean update(ExpensesDTO model);
 
-  ResultBean getList(Integer pageNum, Integer pageSize, String classifyName, String secondClassifyName,
-      String department, String voucherNo,String year,String month);
+  ResultBean getList(Integer pageNum, Integer pageSize, ExpensesConditionDTO expensesDTO);
+  String listSummary(ExpensesConditionDTO expensesDTO);
 
   ResultBean classify(Integer pId);
 
@@ -22,10 +24,10 @@ public interface ExpensesService {
 
   ResultBean classifyByDepartment();
   //获取费用统计表
-  ResultBean getAllClassify(String year,String month);
+  ResultBean getAllClassify(ReportBaseDTO reportBaseDTO);
 //查询部门费用总计
-  ResultBean classifyByDepartmentAll(String year,String month,String endYear,String endMonth);
-  ResultBean getAllClassifyWithDepartment(String department,String year, String month);
+  ResultBean classifyByDepartmentAll(ReportBaseDTO reportBaseDTO);
+  ResultBean getAllClassifyWithDepartment(ReportBaseDTO reportBaseDTO);
   //获取一级部门每月的费用支出
   ResultBean getMonthByDepartment(String department);
   ResultBean getAllClassifyWithFirstClassify(String classify);

@@ -3,8 +3,6 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.Expenses;
 import com.deepsoft.haolifa.model.domain.ExpensesExample;
 import java.util.List;
-
-import com.deepsoft.haolifa.model.domain.ExpensesReport;
 import org.apache.ibatis.annotations.Param;
 
 public interface ExpensesMapper {

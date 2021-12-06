@@ -12,6 +12,8 @@ import com.deepsoft.haolifa.model.domain.ExpensesExample;
 import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -51,6 +53,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
             expenses.setDataYear(dataYear);
             String dataMonth = model.getDataDate().substring(5, 7);
             expenses.setDataMonth(dataMonth);
+            expenses.setDateStr(model.getDataDate());
         }
 
         expenses.setCreateUserId(getLoginUserId());
@@ -98,6 +101,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
             expenses.setDataYear(dataYear);
             String dataMonth = model.getDataDate().substring(5, 7);
             expenses.setDataMonth(dataMonth);
+            expenses.setDateStr(model.getDataDate());
         }
         expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
         expensesMapper.updateByPrimaryKeySelective(expenses);
@@ -105,28 +109,35 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getList(Integer pageNum, Integer pageSize, String classifyName,
-                              String secondClassifyName, String department, String voucherNo
-        , String year, String month) {
+    public ResultBean getList(Integer pageNum, Integer pageSize, ExpensesConditionDTO expensesDTO) {
         ExpensesExample expensesExample = new ExpensesExample();
         ExpensesExample.Criteria criteria = expensesExample.createCriteria();
-        if (StringUtils.isNotEmpty(classifyName) && !"全部".equals(classifyName)) {
-            criteria.andExpensesClassifyEqualTo(classifyName);
+        if (StringUtils.isNotEmpty(expensesDTO.getClassifyName()) && !"全部".equals(expensesDTO.getClassifyName())) {
+            criteria.andExpensesClassifyEqualTo(expensesDTO.getClassifyName());
         }
-        if (StringUtils.isNotEmpty(secondClassifyName) && !"全部".equals(secondClassifyName)) {
-            criteria.andSecondClassifyEqualTo(secondClassifyName);
+        if (StringUtils.isNotEmpty(expensesDTO.getSecondClassifyName()) && !"全部".equals(expensesDTO.getSecondClassifyName())) {
+            criteria.andSecondClassifyEqualTo(expensesDTO.getSecondClassifyName());
         }
-        if (StringUtils.isNotEmpty(department)) {
-            criteria.andDepartmentLike("%" + department + "%");
+        if (StringUtils.isNotEmpty(expensesDTO.getDepartment())) {
+            criteria.andDepartmentLike("%" + expensesDTO.getDepartment() + "%");
         }
-        if (StringUtils.isNotEmpty(voucherNo)) {
-            criteria.andVoucherNoLike("%" + voucherNo + "%");
+        if (StringUtils.isNotEmpty(expensesDTO.getVoucherNo())) {
+            criteria.andVoucherNoLike("%" + expensesDTO.getVoucherNo() + "%");
         }
-        if (StrUtil.isNotEmpty(year)) {
-            criteria.andDataYearEqualTo(year);
+        if (StrUtil.isNotEmpty(expensesDTO.getYear())) {
+            criteria.andDataYearEqualTo(expensesDTO.getYear());
         }
-        if (StrUtil.isNotEmpty(month)) {
-            criteria.andDataMonthEqualTo(month);
+        if (StrUtil.isNotEmpty(expensesDTO.getMonth())) {
+            criteria.andDataMonthEqualTo(expensesDTO.getMonth());
+        }
+        if (StrUtil.isNotEmpty(expensesDTO.getStartDate())) {
+            criteria.andDateStrGreaterThanOrEqualTo(expensesDTO.getStartDate());
+        }
+        if (StrUtil.isNotEmpty(expensesDTO.getEndDate())) {
+            criteria.andDateStrLessThanOrEqualTo(expensesDTO.getEndDate());
+        }
+        if (StrUtil.isNotEmpty(expensesDTO.getCommitUser())) {
+            criteria.andCommitUserLike("%" + expensesDTO.getCommitUser() + "%");
         }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         expensesExample.setOrderByClause("id desc");
@@ -138,6 +149,10 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         return ResultBean.success(pageDTO);
     }
 
+    @Override
+    public String listSummary(ExpensesConditionDTO expensesDTO){
+        return expensesExtendMapper.listSummary(expensesDTO);
+    }
     @Override
     public ResultBean classify(Integer pId) {
         ExpensesClassifyExample classifyExample = new ExpensesClassifyExample();
@@ -156,48 +171,18 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getAllClassify(String year, String month) {
-        Map<String, String> paramMap = new HashMap<>();
-        if (StrUtil.isNotBlank(year)) {
-            paramMap.put("year", year);
-        }
-        if (StrUtil.isNotBlank(month)) {
-            paramMap.put("month", month);
-        }
-        return ResultBean.success(expensesExtendMapper.getAllClassify(paramMap));
+    public ResultBean getAllClassify(ReportBaseDTO reportBaseDTO) {
+        return ResultBean.success(expensesExtendMapper.getAllClassify(reportBaseDTO));
     }
 
     @Override
-    public ResultBean classifyByDepartmentAll(String year, String month,String endYear,String endMonth) {
-        Map<String, String> paramMap = new HashMap<>();
-        if (StrUtil.isNotBlank(year)) {
-            paramMap.put("year", year);
-        }
-        if (StrUtil.isNotBlank(month)) {
-            paramMap.put("month", month);
-        }
-        if (StrUtil.isNotBlank(endYear)) {
-            paramMap.put("endYear", endYear);
-        }
-        if (StrUtil.isNotBlank(endMonth)) {
-            paramMap.put("endMonth", endMonth);
-        }
-        return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll(paramMap));
+    public ResultBean classifyByDepartmentAll(ReportBaseDTO reportBaseDTO) {
+        return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll(reportBaseDTO));
     }
 
     @Override
-    public ResultBean getAllClassifyWithDepartment(String department, String year, String month) {
-        Map<String, String> paramMap = new HashMap<>();
-        if (StrUtil.isNotBlank(department)) {
-            paramMap.put("department", department);
-        }
-        if (StrUtil.isNotBlank(year)) {
-            paramMap.put("year", year);
-        }
-        if (StrUtil.isNotBlank(month)) {
-            paramMap.put("month", month);
-        }
-        return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(paramMap));
+    public ResultBean getAllClassifyWithDepartment(ReportBaseDTO reportBaseDTO) {
+        return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(reportBaseDTO));
     }
 
     @Override
