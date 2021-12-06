@@ -692,8 +692,8 @@ public class CommonEnum {
     }
 
     /**
-     * marry_status
-     * 婚姻状态 1:未婚 2:已婚 3:离异 4:丧偶
+     * UserType
+     * 人员类型 0：生产，1:管理
      */
     public enum UserType {
         UNMARRIED("0", "生产"),

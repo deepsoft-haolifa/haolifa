@@ -19,7 +19,7 @@ public class DictionariesController {
 
     @Resource
     private DictionariesService dictionariesService;
-    @ApiOperation("获取发货类型")
+    @ApiOperation("获取绩效人员类型")
     @GetMapping("/getUserType")
     public ResultBean getClassifyList() {
         return ResultBean.success(dictionariesService.getUserType());
