@@ -11,20 +11,16 @@ import lombok.Data;
 @Data
 public class ReportBaseDTO {
 
-
-
     @ApiModelProperty("开始时间")
     private String startDate;
 
     @ApiModelProperty("结束时间")
     private String endDate;
 
-    @ApiModelProperty("部门名称")
-    private String department;
-
     @ApiModelProperty("年")
     private String year;
 
     @ApiModelProperty("月")
     private String month;
+
 }

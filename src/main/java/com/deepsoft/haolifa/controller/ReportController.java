@@ -3,11 +3,13 @@ package com.deepsoft.haolifa.controller;
 import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.ReportService;
+import com.deepsoft.haolifa.util.CommonUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -15,8 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-@Api(tags = {"报表(2021-12)"})
+@Api(tags = {"报表(2021-12-hd)"})
 @RestController
 @RequestMapping("/report")
 public class ReportController {
@@ -26,8 +29,7 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-
-    @ApiOperation("费用报表--按照月份统计总的费用")
+    @ApiOperation("费用报表--按照月份统计总的费用(2021-12-hd)")
     @GetMapping("/expense/total-by-month")
     public ResultBean expenseTotalByMonth(@RequestParam(value = "year") String year) {
         return expensesService.expenseTotalByMonth(year);
@@ -51,21 +53,21 @@ public class ReportController {
         return expensesService.classifyByDepartment();
     }
 
-    @ApiOperation("费用报表--费用整体分类汇总（2021-12）")
+    @ApiOperation("费用报表--费用整体分类汇总（2021-12-hd）")
     @PostMapping("/expense/getAllClassify")
-    public ResultBean<List<ExpensesReport>> getAllClassify(@RequestBody ReportBaseDTO reportBaseDTO) {
+    public ResultBean<List<ExpensesReport>> getAllClassify(@RequestBody ExpensesConditionDTO reportBaseDTO) {
         return expensesService.getAllClassify(reportBaseDTO);
     }
 
-    @ApiOperation("费用报表--费用整体部门汇总（2021-12）")
+    @ApiOperation("费用报表--费用整体部门汇总（2021-12-hd）")
     @PostMapping("/expense/classifyByDepartmentAll")
-    public ResultBean<List<ExpensesReport>> classifyByDepartmentAll(@RequestBody ReportBaseDTO reportBaseDTO){
+    public ResultBean<List<ExpensesReport>> classifyByDepartmentAll(@RequestBody ExpensesConditionDTO reportBaseDTO){
         return expensesService.classifyByDepartmentAll(reportBaseDTO);
     }
 
-    @ApiOperation("费用报表--某个部门下面的分类统计（2021-12）")
+    @ApiOperation("费用报表--某个部门下面的分类统计（2021-12-hd）")
     @PostMapping(value = "/expense/getAllClassifyWithDepartment")
-    public ResultBean<List<ExpensesReport>> getAllClassifyWithDepartment(@RequestBody ReportBaseDTO reportBaseDTO) {
+    public ResultBean<List<ExpensesReport>> getAllClassifyWithDepartment(@RequestBody ExpensesConditionDTO reportBaseDTO) {
         return expensesService.getAllClassifyWithDepartment(reportBaseDTO);
     }
 
@@ -210,12 +212,18 @@ public class ReportController {
     }
 
 
-    @ApiOperation("销售报表-获取按需方总额饼图")
-    @RequestMapping(value = "/sale/selectContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year, @RequestParam(value = "month", required = false) String month) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectContractByDemandName(year, month);
+    @ApiOperation("销售报表-年度客户总额分类统计图(2021-12-hd)")
+    @GetMapping(value = "/sale/selectContractByDemandName")
+    public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year) {
+        Map<String, List<ExportContractDTO>> exportSaleDTOS = reportService.selectContractByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
+    @ApiOperation("销售报表-月份客户订货额统计图(2021-12-hd)")
+    @PostMapping(value = "/sale/selectContractByDemandNameByMonth")
+    public ResultBean<List<ExportContractDTO>> selectContractByDemandNameByMonth(@RequestBody ReportBaseDTO baseDTO) {
+        return ResultBean.success(reportService.selectContractByDemandNameByMonth(baseDTO));
+    }
+
 
     @ApiOperation("销售报表-获取按需方回款总额饼图")
     @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)

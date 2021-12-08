@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.dao.repository.extend.QualityReportMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
+import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import com.deepsoft.haolifa.service.ReportService;
 import com.deepsoft.haolifa.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -126,12 +127,23 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public List<ExportContractDTO> selectContractByDemandName(String year, String month) {
-        Map<String, Object> packMapParam = CommonUtil.packMapParam(year, month);
-        return saleReportMapper.selectContractByDemandName(packMapParam);
+    public Map<String, List<ExportContractDTO>> selectContractByDemandName(String year) {
+        Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
+        List<ExportContractDTO> exportContractDTOS = saleReportMapper.selectContractByDemandName(packMapParam);
+
+        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(year);
+        List<ExportContractDTO> lastYearExportContractDTOS = saleReportMapper.selectContractByDemandName(lastYearPackMapParam);
+
+        exportContractDTOS.addAll(lastYearExportContractDTOS);
+        return exportContractDTOS.stream().collect(Collectors.groupingBy(ExportContractDTO::getYear));
+
     }
 
-
+    @Override
+    public List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO){
+        Map<String, Object> paramMap = CommonUtil.packYearMonthMapParam(baseDTO.getStartDate(), baseDTO.getEndDate());
+        return saleReportMapper.selectContractByDemandNameMonth(paramMap);
+    }
     @Override
     public List<ExportContractDTO> selectshouhuiContractByDemandName(String year, String month) {
         Map<String, Object> packMapParam = CommonUtil.packMapParam(year, month);
@@ -154,7 +166,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(year);
         List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(year);
         List<ExportContractDTO> refund = this.selectshouhuiContractByDemandName(year, "");
-        List<ExportContractDTO> sale = this.selectContractByDemandName(year, "");
+        Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
+        List<ExportContractDTO> sale  = saleReportMapper.selectContractByDemandName(packMapParam);
 
         Set<String> demandSet = invoice.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
         Set<String> demand1Set = delivery.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());

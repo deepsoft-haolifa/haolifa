@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.dao.repository.extend.ExpensesExtendMapper;
 import com.deepsoft.haolifa.model.domain.Expenses;
 import com.deepsoft.haolifa.model.domain.ExpensesClassifyExample;
 import com.deepsoft.haolifa.model.domain.ExpensesExample;
+import com.deepsoft.haolifa.model.domain.ExpensesReport;
 import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -25,7 +26,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -171,18 +174,18 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getAllClassify(ReportBaseDTO reportBaseDTO) {
-        return ResultBean.success(expensesExtendMapper.getAllClassify(reportBaseDTO));
+    public ResultBean getAllClassify(ExpensesConditionDTO expensesConditionDTO) {
+        return ResultBean.success(expensesExtendMapper.getAllClassify(expensesConditionDTO));
     }
 
     @Override
-    public ResultBean classifyByDepartmentAll(ReportBaseDTO reportBaseDTO) {
-        return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll(reportBaseDTO));
+    public ResultBean classifyByDepartmentAll(ExpensesConditionDTO expensesConditionDTO) {
+        return ResultBean.success(expensesExtendMapper.classifyByDepartmentAll(expensesConditionDTO));
     }
 
     @Override
-    public ResultBean getAllClassifyWithDepartment(ReportBaseDTO reportBaseDTO) {
-        return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(reportBaseDTO));
+    public ResultBean getAllClassifyWithDepartment(ExpensesConditionDTO expensesConditionDTO) {
+        return ResultBean.success(expensesExtendMapper.getAllClassifyWithDepartment(expensesConditionDTO));
     }
 
     @Override
@@ -201,6 +204,15 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         if (StrUtil.isNotBlank(year)) {
             paramMap.put("year", year);
         }
-        return ResultBean.success(expensesExtendMapper.expenseTotalByMonth(paramMap));
+        List<ExpensesReport> expensesReports = expensesExtendMapper.expenseTotalByMonth(paramMap);
+        Map<String, String> lastParamMap = new HashMap<>();
+        if (StrUtil.isNotBlank(year)) {
+            int lastyear = Integer.parseInt(year) - 1;
+            lastParamMap.put("year", String.valueOf(lastyear));
+        }
+        List<ExpensesReport> lastExpensesReports = expensesExtendMapper.expenseTotalByMonth(lastParamMap);
+        expensesReports.addAll(lastExpensesReports);
+        Map<String, List<ExpensesReport>> listMap = expensesReports.stream().collect(Collectors.groupingBy(ExpensesReport::getDataYear));
+        return ResultBean.success(listMap);
     }
 }

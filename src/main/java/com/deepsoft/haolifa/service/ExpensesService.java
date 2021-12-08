@@ -24,10 +24,10 @@ public interface ExpensesService {
 
   ResultBean classifyByDepartment();
   //获取费用统计表
-  ResultBean getAllClassify(ReportBaseDTO reportBaseDTO);
+  ResultBean getAllClassify(ExpensesConditionDTO expensesConditionDTO);
 //查询部门费用总计
-  ResultBean classifyByDepartmentAll(ReportBaseDTO reportBaseDTO);
-  ResultBean getAllClassifyWithDepartment(ReportBaseDTO reportBaseDTO);
+  ResultBean classifyByDepartmentAll(ExpensesConditionDTO expensesConditionDTO);
+  ResultBean getAllClassifyWithDepartment(ExpensesConditionDTO expensesConditionDTO);
   //获取一级部门每月的费用支出
   ResultBean getMonthByDepartment(String department);
   ResultBean getAllClassifyWithFirstClassify(String classify);

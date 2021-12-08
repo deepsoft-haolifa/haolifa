@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = {"费用管理(2021-12)"})
+@Api(tags = {"费用管理(2021-12-hd)"})
 @RestController
 @RequestMapping("/expenses")
 public class ExpensesController {
@@ -49,14 +49,14 @@ public class ExpensesController {
     }
 
 
-    @ApiOperation("查询费用记录列表(2021-12)")
+    @ApiOperation("查询费用记录列表(2021-12-hd)")
     @PostMapping("list")
     public ResultBean<PageDTO<Expenses>> getList(@RequestParam(defaultValue = "1") Integer pageNum,
                                                  @RequestParam(defaultValue = "10") Integer pageSize, @RequestBody ExpensesConditionDTO expensesDTO) {
         return expensesService.getList(pageNum, pageSize, expensesDTO);
     }
 
-    @ApiOperation("查询费用汇总(2021-12)")
+    @ApiOperation("查询费用汇总(2021-12-hd)")
     @PostMapping("list-summary")
     public ResultBean<String> listSummary(@RequestBody ExpensesConditionDTO expensesDTO) {
         return ResultBean.success(expensesService.listSummary(expensesDTO));

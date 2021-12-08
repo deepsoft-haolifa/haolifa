@@ -20,4 +20,6 @@ public class ExpensesConditionDTO extends ReportBaseDTO {
     private String commitUser;
     @ApiModelProperty("凭证号")
     private String voucherNo;
+    @ApiModelProperty("部门名称")
+    private String department;
 }

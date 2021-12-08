@@ -4,10 +4,12 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
+import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ReportService {
 
@@ -35,7 +37,9 @@ public interface ReportService {
     //根据月份获取总金额
     String selectByMonth(String startTime, String endTime);
 
-    List<ExportContractDTO> selectContractByDemandName(String year,String month);
+    Map<String, List<ExportContractDTO>> selectContractByDemandName(String year);
+
+    List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO);
 
     List<ExportContractDTO> selectshouhuiContractByDemandName(String year,String month);
 

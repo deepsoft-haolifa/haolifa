@@ -18,9 +18,9 @@ public interface ExpensesExtendMapper {
     List<ExpensesReport> getClassify(String expensesClassify);
     List<ExpensesReport> classifyByDepartment();
     List<ExpensesReport> classifyBySecondDepartment();
-    List<ExpensesReport> getAllClassify(ReportBaseDTO reportBaseDTO);
-    List<ExpensesReport> classifyByDepartmentAll(ReportBaseDTO reportBaseDTO);
-    List<ExpensesReport> getAllClassifyWithDepartment(ReportBaseDTO reportBaseDTO);
+    List<ExpensesReport> getAllClassify(ExpensesConditionDTO expensesConditionDTO);
+    List<ExpensesReport> classifyByDepartmentAll(ExpensesConditionDTO expensesConditionDTO);
+    List<ExpensesReport> getAllClassifyWithDepartment(ExpensesConditionDTO expensesConditionDTO);
     List<ExpensesReport> getAllClassifyWithFirstClassify(String classify);
     List<ExpensesReport> getMonthByDepartment(String department);
     List<ExpensesReport> expenseTotalByMonth(Map<String, String> paramMap);

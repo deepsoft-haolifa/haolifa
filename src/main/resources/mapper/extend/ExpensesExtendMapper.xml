@@ -83,7 +83,7 @@
         group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m")
     </select>
     <select id="expenseTotalByMonth" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
-        select sum(total_amount) totalAmount,data_month dataMonth from expenses where is_delete=0
+        select sum(total_amount) totalAmount,date_str,data_month,data_year from expenses where is_delete=0
         <if test="year!=null and year!=''">
             and data_year=#{year}
         </if>
@@ -106,9 +106,6 @@
             <if test="endDate!=null and endDate!=''">
                 and date_str&lt;=#{endDate}
             </if>
-            <if test="department!=null and department!=''">
-                and department like concat('%',#{department},'%')
-            </if>
             <if test="year!=null and year!=''">
                 and data_year=#{year}
             </if>
@@ -119,6 +116,9 @@
     </sql>
     <sql id="expenseCondition">
         <where>
+            <if test="department!=null and department!=''">
+                and department like concat('%',#{department},'%')
+            </if>
             <if test="commitUser != null">
                 and commit_user like concat('%',#{commitUser},'%')
             </if>

@@ -77,15 +77,30 @@
     </select>
 
 
-    <select id="selectContractByDemandName" resultMap="contractMap">
+    <select id="selectContractByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         select sum(`total_price`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from
-        order_product where FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-        <if test="startTime!=null and startTime != ''">
-            and create_time&gt;=#{startTime}
-        </if>
-        <if test="endTime!=null and endTime != ''">
-            and create_time&lt;=#{endTime}
-        </if>
+        order_product
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and create_time&lt;=#{endDate}
+            </if>
+        </where>
+        group by demand_name
+    </select>
+    <select id="selectContractByDemandNameMonth" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
+        select sum(`total_price`) total_price,demand_name from
+        order_product
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and create_time&lt;=#{endDate}
+            </if>
+        </where>
         group by demand_name
     </select>
     <select id="selectshouhuiContractByDemandName" resultMap="contractMap">

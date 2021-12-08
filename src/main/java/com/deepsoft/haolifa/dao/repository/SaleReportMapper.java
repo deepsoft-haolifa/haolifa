@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
 import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
+import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -16,11 +17,17 @@ public interface SaleReportMapper {
     String selectByMonth(@Param("startTime") String startTime,@Param("endTime") String endTime);
 
     /**
-     * 根据年份，月份获取按照需求的订货总额
+     * 根据年份获取按照需求方的订货总额
      * @param haspMap
      * @return
      */
     List<ExportContractDTO> selectContractByDemandName(Map<String, Object> haspMap);
+    /**
+     * 根据年-月份获取按照需求方的订货总额
+     * @param haspMap
+     * @return
+     */
+    List<ExportContractDTO>  selectContractByDemandNameMonth(Map<String, Object> haspMap);
 
     List<ExportContractDTO> selectshouhuiContractByDemandName(Map<String, Object> haspMap);
 

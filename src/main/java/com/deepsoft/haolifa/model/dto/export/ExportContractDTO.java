@@ -10,7 +10,7 @@ import lombok.Data;
 public class ExportContractDTO {
 
   @ApiModelProperty("时间")
-  private int year;
+  private String year;
 
   @ApiModelProperty("需方名称")
   private String demandName;
