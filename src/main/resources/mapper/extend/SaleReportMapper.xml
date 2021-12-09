@@ -103,15 +103,40 @@
         </where>
         group by demand_name
     </select>
-    <select id="selectshouhuiContractByDemandName" resultMap="contractMap">
-        select sum(`received_account`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(pm.create_time),"%Y") year from
-        order_product op left join payment_management pm on pm.order_no=op.order_no where FROM_UNIXTIME(UNIX_TIMESTAMP(pm.create_time),"%Y") = #{year}
-        <if test="startTime!=null and startTime != ''">
-            and pm.create_time&gt;=#{startTime}
-        </if>
-        <if test="endTime!=null and endTime != ''">
-            and pm.create_time&lt;=#{endTime}
-        </if>
+    <select id="selectshouhuiContractByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
+        SELECT
+        sum( `received_account` ) total_price,
+        demand_name,
+        FROM_UNIXTIME( UNIX_TIMESTAMP( pm.create_time ), "%Y" ) year
+        FROM
+        order_product op
+        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        <where>
+            <if test="startTime!=null and startTime != ''">
+                and pm.create_time&gt;=#{startTime}
+            </if>
+            <if test="endTime!=null and endTime != ''">
+                and pm.create_time&lt;=#{endTime}
+            </if>
+        </where>
+        group by op.demand_name
+    </select>
+
+    <select id="selectshouhuiContractByDemandNameMonth" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
+        SELECT
+        sum( `received_account` ) total_price,
+        demand_name
+        FROM
+        order_product op
+        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and pm.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and pm.create_time&lt;=#{endDate}
+            </if>
+        </where>
         group by op.demand_name
     </select>
 

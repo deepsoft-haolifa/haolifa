@@ -131,7 +131,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
         List<ExportContractDTO> exportContractDTOS = saleReportMapper.selectContractByDemandName(packMapParam);
 
-        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(year);
+        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(CommonUtil.getLastYear(year));
         List<ExportContractDTO> lastYearExportContractDTOS = saleReportMapper.selectContractByDemandName(lastYearPackMapParam);
 
         exportContractDTOS.addAll(lastYearExportContractDTOS);
@@ -147,9 +147,21 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         return saleReportMapper.selectContractByDemandNameMonth(paramMap);
     }
     @Override
-    public List<ExportContractDTO> selectshouhuiContractByDemandName(String year, String month) {
-        Map<String, Object> packMapParam = CommonUtil.packMapParam(year, month);
-        return saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
+    public Map<String, List<ExportContractDTO>> selectshouhuiContractByDemandName(String year) {
+        Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
+        List<ExportContractDTO> exportContractDTOS = saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
+
+        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(CommonUtil.getLastYear(year));
+        List<ExportContractDTO> lastYearExportContractDTOS = saleReportMapper.selectshouhuiContractByDemandName(lastYearPackMapParam);
+        exportContractDTOS.addAll(lastYearExportContractDTOS);
+        return exportContractDTOS.stream().collect(Collectors.groupingBy(ExportContractDTO::getYear));
+    }
+    @Override
+    public List<ExportContractDTO> selectshouhuiContractByDemandNameByMonth(ReportBaseDTO baseDTO){
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
+        paramMap.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
+        return saleReportMapper.selectshouhuiContractByDemandNameMonth(paramMap);
     }
 
     @Override
@@ -167,9 +179,9 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         List<DemandAmountDto> list = new ArrayList<>();
         List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(year);
         List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(year);
-        List<ExportContractDTO> refund = this.selectshouhuiContractByDemandName(year, "");
         Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
         List<ExportContractDTO> sale  = saleReportMapper.selectContractByDemandName(packMapParam);
+        List<ExportContractDTO> refund = saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
 
         Set<String> demandSet = invoice.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
         Set<String> demand1Set = delivery.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());

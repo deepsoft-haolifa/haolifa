@@ -37,12 +37,30 @@ public interface ReportService {
     //根据月份获取总金额
     String selectByMonth(String startTime, String endTime);
 
+    /**
+     * 销售报表--年度订货
+     * @param year
+     * @return
+     */
     Map<String, List<ExportContractDTO>> selectContractByDemandName(String year);
-
+    /**
+     * 销售报表--月度订货
+     * @param baseDTO
+     * @return
+     */
     List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO);
-
-    List<ExportContractDTO> selectshouhuiContractByDemandName(String year,String month);
-
+    /**
+     * 销售报表--年度回款
+     * @param year
+     * @return
+     */
+    Map<String, List<ExportContractDTO>>  selectshouhuiContractByDemandName(String year);
+    /**
+     * 销售报表--月度回款
+     * @param baseDTO
+     * @return
+     */
+    List<ExportContractDTO> selectshouhuiContractByDemandNameByMonth(ReportBaseDTO baseDTO);
     /**
      * 按需方统计的开票总金额
      *

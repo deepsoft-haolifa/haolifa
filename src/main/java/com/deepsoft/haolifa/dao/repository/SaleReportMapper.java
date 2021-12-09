@@ -31,6 +31,8 @@ public interface SaleReportMapper {
 
     List<ExportContractDTO> selectshouhuiContractByDemandName(Map<String, Object> haspMap);
 
+    List<ExportContractDTO>  selectshouhuiContractByDemandNameMonth(Map<String, Object> haspMap);
+
     //根据产品型号获取生产金额数量
     List<ExportSaleDTO> selectByModel(@Param("year") String year);
 

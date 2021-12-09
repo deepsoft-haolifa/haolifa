@@ -225,12 +225,18 @@ public class ReportController {
     }
 
 
-    @ApiOperation("销售报表-获取按需方回款总额饼图")
-    @RequestMapping(value = "/sale/selectshouhuiContractByDemandName", method = RequestMethod.GET)
-    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year, @RequestParam(value = "month", required = false) String month) {
-        List<ExportContractDTO> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year, month);
+    @ApiOperation("销售报表-年度回款总额分类统计图(2021-12-hd)")
+    @GetMapping(value = "/sale/selectshouhuiContractByDemandName")
+    public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year) {
+        Map<String, List<ExportContractDTO>> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
         return ResultBean.success(exportSaleDTOS);
     }
+    @ApiOperation("销售报表-月份回款额统计图(2021-12-hd)")
+    @PostMapping(value = "/sale/selectshouhuiContractByDemandNameByMonth")
+    public ResultBean<List<ExportContractDTO>> selectshouhuiContractByDemandNameByMonth(@RequestBody ReportBaseDTO baseDTO) {
+        return ResultBean.success(reportService.selectshouhuiContractByDemandNameByMonth(baseDTO));
+    }
+
 
     @ApiOperation("销售报表-按需方统计的开票总金额")
     @GetMapping(value = "/sale/selectInvoiceAmountByDemandName")
