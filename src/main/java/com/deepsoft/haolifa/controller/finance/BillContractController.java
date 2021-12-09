@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ *
+ * 分解审核->>查银行日记账
+ * 申请借款 报销的 报销 出纳
  * 分解审核
  */
 @RestController
