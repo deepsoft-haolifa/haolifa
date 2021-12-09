@@ -707,4 +707,25 @@ public class CommonEnum {
             this.name = name;
         }
     }
+
+
+    /*** 财务管理模块 start**/
+
+    /***
+     *
+     */
+    public enum DelFlagEnum {
+        YES("0", "存在"),
+        NO("2", "删除");
+        public final String code;
+        public final String name;
+        DelFlagEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+    }
+
+
+    /*** 财务管理模块 end**/
+
 }

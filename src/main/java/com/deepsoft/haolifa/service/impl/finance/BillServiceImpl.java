@@ -84,7 +84,7 @@ public class BillServiceImpl implements BillService {
         }
         BizBillExample bizBillExample = new BizBillExample();
         BizBillExample.Criteria criteria = bizBillExample.createCriteria();
-        criteria.andDelFlagEqualTo("0");
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
         // 凭证号 ==
         if (StringUtils.isNotEmpty(model.getCertificateNumber())) {
             criteria.andCertificateNumberEqualTo(model.getCertificateNumber());

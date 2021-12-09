@@ -84,7 +84,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         }
         BizCostBudgetExample bizCostBudgetExample = new BizCostBudgetExample();
         BizCostBudgetExample.Criteria criteria = bizCostBudgetExample.createCriteria();
-        criteria.andDelFlagEqualTo("0");
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
         // 名称 like
         if (StringUtils.isNotEmpty(model.getName())) {

@@ -83,7 +83,7 @@ public class OtherBillServiceImpl implements OtherBillService {
         }
         BizOtherBillExample bizOtherBillExample = new BizOtherBillExample();
         BizOtherBillExample.Criteria criteria = bizOtherBillExample.createCriteria();
-        criteria.andDelFlagEqualTo("0");
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
 
         // 凭证号 ==

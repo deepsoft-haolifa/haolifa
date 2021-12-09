@@ -83,7 +83,7 @@ public class BankBillServiceImpl implements BankBillService {
         }
         BizBankBillExample bizBankBillExample = new BizBankBillExample();
         BizBankBillExample.Criteria criteria = bizBankBillExample.createCriteria();
-        criteria.andDelFlagEqualTo("0");
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
 
 

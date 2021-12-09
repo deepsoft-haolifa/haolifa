@@ -83,7 +83,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         }
         BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
         BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
-        criteria.andDelFlagEqualTo("0");
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
 
 
