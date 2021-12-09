@@ -1,12 +1,3 @@
-两台机器
-service1 public ip 192.168.1.181
-
-service2 public ip 192.168.1.182
-
-service1心跳ip  192.168.168.10
-
-service2心跳ip  192.168.168.11
-
 ssh 60.221.242.49
 
 root 密码 WFES!@#098!@!Qff

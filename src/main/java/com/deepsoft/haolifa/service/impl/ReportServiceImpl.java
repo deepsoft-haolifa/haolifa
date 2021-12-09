@@ -141,7 +141,9 @@ public class ReportServiceImpl extends BaseService implements ReportService {
 
     @Override
     public List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO){
-        Map<String, Object> paramMap = CommonUtil.packYearMonthMapParam(baseDTO.getStartDate(), baseDTO.getEndDate());
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
+        paramMap.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
         return saleReportMapper.selectContractByDemandNameMonth(paramMap);
     }
     @Override

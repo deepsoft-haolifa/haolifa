@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.service.OrderProductService;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -233,5 +235,17 @@ public class OrderProductController {
     @PostMapping("/cover-order-excel")
     public ResultBean coverOrderExcel(@RequestBody OrderContractUpdateDTO dto) {
         return ResultBean.success(orderProductService.updateContractUrl(dto));
+    }
+
+
+    @ApiOperation("订单列表展示--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-order-list")
+    public ResultBean<PageDTO<OrderListRespDTO>> reportOrderList(@RequestBody OrderConditionDTO dto) {
+        return ResultBean.success(orderProductService.reportOrderList(dto));
+    }
+    @ApiOperation("订单列表展示--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-order-summary")
+    public ResultBean<BigDecimal> reportOrderSummary(@RequestBody OrderConditionDTO dto) {
+        return ResultBean.success(orderProductService.reportOrderSummary(dto));
     }
 }

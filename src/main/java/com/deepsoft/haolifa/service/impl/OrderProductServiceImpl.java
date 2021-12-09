@@ -2,7 +2,9 @@ package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -26,6 +28,7 @@ import com.deepsoft.haolifa.model.dto.material.MaterialResultDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.Base64;
+import com.deepsoft.haolifa.util.CommonUtil;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.QiniuUtil;
 import com.github.pagehelper.Page;
@@ -2267,5 +2270,33 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             redisDao.del(CacheKeyManager.cacheKeyOrderInfo(dto.getOrderNo()).key);
         }
         return i;
+    }
+
+    @Override
+    public PageDTO<OrderListRespDTO> reportOrderList(OrderConditionDTO model) {
+        //如果传入2021年，则查2020-12-26 至 2021-12-25
+        if (StrUtil.isNotBlank(model.getYear())) {
+            Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
+            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"startDate")));
+            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"endDate")));
+        }
+        //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
+        if (null != model.getStartDate()) {
+            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getStartDate(), "yy-MM"))));
+        }
+        if (null != model.getEndDate()) {
+            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getEndDate(), "yy-MM"))));
+        }
+        Page<OrderListRespDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> orderExtendMapper.reportOrderList(model));
+        PageDTO<OrderListRespDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(materials, pageDTO);
+        pageDTO.setList(materials);
+        return pageDTO;
+    }
+
+    @Override
+    public BigDecimal reportOrderSummary(OrderConditionDTO dto) {
+        return orderExtendMapper.reportOrderSummary(dto);
     }
 }

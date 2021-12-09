@@ -50,32 +50,22 @@ public class CommonUtil {
     /**
      * 获取某年某月的数据
      *
-     * @param startMonth 格式是：年-月
-     * @param endMonth   格式是：年-月
+     * @param yearMonth 格式是：年-月
      * @return
      */
-    public static Map<String, Object> packYearMonthMapParam(String startMonth, String endMonth) {
-        if (StrUtil.isBlank(startMonth) || StrUtil.isBlank(endMonth)) {
+    public static String packYearMonthMapParam(String yearMonth) {
+        if (StrUtil.isBlank(yearMonth)) {
             throw new BaseException("年份，月份不能为空");
         }
-        Map<String, Object> haspMap = new HashMap<>();
-        String startYear = startMonth.substring(0, 4);
-        String startMonthStr = startMonth.substring(5, 7);
-        String endYear = endMonth.substring(0, 4);
-        String endMonthStr = endMonth.substring(5, 7);
+        String startYear = yearMonth.substring(0, 4);
+        String startMonthStr = yearMonth.substring(5, 7);
         int startIMonth = Integer.parseInt(startMonthStr);
         if (startIMonth == 1) {
-            haspMap.put("startDate", Integer.parseInt(startYear) - 1 + "-12-26");
+            return Integer.parseInt(startYear) - 1 + "-12-26";
         } else {
-            haspMap.put("startDate", startYear + "-" + (startIMonth - 1) + "-26");
+            return startYear + "-" + (startIMonth - 1) + "-26";
         }
-        int endIMonth = Integer.parseInt(endMonthStr);
-        if (endIMonth == 1) {
-            haspMap.put("endDate", Integer.parseInt(endYear) - 1 + "-12-26");
-        } else {
-            haspMap.put("endDate", endYear + "-" + (endIMonth - 1) + "-26");
-        }
-        return haspMap;
+
     }
 
 
@@ -83,7 +73,4 @@ public class CommonUtil {
         return String.valueOf(Integer.parseInt(year) - 1);
     }
 
-    public static void main(String[] args) {
-        System.out.println(packYearMonthMapParam("2021-10", "2021-12"));
-    }
 }

@@ -49,6 +49,31 @@
         LEFT JOIN delivery_record dr on op.order_no=dr.contract_order_no
         <include refid="Where_Clause"/>
     </select>
+    <select id="reportOrderList" resultType="com.deepsoft.haolifa.model.dto.order.OrderListRespDTO">
+        SELECT
+            op.order_no,
+            op.order_status,
+            op.contract_sign_date,
+            op.demand_name,
+            op.delivery_date,
+            op.total_price,
+            ope.price,
+            ope.product_name,
+            ope.specifications,
+            ope.product_model,
+            ope.product_number
+        FROM
+            order_product op
+                LEFT JOIN order_product_associate ope ON op.order_no = ope.order_no
+        <include refid="Where_Clause"/>
+    </select>
+    <select id="reportOrderSummary" resultType="java.math.BigDecimal">
+        SELECT
+        ifnull(sum(op.total_price),0)
+        FROM
+        order_product op
+        <include refid="Where_Clause"/>
+    </select>
 
     <insert id="insertBatchCheckLog" parameterType="java.util.List">
         insert into check_material_log
