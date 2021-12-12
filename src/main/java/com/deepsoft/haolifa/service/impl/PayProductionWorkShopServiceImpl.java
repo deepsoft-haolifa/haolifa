@@ -70,7 +70,7 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setCreateTime(new Date());
         payTeam.setUpdateTime(new Date());
-        payProductionWorkshopMapper.insert(payTeam);
+        payProductionWorkshopMapper.insertSelective(payTeam);
         return ResultBean.success(1);
     }
 

@@ -69,6 +69,32 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     }
 
     @Override
+    public ResultBean getAllList(PayWorkingProcedureDTO model) {
+        PayWorkingProcedureExample example = new PayWorkingProcedureExample();
+        PayWorkingProcedureExample.Criteria criteria = example.createCriteria();
+        if (Objects.nonNull(model.getSerial())) {
+            criteria.andSerialEqualTo(model.getSerial());
+        }
+        if (StringUtils.isNotBlank(model.getWorkshopName())) {
+            criteria.andWorkshopNameLike("%" + model.getWorkshopName() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getWorkType())) {
+            criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getProductModel())) {
+            criteria.andProductModelEqualTo(model.getProductModel());
+        }
+        if (StringUtils.isNotBlank(model.getPostCapability())) {
+            criteria.andPostCapabilityLike("%" + model.getPostCapability() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getPostName())) {
+            criteria.andPostNameLike("%" + model.getPostName() + "%");
+        }
+        List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectByExample(example);
+        return ResultBean.success(payWorkingProcedures);
+    }
+
+    @Override
     public ResultBean save(PayWorkingProcedureDTO model) {
         PayWorkingProcedure payWorkingProcedure = new PayWorkingProcedure();
         BeanUtils.copyProperties(model, payWorkingProcedure);
@@ -101,19 +127,25 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     }
 
     @Override
-    public ResultBean assignTask(Integer productId) {
-        OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(productId);
-        String productModel = orderProductAssociate.getProductModel();
-        PayWorkingProcedureExample example = new PayWorkingProcedureExample();
-        example.createCriteria().andProductModelEqualTo(productModel);
-        List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectByExample(example);
+    public ResultBean assignTask(String productId) {
+        OrderProductAssociateExample example = new OrderProductAssociateExample();
+        example.createCriteria().andProductNoEqualTo(productId);
+        List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(list)) {
+            ResultBean.success(null);
+        }
+        OrderProductAssociate orderProductAssociate = list.get(0);
+        PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
+        payWorkingProcedure.setProductModel(orderProductAssociate.getProductModel());
+        payWorkingProcedure.setWorkType(orderProductAssociate.getProductName());
+        List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
         if (CollectionUtils.isEmpty(payWorkingProcedures)) {
             return ResultBean.success(null);
         }
         List<PayUserProcedureVO> payUserProcedureVOS = new ArrayList<>();
-        for (PayWorkingProcedure payWorkingProcedure : payWorkingProcedures) {
+        for (PayWorkingProcedure procedure : payWorkingProcedures) {
             PayUserRelationProcedureExample userRelationProcedure = new PayUserRelationProcedureExample();
-            userRelationProcedure.createCriteria().andProcedureIdEqualTo(payWorkingProcedure.getId());
+            userRelationProcedure.createCriteria().andProcedureIdEqualTo(procedure.getId());
             List<PayUserRelationProcedure> payUserRelationProcedures = payUserRelationProcedureMapper.selectByExample(userRelationProcedure);
             if (CollectionUtils.isEmpty(payUserRelationProcedures)) {
                 continue;
@@ -123,8 +155,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             PayUserProcedureVO payUserProcedureVO = new PayUserProcedureVO();
             payUserProcedureVO.setUserId(payUser.getId());
             payUserProcedureVO.setUserName(payUser.getUserName());
-            payUserProcedureVO.setPostCode(payWorkingProcedure.getPostCode());
-            payUserProcedureVO.setPostName(payWorkingProcedure.getPostName());
+            payUserProcedureVO.setPostCode(procedure.getPostCode());
+            payUserProcedureVO.setPostName(procedure.getPostName());
             payUserProcedureVOS.add(payUserProcedureVO);
         }
         if (CollectionUtils.isEmpty(payUserProcedureVOS)) {

@@ -7,6 +7,8 @@ public interface PayWorkingProcedureService {
 
     ResultBean pageInfo(PayWorkingProcedureDTO model);
 
+    ResultBean getAllList(PayWorkingProcedureDTO model);
+
     ResultBean save(PayWorkingProcedureDTO model);
 
     ResultBean getInfo(Integer id);
@@ -15,5 +17,5 @@ public interface PayWorkingProcedureService {
 
     ResultBean delete(Integer id);
 
-    ResultBean assignTask(Integer productId);
+    ResultBean assignTask(String productId);
 }

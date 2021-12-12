@@ -25,4 +25,8 @@ public class PayAssessmentQuotaDTO {
     private String standard;
     @ApiModelProperty(name = "备注")
     private String remark;
+    @ApiModelProperty(name = "部门ID")
+    private Integer departId;
+    @ApiModelProperty(name = "部门名称")
+    private String departName;
     }

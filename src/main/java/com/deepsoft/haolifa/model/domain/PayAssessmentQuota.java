@@ -15,6 +15,8 @@ public class PayAssessmentQuota {
 
     private String standard;
 
+    private String departName;
+
     private String remark;
 
     private String createUser;
@@ -25,18 +27,22 @@ public class PayAssessmentQuota {
 
     private Date updateTime;
 
-    public PayAssessmentQuota(Integer id, String projectName, String quotaName, String quotaContent, Integer score, String standard, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
+    private Integer departId;
+
+    public PayAssessmentQuota(Integer id, String projectName, String quotaName, String quotaContent, Integer score, String standard, String departName, String remark, String createUser, String updateUser, Date createTime, Date updateTime, Integer departId) {
         this.id = id;
         this.projectName = projectName;
         this.quotaName = quotaName;
         this.quotaContent = quotaContent;
         this.score = score;
         this.standard = standard;
+        this.departName = departName;
         this.remark = remark;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.departId = departId;
     }
 
     public PayAssessmentQuota() {
@@ -91,6 +97,14 @@ public class PayAssessmentQuota {
         this.standard = standard == null ? null : standard.trim();
     }
 
+    public String getDepartName() {
+        return departName;
+    }
+
+    public void setDepartName(String departName) {
+        this.departName = departName == null ? null : departName.trim();
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -129,5 +143,13 @@ public class PayAssessmentQuota {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getDepartId() {
+        return departId;
+    }
+
+    public void setDepartId(Integer departId) {
+        this.departId = departId;
     }
 }

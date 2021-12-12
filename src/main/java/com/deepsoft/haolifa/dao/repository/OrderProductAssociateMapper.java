@@ -18,7 +18,7 @@ public interface OrderProductAssociateMapper {
 
     List<OrderProductAssociate> selectByExample(OrderProductAssociateExample example);
 
-    OrderProductAssociate selectByPrimaryKey(Integer id);
+    OrderProductAssociate selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") OrderProductAssociate record, @Param("example") OrderProductAssociateExample example);
 

@@ -2,9 +2,8 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.PayAssessmentQuota;
 import com.deepsoft.haolifa.model.domain.PayAssessmentQuotaExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PayAssessmentQuotaMapper {
     int countByExample(PayAssessmentQuotaExample example);

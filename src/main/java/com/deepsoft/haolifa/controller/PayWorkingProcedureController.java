@@ -1,10 +1,15 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
+import com.deepsoft.haolifa.service.OrderProductService;
+import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.service.PayWorkingProcedureService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,11 +26,21 @@ public class PayWorkingProcedureController {
 
     @Resource
     private PayWorkingProcedureService payWorkingProcedureService;
+    @Autowired
+    private OrderProductService orderProductService;
+    @Resource
+    private PayOrderUserRelationProcedureService payOrderUserRelationProcedureService;
 
     @ApiOperation("列表")
     @PostMapping("/getList")
     public ResultBean getList(@RequestBody PayWorkingProcedureDTO model) {
         return payWorkingProcedureService.pageInfo(model);
+    }
+
+    @ApiOperation("获取所有列表")
+    @PostMapping("/getAllList")
+    public ResultBean getAllList(@RequestBody PayWorkingProcedureDTO model) {
+        return payWorkingProcedureService.getAllList(model);
     }
 
     @ApiOperation("保存")
@@ -53,10 +68,24 @@ public class PayWorkingProcedureController {
     }
 
 
-    @ApiOperation("分配任务")
+    @ApiOperation("获取订单的产品列表（只包含产品）")
+    @GetMapping("/product-list")
+    @ApiImplicitParam(name = "orderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean productList(String orderNo) {
+        return ResultBean.success(orderProductService.getOrderProductList(orderNo));
+    }
+
+    @ApiOperation("分配任务按钮")
     @GetMapping(value = "assignTask/{productId}")
-    public ResultBean assignTask(@PathVariable Integer productId) {
+    public ResultBean assignTask(@PathVariable String productId) {
         return payWorkingProcedureService.assignTask(productId);
     }
+
+    @ApiOperation("分配任务保存按钮")
+    @PostMapping(value = "/saveTask")
+    public ResultBean saveTask (@RequestBody PayOrderUserRelationProcedureDTO procedure) {
+        return payOrderUserRelationProcedureService.insertSelective(procedure);
+    }
+
 
 }

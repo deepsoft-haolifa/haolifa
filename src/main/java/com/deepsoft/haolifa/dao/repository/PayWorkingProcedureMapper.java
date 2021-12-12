@@ -2,8 +2,10 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.PayWorkingProcedure;
 import com.deepsoft.haolifa.model.domain.PayWorkingProcedureExample;
-import java.util.List;
+import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface PayWorkingProcedureMapper {
     int countByExample(PayWorkingProcedureExample example);
@@ -17,6 +19,8 @@ public interface PayWorkingProcedureMapper {
     int insertSelective(PayWorkingProcedure record);
 
     List<PayWorkingProcedure> selectByExample(PayWorkingProcedureExample example);
+
+    List<PayWorkingProcedure> selectList(PayWorkingProcedureDTO example);
 
     PayWorkingProcedure selectByPrimaryKey(Integer id);
 

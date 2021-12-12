@@ -76,7 +76,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, serial, workshop_name, work_type, product_model, post_name, post_capability, 
+    id, serial, workshop_name, work_type, product_model, post_name, post_capability,
     post_code, create_user, update_user, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayWorkingProcedureExample" >
@@ -93,8 +93,22 @@
       order by ${orderByClause}
     </if>
   </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO">
+        select
+        *
+        from pay_working_procedure
+        <where>
+            <if test="productModel != null and productModel != ''" >
+                and FIND_IN_SET(#{productModel}, product_model)
+            </if>
+            <if test="workType != null and workType != ''" >
+                and work_type = #{workType}
+            </if>
+        </where>
+    </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from pay_working_procedure
     where id = #{id,jdbcType=INTEGER}
@@ -113,13 +127,13 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_working_procedure (serial, workshop_name, work_type, 
-      product_model, post_name, post_capability, 
-      post_code, create_user, update_user, 
+    insert into pay_working_procedure (serial, workshop_name, work_type,
+      product_model, post_name, post_capability,
+      post_code, create_user, update_user,
       create_time, update_time)
-    values (#{serial,jdbcType=INTEGER}, #{workshopName,jdbcType=VARCHAR}, #{workType,jdbcType=VARCHAR}, 
-      #{productModel,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{postCapability,jdbcType=VARCHAR}, 
-      #{postCode,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
+    values (#{serial,jdbcType=INTEGER}, #{workshopName,jdbcType=VARCHAR}, #{workType,jdbcType=VARCHAR},
+      #{productModel,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{postCapability,jdbcType=VARCHAR},
+      #{postCode,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR},
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayWorkingProcedure" >
