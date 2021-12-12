@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.cache.CacheKeyManager;
@@ -76,6 +77,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public UserInfoVO selectUserInfo() {
         CustomUser customUser = selectLoginUser();
+        log.info("customer user:{}", JSONUtil.toJsonStr(customUser));
         UserInfoVO userInfoVO = new UserInfoVO(customUser.getUsername(), customUser.getRealName(),
             customUser.getId(), customUser.getAuthorities(), permissionService.getMenu("m"));
         return userInfoVO;
