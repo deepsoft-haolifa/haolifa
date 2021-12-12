@@ -24,6 +24,7 @@ import com.deepsoft.haolifa.dao.repository.extend.PurchaseOrderItemExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.domain.PurchaseOrderItem;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableDTO;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
@@ -331,6 +332,62 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
         purchaseOrderPageDTO.setList(purchaseOrderList.getResult());
         return ResultBean.success(purchaseOrderPageDTO);
+    }
+
+    @Override
+    public ResultBean receivableList(PurchaseOrderReceivableDTO purchaseOrderDTO) {
+//        List<String> supplierNoList = new ArrayList<>();
+//        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
+//            SupplierExample supplierExample = new SupplierExample();
+//            supplierExample.createCriteria().andSuppilerNameLike("%" + purchaseOrderDTO.getSupplierName() + "%");
+//            List<Supplier> suppliers = supplierMapper.selectByExample(supplierExample);
+//            supplierNoList = suppliers.stream().map(Supplier::getSuppilerNo).collect(Collectors.toList());
+//        }
+
+
+        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        PurchaseOrderExample.Criteria criteria = purchaseOrderExample.createCriteria();
+        // --
+
+
+        // 合同编号
+        if (StringUtils.isNotEmpty(purchaseOrderDTO.getPurchaseOrderNo())) {
+            criteria.andPurchaseOrderNoEqualTo(purchaseOrderDTO.getPurchaseOrderNo());
+        }
+        // 客户名称
+        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
+            criteria.andSupplierNameLike(purchaseOrderDTO.getSupplierName());
+        }
+        // 签订日期
+        if (purchaseOrderDTO.getOperateTime()!=null) {
+            criteria.andOperateTimeEqualTo(purchaseOrderDTO.getOperateTime());
+        }
+        // 归属部门 like
+//        if (StringUtils.isNotEmpty(purchaseOrderDTO.getPurchaseOrderNo())) {
+//            criteria.andPurchaseOrderNoEqualTo(purchaseOrderDTO.getPurchaseOrderNo());
+//        }
+
+        // 交货日期
+        if (purchaseOrderDTO.getDeliveryTime()!=null) {
+            criteria.andDeliveryTimeEqualTo(purchaseOrderDTO.getDeliveryTime());
+        }
+        // 客户名称
+        if (StringUtils.isNotEmpty(purchaseOrderDTO.getOperatorUserName())) {
+            criteria.andOperatorUserNameLike(purchaseOrderDTO.getOperatorUserName());
+        }
+        // 供应单位 下拉
+        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierNo())) {
+            criteria.andSupplierNameEqualTo(purchaseOrderDTO.getSupplierNo());
+        }
+
+
+        Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(purchaseOrderDTO.getPageNum(), purchaseOrderDTO.getPageSize(), "create_time desc")
+            .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
+
+        PageDTO<PurchaseOrder> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(purchaseOrderList, pageDTO);
+        pageDTO.setList(purchaseOrderList.getResult());
+        return ResultBean.success(pageDTO);
     }
 
     @Override
