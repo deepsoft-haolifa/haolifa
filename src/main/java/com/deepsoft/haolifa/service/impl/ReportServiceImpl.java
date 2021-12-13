@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.sql.Struct;
 import java.util.*;
@@ -166,20 +167,27 @@ public class ReportServiceImpl extends BaseService implements ReportService {
 
     @Override
     public List<ExportContractDTO> selectInvoiceAmountByDemandName(String year) {
-        return saleReportMapper.selectInvoiceAmountByDemandName(year);
+        Map<String, Object> packMapParam = new HashMap<>();
+        packMapParam.put("year",year);
+        return saleReportMapper.selectInvoiceAmountByDemandName(packMapParam);
     }
 
     @Override
     public List<ExportContractDTO> selectDeliveryAmountByDemandName(String year) {
-        return saleReportMapper.selectDeliveryAmountByDemandName(year);
+        Map<String, Object> packMapParam = new HashMap<>();
+        packMapParam.put("year",year);
+        return saleReportMapper.selectDeliveryAmountByDemandName(packMapParam);
     }
 
     @Override
-    public List<DemandAmountDto> selectAllAmountByDemandName(@Param("year") String year) {
+    public List<DemandAmountDto> selectAllAmountByDemandName(ReportBaseDTO baseDTO) {
+        Map<String, Object> packMapParam = new HashMap<>();
+        packMapParam.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
+        packMapParam.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
+
         List<DemandAmountDto> list = new ArrayList<>();
-        List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(year);
-        List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(year);
-        Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
+        List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(packMapParam);
+        List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(packMapParam);
         List<ExportContractDTO> sale  = saleReportMapper.selectContractByDemandName(packMapParam);
         List<ExportContractDTO> refund = saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
 
@@ -194,7 +202,6 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         for (String demandName : demandSet) {
             DemandAmountDto demandAmountDto = new DemandAmountDto();
             demandAmountDto.setDemandName(demandName);
-            demandAmountDto.setYear(year);
             demandAmountDto.setSaleAmount(sale.stream().filter(e -> e.getDemandName().equals(demandName)).mapToDouble(ExportContractDTO::getTotalPrice).sum());
             demandAmountDto.setInvoiceAmount(invoice.stream().filter(e -> e.getDemandName().equals(demandName)).mapToDouble(ExportContractDTO::getTotalPrice).sum());
             demandAmountDto.setRefundAmount(refund.stream().filter(e -> e.getDemandName().equals(demandName)).mapToDouble(ExportContractDTO::getTotalPrice).sum());

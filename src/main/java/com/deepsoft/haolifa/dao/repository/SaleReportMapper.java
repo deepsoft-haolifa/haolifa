@@ -1,12 +1,11 @@
 package com.deepsoft.haolifa.dao.repository;
 
-import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportSaleDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
-import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
+import com.deepsoft.haolifa.model.dto.export.*;
+import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -47,13 +46,20 @@ public interface SaleReportMapper {
     /**
      * 按需方统计的开票总金额
      */
-    List<ExportContractDTO> selectInvoiceAmountByDemandName(@Param("year") String year);
+    List<ExportContractDTO> selectInvoiceAmountByDemandName(Map<String, Object> haspMap);
     /**
      * 按需方统计的发货总金额
      */
-    List<ExportContractDTO> selectDeliveryAmountByDemandName(@Param("year") String year);
+    List<ExportContractDTO> selectDeliveryAmountByDemandName(Map<String, Object> haspMap);
 
 
-
+    /**
+     * 回款订单统计列表
+     */
+    List<PaymentRespDTO>  selectSaleCollectionList(OrderConditionDTO model);
+    /**
+     * 回款订单统计数据
+     */
+    TotalAmountDTO  reportCollectOrderSummary(OrderConditionDTO model);
 
 }

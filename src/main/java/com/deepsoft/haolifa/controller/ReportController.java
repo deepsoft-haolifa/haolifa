@@ -252,11 +252,10 @@ public class ReportController {
         return ResultBean.success(exportSaleDTOS);
     }
 
-    @ApiOperation("销售报表-按需方统计的发货总金额,开票总金额,回款总额,销售总金额")
-    @GetMapping(value = "/sale/selectAllAmountByDemandName")
-    public ResultBean selectAllAmountByDemandName(@RequestParam(value = "year", required = false) String year) {
-        List<DemandAmountDto> exportSaleDTOS = reportService.selectAllAmountByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
+    @ApiOperation("销售报表-按需方统计的发货总金额,开票总金额,回款总额,销售总金额（2021-12-hd）")
+    @PostMapping(value = "/sale/selectAllAmountByDemandName")
+    public ResultBean<List<DemandAmountDto>> selectAllAmountByDemandName(@RequestBody ReportBaseDTO baseDTO) {
+        return ResultBean.success(reportService.selectAllAmountByDemandName(baseDTO));
     }
 
     @ApiOperation("质量报表-喷涂")

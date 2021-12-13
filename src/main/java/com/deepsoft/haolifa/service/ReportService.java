@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,8 @@ public interface ReportService {
      * @return
      */
     List<ExportContractDTO> selectshouhuiContractByDemandNameByMonth(ReportBaseDTO baseDTO);
+
+
     /**
      * 按需方统计的开票总金额
      *
@@ -80,7 +83,7 @@ public interface ReportService {
     /**
      * 按需方统计的发货总金额,开票总金额，生产总金额，回款总金额
      */
-    List<DemandAmountDto> selectAllAmountByDemandName(@Param("year") String year);
+    List<DemandAmountDto> selectAllAmountByDemandName(ReportBaseDTO baseDTO);
 
 
     //根据产品型号获取金额数量

@@ -236,16 +236,4 @@ public class OrderProductController {
     public ResultBean coverOrderExcel(@RequestBody OrderContractUpdateDTO dto) {
         return ResultBean.success(orderProductService.updateContractUrl(dto));
     }
-
-
-    @ApiOperation("订单列表展示--用于销售报表（2021-12-hd）")
-    @PostMapping("/report-order-list")
-    public ResultBean<PageDTO<OrderListRespDTO>> reportOrderList(@RequestBody OrderConditionDTO dto) {
-        return ResultBean.success(orderProductService.reportOrderList(dto));
-    }
-    @ApiOperation("订单列表展示--用于销售报表（2021-12-hd）")
-    @PostMapping("/report-order-summary")
-    public ResultBean<BigDecimal> reportOrderSummary(@RequestBody OrderConditionDTO dto) {
-        return ResultBean.success(orderProductService.reportOrderSummary(dto));
-    }
 }

@@ -179,10 +179,6 @@ public class CommonEnum {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(SysDictTypeEnum.FILE_TYPE.code);
-    }
-
     /**
      * 出入库操作类型
      */

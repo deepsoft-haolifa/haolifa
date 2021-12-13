@@ -111,14 +111,7 @@
         FROM
         order_product op
         LEFT JOIN payment_management pm ON pm.order_no = op.order_no
-        <where>
-            <if test="startTime!=null and startTime != ''">
-                and pm.create_time&gt;=#{startTime}
-            </if>
-            <if test="endTime!=null and endTime != ''">
-                and pm.create_time&lt;=#{endTime}
-            </if>
-        </where>
+        <include refid="saleCollectionSql"/>
         group by op.demand_name
     </select>
 
@@ -129,27 +122,80 @@
         FROM
         order_product op
         LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        <include refid="saleCollectionSql"/>
+        group by op.demand_name
+    </select>
+
+    <select id="selectSaleCollectionList" resultType="com.deepsoft.haolifa.model.dto.export.PaymentRespDTO">
+        SELECT
+            op.order_no,
+            op.order_status,
+            op.contract_sign_date,
+            op.demand_name,
+            op.delivery_date,
+            op.total_price,
+            op.deliverStatus,
+            pm.amount collectionAmount,
+            pm.pay_time collectionDate,
+            ifnull(op.total_price,0) - ifnull(pm.amount,0)  owedAmount
+        FROM
+            order_product op
+        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        <include refid="saleCollectionSql"/>
+    </select>
+
+    <select id="reportCollectOrderSummary" resultType="com.deepsoft.haolifa.model.dto.export.TotalAmountDTO">
+        SELECT
+        sum(ifnull(op.total_price,0)) totalSaleAmount,
+        sum(ifnull(pm.amount,0)) totalCollectAmount,
+        sum(ifnull(op.total_price,0) - ifnull(pm.amount,0)) totalOwedAmount
+        FROM
+        order_product op
+        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        <include refid="saleCollectionSql"/>
+    </select>
+    <sql id="saleCollectionSql">
         <where>
+            and pm.order_type=2
             <if test="startDate!=null and startDate != ''">
                 and pm.create_time&gt;=#{startDate}
             </if>
             <if test="endDate!=null and endDate != ''">
                 and pm.create_time&lt;=#{endDate}
             </if>
+            <if test="orderNo != null and orderNo != ''">
+                and op.order_no like CONCAT('%',#{orderNo},'%')
+            </if>
+            <if test="orderStatus != null and orderStatus > 0">
+                and op.order_status = #{orderStatus}
+            </if>
+            <if test="deliverStatus != null and deliverStatus > 0">
+                and op.deliver_status = #{deliverStatus}
+            </if>
+            <if test="demandName != null and demandName != ''">
+                and op.demand_name like CONCAT('%',#{demandName},'%')
+            </if>
         </where>
-        group by op.demand_name
-    </select>
+    </sql>
 
-    <select id="selectInvoiceAmountByDemandName" resultMap="contractMap" parameterType="java.lang.String">
-        select sum(`total_amount`) total_price,invoice_company as
-        demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") as year from invoice where type=1 and status in(2)
+
+    <select id="selectInvoiceAmountByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
+        select sum(`total_amount`) total_price,
+               invoice_company as demand_name
+        from invoice where type=1 and status in(2)
         <if test="year!=null and year != ''">
             and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
+        </if>
+        <if test="startDate!=null and startDate != ''">
+            and create_time&gt;=#{startDate}
+        </if>
+        <if test="endDate!=null and endDate != ''">
+            and create_time&lt;=#{endDate}
         </if>
         group by invoice_company
     </select>
 
-    <select id="selectDeliveryAmountByDemandName" resultMap="contractMap" parameterType="java.lang.String">
+    <select id="selectDeliveryAmountByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         SELECT o.demand_name, ifnull(SUM(c.price), 0) total_price
         FROM order_product o
             INNER JOIN (
@@ -161,11 +207,18 @@
                     <if test="year!=null and year != ''">
                         and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
                     </if>
+                    <if test="startDate!=null and startDate != ''">
+                        and create_time&gt;=#{startDate}
+                    </if>
+                    <if test="endDate!=null and endDate != ''">
+                        and create_time&lt;=#{endDate}
+                    </if>
                     )
             ) c
             ON c.order_no = o.order_no
         WHERE o.demand_name != ''
         GROUP BY o.demand_name
     </select>
+
 
 </mapper>

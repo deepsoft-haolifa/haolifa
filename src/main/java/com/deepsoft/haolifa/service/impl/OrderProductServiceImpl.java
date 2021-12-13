@@ -2271,32 +2271,4 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         return i;
     }
-
-    @Override
-    public PageDTO<OrderListRespDTO> reportOrderList(OrderConditionDTO model) {
-        //如果传入2021年，则查2020-12-26 至 2021-12-25
-        if (StrUtil.isNotBlank(model.getYear())) {
-            Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
-            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"startDate")));
-            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"endDate")));
-        }
-        //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
-        if (null != model.getStartDate()) {
-            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getStartDate(), "yy-MM"))));
-        }
-        if (null != model.getEndDate()) {
-            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getEndDate(), "yy-MM"))));
-        }
-        Page<OrderListRespDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
-            .doSelectPage(() -> orderExtendMapper.reportOrderList(model));
-        PageDTO<OrderListRespDTO> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(materials, pageDTO);
-        pageDTO.setList(materials);
-        return pageDTO;
-    }
-
-    @Override
-    public BigDecimal reportOrderSummary(OrderConditionDTO dto) {
-        return orderExtendMapper.reportOrderSummary(dto);
-    }
 }
