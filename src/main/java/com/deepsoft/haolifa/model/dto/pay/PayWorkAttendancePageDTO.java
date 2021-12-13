@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.pay;
 
+import com.deepsoft.haolifa.annotation.ExcelHandle;
 import com.deepsoft.haolifa.model.dto.BaseCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,7 +16,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 public class PayWorkAttendancePageDTO extends BaseCondition {
-
+    @ApiModelProperty(value = "id")
+    private Integer id;
+    @ApiModelProperty(value = "序号")
     private Integer serial;
     @ApiModelProperty(value = "部门")
     private String department;
@@ -43,6 +46,8 @@ public class PayWorkAttendancePageDTO extends BaseCondition {
     private Integer workOvertimeDays;
     @ApiModelProperty(value = "迟到早退次数")
     private Integer lateAndLeaveTimes;
+    @ApiModelProperty(value = "备注")
+    private String remark;
     @ApiModelProperty(value = "创建人")
     private String createUser;
     @ApiModelProperty(value = "创建开始时间")
