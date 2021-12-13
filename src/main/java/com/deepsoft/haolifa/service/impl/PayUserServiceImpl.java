@@ -1,15 +1,11 @@
 package com.deepsoft.haolifa.service.impl;
 
-import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
-import com.deepsoft.haolifa.dao.repository.PayTeamMapper;
-import com.deepsoft.haolifa.dao.repository.PayUserMapper;
-import com.deepsoft.haolifa.dao.repository.PayUserRelationProcedureMapper;
-import com.deepsoft.haolifa.model.domain.PayUser;
-import com.deepsoft.haolifa.model.domain.PayUserExample;
-import com.deepsoft.haolifa.model.domain.PayUserRelationProcedure;
+import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
+import com.deepsoft.haolifa.model.vo.PayUserVO;
 import com.deepsoft.haolifa.service.PayUserService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
@@ -17,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -33,7 +30,12 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     private PayUserMapper payUserMapper;
     @Resource
     private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
-
+    @Resource
+    private PayWorkAttendanceMapper payWorkAttendanceMapper;
+    @Resource
+    private PayWagesMapper payWagesMapper;
+    @Resource
+    private PayProductionWorkshopMapper payProductionWorkshopMapper;
     @Override
     public ResultBean pageInfo(PayUserDTO model) {
         PayUserExample example = new PayUserExample();
@@ -119,6 +121,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     }
 
     @Override
+    @Transactional
     public ResultBean save(PayUserDTO model) {
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
@@ -127,6 +130,18 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         payUser.setCreateUser(getLoginUserName());
         payUser.setUpdateUser(getLoginUserName());
         payUserMapper.insert(payUser);
+        // 同步工资表
+        PayWages payWages = new PayWages();
+        payWages.setUserName(payUser.getUserName());
+        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
+        payWages.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        payWages.setMinLiveSecurityFund(payUser.getBasePay());
+        payWagesMapper.insertSelective(payWages);
+        // 同步考勤表
+        PayWorkAttendance dance = new PayWorkAttendance();
+        dance.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        dance.setUserName(payUser.getUserName());
+        payWorkAttendanceMapper.insertSelective(dance);
         return ResultBean.success(1);
     }
 
@@ -142,6 +157,18 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         payUser.setUpdateTime(new Date());
         payUser.setUpdateUser(getLoginUserName());
         payUserMapper.updateByPrimaryKeySelective(payUser);
+        // 同步工资表
+        PayWages payWages = new PayWages();
+        payWages.setUserName(payUser.getUserName());
+        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
+        payWages.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        payWages.setMinLiveSecurityFund(payUser.getBasePay());
+        payWagesMapper.insertSelective(payWages);
+        // 同步考勤表
+        PayWorkAttendance dance = new PayWorkAttendance();
+        dance.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        dance.setUserName(payUser.getUserName());
+        payWorkAttendanceMapper.insertSelective(dance);
         return ResultBean.success(1);
     }
 
@@ -161,5 +188,15 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         payUserRelationProcedure.setUpdateTime(new Date());
         payUserRelationProcedureMapper.insert(payUserRelationProcedure);
         return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean getAllList(PayUserVO payUserVO) {
+        PayUserExample example = new PayUserExample();
+        PayUserExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(payUserVO.getUserType())) {
+            criteria.andUserTypeEqualTo(payUserVO.getUserType());
+        }
+        return ResultBean.success(payUserMapper.selectByExample(example));
     }
 }

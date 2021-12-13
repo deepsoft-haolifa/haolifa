@@ -11,7 +11,7 @@ public interface PayProductionCapacityService {
 
     ResultBean edit(PayProductCapacityDTO model);
 
-    ResultBean pageInfo(Integer pageSize, Integer pageNumber, String capacityName, String capacityCode);
+    ResultBean pageInfo(PayProductCapacityDTO model);
 
     ResultBean delete(Integer capacityId);
 }

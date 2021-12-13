@@ -25,7 +25,7 @@ import java.util.Objects;
 /**
  * @Author liuyaofei
  * @Date create in 下午4:51 2021/9/11
- * @description 人员管理
+ * @description 部门管理
  */
 @Service
 public class PayProductionWorkShopServiceImpl extends BaseService implements PayProductionWorkShopService {

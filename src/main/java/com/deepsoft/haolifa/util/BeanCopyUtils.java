@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 /**
  * 实体转换工具类
  */
-public class BeanUtils {
+public class BeanCopyUtils {
 
     private static Map<String, BeanCopier> beanCopierMap = new ConcurrentHashMap<String, BeanCopier>();
 
