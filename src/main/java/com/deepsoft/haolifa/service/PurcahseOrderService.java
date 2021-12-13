@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderCompleteDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableDTO;
 
 import java.util.Date;
 
@@ -48,6 +49,12 @@ public interface PurcahseOrderService {
    * @return
    */
   ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName, String startDate, String endDate);
+
+  /**
+   * 列表
+   * @return
+   */
+  ResultBean receivableList(PurchaseOrderReceivableDTO purchaseOrderDTO);
 
   /**
    * 采购完成

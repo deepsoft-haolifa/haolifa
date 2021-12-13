@@ -1,18 +1,10 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class BizBill {
     private Integer id;
-    private String createByName;
-
-    private Double billAmount;
-
-    private String deptName;
-
-    private Integer deptId;
-
-    private Long billId;
 
     private String xh;
 
@@ -24,19 +16,21 @@ public class BizBill {
 
     private String clearingBanks;
 
-    private Double preMonthMoney;
+    private BigDecimal preMonthMoney;
 
-    private Double collectionMoney;
+    private BigDecimal collectionMoney;
 
     private String collectionType;
 
-    private Double payment;
+    private BigDecimal payment;
 
     private String paymentType;
 
-    private Double balance;
+    private BigDecimal balance;
 
     private String type;
+
+    private String deptId;
 
     private String string1;
 
@@ -57,14 +51,61 @@ public class BizBill {
     private String string9;
 
     private String string10;
+
+    private String remark;
+
     private String status;
 
     private String delFlag;
 
+    private Integer contractUser;
+
     private Integer createUser;
-    private Integer updateUser;
+
     private Date createTime;
+
+    private Integer updateUser;
+
     private Date updateTime;
+
+    public BizBill(Integer id, String xh, Date d, String certificateNumber, String settlementType, String clearingBanks, BigDecimal preMonthMoney, BigDecimal collectionMoney, String collectionType, BigDecimal payment, String paymentType, BigDecimal balance, String type, String deptId, String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9, String string10, String remark, String status, String delFlag, Integer contractUser, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+        this.id = id;
+        this.xh = xh;
+        this.d = d;
+        this.certificateNumber = certificateNumber;
+        this.settlementType = settlementType;
+        this.clearingBanks = clearingBanks;
+        this.preMonthMoney = preMonthMoney;
+        this.collectionMoney = collectionMoney;
+        this.collectionType = collectionType;
+        this.payment = payment;
+        this.paymentType = paymentType;
+        this.balance = balance;
+        this.type = type;
+        this.deptId = deptId;
+        this.string1 = string1;
+        this.string2 = string2;
+        this.string3 = string3;
+        this.string4 = string4;
+        this.string5 = string5;
+        this.string6 = string6;
+        this.string7 = string7;
+        this.string8 = string8;
+        this.string9 = string9;
+        this.string10 = string10;
+        this.remark = remark;
+        this.status = status;
+        this.delFlag = delFlag;
+        this.contractUser = contractUser;
+        this.createUser = createUser;
+        this.createTime = createTime;
+        this.updateUser = updateUser;
+        this.updateTime = updateTime;
+    }
+
+    public BizBill() {
+        super();
+    }
 
     public Integer getId() {
         return id;
@@ -74,52 +115,12 @@ public class BizBill {
         this.id = id;
     }
 
-    public String getCreateByName() {
-        return createByName;
-    }
-
-    public void setCreateByName(String createByName) {
-        this.createByName = createByName;
-    }
-
-    public Double getBillAmount() {
-        return billAmount;
-    }
-
-    public void setBillAmount(Double billAmount) {
-        this.billAmount = billAmount;
-    }
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
-
-    public Integer getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Integer deptId) {
-        this.deptId = deptId;
-    }
-
-    public Long getBillId() {
-        return billId;
-    }
-
-    public void setBillId(Long billId) {
-        this.billId = billId;
-    }
-
     public String getXh() {
         return xh;
     }
 
     public void setXh(String xh) {
-        this.xh = xh;
+        this.xh = xh == null ? null : xh.trim();
     }
 
     public Date getD() {
@@ -135,7 +136,7 @@ public class BizBill {
     }
 
     public void setCertificateNumber(String certificateNumber) {
-        this.certificateNumber = certificateNumber;
+        this.certificateNumber = certificateNumber == null ? null : certificateNumber.trim();
     }
 
     public String getSettlementType() {
@@ -143,7 +144,7 @@ public class BizBill {
     }
 
     public void setSettlementType(String settlementType) {
-        this.settlementType = settlementType;
+        this.settlementType = settlementType == null ? null : settlementType.trim();
     }
 
     public String getClearingBanks() {
@@ -151,22 +152,22 @@ public class BizBill {
     }
 
     public void setClearingBanks(String clearingBanks) {
-        this.clearingBanks = clearingBanks;
+        this.clearingBanks = clearingBanks == null ? null : clearingBanks.trim();
     }
 
-    public Double getPreMonthMoney() {
+    public BigDecimal getPreMonthMoney() {
         return preMonthMoney;
     }
 
-    public void setPreMonthMoney(Double preMonthMoney) {
+    public void setPreMonthMoney(BigDecimal preMonthMoney) {
         this.preMonthMoney = preMonthMoney;
     }
 
-    public Double getCollectionMoney() {
+    public BigDecimal getCollectionMoney() {
         return collectionMoney;
     }
 
-    public void setCollectionMoney(Double collectionMoney) {
+    public void setCollectionMoney(BigDecimal collectionMoney) {
         this.collectionMoney = collectionMoney;
     }
 
@@ -175,14 +176,14 @@ public class BizBill {
     }
 
     public void setCollectionType(String collectionType) {
-        this.collectionType = collectionType;
+        this.collectionType = collectionType == null ? null : collectionType.trim();
     }
 
-    public Double getPayment() {
+    public BigDecimal getPayment() {
         return payment;
     }
 
-    public void setPayment(Double payment) {
+    public void setPayment(BigDecimal payment) {
         this.payment = payment;
     }
 
@@ -191,14 +192,14 @@ public class BizBill {
     }
 
     public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
+        this.paymentType = paymentType == null ? null : paymentType.trim();
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -207,7 +208,15 @@ public class BizBill {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = type == null ? null : type.trim();
+    }
+
+    public String getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(String deptId) {
+        this.deptId = deptId == null ? null : deptId.trim();
     }
 
     public String getString1() {
@@ -215,7 +224,7 @@ public class BizBill {
     }
 
     public void setString1(String string1) {
-        this.string1 = string1;
+        this.string1 = string1 == null ? null : string1.trim();
     }
 
     public String getString2() {
@@ -223,7 +232,7 @@ public class BizBill {
     }
 
     public void setString2(String string2) {
-        this.string2 = string2;
+        this.string2 = string2 == null ? null : string2.trim();
     }
 
     public String getString3() {
@@ -231,7 +240,7 @@ public class BizBill {
     }
 
     public void setString3(String string3) {
-        this.string3 = string3;
+        this.string3 = string3 == null ? null : string3.trim();
     }
 
     public String getString4() {
@@ -239,7 +248,7 @@ public class BizBill {
     }
 
     public void setString4(String string4) {
-        this.string4 = string4;
+        this.string4 = string4 == null ? null : string4.trim();
     }
 
     public String getString5() {
@@ -247,7 +256,7 @@ public class BizBill {
     }
 
     public void setString5(String string5) {
-        this.string5 = string5;
+        this.string5 = string5 == null ? null : string5.trim();
     }
 
     public String getString6() {
@@ -255,7 +264,7 @@ public class BizBill {
     }
 
     public void setString6(String string6) {
-        this.string6 = string6;
+        this.string6 = string6 == null ? null : string6.trim();
     }
 
     public String getString7() {
@@ -263,7 +272,7 @@ public class BizBill {
     }
 
     public void setString7(String string7) {
-        this.string7 = string7;
+        this.string7 = string7 == null ? null : string7.trim();
     }
 
     public String getString8() {
@@ -271,7 +280,7 @@ public class BizBill {
     }
 
     public void setString8(String string8) {
-        this.string8 = string8;
+        this.string8 = string8 == null ? null : string8.trim();
     }
 
     public String getString9() {
@@ -279,7 +288,7 @@ public class BizBill {
     }
 
     public void setString9(String string9) {
-        this.string9 = string9;
+        this.string9 = string9 == null ? null : string9.trim();
     }
 
     public String getString10() {
@@ -287,7 +296,15 @@ public class BizBill {
     }
 
     public void setString10(String string10) {
-        this.string10 = string10;
+        this.string10 = string10 == null ? null : string10.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public String getStatus() {
@@ -295,7 +312,7 @@ public class BizBill {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status == null ? null : status.trim();
     }
 
     public String getDelFlag() {
@@ -303,7 +320,15 @@ public class BizBill {
     }
 
     public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
+        this.delFlag = delFlag == null ? null : delFlag.trim();
+    }
+
+    public Integer getContractUser() {
+        return contractUser;
+    }
+
+    public void setContractUser(Integer contractUser) {
+        this.contractUser = contractUser;
     }
 
     public Integer getCreateUser() {
@@ -314,14 +339,6 @@ public class BizBill {
         this.createUser = createUser;
     }
 
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -330,51 +347,19 @@ public class BizBill {
         this.createTime = createTime;
     }
 
+    public Integer getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Integer updateUser) {
+        this.updateUser = updateUser;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public BizBill(Integer id, String createByName, Double billAmount, String deptName, Integer deptId, Long billId, String xh, Date d, String certificateNumber, String settlementType, String clearingBanks, Double preMonthMoney, Double collectionMoney, String collectionType, Double payment, String paymentType, Double balance, String type, String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9, String string10, String status, String delFlag, Integer createUser, Integer updateUser, Date createTime, Date updateTime) {
-        this.id = id;
-        this.createByName = createByName;
-        this.billAmount = billAmount;
-        this.deptName = deptName;
-        this.deptId = deptId;
-        this.billId = billId;
-        this.xh = xh;
-        this.d = d;
-        this.certificateNumber = certificateNumber;
-        this.settlementType = settlementType;
-        this.clearingBanks = clearingBanks;
-        this.preMonthMoney = preMonthMoney;
-        this.collectionMoney = collectionMoney;
-        this.collectionType = collectionType;
-        this.payment = payment;
-        this.paymentType = paymentType;
-        this.balance = balance;
-        this.type = type;
-        this.string1 = string1;
-        this.string2 = string2;
-        this.string3 = string3;
-        this.string4 = string4;
-        this.string5 = string5;
-        this.string6 = string6;
-        this.string7 = string7;
-        this.string8 = string8;
-        this.string9 = string9;
-        this.string10 = string10;
-        this.status = status;
-        this.delFlag = delFlag;
-        this.createUser = createUser;
-        this.updateUser = updateUser;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
-
-    public BizBill() {
     }
 }
