@@ -37,6 +37,7 @@ public class PayAssessmentQuotaServiceImpl extends BaseService implements PayAss
         example.setOrderByClause("id desc");
         Page<PayAssessmentQuota> payTeams = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payAssessmentQuotaMapper.selectByExample(example));
+
         PageDTO<PayAssessmentQuota> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(payTeams, pageDTO);
         pageDTO.setList(payTeams);
