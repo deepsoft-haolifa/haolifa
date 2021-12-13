@@ -121,4 +121,35 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
             payWorkAttendanceMapper.insert(payWorkAttendance);
         }
     }
+
+    @Override
+    public ResultBean save(PayWorkAttendancePageDTO model) {
+        PayWorkAttendance payWorkAttendance = new PayWorkAttendance();
+        BeanUtils.copyProperties(model, payWorkAttendance);
+        payWorkAttendance.setCreateTime(new Date());
+        payWorkAttendance.setUpdateTime(new Date());
+        payWorkAttendance.setCreateUser(getLoginUserName());
+        payWorkAttendance.setUpdateUser(getLoginUserName());
+        payWorkAttendanceMapper.insert(payWorkAttendance);
+        return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean getInfo(Integer id) {
+        return ResultBean.success(payWorkAttendanceMapper.selectByPrimaryKey(id));
+    }
+
+    @Override
+    public ResultBean edit(PayWorkAttendancePageDTO model) {
+        PayWorkAttendance payWorkAttendance = new PayWorkAttendance();
+        BeanUtils.copyProperties(model, payWorkAttendance);
+        payWorkAttendance.setUpdateTime(new Date());
+        payWorkAttendance.setUpdateUser(getLoginUserName());
+        return ResultBean.success(payWorkAttendanceMapper.updateByPrimaryKeySelective(payWorkAttendance));
+    }
+
+    @Override
+    public ResultBean delete(Integer id) {
+        return ResultBean.success(payWorkAttendanceMapper.deleteByPrimaryKey(id));
+    }
 }
