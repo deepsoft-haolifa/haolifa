@@ -68,6 +68,7 @@ public class SysUserServiceImpl implements SysUserService {
             e.printStackTrace();
             return null;
         }
+        log.info("login principal:{}",JSONUtil.toJsonStr(principal));
         if ("anonymousUser".equals(principal))
             return (CustomUser) customUserService.loadUserByUsername("admin");
         else
