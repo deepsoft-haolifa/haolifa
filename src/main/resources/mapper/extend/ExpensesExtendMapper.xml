@@ -83,18 +83,17 @@
         group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m")
     </select>
     <select id="expenseTotalByMonth" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
-        select sum(total_amount) totalAmount,date_str,data_month,data_year from expenses where is_delete=0
+        select ifnull(sum(ifnull(total_amount,0)),0) totalAmount,date_str,data_month,data_year from expenses where is_delete=0
         <if test="year!=null and year!=''">
             and data_year=#{year}
         </if>
         group by data_month
     </select>
     <select id="listSummary" resultType="java.lang.String">
-        select ifnull(sum(total_amount),0) totalAmount from expenses
+        select ifnull(sum(ifnull(total_amount,0)),0) totalAmount from expenses
         <include refid="commonCondition"></include>
         <include refid="expenseCondition"></include>
     </select>
-
 
 
     <sql id="commonCondition">
@@ -115,23 +114,21 @@
         </where>
     </sql>
     <sql id="expenseCondition">
-        <where>
-            <if test="department!=null and department!=''">
-                and department like concat('%',#{department},'%')
-            </if>
-            <if test="commitUser != null">
-                and commit_user like concat('%',#{commitUser},'%')
-            </if>
-            <if test="classifyName != null">
-                and expenses_classify like concat('%',#{classifyName},'%')
-            </if>
-            <if test="secondClassifyName != null">
-                and second_classify like concat('%',#{secondClassifyName},'%')
-            </if>
-            <if test="voucherNo != null">
-                and voucher_no like concat('%',#{voucherNo},'%')
-            </if>
-        </where>
+        <if test="department!=null and department!=''">
+            and department like concat('%',#{department},'%')
+        </if>
+        <if test="commitUser != null">
+            and commit_user like concat('%',#{commitUser},'%')
+        </if>
+        <if test="classifyName != null">
+            and expenses_classify like concat('%',#{classifyName},'%')
+        </if>
+        <if test="secondClassifyName != null">
+            and second_classify like concat('%',#{secondClassifyName},'%')
+        </if>
+        <if test="voucherNo != null">
+            and voucher_no like concat('%',#{voucherNo},'%')
+        </if>
     </sql>
 
 
