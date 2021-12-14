@@ -244,11 +244,10 @@ public class MaterialServiceImpl implements MaterialService {
         if (info == null) {
             return 0;
         }
-        log.info("update current quantity start,graphNo:{},quantity:{},version:{},currentQty:{}", graphNo, quantity, info.getVersion(), info.getCurrentQuantity());
-
-        if (quantity < 0 && info.getCurrentQuantity() + quantity < 0) {
-            throw new BaseException(CommonEnum.ResponseEnum.FAIL, "可用库存不足，不能够扣减");
-        }
+//        log.info("update current quantity start,graphNo:{},quantity:{},version:{},currentQty:{}", graphNo, quantity, info.getVersion(), info.getCurrentQuantity());
+////        if (quantity < 0 && info.getCurrentQuantity() + quantity < 0) {
+////            throw new BaseException(CommonEnum.ResponseEnum.FAIL, "可用库存不足，不能够扣减");
+////        }
 
         int update = materialExtendMapper.updateCurrentQuantity(graphNo, quantity, info.getVersion());
         if (update <= 0) {
@@ -265,9 +264,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         log.info("update lock quantity start,graphNo:{},quantity:{},version:{},currentLockQty:{}", graphNo, quantity, info.getVersion(), info.getLockQuantity());
 
-        if (quantity < 0 && info.getLockQuantity() + quantity < 0) {
-            throw new BaseException(CommonEnum.ResponseEnum.FAIL, "锁定库存不足，不能够扣减");
-        }
+//        if (quantity < 0 && info.getLockQuantity() + quantity < 0) {
+//            throw new BaseException(CommonEnum.ResponseEnum.FAIL, "锁定库存不足，不能够扣减");
+//        }
 
         int update = materialExtendMapper.updateLockQuantity(graphNo, quantity, info.getVersion());
         if (update <= 0) {
