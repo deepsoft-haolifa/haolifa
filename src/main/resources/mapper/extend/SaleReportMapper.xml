@@ -133,9 +133,9 @@
             op.contract_sign_date,
             op.demand_name,
             op.delivery_date,
-            op.total_price,
+            ifnull(op.total_price,0),
             op.deliverStatus,
-            pm.amount collectionAmount,
+            ifnull(pm.amount,0) collectionAmount,
             pm.pay_time collectionDate,
             ifnull(op.total_price,0) - ifnull(pm.amount,0)  owedAmount
         FROM
@@ -146,9 +146,9 @@
 
     <select id="reportCollectOrderSummary" resultType="com.deepsoft.haolifa.model.dto.export.TotalAmountDTO">
         SELECT
-        sum(ifnull(op.total_price,0)) totalSaleAmount,
-        sum(ifnull(pm.amount,0)) totalCollectAmount,
-        sum(ifnull(op.total_price,0) - ifnull(pm.amount,0)) totalOwedAmount
+        ifnull(sum(op.total_price),0) totalSaleAmount,
+        ifnull(sum(pm.amount),0) totalCollectAmount,
+        ifnull(sum(ifnull(op.total_price,0) - ifnull(pm.amount,0)),0) totalOwedAmount
         FROM
         order_product op
         LEFT JOIN payment_management pm ON pm.order_no = op.order_no
@@ -180,7 +180,7 @@
 
 
     <select id="selectInvoiceAmountByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
-        select sum(`total_amount`) total_price,
+        select  ifnull(sum(`total_amount`),0) total_price,
                invoice_company as demand_name
         from invoice where type=1 and status in(2)
         <if test="year!=null and year != ''">
