@@ -1,16 +1,17 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayProductionCapacity {
     private Integer id;
 
-    private String capacityName;
+    private Integer userId;
 
     private String capacityCode;
 
-    private BigDecimal capacityPrice;
+    private Integer teamId;
+
+    private Integer departId;
 
     private String createUser;
 
@@ -20,11 +21,12 @@ public class PayProductionCapacity {
 
     private Date updateTime;
 
-    public PayProductionCapacity(Integer id, String capacityName, String capacityCode, BigDecimal capacityPrice, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayProductionCapacity(Integer id, Integer userId, String capacityCode, Integer teamId, Integer departId, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
-        this.capacityName = capacityName;
+        this.userId = userId;
         this.capacityCode = capacityCode;
-        this.capacityPrice = capacityPrice;
+        this.teamId = teamId;
+        this.departId = departId;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.createTime = createTime;
@@ -43,12 +45,12 @@ public class PayProductionCapacity {
         this.id = id;
     }
 
-    public String getCapacityName() {
-        return capacityName;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setCapacityName(String capacityName) {
-        this.capacityName = capacityName == null ? null : capacityName.trim();
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getCapacityCode() {
@@ -59,12 +61,20 @@ public class PayProductionCapacity {
         this.capacityCode = capacityCode == null ? null : capacityCode.trim();
     }
 
-    public BigDecimal getCapacityPrice() {
-        return capacityPrice;
+    public Integer getTeamId() {
+        return teamId;
     }
 
-    public void setCapacityPrice(BigDecimal capacityPrice) {
-        this.capacityPrice = capacityPrice;
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
+    }
+
+    public Integer getDepartId() {
+        return departId;
+    }
+
+    public void setDepartId(Integer departId) {
+        this.departId = departId;
     }
 
     public String getCreateUser() {

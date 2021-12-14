@@ -1,13 +1,16 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.dao.repository.PayAssessmentScoreMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.model.domain.PayAssessmentScore;
 import com.deepsoft.haolifa.model.domain.PayAssessmentScoreExample;
+import com.deepsoft.haolifa.model.domain.PayUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentScoreDTO;
 import com.deepsoft.haolifa.service.PayAssessmentScoreService;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author liuyaofei
@@ -25,15 +30,21 @@ import java.util.Date;
 public class PayAssessmentScoreServiceImpl extends BaseService implements PayAssessmentScoreService {
     @Resource
     private PayAssessmentScoreMapper payAssessmentScoreMapper;
+    @Resource
+    private PayUserMapper payUserMapper;
 
     @Override
     public ResultBean pageInfo(Integer pageNum, Integer pageSize) {
         PayAssessmentScoreExample example = new PayAssessmentScoreExample();
         Page<PayAssessmentScore> payTeams = PageHelper.startPage(pageNum, pageSize)
             .doSelectPage(() -> payAssessmentScoreMapper.selectByExample(example));
-        PageDTO<PayAssessmentScore> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(payTeams, pageDTO);
-        pageDTO.setList(payTeams);
+        List<PayAssessmentScoreDTO> scoreDTOList = BeanCopyUtils.copyPropertiesForNewList(payTeams, () -> new PayAssessmentScoreDTO());
+        scoreDTOList.stream().forEach(score -> {
+            PayUser payUser = payUserMapper.selectByPrimaryKey(score.getUserId());
+            score.setUserName(Objects.isNull(payUser) ? "" : payUser.getUserName());
+        });
+        PageDTO<PayAssessmentScoreDTO> pageDTO = new PageDTO<>();
+        pageDTO.setList(scoreDTOList);
         return ResultBean.success(pageDTO);
     }
 

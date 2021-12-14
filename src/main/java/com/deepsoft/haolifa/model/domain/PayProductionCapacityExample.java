@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -166,73 +165,63 @@ public class PayProductionCapacityExample {
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameIsNull() {
-            addCriterion("capacity_name is null");
+        public Criteria andUserIdIsNull() {
+            addCriterion("user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameIsNotNull() {
-            addCriterion("capacity_name is not null");
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameEqualTo(String value) {
-            addCriterion("capacity_name =", value, "capacityName");
+        public Criteria andUserIdEqualTo(Integer value) {
+            addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameNotEqualTo(String value) {
-            addCriterion("capacity_name <>", value, "capacityName");
+        public Criteria andUserIdNotEqualTo(Integer value) {
+            addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameGreaterThan(String value) {
-            addCriterion("capacity_name >", value, "capacityName");
+        public Criteria andUserIdGreaterThan(Integer value) {
+            addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameGreaterThanOrEqualTo(String value) {
-            addCriterion("capacity_name >=", value, "capacityName");
+        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameLessThan(String value) {
-            addCriterion("capacity_name <", value, "capacityName");
+        public Criteria andUserIdLessThan(Integer value) {
+            addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameLessThanOrEqualTo(String value) {
-            addCriterion("capacity_name <=", value, "capacityName");
+        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameLike(String value) {
-            addCriterion("capacity_name like", value, "capacityName");
+        public Criteria andUserIdIn(List<Integer> values) {
+            addCriterion("user_id in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameNotLike(String value) {
-            addCriterion("capacity_name not like", value, "capacityName");
+        public Criteria andUserIdNotIn(List<Integer> values) {
+            addCriterion("user_id not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameIn(List<String> values) {
-            addCriterion("capacity_name in", values, "capacityName");
+        public Criteria andUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("user_id between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityNameNotIn(List<String> values) {
-            addCriterion("capacity_name not in", values, "capacityName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCapacityNameBetween(String value1, String value2) {
-            addCriterion("capacity_name between", value1, value2, "capacityName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCapacityNameNotBetween(String value1, String value2) {
-            addCriterion("capacity_name not between", value1, value2, "capacityName");
+        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
 
@@ -306,63 +295,123 @@ public class PayProductionCapacityExample {
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceIsNull() {
-            addCriterion("capacity_price is null");
+        public Criteria andTeamIdIsNull() {
+            addCriterion("team_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceIsNotNull() {
-            addCriterion("capacity_price is not null");
+        public Criteria andTeamIdIsNotNull() {
+            addCriterion("team_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceEqualTo(BigDecimal value) {
-            addCriterion("capacity_price =", value, "capacityPrice");
+        public Criteria andTeamIdEqualTo(Integer value) {
+            addCriterion("team_id =", value, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceNotEqualTo(BigDecimal value) {
-            addCriterion("capacity_price <>", value, "capacityPrice");
+        public Criteria andTeamIdNotEqualTo(Integer value) {
+            addCriterion("team_id <>", value, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceGreaterThan(BigDecimal value) {
-            addCriterion("capacity_price >", value, "capacityPrice");
+        public Criteria andTeamIdGreaterThan(Integer value) {
+            addCriterion("team_id >", value, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("capacity_price >=", value, "capacityPrice");
+        public Criteria andTeamIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("team_id >=", value, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceLessThan(BigDecimal value) {
-            addCriterion("capacity_price <", value, "capacityPrice");
+        public Criteria andTeamIdLessThan(Integer value) {
+            addCriterion("team_id <", value, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("capacity_price <=", value, "capacityPrice");
+        public Criteria andTeamIdLessThanOrEqualTo(Integer value) {
+            addCriterion("team_id <=", value, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceIn(List<BigDecimal> values) {
-            addCriterion("capacity_price in", values, "capacityPrice");
+        public Criteria andTeamIdIn(List<Integer> values) {
+            addCriterion("team_id in", values, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceNotIn(List<BigDecimal> values) {
-            addCriterion("capacity_price not in", values, "capacityPrice");
+        public Criteria andTeamIdNotIn(List<Integer> values) {
+            addCriterion("team_id not in", values, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("capacity_price between", value1, value2, "capacityPrice");
+        public Criteria andTeamIdBetween(Integer value1, Integer value2) {
+            addCriterion("team_id between", value1, value2, "teamId");
             return (Criteria) this;
         }
 
-        public Criteria andCapacityPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("capacity_price not between", value1, value2, "capacityPrice");
+        public Criteria andTeamIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("team_id not between", value1, value2, "teamId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdIsNull() {
+            addCriterion("depart_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdIsNotNull() {
+            addCriterion("depart_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdEqualTo(Integer value) {
+            addCriterion("depart_id =", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdNotEqualTo(Integer value) {
+            addCriterion("depart_id <>", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdGreaterThan(Integer value) {
+            addCriterion("depart_id >", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("depart_id >=", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdLessThan(Integer value) {
+            addCriterion("depart_id <", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdLessThanOrEqualTo(Integer value) {
+            addCriterion("depart_id <=", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdIn(List<Integer> values) {
+            addCriterion("depart_id in", values, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdNotIn(List<Integer> values) {
+            addCriterion("depart_id not in", values, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdBetween(Integer value1, Integer value2) {
+            addCriterion("depart_id between", value1, value2, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("depart_id not between", value1, value2, "departId");
             return (Criteria) this;
         }
 

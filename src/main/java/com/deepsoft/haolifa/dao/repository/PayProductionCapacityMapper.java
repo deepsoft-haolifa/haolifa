@@ -2,9 +2,8 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.PayProductionCapacity;
 import com.deepsoft.haolifa.model.domain.PayProductionCapacityExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PayProductionCapacityMapper {
     int countByExample(PayProductionCapacityExample example);
