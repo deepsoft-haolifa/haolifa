@@ -1,55 +1,55 @@
 package com.deepsoft.haolifa.model.domain;
 
-import com.deepsoft.haolifa.annotation.ExcelHandle;
-
 import java.util.Date;
 
 public class PayWorkAttendance {
     private Integer id;
-    @ExcelHandle(name = "序号")
+
     private Integer serial;
-    @ExcelHandle(name = "部门")
+
     private String department;
-    @ExcelHandle(name = "姓名")
+
+    private Integer userId;
+
     private String userName;
-    @ExcelHandle(name = "出勤天数")
+
     private Integer attendanceDays;
-    @ExcelHandle(name = "迟到次数")
+
     private Integer lateTimes;
-    @ExcelHandle(name = "早退次数")
+
     private Integer leaveEarlyTimes;
-    @ExcelHandle(name = "旷工次数")
+
     private Integer absenteeismTimes;
-    @ExcelHandle(name = "中班天数")
+
     private Integer middleDays;
-    @ExcelHandle(name = "夜班天数")
+
     private Integer nightDays;
-    @ExcelHandle(name = "出差天数")
+
     private Integer businessTravelDays;
-    @ExcelHandle(name = "事假天数")
+
     private Integer compassionateLeaveDays;
-    @ExcelHandle(name = "病假天数")
+
     private Integer sickLeaveDays;
-    @ExcelHandle(name = "加班天数")
+
     private Integer workOvertimeDays;
-    @ExcelHandle(name = "迟到早退次数")
+
     private Integer lateAndLeaveTimes;
-    @ExcelHandle(name = "备注")
+
     private String remark;
-    @ExcelHandle(name = "创建人")
+
     private String createUser;
-    @ExcelHandle(name = "修改人")
+
     private String updateUser;
-    @ExcelHandle(name = "创建时间")
+
     private Date createTime;
-    @ExcelHandle(name = "修改时间")
+
     private Date updateTime;
 
-
-    public PayWorkAttendance(Integer id, Integer serial, String department, String userName, Integer attendanceDays, Integer lateTimes, Integer leaveEarlyTimes, Integer absenteeismTimes, Integer middleDays, Integer nightDays, Integer businessTravelDays, Integer compassionateLeaveDays, Integer sickLeaveDays, Integer workOvertimeDays, Integer lateAndLeaveTimes, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayWorkAttendance(Integer id, Integer serial, String department, Integer userId, String userName, Integer attendanceDays, Integer lateTimes, Integer leaveEarlyTimes, Integer absenteeismTimes, Integer middleDays, Integer nightDays, Integer businessTravelDays, Integer compassionateLeaveDays, Integer sickLeaveDays, Integer workOvertimeDays, Integer lateAndLeaveTimes, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.serial = serial;
         this.department = department;
+        this.userId = userId;
         this.userName = userName;
         this.attendanceDays = attendanceDays;
         this.lateTimes = lateTimes;
@@ -95,6 +95,14 @@ public class PayWorkAttendance {
 
     public void setDepartment(String department) {
         this.department = department == null ? null : department.trim();
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {

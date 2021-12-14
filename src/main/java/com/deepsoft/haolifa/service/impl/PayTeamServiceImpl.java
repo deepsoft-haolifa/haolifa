@@ -14,6 +14,7 @@ import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class PayTeamServiceImpl extends BaseService implements PayTeamService {
     }
 
     @Override
+    @Transactional
     public ResultBean save(PayTeamDTO model) {
         PayTeam payTeam = new PayTeam();
         BeanUtils.copyProperties(model, payTeam);

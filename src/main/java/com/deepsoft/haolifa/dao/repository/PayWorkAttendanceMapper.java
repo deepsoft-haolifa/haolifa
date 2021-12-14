@@ -2,9 +2,8 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.PayWorkAttendance;
 import com.deepsoft.haolifa.model.domain.PayWorkAttendanceExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PayWorkAttendanceMapper {
     int countByExample(PayWorkAttendanceExample example);
