@@ -111,25 +111,23 @@
             <if test="month!=null and month!=''">
                 and data_month=#{month}
             </if>
+
+            <if test="department!=null and department!=''">
+                and department like concat('%',#{department},'%')
+            </if>
+            <if test="commitUser != null">
+                and commit_user like concat('%',#{commitUser},'%')
+            </if>
+            <if test="classifyName != null">
+                and expenses_classify like concat('%',#{classifyName},'%')
+            </if>
+            <if test="secondClassifyName != null">
+                and second_classify like concat('%',#{secondClassifyName},'%')
+            </if>
+            <if test="voucherNo != null">
+                and voucher_no like concat('%',#{voucherNo},'%')
+            </if>
         </where>
     </sql>
-    <sql id="expenseCondition">
-        <if test="department!=null and department!=''">
-            and department like concat('%',#{department},'%')
-        </if>
-        <if test="commitUser != null">
-            and commit_user like concat('%',#{commitUser},'%')
-        </if>
-        <if test="classifyName != null">
-            and expenses_classify like concat('%',#{classifyName},'%')
-        </if>
-        <if test="secondClassifyName != null">
-            and second_classify like concat('%',#{secondClassifyName},'%')
-        </if>
-        <if test="voucherNo != null">
-            and voucher_no like concat('%',#{voucherNo},'%')
-        </if>
-    </sql>
-
 
 </mapper>
