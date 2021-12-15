@@ -7,9 +7,13 @@ import com.deepsoft.haolifa.dao.repository.PayWorkingProcedureMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
 import com.deepsoft.haolifa.model.vo.PayUserProcedureVO;
+import com.deepsoft.haolifa.service.PayProductionCapacityService;
 import com.deepsoft.haolifa.service.PayWorkingProcedureService;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +40,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
     @Resource
     private PayUserMapper payUserMapper;
+    @Resource
+    private PayProductionCapacityService payProductionCapacityService;
 
     @Override
     public ResultBean pageInfo(PayWorkingProcedureDTO model) {
@@ -127,42 +133,32 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     }
 
     @Override
-    public ResultBean assignTask(String productId) {
+    public ResultBean assignTask(String orderNo) {
         OrderProductAssociateExample example = new OrderProductAssociateExample();
-        example.createCriteria().andProductNoEqualTo(productId);
+        example.createCriteria().andProductNoEqualTo(orderNo);
         List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(list)) {
             ResultBean.success(null);
         }
-        OrderProductAssociate orderProductAssociate = list.get(0);
-        PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
-        payWorkingProcedure.setProductModel(orderProductAssociate.getProductModel());
-        payWorkingProcedure.setWorkType(orderProductAssociate.getProductName());
-        List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
-        if (CollectionUtils.isEmpty(payWorkingProcedures)) {
-            return ResultBean.success(null);
-        }
-        List<PayUserProcedureVO> payUserProcedureVOS = new ArrayList<>();
-        for (PayWorkingProcedure procedure : payWorkingProcedures) {
-            PayUserRelationProcedureExample userRelationProcedure = new PayUserRelationProcedureExample();
-            userRelationProcedure.createCriteria().andProcedureIdEqualTo(procedure.getId());
-            List<PayUserRelationProcedure> payUserRelationProcedures = payUserRelationProcedureMapper.selectByExample(userRelationProcedure);
-            if (CollectionUtils.isEmpty(payUserRelationProcedures)) {
+        List<PayProductionCapacity> payProductionCapacitieList = new ArrayList<>();
+        for (OrderProductAssociate orderProductAssociate : list) {
+            PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
+            payWorkingProcedure.setProductModel(orderProductAssociate.getProductModel());
+            List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
+            if (CollectionUtils.isEmpty(payWorkingProcedures)) {
                 continue;
             }
-            PayUserRelationProcedure payUserRelationProcedure = payUserRelationProcedures.get(0);
-            PayUser payUser = payUserMapper.selectByPrimaryKey(payUserRelationProcedure.getUserId());
-            PayUserProcedureVO payUserProcedureVO = new PayUserProcedureVO();
-            payUserProcedureVO.setUserId(payUser.getId());
-            payUserProcedureVO.setUserName(payUser.getUserName());
-            payUserProcedureVO.setPostCode(procedure.getPostCode());
-            payUserProcedureVO.setPostName(procedure.getPostName());
-            payUserProcedureVOS.add(payUserProcedureVO);
+            for (PayWorkingProcedure procedure : payWorkingProcedures) {
+                // 车间名称
+                PayProductCapacityDTO payHourQuotaDTO = new PayProductCapacityDTO();
+                payHourQuotaDTO.setDepartName(procedure.getWorkshopName());
+                List<PayProductionCapacity> payProductionCapacities = payProductionCapacityService.getList(payHourQuotaDTO);
+                if (CollectionUtils.isEmpty(payProductionCapacities)) {
+                    continue;
+                }
+                payProductionCapacitieList.addAll(payProductionCapacities);
+            }
         }
-        if (CollectionUtils.isEmpty(payUserProcedureVOS)) {
-            return ResultBean.success(null);
-        }
-        Map<String, List<PayUserProcedureVO>> collect = payUserProcedureVOS.stream().collect(Collectors.groupingBy(PayUserProcedureVO::getUserName));
-        return ResultBean.success(collect);
+        return ResultBean.success(payProductionCapacitieList);
     }
 }

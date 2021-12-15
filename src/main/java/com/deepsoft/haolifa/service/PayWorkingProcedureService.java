@@ -17,5 +17,5 @@ public interface PayWorkingProcedureService {
 
     ResultBean delete(Integer id);
 
-    ResultBean assignTask(String productId);
+    ResultBean assignTask(String orderNo);
 }

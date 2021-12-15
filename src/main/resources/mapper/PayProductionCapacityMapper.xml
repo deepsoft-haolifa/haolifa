@@ -8,6 +8,7 @@
       <arg column="capacity_code" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="team_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="depart_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="depart_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, user_id, capacity_code, team_id, depart_id, create_user, update_user, create_time,
-    update_time
+    id, user_id, capacity_code, team_id, depart_id, depart_name, create_user, update_user, 
+    create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayProductionCapacityExample" >
     select
@@ -91,7 +92,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from pay_production_capacity
     where id = #{id,jdbcType=INTEGER}
@@ -110,12 +111,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_production_capacity (user_id, capacity_code, team_id,
-      depart_id, create_user, update_user,
-      create_time, update_time)
-    values (#{userId,jdbcType=INTEGER}, #{capacityCode,jdbcType=VARCHAR}, #{teamId,jdbcType=INTEGER},
-      #{departId,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into pay_production_capacity (user_id, capacity_code, team_id, 
+      depart_id, depart_name, create_user, 
+      update_user, create_time, update_time
+      )
+    values (#{userId,jdbcType=INTEGER}, #{capacityCode,jdbcType=VARCHAR}, #{teamId,jdbcType=INTEGER}, 
+      #{departId,jdbcType=INTEGER}, #{departName,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayProductionCapacity" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -134,6 +137,9 @@
       </if>
       <if test="departId != null" >
         depart_id,
+      </if>
+      <if test="departName != null" >
+        depart_name,
       </if>
       <if test="createUser != null" >
         create_user,
@@ -160,6 +166,9 @@
       </if>
       <if test="departId != null" >
         #{departId,jdbcType=INTEGER},
+      </if>
+      <if test="departName != null" >
+        #{departName,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null" >
         #{createUser,jdbcType=VARCHAR},
@@ -199,6 +208,9 @@
       <if test="record.departId != null" >
         depart_id = #{record.departId,jdbcType=INTEGER},
       </if>
+      <if test="record.departName != null" >
+        depart_name = #{record.departName,jdbcType=VARCHAR},
+      </if>
       <if test="record.createUser != null" >
         create_user = #{record.createUser,jdbcType=VARCHAR},
       </if>
@@ -223,6 +235,7 @@
       capacity_code = #{record.capacityCode,jdbcType=VARCHAR},
       team_id = #{record.teamId,jdbcType=INTEGER},
       depart_id = #{record.departId,jdbcType=INTEGER},
+      depart_name = #{record.departName,jdbcType=VARCHAR},
       create_user = #{record.createUser,jdbcType=VARCHAR},
       update_user = #{record.updateUser,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -246,6 +259,9 @@
       <if test="departId != null" >
         depart_id = #{departId,jdbcType=INTEGER},
       </if>
+      <if test="departName != null" >
+        depart_name = #{departName,jdbcType=VARCHAR},
+      </if>
       <if test="createUser != null" >
         create_user = #{createUser,jdbcType=VARCHAR},
       </if>
@@ -267,6 +283,7 @@
       capacity_code = #{capacityCode,jdbcType=VARCHAR},
       team_id = #{teamId,jdbcType=INTEGER},
       depart_id = #{departId,jdbcType=INTEGER},
+      depart_name = #{departName,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=VARCHAR},
       update_user = #{updateUser,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

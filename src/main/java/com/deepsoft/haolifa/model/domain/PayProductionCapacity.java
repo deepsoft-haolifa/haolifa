@@ -13,6 +13,8 @@ public class PayProductionCapacity {
 
     private Integer departId;
 
+    private String departName;
+
     private String createUser;
 
     private String updateUser;
@@ -21,12 +23,13 @@ public class PayProductionCapacity {
 
     private Date updateTime;
 
-    public PayProductionCapacity(Integer id, Integer userId, String capacityCode, Integer teamId, Integer departId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayProductionCapacity(Integer id, Integer userId, String capacityCode, Integer teamId, Integer departId, String departName, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.capacityCode = capacityCode;
         this.teamId = teamId;
         this.departId = departId;
+        this.departName = departName;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.createTime = createTime;
@@ -75,6 +78,14 @@ public class PayProductionCapacity {
 
     public void setDepartId(Integer departId) {
         this.departId = departId;
+    }
+
+    public String getDepartName() {
+        return departName;
+    }
+
+    public void setDepartName(String departName) {
+        this.departName = departName == null ? null : departName.trim();
     }
 
     public String getCreateUser() {
