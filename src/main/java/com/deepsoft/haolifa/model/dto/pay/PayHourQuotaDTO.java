@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
+
 @Data
 @EqualsAndHashCode(callSuper=true)
 @ApiModel(description = "工时定额表")
@@ -31,5 +33,5 @@ public class PayHourQuotaDTO extends BaseCondition {
     @ApiModelProperty(value = "岗位代码")
     private String postCode;
     @ApiModelProperty(value = "工时定额（元）")
-    private String hourQuotaPrice;
+    private BigDecimal hourQuotaPrice;
 }

@@ -77,10 +77,14 @@ public class PayUserDTO extends BaseCondition {
     private Integer postId;
     @ApiModelProperty(value = "岗位名称")
     private String postName;
+    @ApiModelProperty(value = "部门名称")
+    private String departName;
     @ApiModelProperty(value = "人员类型")
     private String userType;
     @ApiModelProperty(value = "上级ID")
     private Integer superiorId;
+    @ApiModelProperty(value = "上级名称")
+    private String superiorName;
     @ApiModelProperty(value = "创建人")
     private String createUser;
     @ApiModelProperty(value = "更新人")

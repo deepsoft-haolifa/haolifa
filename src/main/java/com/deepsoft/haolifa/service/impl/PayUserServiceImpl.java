@@ -123,7 +123,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             PayTeam payTeam = payTeamMapper.selectByPrimaryKey(payUser.getTeamId());
             payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
-            payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+            payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
+            payUserDTO.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
@@ -235,7 +236,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             PayTeam payTeam = payTeamMapper.selectByPrimaryKey(payUser.getTeamId());
             payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
-            payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+            payUserDTO.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+            payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
             list.add(payUserDTO);
         });
         return ResultBean.success(list);

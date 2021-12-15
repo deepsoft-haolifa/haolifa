@@ -1876,6 +1876,76 @@ public class PayUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andSuperiorNameIsNull() {
+            addCriterion("superior_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameIsNotNull() {
+            addCriterion("superior_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameEqualTo(String value) {
+            addCriterion("superior_name =", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameNotEqualTo(String value) {
+            addCriterion("superior_name <>", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameGreaterThan(String value) {
+            addCriterion("superior_name >", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameGreaterThanOrEqualTo(String value) {
+            addCriterion("superior_name >=", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameLessThan(String value) {
+            addCriterion("superior_name <", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameLessThanOrEqualTo(String value) {
+            addCriterion("superior_name <=", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameLike(String value) {
+            addCriterion("superior_name like", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameNotLike(String value) {
+            addCriterion("superior_name not like", value, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameIn(List<String> values) {
+            addCriterion("superior_name in", values, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameNotIn(List<String> values) {
+            addCriterion("superior_name not in", values, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameBetween(String value1, String value2) {
+            addCriterion("superior_name between", value1, value2, "superiorName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSuperiorNameNotBetween(String value1, String value2) {
+            addCriterion("superior_name not between", value1, value2, "superiorName");
+            return (Criteria) this;
+        }
+
         public Criteria andSuperiorIdIsNull() {
             addCriterion("superior_id is null");
             return (Criteria) this;
