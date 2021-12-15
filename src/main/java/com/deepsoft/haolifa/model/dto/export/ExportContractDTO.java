@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.model.dto.export;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 销售报表-合同报表
  */
@@ -16,7 +18,7 @@ public class ExportContractDTO {
   private String demandName;
 
   @ApiModelProperty("总金额")
-  private double totalPrice;
+  private BigDecimal totalPrice;
 
 
 

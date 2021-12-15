@@ -42,7 +42,7 @@ public class CommonUtil {
         Map<String, Object> haspMap = new HashMap<>();
         if (StrUtil.isNotBlank(year)) {
             haspMap.put("startDate", getLastYear(year) + "-12-26");
-            haspMap.put("endDate", year + "12-25");
+            haspMap.put("endDate", year + "-12-25");
         }
         return haspMap;
     }

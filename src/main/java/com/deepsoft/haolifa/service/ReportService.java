@@ -43,7 +43,7 @@ public interface ReportService {
      * @param year
      * @return
      */
-    Map<String, List<ExportContractDTO>> selectContractByDemandName(String year);
+    List<ExportSaleMapDTO> selectContractByDemandName(String year);
     /**
      * 销售报表--月度订货
      * @param baseDTO
@@ -55,7 +55,7 @@ public interface ReportService {
      * @param year
      * @return
      */
-    Map<String, List<ExportContractDTO>>  selectshouhuiContractByDemandName(String year);
+    List<ExportSaleMapDTO>   selectshouhuiContractByDemandName(String year);
     /**
      * 销售报表--月度回款
      * @param baseDTO

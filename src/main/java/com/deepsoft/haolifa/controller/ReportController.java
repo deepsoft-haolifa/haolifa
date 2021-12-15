@@ -215,8 +215,7 @@ public class ReportController {
     @ApiOperation("销售报表-年度客户总额分类统计图(2021-12-hd)")
     @GetMapping(value = "/sale/selectContractByDemandName")
     public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year) {
-        Map<String, List<ExportContractDTO>> exportSaleDTOS = reportService.selectContractByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
+        return ResultBean.success(reportService.selectContractByDemandName(year));
     }
     @ApiOperation("销售报表-月份客户订货额统计图(2021-12-hd)")
     @PostMapping(value = "/sale/selectContractByDemandNameByMonth")
@@ -228,8 +227,7 @@ public class ReportController {
     @ApiOperation("销售报表-年度回款总额分类统计图(2021-12-hd)")
     @GetMapping(value = "/sale/selectshouhuiContractByDemandName")
     public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year) {
-        Map<String, List<ExportContractDTO>> exportSaleDTOS = reportService.selectshouhuiContractByDemandName(year);
-        return ResultBean.success(exportSaleDTOS);
+        return ResultBean.success(reportService.selectshouhuiContractByDemandName(year));
     }
     @ApiOperation("销售报表-月份回款额统计图(2021-12-hd)")
     @PostMapping(value = "/sale/selectshouhuiContractByDemandNameByMonth")

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.math.BigDecimal;
 import java.sql.Struct;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -128,37 +129,91 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public Map<String, List<ExportContractDTO>> selectContractByDemandName(String year) {
+    public List<ExportSaleMapDTO> selectContractByDemandName(String year) {
+        Set<String> demandSet = new HashSet<>();
         Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
         List<ExportContractDTO> exportContractDTOS = saleReportMapper.selectContractByDemandName(packMapParam);
-
-        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(CommonUtil.getLastYear(year));
+        String lastYear = CommonUtil.getLastYear(year);
+        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(lastYear);
         List<ExportContractDTO> lastYearExportContractDTOS = saleReportMapper.selectContractByDemandName(lastYearPackMapParam);
 
-        exportContractDTOS.addAll(lastYearExportContractDTOS);
-        return exportContractDTOS.stream().collect(Collectors.groupingBy(ExportContractDTO::getYear));
+        // 将今年和往年的客户集合起来
+        Set<String> demandNameSet = exportContractDTOS.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
+        Set<String> lastDemandNameSet = lastYearExportContractDTOS.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
+        demandSet.addAll(demandNameSet);
+        demandSet.addAll(lastDemandNameSet);
 
+        List<ExportSaleMapDTO> resultList = new ArrayList<>();
+        demandSet.forEach((demandName) -> {
+            ExportSaleMapDTO exportSaleMapDTO = new ExportSaleMapDTO();
+            exportSaleMapDTO.setCompanyName(demandName);
+            List<ExportSaleMapDTO.ValueRespVo> valueRespVoList = new ArrayList<>();
+            ExportSaleMapDTO.ValueRespVo valueRespVo = new ExportSaleMapDTO.ValueRespVo();
+            valueRespVo.setYear(year);
+            BigDecimal yearAmount = exportContractDTOS.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            valueRespVo.setAmount(yearAmount);
+            valueRespVoList.add(valueRespVo);
+
+            ExportSaleMapDTO.ValueRespVo valueRespVo1 = new ExportSaleMapDTO.ValueRespVo();
+            valueRespVo1.setYear(lastYear);
+            BigDecimal lastYearAmount = lastYearExportContractDTOS.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            valueRespVo1.setAmount(lastYearAmount);
+            valueRespVoList.add(valueRespVo1);
+
+            exportSaleMapDTO.setValue(valueRespVoList);
+            resultList.add(exportSaleMapDTO);
+        });
+        return resultList;
     }
 
     @Override
-    public List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO){
+    public List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
         paramMap.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
         return saleReportMapper.selectContractByDemandNameMonth(paramMap);
     }
+
     @Override
-    public Map<String, List<ExportContractDTO>> selectshouhuiContractByDemandName(String year) {
+    public List<ExportSaleMapDTO> selectshouhuiContractByDemandName(String year) {
+        Set<String> demandSet = new HashSet<>();
         Map<String, Object> packMapParam = CommonUtil.packYearMapParam(year);
         List<ExportContractDTO> exportContractDTOS = saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
-
-        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(CommonUtil.getLastYear(year));
+        String lastYear = CommonUtil.getLastYear(year);
+        Map<String, Object> lastYearPackMapParam = CommonUtil.packYearMapParam(lastYear);
         List<ExportContractDTO> lastYearExportContractDTOS = saleReportMapper.selectshouhuiContractByDemandName(lastYearPackMapParam);
-        exportContractDTOS.addAll(lastYearExportContractDTOS);
-        return exportContractDTOS.stream().collect(Collectors.groupingBy(ExportContractDTO::getYear));
+
+        // 将今年和往年的客户集合起来
+        Set<String> demandNameSet = exportContractDTOS.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
+        Set<String> lastDemandNameSet = lastYearExportContractDTOS.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
+        demandSet.addAll(demandNameSet);
+        demandSet.addAll(lastDemandNameSet);
+
+        List<ExportSaleMapDTO> resultList = new ArrayList<>();
+        demandSet.forEach((demandName) -> {
+            ExportSaleMapDTO exportSaleMapDTO = new ExportSaleMapDTO();
+            exportSaleMapDTO.setCompanyName(demandName);
+            List<ExportSaleMapDTO.ValueRespVo> valueRespVoList = new ArrayList<>();
+            ExportSaleMapDTO.ValueRespVo valueRespVo = new ExportSaleMapDTO.ValueRespVo();
+            valueRespVo.setYear(year);
+            BigDecimal yearAmount = exportContractDTOS.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            valueRespVo.setAmount(yearAmount);
+            valueRespVoList.add(valueRespVo);
+
+            ExportSaleMapDTO.ValueRespVo valueRespVo1 = new ExportSaleMapDTO.ValueRespVo();
+            valueRespVo1.setYear(lastYear);
+            BigDecimal lastYearAmount = lastYearExportContractDTOS.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            valueRespVo1.setAmount(lastYearAmount);
+            valueRespVoList.add(valueRespVo1);
+
+            exportSaleMapDTO.setValue(valueRespVoList);
+            resultList.add(exportSaleMapDTO);
+        });
+        return resultList;
     }
+
     @Override
-    public List<ExportContractDTO> selectshouhuiContractByDemandNameByMonth(ReportBaseDTO baseDTO){
+    public List<ExportContractDTO> selectshouhuiContractByDemandNameByMonth(ReportBaseDTO baseDTO) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
         paramMap.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
@@ -168,14 +223,14 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     @Override
     public List<ExportContractDTO> selectInvoiceAmountByDemandName(String year) {
         Map<String, Object> packMapParam = new HashMap<>();
-        packMapParam.put("year",year);
+        packMapParam.put("year", year);
         return saleReportMapper.selectInvoiceAmountByDemandName(packMapParam);
     }
 
     @Override
     public List<ExportContractDTO> selectDeliveryAmountByDemandName(String year) {
         Map<String, Object> packMapParam = new HashMap<>();
-        packMapParam.put("year",year);
+        packMapParam.put("year", year);
         return saleReportMapper.selectDeliveryAmountByDemandName(packMapParam);
     }
 
@@ -188,7 +243,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         List<DemandAmountDto> list = new ArrayList<>();
         List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(packMapParam);
         List<ExportContractDTO> delivery = saleReportMapper.selectDeliveryAmountByDemandName(packMapParam);
-        List<ExportContractDTO> sale  = saleReportMapper.selectContractByDemandName(packMapParam);
+        List<ExportContractDTO> sale = saleReportMapper.selectContractByDemandName(packMapParam);
         List<ExportContractDTO> refund = saleReportMapper.selectshouhuiContractByDemandName(packMapParam);
 
         Set<String> demandSet = invoice.stream().map(ExportContractDTO::getDemandName).collect(Collectors.toSet());
@@ -202,10 +257,10 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         for (String demandName : demandSet) {
             DemandAmountDto demandAmountDto = new DemandAmountDto();
             demandAmountDto.setDemandName(demandName);
-            demandAmountDto.setSaleAmount(sale.stream().filter(e -> e.getDemandName().equals(demandName)).mapToDouble(ExportContractDTO::getTotalPrice).sum());
-            demandAmountDto.setInvoiceAmount(invoice.stream().filter(e -> e.getDemandName().equals(demandName)).mapToDouble(ExportContractDTO::getTotalPrice).sum());
-            demandAmountDto.setRefundAmount(refund.stream().filter(e -> e.getDemandName().equals(demandName)).mapToDouble(ExportContractDTO::getTotalPrice).sum());
-            demandAmountDto.setDeliveryAmount(delivery.stream().filter(e -> e.getDemandName().equals(demandName)).mapToDouble(ExportContractDTO::getTotalPrice).sum());
+            demandAmountDto.setSaleAmount(sale.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO));
+            demandAmountDto.setInvoiceAmount(invoice.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO));
+            demandAmountDto.setRefundAmount(refund.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO));
+            demandAmountDto.setDeliveryAmount(delivery.stream().filter(e -> e.getDemandName().equals(demandName) && null != e.getTotalPrice()).map(ExportContractDTO::getTotalPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO));
             list.add(demandAmountDto);
         }
         return list;

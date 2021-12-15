@@ -78,8 +78,8 @@
 
 
     <select id="selectContractByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
-        select sum(`total_price`) total_price,demand_name,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") year from
-        order_product
+        select ifnull(sum(`total_price`),0) total_price,demand_name
+        from order_product
         <where>
             <if test="startDate!=null and startDate != ''">
                 and create_time&gt;=#{startDate}
@@ -91,7 +91,7 @@
         group by demand_name
     </select>
     <select id="selectContractByDemandNameMonth" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
-        select sum(`total_price`) total_price,demand_name from
+        select ifnull(sum(`total_price`),0) total_price,demand_name from
         order_product
         <where>
             <if test="startDate!=null and startDate != ''">
@@ -105,7 +105,7 @@
     </select>
     <select id="selectshouhuiContractByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         SELECT
-        sum( `received_account` ) total_price,
+        ifnull(sum( `received_account` ),0) total_price,
         demand_name,
         FROM_UNIXTIME( UNIX_TIMESTAMP( pm.create_time ), "%Y" ) year
         FROM
@@ -117,7 +117,7 @@
 
     <select id="selectshouhuiContractByDemandNameMonth" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         SELECT
-        sum( `received_account` ) total_price,
+        ifnull(sum( `received_account` ),0) total_price,
         demand_name
         FROM
         order_product op
@@ -148,7 +148,7 @@
         SELECT
         ifnull(sum(op.total_price),0) totalSaleAmount,
         ifnull(sum(pm.amount),0) totalCollectAmount,
-        ifnull(sum(ifnull(op.total_price,0) - ifnull(pm.amount,0)),0) totalOwedAmount
+        ifnull(sum(op.total_price,0) - ifnull(pm.amount,0)),0) totalOwedAmount
         FROM
         order_product op
         LEFT JOIN payment_management pm ON pm.order_no = op.order_no
@@ -156,7 +156,6 @@
     </select>
     <sql id="saleCollectionSql">
         <where>
-            and pm.order_type=2
             <if test="startDate!=null and startDate != ''">
                 and pm.create_time&gt;=#{startDate}
             </if>
@@ -218,6 +217,29 @@
             ON c.order_no = o.order_no
         WHERE o.demand_name != ''
         GROUP BY o.demand_name
+    </select>
+    <select id="reportAllList" resultType="com.deepsoft.haolifa.model.dto.export.TotalAmountDTO">
+        SELECT
+            op.order_no,
+            op.demand_name,
+            ifnull( sum( op.total_price ), 0 ) saleAmount,
+            sum( pm.amount ) collectAmount,
+            sum( iv.total_amount ) AS invoiceAmount,
+            sum( e.price ) AS deliveryAmount
+        FROM
+            order_product op
+                LEFT JOIN invoice iv ON iv.order_no = op.order_no
+                AND iv.type = 1
+                AND iv.STATUS IN ( 2 )
+                LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+                LEFT JOIN entry_out_store_record e ON e.order_no = op.order_no
+                AND e.type = 1
+                AND e.operation_type = 1
+                AND e.price > 0
+        WHERE
+            op.order_no = "HL-2110298-CGJ055/PO-202107565（上海）"
+        GROUP BY
+            op.order_no,op.demand_name;
     </select>
 
 
