@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.ArrayIter;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserRelationProcedureMapper;
@@ -36,8 +37,6 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     private PayWorkingProcedureMapper payWorkingProcedureMapper;
     @Resource
     private OrderProductAssociateMapper orderProductAssociateMapper;
-    @Resource
-    private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
     @Resource
     private PayUserMapper payUserMapper;
     @Resource
@@ -135,7 +134,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     @Override
     public ResultBean assignTask(String orderNo) {
         OrderProductAssociateExample example = new OrderProductAssociateExample();
-        example.createCriteria().andProductNoEqualTo(orderNo);
+        example.createCriteria().andOrderNoEqualTo(orderNo);
         List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(list)) {
             ResultBean.success(null);
@@ -143,7 +142,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         List<PayProductionCapacity> payProductionCapacitieList = new ArrayList<>();
         for (OrderProductAssociate orderProductAssociate : list) {
             PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
-            payWorkingProcedure.setProductModel(orderProductAssociate.getProductModel());
+            String model = orderProductAssociate.getProductModel().substring(0, 4);
+            payWorkingProcedure.setProductModel(model);
             List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
             if (CollectionUtils.isEmpty(payWorkingProcedures)) {
                 continue;
@@ -159,6 +159,10 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 payProductionCapacitieList.addAll(payProductionCapacities);
             }
         }
-        return ResultBean.success(payProductionCapacitieList);
+        List<PayProductionCapacity> distinctList = payProductionCapacitieList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(
+            Comparator.comparing(PayProductionCapacity::getId))), ArrayList::new));
+        List<PayUserProcedureVO> payUserProcedureVOS = BeanCopyUtils.copyPropertiesForNewList(distinctList, () -> new PayUserProcedureVO());
+        payUserProcedureVOS.forEach(aa -> aa.setUserName(payUserMapper.selectByPrimaryKey(aa.getUserId()).getUserName()));
+        return ResultBean.success(payUserProcedureVOS);
     }
 }
