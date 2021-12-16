@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO;
 import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
 import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
@@ -46,5 +47,25 @@ public class ReportExtendController {
     public ResultBean<TotalAmountDTO> reportCollectOrderSummary(@RequestBody OrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportCollectOrderSummary(dto));
     }
+    @ApiOperation("按照需方统计展示--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-sale-demand-list")
+    public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleDemandList(@RequestBody OrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportSaleByDemandList(dto));
+    }
+    @ApiOperation("按照需方统计汇总--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-sale-demand-summary")
+    public ResultBean<DemandSaleAmountRespDTO> reportSaleDemandSummary(@RequestBody OrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportSaleByDemandSummary(dto));
+    }
 
+    @ApiOperation("每月产值总额统计--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-sale-month-list")
+    public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleMonthList(@RequestBody OrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportSaleByDemandList(dto));
+    }
+    @ApiOperation("每月产值总额汇总--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-sale-month-summary")
+    public ResultBean<DemandSaleAmountRespDTO> reportSaleMonthSummary(@RequestBody OrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportSaleByDemandSummary(dto));
+    }
 }

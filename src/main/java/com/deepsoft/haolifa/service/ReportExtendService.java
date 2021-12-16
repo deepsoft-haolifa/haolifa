@@ -1,12 +1,14 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO;
 import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
 import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author murphy.he
@@ -39,4 +41,17 @@ public interface ReportExtendService {
      * @return
      */
     TotalAmountDTO reportCollectOrderSummary(OrderConditionDTO dto);
+
+    /**
+     * 销售报表-按需方统计-列表数据
+     * @param model
+     * @return
+     */
+    PageDTO<DemandSaleAmountRespDTO> reportSaleByDemandList(OrderConditionDTO model);
+    /**
+     * 销售报表-按需方统计-统计
+     * @param model
+     * @return
+     */
+    DemandSaleAmountRespDTO reportSaleByDemandSummary(OrderConditionDTO model);
 }

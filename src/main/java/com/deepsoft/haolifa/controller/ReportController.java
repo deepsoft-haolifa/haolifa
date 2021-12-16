@@ -83,19 +83,16 @@ public class ReportController {
         return expensesService.getAllClassifyWithFirstClassify(classify);
     }
 
-    @ApiOperation("采购报表--根据供应商查询采购报表")
+    @ApiOperation("采购报表--根据供应商查询采购报表（2021-12-hd）")
     @RequestMapping(value = "/purchase/selectBySupplierName", method = RequestMethod.GET)
-    public ResultBean selectBySupplierName(@RequestParam(value = "purchase") String purchase,
-                                           @RequestParam(value = "year", required = false) String year) {
-
-        return reportService.selectBySupplierName(purchase, year);
+    public ResultBean selectBySupplierName(@RequestBody ReportSupplierConditionDTO dto) {
+        return reportService.selectBySupplierName(dto);
     }
 
-    @ApiOperation("采购报表")
-    @RequestMapping(value = "/purchase/getPurchases", method = RequestMethod.GET)
-    public ResultBean getPurchases(@RequestParam(value = "year", required = false) String year, @RequestParam(value = "month", required = false) String month) {
-
-        return reportService.selectPurchase(year, month);
+    @ApiOperation("采购报表（2021-12-hd）")
+    @PostMapping(value = "/purchase/getPurchases")
+    public ResultBean getPurchases(@RequestBody ReportBaseDTO baseDTO) {
+        return reportService.selectPurchase(baseDTO);
     }
 
     @ApiOperation("采购报表--按月查询采购物资")

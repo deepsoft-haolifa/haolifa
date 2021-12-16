@@ -15,14 +15,14 @@ import java.util.Map;
 public interface ReportService {
 
     //获取采购合同报表
-    ResultBean selectBySupplierName(String purchase, String year);
+    ResultBean selectBySupplierName(ReportSupplierConditionDTO dto);
 
     /**
      * 采购报表--采购统计
      *
      * @return
      */
-    ResultBean selectPurchase(String year,String month);
+    ResultBean selectPurchase(ReportBaseDTO baseDTO);
 
     /**
      * 采购报表--好利公司按月采购统计

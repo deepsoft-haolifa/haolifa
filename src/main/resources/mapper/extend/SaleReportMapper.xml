@@ -218,29 +218,65 @@
         WHERE o.demand_name != ''
         GROUP BY o.demand_name
     </select>
-    <select id="reportAllList" resultType="com.deepsoft.haolifa.model.dto.export.TotalAmountDTO">
+    <select id="reportSaleByDemandList" resultType="com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO">
         SELECT
-            op.order_no,
-            op.demand_name,
-            ifnull( sum( op.total_price ), 0 ) saleAmount,
-            sum( pm.amount ) collectAmount,
-            sum( iv.total_amount ) AS invoiceAmount,
-            sum( e.price ) AS deliveryAmount
+        op.order_no,
+        op.demand_name,
+        ifnull( sum( op.total_price ), 0 ) saleAmount,
+        ifnull( sum( pm.amount ), 0 ) collectAmount,
+        ifnull( sum( iv.total_amount ), 0 ) invoiceAmount,
+        ifnull( sum( e.price ), 0 ) deliveryAmount,
+        ifnull( sum( e.price ), 0 ) - ifnull( sum( iv.total_amount ), 0 ) oweTicketAmount,
+        ifnull( sum( e.price ), 0 ) - ifnull( sum( pm.amount ), 0 ) oweMoneyAmount
         FROM
-            order_product op
-                LEFT JOIN invoice iv ON iv.order_no = op.order_no
-                AND iv.type = 1
-                AND iv.STATUS IN ( 2 )
-                LEFT JOIN payment_management pm ON pm.order_no = op.order_no
-                LEFT JOIN entry_out_store_record e ON e.order_no = op.order_no
-                AND e.type = 1
-                AND e.operation_type = 1
-                AND e.price > 0
-        WHERE
-            op.order_no = "HL-2110298-CGJ055/PO-202107565（上海）"
-        GROUP BY
-            op.order_no,op.demand_name;
+        order_product op
+        LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 1 AND STATUS IN ( 2 ) GROUP BY order_no ) iv ON iv.order_no = op.order_no
+        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no = op.order_no
+        LEFT JOIN ( SELECT order_no, sum( price ) price FROM entry_out_store_record WHERE type = 1 AND operation_type = 1 AND price > 0 GROUP BY order_no ) e ON e.order_no = op.order_no
+        <include refid="saleByDemandSql"></include>
+        GROUP BY op.order_no,op.demand_name
     </select>
-
-
+    <select id="reportSaleByDemandSummary" resultType="com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO">
+        SELECT
+        sum( tmp.saleAmount ) saleAmount,
+        sum( tmp.collectAmount ) collectAmount,
+        sum( tmp.invoiceAmount ) invoiceAmount,
+        sum( tmp.deliveryAmount ) deliveryAmount,
+        sum( tmp.oweTicketAmount ) oweTicketAmount,
+        sum( tmp.oweMoneyAmount ) oweMoneyAmount
+        FROM
+        (
+        SELECT
+        ifnull( sum( op.total_price ), 0 ) saleAmount,
+        ifnull( sum( pm.amount ), 0 ) collectAmount,
+        ifnull( sum( iv.total_amount ), 0 ) invoiceAmount,
+        ifnull( sum( e.price ), 0 ) deliveryAmount,
+        ifnull( sum( e.price ), 0 ) - ifnull( sum( iv.total_amount ), 0 ) oweTicketAmount,
+        ifnull( sum( e.price ), 0 ) - ifnull( sum( pm.amount ), 0 ) oweMoneyAmount
+        FROM
+        order_product op
+        LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 1 AND STATUS IN ( 2 ) GROUP BY order_no ) iv ON iv.order_no = op.order_no
+        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no = op.order_no
+        LEFT JOIN ( SELECT order_no, sum( price ) price FROM entry_out_store_record WHERE type = 1 AND operation_type = 1 AND price > 0 GROUP BY order_no ) e ON e.order_no = op.order_no
+        <include refid="saleByDemandSql"></include>
+        GROUP BY
+        op.order_no
+        ) tmp
+    </select>
+    <sql id="saleByDemandSql">
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and op.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and op.create_time&lt;=#{endDate}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and op.order_no like CONCAT('%',#{orderNo},'%')
+            </if>
+            <if test="demandName != null and demandName != ''">
+                and op.demand_name like CONCAT('%',#{demandName},'%')
+            </if>
+        </where>
+    </sql>
 </mapper>

@@ -5,10 +5,18 @@
   <select id="selectBySupplierName" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
          select supplier_name supplierName,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
          where 1=1
+      <if test="supplierName!=null and supplierName>0">
+          and supplier_name = #{supplierName}
+      </if>
       <if test="status!=null and status>0">
           and status=#{status}
       </if>
-         and purchase_order.supplier_name = #{supplierName}
+      <if test="startDate!=null and startDate != ''">
+          and create_time&gt;=#{startDate}
+      </if>
+      <if test="endDate!=null and endDate != ''">
+          and create_time&lt;=#{endDate}
+      </if>
       <if test="year != null and year != ''">
           and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
       </if>
@@ -23,11 +31,11 @@
         <if test="year != null and year != ''">
             and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
         </if>
-        <if test="startTime!=null and startTime != ''">
-            and create_time&gt;=#{startTime}
+        <if test="startDate!=null and startDate != ''">
+            and create_time&gt;=#{startDate}
         </if>
-        <if test="endTime!=null and endTime != ''">
-            and create_time&lt;=#{endTime}
+        <if test="endDate!=null and endDate != ''">
+            and create_time&lt;=#{endDate}
         </if>
         group by supplier_name
     </select>

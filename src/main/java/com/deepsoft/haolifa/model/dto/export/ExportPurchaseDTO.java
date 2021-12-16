@@ -9,25 +9,31 @@ import lombok.Data;
 @Data
 public class ExportPurchaseDTO {
 
-  @ApiModelProperty("供应商名称")
-  private String supplierName;
+    @ApiModelProperty("供应商名称")
+    private String supplierName;
 
-  @ApiModelProperty("创建时间")
-  private String createTime;
+    @ApiModelProperty("创建时间")
+    private String createTime;
 
-  @ApiModelProperty("总费用")
-  private String total;
+    @ApiModelProperty("总费用")
+    private String total;
 
-  @ApiModelProperty("付款金额")
-  private String payTotal;
+    @ApiModelProperty("付款金额")
+    private String payTotal;
 
-  @ApiModelProperty("未付款")
-  private String unpay;
+    @ApiModelProperty("未付款")
+    private String unpay;
 
-  @ApiModelProperty(value = "已挂账金额")
-  private String registered;
+    @ApiModelProperty(value = "已挂账金额")
+    private String registered;
 
     @ApiModelProperty(value = "供应商已回款金额")
     private String collected;
+
+    @ApiModelProperty(value = "累计回票金额")
+    private String returnTicketAmount;
+
+    @ApiModelProperty(value = "上账未开票金额(入账金额-回票金额)")
+    private String unTicketAmount;
 
 }
