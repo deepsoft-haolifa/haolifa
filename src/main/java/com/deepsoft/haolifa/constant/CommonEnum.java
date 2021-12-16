@@ -479,6 +479,7 @@ public class CommonEnum {
      */
     public enum SysDictTypeEnum {
         FILE_TYPE("FILE_TYPE", "文件类型"),
+        PAYMENT_TYPE("PAYMENT_TYPE", "付款类型"),
         ;
 
         public String code;

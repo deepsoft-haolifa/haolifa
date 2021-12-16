@@ -111,9 +111,8 @@ public class BillServiceImpl implements BillService {
             .doSelectPage(() -> {
                 bizBillMapper.selectByExample(bizBillExample);
             });
-        PageDTO<BizBill> pageDTO = new PageDTO<>();
+        PageDTO<BizBillDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
-        pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
     }
 
