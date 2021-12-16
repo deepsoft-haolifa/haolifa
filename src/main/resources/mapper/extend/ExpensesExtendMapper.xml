@@ -44,17 +44,20 @@
     <select id="getAllClassify" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
         select  ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
         <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by expenses_classify
     </select>
     <select id="classifyByDepartmentAll" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport"
             parameterType="com.deepsoft.haolifa.model.dto.report.ReportBaseDTO">
         select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
         <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by department
     </select>
     <select id="getAllClassifyWithDepartment" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
         select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
         <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by expenses_classify
     </select>
 
