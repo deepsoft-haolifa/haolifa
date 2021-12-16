@@ -46,4 +46,5 @@ public class ReportExtendController {
     public ResultBean<TotalAmountDTO> reportCollectOrderSummary(@RequestBody OrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportCollectOrderSummary(dto));
     }
+
 }

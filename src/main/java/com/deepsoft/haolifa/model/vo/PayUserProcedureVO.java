@@ -14,8 +14,6 @@ public class PayUserProcedureVO {
     private String userName;
     @ApiModelProperty(value = "用户ID")
     private Integer userId;
-    @ApiModelProperty(value = "岗位名称")
-    private String postName;
-    @ApiModelProperty(value = "岗位代码")
-    private String postCode;
+    @ApiModelProperty(value = "岗位能力明细")
+    private String capacityCode;
 }

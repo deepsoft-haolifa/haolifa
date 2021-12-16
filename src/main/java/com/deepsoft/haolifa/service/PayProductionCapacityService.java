@@ -1,7 +1,10 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.PayProductionCapacity;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
+
+import java.util.List;
 
 public interface PayProductionCapacityService {
 
@@ -14,4 +17,6 @@ public interface PayProductionCapacityService {
     ResultBean pageInfo(PayProductCapacityDTO model);
 
     ResultBean delete(Integer capacityId);
+
+    List<PayProductionCapacity> getList(PayProductCapacityDTO model);
 }

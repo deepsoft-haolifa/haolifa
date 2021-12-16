@@ -958,9 +958,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
     @Override
     public List<OrderProductAssociate> getOrderProductList(String orderNo) {
-        OrderProductAssociateExample orderProductAssociateExample = new OrderProductAssociateExample();
-        orderProductAssociateExample.createCriteria().andOrderNoEqualTo(orderNo);
-        return orderProductAssociateMapper.selectByExample(orderProductAssociateExample);
+        OrderProductAssociateExample example = new OrderProductAssociateExample();
+        example.createCriteria().andOrderNoEqualTo(orderNo);
+        return orderProductAssociateMapper.selectByExample(example);
     }
 
 

@@ -62,4 +62,10 @@ public interface SaleReportMapper {
      */
     TotalAmountDTO  reportCollectOrderSummary(OrderConditionDTO model);
 
+    /**
+     * 订单详情统计
+     */
+
+    List<TotalAmountDTO> reportAllList(OrderConditionDTO model);
+
 }

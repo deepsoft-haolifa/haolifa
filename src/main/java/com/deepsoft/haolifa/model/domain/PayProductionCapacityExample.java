@@ -415,6 +415,76 @@ public class PayProductionCapacityExample {
             return (Criteria) this;
         }
 
+        public Criteria andDepartNameIsNull() {
+            addCriterion("depart_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameIsNotNull() {
+            addCriterion("depart_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameEqualTo(String value) {
+            addCriterion("depart_name =", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameNotEqualTo(String value) {
+            addCriterion("depart_name <>", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameGreaterThan(String value) {
+            addCriterion("depart_name >", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameGreaterThanOrEqualTo(String value) {
+            addCriterion("depart_name >=", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameLessThan(String value) {
+            addCriterion("depart_name <", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameLessThanOrEqualTo(String value) {
+            addCriterion("depart_name <=", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameLike(String value) {
+            addCriterion("depart_name like", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameNotLike(String value) {
+            addCriterion("depart_name not like", value, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameIn(List<String> values) {
+            addCriterion("depart_name in", values, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameNotIn(List<String> values) {
+            addCriterion("depart_name not in", values, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameBetween(String value1, String value2) {
+            addCriterion("depart_name between", value1, value2, "departName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartNameNotBetween(String value1, String value2) {
+            addCriterion("depart_name not between", value1, value2, "departName");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateUserIsNull() {
             addCriterion("create_user is null");
             return (Criteria) this;

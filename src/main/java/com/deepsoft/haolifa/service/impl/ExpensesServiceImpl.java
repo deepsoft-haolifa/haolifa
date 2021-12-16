@@ -14,8 +14,11 @@ import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportSaleMapDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
+import com.deepsoft.haolifa.util.CommonUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,10 +117,10 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         ExpensesExample expensesExample = new ExpensesExample();
         ExpensesExample.Criteria criteria = expensesExample.createCriteria();
         if (StringUtils.isNotEmpty(expensesDTO.getClassifyName()) && !"全部".equals(expensesDTO.getClassifyName())) {
-            criteria.andSecondClassifyLike("%" +expensesDTO.getClassifyName()+ "%");
+            criteria.andSecondClassifyLike("%" + expensesDTO.getClassifyName() + "%");
         }
         if (StringUtils.isNotEmpty(expensesDTO.getSecondClassifyName()) && !"全部".equals(expensesDTO.getSecondClassifyName())) {
-            criteria.andSecondClassifyLike("%" +expensesDTO.getSecondClassifyName()+ "%");
+            criteria.andSecondClassifyLike("%" + expensesDTO.getSecondClassifyName() + "%");
         }
         if (StringUtils.isNotEmpty(expensesDTO.getDepartment())) {
             criteria.andDepartmentLike("%" + expensesDTO.getDepartment() + "%");
@@ -153,9 +154,10 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public String listSummary(ExpensesConditionDTO expensesDTO){
+    public String listSummary(ExpensesConditionDTO expensesDTO) {
         return expensesExtendMapper.listSummary(expensesDTO);
     }
+
     @Override
     public ResultBean classify(Integer pId) {
         ExpensesClassifyExample classifyExample = new ExpensesClassifyExample();
@@ -200,19 +202,44 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
 
     @Override
     public ResultBean expenseTotalByMonth(String year) {
+        Set<String> dataMonthSet = new HashSet<>();
         Map<String, String> paramMap = new HashMap<>();
         if (StrUtil.isNotBlank(year)) {
             paramMap.put("year", year);
         }
         List<ExpensesReport> expensesReports = expensesExtendMapper.expenseTotalByMonth(paramMap);
         Map<String, String> lastParamMap = new HashMap<>();
-        if (StrUtil.isNotBlank(year)) {
-            int lastyear = Integer.parseInt(year) - 1;
-            lastParamMap.put("year", String.valueOf(lastyear));
-        }
+        String lastYear = CommonUtil.getLastYear(year);
+        lastParamMap.put("year", lastYear);
         List<ExpensesReport> lastExpensesReports = expensesExtendMapper.expenseTotalByMonth(lastParamMap);
-        expensesReports.addAll(lastExpensesReports);
-        Map<String, List<ExpensesReport>> listMap = expensesReports.stream().collect(Collectors.groupingBy(ExpensesReport::getDataYear));
-        return ResultBean.success(listMap);
+
+        // 将今年和往年的客户集合起来
+        Set<String> dataSet = expensesReports.stream().map(ExpensesReport::getDataMonth).collect(Collectors.toSet());
+        Set<String> lastDataSet = lastExpensesReports.stream().map(ExpensesReport::getDataMonth).collect(Collectors.toSet());
+        dataMonthSet.addAll(dataSet);
+        dataMonthSet.addAll(lastDataSet);
+
+        List<ExportSaleMapDTO> resultList = new ArrayList<>();
+        dataMonthSet.forEach((dataMonth) -> {
+            ExportSaleMapDTO exportSaleMapDTO = new ExportSaleMapDTO();
+            exportSaleMapDTO.setCompanyName(dataMonth);
+            List<ExportSaleMapDTO.ValueRespVo> valueRespVoList = new ArrayList<>();
+            ExportSaleMapDTO.ValueRespVo valueRespVo = new ExportSaleMapDTO.ValueRespVo();
+            valueRespVo.setYear(year);
+            BigDecimal yearAmount = expensesReports.stream().filter(e -> e.getDataMonth().equals(dataMonth) && null != e.getTotalAmount()).map(ExpensesReport::getTotalAmount).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            valueRespVo.setAmount(yearAmount);
+            valueRespVoList.add(valueRespVo);
+
+            ExportSaleMapDTO.ValueRespVo valueRespVo1 = new ExportSaleMapDTO.ValueRespVo();
+            valueRespVo1.setYear(lastYear);
+            BigDecimal lastYearAmount = lastExpensesReports.stream().filter(e -> e.getDataMonth().equals(dataMonth) && null != e.getTotalAmount()).map(ExpensesReport::getTotalAmount).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+            valueRespVo1.setAmount(lastYearAmount);
+            valueRespVoList.add(valueRespVo1);
+
+            exportSaleMapDTO.setValue(valueRespVoList);
+            resultList.add(exportSaleMapDTO);
+        });
+        List<ExportSaleMapDTO> collect = resultList.stream().sorted(Comparator.comparing(ExportSaleMapDTO::getCompanyName)).collect(Collectors.toList());
+        return ResultBean.success(collect);
     }
 }

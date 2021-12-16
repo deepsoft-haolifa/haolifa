@@ -14,12 +14,14 @@ import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author liuyaofei
@@ -75,9 +77,23 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     }
 
     @Override
+    public List<PayProductionCapacity> getList(PayProductCapacityDTO model) {
+        PayProductionCapacityExample example = new PayProductionCapacityExample();
+        PayProductionCapacityExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model.getDepartName())) {
+            criteria.andDepartNameEqualTo(model.getDepartName());
+        }
+        return PayProductionCapacityMapper.selectByExample(example);
+    }
+
+    @Override
     public ResultBean save(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
+        if (Objects.nonNull(payTeam.getDepartId())) {
+            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
+            payTeam.setDepartName(payProductionWorkshop.getDepartName());
+        }
         payTeam.setCreateUser(getLoginUserName());
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setCreateTime(new Date());
@@ -95,6 +111,10 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     public ResultBean edit(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
+        if (Objects.nonNull(payTeam.getDepartId())) {
+            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
+            payTeam.setDepartName(payProductionWorkshop.getDepartName());
+        }
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setUpdateTime(new Date());
         PayProductionCapacityMapper.updateByPrimaryKeySelective(payTeam);

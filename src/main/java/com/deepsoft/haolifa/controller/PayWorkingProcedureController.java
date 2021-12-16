@@ -76,9 +76,9 @@ public class PayWorkingProcedureController {
     }
 
     @ApiOperation("分配任务按钮")
-    @GetMapping(value = "assignTask/{productId}")
-    public ResultBean assignTask(@PathVariable String productId) {
-        return payWorkingProcedureService.assignTask(productId);
+    @GetMapping(value = "assignTask/{orderNo}")
+    public ResultBean assignTask(@PathVariable String orderNo) {
+        return payWorkingProcedureService.assignTask(orderNo);
     }
 
     @ApiOperation("分配任务保存按钮")

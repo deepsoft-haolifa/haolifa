@@ -44,17 +44,20 @@
     <select id="getAllClassify" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
         select  ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
         <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by expenses_classify
     </select>
     <select id="classifyByDepartmentAll" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport"
             parameterType="com.deepsoft.haolifa.model.dto.report.ReportBaseDTO">
         select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
         <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by department
     </select>
     <select id="getAllClassifyWithDepartment" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
         select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
         <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by expenses_classify
     </select>
 
@@ -83,7 +86,9 @@
         group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m")
     </select>
     <select id="expenseTotalByMonth" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
-        select ifnull(sum(total_amount),0) totalAmount,date_str,data_month,data_year from expenses where is_delete=0
+        select ifnull(sum(total_amount),0) totalAmount,data_month
+        from expenses
+        where is_delete=0
         <if test="year!=null and year!=''">
             and data_year=#{year}
         </if>
