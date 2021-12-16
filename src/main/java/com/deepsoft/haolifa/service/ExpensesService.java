@@ -13,7 +13,7 @@ public interface ExpensesService {
 
   ResultBean update(ExpensesDTO model);
 
-  ResultBean getList(Integer pageNum, Integer pageSize, ExpensesConditionDTO expensesDTO);
+  ResultBean getList(ExpensesConditionDTO expensesDTO);
   String listSummary(ExpensesConditionDTO expensesDTO);
 
   ResultBean classify(Integer pId);

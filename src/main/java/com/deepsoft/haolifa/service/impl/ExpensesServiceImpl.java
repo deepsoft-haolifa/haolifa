@@ -113,7 +113,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public ResultBean getList(Integer pageNum, Integer pageSize, ExpensesConditionDTO expensesDTO) {
+    public ResultBean getList(ExpensesConditionDTO expensesDTO) {
         ExpensesExample expensesExample = new ExpensesExample();
         ExpensesExample.Criteria criteria = expensesExample.createCriteria();
         if (StringUtils.isNotEmpty(expensesDTO.getClassifyName()) && !"全部".equals(expensesDTO.getClassifyName())) {
@@ -145,7 +145,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         }
         criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
         expensesExample.setOrderByClause("id desc");
-        Page<Expenses> page = PageHelper.startPage(pageNum, pageSize)
+        Page<Expenses> page = PageHelper.startPage(expensesDTO.getPageNum(), expensesDTO.getPageSize())
             .doSelectPage(() -> expensesMapper.selectByExample(expensesExample));
         PageDTO<Expenses> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(page, pageDTO);

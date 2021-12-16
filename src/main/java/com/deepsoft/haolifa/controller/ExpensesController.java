@@ -51,9 +51,8 @@ public class ExpensesController {
 
     @ApiOperation("查询费用记录列表(2021-12-hd)")
     @PostMapping("list")
-    public ResultBean<PageDTO<Expenses>> getList(@RequestParam(defaultValue = "1") Integer pageNum,
-                                                 @RequestParam(defaultValue = "10") Integer pageSize, @RequestBody ExpensesConditionDTO expensesDTO) {
-        return expensesService.getList(pageNum, pageSize, expensesDTO);
+    public ResultBean<PageDTO<Expenses>> getList( @RequestBody ExpensesConditionDTO expensesDTO) {
+        return expensesService.getList(expensesDTO);
     }
 
     @ApiOperation("查询费用汇总(2021-12-hd)")

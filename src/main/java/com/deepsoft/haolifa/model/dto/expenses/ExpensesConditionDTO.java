@@ -11,7 +11,11 @@ import lombok.EqualsAndHashCode;
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ExpensesConditionDTO extends ReportBaseDTO {
+public class ExpensesConditionDTO extends ReportBaseDTO{
+    @ApiModelProperty(value = "页码，从1开始")
+    private Integer pageNum = 1;
+    @ApiModelProperty(value = "页面大小")
+    private Integer pageSize = 20;
     @ApiModelProperty(value = "一级分类名称, 搜索全部时值：全部")
     private String classifyName;
     @ApiModelProperty(value = "二级分类名称，搜索全部时值：全部")
