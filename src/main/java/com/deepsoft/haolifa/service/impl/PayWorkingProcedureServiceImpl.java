@@ -142,6 +142,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         List<PayProductionCapacity> payProductionCapacitieList = new ArrayList<>();
         for (OrderProductAssociate orderProductAssociate : list) {
             PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
+            //
             String model = orderProductAssociate.getProductModel().substring(0, 4);
             payWorkingProcedure.setProductModel(model);
             List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);

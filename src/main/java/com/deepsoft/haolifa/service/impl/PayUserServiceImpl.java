@@ -128,6 +128,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(payUsers, pageDTO);
         pageDTO.setList(list);
         return ResultBean.success(pageDTO);
     }

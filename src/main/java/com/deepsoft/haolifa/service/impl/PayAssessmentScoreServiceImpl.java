@@ -44,6 +44,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
             score.setUserName(Objects.isNull(payUser) ? "" : payUser.getUserName());
         });
         PageDTO<PayAssessmentScoreDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(payTeams, pageDTO);
         pageDTO.setList(scoreDTOList);
         return ResultBean.success(pageDTO);
     }

@@ -67,6 +67,7 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
             });
         }
         PageDTO<PayProductCapacityVO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(payProductionCapacities, pageDTO);
         pageDTO.setList(payProductCapacityVOS);
         return ResultBean.success(pageDTO);
     }
