@@ -12,6 +12,9 @@ public class ExportMaterialEntryRoomDTO {
   @ApiModelProperty("结束时间")
   private String endDate;
 
+  @ApiModelProperty("类型 2 机加工")
+  private Integer type;
+
   @ApiModelProperty("记录类型 0 全部 1 待入库 2 已入库")
   private Integer entryStatus;
 

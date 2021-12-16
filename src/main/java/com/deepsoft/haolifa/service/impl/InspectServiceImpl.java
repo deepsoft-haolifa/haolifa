@@ -198,7 +198,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         example.or().andPurchaseOrderNoEqualTo(inspectItemDTO.getPurchaseNo()).andMaterialGraphNoEqualTo(inspectItemDTO.getMaterialGraphNo()).andSpecificationEqualTo(inspectItemDTO.getSpecification());
         List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemMapper.selectByExample(example);
         if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
-            purchaseNumber = purchaseOrderItems.get(0).getNumber();
+            purchaseNumber = purchaseOrderItems.stream().mapToInt(PurchaseOrderItem::getNumber).sum();
+//            purchaseNumber = purchaseOrderItems.get(0).getNumber();
         }
         // 此次送检数+历史送检数-不合格数 不能大于合同的采购数
         if (deliveryNumber + inspectItemSumDto.getDeliveryNumber() - inspectItemSumDto.getUnqualifiedNumber() > purchaseNumber) {

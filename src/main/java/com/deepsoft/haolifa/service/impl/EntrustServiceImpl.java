@@ -136,6 +136,9 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         if (StringUtils.isNotEmpty(model.getBatchNumber())) {
             criteria.andBatchNumberLike("%" + model.getBatchNumber() + "%");
         }
+        if (StringUtils.isNotEmpty(model.getProcessedGraphNo())) {
+            criteria.andProcessedGraphNoLike("%" + model.getProcessedGraphNo() + "%");
+        }
         if (model.getType() == 1) {
             // 调度
             criteria.andStatusNotEqualTo(EntrustStatus.NO_COMMIT_0.code);
@@ -221,31 +224,33 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         }
         // 查询生产库存的单
         criteria.andBusTypeEqualTo(CommonEnum.BusType.PRODUCT_INVENTORY.type);
-
         criteria.andStatusIn(Arrays
             .asList(EntrustStatus.DEALING_3.code, EntrustStatus.INSPECT_COMPLETE.code));
         List<Entrust> entrusts = entrustMapper.selectByExample(entrustExample);
         int number = entrusts.stream().map(Entrust::getNumber).reduce(0, (a, b) -> a + b);
-
+        log.info("obtainEntrustNumber 1 materialGraphNo:{},processGraphNo：{},number:{}", materialGraphNo, processedGraphNo, number);
         // 获取 机加工质检完成的合格数量
         if (number > 0) {
             List<String> noList = entrusts.stream().map(Entrust::getEntrustNo).collect(Collectors.toList());
             List<InspectHistory> inspectHistories = inspectService.historyList(noList, CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code, CommonEnum.InspectHistoryType.ENTRUST.code);
-            if (!CollectionUtils.isEmpty(inspectHistories)) {
-                // 已经入库的数量
-                Integer storeCount = inspectHistories.stream().map(InspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
-                // 正在机加工的数据，需要减去已经入库的数量
-                number = number - storeCount;
-
-                if (number > 0) {
-                    // 获取已经核料锁定的数量
-                    List<CheckMaterialLock> checkMaterialLocks = checkMaterialLockService.findByMaterialAndType(materialGraphNo, CommonEnum.CheckMaterialLockType.ENTRUST.type);
-                    if (!CollectionUtils.isEmpty(checkMaterialLocks)) {
-                        Integer lockCount = checkMaterialLocks.stream().map(CheckMaterialLock::getLockQuantity).reduce(0, (a, b) -> a + b);
-                        number = number - lockCount;
-                    }
+            // 已经入库的数量
+            Integer storeCount = Optional.ofNullable(inspectHistories).orElse(new ArrayList<>()).stream().map(InspectHistory::getQualifiedNumber).reduce(0, (a, b) -> a + b);
+            log.info("obtainEntrustNumber 2 materialGraphNo:{},processGraphNo：{},storeCount:{}", materialGraphNo, processedGraphNo, storeCount);
+            // 正在机加工的数据，需要减去已经入库的数量
+            number = number - storeCount;
+            if (number > 0) {
+                // 获取已经核料锁定的数量
+                List<CheckMaterialLock> checkMaterialLocks = checkMaterialLockService.findByMaterialAndType(processedGraphNo, CommonEnum.CheckMaterialLockType.ENTRUST.type);
+                if (!CollectionUtils.isEmpty(checkMaterialLocks)) {
+                    Integer lockCount = checkMaterialLocks.stream().map(CheckMaterialLock::getLockQuantity).reduce(0, (a, b) -> a + b);
+                    log.info("obtainEntrustNumber 3 materialGraphNo:{},processGraphNo：{},lockCount:{}", materialGraphNo, processedGraphNo, lockCount);
+                    number = number - lockCount;
                 }
             }
+        }
+        if (number < 0) {
+            log.info("obtainEntrustNumber 4 materialGraphNo:{},processGraphNo：{},number:{}", materialGraphNo, processedGraphNo, number);
+            number = 0;
         }
         return number;
     }
