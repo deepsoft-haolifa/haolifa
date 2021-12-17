@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -56,18 +57,18 @@ public interface SaleReportMapper {
     /**
      * 回款订单统计列表
      */
-    List<PaymentRespDTO>  selectSaleCollectionList(OrderConditionDTO model);
+    List<PaymentRespDTO>  selectSaleCollectionList(ReportOrderConditionDTO model);
     /**
      * 回款订单统计数据
      */
-    TotalAmountDTO  reportCollectOrderSummary(OrderConditionDTO model);
+    TotalAmountDTO  reportCollectOrderSummary(ReportOrderConditionDTO model);
     /**
      * 订单列表-按需方统计
      */
 
-    List<DemandSaleAmountRespDTO> reportSaleByDemandList(OrderConditionDTO model);
+    List<DemandSaleAmountRespDTO> reportSaleByDemandList(ReportOrderConditionDTO model);
     /**
      * 订单统计-按需方统计
      */
-    DemandSaleAmountRespDTO reportSaleByDemandSummary(OrderConditionDTO model);
+    DemandSaleAmountRespDTO reportSaleByDemandSummary(ReportOrderConditionDTO model);
 }

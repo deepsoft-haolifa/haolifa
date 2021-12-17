@@ -9,6 +9,8 @@ import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
 import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportPurchaseConditionDTO;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
@@ -24,44 +26,44 @@ public interface ReportExtendService {
      * @param dto
      * @return
      */
-    PageDTO<OrderListRespDTO> reportOrderList(OrderConditionDTO dto);
+    PageDTO<OrderListRespDTO> reportOrderList(ReportOrderConditionDTO dto);
 
     /**
      * 用于报表累计订货额显示
      * @param dto
      * @return
      */
-    BigDecimal reportOrderSummary(OrderConditionDTO dto);
+    BigDecimal reportOrderSummary(ReportOrderConditionDTO dto);
     /**
      * 用于报表展示回款列表数据
      * @param dto
      * @return
      */
-    PageDTO<PaymentRespDTO> reportCollectOrderList(OrderConditionDTO dto);
+    PageDTO<PaymentRespDTO> reportCollectOrderList(ReportOrderConditionDTO dto);
 
     /**
      * 用于报表回款订货额显示
      * @param dto
      * @return
      */
-    TotalAmountDTO reportCollectOrderSummary(OrderConditionDTO dto);
+    TotalAmountDTO reportCollectOrderSummary(ReportOrderConditionDTO dto);
 
     /**
      * 销售报表-按需方统计-列表数据
      * @param model
      * @return
      */
-    PageDTO<DemandSaleAmountRespDTO> reportSaleByDemandList(OrderConditionDTO model);
+    PageDTO<DemandSaleAmountRespDTO> reportSaleByDemandList(ReportOrderConditionDTO model);
     /**
      * 销售报表-按需方统计-统计
      * @param model
      * @return
      */
-    DemandSaleAmountRespDTO reportSaleByDemandSummary(OrderConditionDTO model);
+    DemandSaleAmountRespDTO reportSaleByDemandSummary(ReportOrderConditionDTO model);
 
 
-    PageDTO<ExportPurchaseDTO> reportPurchaseList(PurchaseOrderConditionDTO dto);
+    PageDTO<ExportPurchaseDTO> reportPurchaseList(ReportPurchaseConditionDTO dto);
 
 
-    ExportPurchaseDTO reportPurchaseSummary(PurchaseOrderConditionDTO dto);
+    ExportPurchaseDTO reportPurchaseSummary(ReportPurchaseConditionDTO dto);
 }

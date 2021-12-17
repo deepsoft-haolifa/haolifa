@@ -13,6 +13,8 @@ import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
 import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportPurchaseConditionDTO;
 import com.deepsoft.haolifa.service.ReportExtendService;
 import com.deepsoft.haolifa.service.ReportService;
 import com.deepsoft.haolifa.util.CommonUtil;
@@ -42,7 +44,7 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     private PurchaseReportMapper purchaseReportMapper;
 
     @Override
-    public PageDTO<OrderListRespDTO> reportOrderList(OrderConditionDTO model) {
+    public PageDTO<OrderListRespDTO> reportOrderList(ReportOrderConditionDTO model) {
         this.packSaleQuery(model);
         Page<OrderListRespDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> orderExtendMapper.reportOrderList(model));
@@ -53,13 +55,13 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     }
 
     @Override
-    public BigDecimal reportOrderSummary(OrderConditionDTO dto) {
+    public BigDecimal reportOrderSummary(ReportOrderConditionDTO dto) {
         this.packSaleQuery(dto);
         return orderExtendMapper.reportOrderSummary(dto);
     }
 
     @Override
-    public PageDTO<PaymentRespDTO> reportCollectOrderList(OrderConditionDTO model) {
+    public PageDTO<PaymentRespDTO> reportCollectOrderList(ReportOrderConditionDTO model) {
         this.packSaleQuery(model);
         Page<PaymentRespDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> saleReportMapper.selectSaleCollectionList(model));
@@ -70,13 +72,13 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     }
 
     @Override
-    public TotalAmountDTO reportCollectOrderSummary(OrderConditionDTO model) {
+    public TotalAmountDTO reportCollectOrderSummary(ReportOrderConditionDTO model) {
         this.packSaleQuery(model);
         return saleReportMapper.reportCollectOrderSummary(model);
     }
 
     @Override
-    public PageDTO<DemandSaleAmountRespDTO> reportSaleByDemandList(OrderConditionDTO model) {
+    public PageDTO<DemandSaleAmountRespDTO> reportSaleByDemandList(ReportOrderConditionDTO model) {
         this.packSaleQuery(model);
         Page<DemandSaleAmountRespDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> saleReportMapper.reportSaleByDemandList(model));
@@ -87,13 +89,13 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     }
 
     @Override
-    public DemandSaleAmountRespDTO reportSaleByDemandSummary(OrderConditionDTO model) {
+    public DemandSaleAmountRespDTO reportSaleByDemandSummary(ReportOrderConditionDTO model) {
         this.packSaleQuery(model);
         return saleReportMapper.reportSaleByDemandSummary(model);
     }
 
     @Override
-    public PageDTO<ExportPurchaseDTO> reportPurchaseList(PurchaseOrderConditionDTO model) {
+    public PageDTO<ExportPurchaseDTO> reportPurchaseList(ReportPurchaseConditionDTO model) {
         this.packPurchaseQuery(model);
         Page<ExportPurchaseDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> purchaseReportMapper.reportPurchaseList(model));
@@ -104,17 +106,17 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     }
 
     @Override
-    public ExportPurchaseDTO reportPurchaseSummary(PurchaseOrderConditionDTO model) {
+    public ExportPurchaseDTO reportPurchaseSummary(ReportPurchaseConditionDTO model) {
         this.packPurchaseQuery(model);
         return purchaseReportMapper.reportPurchaseSummary(model);
     }
 
-    private void packSaleQuery(OrderConditionDTO model){
+    private void packSaleQuery(ReportOrderConditionDTO model){
         //如果传入2021年，则查2020-12-26 至 2021-12-25
         if (StrUtil.isNotBlank(model.getYear())) {
             Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
-            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"startDate")));
-            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"endDate")));
+            model.setStartDate(MapUtil.getStr(param,"startDate"));
+            model.setEndDate(MapUtil.getStr(param,"endDate"));
         }
         //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
         if (null != model.getStartDate()) {
@@ -125,12 +127,12 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
         }
     }
 
-    private void packPurchaseQuery(PurchaseOrderConditionDTO model){
+    private void packPurchaseQuery(ReportPurchaseConditionDTO model){
         //如果传入2021年，则查2020-12-26 至 2021-12-25
         if (StrUtil.isNotBlank(model.getYear())) {
             Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
-            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"startDate")));
-            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(MapUtil.getStr(param,"endDate")));
+            model.setStartDate(MapUtil.getStr(param,"startDate"));
+            model.setEndDate(MapUtil.getStr(param,"endDate"));
         }
         //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
         if (null != model.getStartDate()) {

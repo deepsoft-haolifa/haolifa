@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.dto.order.OrderCheckMaterialDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -66,7 +67,7 @@ public interface OrderExtendMapper {
     int countDelivery(Map<String, Object> paramMap);
 
 
-    List<OrderListRespDTO> reportOrderList(OrderConditionDTO model);
+    List<OrderListRespDTO> reportOrderList(ReportOrderConditionDTO model);
 
-    BigDecimal reportOrderSummary(OrderConditionDTO model);
+    BigDecimal reportOrderSummary(ReportOrderConditionDTO model);
 }
