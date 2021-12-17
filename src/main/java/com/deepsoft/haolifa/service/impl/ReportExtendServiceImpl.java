@@ -120,10 +120,10 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
         }
         //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
         if (null != model.getStartDate()) {
-            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getStartDate(), "yy-MM"))));
+            model.setStartDate(CommonUtil.packYearMonthMapParam(model.getStartDate()));
         }
         if (null != model.getEndDate()) {
-            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getEndDate(), "yy-MM"))));
+            model.setEndDate(CommonUtil.packYearMonthMapParam(model.getEndDate()));
         }
     }
 
@@ -136,10 +136,10 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
         }
         //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
         if (null != model.getStartDate()) {
-            model.setStartDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getStartDate(), "yy-MM"))));
+            model.setStartDate(CommonUtil.packYearMonthMapParam(model.getStartDate()));
         }
         if (null != model.getEndDate()) {
-            model.setEndDate(cn.hutool.core.date.DateUtil.parseDate(CommonUtil.packYearMonthMapParam(cn.hutool.core.date.DateUtil.format(model.getEndDate(), "yy-MM"))));
+            model.setEndDate(CommonUtil.packYearMonthMapParam(model.getEndDate()));
         }
     }
 }
