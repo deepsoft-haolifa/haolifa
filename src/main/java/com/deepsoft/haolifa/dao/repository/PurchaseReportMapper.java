@@ -1,6 +1,9 @@
 package com.deepsoft.haolifa.dao.repository;
 
+import com.deepsoft.haolifa.model.dto.PurchaseOrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +25,9 @@ public interface PurchaseReportMapper {
      * @return
      */
     List<ExportPurchaseDTO> selectInvoicePurchase(Map<String, Object> paramMap);
+
+
+    List<ExportPurchaseDTO> reportPurchaseList(PurchaseOrderConditionDTO model);
+
+    ExportPurchaseDTO reportPurchaseSummary(PurchaseOrderConditionDTO model);
 }

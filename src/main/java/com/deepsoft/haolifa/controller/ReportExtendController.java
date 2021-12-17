@@ -1,8 +1,10 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.PurchaseOrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
 import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
 import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
@@ -58,14 +60,26 @@ public class ReportExtendController {
         return ResultBean.success(reportExtendService.reportSaleByDemandSummary(dto));
     }
 
-    @ApiOperation("每月产值总额统计--用于销售报表（2021-12-hd）")
-    @PostMapping("/report-sale-month-list")
-    public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleMonthList(@RequestBody OrderConditionDTO dto) {
-        return ResultBean.success(reportExtendService.reportSaleByDemandList(dto));
+//    @ApiOperation("每月产值总额统计--用于销售报表（2021-12-hd）")
+//    @PostMapping("/report-sale-month-list")
+//    public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleMonthList(@RequestBody OrderConditionDTO dto) {
+//        return ResultBean.success(reportExtendService.reportSaleByDemandList(dto));
+//    }
+//    @ApiOperation("每月产值总额汇总--用于销售报表（2021-12-hd）")
+//    @PostMapping("/report-sale-month-summary")
+//    public ResultBean<DemandSaleAmountRespDTO> reportSaleMonthSummary(@RequestBody OrderConditionDTO dto) {
+//        return ResultBean.success(reportExtendService.reportSaleByDemandSummary(dto));
+//    }
+
+
+    @ApiOperation("采购统计列表--用于采购报表（2021-12-hd）")
+    @PostMapping("/report-purchase-list")
+    public ResultBean<PageDTO<ExportPurchaseDTO>> reportPurchaseList(@RequestBody PurchaseOrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportPurchaseList(dto));
     }
-    @ApiOperation("每月产值总额汇总--用于销售报表（2021-12-hd）")
-    @PostMapping("/report-sale-month-summary")
-    public ResultBean<DemandSaleAmountRespDTO> reportSaleMonthSummary(@RequestBody OrderConditionDTO dto) {
-        return ResultBean.success(reportExtendService.reportSaleByDemandSummary(dto));
+    @ApiOperation("采购统计汇总--用于采购报表（2021-12-hd）")
+    @PostMapping("/report-purchase-summary")
+    public ResultBean<ExportPurchaseDTO> reportPurchaseSummary(@RequestBody PurchaseOrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportPurchaseSummary(dto));
     }
 }

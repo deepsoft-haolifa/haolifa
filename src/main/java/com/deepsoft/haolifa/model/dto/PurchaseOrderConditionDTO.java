@@ -12,6 +12,11 @@ import java.util.Date;
  **/
 @Data
 public class PurchaseOrderConditionDTO {
+    @ApiModelProperty(value = "页码，从1开始")
+    private Integer pageNum = 1;
+    @ApiModelProperty(value = "页面大小")
+    private Integer pageSize = 20;
+
     @ApiModelProperty("采购订单号")
     private String orderNo;
     @ApiModelProperty("采购订单状态")
@@ -24,4 +29,6 @@ public class PurchaseOrderConditionDTO {
     private Date endDate;
     @ApiModelProperty(value = "当前用户Id")
     private int createUserId;
+    @ApiModelProperty(value = "年")
+    private String year;
 }

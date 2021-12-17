@@ -12,19 +12,25 @@ public class ExportPurchaseDTO {
     @ApiModelProperty("供应商名称")
     private String supplierName;
 
+    @ApiModelProperty("采购数量")
+    private Integer totalCount;
+
+    @ApiModelProperty("采购状态")
+    private Integer status;
+
     @ApiModelProperty("创建时间")
     private String createTime;
 
-    @ApiModelProperty("总费用")
+    @ApiModelProperty("合同金额")
     private String total;
 
     @ApiModelProperty("付款金额")
     private String payTotal;
 
-    @ApiModelProperty("未付款")
+    @ApiModelProperty("欠款金额")
     private String unpay;
 
-    @ApiModelProperty(value = "已挂账金额")
+    @ApiModelProperty(value = "已挂账金额、入账金额")
     private String registered;
 
     @ApiModelProperty(value = "供应商已回款金额")

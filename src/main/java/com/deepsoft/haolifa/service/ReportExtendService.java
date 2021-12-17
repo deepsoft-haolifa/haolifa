@@ -1,11 +1,15 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.PurchaseOrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO;
+import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
 import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
 import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -54,4 +58,10 @@ public interface ReportExtendService {
      * @return
      */
     DemandSaleAmountRespDTO reportSaleByDemandSummary(OrderConditionDTO model);
+
+
+    PageDTO<ExportPurchaseDTO> reportPurchaseList(PurchaseOrderConditionDTO dto);
+
+
+    ExportPurchaseDTO reportPurchaseSummary(PurchaseOrderConditionDTO dto);
 }
