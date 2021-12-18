@@ -13,14 +13,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BizPayPlanDTO extends PageParam {
-
-    // query
-    @ApiModelProperty(value = "查询条件-开始日期")
-    private Date applyDateStart;
-    @ApiModelProperty(value = "查询条件-结束日期")
-    private Date applyDateEnd;
-
+public class BizPayPlanRSDTO  {
 
 
 

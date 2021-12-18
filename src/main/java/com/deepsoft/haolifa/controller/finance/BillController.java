@@ -1,10 +1,12 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.model.domain.BizBill;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.bill.BizBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
 import com.deepsoft.haolifa.service.finance.BillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,10 +44,23 @@ public class BillController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getBillList")
-    public ResultBean getBillList(@RequestBody BizBillDTO bizBillDTO) {
+    public ResultBean<BizBillRSDTO> getBillList(@RequestBody BizBillRQDTO bizBillDTO) {
         return billService.getList(bizBillDTO);
     }
 
+
+    public static void main(String[] args) {
+
+
+
+        String s = "{\"balance\":0,\"certificateNumber\":\"sssss\",\"clearingBanks\":\"\",\"collectionMoney\":\"21\",\"collectionType\":\"28\",\"d\":\"\",\"deptId\":\"01\",\"payment\":\"32132\",\"paymentType\":\"24\",\"preMonthMoney\":0,\"remark\":\"fdafd\",\"settlementType\":\"\",\"status\":\"\",\"string1\":\"\",\"string10\":\"\",\"string2\":\"\",\"string3\":\"\",\"string4\":\"\",\"string5\":\"\",\"string6\":\"\",\"string7\":\"\",\"string8\":\"\",\"string9\":\"\",\"type\":\"1\",\"xh\":\"\",\"operateDate\":\"2021-12-09\",\"collectCompany\":\"fafdsf\",\"payCompany\":\"vffad\"}";
+
+
+        BizBillAddDTO ss = JSON.parseObject(s,BizBillAddDTO.class);
+
+
+        System.out.println(ss);
+    }
 
 
 

@@ -5,8 +5,6 @@ import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayAppAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayAppDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanDTO;
 import com.deepsoft.haolifa.service.finance.PayPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

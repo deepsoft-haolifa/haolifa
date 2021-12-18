@@ -5,15 +5,15 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizPayPlanMapper;
 import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.domain.BizPayPlanExample;
-import com.deepsoft.haolifa.model.domain.PurchaseOrder;
-import com.deepsoft.haolifa.model.domain.PurchaseOrderExample;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayAppAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayAppDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanDTO;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRSDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
@@ -33,8 +33,6 @@ import java.util.Date;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.*;
 import static com.deepsoft.haolifa.constant.CommonEnum.FormType.*;
-import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_ENTRUST_1;
-import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_PURCHASE_0;
 
 @Service
 @Slf4j
@@ -189,7 +187,7 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     @Override
-    public ResultBean getList(BizPayPlanDTO model) {
+    public ResultBean getList(BizPayPlanRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -247,6 +245,76 @@ public class PayPlanServiceImpl implements PayPlanService {
         }
 
         bizPayPlanExample.setOrderByClause("id desc");
+        Page<BizPayPlan> pageData = PageHelper
+            .startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> {
+                bizPayPlanMapper.selectByExample(bizPayPlanExample);
+            });
+        PageDTO<BizPayPlan> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+        pageDTO.setList(pageData.getResult());
+        return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean<BizPayPlanSummaryRSDTO> getPayPlanSummaryList(BizPayPlanSummaryRQDTO model) {
+        if (model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if (model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+        BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
+        BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+
+
+        // 申请编号 ==
+        if (StringUtils.isNotEmpty(model.getApplyNo())) {
+            criteria.andApplyNoEqualTo(model.getApplyNo());
+        }
+        //开始时间
+        //结束时间
+        if (model.getApplyDateStart() != null && model.getApplyDateEnd() != null) {
+            // 区间
+            criteria.andApplyDateBetween(model.getApplyDateStart(), model.getApplyDateEnd());
+        } else if (model.getApplyDateStart() != null) {
+            // 大于
+            criteria.andApplyDateGreaterThanOrEqualTo(model.getApplyDateStart());
+        } else if (model.getApplyDateEnd() != null) {
+            // 小于
+            criteria.andApplyDateLessThanOrEqualTo(model.getApplyDateEnd());
+        }
+        //采购合同号
+        if (StringUtils.isNotEmpty(model.getContractNo())) {
+            criteria.andContractNoEqualTo(model.getContractNo());
+        }
+
+        //收款单位：like
+        if (StringUtils.isNotEmpty(model.getApplyCollectionCompany())) {
+            criteria.andApplyCollectionCompanyLike(model.getApplyCollectionCompany());
+        }
+        //付款单位：like
+        if (StringUtils.isNotEmpty(model.getApplyPayCompany())) {
+            criteria.andApplyPayCompanyLike(model.getApplyPayCompany());
+        }
+
+        // 付款方式 ==
+        if (StringUtils.isNotEmpty(model.getPayWay())) {
+            criteria.andPayWayEqualTo(model.getPayWay());
+        }
+
+        //付款状态
+        if (StringUtils.isNotEmpty(model.getStatus())) {
+            criteria.andStatusEqualTo(model.getStatus());
+        }
+        //数据状态
+        if (StringUtils.isNotEmpty(model.getDataStatus())) {
+            criteria.andDataStatusEqualTo(model.getDataStatus());
+        }
+
+        bizPayPlanExample.setOrderByClause("id desc");
+
         Page<BizPayPlan> pageData = PageHelper
             .startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> {

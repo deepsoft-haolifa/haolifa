@@ -24,7 +24,8 @@ import com.deepsoft.haolifa.dao.repository.extend.PurchaseOrderItemExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.domain.PurchaseOrderItem;
 import com.deepsoft.haolifa.model.dto.*;
-import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableRSDTO;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
@@ -335,7 +336,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }
 
     @Override
-    public ResultBean receivableList(PurchaseOrderReceivableDTO purchaseOrderDTO) {
+    public ResultBean<PurchaseOrderReceivableRSDTO> receivableList(PurchaseOrderReceivableRQDTO purchaseOrderDTO) {
 //        List<String> supplierNoList = new ArrayList<>();
 //        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
 //            SupplierExample supplierExample = new SupplierExample();
@@ -376,17 +377,24 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             criteria.andOperatorUserNameLike(purchaseOrderDTO.getOperatorUserName());
         }
         // 供应单位 下拉
-        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierNo())) {
-            criteria.andSupplierNameEqualTo(purchaseOrderDTO.getSupplierNo());
+        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
+            criteria.andSupplierNameEqualTo(purchaseOrderDTO.getSupplierName());
         }
-
 
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(purchaseOrderDTO.getPageNum(), purchaseOrderDTO.getPageSize(), "create_time desc")
             .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
 
-        PageDTO<PurchaseOrder> pageDTO = new PageDTO<>();
+        PageDTO<PurchaseOrderReceivableRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(purchaseOrderList, pageDTO);
-        pageDTO.setList(purchaseOrderList.getResult());
+        List<PurchaseOrderReceivableRSDTO> purchaseOrderReceivableRSDTOList = purchaseOrderList.getResult().stream()
+            .map(purchaseOrder -> {
+                PurchaseOrderReceivableRSDTO purchaseOrderReceivableRSDTO = new PurchaseOrderReceivableRSDTO();
+                BeanUtils.copyProperties(purchaseOrder, purchaseOrderReceivableRSDTO);
+                return purchaseOrderReceivableRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        pageDTO.setList(purchaseOrderReceivableRSDTOList);
         return ResultBean.success(pageDTO);
     }
 

@@ -3,7 +3,8 @@ package com.deepsoft.haolifa.service.finance;
 import com.deepsoft.haolifa.model.domain.BizBill;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.bill.BizBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
 
 public interface BillService {
     /**
@@ -40,7 +41,7 @@ public interface BillService {
      * @param model
      * @return
      */
-    ResultBean getList(BizBillDTO model);
+    ResultBean<BizBillRSDTO> getList(BizBillRQDTO model);
 
 
     /**

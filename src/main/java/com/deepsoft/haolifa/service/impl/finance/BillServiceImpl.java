@@ -9,19 +9,21 @@ import com.deepsoft.haolifa.model.dto.DepartmentDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.bill.BizBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -82,7 +84,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public ResultBean getList(BizBillDTO model) {
+    public ResultBean<BizBillRSDTO> getList(BizBillRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -122,29 +124,36 @@ public class BillServiceImpl implements BillService {
         List<Integer> departIdList = pageData.getResult().stream()
             .map(bizBill -> Integer.parseInt(bizBill.getDeptId()))
             .collect(Collectors.toList());
-        // 查询部门
-        SysDepartmentExample departmentExample = new SysDepartmentExample();
-        SysDepartmentExample.Criteria departmentExampleCriteria = departmentExample.createCriteria();
-        departmentExampleCriteria.andIdIn(departIdList);
-        Map<Integer, DepartmentDTO> departmentMap = departmentMapper.selectByExample(departmentExample).stream()
-            .map(sysDepartment -> {
-                DepartmentDTO departmentDTO = new DepartmentDTO();
-                BeanUtils.copyProperties(sysDepartment, departmentDTO);
-                return departmentDTO;
-            })
-            .collect(Collectors.toMap(DepartmentDTO::getId, Function.identity(), (a, b) -> a));
+
+        Map<Integer, DepartmentDTO> departmentMap = new HashMap<>();
+            // 查询部门
+        if (CollectionUtils.isNotEmpty(departIdList)){
+            SysDepartmentExample departmentExample = new SysDepartmentExample();
+            SysDepartmentExample.Criteria departmentExampleCriteria = departmentExample.createCriteria();
+            departmentExampleCriteria.andIdIn(departIdList);
+            departmentMap = departmentMapper.selectByExample(departmentExample).stream()
+                .map(sysDepartment -> {
+                    DepartmentDTO departmentDTO = new DepartmentDTO();
+                    BeanUtils.copyProperties(sysDepartment, departmentDTO);
+                    return departmentDTO;
+                })
+                .collect(Collectors.toMap(DepartmentDTO::getId, Function.identity(), (a, b) -> a));
+        }
 
 
-        List<BizBillDTO> bizBillDTOS = pageData.getResult().stream()
+        Map<Integer, DepartmentDTO> finalDepartmentMap = departmentMap;
+        List<BizBillRSDTO> bizBillDTOS = pageData.getResult().stream()
             .map(bizBill -> {
-                BizBillDTO bizBillDTO = new BizBillDTO();
+                BizBillRSDTO bizBillDTO = new BizBillRSDTO();
                 BeanUtils.copyProperties(bizBill, bizBillDTO);
-                bizBillDTO.setDepartmentDTO(departmentMap.get(Integer.parseInt(bizBill.getDeptId())));
+                bizBillDTO.setCollectionCompany(bizBill.getString1());
+                bizBillDTO.setPaymentCompany(bizBill.getString2());
+                bizBillDTO.setDepartmentDTO(finalDepartmentMap.get(Integer.parseInt(bizBill.getDeptId())));
                 return bizBillDTO;
             })
             .collect(Collectors.toList());
 
-        PageDTO<BizBillDTO> pageDTO = new PageDTO<>();
+        PageDTO<BizBillRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(bizBillDTOS);
         return ResultBean.success(pageDTO);
@@ -155,7 +164,7 @@ public class BillServiceImpl implements BillService {
     public ResultBean getBillContractDetailByBillId(int id) {
         BizBill bizBill = bizBillMapper.selectByPrimaryKey(id);
 
-        BizBillDTO bizBillDTO = new BizBillDTO();
+        BizBillRQDTO bizBillDTO = new BizBillRQDTO();
         BeanUtils.copyProperties(bizBill, bizBillDTO);
         // todo 欠缺 销售合同号saleContractNo
 

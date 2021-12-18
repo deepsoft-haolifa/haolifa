@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.dto.finance.receivable;
 
-import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,18 +12,18 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class PurchaseOrderReceivableDTO extends PageParam {
+public class PurchaseOrderReceivableRSDTO {
 
     @ApiModelProperty(value = "主键")
     private Integer id;
 
-    @ApiModelProperty(value = "Query-订单编号")
+    @ApiModelProperty(value = "订单编号")
     private String purchaseOrderNo;
 
-    @ApiModelProperty(value = "Query-供应商编号")
+    @ApiModelProperty(value = "供应商编号")
     private String supplierNo;
 
-    @ApiModelProperty(value = "Query-提供方")
+    @ApiModelProperty(value = "提供方")
     private String supplierName;
 
     @ApiModelProperty(value = "需方")
@@ -48,13 +47,13 @@ public class PurchaseOrderReceivableDTO extends PageParam {
     @ApiModelProperty(value = "需方联系人电话")
     private String demanderPhone;
 
-    @ApiModelProperty(value = "Query-交货日期")
+    @ApiModelProperty(value = "交货日期")
     private Date deliveryTime;
 
-    @ApiModelProperty(value = "Query-订单经办人")
+    @ApiModelProperty(value = "订单经办人")
     private String operatorUserName;
 
-    @ApiModelProperty(value = "Query-经办日期")
+    @ApiModelProperty(value = "经办日期")
     private Date operateTime;
 
     @ApiModelProperty(value = "供方确认人")

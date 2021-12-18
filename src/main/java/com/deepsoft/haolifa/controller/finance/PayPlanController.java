@@ -3,8 +3,7 @@ package com.deepsoft.haolifa.controller.finance;
 
 import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanDTO;
+import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.service.finance.PayPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,8 +41,14 @@ public class PayPlanController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getPayPlanList")
-    public ResultBean getPayPlanList(@RequestBody BizPayPlanDTO payPlanDTO) {
+    public ResultBean<BizPayPlanRSDTO> getPayPlanList(@RequestBody BizPayPlanRQDTO payPlanDTO) {
         return payPlanService.getList(payPlanDTO);
+    }
+
+    @ApiOperation("获取应付汇总节点列表")
+    @PostMapping("/summary/getPayPlanList")
+    public ResultBean<BizPayPlanSummaryRSDTO> getPayPlanSummaryList(@RequestBody BizPayPlanSummaryRQDTO payPlanDTO) {
+        return payPlanService.getPayPlanSummaryList(payPlanDTO);
     }
 
 

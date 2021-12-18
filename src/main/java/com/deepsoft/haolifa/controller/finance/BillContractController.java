@@ -2,9 +2,7 @@ package com.deepsoft.haolifa.controller.finance;
 
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
-import com.deepsoft.haolifa.model.dto.finance.bill.BizBillDTO;
-import com.deepsoft.haolifa.service.finance.BankBillService;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
 import com.deepsoft.haolifa.service.finance.BillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +24,7 @@ public class BillContractController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getBankBillList")
-    public ResultBean getBankBillList(@RequestBody BizBillDTO billDTO) {
+    public ResultBean getBankBillList(@RequestBody BizBillRQDTO billDTO) {
         return billService.getList(billDTO);
     }
 

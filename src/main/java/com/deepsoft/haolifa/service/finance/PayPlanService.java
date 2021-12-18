@@ -4,8 +4,7 @@ import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayAppAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayAppDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanDTO;
+import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 
 public interface PayPlanService {
 
@@ -64,7 +63,14 @@ public interface PayPlanService {
      * @param model
      * @return
      */
-    ResultBean getList(BizPayPlanDTO model);
+    ResultBean<BizPayPlanRSDTO> getList(BizPayPlanRQDTO model);
+    /**
+     * 获取列表
+     *
+     * @param model
+     * @return
+     */
+    ResultBean<BizPayPlanSummaryRSDTO>  getPayPlanSummaryList(BizPayPlanSummaryRQDTO  model);
 
     /**
      * 付款申请-发起审批
