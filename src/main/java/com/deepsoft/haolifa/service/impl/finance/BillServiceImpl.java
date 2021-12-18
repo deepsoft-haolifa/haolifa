@@ -3,9 +3,9 @@ package com.deepsoft.haolifa.service.impl.finance;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizBillMapper;
-import com.deepsoft.haolifa.model.domain.BizBankBill;
-import com.deepsoft.haolifa.model.domain.BizBill;
-import com.deepsoft.haolifa.model.domain.BizBillExample;
+import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
+import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.DepartmentDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
@@ -14,6 +14,7 @@ import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -21,10 +22,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class BillServiceImpl implements BillService {
+    @Autowired
+    private SysDepartmentMapper departmentMapper;
 
     @Autowired
     private BizBillMapper bizBillMapper;
@@ -104,15 +111,42 @@ public class BillServiceImpl implements BillService {
         // 部门 like todo
 
         // 凭证号 付款类别 收款单位 付款单位 部门
-
         bizBillExample.setOrderByClause("id desc");
         Page<BizBill> pageData = PageHelper
             .startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> {
                 bizBillMapper.selectByExample(bizBillExample);
             });
+
+
+        List<Integer> departIdList = pageData.getResult().stream()
+            .map(bizBill -> Integer.parseInt(bizBill.getDeptId()))
+            .collect(Collectors.toList());
+        // 查询部门
+        SysDepartmentExample departmentExample = new SysDepartmentExample();
+        SysDepartmentExample.Criteria departmentExampleCriteria = departmentExample.createCriteria();
+        departmentExampleCriteria.andIdIn(departIdList);
+        Map<Integer, DepartmentDTO> departmentMap = departmentMapper.selectByExample(departmentExample).stream()
+            .map(sysDepartment -> {
+                DepartmentDTO departmentDTO = new DepartmentDTO();
+                BeanUtils.copyProperties(sysDepartment, departmentDTO);
+                return departmentDTO;
+            })
+            .collect(Collectors.toMap(DepartmentDTO::getId, Function.identity(), (a, b) -> a));
+
+
+        List<BizBillDTO> bizBillDTOS = pageData.getResult().stream()
+            .map(bizBill -> {
+                BizBillDTO bizBillDTO = new BizBillDTO();
+                BeanUtils.copyProperties(bizBill, bizBillDTO);
+                bizBillDTO.setDepartmentDTO(departmentMap.get(Integer.parseInt(bizBill.getDeptId())));
+                return bizBillDTO;
+            })
+            .collect(Collectors.toList());
+
         PageDTO<BizBillDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
+        pageDTO.setList(bizBillDTOS);
         return ResultBean.success(pageDTO);
     }
 
