@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayProductionWorkshopDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayProductionWorkshopVO;
+import com.deepsoft.haolifa.model.vo.pay.PayWorkingProcedureUserVO;
 import com.deepsoft.haolifa.service.PayProductionWorkShopService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
@@ -17,10 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.xml.transform.Result;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author liuyaofei
@@ -105,5 +104,19 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
             list.add(dto);
         }
         return ResultBean.success(list);
+    }
+
+    @Override
+    public ResultBean getDepartDistinctList() {
+        List<PayProductionWorkshop> payProductionWorkshops = payProductionWorkshopMapper.selectByExample(new PayProductionWorkshopExample());
+        List<PayProductionWorkshopDTO> list = new ArrayList<>();
+        for (PayProductionWorkshop payProductionWorkshop : payProductionWorkshops) {
+            PayProductionWorkshopDTO dto = new PayProductionWorkshopDTO();
+            BeanUtils.copyProperties(payProductionWorkshop, dto);
+            list.add(dto);
+        }
+        List<PayProductionWorkshopDTO> distinctList = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(
+            Comparator.comparing(PayProductionWorkshopDTO::getDepartName))), ArrayList::new));
+        return ResultBean.success(distinctList);
     }
 }

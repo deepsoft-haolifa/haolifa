@@ -6,6 +6,8 @@ import com.deepsoft.haolifa.model.dto.BaseException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author murphy.he
@@ -71,6 +73,42 @@ public class CommonUtil {
 
     public static String getLastYear(String year) {
         return String.valueOf(Integer.parseInt(year) - 1);
+    }
+
+    public static String IDCardValidate(String IDStr) {
+        String tipInfo = "";// 记录错误信息
+        String Ai = "";
+        // 判断号码的长度 15位或18位
+        if (IDStr.length() != 15 && IDStr.length() != 18) {
+            tipInfo = "身份证号码长度应该为15位或18位。";
+            return tipInfo;
+        }
+        // 18位身份证前17位位数字，如果是15位的身份证则所有号码都为数字
+        if (IDStr.length() == 18) {
+            Ai = IDStr.substring(0, 17);
+        } else if (IDStr.length() == 15) {
+            Ai = IDStr.substring(0, 6) + "19" + IDStr.substring(6, 15);
+        }
+        if (isNumeric(Ai) == false) {
+            tipInfo = "身份证15位号码都应为数字 ; 18位号码除最后一位外，都应为数字。";
+            return tipInfo;
+        }
+        return tipInfo;
+    }
+
+    /**
+     * 判断字符串是否为数字,0-9重复0次或者多次
+     * @param strnum
+     * @return
+     */
+    private static boolean isNumeric(String strnum) {
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(strnum);
+        if (isNum.matches()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

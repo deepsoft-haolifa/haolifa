@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.vo;
+package com.deepsoft.haolifa.model.vo.pay;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

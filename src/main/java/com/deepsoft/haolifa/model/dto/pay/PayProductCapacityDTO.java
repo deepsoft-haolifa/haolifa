@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 public class PayProductCapacityDTO extends BaseCondition {
     @ApiModelProperty(value = "id")
     private Integer id;
-    @ApiModelProperty(value = "用户ID")
-    private Integer userId;
+    @ApiModelProperty(value = "用户名称")
+    private String userName;
     @ApiModelProperty(value = "班组ID")
     private Integer teamId;
     @ApiModelProperty(value = "部门ID")

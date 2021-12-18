@@ -1,17 +1,17 @@
 package com.deepsoft.haolifa.service.impl;
 
-import cn.hutool.core.collection.ArrayIter;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
-import com.deepsoft.haolifa.dao.repository.PayUserRelationProcedureMapper;
 import com.deepsoft.haolifa.dao.repository.PayWorkingProcedureMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
-import com.deepsoft.haolifa.model.vo.PayUserProcedureVO;
+import com.deepsoft.haolifa.model.vo.pay.PayUserProcedureVO;
+import com.deepsoft.haolifa.model.vo.pay.PayWorkingProcedureUserVO;
+import com.deepsoft.haolifa.model.vo.pay.ProcedureUserVO;
 import com.deepsoft.haolifa.service.PayProductionCapacityService;
 import com.deepsoft.haolifa.service.PayWorkingProcedureService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
@@ -132,38 +132,62 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     }
 
     @Override
-    public ResultBean assignTask(String orderNo) {
+    public ResultBean assignTask(String orderNo, String type) {
         OrderProductAssociateExample example = new OrderProductAssociateExample();
         example.createCriteria().andOrderNoEqualTo(orderNo);
         List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(list)) {
             ResultBean.success(null);
         }
-        List<PayProductionCapacity> payProductionCapacitieList = new ArrayList<>();
+        List<PayWorkingProcedure> payWorkingProcedures = new ArrayList<>();
+        // 工序对应人的列表
+        List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS = new ArrayList<>();
+        // 循环所有产品
         for (OrderProductAssociate orderProductAssociate : list) {
             PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
-            //
+            // 产品型号
             String model = orderProductAssociate.getProductModel().substring(0, 4);
             payWorkingProcedure.setProductModel(model);
-            List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
-            if (CollectionUtils.isEmpty(payWorkingProcedures)) {
-                continue;
+
+            if (CommonEnum.WorkShopTypeEnum.PRODUCT.code.equals(type)) {
+                // 生产装配订单
+                payWorkingProcedure.setWorkshopName(CommonEnum.WorkShopTypeEnum.PRODUCT.name);
+                payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
+            } else if (CommonEnum.WorkShopTypeEnum.SPRAY.code.equals(type)) {
+                // 喷涂订单
+                payWorkingProcedure.setWorkshopName(CommonEnum.WorkShopTypeEnum.SPRAY.name);
+                payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
+            } else if (CommonEnum.WorkShopTypeEnum.MACHINING.code.equals(type)) {
+                // 机加工订单
+                payWorkingProcedure.setWorkshopName(CommonEnum.WorkShopTypeEnum.MACHINING.name);
+                payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
             }
-            for (PayWorkingProcedure procedure : payWorkingProcedures) {
-                // 车间名称
+
+            for (PayWorkingProcedure workingProcedure : payWorkingProcedures) {
+                // copy 工序人员表
+                PayWorkingProcedureUserVO payWorkingProcedureUserVO = new PayWorkingProcedureUserVO();
+                BeanUtils.copyProperties(workingProcedure, payWorkingProcedureUserVO);
+                payWorkingProcedureUserVO.setOrderNo(orderNo);
+                payWorkingProcedureUserVO.setProductId(orderProductAssociate.getId());
+                payWorkingProcedureUserVOS.add(payWorkingProcedureUserVO);
+                // 找人员
                 PayProductCapacityDTO payHourQuotaDTO = new PayProductCapacityDTO();
-                payHourQuotaDTO.setDepartName(procedure.getWorkshopName());
+                payHourQuotaDTO.setCapacityCode(workingProcedure.getPostCode());
                 List<PayProductionCapacity> payProductionCapacities = payProductionCapacityService.getList(payHourQuotaDTO);
                 if (CollectionUtils.isEmpty(payProductionCapacities)) {
                     continue;
                 }
-                payProductionCapacitieList.addAll(payProductionCapacities);
+                List<ProcedureUserVO> procedureUserVOS = BeanCopyUtils.copyPropertiesForNewList(payProductionCapacities, () -> new ProcedureUserVO());
+                // 用户名称匹配
+                procedureUserVOS.forEach(pp -> pp.setUserName(Objects.isNull(payUserMapper.selectByPrimaryKey(pp.getUserId())) ? "" : payUserMapper.selectByPrimaryKey(pp.getUserId()).getUserName()));
+                payWorkingProcedureUserVO.setUserList(procedureUserVOS);
             }
         }
-        List<PayProductionCapacity> distinctList = payProductionCapacitieList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(
-            Comparator.comparing(PayProductionCapacity::getId))), ArrayList::new));
-        List<PayUserProcedureVO> payUserProcedureVOS = BeanCopyUtils.copyPropertiesForNewList(distinctList, () -> new PayUserProcedureVO());
-        payUserProcedureVOS.forEach(aa -> aa.setUserName(payUserMapper.selectByPrimaryKey(aa.getUserId()).getUserName()));
-        return ResultBean.success(payUserProcedureVOS);
+        if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
+            return ResultBean.success(null);
+        }
+        List<PayWorkingProcedureUserVO> distinctList = payWorkingProcedureUserVOS.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(
+            Comparator.comparing(PayWorkingProcedureUserVO::getId))), ArrayList::new));
+        return ResultBean.success(distinctList);
     }
 }

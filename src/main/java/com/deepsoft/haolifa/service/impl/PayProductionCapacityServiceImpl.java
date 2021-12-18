@@ -8,7 +8,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
-import com.deepsoft.haolifa.model.vo.PayProductCapacityVO;
+import com.deepsoft.haolifa.model.vo.pay.PayProductCapacityVO;
 import com.deepsoft.haolifa.service.PayProductionCapacityService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
@@ -42,14 +42,17 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     public ResultBean pageInfo(PayProductCapacityDTO model) {
         PayProductionCapacityExample example = new PayProductionCapacityExample();
         PayProductionCapacityExample.Criteria criteria = example.createCriteria();
-        if (Objects.nonNull(model.getUserId())) {
-            criteria.andUserIdEqualTo(model.getUserId());
+        if (StringUtils.isNotBlank(model.getUserName())) {
+            criteria.andUserNameEqualTo(model.getUserName());
         }
         if (Objects.nonNull(model.getTeamId())) {
             criteria.andUserIdEqualTo(model.getTeamId());
         }
-        if (Objects.nonNull(model.getDepartId())) {
-            criteria.andUserIdEqualTo(model.getDepartId());
+        if (StringUtils.isNotBlank(model.getDepartName())) {
+            criteria.andDepartNameEqualTo(model.getDepartName());
+        }
+        if (StringUtils.isNotBlank(model.getCapacityCode())) {
+            criteria.andCapacityCodeEqualTo(model.getCapacityCode());
         }
         example.setOrderByClause("id desc");
         Page<PayProductionCapacity> payProductionCapacities = PageHelper.startPage(model.getPageNum(), model.getPageSize())
@@ -58,8 +61,6 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
         List<PayProductCapacityVO> payProductCapacityVOS = BeanCopyUtils.copyPropertiesForNewList(payProductionCapacities, () -> new PayProductCapacityVO());
         if (CollectionUtils.isNotEmpty(payProductCapacityVOS)) {
             payProductCapacityVOS.stream().forEach(capacity -> {
-                PayUser payUser = payUserMapper.selectByPrimaryKey(capacity.getUserId());
-                capacity.setUserName(Objects.isNull(payUser) ? "" : payUser.getUserName());
                 PayTeam payTeam = payTeamMapper.selectByPrimaryKey(capacity.getTeamId());
                 capacity.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
                 PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(capacity.getDepartId());
@@ -79,12 +80,7 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
 
     @Override
     public List<PayProductionCapacity> getList(PayProductCapacityDTO model) {
-        PayProductionCapacityExample example = new PayProductionCapacityExample();
-        PayProductionCapacityExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(model.getDepartName())) {
-            criteria.andDepartNameEqualTo(model.getDepartName());
-        }
-        return PayProductionCapacityMapper.selectByExample(example);
+        return PayProductionCapacityMapper.getList(model);
     }
 
     @Override
@@ -95,6 +91,8 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
             payTeam.setDepartName(payProductionWorkshop.getDepartName());
         }
+        PayUser payUser = payUserMapper.selectByPrimaryKey(payTeam.getUserId());
+        payTeam.setUserName(payUser.getUserName());
         payTeam.setCreateUser(getLoginUserName());
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setCreateTime(new Date());

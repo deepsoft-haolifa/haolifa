@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.service.PayWorkingProcedureService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -76,9 +77,15 @@ public class PayWorkingProcedureController {
     }
 
     @ApiOperation("分配任务按钮")
-    @GetMapping(value = "assignTask/{orderNo}")
-    public ResultBean assignTask(@PathVariable String orderNo) {
-        return payWorkingProcedureService.assignTask(orderNo);
+    @GetMapping(value = "assignTask")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "orderNo", value = "订单号", required = true),
+        @ApiImplicitParam(name = "type", value = "订单类型， 1：生产装配订单；2：喷涂订单；3：机加工订单", required = true)
+
+    })
+    public ResultBean assignTask(@RequestParam(value = "orderNo") String orderNo,
+                                 @RequestParam(value = "type") String type) {
+        return payWorkingProcedureService.assignTask(orderNo, type);
     }
 
     @ApiOperation("分配任务保存按钮")

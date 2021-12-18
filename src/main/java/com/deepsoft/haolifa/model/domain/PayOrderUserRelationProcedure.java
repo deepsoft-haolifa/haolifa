@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayOrderUserRelationProcedure {
@@ -7,9 +8,13 @@ public class PayOrderUserRelationProcedure {
 
     private Integer userId;
 
-    private String orderId;
+    private Integer orderId;
 
-    private String procedureId;
+    private Integer procedureId;
+
+    private Integer productId;
+
+    private BigDecimal hourPrice;
 
     private String createUser;
 
@@ -19,11 +24,13 @@ public class PayOrderUserRelationProcedure {
 
     private Date updateTime;
 
-    public PayOrderUserRelationProcedure(Integer id, Integer userId, String orderId, String procedureId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayOrderUserRelationProcedure(Integer id, Integer userId, Integer orderId, Integer procedureId, Integer productId, BigDecimal hourPrice, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.orderId = orderId;
         this.procedureId = procedureId;
+        this.productId = productId;
+        this.hourPrice = hourPrice;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.createTime = createTime;
@@ -50,20 +57,36 @@ public class PayOrderUserRelationProcedure {
         this.userId = userId;
     }
 
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
-    public String getProcedureId() {
+    public Integer getProcedureId() {
         return procedureId;
     }
 
-    public void setProcedureId(String procedureId) {
-        this.procedureId = procedureId == null ? null : procedureId.trim();
+    public void setProcedureId(Integer procedureId) {
+        this.procedureId = procedureId;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public BigDecimal getHourPrice() {
+        return hourPrice;
+    }
+
+    public void setHourPrice(BigDecimal hourPrice) {
+        this.hourPrice = hourPrice;
     }
 
     public String getCreateUser() {

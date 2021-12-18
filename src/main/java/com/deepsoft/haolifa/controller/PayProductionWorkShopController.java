@@ -58,4 +58,10 @@ public class PayProductionWorkShopController {
     public ResultBean getAllList() {
         return payProductionWorkShopService.getList();
     }
+
+    @ApiOperation("工序新增获取去重部门列表")
+    @PostMapping("/getDepartDistinctList")
+    public ResultBean getDepartDistinctList() {
+        return payProductionWorkShopService.getDepartDistinctList();
+    }
 }

@@ -184,7 +184,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             return ResultBean.success(new ArrayList<>());
         }
         for (PayOrderUserRelationProcedure payOrderUserRelationProcedure : payOrderUserRelationProcedureList) {
-            String orderId = payOrderUserRelationProcedure.getOrderId();
+//            String orderId = payOrderUserRelationProcedure.getOrderId();
             Integer userId = payOrderUserRelationProcedure.getUserId();
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
@@ -192,7 +192,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             BigDecimal totalAmount = new BigDecimal("0");
             Integer qualifiedNumber = null;
             if (CommonEnum.UserType.MARRIED.type.equals(userType)) {
-                List<OrderProductAssociate> orderProductList = orderProductService.getOrderProductList(orderId);
+                List<OrderProductAssociate> orderProductList = orderProductService.getOrderProductList("orderId");
                 if (CollectionUtils.isEmpty(orderProductList)) {
                     continue;
                 }
@@ -223,7 +223,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 }
             } else {
                 // 1: 零件质检记录
-                List<InspectHistory> inspectHistoryDtos = inspectService.historyList(orderId, payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
+                List<InspectHistory> inspectHistoryDtos = inspectService.historyList("orderId", payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
                 if (null != inspectHistoryDtos && inspectHistoryDtos.size() > 0) {
                     for (InspectHistory inspectHistory : inspectHistoryDtos) {
                         // 合格数量
@@ -241,7 +241,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     }
                 }
                 // 喷涂记录
-                List<SprayInspectHistory> inspectList = sprayService.getInspectList(orderId, payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
+                List<SprayInspectHistory> inspectList = sprayService.getInspectList("orderId", payWagesVO.getStartCreateTime(), payWagesVO.getEndCreateTime());
                 if (Objects.nonNull(inspectList) && inspectList.size() > 0) {
                     for (SprayInspectHistory sprayInspectHistory : inspectList) {
                         // 合格数量

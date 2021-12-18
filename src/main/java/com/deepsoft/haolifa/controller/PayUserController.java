@@ -2,7 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
-import com.deepsoft.haolifa.model.vo.PayUserVO;
+import com.deepsoft.haolifa.model.vo.pay.PayUserVO;
 import com.deepsoft.haolifa.service.PayUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

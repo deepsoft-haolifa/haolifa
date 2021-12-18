@@ -1,13 +1,15 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
-import com.deepsoft.haolifa.model.vo.PayUserVO;
+import com.deepsoft.haolifa.model.vo.pay.PayUserVO;
 import com.deepsoft.haolifa.service.PayUserService;
 import com.deepsoft.haolifa.service.PayWagesRelationUserService;
+import com.deepsoft.haolifa.util.CommonUtil;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -136,6 +138,10 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     @Override
     @Transactional
     public ResultBean save(PayUserDTO model) {
+        String s = CommonUtil.IDCardValidate(model.getIdCard());
+        if (StringUtils.isNotBlank(s)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_INVALID, s);
+        }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
         payUser.setCreateTime(new Date());
@@ -206,7 +212,19 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
 
     @Override
     public ResultBean delete(Integer userId) {
-        return ResultBean.success(payUserMapper.deleteByPrimaryKey(userId));
+        payUserMapper.deleteByPrimaryKey(userId);
+        // 工资人员
+        PayWagesRelationUser relationUser = new PayWagesRelationUser();
+        relationUser.setUserId(userId);
+        List<PayWagesRelationUser> list = payWagesRelationUserService.getList(relationUser);
+        if (CollectionUtils.isNotEmpty(list)) {
+            payWagesMapper.deleteByPrimaryKey(list.get(0).getWagesId());
+        }
+        // 考勤人员
+        PayWorkAttendanceExample example = new PayWorkAttendanceExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        payWorkAttendanceMapper.deleteByExample(example);
+        return ResultBean.success(1);
     }
 
     @Override

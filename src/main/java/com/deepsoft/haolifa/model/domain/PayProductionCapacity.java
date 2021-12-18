@@ -7,6 +7,8 @@ public class PayProductionCapacity {
 
     private Integer userId;
 
+    private String userName;
+
     private String capacityCode;
 
     private Integer teamId;
@@ -23,9 +25,10 @@ public class PayProductionCapacity {
 
     private Date updateTime;
 
-    public PayProductionCapacity(Integer id, Integer userId, String capacityCode, Integer teamId, Integer departId, String departName, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayProductionCapacity(Integer id, Integer userId, String userName, String capacityCode, Integer teamId, Integer departId, String departName, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
+        this.userName = userName;
         this.capacityCode = capacityCode;
         this.teamId = teamId;
         this.departId = departId;
@@ -54,6 +57,14 @@ public class PayProductionCapacity {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
     }
 
     public String getCapacityCode() {

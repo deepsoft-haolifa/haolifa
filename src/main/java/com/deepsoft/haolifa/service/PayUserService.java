@@ -2,7 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
-import com.deepsoft.haolifa.model.vo.PayUserVO;
+import com.deepsoft.haolifa.model.vo.pay.PayUserVO;
 
 public interface PayUserService {
     ResultBean pageInfo(PayUserDTO model);

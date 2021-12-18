@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -235,62 +236,52 @@ public class PayOrderUserRelationProcedureExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdEqualTo(String value) {
+        public Criteria andOrderIdEqualTo(Integer value) {
             addCriterion("order_id =", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotEqualTo(String value) {
+        public Criteria andOrderIdNotEqualTo(Integer value) {
             addCriterion("order_id <>", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdGreaterThan(String value) {
+        public Criteria andOrderIdGreaterThan(Integer value) {
             addCriterion("order_id >", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdGreaterThanOrEqualTo(String value) {
+        public Criteria andOrderIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("order_id >=", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLessThan(String value) {
+        public Criteria andOrderIdLessThan(Integer value) {
             addCriterion("order_id <", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLessThanOrEqualTo(String value) {
+        public Criteria andOrderIdLessThanOrEqualTo(Integer value) {
             addCriterion("order_id <=", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLike(String value) {
-            addCriterion("order_id like", value, "orderId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderIdNotLike(String value) {
-            addCriterion("order_id not like", value, "orderId");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderIdIn(List<String> values) {
+        public Criteria andOrderIdIn(List<Integer> values) {
             addCriterion("order_id in", values, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotIn(List<String> values) {
+        public Criteria andOrderIdNotIn(List<Integer> values) {
             addCriterion("order_id not in", values, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdBetween(String value1, String value2) {
+        public Criteria andOrderIdBetween(Integer value1, Integer value2) {
             addCriterion("order_id between", value1, value2, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotBetween(String value1, String value2) {
+        public Criteria andOrderIdNotBetween(Integer value1, Integer value2) {
             addCriterion("order_id not between", value1, value2, "orderId");
             return (Criteria) this;
         }
@@ -305,63 +296,173 @@ public class PayOrderUserRelationProcedureExample {
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdEqualTo(String value) {
+        public Criteria andProcedureIdEqualTo(Integer value) {
             addCriterion("procedure_id =", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdNotEqualTo(String value) {
+        public Criteria andProcedureIdNotEqualTo(Integer value) {
             addCriterion("procedure_id <>", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdGreaterThan(String value) {
+        public Criteria andProcedureIdGreaterThan(Integer value) {
             addCriterion("procedure_id >", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdGreaterThanOrEqualTo(String value) {
+        public Criteria andProcedureIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("procedure_id >=", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdLessThan(String value) {
+        public Criteria andProcedureIdLessThan(Integer value) {
             addCriterion("procedure_id <", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdLessThanOrEqualTo(String value) {
+        public Criteria andProcedureIdLessThanOrEqualTo(Integer value) {
             addCriterion("procedure_id <=", value, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdLike(String value) {
-            addCriterion("procedure_id like", value, "procedureId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcedureIdNotLike(String value) {
-            addCriterion("procedure_id not like", value, "procedureId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProcedureIdIn(List<String> values) {
+        public Criteria andProcedureIdIn(List<Integer> values) {
             addCriterion("procedure_id in", values, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdNotIn(List<String> values) {
+        public Criteria andProcedureIdNotIn(List<Integer> values) {
             addCriterion("procedure_id not in", values, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdBetween(String value1, String value2) {
+        public Criteria andProcedureIdBetween(Integer value1, Integer value2) {
             addCriterion("procedure_id between", value1, value2, "procedureId");
             return (Criteria) this;
         }
 
-        public Criteria andProcedureIdNotBetween(String value1, String value2) {
+        public Criteria andProcedureIdNotBetween(Integer value1, Integer value2) {
             addCriterion("procedure_id not between", value1, value2, "procedureId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIsNull() {
+            addCriterion("product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIsNotNull() {
+            addCriterion("product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdEqualTo(Integer value) {
+            addCriterion("product_id =", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotEqualTo(Integer value) {
+            addCriterion("product_id <>", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThan(Integer value) {
+            addCriterion("product_id >", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("product_id >=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThan(Integer value) {
+            addCriterion("product_id <", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThanOrEqualTo(Integer value) {
+            addCriterion("product_id <=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIn(List<Integer> values) {
+            addCriterion("product_id in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotIn(List<Integer> values) {
+            addCriterion("product_id not in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdBetween(Integer value1, Integer value2) {
+            addCriterion("product_id between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("product_id not between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceIsNull() {
+            addCriterion("hour_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceIsNotNull() {
+            addCriterion("hour_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceEqualTo(BigDecimal value) {
+            addCriterion("hour_price =", value, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceNotEqualTo(BigDecimal value) {
+            addCriterion("hour_price <>", value, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceGreaterThan(BigDecimal value) {
+            addCriterion("hour_price >", value, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("hour_price >=", value, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceLessThan(BigDecimal value) {
+            addCriterion("hour_price <", value, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("hour_price <=", value, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceIn(List<BigDecimal> values) {
+            addCriterion("hour_price in", values, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceNotIn(List<BigDecimal> values) {
+            addCriterion("hour_price not in", values, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("hour_price between", value1, value2, "hourPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHourPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("hour_price not between", value1, value2, "hourPrice");
             return (Criteria) this;
         }
 

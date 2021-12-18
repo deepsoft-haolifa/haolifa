@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.vo;
+package com.deepsoft.haolifa.model.vo.pay;
 
 import com.deepsoft.haolifa.model.dto.BaseCondition;
 import io.swagger.annotations.ApiModel;
