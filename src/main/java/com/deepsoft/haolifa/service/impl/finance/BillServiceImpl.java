@@ -110,7 +110,19 @@ public class BillServiceImpl implements BillService {
         if (StringUtils.isNotEmpty(model.getCollectionCompany())) {
             criteria.andString2Like(model.getCollectionCompany());
         }
-        // 部门 like todo
+        // 部门 like
+        if (StringUtils.isNotEmpty(model.getDeptName())) {
+            SysDepartmentExample departmentExample = new SysDepartmentExample();
+            SysDepartmentExample.Criteria departmentExampleCriteria = departmentExample.createCriteria();
+            departmentExampleCriteria.andDeptNameLike(model.getDeptName());
+            List<String> deparList = departmentMapper.selectByExample(departmentExample).stream()
+                .map(department->department.getId()+"")
+                .collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(deparList)){
+                criteria.andDeptIdIn(deparList);
+            }
+        }
+
 
         // 凭证号 付款类别 收款单位 付款单位 部门
         bizBillExample.setOrderByClause("id desc");
@@ -123,6 +135,7 @@ public class BillServiceImpl implements BillService {
 
         List<Integer> departIdList = pageData.getResult().stream()
             .map(bizBill -> Integer.parseInt(bizBill.getDeptId()))
+            .distinct()
             .collect(Collectors.toList());
 
         Map<Integer, DepartmentDTO> departmentMap = new HashMap<>();

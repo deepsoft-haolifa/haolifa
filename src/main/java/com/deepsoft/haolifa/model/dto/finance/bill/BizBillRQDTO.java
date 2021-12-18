@@ -32,6 +32,9 @@ public class BizBillRQDTO extends PageParam {
     @ApiModelProperty(value = "部门ID")
     private String deptId;
 
+    @ApiModelProperty(value = "部门名称")
+    private String deptName;
+
 
 
 }
