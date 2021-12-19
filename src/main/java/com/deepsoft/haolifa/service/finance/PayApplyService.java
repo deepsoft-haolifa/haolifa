@@ -1,11 +1,12 @@
 package com.deepsoft.haolifa.service.finance;
 
-import com.deepsoft.haolifa.model.domain.BizPayPlan;
+import com.deepsoft.haolifa.model.domain.BizPayApply;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.payplan.*;
+import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRSDTO;
 
-public interface PayPlanService {
-
+public interface PayApplyService {
 
     /**
      * 添加
@@ -13,7 +14,7 @@ public interface PayPlanService {
      * @param model
      * @return
      */
-    ResultBean save(BizPayPlanAddDTO model);
+    ResultBean save(PayApplyAddDTO model);
 
 
     /**
@@ -30,7 +31,7 @@ public interface PayPlanService {
      * @param model
      * @return
      */
-    ResultBean update(BizPayPlan model);
+    ResultBean update(BizPayApply model);
 
     /**
      * 获取详情
@@ -46,13 +47,13 @@ public interface PayPlanService {
      * @param model
      * @return
      */
-    ResultBean<BizPayPlanRSDTO> getList(BizPayPlanRQDTO model);
+    ResultBean<PayApplyRSDTO> getList(PayApplyRQDTO model);
+
     /**
-     * 获取列表
+     * 付款申请-发起审批
      *
-     * @param model
+     * @param id
      * @return
      */
-    ResultBean<BizPayPlanSummaryRSDTO>  getPayPlanSummaryList(BizPayPlanSummaryRQDTO  model);
-
+    ResultBean approve(Integer id);
 }
