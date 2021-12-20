@@ -18,5 +18,5 @@ public interface PayProductionCapacityService {
 
     ResultBean delete(Integer capacityId);
 
-    List<PayProductionCapacity> getListByUserIdList(List<Integer> userIdList);
+    List<PayProductionCapacity> getListByCapacityCode(String postCode);
 }

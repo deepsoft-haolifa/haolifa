@@ -28,4 +28,6 @@ public class PayUserVO extends BaseCondition {
     private String userType;
     @ApiModelProperty(value = "上级ID")
     private Integer superiorId;
+    @ApiModelProperty(value = "部门名称")
+    private Integer departName;
 }

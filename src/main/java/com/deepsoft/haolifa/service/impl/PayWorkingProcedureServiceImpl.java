@@ -174,15 +174,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 payWorkingProcedureUserVO.setProductId(orderProductAssociate.getId());
                 payWorkingProcedureUserVOS.add(payWorkingProcedureUserVO);
                 // 找人员
-                PayUserRelationProcedureExample userRelationProcedureExample = new PayUserRelationProcedureExample();
-                userRelationProcedureExample.createCriteria().andProcedureIdEqualTo(workingProcedure.getId());
-                List<PayUserRelationProcedure> payUserRelationProcedures = payUserRelationProcedureMapper.selectByExample(userRelationProcedureExample);
-                if (CollectionUtils.isEmpty(payUserRelationProcedures) && payUserRelationProcedures.size() == 0) {
-                    log.info("通过工序找人员关联表为空");
-                    continue;
-                }
-                List<Integer> userIdList = payUserRelationProcedures.stream().map(rr -> rr.getUserId()).collect(Collectors.toList());
-                List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByUserIdList(userIdList);
+                List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
                 if (CollectionUtils.isEmpty(listByUserIdList) && listByUserIdList.size() == 0) {
                     log.info("通过工序找人员为空");
                     continue;

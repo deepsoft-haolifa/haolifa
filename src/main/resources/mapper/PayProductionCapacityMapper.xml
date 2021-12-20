@@ -312,12 +312,13 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="getListByUserIdList" resultMap="BaseResultMap" parameterType="java.util.List">
+    <select id="getListByCapacityCode" resultMap="BaseResultMap" parameterType="String">
         select *
         from pay_production_capacity
-        where user_id in
-        <foreach collection="list" item="userIdList" open="(" close=")" separator=",">
-            #{userIdList}
-        </foreach>
+        <where>
+            <if test="postCode != null and postCode != ''" >
+                and FIND_IN_SET(#{postCode}, capacity_code)
+            </if>
+        </where>
     </select>
 </mapper>

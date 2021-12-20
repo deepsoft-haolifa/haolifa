@@ -79,8 +79,8 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     }
 
     @Override
-    public List<PayProductionCapacity> getListByUserIdList(List<Integer> userIdList) {
-        return PayProductionCapacityMapper.getListByUserIdList(userIdList);
+    public List<PayProductionCapacity> getListByCapacityCode(String postCode) {
+        return PayProductionCapacityMapper.getListByCapacityCode(postCode);
     }
 
     @Override

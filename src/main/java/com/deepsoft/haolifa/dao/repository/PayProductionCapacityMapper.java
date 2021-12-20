@@ -28,5 +28,5 @@ public interface PayProductionCapacityMapper {
 
     int updateByPrimaryKey(PayProductionCapacity record);
 
-    List<PayProductionCapacity> getListByUserIdList(List<Integer> userIdList);
+    List<PayProductionCapacity> getListByCapacityCode(String postCode);
 }
