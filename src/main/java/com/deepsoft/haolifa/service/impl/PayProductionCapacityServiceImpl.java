@@ -91,8 +91,6 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
         if (Objects.nonNull(payProductionWorkshop)) {
             payTeam.setDepartName(payProductionWorkshop.getDepartName());
         }
-        PayUser payUser = payUserMapper.selectByPrimaryKey(payTeam.getUserId());
-        payTeam.setUserName(payUser.getUserName());
         payTeam.setCreateUser(getLoginUserName());
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setCreateTime(new Date());
