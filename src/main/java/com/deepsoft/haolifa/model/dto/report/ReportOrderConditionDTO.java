@@ -29,6 +29,12 @@ public class ReportOrderConditionDTO {
     private String endDate;
     @ApiModelProperty(value = "年")
     private String year;
+    @ApiModelProperty(value = "发货状态:-1 全部 0 待发货（默认） 1 部分发货 2 发货完成")
+    private Byte deliverStatus;
+
+    @ApiModelProperty(value = "产品名称")
+    private String productName;
+
 }
 
 

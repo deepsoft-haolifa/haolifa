@@ -71,4 +71,14 @@ public interface SaleReportMapper {
      * 订单统计-按需方统计
      */
     DemandSaleAmountRespDTO reportSaleByDemandSummary(ReportOrderConditionDTO model);
+
+    /**
+     * 销售报表-产值列表
+     */
+
+    List<SaleOutputRespDTO> reportSaleOutputList(ReportOrderConditionDTO model);
+    /**
+     * 销售报表-产值统计
+     */
+    BigDecimal reportSaleOutputSummary(ReportOrderConditionDTO model);
 }

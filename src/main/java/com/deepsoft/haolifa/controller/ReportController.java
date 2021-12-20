@@ -203,7 +203,6 @@ public class ReportController {
     @ApiOperation("销售报表-根据产品型号统计合同金额")
     @RequestMapping(value = "/sale/getSaleByModelContract", method = RequestMethod.GET)
     public ResultBean getSaleByModelContract() {
-
         List<ExportSaleDTO> exportSaleDTOS = reportService.selectByModelContract();
         return ResultBean.success(exportSaleDTOS);
     }

@@ -18,7 +18,7 @@ public class ReportPurchaseConditionDTO {
     private Integer pageSize = 20;
 
     @ApiModelProperty("采购订单号")
-    private String orderNo;
+    private String purchaseOrderNo;
     @ApiModelProperty("采购订单状态")
     private Integer status;
     @ApiModelProperty("供应商名称")

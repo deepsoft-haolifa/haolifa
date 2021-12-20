@@ -70,6 +70,7 @@
         po.purchase_order_no,
         po.STATUS,
         po.supplier_name,
+        po.create_time,
         po.total_count,
         IFNULL( po.total_price, 0 ) total,
         IFNULL( po.paid_account, 0 ) payTotal,
@@ -113,8 +114,8 @@
             <if test="endDate!=null and endDate != ''">
                 and po.create_time&lt;=#{endDate}
             </if>
-            <if test="supplerName!=null and supplerName != ''">
-                and po.suppler_name like CONCAT('%',#{supplerName},'%')
+            <if test="supplierName!=null and supplierName != ''">
+                and po.supplier_name like CONCAT('%',#{supplierName},'%')
             </if>
             <if test="purchaseOrderNo!=null and purchaseOrderNo != ''">
                 and po.purchase_order_no like CONCAT('%',#{purchaseOrderNo},'%')

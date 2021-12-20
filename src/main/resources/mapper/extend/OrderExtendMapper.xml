@@ -53,7 +53,7 @@
         SELECT
             op.order_no,
             op.order_status,
-            op.contract_sign_date,
+            op.createTime,
             op.demand_name,
             op.delivery_date,
             op.total_price,
@@ -100,7 +100,7 @@
             <if test="orderStatus != null and orderStatus > 0">
                 and op.order_status = #{orderStatus}
             </if>
-            <if test="deliverStatus != null and deliverStatus > 0">
+            <if test="deliverStatus != null and deliverStatus > -1">
                 and op.deliver_status = #{deliverStatus}
             </if>
             <if test="demandName != null and demandName != ''">

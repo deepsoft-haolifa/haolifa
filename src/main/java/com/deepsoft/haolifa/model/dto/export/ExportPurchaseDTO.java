@@ -9,6 +9,9 @@ import lombok.Data;
 @Data
 public class ExportPurchaseDTO {
 
+    @ApiModelProperty("合同编号")
+    private String purchaseOrderNo;
+
     @ApiModelProperty("供应商名称")
     private String supplierName;
 

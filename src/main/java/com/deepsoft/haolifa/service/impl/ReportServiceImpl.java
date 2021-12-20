@@ -55,8 +55,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         if (StrUtil.isNotBlank(dto.getSupplierName())) {
             paramMap.put("supplierName", dto.getSupplierName());
         }
-        paramMap.put("startDate", CommonUtil.packYearMonthMapParam(dto.getStartDate()));
-        paramMap.put("endDate", CommonUtil.packYearMonthMapParam(dto.getEndDate()));
+        paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(dto.getStartDate()));
+        paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(dto.getEndDate()));
         List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectBySupplierName(paramMap);
         paramMap.put("status", 5);
         List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectPurchase(paramMap);
@@ -74,8 +74,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     @Override
     public ResultBean selectPurchase(ReportBaseDTO baseDTO) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
-        paramMap.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
+        paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(baseDTO.getStartDate()));
+        paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(baseDTO.getEndDate()));
         List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectPurchase(paramMap);
         paramMap.put("status", 5);
         List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectPurchase(paramMap);
@@ -170,8 +170,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     @Override
     public List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
-        paramMap.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
+        paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(baseDTO.getStartDate()));
+        paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(baseDTO.getEndDate()));
         return saleReportMapper.selectContractByDemandNameMonth(paramMap);
     }
 
@@ -216,8 +216,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     @Override
     public List<ExportContractDTO> selectshouhuiContractByDemandNameByMonth(ReportBaseDTO baseDTO) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
-        paramMap.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
+        paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(baseDTO.getStartDate()));
+        paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(baseDTO.getEndDate()));
         return saleReportMapper.selectshouhuiContractByDemandNameMonth(paramMap);
     }
 
@@ -238,8 +238,8 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     @Override
     public List<DemandAmountDto> selectAllAmountByDemandName(ReportBaseDTO baseDTO) {
         Map<String, Object> packMapParam = new HashMap<>();
-        packMapParam.put("startDate", CommonUtil.packYearMonthMapParam(baseDTO.getStartDate()));
-        packMapParam.put("endDate", CommonUtil.packYearMonthMapParam(baseDTO.getEndDate()));
+        packMapParam.put("startDate", CommonUtil.packYearMonthMapParamStart(baseDTO.getStartDate()));
+        packMapParam.put("endDate", CommonUtil.packYearMonthMapParamEnd(baseDTO.getEndDate()));
 
         List<DemandAmountDto> list = new ArrayList<>();
         List<ExportContractDTO> invoice = saleReportMapper.selectInvoiceAmountByDemandName(packMapParam);

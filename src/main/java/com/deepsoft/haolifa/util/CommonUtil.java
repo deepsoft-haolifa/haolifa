@@ -55,7 +55,7 @@ public class CommonUtil {
      * @param yearMonth 格式是：年-月
      * @return
      */
-    public static String packYearMonthMapParam(String yearMonth) {
+    public static String packYearMonthMapParamStart(String yearMonth) {
         if (StrUtil.isBlank(yearMonth)) {
             throw new BaseException("年份，月份不能为空");
         }
@@ -67,7 +67,21 @@ public class CommonUtil {
         } else {
             return startYear + "-" + (startIMonth - 1) + "-26";
         }
+    }
 
+    /**
+     * 获取某年某月的数据
+     *
+     * @param yearMonth 格式是：年-月
+     * @return
+     */
+    public static String packYearMonthMapParamEnd(String yearMonth) {
+        if (StrUtil.isBlank(yearMonth)) {
+            throw new BaseException("年份，月份不能为空");
+        }
+        String startYear = yearMonth.substring(0, 4);
+        String startMonthStr = yearMonth.substring(5, 7);
+        return startYear + "-" + startMonthStr + "-25";
     }
 
 
@@ -98,6 +112,7 @@ public class CommonUtil {
 
     /**
      * 判断字符串是否为数字,0-9重复0次或者多次
+     *
      * @param strnum
      * @return
      */

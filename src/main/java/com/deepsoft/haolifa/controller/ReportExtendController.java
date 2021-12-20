@@ -35,6 +35,7 @@ public class ReportExtendController {
     public ResultBean<PageDTO<OrderListRespDTO>> reportOrderList(@RequestBody ReportOrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportOrderList(dto));
     }
+
     @ApiOperation("订单列表总额汇总--用于销售报表-订货（2021-12-hd）")
     @PostMapping("/report-order-summary")
     public ResultBean<BigDecimal> reportOrderSummary(@RequestBody ReportOrderConditionDTO dto) {
@@ -46,32 +47,36 @@ public class ReportExtendController {
     public ResultBean<PageDTO<PaymentRespDTO>> reportCollectOrderList(@RequestBody ReportOrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportCollectOrderList(dto));
     }
+
     @ApiOperation("回款订单金额汇总--用于销售报表-回款（2021-12-hd）")
     @PostMapping("/report-collect-order-summary")
     public ResultBean<TotalAmountDTO> reportCollectOrderSummary(@RequestBody ReportOrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportCollectOrderSummary(dto));
     }
+
     @ApiOperation("按照需方统计展示--用于销售报表（2021-12-hd）")
     @PostMapping("/report-sale-demand-list")
     public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleDemandList(@RequestBody ReportOrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportSaleByDemandList(dto));
     }
+
     @ApiOperation("按照需方统计汇总--用于销售报表（2021-12-hd）")
     @PostMapping("/report-sale-demand-summary")
     public ResultBean<DemandSaleAmountRespDTO> reportSaleDemandSummary(@RequestBody ReportOrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportSaleByDemandSummary(dto));
     }
 
-//    @ApiOperation("每月产值总额统计--用于销售报表（2021-12-hd）")
-//    @PostMapping("/report-sale-month-list")
-//    public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleMonthList(@RequestBody OrderConditionDTO dto) {
-//        return ResultBean.success(reportExtendService.reportSaleByDemandList(dto));
-//    }
-//    @ApiOperation("每月产值总额汇总--用于销售报表（2021-12-hd）")
-//    @PostMapping("/report-sale-month-summary")
-//    public ResultBean<DemandSaleAmountRespDTO> reportSaleMonthSummary(@RequestBody OrderConditionDTO dto) {
-//        return ResultBean.success(reportExtendService.reportSaleByDemandSummary(dto));
-//    }
+    @ApiOperation("每月产值总额统计--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-sale-output-list")
+    public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleOutputList(@RequestBody ReportOrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportSaleOutputList(dto));
+    }
+
+    @ApiOperation("每月产值总额汇总--用于销售报表（2021-12-hd）")
+    @PostMapping("/report-sale-output-summary")
+    public ResultBean<DemandSaleAmountRespDTO> reportSaleOutputSummary(@RequestBody ReportOrderConditionDTO dto) {
+        return ResultBean.success(reportExtendService.reportSaleOutputSummary(dto));
+    }
 
 
     @ApiOperation("采购统计列表--用于采购报表（2021-12-hd）")
@@ -79,6 +84,7 @@ public class ReportExtendController {
     public ResultBean<PageDTO<ExportPurchaseDTO>> reportPurchaseList(@RequestBody ReportPurchaseConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportPurchaseList(dto));
     }
+
     @ApiOperation("采购统计汇总--用于采购报表（2021-12-hd）")
     @PostMapping("/report-purchase-summary")
     public ResultBean<ExportPurchaseDTO> reportPurchaseSummary(@RequestBody ReportPurchaseConditionDTO dto) {
