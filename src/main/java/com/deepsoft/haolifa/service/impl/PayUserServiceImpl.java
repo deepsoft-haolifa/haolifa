@@ -181,6 +181,10 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
 
     @Override
     public ResultBean edit(PayUserDTO model) {
+        String s = CommonUtil.IDCardValidate(model.getIdCard());
+        if (StringUtils.isNotBlank(s)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_INVALID, s);
+        }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
         payUser.setUpdateTime(new Date());
@@ -228,15 +232,17 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     }
 
     @Override
-    public ResultBean saveUserRelationProcedure(Integer userId, Integer procedureId) {
-        PayUserRelationProcedure payUserRelationProcedure = new PayUserRelationProcedure();
-        payUserRelationProcedure.setUserId(userId);
-        payUserRelationProcedure.setProcedureId(procedureId);
-        payUserRelationProcedure.setCreateUser(getLoginUserName());
-        payUserRelationProcedure.setUpdateUser(getLoginUserName());
-        payUserRelationProcedure.setCreateTime(new Date());
-        payUserRelationProcedure.setUpdateTime(new Date());
-        payUserRelationProcedureMapper.insert(payUserRelationProcedure);
+    public ResultBean saveUserRelationProcedure(Integer userId, List<Integer> procedureIdList) {
+        for (Integer procedureId : procedureIdList) {
+            PayUserRelationProcedure payUserRelationProcedure = new PayUserRelationProcedure();
+            payUserRelationProcedure.setUserId(userId);
+            payUserRelationProcedure.setProcedureId(procedureId);
+            payUserRelationProcedure.setCreateUser(getLoginUserName());
+            payUserRelationProcedure.setUpdateUser(getLoginUserName());
+            payUserRelationProcedure.setCreateTime(new Date());
+            payUserRelationProcedure.setUpdateTime(new Date());
+            payUserRelationProcedureMapper.insert(payUserRelationProcedure);
+        }
         return ResultBean.success(1);
     }
 

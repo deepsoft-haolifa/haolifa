@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -63,10 +64,10 @@ public class PayUserController {
     @ApiOperation("保存人员工序关联表")
     @PostMapping(value = "/saveUserRelationProcedure")
     public ResultBean saveUserRelationProcedure(@RequestParam(value = "userId", required = true) Integer userId,
-                           @RequestParam(value = "procedureId", required = true) Integer procedureId) {
-        if (Objects.isNull(userId) || Objects.isNull(procedureId)) {
+                           @RequestParam(value = "procedureIdList", required = true) List<Integer> procedureIdList) {
+        if (Objects.isNull(userId) || Objects.isNull(procedureIdList)) {
             throw new RuntimeException("userId or procedureId is null");
         }
-        return payUserService.saveUserRelationProcedure(userId, procedureId);
+        return payUserService.saveUserRelationProcedure(userId, procedureIdList);
     }
 }
