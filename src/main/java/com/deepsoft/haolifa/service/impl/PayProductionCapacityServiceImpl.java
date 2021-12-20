@@ -87,8 +87,8 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     public ResultBean save(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
-        if (Objects.nonNull(payTeam.getDepartId())) {
-            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
+        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
+        if (Objects.nonNull(payProductionWorkshop)) {
             payTeam.setDepartName(payProductionWorkshop.getDepartName());
         }
         PayUser payUser = payUserMapper.selectByPrimaryKey(payTeam.getUserId());
@@ -110,8 +110,8 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     public ResultBean edit(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
-        if (Objects.nonNull(payTeam.getDepartId())) {
-            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
+        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
+        if (Objects.nonNull(payProductionWorkshop)) {
             payTeam.setDepartName(payProductionWorkshop.getDepartName());
         }
         payTeam.setUpdateUser(getLoginUserName());

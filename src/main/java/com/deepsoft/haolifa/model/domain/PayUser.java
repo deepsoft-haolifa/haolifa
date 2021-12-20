@@ -56,6 +56,8 @@ public class PayUser {
 
     private Integer postId;
 
+    private String departName;
+
     private String userType;
 
     private String superiorName;
@@ -70,7 +72,7 @@ public class PayUser {
 
     private Date updateTime;
 
-    public PayUser(Integer id, String userName, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, String userType, String superiorName, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayUser(Integer id, String userName, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, String departName, String userType, String superiorName, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userName = userName;
         this.onceUserName = onceUserName;
@@ -97,6 +99,7 @@ public class PayUser {
         this.basePay = basePay;
         this.meritPay = meritPay;
         this.postId = postId;
+        this.departName = departName;
         this.userType = userType;
         this.superiorName = superiorName;
         this.superiorId = superiorId;
@@ -316,6 +319,14 @@ public class PayUser {
 
     public void setPostId(Integer postId) {
         this.postId = postId;
+    }
+
+    public String getDepartName() {
+        return departName;
+    }
+
+    public void setDepartName(String departName) {
+        this.departName = departName == null ? null : departName.trim();
     }
 
     public String getUserType() {

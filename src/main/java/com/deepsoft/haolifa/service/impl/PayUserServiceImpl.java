@@ -144,6 +144,10 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
+        if (Objects.nonNull(model.getPostId())) {
+            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(model.getPostId());
+            payUser.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        }
         payUser.setCreateTime(new Date());
         payUser.setUpdateTime(new Date());
         payUser.setCreateUser(getLoginUserName());
@@ -187,6 +191,10 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
+        if (Objects.nonNull(model.getPostId())) {
+            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(model.getPostId());
+            payUser.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        }
         payUser.setUpdateTime(new Date());
         payUser.setUpdateUser(getLoginUserName());
         payUserMapper.updateByPrimaryKeySelective(payUser);
@@ -252,6 +260,9 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         PayUserExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(payUserVO.getUserType())) {
             criteria.andUserTypeEqualTo(payUserVO.getUserType());
+        }
+        if (StringUtils.isNotBlank(payUserVO.getDepartName())) {
+            criteria.andDepartNameEqualTo(payUserVO.getDepartName());
         }
         List<PayUser> payUsers = payUserMapper.selectByExample(example);
         List<PayUserDTO> list = Lists.newArrayList();

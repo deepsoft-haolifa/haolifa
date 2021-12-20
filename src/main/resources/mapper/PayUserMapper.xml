@@ -29,6 +29,7 @@
       <arg column="base_pay" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="merit_pay" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="post_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="depart_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="user_type" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="superior_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="superior_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -100,8 +101,8 @@
     id, user_name, once_user_name, sex, birthday, nation, native_place, political_outlook, 
     blood_type, health, marry_status, id_card, registered, university_from, major, education, 
     graduation_time, working_time, address, insurance_base, phone, mail, team_id, base_pay, 
-    merit_pay, post_id, user_type, superior_name, superior_id, create_user, update_user, 
-    create_time, update_time
+    merit_pay, post_id, depart_name, user_type, superior_name, superior_id, create_user, 
+    update_user, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayUserExample" >
     select
@@ -145,9 +146,10 @@
       graduation_time, working_time, address, 
       insurance_base, phone, mail, 
       team_id, base_pay, merit_pay, 
-      post_id, user_type, superior_name, 
-      superior_id, create_user, update_user, 
-      create_time, update_time)
+      post_id, depart_name, user_type, 
+      superior_name, superior_id, create_user, 
+      update_user, create_time, update_time
+      )
     values (#{userName,jdbcType=VARCHAR}, #{onceUserName,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
       #{birthday,jdbcType=TIMESTAMP}, #{nation,jdbcType=VARCHAR}, #{nativePlace,jdbcType=VARCHAR}, 
       #{politicalOutlook,jdbcType=VARCHAR}, #{bloodType,jdbcType=VARCHAR}, #{health,jdbcType=VARCHAR}, 
@@ -156,9 +158,10 @@
       #{graduationTime,jdbcType=TIMESTAMP}, #{workingTime,jdbcType=TIMESTAMP}, #{address,jdbcType=VARCHAR}, 
       #{insuranceBase,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, 
       #{teamId,jdbcType=INTEGER}, #{basePay,jdbcType=DECIMAL}, #{meritPay,jdbcType=DECIMAL}, 
-      #{postId,jdbcType=INTEGER}, #{userType,jdbcType=VARCHAR}, #{superiorName,jdbcType=VARCHAR}, 
-      #{superiorId,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{postId,jdbcType=INTEGER}, #{departName,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, 
+      #{superiorName,jdbcType=VARCHAR}, #{superiorId,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayUser" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -240,6 +243,9 @@
       </if>
       <if test="postId != null" >
         post_id,
+      </if>
+      <if test="departName != null" >
+        depart_name,
       </if>
       <if test="userType != null" >
         user_type,
@@ -338,6 +344,9 @@
       </if>
       <if test="postId != null" >
         #{postId,jdbcType=INTEGER},
+      </if>
+      <if test="departName != null" >
+        #{departName,jdbcType=VARCHAR},
       </if>
       <if test="userType != null" >
         #{userType,jdbcType=VARCHAR},
@@ -449,6 +458,9 @@
       <if test="record.postId != null" >
         post_id = #{record.postId,jdbcType=INTEGER},
       </if>
+      <if test="record.departName != null" >
+        depart_name = #{record.departName,jdbcType=VARCHAR},
+      </if>
       <if test="record.userType != null" >
         user_type = #{record.userType,jdbcType=VARCHAR},
       </if>
@@ -503,6 +515,7 @@
       base_pay = #{record.basePay,jdbcType=DECIMAL},
       merit_pay = #{record.meritPay,jdbcType=DECIMAL},
       post_id = #{record.postId,jdbcType=INTEGER},
+      depart_name = #{record.departName,jdbcType=VARCHAR},
       user_type = #{record.userType,jdbcType=VARCHAR},
       superior_name = #{record.superiorName,jdbcType=VARCHAR},
       superior_id = #{record.superiorId,jdbcType=INTEGER},
@@ -592,6 +605,9 @@
       <if test="postId != null" >
         post_id = #{postId,jdbcType=INTEGER},
       </if>
+      <if test="departName != null" >
+        depart_name = #{departName,jdbcType=VARCHAR},
+      </if>
       <if test="userType != null" >
         user_type = #{userType,jdbcType=VARCHAR},
       </if>
@@ -643,6 +659,7 @@
       base_pay = #{basePay,jdbcType=DECIMAL},
       merit_pay = #{meritPay,jdbcType=DECIMAL},
       post_id = #{postId,jdbcType=INTEGER},
+      depart_name = #{departName,jdbcType=VARCHAR},
       user_type = #{userType,jdbcType=VARCHAR},
       superior_name = #{superiorName,jdbcType=VARCHAR},
       superior_id = #{superiorId,jdbcType=INTEGER},
