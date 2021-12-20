@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -50,44 +51,38 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     private QualityReportMapper qualityReportMapper;
 
     @Override
-    public ResultBean selectBySupplierName(ReportSupplierConditionDTO dto) {
-        Map<String, Object> paramMap = new HashMap<>();
-        if (StrUtil.isNotBlank(dto.getSupplierName())) {
-            paramMap.put("supplierName", dto.getSupplierName());
+    public ResultBean selectBySupplierName(ReportSupplierConditionDTO model) {
+        //如果传入2021年，则查2020-12-26 至 2021-12-25
+        if (StrUtil.isNotBlank(model.getYear())) {
+            Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
+            model.setStartDate(MapUtil.getStr(param, "startDate"));
+            model.setEndDate(MapUtil.getStr(param, "endDate"));
         }
-        paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(dto.getStartDate()));
-        paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(dto.getEndDate()));
-        List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectBySupplierName(paramMap);
-        paramMap.put("status", 5);
-        List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectPurchase(paramMap);
-        if (CollUtil.isNotEmpty(exportPurchaseDTOS)) {
-            for (ExportPurchaseDTO i : exportPurchaseDTOS) {
-                List<String> collect = exportPurchaseDTOS1.stream().filter(e -> e.getCreateTime().equals(i.getCreateTime())).map(ExportPurchaseDTO::getTotal).collect(Collectors.toList());
-                if (CollUtil.isNotEmpty(collect)) {
-                    i.setRegistered(collect.get(0));
-                }
-            }
+        if (null != model.getStartDate()) {
+            model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
         }
+        if (null != model.getEndDate()) {
+            model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+        }
+        List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectBySupplierName(model);
         return ResultBean.success(exportPurchaseDTOS);
     }
 
     @Override
-    public ResultBean selectPurchase(ReportBaseDTO baseDTO) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(baseDTO.getStartDate()));
-        paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(baseDTO.getEndDate()));
-        List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectPurchase(paramMap);
-        paramMap.put("status", 5);
-        List<ExportPurchaseDTO> exportPurchaseDTOS1 = purchaseReportMapper.selectPurchase(paramMap);
-
-        if (CollUtil.isNotEmpty(exportPurchaseDTOS)) {
-            for (ExportPurchaseDTO i : exportPurchaseDTOS) {
-                List<String> collect = exportPurchaseDTOS1.stream().filter(e -> e.getSupplierName().equals(i.getSupplierName())).map(ExportPurchaseDTO::getTotal).collect(Collectors.toList());
-                if (CollUtil.isNotEmpty(collect)) {
-                    i.setRegistered(collect.get(0));
-                }
-            }
+    public ResultBean selectPurchase(ReportSupplierConditionDTO model) {
+        //如果传入2021年，则查2020-12-26 至 2021-12-25
+        if (StrUtil.isNotBlank(model.getYear())) {
+            Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
+            model.setStartDate(MapUtil.getStr(param, "startDate"));
+            model.setEndDate(MapUtil.getStr(param, "endDate"));
         }
+        if (null != model.getStartDate()) {
+            model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
+        }
+        if (null != model.getEndDate()) {
+            model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+        }
+        List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectPurchase(model);
         return ResultBean.success(exportPurchaseDTOS);
     }
 

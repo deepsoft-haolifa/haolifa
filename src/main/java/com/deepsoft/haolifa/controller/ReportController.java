@@ -84,14 +84,14 @@ public class ReportController {
     }
 
     @ApiOperation("采购报表--根据供应商查询采购报表（2021-12-hd）")
-    @RequestMapping(value = "/purchase/selectBySupplierName", method = RequestMethod.GET)
+    @PostMapping(value = "/purchase/selectBySupplierName")
     public ResultBean selectBySupplierName(@RequestBody ReportSupplierConditionDTO dto) {
         return reportService.selectBySupplierName(dto);
     }
 
     @ApiOperation("采购报表（2021-12-hd）")
     @PostMapping(value = "/purchase/getPurchases")
-    public ResultBean getPurchases(@RequestBody ReportBaseDTO baseDTO) {
+    public ResultBean getPurchases(@RequestBody ReportSupplierConditionDTO baseDTO) {
         return reportService.selectPurchase(baseDTO);
     }
 

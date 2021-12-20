@@ -22,7 +22,7 @@ public interface ReportService {
      *
      * @return
      */
-    ResultBean selectPurchase(ReportBaseDTO baseDTO);
+    ResultBean selectPurchase(ReportSupplierConditionDTO baseDTO);
 
     /**
      * 采购报表--好利公司按月采购统计
