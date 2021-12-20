@@ -3,8 +3,6 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.PayProductionCapacity;
 import com.deepsoft.haolifa.model.domain.PayProductionCapacityExample;
 import java.util.List;
-
-import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface PayProductionCapacityMapper {
@@ -30,5 +28,5 @@ public interface PayProductionCapacityMapper {
 
     int updateByPrimaryKey(PayProductionCapacity record);
 
-    List<PayProductionCapacity> getList(PayProductCapacityDTO record);
+    List<PayProductionCapacity> getListByUserIdList(List<Integer> userIdList);
 }

@@ -79,8 +79,8 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     }
 
     @Override
-    public List<PayProductionCapacity> getList(PayProductCapacityDTO model) {
-        return PayProductionCapacityMapper.getList(model);
+    public List<PayProductionCapacity> getListByUserIdList(List<Integer> userIdList) {
+        return PayProductionCapacityMapper.getListByUserIdList(userIdList);
     }
 
     @Override

@@ -3,13 +3,12 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserRelationProcedureMapper;
 import com.deepsoft.haolifa.dao.repository.PayWorkingProcedureMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
-import com.deepsoft.haolifa.model.vo.pay.PayUserProcedureVO;
 import com.deepsoft.haolifa.model.vo.pay.PayWorkingProcedureUserVO;
 import com.deepsoft.haolifa.model.vo.pay.ProcedureUserVO;
 import com.deepsoft.haolifa.service.PayProductionCapacityService;
@@ -17,6 +16,7 @@ import com.deepsoft.haolifa.service.PayWorkingProcedureService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
  * @description 人员管理
  */
 @Service
+@Slf4j
 public class PayWorkingProcedureServiceImpl extends BaseService implements PayWorkingProcedureService {
     @Resource
     private PayWorkingProcedureMapper payWorkingProcedureMapper;
@@ -41,6 +42,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     private PayUserMapper payUserMapper;
     @Resource
     private PayProductionCapacityService payProductionCapacityService;
+    @Resource
+    private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
 
     @Override
     public ResultBean pageInfo(PayWorkingProcedureDTO model) {
@@ -171,13 +174,20 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 payWorkingProcedureUserVO.setProductId(orderProductAssociate.getId());
                 payWorkingProcedureUserVOS.add(payWorkingProcedureUserVO);
                 // 找人员
-                PayProductCapacityDTO payHourQuotaDTO = new PayProductCapacityDTO();
-                payHourQuotaDTO.setCapacityCode(workingProcedure.getPostCode());
-                List<PayProductionCapacity> payProductionCapacities = payProductionCapacityService.getList(payHourQuotaDTO);
-                if (CollectionUtils.isEmpty(payProductionCapacities)) {
+                PayUserRelationProcedureExample userRelationProcedureExample = new PayUserRelationProcedureExample();
+                userRelationProcedureExample.createCriteria().andProcedureIdEqualTo(workingProcedure.getId());
+                List<PayUserRelationProcedure> payUserRelationProcedures = payUserRelationProcedureMapper.selectByExample(userRelationProcedureExample);
+                if (CollectionUtils.isEmpty(payUserRelationProcedures) && payUserRelationProcedures.size() == 0) {
+                    log.info("通过工序找人员关联表为空");
                     continue;
                 }
-                List<ProcedureUserVO> procedureUserVOS = BeanCopyUtils.copyPropertiesForNewList(payProductionCapacities, () -> new ProcedureUserVO());
+                List<Integer> userIdList = payUserRelationProcedures.stream().map(rr -> rr.getUserId()).collect(Collectors.toList());
+                List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByUserIdList(userIdList);
+                if (CollectionUtils.isEmpty(listByUserIdList) && listByUserIdList.size() == 0) {
+                    log.info("通过工序找人员为空");
+                    continue;
+                }
+                List<ProcedureUserVO> procedureUserVOS = BeanCopyUtils.copyPropertiesForNewList(listByUserIdList, () -> new ProcedureUserVO());
                 // 用户名称匹配
                 procedureUserVOS.forEach(pp -> pp.setUserName(Objects.isNull(payUserMapper.selectByPrimaryKey(pp.getUserId())) ? "" : payUserMapper.selectByPrimaryKey(pp.getUserId()).getUserName()));
                 payWorkingProcedureUserVO.setUserList(procedureUserVOS);

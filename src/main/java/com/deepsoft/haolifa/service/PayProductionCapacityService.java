@@ -18,5 +18,5 @@ public interface PayProductionCapacityService {
 
     ResultBean delete(Integer capacityId);
 
-    List<PayProductionCapacity> getList(PayProductCapacityDTO model);
+    List<PayProductionCapacity> getListByUserIdList(List<Integer> userIdList);
 }

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.vo.pay;
 
+import com.deepsoft.haolifa.model.dto.BaseCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,21 +8,21 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-/**
- * @Author liuyaofei
- * @Date create in 下午9:34 2021/12/18
- * @description
- */
 @Data
-@EqualsAndHashCode()
-@ApiModel(description = "工序对应人员明细表")
-public class PayWorkingProcedureUserVO {
+@EqualsAndHashCode(callSuper=true)
+@ApiModel(description = "工序明人员明细表")
+public class PayWorkingProcedureUserVO extends BaseCondition {
     @ApiModelProperty(value = "id")
     private Integer id;
-    @ApiModelProperty(value = "订单号")
+    @ApiModelProperty(value = "订单ID")
     private String orderNo;
     @ApiModelProperty(value = "产品ID")
     private Integer productId;
+    @ApiModelProperty(value = "车间名称")
+    private String workshopName;
+    @ApiModelProperty(value = "工种类别")
+    private String workType;
+    @ApiModelProperty(value = "适用工单产品型号")
     private String productModel;
     @ApiModelProperty(value = "岗位（工序）名称")
     private String postName;
@@ -29,6 +30,6 @@ public class PayWorkingProcedureUserVO {
     private String postCapability;
     @ApiModelProperty(value = "岗位（工序）代码")
     private String postCode;
-    @ApiModelProperty(value = "工序对应的人员")
+    @ApiModelProperty(value = "工序对应的人员列表")
     private List<ProcedureUserVO> userList;
 }
