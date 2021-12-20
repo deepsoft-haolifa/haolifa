@@ -46,7 +46,7 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
             criteria.andUserNameEqualTo(model.getUserName());
         }
         if (Objects.nonNull(model.getTeamId())) {
-            criteria.andUserIdEqualTo(model.getTeamId());
+            criteria.andTeamIdEqualTo(model.getTeamId());
         }
         if (StringUtils.isNotBlank(model.getDepartName())) {
             criteria.andDepartNameEqualTo(model.getDepartName());

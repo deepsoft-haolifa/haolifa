@@ -15,6 +15,8 @@ public class PayProductCapacityDTO extends BaseCondition {
     private Integer id;
     @ApiModelProperty(value = "用户名称")
     private String userName;
+    @ApiModelProperty(value = "用户Id")
+    private Integer userId;
     @ApiModelProperty(value = "班组ID")
     private Integer teamId;
     @ApiModelProperty(value = "部门ID")
