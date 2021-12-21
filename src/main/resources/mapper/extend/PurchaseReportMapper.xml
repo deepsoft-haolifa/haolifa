@@ -127,9 +127,6 @@
             <if test="supplierName!=null and supplierName != ''">
                 and po.supplier_name like CONCAT('%',#{supplierName},'%')
             </if>
-            <if test="supplierFullName!=null and supplierFullName != ''">
-                and po.supplier_name =#{supplierFullName}
-            </if>
             <if test="purchaseOrderNo!=null and purchaseOrderNo != ''">
                 and po.purchase_order_no like CONCAT('%',#{purchaseOrderNo},'%')
             </if>
