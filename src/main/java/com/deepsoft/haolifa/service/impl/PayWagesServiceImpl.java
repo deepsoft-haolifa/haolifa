@@ -5,7 +5,6 @@ import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.dao.repository.PayWagesMapper;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.InspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @Author liuyaofei
@@ -200,7 +198,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 if (Objects.isNull(payProductionWorkshop)) {
                     continue;
                 }
-                String departName = payProductionWorkshop.getDepartName();
                 // 岗位名称
                 String postName = payProductionWorkshop.getPostName();
                 for (OrderProductAssociate orderProductAssociate : orderProductList) {

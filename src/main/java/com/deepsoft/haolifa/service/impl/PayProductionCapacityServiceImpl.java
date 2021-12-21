@@ -33,11 +33,7 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     @Resource
     private PayProductionCapacityMapper PayProductionCapacityMapper;
     @Resource
-    private PayUserMapper payUserMapper;
-    @Resource
     private PayTeamMapper payTeamMapper;
-    @Resource
-    private PayProductionWorkshopMapper payProductionWorkshopMapper;
     @Override
     public ResultBean pageInfo(PayProductCapacityDTO model) {
         PayProductionCapacityExample example = new PayProductionCapacityExample();
@@ -63,8 +59,6 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
             payProductCapacityVOS.stream().forEach(capacity -> {
                 PayTeam payTeam = payTeamMapper.selectByPrimaryKey(capacity.getTeamId());
                 capacity.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
-                PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(capacity.getDepartId());
-                capacity.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
             });
         }
         PageDTO<PayProductCapacityVO> pageDTO = new PageDTO<>();
@@ -87,10 +81,6 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     public ResultBean save(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
-        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
-        if (Objects.nonNull(payProductionWorkshop)) {
-            payTeam.setDepartName(payProductionWorkshop.getDepartName());
-        }
         payTeam.setCreateUser(getLoginUserName());
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setCreateTime(new Date());
@@ -108,10 +98,6 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     public ResultBean edit(PayProductCapacityDTO model) {
         PayProductionCapacity payTeam = new PayProductionCapacity();
         BeanUtils.copyProperties(model, payTeam);
-        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payTeam.getDepartId());
-        if (Objects.nonNull(payProductionWorkshop)) {
-            payTeam.setDepartName(payProductionWorkshop.getDepartName());
-        }
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setUpdateTime(new Date());
         PayProductionCapacityMapper.updateByPrimaryKeySelective(payTeam);

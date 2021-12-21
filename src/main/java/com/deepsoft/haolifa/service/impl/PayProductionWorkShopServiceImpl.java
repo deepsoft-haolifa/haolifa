@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.pay.PayProductionWorkshopDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayProductionWorkshopVO;
 import com.deepsoft.haolifa.model.vo.pay.PayWorkingProcedureUserVO;
 import com.deepsoft.haolifa.service.PayProductionWorkShopService;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * @Author liuyaofei
  * @Date create in 下午4:51 2021/9/11
- * @description 部门管理
+ * @description 岗位管理
  */
 @Service
 public class PayProductionWorkShopServiceImpl extends BaseService implements PayProductionWorkShopService {
@@ -35,9 +36,6 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
     public ResultBean pageInfo(PayProductionWorkshopVO model) {
         PayProductionWorkshopExample example = new PayProductionWorkshopExample();
         PayProductionWorkshopExample.Criteria criteria = example.createCriteria();
-        if (Objects.nonNull(model.getDepartName())) {
-            criteria.andDepartNameLike("%" + model.getDepartName() + "%");
-        }
         if (StringUtils.isNotBlank(model.getWorkType())) {
             criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
         }
@@ -55,9 +53,10 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
         example.setOrderByClause("id desc");
         Page<PayProductionWorkshop> payTeams = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payProductionWorkshopMapper.selectByExample(example));
-        PageDTO<PayProductionWorkshop> pageDTO = new PageDTO<>();
+        PageDTO<PayProductionWorkshopVO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(payTeams, pageDTO);
-        pageDTO.setList(payTeams);
+        List<PayProductionWorkshopVO> payProductionWorkshopVOS = BeanCopyUtils.copyPropertiesForNewList(payTeams, () -> new PayProductionWorkshopVO());
+        pageDTO.setList(payProductionWorkshopVOS);
         return ResultBean.success(pageDTO);
     }
 
@@ -106,17 +105,4 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
         return ResultBean.success(list);
     }
 
-    @Override
-    public ResultBean getDepartDistinctList() {
-        List<PayProductionWorkshop> payProductionWorkshops = payProductionWorkshopMapper.selectByExample(new PayProductionWorkshopExample());
-        List<PayProductionWorkshopDTO> list = new ArrayList<>();
-        for (PayProductionWorkshop payProductionWorkshop : payProductionWorkshops) {
-            PayProductionWorkshopDTO dto = new PayProductionWorkshopDTO();
-            BeanUtils.copyProperties(payProductionWorkshop, dto);
-            list.add(dto);
-        }
-        List<PayProductionWorkshopDTO> distinctList = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(
-            Comparator.comparing(PayProductionWorkshopDTO::getDepartName))), ArrayList::new));
-        return ResultBean.success(distinctList);
-    }
 }

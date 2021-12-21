@@ -17,7 +17,5 @@ public interface PayProductionWorkShopService {
 
     ResultBean getList();
 
-    ResultBean getDepartDistinctList();
-
 
     }

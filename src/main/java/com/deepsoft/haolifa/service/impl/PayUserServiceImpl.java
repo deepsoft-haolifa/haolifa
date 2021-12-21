@@ -126,7 +126,6 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
             payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
-            payUserDTO.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
@@ -144,10 +143,6 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
-        if (Objects.nonNull(model.getPostId())) {
-            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(model.getPostId());
-            payUser.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
-        }
         payUser.setCreateTime(new Date());
         payUser.setUpdateTime(new Date());
         payUser.setCreateUser(getLoginUserName());
@@ -156,13 +151,12 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         // 同步工资表
         PayWages payWages = new PayWages();
         payWages.setUserName(payUser.getUserName());
-        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
-        payWages.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        payWages.setDepartment(payUser.getDepartName());
         payWages.setMinLiveSecurityFund(payUser.getBasePay());
         payWagesMapper.insertSelective(payWages);
         // 同步考勤表
         PayWorkAttendance dance = new PayWorkAttendance();
-        dance.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        dance.setDepartment(payUser.getDepartName());
         dance.setUserName(payUser.getUserName());
         dance.setUserId(payUser.getId());
         payWorkAttendanceMapper.insertSelective(dance);
@@ -191,29 +185,24 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
-        if (Objects.nonNull(model.getPostId())) {
-            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(model.getPostId());
-            payUser.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
-        }
         payUser.setUpdateTime(new Date());
         payUser.setUpdateUser(getLoginUserName());
         payUserMapper.updateByPrimaryKeySelective(payUser);
         PayWagesRelationUser relationUser = new PayWagesRelationUser();
         relationUser.setUserId(payUser.getId());
         List<PayWagesRelationUser> list = payWagesRelationUserService.getList(relationUser);
-        PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
         if (CollectionUtils.isNotEmpty(list)) {
             // 同步工资表
             PayWages payWages = new PayWages();
             payWages.setUserName(payUser.getUserName());
-            payWages.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+            payWages.setDepartment(payUser.getDepartName());
             payWages.setMinLiveSecurityFund(payUser.getBasePay());
             payWages.setId(list.get(0).getWagesId());
             payWagesMapper.updateByPrimaryKeySelective(payWages);
         }
         // 同步考勤表
         PayWorkAttendance dance = new PayWorkAttendance();
-        dance.setDepartment(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
+        dance.setDepartment(payUser.getDepartName());
         dance.setUserName(payUser.getUserName());
         dance.setUserId(payUser.getId());
         PayWorkAttendanceExample example = new PayWorkAttendanceExample();
@@ -231,6 +220,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         List<PayWagesRelationUser> list = payWagesRelationUserService.getList(relationUser);
         if (CollectionUtils.isNotEmpty(list)) {
             payWagesMapper.deleteByPrimaryKey(list.get(0).getWagesId());
+            payWagesRelationUserService.delete(list.get(0).getId());
         }
         // 考勤人员
         PayWorkAttendanceExample example = new PayWorkAttendanceExample();
@@ -272,7 +262,6 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             PayTeam payTeam = payTeamMapper.selectByPrimaryKey(payUser.getTeamId());
             payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
-            payUserDTO.setDepartName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getDepartName());
             payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
             list.add(payUserDTO);
         });
