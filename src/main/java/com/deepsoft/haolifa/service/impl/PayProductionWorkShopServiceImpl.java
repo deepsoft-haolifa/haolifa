@@ -7,7 +7,6 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayProductionWorkshopDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayProductionWorkshopVO;
-import com.deepsoft.haolifa.model.vo.pay.PayWorkingProcedureUserVO;
 import com.deepsoft.haolifa.service.PayProductionWorkShopService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
@@ -18,9 +17,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.xml.transform.Result;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Author liuyaofei

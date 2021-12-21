@@ -18,6 +18,8 @@ public class PayProductionWorkshopVO extends BaseCondition {
     private String postName;
     @ApiModelProperty(value = "岗位代码")
     private String postCode;
+    @ApiModelProperty(value = "部门名称")
+    private String departName;
     @ApiModelProperty(value = "开始创建时间")
     private String startCreateTime;
     @ApiModelProperty(value = "结束创建时间")
