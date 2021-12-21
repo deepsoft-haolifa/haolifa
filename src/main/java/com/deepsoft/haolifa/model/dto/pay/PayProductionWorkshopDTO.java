@@ -11,8 +11,6 @@ import lombok.EqualsAndHashCode;
 public class PayProductionWorkshopDTO {
     @ApiModelProperty(value = "id")
     private Integer id;
-    @ApiModelProperty(value = "部门名称")
-    private String departName;
     @ApiModelProperty(value = "工种类别")
     private String workType;
     @ApiModelProperty(value = "岗位名称")

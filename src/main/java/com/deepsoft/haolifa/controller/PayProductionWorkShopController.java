@@ -13,9 +13,9 @@ import javax.annotation.Resource;
 /**
  * @Author liuyaofei
  * @Date create in 上午11:37 2021/9/11
- * @description 绩效部门表
+ * @description 绩效岗位管理
  */
-@Api(tags = "绩效部门表")
+@Api(tags = "绩效岗位管理")
 @RestController
 @RequestMapping("/pay-production-work-shop")
 public class PayProductionWorkShopController {
@@ -57,11 +57,5 @@ public class PayProductionWorkShopController {
     @PostMapping("/getAllList")
     public ResultBean getAllList() {
         return payProductionWorkShopService.getList();
-    }
-
-    @ApiOperation("工序新增获取去重部门列表")
-    @PostMapping("/getDepartDistinctList")
-    public ResultBean getDepartDistinctList() {
-        return payProductionWorkShopService.getDepartDistinctList();
     }
 }
