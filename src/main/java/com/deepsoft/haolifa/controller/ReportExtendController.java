@@ -1,18 +1,15 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
 import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
 import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
-import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportPurchaseConditionDTO;
 import com.deepsoft.haolifa.service.ReportExtendService;
-import com.deepsoft.haolifa.service.ReportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

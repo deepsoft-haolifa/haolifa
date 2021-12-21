@@ -29,7 +29,7 @@ public class PaymentRespDTO {
     @ApiModelProperty(value = "发货状态：0 待发货（默认） 1 部分发货 2 发货完成")
     private Byte deliverStatus;
 
-    @ApiModelProperty(value = "金额")
+    @ApiModelProperty(value = "合同金额")
     private BigDecimal totalPrice;
 
     @ApiModelProperty(value = "交货日期")
