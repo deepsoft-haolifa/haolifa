@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 销售回款返回实体
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Data
 public class PaymentRespDTO {
     @ApiModelProperty(value = "接单日期")
-    private String contractSignDate;
+    private Date createTime;
 
     @ApiModelProperty(value = "客户名称")
     private String demandName;

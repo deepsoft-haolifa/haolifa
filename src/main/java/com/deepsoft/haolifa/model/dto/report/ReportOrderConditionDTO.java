@@ -21,8 +21,6 @@ public class ReportOrderConditionDTO {
     private Byte orderStatus;
     @ApiModelProperty(value = "需求方名称")
     private String demandName;
-    @ApiModelProperty(value = Constant.ORDER_STATUS_DESC, name = "订单状态列表(逗号分隔)")
-    private List<Byte> orderStatusList;
     @ApiModelProperty(value = "开始时间")
     private String startDate;
     @ApiModelProperty(value = "结束时间")
