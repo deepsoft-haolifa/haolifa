@@ -126,6 +126,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
             payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
+            PayProductionWorkshop workshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getSuperiorId());
+            payUserDTO.setSuperiorName(Objects.isNull(workshop) ? "" : workshop.getPostName());
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
