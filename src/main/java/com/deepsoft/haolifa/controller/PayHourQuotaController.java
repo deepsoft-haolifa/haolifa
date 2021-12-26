@@ -50,4 +50,10 @@ public class PayHourQuotaController {
     public ResultBean del(@PathVariable("id") Integer id) {
         return payHourQuotaService.delete(id);
     }
+
+    @ApiOperation("获取全部list")
+    @PostMapping(value = "getAllList")
+    public ResultBean getAllList(@RequestBody PayHourQuotaDTO payHourQuotaDTO) {
+        return ResultBean.success(payHourQuotaService.getList(payHourQuotaDTO));
+    }
 }

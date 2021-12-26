@@ -6,13 +6,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.cache.CacheKeyManager;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MyUserMapper;
-import com.deepsoft.haolifa.model.domain.SysRoleUser;
-import com.deepsoft.haolifa.model.domain.SysRoleUserExample;
-import com.deepsoft.haolifa.model.domain.SysUser;
-import com.deepsoft.haolifa.model.domain.SysUserExample;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
 import com.deepsoft.haolifa.model.vo.UserPageVO;
@@ -30,7 +28,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PARAM_ERROR;
@@ -57,6 +57,9 @@ public class SysUserServiceImpl implements SysUserService {
     private RedisDao redisDao;
     @Autowired
     private MyUserMapper myUserMapper;
+    @Resource
+    private PayProductionWorkshopMapper payProductionWorkshopMapper;
+
 
     @Override
     public CustomUser selectLoginUser() {
@@ -134,6 +137,10 @@ public class SysUserServiceImpl implements SysUserService {
             UserCacheDTO sysUser = (UserCacheDTO) getSysUser(u.getId());
             UserPageVO userPageVO = new UserPageVO();
             BeanUtils.copyProperties(sysUser, userPageVO);
+            PayProductionWorkshop workshop = payProductionWorkshopMapper.selectByPrimaryKey(u.getPostId());
+            userPageVO.setPostName(Objects.isNull(workshop) ? "" : workshop.getPostName());
+            DepartmentDTO departmentDTO = departmentService.selectDepartmentById(u.getDepartId());
+            userPageVO.setDepartName(Objects.isNull(departmentDTO) ? "" : departmentDTO.getDeptName());
             return userPageVO;
         }).collect(Collectors.toList());
         PageDTO<UserPageVO> pageDTO = new PageDTO<>();

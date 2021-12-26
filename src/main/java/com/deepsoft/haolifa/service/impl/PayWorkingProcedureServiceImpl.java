@@ -67,6 +67,9 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         if (StringUtils.isNotBlank(model.getPostName())) {
             criteria.andPostNameLike("%" + model.getPostName() + "%");
         }
+        if (StringUtils.isNotBlank(model.getPostCode())) {
+            criteria.andPostCodeLike("%" + model.getPostCode() + "%");
+        }
         example.setOrderByClause("id desc");
         Page<PayWorkingProcedure> payWorkingProcedures = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payWorkingProcedureMapper.selectByExample(example));
@@ -97,6 +100,9 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         }
         if (StringUtils.isNotBlank(model.getPostName())) {
             criteria.andPostNameLike("%" + model.getPostName() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getPostCode())) {
+            criteria.andPostCodeLike("%" + model.getPostCode() + "%");
         }
         List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectByExample(example);
         return ResultBean.success(payWorkingProcedures);

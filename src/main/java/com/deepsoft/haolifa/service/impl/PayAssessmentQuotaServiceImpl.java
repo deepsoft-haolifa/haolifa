@@ -1,10 +1,8 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.dao.repository.PayAssessmentQuotaMapper;
-import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
 import com.deepsoft.haolifa.model.domain.PayAssessmentQuota;
 import com.deepsoft.haolifa.model.domain.PayAssessmentQuotaExample;
-import com.deepsoft.haolifa.model.domain.PayProductionWorkshop;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaDTO;
@@ -12,13 +10,13 @@ import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaVO;
 import com.deepsoft.haolifa.service.PayAssessmentQuotaService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,8 +28,7 @@ import java.util.Objects;
 public class PayAssessmentQuotaServiceImpl extends BaseService implements PayAssessmentQuotaService {
     @Resource
     private PayAssessmentQuotaMapper payAssessmentQuotaMapper;
-    @Resource
-    private PayProductionWorkshopMapper payProductionWorkshopMapper;
+
     @Override
     public ResultBean pageInfo(PayAssessmentQuotaVO model) {
         PayAssessmentQuotaExample example = new PayAssessmentQuotaExample();
@@ -42,14 +39,6 @@ public class PayAssessmentQuotaServiceImpl extends BaseService implements PayAss
         example.setOrderByClause("id desc");
         Page<PayAssessmentQuota> payTeams = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payAssessmentQuotaMapper.selectByExample(example));
-        if (CollectionUtils.isNotEmpty(payTeams)) {
-            payTeams.stream().forEach(pay-> {
-                PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(pay.getDepartId());
-                if (Objects.nonNull(payProductionWorkshop)) {
-                    pay.setDepartName(payProductionWorkshop.getDepartName());
-                }
-            });
-        }
         PageDTO<PayAssessmentQuota> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(payTeams, pageDTO);
         pageDTO.setList(payTeams);
@@ -86,5 +75,23 @@ public class PayAssessmentQuotaServiceImpl extends BaseService implements PayAss
     @Override
     public ResultBean delete(Integer quotaId) {
         return ResultBean.success(payAssessmentQuotaMapper.deleteByPrimaryKey(quotaId));
+    }
+
+    @Override
+    public List<PayAssessmentQuota> getQuotaList(PayAssessmentQuotaVO model) {
+        PayAssessmentQuotaExample example = new PayAssessmentQuotaExample();
+        PayAssessmentQuotaExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model.getProjectName())) {
+            criteria.andProjectNameLike("%" + model.getProjectName() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getDepartName())) {
+            criteria.andDepartNameEqualTo(model.getDepartName());
+        }
+        if (Objects.nonNull(model.getDepartId())) {
+            criteria.andDepartIdEqualTo(model.getDepartId());
+        }
+        example.setOrderByClause("id desc");
+        List<PayAssessmentQuota> payAssessmentQuotas = payAssessmentQuotaMapper.selectByExample(example);
+        return payAssessmentQuotas;
     }
 }

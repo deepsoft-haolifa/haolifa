@@ -41,7 +41,10 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
         if (StringUtils.isNotBlank(model.getPostName())) {
             criteria.andPostNameLike("%" + model.getPostName() + "%");
         }
-        if (StringUtils.isNotEmpty(model.getPostName())) {
+        if (StringUtils.isNotBlank(model.getDepartName())) {
+            criteria.andDepartNameLike("%" + model.getDepartName() + "%");
+        }
+        if (StringUtils.isNotEmpty(model.getStartCreateTime())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartCreateTime());
             criteria.andCreateTimeGreaterThan(startDate);
         }

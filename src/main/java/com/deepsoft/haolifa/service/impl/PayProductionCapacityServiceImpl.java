@@ -45,10 +45,10 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
             criteria.andTeamIdEqualTo(model.getTeamId());
         }
         if (StringUtils.isNotBlank(model.getDepartName())) {
-            criteria.andDepartNameEqualTo(model.getDepartName());
+            criteria.andDepartNameLike('%'+model.getDepartName()+'%');
         }
         if (StringUtils.isNotBlank(model.getCapacityCode())) {
-            criteria.andCapacityCodeEqualTo(model.getCapacityCode());
+            criteria.andCapacityCodeLike('%'+model.getCapacityCode()+'%');
         }
         example.setOrderByClause("id desc");
         Page<PayProductionCapacity> payProductionCapacities = PageHelper.startPage(model.getPageNum(), model.getPageSize())

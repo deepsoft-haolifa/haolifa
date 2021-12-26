@@ -3,12 +3,16 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayUserVO;
 import com.deepsoft.haolifa.service.PayUserService;
 import com.deepsoft.haolifa.service.PayWagesRelationUserService;
+import com.deepsoft.haolifa.service.RoleService;
+import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.CommonUtil;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
@@ -24,6 +28,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author liuyaofei
@@ -48,10 +53,25 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     private PayWagesRelationUserService payWagesRelationUserService;
     @Resource
     private PayTeamMapper payTeamMapper;
+    @Resource
+    private RoleService roleService;
+    @Resource
+    private SysUserService sysUserService;
     @Override
     public ResultBean pageInfo(PayUserDTO model) {
         PayUserExample example = new PayUserExample();
         PayUserExample.Criteria criteria = example.createCriteria();
+
+        // 获取当前登录人的岗位ID作为人员列表的直属上级ID。
+        CustomUser customUser = sysUserService.selectLoginUser();
+        if (Objects.nonNull(customUser.getId())) {
+            List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
+            if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
+                .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
+                SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+                criteria.andSuperiorIdEqualTo(sysUser.getPostId());
+            }
+        }
         if (StringUtils.isNotBlank(model.getUserName())) {
             criteria.andUserNameLike("%" + model.getUserName() + "%");
         }
