@@ -456,4 +456,14 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         List<SprayInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
         return inspectHistories;
     }
+
+    @Override
+    public void updateTaskStatus(String sprayNo, int taskStatus) {
+        SprayExample example = new SprayExample();
+        SprayExample.Criteria criteria = example.createCriteria();
+        criteria.andSprayNoEqualTo(sprayNo);
+        Spray spray = new Spray();
+        spray.setTaskStatus(Integer.valueOf(taskStatus).byteValue());
+        sprayMapper.updateByExampleSelective(spray, example);
+    }
 }

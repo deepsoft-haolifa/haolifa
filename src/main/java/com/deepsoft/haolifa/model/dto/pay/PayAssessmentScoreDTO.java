@@ -20,7 +20,5 @@ public class PayAssessmentScoreDTO {
     private String userName;
     @ApiModelProperty(name = "得分")
     private Integer score;
-    @ApiModelProperty(name = "打分时间")
-    private Date scoreTime;
 
 }

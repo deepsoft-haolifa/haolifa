@@ -48,4 +48,7 @@ public interface SprayService {
 
     List<SprayInspectHistory> getInspectList(String sprayNo, String startTime, String endTime);
 
-}
+    void updateTaskStatus(String sprayNo, int status);
+
+
+    }

@@ -53,6 +53,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     public ResultBean save(PayAssessmentScoreDTO model) {
         PayAssessmentScore payTeam = new PayAssessmentScore();
         BeanUtils.copyProperties(model, payTeam);
+        payTeam.setScoreTime(new Date());
         payTeam.setCreateUser(getLoginUserName());
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setCreateTime(new Date());
@@ -70,6 +71,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     public ResultBean edit(PayAssessmentScoreDTO model) {
         PayAssessmentScore payTeam = new PayAssessmentScore();
         BeanUtils.copyProperties(model, payTeam);
+        payTeam.setScoreTime(new Date());
         payTeam.setUpdateUser(getLoginUserName());
         payTeam.setUpdateTime(new Date());
         payAssessmentScoreMapper.updateByPrimaryKeySelective(payTeam);

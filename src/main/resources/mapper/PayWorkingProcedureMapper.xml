@@ -105,6 +105,9 @@
             <if test="workType != null and workType != ''" >
                 and work_type = #{workType}
             </if>
+            <if test="workshopName != null and workshopName != ''" >
+                and workshop_name = #{workshopName}
+            </if>
         </where>
     </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
