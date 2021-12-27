@@ -9,8 +9,8 @@ import com.deepsoft.haolifa.model.domain.PayWorkingProcedure;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayOrderUserRelationProcedureVO;
+import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
-import com.deepsoft.haolifa.service.PayWorkingProcedureService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,6 +30,8 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
     private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
     @Resource
     private PayWorkingProcedureMapper payWorkingProcedureMapper;
+    @Resource
+    private OrderProductService orderProductService;
 
     @Override
     public List<PayOrderUserRelationProcedure> getPayOrderUserRelationProcedureList() {
@@ -49,6 +51,8 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(procedure.getId());
             String workshopName = payWorkingProcedure.getWorkshopName();
             if (CommonEnum.WorkShopTypeEnum.PRODUCT.name.equals(workshopName)) {
+                orderProductService.updateOrderTaskStatus(procedure.getOrderId(), 1);
+            } else if (CommonEnum.WorkShopTypeEnum.SPRAY.name.equals(workshopName)) {
 
             }
             procedure.setCreateUser(getLoginUserName());

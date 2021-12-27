@@ -2271,4 +2271,14 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         }
         return i;
     }
+
+
+    @Override
+    public void updateOrderTaskStatus(String orderNo, int status) {
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setTaskStatus((byte) status);
+        OrderProductExample example = new OrderProductExample();
+        example.createCriteria().andOrderNoEqualTo(orderNo);
+        orderProductMapper.updateByExampleSelective(orderProduct, example);
+    }
 }

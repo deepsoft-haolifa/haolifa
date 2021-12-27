@@ -1,17 +1,10 @@
 package com.deepsoft.haolifa.service;
 
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
-import com.deepsoft.haolifa.model.domain.OrderMaterial;
-import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import com.deepsoft.haolifa.model.dto.Accessory;
-import com.deepsoft.haolifa.model.dto.FileUploadDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.*;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderProductService {
@@ -180,6 +173,14 @@ public interface OrderProductService {
      */
     int updateContractUrl(OrderContractUpdateDTO dto);
 
+    /**
+     * 更新生产订单的任务状态
+     * @param status
+     * @param orderNo
+     */
+    void updateOrderTaskStatus(String orderNo, int status);
 
 
-}
+
+
+    }

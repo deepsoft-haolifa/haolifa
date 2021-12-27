@@ -8,7 +8,7 @@ public class PayOrderUserRelationProcedure {
 
     private Integer userId;
 
-    private Integer orderId;
+    private String orderId;
 
     private Integer procedureId;
 
@@ -24,7 +24,7 @@ public class PayOrderUserRelationProcedure {
 
     private Date updateTime;
 
-    public PayOrderUserRelationProcedure(Integer id, Integer userId, Integer orderId, Integer procedureId, Integer productId, BigDecimal hourPrice, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayOrderUserRelationProcedure(Integer id, Integer userId, String orderId, Integer procedureId, Integer productId, BigDecimal hourPrice, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.orderId = orderId;
@@ -57,12 +57,12 @@ public class PayOrderUserRelationProcedure {
         this.userId = userId;
     }
 
-    public Integer getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
     }
 
     public Integer getProcedureId() {

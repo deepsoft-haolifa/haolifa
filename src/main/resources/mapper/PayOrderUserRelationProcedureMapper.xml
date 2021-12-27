@@ -5,7 +5,7 @@
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="order_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_id" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="procedure_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="product_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="hour_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
@@ -115,7 +115,7 @@
       product_id, hour_price, create_user, 
       update_user, create_time, update_time
       )
-    values (#{userId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{procedureId,jdbcType=INTEGER}, 
+    values (#{userId,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{procedureId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{hourPrice,jdbcType=DECIMAL}, #{createUser,jdbcType=VARCHAR}, 
       #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -159,7 +159,7 @@
         #{userId,jdbcType=INTEGER},
       </if>
       <if test="orderId != null" >
-        #{orderId,jdbcType=INTEGER},
+        #{orderId,jdbcType=VARCHAR},
       </if>
       <if test="procedureId != null" >
         #{procedureId,jdbcType=INTEGER},
@@ -200,7 +200,7 @@
         user_id = #{record.userId,jdbcType=INTEGER},
       </if>
       <if test="record.orderId != null" >
-        order_id = #{record.orderId,jdbcType=INTEGER},
+        order_id = #{record.orderId,jdbcType=VARCHAR},
       </if>
       <if test="record.procedureId != null" >
         procedure_id = #{record.procedureId,jdbcType=INTEGER},
@@ -232,7 +232,7 @@
     update pay_order_user_relation_procedure
     set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
       procedure_id = #{record.procedureId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       hour_price = #{record.hourPrice,jdbcType=DECIMAL},
@@ -251,7 +251,7 @@
         user_id = #{userId,jdbcType=INTEGER},
       </if>
       <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=INTEGER},
+        order_id = #{orderId,jdbcType=VARCHAR},
       </if>
       <if test="procedureId != null" >
         procedure_id = #{procedureId,jdbcType=INTEGER},
@@ -280,7 +280,7 @@
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayOrderUserRelationProcedure" >
     update pay_order_user_relation_procedure
     set user_id = #{userId,jdbcType=INTEGER},
-      order_id = #{orderId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
       procedure_id = #{procedureId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
       hour_price = #{hourPrice,jdbcType=DECIMAL},
