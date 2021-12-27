@@ -24,5 +24,5 @@ public class PayOrderUserRelationProcedureDTO {
     @ApiModelProperty(value = "产品ID")
     private Integer productId;
     @ApiModelProperty(value = "用户ID")
-    private List<Integer> userIdList;
+    private Integer userId;
 }

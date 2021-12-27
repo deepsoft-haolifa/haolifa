@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.model.domain;
 
+import com.deepsoft.haolifa.annotation.ExcelHandle;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -7,23 +9,23 @@ public class PayHourQuota {
     private Integer id;
 
     private Integer serial;
-
+    @ExcelHandle(name = "车间")
     private String workshopName;
-
+    @ExcelHandle(name = "过程产品名称")
     private String productName;
-
+    @ExcelHandle(name = "适用订单ID类别或委托单产品类别")
     private String idCategory;
-
+    @ExcelHandle(name = "适用型号")
     private String appModel;
-
+    @ExcelHandle(name = "适用规格")
     private String appSpecifications;
-
+    @ExcelHandle(name = "工种类别")
     private String workType;
-
+    @ExcelHandle(name = "工序名称")
     private String procedureName;
-
+    @ExcelHandle(name = "岗位代码")
     private String postCode;
-
+    @ExcelHandle(name = "工时定额（元）")
     private BigDecimal hourQuotaPrice;
 
     private String createUser;

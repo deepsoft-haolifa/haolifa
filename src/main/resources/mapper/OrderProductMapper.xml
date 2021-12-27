@@ -53,6 +53,7 @@
       <arg column="received_account" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
       <arg column="gen_picking_list" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="is_check_material" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="task_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -123,7 +124,7 @@
     discount_total_price, total_price, special_require, cargo_information, sign_board, 
     acceptance_criteria, warranty_period, packaging_specification, remark, deliver_status, 
     accessory, qualified_number, pressure_qualified_number, delivered_number, received_account, 
-    gen_picking_list, is_check_material
+    gen_picking_list, is_check_material, task_status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" >
     select
@@ -176,7 +177,7 @@
       remark, deliver_status, accessory, 
       qualified_number, pressure_qualified_number, 
       delivered_number, received_account, gen_picking_list, 
-      is_check_material)
+      is_check_material, task_status)
     values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
       #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR}, 
       #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{orderContractExtendUrl,jdbcType=VARCHAR}, 
@@ -194,7 +195,7 @@
       #{remark,jdbcType=VARCHAR}, #{deliverStatus,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR}, 
       #{qualifiedNumber,jdbcType=INTEGER}, #{pressureQualifiedNumber,jdbcType=INTEGER}, 
       #{deliveredNumber,jdbcType=INTEGER}, #{receivedAccount,jdbcType=DECIMAL}, #{genPickingList,jdbcType=TINYINT}, 
-      #{isCheckMaterial,jdbcType=TINYINT})
+      #{isCheckMaterial,jdbcType=TINYINT}, #{taskStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -349,6 +350,9 @@
       <if test="isCheckMaterial != null" >
         is_check_material,
       </if>
+      <if test="taskStatus != null" >
+        task_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="createTime != null" >
@@ -497,6 +501,9 @@
       </if>
       <if test="isCheckMaterial != null" >
         #{isCheckMaterial,jdbcType=TINYINT},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -659,6 +666,9 @@
       <if test="record.isCheckMaterial != null" >
         is_check_material = #{record.isCheckMaterial,jdbcType=TINYINT},
       </if>
+      <if test="record.taskStatus != null" >
+        task_status = #{record.taskStatus,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -715,7 +725,8 @@
       delivered_number = #{record.deliveredNumber,jdbcType=INTEGER},
       received_account = #{record.receivedAccount,jdbcType=DECIMAL},
       gen_picking_list = #{record.genPickingList,jdbcType=TINYINT},
-      is_check_material = #{record.isCheckMaterial,jdbcType=TINYINT}
+      is_check_material = #{record.isCheckMaterial,jdbcType=TINYINT},
+      task_status = #{record.taskStatus,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -870,6 +881,9 @@
       <if test="isCheckMaterial != null" >
         is_check_material = #{isCheckMaterial,jdbcType=TINYINT},
       </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -923,7 +937,8 @@
       delivered_number = #{deliveredNumber,jdbcType=INTEGER},
       received_account = #{receivedAccount,jdbcType=DECIMAL},
       gen_picking_list = #{genPickingList,jdbcType=TINYINT},
-      is_check_material = #{isCheckMaterial,jdbcType=TINYINT}
+      is_check_material = #{isCheckMaterial,jdbcType=TINYINT},
+      task_status = #{taskStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

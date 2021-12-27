@@ -1,8 +1,8 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
+import com.deepsoft.haolifa.model.vo.pay.PayOrderUserRelationProcedureVO;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.service.PayWorkingProcedureService;
@@ -90,7 +90,7 @@ public class PayWorkingProcedureController {
 
     @ApiOperation("分配任务保存按钮")
     @PostMapping(value = "/saveTask")
-    public ResultBean saveTask (@RequestBody PayOrderUserRelationProcedureDTO procedure) {
+    public ResultBean saveTask (@RequestBody PayOrderUserRelationProcedureVO procedure) {
         return payOrderUserRelationProcedureService.insertSelective(procedure);
     }
 

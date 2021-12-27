@@ -1,13 +1,20 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.model.domain.PayHourQuota;
+import com.deepsoft.haolifa.model.domain.PayWorkAttendance;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.service.PayHourQuotaService;
+import com.deepsoft.haolifa.util.ExcelUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author liuyaofei
@@ -55,5 +62,21 @@ public class PayHourQuotaController {
     @PostMapping(value = "getAllList")
     public ResultBean getAllList(@RequestBody PayHourQuotaDTO payHourQuotaDTO) {
         return ResultBean.success(payHourQuotaService.getList(payHourQuotaDTO));
+    }
+
+    @ApiOperation("导入工时定额")
+    @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
+    public ResultBean uploadMaterial(@ApiParam(value = "工时定额Excel表格", required = true) MultipartFile file) {
+        try {
+            if (file == null) {
+                return ResultBean.error(CommonEnum.ResponseEnum.FILE_IS_NULL);
+            }
+            List<PayHourQuota> objects = (List<PayHourQuota>) ExcelUtils.importExcelReadColumn(file.getInputStream(), PayHourQuota.class);
+            payHourQuotaService.save(objects);
+            return ResultBean.success(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
     }
 }

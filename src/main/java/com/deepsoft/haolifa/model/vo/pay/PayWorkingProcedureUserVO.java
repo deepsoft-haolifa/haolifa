@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.vo.pay;
 
-import com.deepsoft.haolifa.model.dto.BaseCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,9 +8,9 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode()
 @ApiModel(description = "工序明人员明细表")
-public class PayWorkingProcedureUserVO extends BaseCondition {
+public class PayWorkingProcedureUserVO {
     @ApiModelProperty(value = "id")
     private Integer id;
     @ApiModelProperty(value = "订单ID")

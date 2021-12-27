@@ -52,14 +52,24 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
 
     @Override
     public ResultBean save(PayHourQuotaDTO model) {
-        for (int i = 0; i <90; i++) {
-            PayHourQuota payTeam = new PayHourQuota();
-            BeanUtils.copyProperties(model, payTeam);
-            payTeam.setCreateUser(getLoginUserName());
-            payTeam.setUpdateUser(getLoginUserName());
-            payTeam.setCreateTime(new Date());
-            payTeam.setUpdateTime(new Date());
-            payHourQuotaMapper.insert(payTeam);
+        PayHourQuota payTeam = new PayHourQuota();
+        BeanUtils.copyProperties(model, payTeam);
+        payTeam.setCreateUser(getLoginUserName());
+        payTeam.setUpdateUser(getLoginUserName());
+        payTeam.setCreateTime(new Date());
+        payTeam.setUpdateTime(new Date());
+        payHourQuotaMapper.insert(payTeam);
+        return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean save(List<PayHourQuota> list) {
+        for (PayHourQuota payHourQuota : list) {
+            payHourQuota.setCreateUser(getLoginUserName());
+            payHourQuota.setUpdateUser(getLoginUserName());
+            payHourQuota.setCreateTime(new Date());
+            payHourQuota.setUpdateTime(new Date());
+            payHourQuotaMapper.insert(payHourQuota);
         }
         return ResultBean.success(1);
     }

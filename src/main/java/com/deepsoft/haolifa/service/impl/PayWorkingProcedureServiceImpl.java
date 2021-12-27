@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.vo.pay.PayWorkingProcedureUserVO;
 import com.deepsoft.haolifa.model.vo.pay.ProcedureUserVO;
 import com.deepsoft.haolifa.service.PayProductionCapacityService;
 import com.deepsoft.haolifa.service.PayWorkingProcedureService;
+import com.deepsoft.haolifa.service.SprayService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -43,7 +44,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     @Resource
     private PayProductionCapacityService payProductionCapacityService;
     @Resource
-    private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
+    private SprayService sprayService;
 
     @Override
     public ResultBean pageInfo(PayWorkingProcedureDTO model) {
@@ -142,54 +143,33 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
 
     @Override
     public ResultBean assignTask(String orderNo, String type) {
-        OrderProductAssociateExample example = new OrderProductAssociateExample();
-        example.createCriteria().andOrderNoEqualTo(orderNo);
-        List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(list)) {
-            ResultBean.success(null);
-        }
-        List<PayWorkingProcedure> payWorkingProcedures = new ArrayList<>();
         // 工序对应人的列表
         List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS = new ArrayList<>();
-        // 循环所有产品
-        for (OrderProductAssociate orderProductAssociate : list) {
-            PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
-            // 产品型号
-            String model = orderProductAssociate.getProductModel().substring(0, 4);
-            payWorkingProcedure.setProductModel(model);
-
-            if (CommonEnum.WorkShopTypeEnum.PRODUCT.code.equals(type)) {
-                // 生产装配订单
-                payWorkingProcedure.setWorkshopName(CommonEnum.WorkShopTypeEnum.PRODUCT.name);
-                payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
-            } else if (CommonEnum.WorkShopTypeEnum.SPRAY.code.equals(type)) {
-                // 喷涂订单
-                payWorkingProcedure.setWorkshopName(CommonEnum.WorkShopTypeEnum.SPRAY.name);
-                payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
-            } else if (CommonEnum.WorkShopTypeEnum.MACHINING.code.equals(type)) {
-                // 机加工订单
-                payWorkingProcedure.setWorkshopName(CommonEnum.WorkShopTypeEnum.MACHINING.name);
-                payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
+        if (CommonEnum.WorkShopTypeEnum.PRODUCT.code.equals(type)) {
+            // 生产装配订单
+            OrderProductAssociateExample example = new OrderProductAssociateExample();
+            example.createCriteria().andOrderNoEqualTo(orderNo);
+            List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
+            if (CollectionUtils.isEmpty(list)) {
+                ResultBean.success(null);
             }
-
-            for (PayWorkingProcedure workingProcedure : payWorkingProcedures) {
-                // copy 工序人员表
-                PayWorkingProcedureUserVO payWorkingProcedureUserVO = new PayWorkingProcedureUserVO();
-                BeanUtils.copyProperties(workingProcedure, payWorkingProcedureUserVO);
-                payWorkingProcedureUserVO.setOrderNo(orderNo);
-                payWorkingProcedureUserVO.setProductId(orderProductAssociate.getId());
-                payWorkingProcedureUserVOS.add(payWorkingProcedureUserVO);
-                // 找人员
-                List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
-                if (CollectionUtils.isEmpty(listByUserIdList) && listByUserIdList.size() == 0) {
-                    log.info("通过工序找人员为空");
-                    continue;
-                }
-                List<ProcedureUserVO> procedureUserVOS = BeanCopyUtils.copyPropertiesForNewList(listByUserIdList, () -> new ProcedureUserVO());
-                // 用户名称匹配
-                procedureUserVOS.forEach(pp -> pp.setUserName(Objects.isNull(payUserMapper.selectByPrimaryKey(pp.getUserId())) ? "" : payUserMapper.selectByPrimaryKey(pp.getUserId()).getUserName()));
-                payWorkingProcedureUserVO.setUserList(procedureUserVOS);
+            // 循环所有产品
+            for (OrderProductAssociate orderProductAssociate : list) {
+                // 产品型号
+                String model = orderProductAssociate.getProductModel().substring(0, 4);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.PRODUCT.name, orderProductAssociate.getId(), orderNo);
             }
+        } else if (CommonEnum.WorkShopTypeEnum.SPRAY.code.equals(type)) {
+            // 喷涂订单
+            List<SprayItem> sprayItems = (List<SprayItem>) sprayService.getItemsList(orderNo).getResult();
+            for (SprayItem sprayItem : sprayItems) {
+                String model = sprayItem.getModel();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo);
+            }
+        } else if (CommonEnum.WorkShopTypeEnum.MACHINING.code.equals(type)) {
+            // 机加工订单 TODO 待修改
+            String model = "";
+            buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, 0, orderNo);
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
             return ResultBean.success(null);
@@ -197,5 +177,30 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         List<PayWorkingProcedureUserVO> distinctList = payWorkingProcedureUserVOS.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(
             Comparator.comparing(PayWorkingProcedureUserVO::getId))), ArrayList::new));
         return ResultBean.success(distinctList);
+    }
+
+    private void buildProductAndUser(List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS, String model, String workShopName, Integer productId, String orderNo) {
+        PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
+        payWorkingProcedure.setProductModel(model);
+        payWorkingProcedure.setWorkshopName(workShopName);
+        List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
+        for (PayWorkingProcedure workingProcedure : payWorkingProcedures) {
+            // copy 工序人员表
+            PayWorkingProcedureUserVO payWorkingProcedureUserVO = new PayWorkingProcedureUserVO();
+            BeanUtils.copyProperties(workingProcedure, payWorkingProcedureUserVO);
+            payWorkingProcedureUserVO.setOrderNo(orderNo);
+            payWorkingProcedureUserVO.setProductId(productId);
+            payWorkingProcedureUserVOS.add(payWorkingProcedureUserVO);
+            // 找人员
+            List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
+            if (CollectionUtils.isEmpty(listByUserIdList) && listByUserIdList.size() == 0) {
+                log.info("通过工序找人员为空");
+                continue;
+            }
+            List<ProcedureUserVO> procedureUserVOS = BeanCopyUtils.copyPropertiesForNewList(listByUserIdList, () -> new ProcedureUserVO());
+            // 用户名称匹配
+            procedureUserVOS.forEach(pp -> pp.setUserName(Objects.isNull(payUserMapper.selectByPrimaryKey(pp.getUserId())) ? "" : payUserMapper.selectByPrimaryKey(pp.getUserId()).getUserName()));
+            payWorkingProcedureUserVO.setUserList(procedureUserVOS);
+        }
     }
 }

@@ -41,56 +41,6 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
         if (StringUtils.isNotBlank(model.getUserName())) {
             criteria.andUserNameLike("%" + model.getUserName() + "%");
         }
-        if (Objects.nonNull(model.getAttendanceDays())) {
-            criteria.andAttendanceDaysEqualTo(model.getAttendanceDays());
-        }
-        if (Objects.nonNull(model.getLateTimes())) {
-            criteria.andLateTimesEqualTo(model.getLateTimes());
-        }
-        if (Objects.nonNull(model.getLeaveEarlyTimes())) {
-            criteria.andLeaveEarlyTimesEqualTo(model.getLeaveEarlyTimes());
-        }
-        if (Objects.nonNull(model.getAbsenteeismTimes())) {
-            criteria.andAbsenteeismTimesEqualTo(model.getAbsenteeismTimes());
-        }
-        if (Objects.nonNull(model.getMiddleDays())) {
-            criteria.andMiddleDaysEqualTo(model.getMiddleDays());
-        }
-        if (Objects.nonNull(model.getNightDays())) {
-            criteria.andNightDaysEqualTo(model.getNightDays());
-        }
-        if (Objects.nonNull(model.getBusinessTravelDays())) {
-            criteria.andBusinessTravelDaysEqualTo(model.getBusinessTravelDays());
-        }
-        if (Objects.nonNull(model.getCompassionateLeaveDays())) {
-            criteria.andCompassionateLeaveDaysEqualTo(model.getCompassionateLeaveDays());
-        }
-        if (Objects.nonNull(model.getSickLeaveDays())) {
-            criteria.andSickLeaveDaysEqualTo(model.getSickLeaveDays());
-        }
-        if (Objects.nonNull(model.getWorkOvertimeDays())) {
-            criteria.andWorkOvertimeDaysEqualTo(model.getWorkOvertimeDays());
-        }
-        if (Objects.nonNull(model.getLateAndLeaveTimes())) {
-            criteria.andLateAndLeaveTimesEqualTo(model.getLateAndLeaveTimes());
-        }
-        if (Objects.nonNull(model.getNightDays())) {
-            criteria.andNightDaysEqualTo(model.getNightDays());
-        }
-        if (Objects.nonNull(model.getNightDays())) {
-            criteria.andNightDaysEqualTo(model.getNightDays());
-        }
-        if (StringUtils.isNotBlank(model.getCreateUser())) {
-            criteria.andCreateUserLike("%" + model.getCreateUser() + "%");
-        }
-        if (StringUtils.isNotEmpty(model.getStartCreateTime())) {
-            Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartCreateTime());
-            criteria.andCreateTimeGreaterThan(startDate);
-        }
-        if (StringUtils.isNotEmpty(model.getEndCreateTime())) {
-            Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getEndCreateTime());
-            criteria.andCreateTimeLessThan(endDate);
-        }
         example.setOrderByClause("id desc");
         Page<PayWorkAttendance> payWorkAttendances = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payWorkAttendanceMapper.selectByExample(example));

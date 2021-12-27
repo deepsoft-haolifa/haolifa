@@ -11,6 +11,8 @@ public interface PayHourQuotaService {
 
     ResultBean save(PayHourQuotaDTO model);
 
+    ResultBean save(List<PayHourQuota> list);
+
     ResultBean getInfo(Integer id);
 
     ResultBean edit(PayHourQuotaDTO model);

@@ -50,7 +50,9 @@ public class Entrust {
 
     private Byte outRoomStatus;
 
-    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber, Integer unqualifiedNumber, String processedGraphNo, Byte busType, Byte outRoomStatus) {
+    private Byte taskStatus;
+
+    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber, Integer unqualifiedNumber, String processedGraphNo, Byte busType, Byte outRoomStatus, Byte taskStatus) {
         this.id = id;
         this.materialGraphName = materialGraphName;
         this.purchaseNo = purchaseNo;
@@ -74,6 +76,7 @@ public class Entrust {
         this.processedGraphNo = processedGraphNo;
         this.busType = busType;
         this.outRoomStatus = outRoomStatus;
+        this.taskStatus = taskStatus;
     }
 
     public Entrust() {
@@ -262,5 +265,13 @@ public class Entrust {
 
     public void setOutRoomStatus(Byte outRoomStatus) {
         this.outRoomStatus = outRoomStatus;
+    }
+
+    public Byte getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(Byte taskStatus) {
+        this.taskStatus = taskStatus;
     }
 }
