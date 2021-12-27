@@ -91,15 +91,16 @@ public class PayApplyServiceImpl implements PayApplyService {
         model.getApplyDetailAddDTOList().stream()
             .forEach(payApplyDetailAddDTO -> {
                 BizPayApplyDetail payApplyDetail =
-                    buildBizPayApplyDetail(currentDate, payApplyDetailAddDTO);
+                    buildBizPayApplyDetail(currentDate, payApplyDetailAddDTO,payApply);
                 bizPayApplyDetailMapper.insertSelective(payApplyDetail);
             });
         return ResultBean.success(insertId);
     }
 
-    private BizPayApplyDetail buildBizPayApplyDetail(Date currentDate, PayApplyDetailAddDTO payApplyDetailAddDTO) {
+    private BizPayApplyDetail buildBizPayApplyDetail(Date currentDate, PayApplyDetailAddDTO payApplyDetailAddDTO,BizPayApply payApply) {
         BizPayApplyDetail payApplyDetail = new BizPayApplyDetail();
         BeanUtils.copyProperties(payApplyDetailAddDTO, payApplyDetail);
+        payApplyDetail.setPayApplyId((long)payApply.getId());
         payApplyDetail.setCreateTime(currentDate);
         payApplyDetail.setUpdateTime(currentDate);
         payApplyDetail.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
@@ -115,8 +116,8 @@ public class PayApplyServiceImpl implements PayApplyService {
         payApply.setUpdateTime(currentDate);
         // `status`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
         payApply.setStatus("0");
-        payApply.setTotalPrice(payApply.getTotalPrice());
-        payApply.setRemark(payApply.getRemark());
+        payApply.setTotalPrice(model.getTotalPrice());
+        payApply.setRemark(model.getRemark());
         String applyPayCompany = model.getApplyDetailAddDTOList().stream()
             .map(PayApplyDetailAddDTO::getApplyPayCompany)
             .distinct()
