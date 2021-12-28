@@ -6,11 +6,13 @@ import com.deepsoft.haolifa.dao.repository.BizPayApplyDetailMapper;
 import com.deepsoft.haolifa.dao.repository.BizPayApplyMapper;
 import com.deepsoft.haolifa.dao.repository.BizPayPlanMapper;
 import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
+import com.deepsoft.haolifa.enums.PayStatusEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.*;
+import com.deepsoft.haolifa.model.dto.order.CheckReplaceMaterialAuditDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
@@ -18,6 +20,7 @@ import com.deepsoft.haolifa.service.finance.PayApplyService;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -27,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -115,7 +115,7 @@ public class PayApplyServiceImpl implements PayApplyService {
         payApply.setCreateTime(currentDate);
         payApply.setUpdateTime(currentDate);
         // `status`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
-        payApply.setStatus("0");
+        payApply.setStatus(PayStatusEnum.PENDING_APPROVAL.getCode());
         payApply.setTotalPrice(model.getTotalPrice());
         payApply.setRemark(model.getRemark());
         String applyPayCompany = model.getApplyDetailAddDTOList().stream()
@@ -196,7 +196,13 @@ public class PayApplyServiceImpl implements PayApplyService {
 
         // 申请状态 ==
         if (StringUtils.isNotEmpty(model.getStatus())) {
-            criteria.andStatusEqualTo(model.getStatus());
+            List<String> stringList = new ArrayList<>();
+            // 0 全部 1 代办 2 已办
+            switch (model.getStatus()){
+                case "0":
+                   stringList = Arrays.stream(PayStatusEnum.values()).map(PayStatusEnum::getCode).collect(Collectors.toList());
+            }
+            criteria.andStatusIn(stringList);
         }
 
         bizPayApplyExample.setOrderByClause("id desc");
@@ -246,13 +252,40 @@ public class PayApplyServiceImpl implements PayApplyService {
         return ResultBean.success(pageDTO);
     }
 
+    @Override
+   public int auditReplaceMaterial(Integer item_id,String auditResult){
+        BizPayApply payApply = bizPayApplyMapper.selectByPrimaryKey(item_id);
+        payApply.setStatus(auditResult);
+        payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        payApply.setUpdateTime(new Date());
+        bizPayApplyMapper.updateByPrimaryKeySelective(payApply);
+
+
+        BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
+        BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andPayDataIdEqualTo((long)payApply.getId());
+        List<BizPayPlan> bizPayPlanList = bizPayPlanMapper.selectByExample(bizPayPlanExample);
+
+        bizPayPlanList.stream()
+            .forEach(bizPayPlan -> {
+                BizPayPlan bizPay = new BizPayPlan();
+                bizPay.setId(bizPayPlan.getId());
+                // `applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
+                bizPay.setApplyStatus(auditResult);
+                bizPayPlanMapper.updateByPrimaryKeySelective(bizPay);
+            });
+        return 1;
+    };
+
 
     @Override
     public ResultBean approve(Integer id) {
 
         // 查询&修改 付款申请
         BizPayApply payApply = bizPayApplyMapper.selectByPrimaryKey(id);
-        payApply.setStatus("2");
+        //审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成
+        payApply.setStatus(PayStatusEnum.UNDER_APPROVAL.getCode());
         payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         payApply.setUpdateTime(new Date());
         bizPayApplyMapper.updateByPrimaryKeySelective(payApply);
@@ -314,7 +347,8 @@ public class PayApplyServiceImpl implements PayApplyService {
         payPlan.setApplyAmount(bizPayApplyDetailMap.get(purchaseOrder.getId()).getPrice());
         payPlan.setPayCompany(purchaseOrder.getDemander());
         payPlan.setStatus("0");
-        payPlan.setDataStatus("0");
+        //`applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
+        payPlan.setDataStatus(PayStatusEnum.UNDER_APPROVAL.getCode());
         Date currentDate = new Date();
         payPlan.setCreateTime(currentDate);
         payPlan.setUpdateTime(currentDate);

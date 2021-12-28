@@ -20,6 +20,7 @@ import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SupplierService;
+import com.deepsoft.haolifa.service.finance.PayApplyService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +60,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     private PurcahseOrderService purcahseOrderService;
     @Autowired
     private OrderProductService orderProductService;
+    @Autowired
+    private PayApplyService payApplyService;
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
@@ -315,6 +318,18 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                     auditDTO.setAuditResult((byte) 2);
                 }
                 orderProductService.auditReplaceMaterial(auditDTO);
+                break;
+            case 10:
+                // 替换料审批
+                String auditResult = "";
+                if (auditRes == 1) {
+                    // 审核通过
+                    auditResult = "3";
+                } else if (auditRes == 0) {
+                    // 审核不通过
+                    auditResult = "4";
+                }
+                payApplyService.auditReplaceMaterial(formId,auditResult);
                 break;
             default:
                 ;

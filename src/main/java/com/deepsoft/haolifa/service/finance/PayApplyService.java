@@ -49,6 +49,7 @@ public interface PayApplyService {
      */
     ResultBean<PayApplyRSDTO> getList(PayApplyRQDTO model);
 
+    int auditReplaceMaterial(Integer item_id,String auditResult);
     /**
      * 付款申请-发起审批
      *
