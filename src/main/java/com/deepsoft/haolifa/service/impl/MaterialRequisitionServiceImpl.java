@@ -1,27 +1,33 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.MaterialRequisitionMapper;
 import com.deepsoft.haolifa.dao.repository.extend.CommonExtendMapper;
-import com.deepsoft.haolifa.model.domain.InspectHistory;
-import com.deepsoft.haolifa.model.domain.MaterialRequisition;
-import com.deepsoft.haolifa.model.domain.MaterialRequisitionExample;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.storage.BatchNoListDTO;
+import com.deepsoft.haolifa.model.dto.storage.MaterialBatchNoDTO;
+import com.deepsoft.haolifa.model.dto.storage.OutMaterialStorageDTO;
+import com.deepsoft.haolifa.model.dto.stormRoom.WholeOutboundReqDTO;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
-import com.deepsoft.haolifa.service.MaterialRequisitionService;
-import com.deepsoft.haolifa.service.MaterialService;
-import com.deepsoft.haolifa.service.OrderProductService;
+import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -32,6 +38,7 @@ import java.util.List;
  * @since 2019-11-23
  */
 @Service
+@Slf4j
 public class MaterialRequisitionServiceImpl implements MaterialRequisitionService {
 
     @Resource
@@ -39,11 +46,13 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
     @Resource
     private OrderProductService orderProductService;
     @Resource
+    private EntryOutStoreRecordService entryOutStoreRecordService;
+    @Resource
+    private StockService stockService;
+    @Resource
     private MaterialRequisitionMapper materialRequisitionMapper;
-
     @Resource
     private CommonExtendMapper commonExtendMapper;
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -95,6 +104,54 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
         BeanUtils.copyProperties(preOutMaterialVos, pageDTO);
         pageDTO.setList(preOutMaterialVos);
         return pageDTO;
+    }
+
+    @Override
+    public int wholeOutbound(WholeOutboundReqDTO reqDTO) {
+        int result=0;
+        String busNo = reqDTO.getBusNo();
+        List<String> busNoList = Arrays.asList(StrUtil.split(busNo, StrUtil.COMMA));
+        MaterialRequisitionExample example = new MaterialRequisitionExample();
+        example.or().andOrderNoIn(busNoList).andOutRoomStatusEqualTo(CommonEnum.OutRoomStatus.NOT_OUT.type);
+        List<MaterialRequisition> materialRequisitions = materialRequisitionMapper.selectByExample(example);
+        // 获取每个零件的单价
+        Map<String, BigDecimal> materialPriceMap = this.mapMaterialPrice(materialRequisitions.stream().map(MaterialRequisition::getGraphNo).collect(Collectors.toSet()));
+        for (MaterialRequisition materialRequisition : materialRequisitions) {
+            try {
+                OutMaterialStorageDTO outMaterialStorageDTO = new OutMaterialStorageDTO();
+                outMaterialStorageDTO.setMaterialGraphNo(materialRequisition.getGraphNo());
+                outMaterialStorageDTO.setType(CommonEnum.materialOutType.MATERIAL_REQUISITION.type);
+                outMaterialStorageDTO.setReceiveDepartment("装配车间");
+                outMaterialStorageDTO.setBusId(materialRequisition.getId());
+                outMaterialStorageDTO.setBusNo(materialRequisition.getOrderNo());
+                outMaterialStorageDTO.setOrderNo(materialRequisition.getOrderNo());
+                outMaterialStorageDTO.setQuantity(materialRequisition.getQuantity());
+                outMaterialStorageDTO.setPrice(materialPriceMap.getOrDefault(materialRequisition.getGraphNo(), null));
+                //获取batchNoList
+                BatchNoListDTO batchNoListDTO = new BatchNoListDTO();
+                batchNoListDTO.setQty(materialRequisition.getQuantity());
+                batchNoListDTO.setGraphNo(materialRequisition.getGraphNo());
+                List<MaterialBatchNoDTO> batchNoList = stockService.batchListNo(batchNoListDTO);
+                if(CollectionUtil.isEmpty(batchNoList)){
+                    log.error("whole out bound out no stock:{}", JSONUtil.toJsonStr(outMaterialStorageDTO));
+                    continue;
+                }
+                outMaterialStorageDTO.setBatchNoDTOList(batchNoList);
+                int i = entryOutStoreRecordService.outMaterial(outMaterialStorageDTO);
+                if (i < 1) {
+                    log.error("whole out bound out material error:{}", JSONUtil.toJsonStr(outMaterialStorageDTO));
+                }
+                result++;
+            } catch (Exception e) {
+                log.error("whole out bound out material exception:", e);
+            }
+        }
+        return result;
+    }
+
+    private Map<String, BigDecimal> mapMaterialPrice(Set<String> graphNoList) {
+        List<Material> materials = materialService.listByGraphNos(new ArrayList<>(graphNoList));
+        return materials.stream().collect(Collectors.toMap(Material::getGraphNo, Material::getPrice));
     }
 
 

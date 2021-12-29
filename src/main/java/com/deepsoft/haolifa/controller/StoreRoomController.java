@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.storage.*;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRackRequestDTO;
 import com.deepsoft.haolifa.model.dto.stormRoom.StoreRoomRequestDTO;
+import com.deepsoft.haolifa.model.dto.stormRoom.WholeOutboundReqDTO;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
 import com.deepsoft.haolifa.service.*;
@@ -238,5 +239,10 @@ public class StoreRoomController {
         return ResultBean.success(materialRequisitionService.preOutMaterialPage(preOutMaterialPageVo));
     }
 
+    @PostMapping("/whole-out-bound")
+    @ApiOperation("领料单-整单出库")
+    public ResultBean wholeOutbound(@RequestBody WholeOutboundReqDTO reqDTO) {
+        return ResultBean.success(materialRequisitionService.wholeOutbound(reqDTO));
+    }
 
 }
