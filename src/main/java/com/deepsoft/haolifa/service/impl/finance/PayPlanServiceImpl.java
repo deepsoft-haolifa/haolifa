@@ -1,16 +1,18 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizPayPlanMapper;
+import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
+import com.deepsoft.haolifa.enums.BookingTypeEnum;
 import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.domain.BizPayPlanExample;
+import com.deepsoft.haolifa.model.domain.PurchaseOrder;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.payplan.*;
+import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.PayPlanService;
 import com.github.pagehelper.Page;
@@ -31,6 +33,12 @@ public class PayPlanServiceImpl implements PayPlanService {
     private BizPayPlanMapper bizPayPlanMapper;
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private PurchaseOrderMapper purchaseOrderMapper;
+
+    @Autowired
+    private SysDictService sysDictService;
 
     @Override
     public ResultBean save(BizPayPlanAddDTO model) {
@@ -62,10 +70,51 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     @Override
-    public ResultBean update(BizPayPlan billBank) {
-        billBank.setUpdateTime(new Date());
-        billBank.setUpdateUser(sysUserService.selectLoginUser().getId());
-        int update = bizPayPlanMapper.updateByPrimaryKeySelective(billBank);
+    public ResultBean update(BizPayPlanPayDTO planPayDTO) {
+
+        // 1 更新付款计划状态
+        BizPayPlan record = new BizPayPlan();
+        BeanUtils.copyProperties(record,planPayDTO);
+        // todo 添加付款方式日志表
+        record.setPayWay(JSON.toJSONString(planPayDTO.getPayWayList()));
+        record.setUpdateTime(new Date());
+        record.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int update = bizPayPlanMapper.updateByPrimaryKeySelective(record);
+        if (update < 1){
+            return ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_EXCEPTION);
+        }
+
+        // 更新日记账表
+//        Map<String, String> stringStringMap = sysDictService.getSysDictByTypeCode(DictEnum.BOOKING_TYPE.getCode())
+//            .stream()
+//            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName));
+
+        BookingTypeEnum bookingTypeEnum = BookingTypeEnum.valueOfCode(record.getBookingType());
+        switch (bookingTypeEnum){
+            case bill:
+
+                break;
+            case bank_bill:
+
+                break;
+            case other_bill:
+
+                break;
+            default:
+
+                break;
+        }
+
+        // 付款完成后，将采购订单的状态更新为已付款
+        BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(record.getId());
+        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(record.getContractId()));
+        PurchaseOrder purchaseOrderU = new PurchaseOrder();
+        purchaseOrderU.setId(Integer.parseInt(record.getContractId()));
+        // todo 增加支付状态
+        // purchaseOrderU.setPayStatus();
+        purchaseOrderU.setPaidAccount(purchaseOrder.getPaidAccount().add(bizPayPlan.getApplyAmount()));
+        int selective = purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrderU);
+
         return ResultBean.success(update);
     }
 
@@ -128,7 +177,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         if (StringUtils.isNotEmpty(model.getStatus())) {
             criteria.andStatusEqualTo(model.getStatus());
         }
-        //数据状态
+        //数据状态 2 审核中  3 出纳付款
         if (StringUtils.isNotEmpty(model.getDataStatus())) {
             criteria.andDataStatusEqualTo(model.getDataStatus());
         }
