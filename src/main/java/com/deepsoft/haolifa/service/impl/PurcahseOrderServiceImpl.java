@@ -1,16 +1,5 @@
 package com.deepsoft.haolifa.service.impl;
 
-import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
-import static com.deepsoft.haolifa.constant.CacheKey.INSPECT_NO_KEY;
-import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.ENTRUST_FLOW;
-import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.PURCHASE_FLOW;
-import static com.deepsoft.haolifa.constant.CommonEnum.FormType.ENTRUST_TYPE;
-import static com.deepsoft.haolifa.constant.CommonEnum.FormType.PURCHASE_TYPE;
-import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_ENTRUST_1;
-import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_PURCHASE_0;
-import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
-import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
-
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -21,37 +10,41 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.PurchaseOrderItemExtendMapper;
-import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.domain.PurchaseOrderItem;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
-import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRSDTO;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
-import java.math.RoundingMode;
-import java.util.Date;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.RoundingMode;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
+import static com.deepsoft.haolifa.constant.CacheKey.BATCH_NUM_KEY;
+import static com.deepsoft.haolifa.constant.CacheKey.INSPECT_NO_KEY;
+import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.ENTRUST_FLOW;
+import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.PURCHASE_FLOW;
+import static com.deepsoft.haolifa.constant.CommonEnum.FormType.ENTRUST_TYPE;
+import static com.deepsoft.haolifa.constant.CommonEnum.FormType.PURCHASE_TYPE;
+import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_ENTRUST_1;
+import static com.deepsoft.haolifa.constant.Constant.PurchaseOrderType.ORDER_TYPE_PURCHASE_0;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.BATCH_NUMBER_PREFIX_PC;
+import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.INSPECT_NO_PREFIX_BJ;
 
 @Service
 @Slf4j
@@ -336,7 +329,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }
 
     @Override
-    public ResultBean<PurchaseOrderReceivableRSDTO> receivableList(PurchaseOrderReceivableRQDTO purchaseOrderDTO) {
+    public ResultBean<PurchaseOrderStandAccountRSDTO> standAccountList(PurchaseOrderStandAccountRQDTO purchaseOrderDTO) {
 //        List<String> supplierNoList = new ArrayList<>();
 //        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
 //            SupplierExample supplierExample = new SupplierExample();
@@ -359,38 +352,23 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
             criteria.andSupplierNameLike(purchaseOrderDTO.getSupplierName());
         }
-        // 签订日期
-        if (purchaseOrderDTO.getOperateTime()!=null) {
-            criteria.andOperateTimeEqualTo(purchaseOrderDTO.getOperateTime());
-        }
-        // 归属部门 like
-//        if (StringUtils.isNotEmpty(purchaseOrderDTO.getPurchaseOrderNo())) {
-//            criteria.andPurchaseOrderNoEqualTo(purchaseOrderDTO.getPurchaseOrderNo());
-//        }
 
-        // 交货日期
-        if (purchaseOrderDTO.getDeliveryTime()!=null) {
-            criteria.andDeliveryTimeEqualTo(purchaseOrderDTO.getDeliveryTime());
+        // 结算方
+        if (StringUtils.isNotEmpty(purchaseOrderDTO.getDemander())) {
+            criteria.andDemanderLike(purchaseOrderDTO.getDemander());
         }
-        // 客户名称
-        if (StringUtils.isNotEmpty(purchaseOrderDTO.getOperatorUserName())) {
-            criteria.andOperatorUserNameLike(purchaseOrderDTO.getOperatorUserName());
-        }
-        // 供应单位 下拉
-        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
-            criteria.andSupplierNameEqualTo(purchaseOrderDTO.getSupplierName());
-        }
+
 
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(purchaseOrderDTO.getPageNum(), purchaseOrderDTO.getPageSize(), "create_time desc")
             .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
 
-        PageDTO<PurchaseOrderReceivableRSDTO> pageDTO = new PageDTO<>();
+        PageDTO<PurchaseOrderStandAccountRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(purchaseOrderList, pageDTO);
-        List<PurchaseOrderReceivableRSDTO> purchaseOrderReceivableRSDTOList = purchaseOrderList.getResult().stream()
+        List<PurchaseOrderStandAccountRSDTO> purchaseOrderReceivableRSDTOList = purchaseOrderList.getResult().stream()
             .map(purchaseOrder -> {
-                PurchaseOrderReceivableRSDTO purchaseOrderReceivableRSDTO = new PurchaseOrderReceivableRSDTO();
-                BeanUtils.copyProperties(purchaseOrder, purchaseOrderReceivableRSDTO);
-                return purchaseOrderReceivableRSDTO;
+                PurchaseOrderStandAccountRSDTO rsdto = new PurchaseOrderStandAccountRSDTO();
+                BeanUtils.copyProperties(purchaseOrder, rsdto);
+                return rsdto;
             })
             .collect(Collectors.toList());
 

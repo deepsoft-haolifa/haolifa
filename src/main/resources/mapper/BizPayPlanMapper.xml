@@ -130,7 +130,7 @@
     insert into biz_pay_plan (pay_data_id, apply_no, apply_date,
       contract_id, contract_no, contract_pay_way,
       apply_pay_company, apply_collection_company,
-      apply_amount, pay_company, pay_account,
+      apply_amount,apply_status, pay_company, pay_account,
       pay_way, payment_type, status,
       pay_date, booking_type, data_status,
       remark, del_flag, create_user,
@@ -139,7 +139,7 @@
     values (#{payDataId,jdbcType=BIGINT}, #{applyNo,jdbcType=VARCHAR}, #{applyDate,jdbcType=TIMESTAMP},
       #{contractId,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR}, #{contractPayWay,jdbcType=VARCHAR},
       #{applyPayCompany,jdbcType=VARCHAR}, #{applyCollectionCompany,jdbcType=VARCHAR},
-      #{applyAmount,jdbcType=DECIMAL}, #{payCompany,jdbcType=VARCHAR}, #{payAccount,jdbcType=VARCHAR},
+      #{applyAmount,jdbcType=DECIMAL},#{applyStatus,jdbcType=VARCHAR}, #{payCompany,jdbcType=VARCHAR}, #{payAccount,jdbcType=VARCHAR},
       #{payWay,jdbcType=VARCHAR}, #{paymentType,jdbcType=CHAR}, #{status,jdbcType=CHAR},
       #{payDate,jdbcType=TIMESTAMP}, #{bookingType,jdbcType=CHAR}, #{dataStatus,jdbcType=CHAR},
       #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER},
@@ -436,6 +436,9 @@
       </if>
       <if test="applyCollectionCompany != null">
         apply_collection_company = #{applyCollectionCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="applyStatus != null">
+          apply_status = #{applyStatus,jdbcType=VARCHAR},
       </if>
       <if test="applyAmount != null">
         apply_amount = #{applyAmount,jdbcType=DECIMAL},

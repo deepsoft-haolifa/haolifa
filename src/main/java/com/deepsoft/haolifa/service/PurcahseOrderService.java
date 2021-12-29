@@ -6,6 +6,8 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.receivable.PurchaseOrderReceivableRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRSDTO;
 
 public interface PurcahseOrderService {
 
@@ -53,7 +55,7 @@ public interface PurcahseOrderService {
    * 列表
    * @return
    */
-  ResultBean<PurchaseOrderReceivableRSDTO> receivableList(PurchaseOrderReceivableRQDTO purchaseOrderDTO);
+  ResultBean<PurchaseOrderStandAccountRSDTO> standAccountList(PurchaseOrderStandAccountRQDTO purchaseOrderDTO);
 
   /**
    * 采购完成
