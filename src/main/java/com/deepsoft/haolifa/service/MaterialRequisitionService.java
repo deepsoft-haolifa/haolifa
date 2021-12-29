@@ -2,9 +2,11 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.MaterialRequisition;
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.stormRoom.WholeOutboundReqDTO;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialPageVo;
 import com.deepsoft.haolifa.model.vo.PreOutMaterialVo;
 import com.github.pagehelper.Page;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -41,4 +43,11 @@ public interface MaterialRequisitionService {
      * @return
      */
     PageDTO<PreOutMaterialVo> preOutMaterialPage(PreOutMaterialPageVo vo);
+
+
+    /**
+     * 整单出库
+     * @param reqDTO
+     */
+    int wholeOutbound(WholeOutboundReqDTO reqDTO);
 }

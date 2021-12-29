@@ -194,7 +194,12 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return null;
     }
-
+    @Override
+    public List<Material> listByGraphNos(List<String> graphNos) {
+        MaterialExample example = new MaterialExample();
+        example.or().andGraphNoIn(graphNos);
+        return materialMapper.selectByExample(example);
+    }
 
     @Override
     public Material getInfoById(int id) {
