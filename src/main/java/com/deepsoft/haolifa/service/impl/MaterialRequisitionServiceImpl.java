@@ -121,7 +121,7 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
                 OutMaterialStorageDTO outMaterialStorageDTO = new OutMaterialStorageDTO();
                 outMaterialStorageDTO.setMaterialGraphNo(materialRequisition.getGraphNo());
                 outMaterialStorageDTO.setType(CommonEnum.materialOutType.MATERIAL_REQUISITION.type);
-                outMaterialStorageDTO.setReceiveDepartment("装配车间");
+                outMaterialStorageDTO.setReceiveDepartment(reqDTO.getReceiveDepartment());
                 outMaterialStorageDTO.setBusId(materialRequisition.getId());
                 outMaterialStorageDTO.setBusNo(materialRequisition.getOrderNo());
                 outMaterialStorageDTO.setOrderNo(materialRequisition.getOrderNo());
