@@ -41,6 +41,15 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
         if (StringUtils.isNotBlank(model.getPostCode())) {
             criteria.andPostCodeLike("%" + model.getPostCode() + "%");
         }
+        if (StringUtils.isNotBlank(model.getAppSpecifications())) {
+            criteria.andAppSpecificationsLike("%" + model.getAppSpecifications() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getProcedureName())) {
+            criteria.andProcedureNameLike("%" + model.getProcedureName() + "%");
+        }
+        if (Objects.nonNull(model.getHourQuotaPrice())) {
+            criteria.andHourQuotaPriceEqualTo(model.getHourQuotaPrice());
+        }
         example.setOrderByClause("id desc");
         Page<PayHourQuota> payTeams = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payHourQuotaMapper.selectByExample(example));
