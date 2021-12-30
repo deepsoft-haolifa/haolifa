@@ -9,4 +9,11 @@ public interface DictionariesService {
      */
     ResultBean getUserType();
 
-}
+    /**
+     * 工种类别
+     * @return
+     */
+    ResultBean getTypeOfWorkEnum();
+
+
+    }

@@ -27,4 +27,18 @@ public class DictionariesServiceImpl implements DictionariesService {
         }
         return ResultBean.success(list);
     }
+
+    @Override
+    public ResultBean getTypeOfWorkEnum() {
+        List<DictionariesVo> list = new ArrayList<>();
+        for (CommonEnum.TypeOfWorkEnum type : CommonEnum.TypeOfWorkEnum.values()) {
+            DictionariesVo vo = new DictionariesVo();
+            vo.setCode(type.code);
+            vo.setName(type.name);
+            list.add(vo);
+        }
+        return ResultBean.success(list);
+    }
+
+
 }

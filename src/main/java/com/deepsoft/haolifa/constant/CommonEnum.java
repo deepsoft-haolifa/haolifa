@@ -742,4 +742,26 @@ public class CommonEnum {
             this.name = name;
         }
     }
+
+    /*** 财务管理模块 end**/
+
+    /***
+     *
+     */
+    public enum TypeOfWorkEnum {
+        VALVE_ASSEMBLY("1", "阀门装配"),
+        VALVE_BODY("2", "阀体"),
+        VALVE_PLATE("3", "阀板"),
+        SEMI_FINISHED_VALVE_BODY("4", "阀体半成品"),
+        SEMI_FINISHED_VALVE_PLATE("5", "阀板半成品"),
+        VALVE_SEAT_MACHINING("6", "阀座加工"),
+        ACTUATOR_MACHINING("7", "执行器加工"),
+        ;
+        public final String code;
+        public final String name;
+        TypeOfWorkEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+    }
 }

@@ -60,7 +60,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
         }
         if (StringUtils.isNotBlank(model.getProductModel())) {
-            criteria.andProductModelEqualTo(model.getProductModel());
+            criteria.andProductModelEqualTo("%" + model.getProductModel() + "%");
         }
         if (StringUtils.isNotBlank(model.getPostCapability())) {
             criteria.andPostCapabilityLike("%" + model.getPostCapability() + "%");

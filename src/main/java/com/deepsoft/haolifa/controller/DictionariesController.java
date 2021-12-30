@@ -24,4 +24,14 @@ public class DictionariesController {
     public ResultBean getClassifyList() {
         return ResultBean.success(dictionariesService.getUserType());
     }
+
+
+    @ApiOperation("获取工种类别")
+    @GetMapping("/getTypeOfWorkEnum")
+    public ResultBean getTypeOfWorkEnum() {
+        return ResultBean.success(dictionariesService.getTypeOfWorkEnum());
+    }
+
+
+
 }
