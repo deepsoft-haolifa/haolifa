@@ -1,10 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
-import com.deepsoft.haolifa.dao.repository.PayUserMapper;
-import com.deepsoft.haolifa.dao.repository.PayUserRelationProcedureMapper;
-import com.deepsoft.haolifa.dao.repository.PayWorkingProcedureMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -45,6 +42,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     private PayProductionCapacityService payProductionCapacityService;
     @Resource
     private SprayService sprayService;
+    @Resource
+    private EntrustMapper entrustMapper;
 
     @Override
     public ResultBean pageInfo(PayWorkingProcedureDTO model) {
@@ -60,7 +59,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
         }
         if (StringUtils.isNotBlank(model.getProductModel())) {
-            criteria.andProductModelEqualTo(model.getProductModel());
+            criteria.andProductModelEqualTo("%" + model.getProductModel() + "%");
         }
         if (StringUtils.isNotBlank(model.getPostCapability())) {
             criteria.andPostCapabilityLike("%" + model.getPostCapability() + "%");
@@ -167,9 +166,16 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo);
             }
         } else if (CommonEnum.WorkShopTypeEnum.MACHINING.code.equals(type)) {
-            // 机加工订单 TODO 待修改
-            String model = "";
-            buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, 0, orderNo);
+            // 机加工订单
+            EntrustExample example = new EntrustExample();
+            EntrustExample.Criteria criteria = example.createCriteria();
+            criteria.andEntrustNoEqualTo(orderNo);
+            List<Entrust> entrusts = entrustMapper.selectByExample(example);
+            for (Entrust entrust : entrusts) {
+                String materialGraphNo = entrust.getMaterialGraphNo();
+                String model = materialGraphNo.split("-")[0];
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, 0, orderNo);
+            }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
             return ResultBean.success(null);

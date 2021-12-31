@@ -30,7 +30,7 @@ public interface PayPlanService {
      * @param model
      * @return
      */
-    ResultBean update(BizPayPlan model);
+    ResultBean update(BizPayPlanPayDTO model);
 
     /**
      * 获取详情
@@ -47,6 +47,7 @@ public interface PayPlanService {
      * @return
      */
     ResultBean<BizPayPlanRSDTO> getList(BizPayPlanRQDTO model);
+
     /**
      * 获取列表
      *

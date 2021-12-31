@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.material.MaterialListDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 零件管理接口
@@ -93,6 +94,13 @@ public interface MaterialService {
      * @return
      */
     Material getInfoByGraphNo(String graphNo);
+
+    /**
+     * 根据图号获取零件
+     * @param graphNos
+     * @return
+     */
+    List<Material> listByGraphNos(List<String> graphNos);
 
     /**
      * 获取零件详情（根据主键）

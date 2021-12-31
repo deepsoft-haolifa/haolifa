@@ -1,13 +1,13 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
-import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.service.finance.PayPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -35,7 +35,8 @@ public class PayPlanController {
 
     @ApiOperation("更新节点")
     @PostMapping("/updatePayPlan")
-    public ResultBean updatePayPlan(@RequestBody BizPayPlan payPlan) {
+    @Transactional(rollbackFor = Exception.class)
+    public ResultBean updatePayPlan(@RequestBody BizPayPlanPayDTO payPlan) {
         return payPlanService.update(payPlan);
     }
 

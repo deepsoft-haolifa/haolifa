@@ -273,6 +273,8 @@ public class PayApplyServiceImpl implements PayApplyService {
                 bizPay.setId(bizPayPlan.getId());
                 // `applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
                 bizPay.setApplyStatus(auditResult);
+                // `applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
+                bizPay.setDataStatus(auditResult);
                 bizPayPlanMapper.updateByPrimaryKeySelective(bizPay);
             });
         return 1;

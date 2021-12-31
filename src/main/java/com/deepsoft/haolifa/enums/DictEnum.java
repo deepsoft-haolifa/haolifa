@@ -1,16 +1,16 @@
 package com.deepsoft.haolifa.enums;
 
-/***
- * 付款审批-审批状态
- */
-public enum PayStatusEnum {
 
-    //1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成
-    PENDING_APPROVAL("1", "待审批"),
-    UNDER_APPROVAL("2", "审批中"),
-    IN_PAYMENT("3", "付款中"),
-    APPROVAL_FAILED("4", "审批不通过"),
-    PAYMENT_COMPLETED("5", "付款完成");
+/***
+ * 字典表 key
+ */
+public enum DictEnum {
+
+        BOOKING_TYPE("BOOKING_TYPE", "记账方式"),
+        PAY_WAY("PAY_WAY", "付款方式"),
+        PAY_ACCOUNT("PAY_ACCOUNT", "付款账号"),
+        PAYMENT_TYPE("PAY_ACCOUNT", "付款账号"),
+        COLLECTION_TYPE("PAYMENT_TYPE", "收款类型");
 
     private String code;
     private String desc;
@@ -31,7 +31,7 @@ public enum PayStatusEnum {
         this.desc = desc;
     }
 
-     PayStatusEnum(String code, String desc) {
+     DictEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }

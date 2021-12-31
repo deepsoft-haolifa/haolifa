@@ -66,7 +66,7 @@ public class BizPayPlanRQDTO extends PageParam {
     @ApiModelProperty(value = "付款类型:默认是货款")
     private String paymentType;
 
-    @ApiModelProperty(value = "付款状态 0.未付；1.付款中 2已付款")
+    @ApiModelProperty(value = "付款状态 0.未付款； 2已付款")
     private String status;
 
     @ApiModelProperty(value = "付款日期")
@@ -74,8 +74,6 @@ public class BizPayPlanRQDTO extends PageParam {
 
     @ApiModelProperty(value = "付款渠道：1.现金日记账；2.银行日记账；")
     private String bookingType;
-
-
 
     @ApiModelProperty(value = "数据状态：1. 老总选择； 2. 财务主管选择；3.出纳付款")
     private String dataStatus;
