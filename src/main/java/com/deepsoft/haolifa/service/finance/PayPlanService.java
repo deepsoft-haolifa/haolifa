@@ -56,4 +56,5 @@ public interface PayPlanService {
      */
     ResultBean<BizPayPlanSummaryRSDTO>  getPayPlanSummaryList(BizPayPlanSummaryRQDTO  model);
 
+    ResultBean<BookingTypeRSDTO> getAllPayWayList();
 }

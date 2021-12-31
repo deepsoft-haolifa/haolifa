@@ -21,7 +21,7 @@ public class BizPayPlanPayDTO {
     @ApiModelProperty(value = "申请付款单位")
     private String applyPayCompany;
 
-    @ApiModelProperty(value = "付款金额")
+    @ApiModelProperty(value = "总付款金额")
     private BigDecimal applyAmount;
 
     @ApiModelProperty(value = "付款单位")
@@ -33,8 +33,8 @@ public class BizPayPlanPayDTO {
     @ApiModelProperty(value = "付款方式; 字典PAY_WAY")
     private List<PayWayDTO> payWayList;
 
-    @ApiModelProperty(value = "付款类型:默认是货款")
-    private String paymentType;
+    //@ApiModelProperty(value = "付款类型:默认是货款")
+    // private String paymentType;
 
     @ApiModelProperty(value = "付款状态 0.未付； 2已付款")
     private String status;
@@ -42,23 +42,21 @@ public class BizPayPlanPayDTO {
     @ApiModelProperty(value = "付款日期")
     private Date payDate;
 
-    @ApiModelProperty(value = "记账方式：字典BOOKING_TYPE")
-    private String bookingType;
-
     @ApiModelProperty(value = "备注")
     private String remark;
 
-
-
     @Data
-    class PayWayDTO{
-        @ApiModelProperty(value = "付款方式; 字典PAY_WAY")
+    public static class PayWayDTO {
+
+        @ApiModelProperty(value = "记账方式")
+        private String bookingType;
+
+        @ApiModelProperty(value = "付款方式")
         private String code;
 
         @ApiModelProperty(value = "支付金额")
         private BigDecimal amount;
     }
-
 
 
 }

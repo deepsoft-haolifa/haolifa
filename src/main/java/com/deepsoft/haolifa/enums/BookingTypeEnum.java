@@ -7,15 +7,12 @@ import java.util.Arrays;
  * 记账方式
  */
 public enum BookingTypeEnum {
-
-        bill("1", "现金日记账"),
-        bank_bill("2", "银行日记账"),
-        other_bill("3", "其他货币日记账");
+    cash_bill("cash_bill", "现金日记账"),
+    bank_bill("bank_bill", "银行日记账"),
+    other_bill("other_bill", "其他货币日记账");
 
     private String code;
     private String desc;
-
-
 
 
     public static BookingTypeEnum valueOfCode(String code) {
@@ -23,8 +20,8 @@ public enum BookingTypeEnum {
             .filter(e -> e.code.equalsIgnoreCase(code))
             .findFirst()
             .orElse(null);
-        if (bookingTypeEnum == null){
-            throw  new RuntimeException();
+        if (bookingTypeEnum == null) {
+            throw new RuntimeException();
         }
         return bookingTypeEnum;
     }

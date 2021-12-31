@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizPayPlanMapper;
 import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
 import com.deepsoft.haolifa.enums.BookingTypeEnum;
+import com.deepsoft.haolifa.enums.PayWayEnum;
 import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.domain.BizPayPlanExample;
 import com.deepsoft.haolifa.model.domain.PurchaseOrder;
@@ -23,7 +24,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -74,7 +77,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         // 1 更新付款计划状态
         BizPayPlan record = new BizPayPlan();
-        BeanUtils.copyProperties(record,planPayDTO);
+        BeanUtils.copyProperties(planPayDTO,record);
         // todo 添加付款方式日志表
         record.setPayWay(JSON.toJSONString(planPayDTO.getPayWayList()));
         record.setUpdateTime(new Date());
@@ -89,31 +92,45 @@ public class PayPlanServiceImpl implements PayPlanService {
 //            .stream()
 //            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName));
 
-        BookingTypeEnum bookingTypeEnum = BookingTypeEnum.valueOfCode(record.getBookingType());
-        switch (bookingTypeEnum){
-            case bill:
-
-                break;
-            case bank_bill:
-
-                break;
-            case other_bill:
-
-                break;
-            default:
-
-                break;
-        }
+        // 1 支付方式
+//        planPayDTO.getPayWayList().stream()
+//            .map(payWayDTO -> {
+//
+//                return null;
+//            })
+//            .collect(Collectors.toList());
+        // 2 记账方式
+//        planPayDTO.getPayWayList().stream()
+//            .map(payWayDTO -> {
+//
+//                return null;
+//            })
+//            .collect(Collectors.toList());
+//        BookingTypeEnum bookingTypeEnum = BookingTypeEnum.valueOfCode(record.getBookingType());
+//        switch (bookingTypeEnum){
+//            case bill:
+//
+//                break;
+//            case bank_bill:
+//
+//                break;
+//            case other_bill:
+//
+//                break;
+//            default:
+//
+//                break;
+//        }
 
         // 付款完成后，将采购订单的状态更新为已付款
         BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(record.getId());
-        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(record.getContractId()));
+        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
         PurchaseOrder purchaseOrderU = new PurchaseOrder();
-        purchaseOrderU.setId(Integer.parseInt(record.getContractId()));
+        purchaseOrderU.setId(Integer.parseInt(bizPayPlan.getContractId()));
         // todo 增加支付状态
         // purchaseOrderU.setPayStatus();
         purchaseOrderU.setPaidAccount(purchaseOrder.getPaidAccount().add(bizPayPlan.getApplyAmount()));
-        int selective = purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrderU);
+        //int selective = purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrderU);
 
         return ResultBean.success(update);
     }
@@ -262,6 +279,37 @@ public class PayPlanServiceImpl implements PayPlanService {
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean<BookingTypeRSDTO> getAllPayWayList() {
+
+        Map<BookingTypeEnum, List<PayWayEnum>> typeEnumPayWayEnumMap = Arrays.stream(PayWayEnum.values())
+            .collect(Collectors.groupingBy(PayWayEnum::getBookingTypeEnum));
+
+        List<BookingTypeRSDTO> bookingTypeRSDTOList = typeEnumPayWayEnumMap.entrySet().stream()
+            .map(entry -> {
+                BookingTypeEnum bookingTypeEnum = entry.getKey();
+
+                BookingTypeRSDTO bookingTypeRSDTO = new BookingTypeRSDTO();
+                bookingTypeRSDTO.setCode(bookingTypeEnum.getCode());
+                bookingTypeRSDTO.setDesc(bookingTypeEnum.getDesc());
+
+                List<BookingTypeRSDTO.PayWay> payWayList = entry.getValue().stream()
+                    .map(payWayEnum -> {
+                        BookingTypeRSDTO.PayWay payWay = new BookingTypeRSDTO.PayWay();
+                        payWay.setCode(payWayEnum.getCode());
+                        payWay.setDesc(payWayEnum.getDesc());
+                        return payWay;
+                    })
+                    .collect(Collectors.toList());
+                bookingTypeRSDTO.setWayList(payWayList);
+
+                return bookingTypeRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        return ResultBean.success(bookingTypeRSDTOList);
     }
 
 
