@@ -6,13 +6,19 @@ import java.util.Date;
 public class Entrust {
     private Integer id;
 
-    private String materialGraphName;
+    private String materialClassifyName;
 
     private String purchaseNo;
 
     private String entrustNo;
 
     private String materialGraphNo;
+
+    private String materialGraphName;
+
+    private String specifications;
+
+    private String model;
 
     private Byte workshopType;
 
@@ -52,12 +58,15 @@ public class Entrust {
 
     private Byte taskStatus;
 
-    public Entrust(Integer id, String materialGraphName, String purchaseNo, String entrustNo, String materialGraphNo, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber, Integer unqualifiedNumber, String processedGraphNo, Byte busType, Byte outRoomStatus, Byte taskStatus) {
+    public Entrust(Integer id, String materialClassifyName, String purchaseNo, String entrustNo, String materialGraphNo, String materialGraphName, String specifications, String model, Byte workshopType, String supplierName, String supplierNo, String batchNumber, Integer number, BigDecimal purchasePrice, Byte status, String entrustPerson, Byte isDelete, Date createTime, Date updateTime, Integer createUserId, Byte inspectStatus, Integer qualifiedNumber, Integer unqualifiedNumber, String processedGraphNo, Byte busType, Byte outRoomStatus, Byte taskStatus) {
         this.id = id;
-        this.materialGraphName = materialGraphName;
+        this.materialClassifyName = materialClassifyName;
         this.purchaseNo = purchaseNo;
         this.entrustNo = entrustNo;
         this.materialGraphNo = materialGraphNo;
+        this.materialGraphName = materialGraphName;
+        this.specifications = specifications;
+        this.model = model;
         this.workshopType = workshopType;
         this.supplierName = supplierName;
         this.supplierNo = supplierNo;
@@ -91,12 +100,12 @@ public class Entrust {
         this.id = id;
     }
 
-    public String getMaterialGraphName() {
-        return materialGraphName;
+    public String getMaterialClassifyName() {
+        return materialClassifyName;
     }
 
-    public void setMaterialGraphName(String materialGraphName) {
-        this.materialGraphName = materialGraphName == null ? null : materialGraphName.trim();
+    public void setMaterialClassifyName(String materialClassifyName) {
+        this.materialClassifyName = materialClassifyName == null ? null : materialClassifyName.trim();
     }
 
     public String getPurchaseNo() {
@@ -121,6 +130,30 @@ public class Entrust {
 
     public void setMaterialGraphNo(String materialGraphNo) {
         this.materialGraphNo = materialGraphNo == null ? null : materialGraphNo.trim();
+    }
+
+    public String getMaterialGraphName() {
+        return materialGraphName;
+    }
+
+    public void setMaterialGraphName(String materialGraphName) {
+        this.materialGraphName = materialGraphName == null ? null : materialGraphName.trim();
+    }
+
+    public String getSpecifications() {
+        return specifications;
+    }
+
+    public void setSpecifications(String specifications) {
+        this.specifications = specifications == null ? null : specifications.trim();
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model == null ? null : model.trim();
     }
 
     public Byte getWorkshopType() {
