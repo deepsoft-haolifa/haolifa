@@ -108,12 +108,26 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
 
     @Override
     public int wholeOutbound(WholeOutboundReqDTO reqDTO) {
-        int result=0;
+        int result;
         String busNo = reqDTO.getBusNo();
+        Byte type = reqDTO.getType();
         List<String> busNoList = Arrays.asList(StrUtil.split(busNo, StrUtil.COMMA));
+        if (CommonEnum.materialOutType.MATERIAL_REQUISITION.type == type) {
+            result = handleMaterialRequisition(busNoList, reqDTO);
+        } else {
+            throw new BaseException("暂不支持此类型的整单出库，敬请期待");
+        }
+        return result;
+    }
+
+    private int handleMaterialRequisition(List<String> busNoList, WholeOutboundReqDTO reqDTO) {
+        int result = 0;
         MaterialRequisitionExample example = new MaterialRequisitionExample();
         example.or().andOrderNoIn(busNoList).andOutRoomStatusEqualTo(CommonEnum.OutRoomStatus.NOT_OUT.type);
         List<MaterialRequisition> materialRequisitions = materialRequisitionMapper.selectByExample(example);
+        if (CollectionUtil.isEmpty(materialRequisitions)) {
+            throw new BaseException("没有找到未出库的订单号");
+        }
         // 获取每个零件的单价
         Map<String, BigDecimal> materialPriceMap = this.mapMaterialPrice(materialRequisitions.stream().map(MaterialRequisition::getGraphNo).collect(Collectors.toSet()));
         for (MaterialRequisition materialRequisition : materialRequisitions) {
@@ -121,7 +135,7 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
                 OutMaterialStorageDTO outMaterialStorageDTO = new OutMaterialStorageDTO();
                 outMaterialStorageDTO.setMaterialGraphNo(materialRequisition.getGraphNo());
                 outMaterialStorageDTO.setType(CommonEnum.materialOutType.MATERIAL_REQUISITION.type);
-                outMaterialStorageDTO.setReceiveDepartment("装配车间");
+                outMaterialStorageDTO.setReceiveDepartment(reqDTO.getReceiveDepartment());
                 outMaterialStorageDTO.setBusId(materialRequisition.getId());
                 outMaterialStorageDTO.setBusNo(materialRequisition.getOrderNo());
                 outMaterialStorageDTO.setOrderNo(materialRequisition.getOrderNo());
@@ -132,7 +146,7 @@ public class MaterialRequisitionServiceImpl implements MaterialRequisitionServic
                 batchNoListDTO.setQty(materialRequisition.getQuantity());
                 batchNoListDTO.setGraphNo(materialRequisition.getGraphNo());
                 List<MaterialBatchNoDTO> batchNoList = stockService.batchListNo(batchNoListDTO);
-                if(CollectionUtil.isEmpty(batchNoList)){
+                if (CollectionUtil.isEmpty(batchNoList)) {
                     log.error("whole out bound out no stock:{}", JSONUtil.toJsonStr(outMaterialStorageDTO));
                     continue;
                 }
