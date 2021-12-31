@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.EntrustMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Entrust" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="material_classify_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="purchase_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="entrust_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_graph_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="workShop_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="supplier_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="supplier_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="batch_number" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="purchase_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="entrust_person" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="is_delete" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="inspect_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="qualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="unqualified_number" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="processed_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bus_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="out_room_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="task_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, material_classify_name, purchase_no, entrust_no, material_graph_no, material_graph_name, 
+    specifications, model, workShop_type, supplier_name, supplier_no, batch_number, number, 
+    purchase_price, status, entrust_person, is_delete, create_time, update_time, create_user_id, 
+    inspect_status, qualified_number, unqualified_number, processed_graph_no, bus_type, 
+    out_room_status, task_status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from entrust
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from entrust
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from entrust
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" >
+    delete from entrust
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into entrust (material_classify_name, purchase_no, 
+      entrust_no, material_graph_no, material_graph_name, 
+      specifications, model, workShop_type, 
+      supplier_name, supplier_no, batch_number, 
+      number, purchase_price, status, 
+      entrust_person, is_delete, create_time, 
+      update_time, create_user_id, inspect_status, 
+      qualified_number, unqualified_number, processed_graph_no, 
+      bus_type, out_room_status, task_status
+      )
+    values (#{materialClassifyName,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, 
+      #{entrustNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{workshopType,jdbcType=TINYINT}, 
+      #{supplierName,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, 
+      #{number,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{entrustPerson,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{inspectStatus,jdbcType=TINYINT}, 
+      #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{processedGraphNo,jdbcType=VARCHAR}, 
+      #{busType,jdbcType=TINYINT}, #{outRoomStatus,jdbcType=TINYINT}, #{taskStatus,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into entrust
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="materialClassifyName != null" >
+        material_classify_name,
+      </if>
+      <if test="purchaseNo != null" >
+        purchase_no,
+      </if>
+      <if test="entrustNo != null" >
+        entrust_no,
+      </if>
+      <if test="materialGraphNo != null" >
+        material_graph_no,
+      </if>
+      <if test="materialGraphName != null" >
+        material_graph_name,
+      </if>
+      <if test="specifications != null" >
+        specifications,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="workshopType != null" >
+        workShop_type,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no,
+      </if>
+      <if test="batchNumber != null" >
+        batch_number,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="entrustPerson != null" >
+        entrust_person,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="inspectStatus != null" >
+        inspect_status,
+      </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number,
+      </if>
+      <if test="unqualifiedNumber != null" >
+        unqualified_number,
+      </if>
+      <if test="processedGraphNo != null" >
+        processed_graph_no,
+      </if>
+      <if test="busType != null" >
+        bus_type,
+      </if>
+      <if test="outRoomStatus != null" >
+        out_room_status,
+      </if>
+      <if test="taskStatus != null" >
+        task_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="materialClassifyName != null" >
+        #{materialClassifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNo != null" >
+        #{purchaseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustNo != null" >
+        #{entrustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphNo != null" >
+        #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null" >
+        #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopType != null" >
+        #{workshopType,jdbcType=TINYINT},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="entrustPerson != null" >
+        #{entrustPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="inspectStatus != null" >
+        #{inspectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="qualifiedNumber != null" >
+        #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null" >
+        #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="processedGraphNo != null" >
+        #{processedGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="busType != null" >
+        #{busType,jdbcType=TINYINT},
+      </if>
+      <if test="outRoomStatus != null" >
+        #{outRoomStatus,jdbcType=TINYINT},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" resultType="java.lang.Integer" >
+    select count(*) from entrust
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update entrust
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.materialClassifyName != null" >
+        material_classify_name = #{record.materialClassifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseNo != null" >
+        purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entrustNo != null" >
+        entrust_no = #{record.entrustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGraphNo != null" >
+        material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGraphName != null" >
+        material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.model != null" >
+        model = #{record.model,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workshopType != null" >
+        workShop_type = #{record.workshopType,jdbcType=TINYINT},
+      </if>
+      <if test="record.supplierName != null" >
+        supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierNo != null" >
+        supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batchNumber != null" >
+        batch_number = #{record.batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=INTEGER},
+      </if>
+      <if test="record.purchasePrice != null" >
+        purchase_price = #{record.purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.entrustPerson != null" >
+        entrust_person = #{record.entrustPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.inspectStatus != null" >
+        inspect_status = #{record.inspectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.qualifiedNumber != null" >
+        qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.unqualifiedNumber != null" >
+        unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.processedGraphNo != null" >
+        processed_graph_no = #{record.processedGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.busType != null" >
+        bus_type = #{record.busType,jdbcType=TINYINT},
+      </if>
+      <if test="record.outRoomStatus != null" >
+        out_room_status = #{record.outRoomStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.taskStatus != null" >
+        task_status = #{record.taskStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update entrust
+    set id = #{record.id,jdbcType=INTEGER},
+      material_classify_name = #{record.materialClassifyName,jdbcType=VARCHAR},
+      purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
+      entrust_no = #{record.entrustNo,jdbcType=VARCHAR},
+      material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      model = #{record.model,jdbcType=VARCHAR},
+      workShop_type = #{record.workshopType,jdbcType=TINYINT},
+      supplier_name = #{record.supplierName,jdbcType=VARCHAR},
+      supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
+      batch_number = #{record.batchNumber,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=INTEGER},
+      purchase_price = #{record.purchasePrice,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=TINYINT},
+      entrust_person = #{record.entrustPerson,jdbcType=VARCHAR},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      inspect_status = #{record.inspectStatus,jdbcType=TINYINT},
+      qualified_number = #{record.qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{record.unqualifiedNumber,jdbcType=INTEGER},
+      processed_graph_no = #{record.processedGraphNo,jdbcType=VARCHAR},
+      bus_type = #{record.busType,jdbcType=TINYINT},
+      out_room_status = #{record.outRoomStatus,jdbcType=TINYINT},
+      task_status = #{record.taskStatus,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
+    update entrust
+    <set >
+      <if test="materialClassifyName != null" >
+        material_classify_name = #{materialClassifyName,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNo != null" >
+        purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustNo != null" >
+        entrust_no = #{entrustNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphNo != null" >
+        material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null" >
+        material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopType != null" >
+        workShop_type = #{workshopType,jdbcType=TINYINT},
+      </if>
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNo != null" >
+        supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="entrustPerson != null" >
+        entrust_person = #{entrustPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="inspectStatus != null" >
+        inspect_status = #{inspectStatus,jdbcType=TINYINT},
+      </if>
+      <if test="qualifiedNumber != null" >
+        qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="unqualifiedNumber != null" >
+        unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      </if>
+      <if test="processedGraphNo != null" >
+        processed_graph_no = #{processedGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="busType != null" >
+        bus_type = #{busType,jdbcType=TINYINT},
+      </if>
+      <if test="outRoomStatus != null" >
+        out_room_status = #{outRoomStatus,jdbcType=TINYINT},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
+    update entrust
+    set material_classify_name = #{materialClassifyName,jdbcType=VARCHAR},
+      purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      entrust_no = #{entrustNo,jdbcType=VARCHAR},
+      material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      workShop_type = #{workshopType,jdbcType=TINYINT},
+      supplier_name = #{supplierName,jdbcType=VARCHAR},
+      supplier_no = #{supplierNo,jdbcType=VARCHAR},
+      batch_number = #{batchNumber,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      status = #{status,jdbcType=TINYINT},
+      entrust_person = #{entrustPerson,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      inspect_status = #{inspectStatus,jdbcType=TINYINT},
+      qualified_number = #{qualifiedNumber,jdbcType=INTEGER},
+      unqualified_number = #{unqualifiedNumber,jdbcType=INTEGER},
+      processed_graph_no = #{processedGraphNo,jdbcType=VARCHAR},
+      bus_type = #{busType,jdbcType=TINYINT},
+      out_room_status = #{outRoomStatus,jdbcType=TINYINT},
+      task_status = #{taskStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
