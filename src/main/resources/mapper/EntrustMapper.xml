@@ -4,10 +4,13 @@
   <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.Entrust" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="material_graph_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_classify_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="purchase_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="entrust_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="material_graph_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="material_graph_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="model" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="workShop_type" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="supplier_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="supplier_no" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -88,10 +91,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, material_graph_name, purchase_no, entrust_no, material_graph_no, workShop_type, 
-    supplier_name, supplier_no, batch_number, number, purchase_price, status, entrust_person, 
-    is_delete, create_time, update_time, create_user_id, inspect_status, qualified_number, 
-    unqualified_number, processed_graph_no, bus_type, out_room_status, task_status
+    id, material_classify_name, purchase_no, entrust_no, material_graph_no, material_graph_name, 
+    specifications, model, workShop_type, supplier_name, supplier_no, batch_number, number, 
+    purchase_price, status, entrust_person, is_delete, create_time, update_time, create_user_id, 
+    inspect_status, qualified_number, unqualified_number, processed_graph_no, bus_type, 
+    out_room_status, task_status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.EntrustExample" >
     select
@@ -127,22 +131,26 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into entrust (material_graph_name, purchase_no, entrust_no, 
-      material_graph_no, workShop_type, supplier_name, 
-      supplier_no, batch_number, number, 
-      purchase_price, status, entrust_person, 
-      is_delete, create_time, update_time, 
-      create_user_id, inspect_status, qualified_number, 
-      unqualified_number, processed_graph_no, bus_type, 
-      out_room_status, task_status)
-    values (#{materialGraphName,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{entrustNo,jdbcType=VARCHAR}, 
-      #{materialGraphNo,jdbcType=VARCHAR}, #{workshopType,jdbcType=TINYINT}, #{supplierName,jdbcType=VARCHAR}, 
-      #{supplierNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
-      #{purchasePrice,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{entrustPerson,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER}, #{inspectStatus,jdbcType=TINYINT}, #{qualifiedNumber,jdbcType=INTEGER}, 
-      #{unqualifiedNumber,jdbcType=INTEGER}, #{processedGraphNo,jdbcType=VARCHAR}, #{busType,jdbcType=TINYINT}, 
-      #{outRoomStatus,jdbcType=TINYINT}, #{taskStatus,jdbcType=TINYINT})
+    insert into entrust (material_classify_name, purchase_no, 
+      entrust_no, material_graph_no, material_graph_name, 
+      specifications, model, workShop_type, 
+      supplier_name, supplier_no, batch_number, 
+      number, purchase_price, status, 
+      entrust_person, is_delete, create_time, 
+      update_time, create_user_id, inspect_status, 
+      qualified_number, unqualified_number, processed_graph_no, 
+      bus_type, out_room_status, task_status
+      )
+    values (#{materialClassifyName,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, 
+      #{entrustNo,jdbcType=VARCHAR}, #{materialGraphNo,jdbcType=VARCHAR}, #{materialGraphName,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{workshopType,jdbcType=TINYINT}, 
+      #{supplierName,jdbcType=VARCHAR}, #{supplierNo,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, 
+      #{number,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, 
+      #{entrustPerson,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{inspectStatus,jdbcType=TINYINT}, 
+      #{qualifiedNumber,jdbcType=INTEGER}, #{unqualifiedNumber,jdbcType=INTEGER}, #{processedGraphNo,jdbcType=VARCHAR}, 
+      #{busType,jdbcType=TINYINT}, #{outRoomStatus,jdbcType=TINYINT}, #{taskStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -150,8 +158,8 @@
     </selectKey>
     insert into entrust
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="materialGraphName != null" >
-        material_graph_name,
+      <if test="materialClassifyName != null" >
+        material_classify_name,
       </if>
       <if test="purchaseNo != null" >
         purchase_no,
@@ -161,6 +169,15 @@
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no,
+      </if>
+      <if test="materialGraphName != null" >
+        material_graph_name,
+      </if>
+      <if test="specifications != null" >
+        specifications,
+      </if>
+      <if test="model != null" >
+        model,
       </if>
       <if test="workshopType != null" >
         workShop_type,
@@ -221,8 +238,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="materialGraphName != null" >
-        #{materialGraphName,jdbcType=VARCHAR},
+      <if test="materialClassifyName != null" >
+        #{materialClassifyName,jdbcType=VARCHAR},
       </if>
       <if test="purchaseNo != null" >
         #{purchaseNo,jdbcType=VARCHAR},
@@ -232,6 +249,15 @@
       </if>
       <if test="materialGraphNo != null" >
         #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null" >
+        #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
       </if>
       <if test="workshopType != null" >
         #{workshopType,jdbcType=TINYINT},
@@ -304,8 +330,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.materialGraphName != null" >
-        material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      <if test="record.materialClassifyName != null" >
+        material_classify_name = #{record.materialClassifyName,jdbcType=VARCHAR},
       </if>
       <if test="record.purchaseNo != null" >
         purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
@@ -315,6 +341,15 @@
       </if>
       <if test="record.materialGraphNo != null" >
         material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGraphName != null" >
+        material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.model != null" >
+        model = #{record.model,jdbcType=VARCHAR},
       </if>
       <if test="record.workshopType != null" >
         workShop_type = #{record.workshopType,jdbcType=TINYINT},
@@ -381,10 +416,13 @@
   <update id="updateByExample" parameterType="map" >
     update entrust
     set id = #{record.id,jdbcType=INTEGER},
-      material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      material_classify_name = #{record.materialClassifyName,jdbcType=VARCHAR},
       purchase_no = #{record.purchaseNo,jdbcType=VARCHAR},
       entrust_no = #{record.entrustNo,jdbcType=VARCHAR},
       material_graph_no = #{record.materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{record.materialGraphName,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      model = #{record.model,jdbcType=VARCHAR},
       workShop_type = #{record.workshopType,jdbcType=TINYINT},
       supplier_name = #{record.supplierName,jdbcType=VARCHAR},
       supplier_no = #{record.supplierNo,jdbcType=VARCHAR},
@@ -411,8 +449,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
     update entrust
     <set >
-      <if test="materialGraphName != null" >
-        material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      <if test="materialClassifyName != null" >
+        material_classify_name = #{materialClassifyName,jdbcType=VARCHAR},
       </if>
       <if test="purchaseNo != null" >
         purchase_no = #{purchaseNo,jdbcType=VARCHAR},
@@ -422,6 +460,15 @@
       </if>
       <if test="materialGraphNo != null" >
         material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGraphName != null" >
+        material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
       </if>
       <if test="workshopType != null" >
         workShop_type = #{workshopType,jdbcType=TINYINT},
@@ -485,10 +532,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.Entrust" >
     update entrust
-    set material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+    set material_classify_name = #{materialClassifyName,jdbcType=VARCHAR},
       purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       entrust_no = #{entrustNo,jdbcType=VARCHAR},
       material_graph_no = #{materialGraphNo,jdbcType=VARCHAR},
+      material_graph_name = #{materialGraphName,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
       workShop_type = #{workshopType,jdbcType=TINYINT},
       supplier_name = #{supplierName,jdbcType=VARCHAR},
       supplier_no = #{supplierNo,jdbcType=VARCHAR},
