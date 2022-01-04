@@ -4,12 +4,14 @@ import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.List;
 
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class ReceivableOrderRQDTO  extends PageParam {
 
     @ApiModelProperty(value = "订单号")
