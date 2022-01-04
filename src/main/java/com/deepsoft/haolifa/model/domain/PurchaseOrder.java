@@ -60,9 +60,6 @@ public class PurchaseOrder {
 
     private Integer totalCount;
 
-    private BigDecimal totalPrice;
-
-    private BigDecimal paidAccount;
 
     private Integer acceptCount;
 
@@ -74,7 +71,12 @@ public class PurchaseOrder {
 
     private Integer qualifiedNumber;
 
-    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, Byte payStatus, String payType, Byte orderType, String fileUrl, Integer totalCount, BigDecimal totalPrice, BigDecimal paidAccount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges, Integer qualifiedNumber) {
+
+    private BigDecimal totalPrice;
+
+    private BigDecimal paidAccount;
+
+    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl, Integer totalCount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges, Integer qualifiedNumber, BigDecimal totalPrice, BigDecimal paidAccount) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
         this.supplierNo = supplierNo;
@@ -98,22 +100,21 @@ public class PurchaseOrder {
         this.wreckAmount = wreckAmount;
         this.wreckReason = wreckReason;
         this.status = status;
-        this.payStatus = payStatus;
         this.payType = payType;
         this.orderType = orderType;
         this.fileUrl = fileUrl;
         this.totalCount = totalCount;
-        this.totalPrice = totalPrice;
-        this.paidAccount = paidAccount;
         this.acceptCount = acceptCount;
         this.backCount = backCount;
         this.processCount = processCount;
         this.processCharges = processCharges;
         this.qualifiedNumber = qualifiedNumber;
+        this.totalPrice = totalPrice;
+        this.paidAccount = paidAccount;
     }
 
     public PurchaseOrder() {
-        super();
+
     }
 
     public Integer getId() {
