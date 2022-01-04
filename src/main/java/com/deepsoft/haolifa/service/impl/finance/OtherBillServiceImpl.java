@@ -3,8 +3,10 @@ package com.deepsoft.haolifa.service.impl.finance;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizOtherBillMapper;
+import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.domain.BizOtherBill;
 import com.deepsoft.haolifa.model.domain.BizOtherBillExample;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
@@ -19,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Service
@@ -38,6 +41,33 @@ public class OtherBillServiceImpl implements OtherBillService {
         }
         BizOtherBill billOther = new BizOtherBill();
         BeanUtils.copyProperties(model, billOther);
+
+
+        // 设置上月结转
+        //bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2, null, null));
+
+        // 设置余额 start
+        // 查找最新一条记录的余额
+        BizOtherBill lastRecord = bizOtherBillMapper.getLastRecord();
+        BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
+            ? BigDecimal.ZERO : lastRecord.getBalance();
+
+        // 收款，上次余额 + 本次收款
+        if (StringUtils.isNotEmpty(billOther.getCollectionType())) {
+            BigDecimal collectionMoney = billOther.getCollectionMoney();
+            BigDecimal add = collectionMoney.add(lastBalance);
+            billOther.setBalance(add);
+        } else if (StringUtils.isNotEmpty(billOther.getPaymentType())) {
+            // 付款 , 上次余额 - 本次付款
+            BigDecimal payment = billOther.getPayment();
+            BigDecimal subtract = lastBalance.subtract(payment);
+            if (subtract.compareTo(BigDecimal.ZERO) < 0) {
+                throw new BaseException("现金余额不足以付款");
+            }
+            billOther.setBalance(subtract);
+        }
+        // 设置余额 end
+
         billOther.setCreateTime(new Date());
         billOther.setUpdateTime(new Date());
         billOther.setCreateUser(sysUserService.selectLoginUser().getId());

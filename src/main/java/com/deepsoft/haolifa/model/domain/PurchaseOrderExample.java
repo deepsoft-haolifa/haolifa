@@ -1616,6 +1616,66 @@ public class PurchaseOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayStatusIsNull() {
+            addCriterion("pay_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusIsNotNull() {
+            addCriterion("pay_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusEqualTo(Byte value) {
+            addCriterion("pay_status =", value, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusNotEqualTo(Byte value) {
+            addCriterion("pay_status <>", value, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusGreaterThan(Byte value) {
+            addCriterion("pay_status >", value, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("pay_status >=", value, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusLessThan(Byte value) {
+            addCriterion("pay_status <", value, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("pay_status <=", value, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusIn(List<Byte> values) {
+            addCriterion("pay_status in", values, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusNotIn(List<Byte> values) {
+            addCriterion("pay_status not in", values, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusBetween(Byte value1, Byte value2) {
+            addCriterion("pay_status between", value1, value2, "payStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("pay_status not between", value1, value2, "payStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andPayTypeIsNull() {
             addCriterion("pay_type is null");
             return (Criteria) this;
@@ -1873,6 +1933,126 @@ public class PurchaseOrderExample {
 
         public Criteria andTotalCountNotBetween(Integer value1, Integer value2) {
             addCriterion("total_count not between", value1, value2, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIsNull() {
+            addCriterion("total_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIsNotNull() {
+            addCriterion("total_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceEqualTo(BigDecimal value) {
+            addCriterion("total_price =", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotEqualTo(BigDecimal value) {
+            addCriterion("total_price <>", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThan(BigDecimal value) {
+            addCriterion("total_price >", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price >=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThan(BigDecimal value) {
+            addCriterion("total_price <", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price <=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIn(List<BigDecimal> values) {
+            addCriterion("total_price in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotIn(List<BigDecimal> values) {
+            addCriterion("total_price not in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price not between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountIsNull() {
+            addCriterion("paid_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountIsNotNull() {
+            addCriterion("paid_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountEqualTo(BigDecimal value) {
+            addCriterion("paid_account =", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountNotEqualTo(BigDecimal value) {
+            addCriterion("paid_account <>", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountGreaterThan(BigDecimal value) {
+            addCriterion("paid_account >", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("paid_account >=", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountLessThan(BigDecimal value) {
+            addCriterion("paid_account <", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("paid_account <=", value, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountIn(List<BigDecimal> values) {
+            addCriterion("paid_account in", values, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountNotIn(List<BigDecimal> values) {
+            addCriterion("paid_account not in", values, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("paid_account between", value1, value2, "paidAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaidAccountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("paid_account not between", value1, value2, "paidAccount");
             return (Criteria) this;
         }
 
@@ -2173,126 +2353,6 @@ public class PurchaseOrderExample {
 
         public Criteria andQualifiedNumberNotBetween(Integer value1, Integer value2) {
             addCriterion("qualified_number not between", value1, value2, "qualifiedNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceIsNull() {
-            addCriterion("total_price is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceIsNotNull() {
-            addCriterion("total_price is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceEqualTo(BigDecimal value) {
-            addCriterion("total_price =", value, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceNotEqualTo(BigDecimal value) {
-            addCriterion("total_price <>", value, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceGreaterThan(BigDecimal value) {
-            addCriterion("total_price >", value, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("total_price >=", value, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceLessThan(BigDecimal value) {
-            addCriterion("total_price <", value, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("total_price <=", value, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceIn(List<BigDecimal> values) {
-            addCriterion("total_price in", values, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceNotIn(List<BigDecimal> values) {
-            addCriterion("total_price not in", values, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("total_price between", value1, value2, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andTotalPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("total_price not between", value1, value2, "totalPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountIsNull() {
-            addCriterion("paid_account is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountIsNotNull() {
-            addCriterion("paid_account is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountEqualTo(BigDecimal value) {
-            addCriterion("paid_account =", value, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountNotEqualTo(BigDecimal value) {
-            addCriterion("paid_account <>", value, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountGreaterThan(BigDecimal value) {
-            addCriterion("paid_account >", value, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("paid_account >=", value, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountLessThan(BigDecimal value) {
-            addCriterion("paid_account <", value, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("paid_account <=", value, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountIn(List<BigDecimal> values) {
-            addCriterion("paid_account in", values, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountNotIn(List<BigDecimal> values) {
-            addCriterion("paid_account not in", values, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("paid_account between", value1, value2, "paidAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andPaidAccountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("paid_account not between", value1, value2, "paidAccount");
             return (Criteria) this;
         }
     }

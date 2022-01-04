@@ -558,4 +558,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+    <select id="getLastRecord" resultType="com.deepsoft.haolifa.model.domain.BizOtherBill">
+        select * from biz_other_bill order by id desc limit 1
+    </select>
 </mapper>

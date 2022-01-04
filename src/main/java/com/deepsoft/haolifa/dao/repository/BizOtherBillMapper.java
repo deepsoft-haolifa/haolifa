@@ -27,4 +27,6 @@ public interface BizOtherBillMapper {
     int updateByPrimaryKeySelective(BizOtherBill record);
 
     int updateByPrimaryKey(BizOtherBill record);
+
+    BizOtherBill getLastRecord();
 }

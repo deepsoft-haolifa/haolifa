@@ -5,14 +5,13 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizBillMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.DepartmentDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillService;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +21,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,15 +47,64 @@ public class BillServiceImpl implements BillService {
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+        CustomUser customUser = sysUserService.selectLoginUser();
+
         BizBill bizBill = new BizBill();
         BeanUtils.copyProperties(model, bizBill);
+
+        // 设置上月结转
+        //bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2, null, null));
+
+        // 设置余额 start
+        // 查找最新一条记录的余额
+        BizBill lastRecord = bizBillMapper.getLastRecord();
+        BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
+            ? BigDecimal.ZERO : lastRecord.getBalance();
+
+        // 收款，上次余额 + 本次收款
+        if (StringUtils.isNotEmpty(bizBill.getCollectionType())) {
+            BigDecimal collectionMoney = bizBill.getCollectionMoney();
+            BigDecimal add = collectionMoney.add(lastBalance);
+            bizBill.setBalance(add);
+        } else if (StringUtils.isNotEmpty(bizBill.getPaymentType())) {
+            // 付款 , 上次余额 - 本次付款
+            BigDecimal payment = bizBill.getPayment();
+            BigDecimal subtract = lastBalance.subtract(payment);
+            if (subtract.compareTo(BigDecimal.ZERO) < 0) {
+                throw new BaseException("现金余额不足以付款");
+            }
+            bizBill.setBalance(subtract);
+        }
+        // 设置余额 end
+
         bizBill.setCreateTime(new Date());
         bizBill.setUpdateTime(new Date());
-        bizBill.setCreateUser(sysUserService.selectLoginUser().getId());
-        bizBill.setUpdateUser(sysUserService.selectLoginUser().getId());
+        bizBill.setCreateUser(customUser.getId());
+        bizBill.setUpdateUser(customUser.getId());
         int insertId = bizBillMapper.insertSelective(bizBill);
         return ResultBean.success(insertId);
     }
+
+//    @Override
+//    public Double getPreMonthAmount(Integer type, String payCompany, String payAccount) {
+//        BizBillAmount bizBillAmount = new BizBillAmount();
+//        bizBillAmount.setType(type);
+//        LocalDateTime now = LocalDateTime.now();
+//        bizBillAmount.setYear(String.valueOf(now.getYear()));
+//        bizBillAmount.setMonth(String.valueOf(now.getMonthValue()));
+//        if (StringUtils.isNotEmpty(payCompany)) {
+//            bizBillAmount.setCompany(payCompany);
+//        }
+//        if (StringUtils.isNotEmpty(payCompany)) {
+//            bizBillAmount.setAccount(payAccount);
+//        }
+//
+//        List<BizBillAmount> bizBillAmountList = bizBillAmountMapper.selectBizBillAmountList(bizBillAmount);
+//        if (org.springframework.util.CollectionUtils.isEmpty(bizBillAmountList)) {
+//            return 0D;
+//        }
+//        return bizBillAmountList.get(0).getNextAmount();
+//    }
 
     @Override
     public ResultBean delete(Integer id) {
@@ -116,9 +166,9 @@ public class BillServiceImpl implements BillService {
             SysDepartmentExample.Criteria departmentExampleCriteria = departmentExample.createCriteria();
             departmentExampleCriteria.andDeptNameLike(model.getDeptName());
             List<String> deparList = departmentMapper.selectByExample(departmentExample).stream()
-                .map(department->department.getId()+"")
+                .map(department -> department.getId() + "")
                 .collect(Collectors.toList());
-            if (CollectionUtils.isNotEmpty(deparList)){
+            if (CollectionUtils.isNotEmpty(deparList)) {
                 criteria.andDeptIdIn(deparList);
             }
         }
@@ -139,8 +189,8 @@ public class BillServiceImpl implements BillService {
             .collect(Collectors.toList());
 
         Map<Integer, DepartmentDTO> departmentMap = new HashMap<>();
-            // 查询部门
-        if (CollectionUtils.isNotEmpty(departIdList)){
+        // 查询部门
+        if (CollectionUtils.isNotEmpty(departIdList)) {
             SysDepartmentExample departmentExample = new SysDepartmentExample();
             SysDepartmentExample.Criteria departmentExampleCriteria = departmentExample.createCriteria();
             departmentExampleCriteria.andIdIn(departIdList);

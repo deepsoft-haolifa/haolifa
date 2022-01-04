@@ -5,6 +5,9 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizBankBillMapper;
 import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.domain.BizBankBillExample;
+import com.deepsoft.haolifa.model.domain.BizBill;
+import com.deepsoft.haolifa.model.dto.BaseException;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
@@ -19,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Service
@@ -36,8 +40,44 @@ public class BankBillServiceImpl implements BankBillService {
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+
+
+
+        log.info("BizBill saveInfo start|{}", JSONObject.toJSON(model));
+        if (StringUtils.isAnyBlank()) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+        CustomUser customUser = sysUserService.selectLoginUser();
+
         BizBankBill billBank = new BizBankBill();
         BeanUtils.copyProperties(model, billBank);
+
+        // 设置上月结转
+        //bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2, null, null));
+
+        // 设置余额 start
+        // 查找最新一条记录的余额
+        BizBankBill lastRecord = bizBankBillMapper.getLastRecord();
+        BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
+            ? BigDecimal.ZERO : lastRecord.getBalance();
+
+        // 收款，上次余额 + 本次收款
+        if (StringUtils.isNotEmpty(billBank.getCollectionType())) {
+            BigDecimal collectionMoney = billBank.getCollectionMoney();
+            BigDecimal add = collectionMoney.add(lastBalance);
+            billBank.setBalance(add);
+        } else if (StringUtils.isNotEmpty(billBank.getPaymentType())) {
+            // 付款 , 上次余额 - 本次付款
+            BigDecimal payment = billBank.getPayment();
+            BigDecimal subtract = lastBalance.subtract(payment);
+            if (subtract.compareTo(BigDecimal.ZERO) < 0) {
+                throw new BaseException("现金余额不足以付款");
+            }
+            billBank.setBalance(subtract);
+        }
+        // 设置余额 end
+
+
         billBank.setCreateTime(new Date());
         billBank.setUpdateTime(new Date());
         billBank.setCreateUser(sysUserService.selectLoginUser().getId());

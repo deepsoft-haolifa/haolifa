@@ -50,6 +50,8 @@ public class PurchaseOrder {
 
     private Byte status;
 
+    private Byte payStatus;
+
     private String payType;
 
     private Byte orderType;
@@ -57,6 +59,10 @@ public class PurchaseOrder {
     private String fileUrl;
 
     private Integer totalCount;
+
+    private BigDecimal totalPrice;
+
+    private BigDecimal paidAccount;
 
     private Integer acceptCount;
 
@@ -68,11 +74,7 @@ public class PurchaseOrder {
 
     private Integer qualifiedNumber;
 
-    private BigDecimal totalPrice;
-
-    private BigDecimal paidAccount;
-
-    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl, Integer totalCount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges, Integer qualifiedNumber, BigDecimal totalPrice, BigDecimal paidAccount) {
+    public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, Byte payStatus, String payType, Byte orderType, String fileUrl, Integer totalCount, BigDecimal totalPrice, BigDecimal paidAccount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges, Integer qualifiedNumber) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;
         this.supplierNo = supplierNo;
@@ -96,17 +98,18 @@ public class PurchaseOrder {
         this.wreckAmount = wreckAmount;
         this.wreckReason = wreckReason;
         this.status = status;
+        this.payStatus = payStatus;
         this.payType = payType;
         this.orderType = orderType;
         this.fileUrl = fileUrl;
         this.totalCount = totalCount;
+        this.totalPrice = totalPrice;
+        this.paidAccount = paidAccount;
         this.acceptCount = acceptCount;
         this.backCount = backCount;
         this.processCount = processCount;
         this.processCharges = processCharges;
         this.qualifiedNumber = qualifiedNumber;
-        this.totalPrice = totalPrice;
-        this.paidAccount = paidAccount;
     }
 
     public PurchaseOrder() {
@@ -297,6 +300,14 @@ public class PurchaseOrder {
         this.status = status;
     }
 
+    public Byte getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Byte payStatus) {
+        this.payStatus = payStatus;
+    }
+
     public String getPayType() {
         return payType;
     }
@@ -327,6 +338,22 @@ public class PurchaseOrder {
 
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getPaidAccount() {
+        return paidAccount;
+    }
+
+    public void setPaidAccount(BigDecimal paidAccount) {
+        this.paidAccount = paidAccount;
     }
 
     public Integer getAcceptCount() {
@@ -367,21 +394,5 @@ public class PurchaseOrder {
 
     public void setQualifiedNumber(Integer qualifiedNumber) {
         this.qualifiedNumber = qualifiedNumber;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public BigDecimal getPaidAccount() {
-        return paidAccount;
-    }
-
-    public void setPaidAccount(BigDecimal paidAccount) {
-        this.paidAccount = paidAccount;
     }
 }

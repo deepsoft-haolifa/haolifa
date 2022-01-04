@@ -1,12 +1,14 @@
 package com.deepsoft.haolifa.model.dto.finance.payplan;
 
 import com.deepsoft.haolifa.model.dto.PageParam;
+import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /***
  * 付款计划
@@ -53,9 +55,6 @@ public class BizPayPlanRSDTO  {
     @ApiModelProperty(value = "付款账号")
     private String payAccount;
 
-    @ApiModelProperty(value = "付款方式;")
-    private String payWay;
-
     @ApiModelProperty(value = "付款类型:默认是货款")
     private String paymentType;
 
@@ -65,10 +64,17 @@ public class BizPayPlanRSDTO  {
     @ApiModelProperty(value = "付款日期")
     private Date payDate;
 
-    @ApiModelProperty(value = "付款渠道：1.现金日记账；2.银行日记账；")
+    @ApiModelProperty(value = "付款方式;")
+    private String payWay;
+
+    @ApiModelProperty(value = "记账方式：1.现金日记账；2.银行日记账；")
     private String bookingType;
 
+    @ApiModelProperty(value = "付款方式list")
+    private List<BizPayPlanPayLogDTO> payWayList;
 
+    @ApiModelProperty(value = "记账方式list：1.现金日记账；2.银行日记账；")
+    private List<String> bookingTypeList;
 
     @ApiModelProperty(value = "数据状态：1. 老总选择； 2. 财务主管选择；3.出纳付款")
     private String dataStatus;
@@ -86,5 +92,7 @@ public class BizPayPlanRSDTO  {
     private Integer updateUser;
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
+
+
 
 }

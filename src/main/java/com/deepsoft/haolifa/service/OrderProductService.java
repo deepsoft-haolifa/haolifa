@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRQDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
 
 import java.util.List;
@@ -92,6 +93,11 @@ public interface OrderProductService {
      * 获取核料订单产品列表(包含需要选择的阀体，阀座等)
      */
     List<ProductCheckMaterialListDTO> getCheckOrderProductList(String orderNo);
+
+    /**
+     * 获取 订单列表
+     */
+    public ResultBean receivableOrderList(ReceivableOrderRQDTO model);
 
     /**
      * 核料（将前端提交过来的零件，进行核料）

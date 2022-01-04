@@ -28,4 +28,6 @@ public interface BizBillMapper {
     int updateByPrimaryKeySelective(BizBill record);
 
     int updateByPrimaryKey(BizBill record);
+
+    BizBill getLastRecord();
 }
