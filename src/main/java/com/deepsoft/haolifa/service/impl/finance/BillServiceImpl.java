@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillUpDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.deepsoft.haolifa.util.DateUtils;
@@ -120,7 +121,15 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public ResultBean update(BizBill bizBill) {
+    public ResultBean update(BizBillUpDTO bizBillUpDTO) {
+        BizBill bizBill = new BizBill();
+        BeanUtils.copyProperties(bizBillUpDTO,bizBill);
+        BizBill selectByPrimaryKey = bizBillMapper.selectByPrimaryKey(bizBillUpDTO.getId());
+
+        BigDecimal divide = bizBill.getPayment().subtract(selectByPrimaryKey.getPayment());
+        BigDecimal bigDecimal = selectByPrimaryKey.getBalance().add(divide);
+        bizBill.setBalance(bigDecimal);
+
         bizBill.setUpdateTime(new Date());
         bizBill.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizBillMapper.updateByPrimaryKeySelective(bizBill);

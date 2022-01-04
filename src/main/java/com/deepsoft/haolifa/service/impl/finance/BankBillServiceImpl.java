@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import com.github.pagehelper.Page;
@@ -41,48 +42,50 @@ public class BankBillServiceImpl implements BankBillService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
 
+        BizBankBill bizBankBill = new BizBankBill();
+        BeanUtils.copyProperties(model,bizBankBill);
 
 
-        log.info("BizBill saveInfo start|{}", JSONObject.toJSON(model));
-        if (StringUtils.isAnyBlank()) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        // 设置公司和账户，用来统计余额
+        if (bizBankBill.getType().equals("1")) {
+            bizBankBill.setCompany(bizBankBill.getCollectCompany());
+            bizBankBill.setAccount(bizBankBill.getPayAccount());
+        } else if (bizBankBill.getType().equals("2")) {
+            bizBankBill.setCompany(bizBankBill.getPayCompany());
+            bizBankBill.setAccount(bizBankBill.getPayAccount());
         }
-        CustomUser customUser = sysUserService.selectLoginUser();
-
-        BizBankBill billBank = new BizBankBill();
-        BeanUtils.copyProperties(model, billBank);
-
+        String companyQuery = bizBankBill.getCompany();
+        String accountQuery = bizBankBill.getAccount();
         // 设置上月结转
-        //bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2, null, null));
+       // bizBankBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(1, companyQuery, accountQuery));
 
         // 设置余额 start
         // 查找最新一条记录的余额
-        BizBankBill lastRecord = bizBankBillMapper.getLastRecord();
+        BizBankBill lastRecord = bizBankBillMapper.getLastRecord(companyQuery, accountQuery);
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
 
         // 收款，上次余额 + 本次收款
-        if (StringUtils.isNotEmpty(billBank.getCollectionType())) {
-            BigDecimal collectionMoney = billBank.getCollectionMoney();
+        if (bizBankBill.getType().equals("1")) {
+            BigDecimal collectionMoney = bizBankBill.getCollectionMoney();
             BigDecimal add = collectionMoney.add(lastBalance);
-            billBank.setBalance(add);
-        } else if (StringUtils.isNotEmpty(billBank.getPaymentType())) {
+            bizBankBill.setBalance(add);
+        } else if (bizBankBill.getType().equals("2")) {
             // 付款 , 上次余额 - 本次付款
-            BigDecimal payment = billBank.getPayment();
+            BigDecimal payment = bizBankBill.getPayment();
             BigDecimal subtract = lastBalance.subtract(payment);
             if (subtract.compareTo(BigDecimal.ZERO) < 0) {
                 throw new BaseException("现金余额不足以付款");
             }
-            billBank.setBalance(subtract);
+            bizBankBill.setBalance(subtract);
         }
         // 设置余额 end
 
-
-        billBank.setCreateTime(new Date());
-        billBank.setUpdateTime(new Date());
-        billBank.setCreateUser(sysUserService.selectLoginUser().getId());
-        billBank.setUpdateUser(sysUserService.selectLoginUser().getId());
-        int insertId = bizBankBillMapper.insertSelective(billBank);
+        bizBankBill.setCreateTime(new Date());
+        bizBankBill.setUpdateTime(new Date());
+        bizBankBill.setCreateUser(sysUserService.selectLoginUser().getId());
+        bizBankBill.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int insertId = bizBankBillMapper.insertSelective(bizBankBill);
         return ResultBean.success(insertId);
     }
 
@@ -100,10 +103,28 @@ public class BankBillServiceImpl implements BankBillService {
     }
 
     @Override
-    public ResultBean update(BizBankBill billBank) {
-        billBank.setUpdateTime(new Date());
-        billBank.setUpdateUser(sysUserService.selectLoginUser().getId());
-        int update = bizBankBillMapper.updateByPrimaryKeySelective(billBank);
+    public ResultBean update(BizBankBillUpDTO billBank) {
+
+        BizBankBill bizBankBill = new BizBankBill();
+        BeanUtils.copyProperties(billBank,bizBankBill);
+        BizBankBill selectByPrimaryKey = bizBankBillMapper.selectByPrimaryKey(billBank.getId());
+
+        switch (bizBankBill.getType()){
+            case "1":
+                BigDecimal collectionMoney = bizBankBill.getCollectionMoney().subtract(selectByPrimaryKey.getCollectionMoney());
+                BigDecimal balance = selectByPrimaryKey.getBalance().add(collectionMoney);
+                bizBankBill.setBalance(balance);
+                break;
+            case "2":
+                BigDecimal payment = bizBankBill.getPayment().subtract(selectByPrimaryKey.getPayment());
+                BigDecimal bigDecimal = selectByPrimaryKey.getBalance().add(payment);
+                bizBankBill.setBalance(bigDecimal);
+                break;
+        }
+
+        bizBankBill.setUpdateTime(new Date());
+        bizBankBill.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int update = bizBankBillMapper.updateByPrimaryKeySelective(bizBankBill);
         return ResultBean.success(update);
     }
 
@@ -125,9 +146,6 @@ public class BankBillServiceImpl implements BankBillService {
         BizBankBillExample.Criteria criteria = bizBankBillExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
-
-
-
         // 凭证号 ==
         if (StringUtils.isNotEmpty(model.getCertificateNumber())) {
             criteria.andCertificateNumberEqualTo(model.getCertificateNumber());
@@ -147,7 +165,7 @@ public class BankBillServiceImpl implements BankBillService {
             criteria.andOperateDateBetween(model.getOperateDateStart(),model.getOperateDateEnd());
         }else if (model.getOperateDateStart()!=null ) {
             // 大于
-            criteria.andOperateDateGreaterThanOrEqualTo(model.getOperateDate());
+            criteria.andOperateDateGreaterThanOrEqualTo(model.getOperateDateStart());
         }else if (model.getOperateDateEnd()!=null ) {
             // 小于
             criteria.andOperateDateLessThanOrEqualTo(model.getOperateDateEnd());
@@ -161,17 +179,6 @@ public class BankBillServiceImpl implements BankBillService {
         if (StringUtils.isNotEmpty(model.getPaymentType())) {
             criteria.andPaymentTypeEqualTo(model.getPaymentType());
         }
-
-        // 付款类型 ==
-        if (StringUtils.isNotEmpty(model.getPaymentType())) {
-            criteria.andPaymentTypeEqualTo(model.getPaymentType());
-        }
-
-        // 分解状态
-        if (StringUtils.isNotEmpty(model.getContractStatus())) {
-            criteria.andContractStatusEqualTo(model.getContractStatus());
-        }
-
 
         bizBankBillExample.setOrderByClause("id desc");
         Page<BizBankBill> pageData = PageHelper

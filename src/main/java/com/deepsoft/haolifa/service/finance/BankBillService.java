@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 
 public interface BankBillService {
     /**
@@ -29,7 +30,7 @@ public interface BankBillService {
      * @param model
      * @return
      */
-    ResultBean update(BizBankBill model);
+    ResultBean update(BizBankBillUpDTO model);
 
     /**
      * 获取详情

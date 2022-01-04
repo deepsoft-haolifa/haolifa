@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +37,7 @@ public class BankBillController {
 
     @ApiOperation("更新节点")
     @PostMapping("/updateBankBill")
-    public ResultBean updateBankBill(@RequestBody BizBankBill bankBill) {
+    public ResultBean updateBankBill(@RequestBody BizBankBillUpDTO bankBill) {
         return bankBillService.update(bankBill);
     }
 

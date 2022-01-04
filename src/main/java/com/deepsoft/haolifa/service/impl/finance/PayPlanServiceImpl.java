@@ -15,7 +15,6 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
 import com.deepsoft.haolifa.service.SysDictService;
@@ -35,7 +34,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -108,7 +106,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(planPayDTO.getId());
 
-        if(StringUtils.equalsIgnoreCase("2",bizPayPlan.getStatus())){
+        if (StringUtils.equalsIgnoreCase("2", bizPayPlan.getStatus())) {
             throw new BaseException("当前付款计划以付款");
         }
 
@@ -116,10 +114,10 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         BizPayPlan record = buildBizPayPlan(planPayDTO, customUser);
         int update = bizPayPlanMapper.updateByPrimaryKeySelective(record);
-        if (update < 1){
+        if (update < 1) {
             return ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_EXCEPTION);
         }
-  PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
+        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
 
         // 1 支付方式
         planPayDTO.getPayWayList()
@@ -142,7 +140,7 @@ public class PayPlanServiceImpl implements PayPlanService {
                         bankBillService.save(bizBankBillAddDTO);
                         break;
                     case other_bill:
-                        BizOtherBillAddDTO   bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
+                        BizOtherBillAddDTO bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
                         otherBillService.save(bizBillAddDTO);
                         break;
                     default:
@@ -159,9 +157,9 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         BigDecimal totalPrice = purchaseOrder.getTotalPrice();
         Byte payStatus = null;
-        if (totalPrice.doubleValue() >= currentPaid.doubleValue()){
+        if (totalPrice.doubleValue() >= currentPaid.doubleValue()) {
             payStatus = Byte.valueOf(OrderPayStatusEnum.all_pay.getCode());
-        }else {
+        } else {
             payStatus = Byte.valueOf(OrderPayStatusEnum.partial_pay.getCode());
         }
 
@@ -186,16 +184,20 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     private BizBankBillAddDTO buildBizBankBillAddDTO(BizPayPlan bizPayPlan, BizPayPlanPayDTO.PayWayDTO payWayDTO, BookingTypeEnum bookingTypeEnum) {
-        BizBankBillAddDTO bizBill = new BizBankBillAddDTO();
-        bizBill.setType(bookingTypeEnum.getCode());
-        bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
-        bizBill.setOperateDate(bizPayPlan.getPayDate());
-        bizBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
-        bizBill.setPayment(payWayDTO.getAmount());
-        bizBill.setRemark(bizPayPlan.getRemark());
-        bizBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
-        bizBill.setPayCompany(bizPayPlan.getPayCompany());
-        return bizBill;
+        BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
+        // 付款
+        bizBankBill.setType("2");
+        bizBankBill.setCompany(bizPayPlan.getApplyCollectionCompany());
+        bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
+        bizBankBill.setOperateDate(bizPayPlan.getPayDate());
+        bizBankBill.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
+        bizBankBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
+        bizBankBill.setPayment(payWayDTO.getAmount());
+        bizBankBill.setRemark(bizPayPlan.getRemark());
+        bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
+        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
+        bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
+        return bizBankBill;
     }
 
     private BizBillAddDTO buildBizBillAddDTO(BizPayPlan bizPayPlan, BizPayPlanPayDTO.PayWayDTO payWayDTO, BookingTypeEnum bookingTypeEnum) {
@@ -203,6 +205,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         bizBill.setType(bookingTypeEnum.getCode());
         bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
         bizBill.setD(bizPayPlan.getPayDate());
+        // todo
         bizBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
         bizBill.setPayment(payWayDTO.getAmount());
         bizBill.setRemark(bizPayPlan.getRemark());
@@ -214,7 +217,7 @@ public class PayPlanServiceImpl implements PayPlanService {
     private BizPayPlan buildBizPayPlan(BizPayPlanPayDTO planPayDTO, CustomUser customUser) {
         // 1 更新付款计划状态
         BizPayPlan record = new BizPayPlan();
-        BeanUtils.copyProperties(planPayDTO,record);
+        BeanUtils.copyProperties(planPayDTO, record);
 
         //  添加付款方式日志表
         record.setPayWay(JSON.toJSONString(planPayDTO.getPayWayList()));
@@ -315,7 +318,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         Map<Long, List<BizPayPlanPayLog>> bizPayPlanPayLogListMap = new HashMap<>();
         if (CollectionUtils.isNotEmpty(pageData.getResult())) {
-          List<Long> idList = pageData.getResult().stream().map(bizPayPlan->(long)bizPayPlan.getId()).collect(Collectors.toList());
+            List<Long> idList = pageData.getResult().stream().map(bizPayPlan -> (long) bizPayPlan.getId()).collect(Collectors.toList());
             BizPayPlanPayLogExample bizPayPlanPayLogExample = new BizPayPlanPayLogExample();
             BizPayPlanPayLogExample.Criteria planPayLogExampleCriteria = bizPayPlanPayLogExample.createCriteria();
             planPayLogExampleCriteria.andPayPlanIdIn(idList);
@@ -336,7 +339,7 @@ public class PayPlanServiceImpl implements PayPlanService {
                 List<BizPayPlanPayLog> payPlanPayLogList = finalBizPayPlanPayLogListMap.get((long) payApply.getId());
 
                 List<BizPayPlanPayLogDTO> bizPayPlanPayLogDTOS = new ArrayList<>();
-                if(CollectionUtils.isNotEmpty(payPlanPayLogList)){
+                if (CollectionUtils.isNotEmpty(payPlanPayLogList)) {
                     bizPayPlanPayLogDTOS = payPlanPayLogList.stream()
                         .map(bizPayPlanPayLog -> {
                             BizPayPlanPayLogDTO payPlanPayLogDTO = new BizPayPlanPayLogDTO();
@@ -350,7 +353,7 @@ public class PayPlanServiceImpl implements PayPlanService {
                 payApply.setPayWayList(bizPayPlanPayLogDTOS);
 
                 List<String> asList = new ArrayList<>();
-                if (StringUtils.isNotEmpty(payApply.getBookingType())){
+                if (StringUtils.isNotEmpty(payApply.getBookingType())) {
                     asList = Arrays.asList(payApply.getBookingType().split(",").clone());
                 }
                 payApply.setBookingTypeList(asList);

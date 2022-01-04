@@ -28,6 +28,6 @@ public interface BizBankBillMapper {
 
     int updateByPrimaryKey(BizBankBill record);
 
-    BizBankBill getLastRecord();
+    BizBankBill getLastRecord(@Param("companyQuery") String companyQuery, @Param("accountQuery") String accountQuery);
 
 }

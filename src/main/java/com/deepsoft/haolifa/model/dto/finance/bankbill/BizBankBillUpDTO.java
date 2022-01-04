@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.finance.bankbill;
 
+import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,8 +13,11 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BizBankBillAddDTO {
+public class BizBankBillUpDTO {
 
+
+    @ApiModelProperty(value = "id")
+    private Integer id;
     @ApiModelProperty(value = "公司（收款是收款公司，付款是付款公司")
     private String company;
     @ApiModelProperty(value = "账户（公司下面的某个银行)用来计算余额")
@@ -50,7 +54,5 @@ public class BizBankBillAddDTO {
     private String remark;
     @ApiModelProperty(value = "收款合同分解状态；0未完成；1.完成")
     private String contractStatus;
-    @ApiModelProperty(value = "创建者")
-    private Integer contractUser;
 
 }

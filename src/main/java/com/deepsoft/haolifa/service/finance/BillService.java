@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillUpDTO;
 
 public interface BillService {
     /**
@@ -27,7 +28,7 @@ public interface BillService {
      * @param model
      * @return
      */
-    ResultBean update(BizBill model);
+    ResultBean update(BizBillUpDTO model);
 
     /**
      * 获取详情
