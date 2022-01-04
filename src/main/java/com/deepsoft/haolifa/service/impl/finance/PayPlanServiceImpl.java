@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.enums.BookingTypeEnum;
 import com.deepsoft.haolifa.enums.OrderPayStatusEnum;
 import com.deepsoft.haolifa.enums.PayWayEnum;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -105,6 +106,12 @@ public class PayPlanServiceImpl implements PayPlanService {
     @Override
     public ResultBean update(BizPayPlanPayDTO planPayDTO) {
 
+        BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(planPayDTO.getId());
+
+        if(StringUtils.equalsIgnoreCase("2",bizPayPlan.getStatus())){
+            throw new BaseException("当前付款计划以付款");
+        }
+
         CustomUser customUser = sysUserService.selectLoginUser();
 
         BizPayPlan record = buildBizPayPlan(planPayDTO, customUser);
@@ -112,9 +119,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         if (update < 1){
             return ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_EXCEPTION);
         }
-
-        BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(record.getId());
-        PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
+  PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
 
         // 1 支付方式
         planPayDTO.getPayWayList()
@@ -145,14 +150,6 @@ public class PayPlanServiceImpl implements PayPlanService {
                         break;
                 }
             });
-
-
-        planPayDTO.getPayWayList()
-            .forEach(payWayDTO -> {
-            BizPayPlanPayLog payPlanPayLog = buildBizPayPlanPayLog(customUser, bizPayPlan, purchaseOrder, payWayDTO);
-            bizPayPlanPayLogMapper.insert(payPlanPayLog);
-        });
-
 
         // 付款完成后，将采购订单的状态更新为已付款
         PurchaseOrder purchaseOrderU = new PurchaseOrder();

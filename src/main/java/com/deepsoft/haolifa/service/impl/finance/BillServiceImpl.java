@@ -184,6 +184,7 @@ public class BillServiceImpl implements BillService {
 
 
         List<Integer> departIdList = pageData.getResult().stream()
+            .filter(bizBill -> StringUtils.isNotEmpty(bizBill.getDeptId()))
             .map(bizBill -> Integer.parseInt(bizBill.getDeptId()))
             .distinct()
             .collect(Collectors.toList());
@@ -211,7 +212,8 @@ public class BillServiceImpl implements BillService {
                 BeanUtils.copyProperties(bizBill, bizBillDTO);
                 bizBillDTO.setCollectionCompany(bizBill.getString1());
                 bizBillDTO.setPaymentCompany(bizBill.getString2());
-                bizBillDTO.setDepartmentDTO(finalDepartmentMap.get(Integer.parseInt(bizBill.getDeptId())));
+                DepartmentDTO departmentDTO = finalDepartmentMap.get(StringUtils.isNotEmpty(bizBill.getDeptId()) ? Integer.parseInt(bizBill.getDeptId()) : -1);
+                bizBillDTO.setDepartmentDTO(departmentDTO);
                 return bizBillDTO;
             })
             .collect(Collectors.toList());
