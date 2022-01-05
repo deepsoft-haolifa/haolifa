@@ -150,7 +150,7 @@ public class BankBillServiceImpl implements BankBillService {
         if (StringUtils.isNotEmpty(model.getCertificateNumber())) {
             criteria.andCertificateNumberEqualTo(model.getCertificateNumber());
         }
-        //收付款银行：下拉选框
+        //收付款账户：下拉选框
         if (StringUtils.isNotEmpty(model.getPayAccount())) {
             criteria.andPayAccountEqualTo(model.getPayAccount());
         }
@@ -176,8 +176,8 @@ public class BankBillServiceImpl implements BankBillService {
             criteria.andCollectCompanyLike(model.getCollectCompany());
         }
         //付款单位：like
-        if (StringUtils.isNotEmpty(model.getPaymentType())) {
-            criteria.andPaymentTypeEqualTo(model.getPaymentType());
+        if (StringUtils.isNotEmpty(model.getPayCompany())) {
+            criteria.andPayCompanyLike(model.getPayCompany());
         }
 
         bizBankBillExample.setOrderByClause("id desc");

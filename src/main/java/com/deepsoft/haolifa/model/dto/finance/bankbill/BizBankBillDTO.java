@@ -28,6 +28,9 @@ public class BizBankBillDTO extends PageParam {
     @ApiModelProperty(value = "查询条件-收款单位")
     private String collectCompany;
 
+    @ApiModelProperty(value = "查询条件-付款单位")
+    private String payCompany;
+
     @ApiModelProperty(value = "查询条件-付款类别")
     private String paymentType;
 
