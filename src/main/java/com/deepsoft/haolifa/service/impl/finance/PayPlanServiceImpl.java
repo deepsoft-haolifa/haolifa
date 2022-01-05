@@ -2,11 +2,13 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.BookingTypeEnum;
 import com.deepsoft.haolifa.enums.OrderPayStatusEnum;
 import com.deepsoft.haolifa.enums.PayWayEnum;
+import com.deepsoft.haolifa.enums.RoleEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
@@ -30,6 +32,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -259,6 +262,89 @@ public class PayPlanServiceImpl implements PayPlanService {
         if (model.getPageSize() == null || model.getPageSize() == 0) {
             model.setPageSize(10);
         }
+
+        // 查询当前用户的角色
+
+        CustomUser customUser = sysUserService.selectLoginUser();
+
+
+        //当前角色是否为出纳
+        boolean iscn = customUser.getAuthorities().stream()
+            .map(a->(CustomGrantedAuthority)a)
+            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
+
+        // 构造查询条件
+        BizPayPlanExample bizPayPlanExample = this.buildBizPayPlanExample(model);
+        Page<BizPayPlan> pageData = PageHelper
+            .startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> {
+                bizPayPlanMapper.selectByExample(bizPayPlanExample);
+            });
+
+        Map<Long, List<BizPayPlanPayLog>> bizPayPlanPayLogListMap = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(pageData.getResult())) {
+            List<Long> idList = pageData.getResult().stream().map(bizPayPlan -> (long) bizPayPlan.getId()).collect(Collectors.toList());
+            BizPayPlanPayLogExample bizPayPlanPayLogExample = new BizPayPlanPayLogExample();
+            BizPayPlanPayLogExample.Criteria planPayLogExampleCriteria = bizPayPlanPayLogExample.createCriteria();
+            planPayLogExampleCriteria.andPayPlanIdIn(idList);
+            List<BizPayPlanPayLog> bizPayPlanPayLogs = bizPayPlanPayLogMapper.selectByExample(bizPayPlanPayLogExample);
+            bizPayPlanPayLogListMap = bizPayPlanPayLogs.stream().collect(Collectors.groupingBy(BizPayPlanPayLog::getPayPlanId));
+        }
+
+
+        PageDTO<BizPayPlanRSDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+
+        Map<Long, List<BizPayPlanPayLog>> finalBizPayPlanPayLogListMap = bizPayPlanPayLogListMap;
+        List<BizPayPlanRSDTO> payApplyRSDTOList = pageData.getResult().stream()
+            .map(bizPayApply -> {
+                BizPayPlanRSDTO payApply = new BizPayPlanRSDTO();
+                BeanUtils.copyProperties(bizPayApply, payApply);
+
+                List<BizPayPlanPayLogDTO> bizPayPlanPayLogDTOS = this.convertBizPayPlanPayLogDTOList(finalBizPayPlanPayLogListMap, payApply);
+                payApply.setPayWayList(bizPayPlanPayLogDTOS);
+
+                List<String> asList = this.convertBoolingTypeList(payApply);
+                payApply.setBookingTypeList(asList);
+
+                payApply.setIsCN(iscn);
+                return payApply;
+            })
+            .collect(Collectors.toList());
+
+        pageDTO.setList(payApplyRSDTOList);
+        return ResultBean.success(pageDTO);
+    }
+
+    private List<String> convertBoolingTypeList(BizPayPlanRSDTO payApply) {
+        List<String> asList = new ArrayList<>();
+        if (StringUtils.isNotEmpty(payApply.getBookingType())) {
+            asList = Arrays.asList(payApply.getBookingType().split(",").clone()).stream()
+                .map(o -> BookingTypeEnum.valueOfCode(o).getDesc())
+                .collect(Collectors.toList());
+        }
+        return asList;
+    }
+
+    private List<BizPayPlanPayLogDTO> convertBizPayPlanPayLogDTOList(Map<Long, List<BizPayPlanPayLog>> finalBizPayPlanPayLogListMap, BizPayPlanRSDTO payApply) {
+        List<BizPayPlanPayLog> payPlanPayLogList = finalBizPayPlanPayLogListMap.get((long) payApply.getId());
+
+        List<BizPayPlanPayLogDTO> bizPayPlanPayLogDTOS = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(payPlanPayLogList)) {
+            bizPayPlanPayLogDTOS = payPlanPayLogList.stream()
+                .map(bizPayPlanPayLog -> {
+                    BizPayPlanPayLogDTO payPlanPayLogDTO = new BizPayPlanPayLogDTO();
+                    BeanUtils.copyProperties(bizPayPlanPayLog, payPlanPayLogDTO);
+                    payPlanPayLogDTO.setPayWay(PayWayEnum.valueOfCode(payPlanPayLogDTO.getPayWay()).getDesc());
+                    payPlanPayLogDTO.setBookingType(BookingTypeEnum.valueOfCode(payPlanPayLogDTO.getBookingType()).getDesc());
+                    return payPlanPayLogDTO;
+                })
+                .collect(Collectors.toList());
+        }
+        return bizPayPlanPayLogDTOS;
+    }
+
+    private BizPayPlanExample buildBizPayPlanExample(BizPayPlanRQDTO model) {
         BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
         BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
@@ -310,62 +396,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         }
 
         bizPayPlanExample.setOrderByClause("id desc");
-        Page<BizPayPlan> pageData = PageHelper
-            .startPage(model.getPageNum(), model.getPageSize())
-            .doSelectPage(() -> {
-                bizPayPlanMapper.selectByExample(bizPayPlanExample);
-            });
-
-        Map<Long, List<BizPayPlanPayLog>> bizPayPlanPayLogListMap = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(pageData.getResult())) {
-            List<Long> idList = pageData.getResult().stream().map(bizPayPlan -> (long) bizPayPlan.getId()).collect(Collectors.toList());
-            BizPayPlanPayLogExample bizPayPlanPayLogExample = new BizPayPlanPayLogExample();
-            BizPayPlanPayLogExample.Criteria planPayLogExampleCriteria = bizPayPlanPayLogExample.createCriteria();
-            planPayLogExampleCriteria.andPayPlanIdIn(idList);
-            List<BizPayPlanPayLog> bizPayPlanPayLogs = bizPayPlanPayLogMapper.selectByExample(bizPayPlanPayLogExample);
-            bizPayPlanPayLogListMap = bizPayPlanPayLogs.stream().collect(Collectors.groupingBy(BizPayPlanPayLog::getPayPlanId));
-        }
-
-
-        PageDTO<BizPayPlanRSDTO> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(pageData, pageDTO);
-
-        Map<Long, List<BizPayPlanPayLog>> finalBizPayPlanPayLogListMap = bizPayPlanPayLogListMap;
-        List<BizPayPlanRSDTO> payApplyRSDTOList = pageData.getResult().stream()
-            .map(bizPayApply -> {
-                BizPayPlanRSDTO payApply = new BizPayPlanRSDTO();
-                BeanUtils.copyProperties(bizPayApply, payApply);
-
-                List<BizPayPlanPayLog> payPlanPayLogList = finalBizPayPlanPayLogListMap.get((long) payApply.getId());
-
-                List<BizPayPlanPayLogDTO> bizPayPlanPayLogDTOS = new ArrayList<>();
-                if (CollectionUtils.isNotEmpty(payPlanPayLogList)) {
-                    bizPayPlanPayLogDTOS = payPlanPayLogList.stream()
-                        .map(bizPayPlanPayLog -> {
-                            BizPayPlanPayLogDTO payPlanPayLogDTO = new BizPayPlanPayLogDTO();
-                            BeanUtils.copyProperties(bizPayPlanPayLog, payPlanPayLogDTO);
-                            payPlanPayLogDTO.setPayWay(PayWayEnum.valueOfCode(payPlanPayLogDTO.getPayWay()).getDesc());
-                            payPlanPayLogDTO.setBookingType(BookingTypeEnum.valueOfCode(payPlanPayLogDTO.getBookingType()).getDesc());
-                            return payPlanPayLogDTO;
-                        })
-                        .collect(Collectors.toList());
-                }
-                payApply.setPayWayList(bizPayPlanPayLogDTOS);
-
-                List<String> asList = new ArrayList<>();
-                if (StringUtils.isNotEmpty(payApply.getBookingType())) {
-                    asList = Arrays.asList(payApply.getBookingType().split(",").clone()).stream()
-                        .map(o -> BookingTypeEnum.valueOfCode(o).getDesc())
-                        .collect(Collectors.toList());
-                }
-                payApply.setBookingTypeList(asList);
-
-                return payApply;
-            })
-            .collect(Collectors.toList());
-
-        pageDTO.setList(payApplyRSDTOList);
-        return ResultBean.success(pageDTO);
+        return bizPayPlanExample;
     }
 
     @Override
