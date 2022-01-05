@@ -354,7 +354,9 @@ public class PayPlanServiceImpl implements PayPlanService {
 
                 List<String> asList = new ArrayList<>();
                 if (StringUtils.isNotEmpty(payApply.getBookingType())) {
-                    asList = Arrays.asList(payApply.getBookingType().split(",").clone());
+                    asList = Arrays.asList(payApply.getBookingType().split(",").clone()).stream()
+                        .map(o -> BookingTypeEnum.valueOfCode(o).getDesc())
+                        .collect(Collectors.toList());
                 }
                 payApply.setBookingTypeList(asList);
 
