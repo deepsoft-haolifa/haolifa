@@ -30,9 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.APYAPP_FLOW;
 import static com.deepsoft.haolifa.constant.CommonEnum.FormType.PAYAPP_TYPE;
@@ -174,12 +176,50 @@ public class PayApplyServiceImpl implements PayApplyService {
                     BeanUtils.copyProperties(bizPayApplyDetail, applyDetailRSDTO);
                     return applyDetailRSDTO;
                 })
+                .collect(Collectors.groupingBy(PayApplyDetailRSDTO::getApplyCollectionCompany))
+                .entrySet().stream()
+                .map(this::reducePayApplyDetailRSDTO)
                 .collect(Collectors.toList());
+
             payApplyRSDTO.setApplyDetailRSDTOList(applyDetailRSDTOList);
             return ResultBean.success(payApplyRSDTO);
         }
 
         return ResultBean.success(payApply);
+    }
+
+    private PayApplyDetailRSDTO reducePayApplyDetailRSDTO(Map.Entry<String, List<PayApplyDetailRSDTO>> e) {
+        PayApplyDetailRSDTO applyDetailRSDTO = new PayApplyDetailRSDTO();
+
+        BigDecimal price = e.getValue().stream()
+            .map(PayApplyDetailRSDTO::getPrice)
+            .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+        applyDetailRSDTO.setPrice(price);
+
+        String purchaseOrderNo = e.getValue().stream()
+            .map(PayApplyDetailRSDTO::getPurchaseOrderNo)
+            .distinct()
+            .collect(Collectors.joining(","));
+        applyDetailRSDTO.setPurchaseOrderNo(purchaseOrderNo);
+
+        String applyPayCompany = e.getValue().stream()
+            .map(PayApplyDetailRSDTO::getApplyPayCompany)
+            .distinct()
+            .collect(Collectors.joining(","));
+        applyDetailRSDTO.setApplyPayCompany(applyPayCompany);
+
+        String applyCollectionCompany = e.getValue().stream()
+            .map(PayApplyDetailRSDTO::getApplyCollectionCompany)
+            .distinct()
+            .collect(Collectors.joining(","));
+        applyDetailRSDTO.setApplyCollectionCompany(applyCollectionCompany);
+
+        String remark = e.getValue().stream()
+            .map(PayApplyDetailRSDTO::getRemark)
+            .collect(Collectors.joining(","));
+        applyDetailRSDTO.setRemark(remark);
+
+        return applyDetailRSDTO;
     }
 
     @Override

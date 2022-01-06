@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,6 +27,7 @@ public class PayApplyController {
 
     @ApiOperation("创建付款申请")
     @PostMapping("/savePayApp")
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean savePayApp(@RequestBody PayApplyAddDTO model) {
         return payApplyService.save(model);
     }
@@ -40,6 +42,7 @@ public class PayApplyController {
 
     @ApiOperation("发起审批")
     @GetMapping("approve/{id}")
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean approve(@ApiParam("付款申请ID") @PathVariable("id") Integer id) {
         return payApplyService.approve(id);
     }
@@ -60,6 +63,7 @@ public class PayApplyController {
 
     @ApiOperation("更新节点")
     @PostMapping("/updatePayApp")
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean updatePayAppn(@RequestBody BizPayApply payPlan) {
         return payApplyService.update(payPlan);
     }
