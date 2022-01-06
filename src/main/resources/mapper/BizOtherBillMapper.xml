@@ -559,6 +559,17 @@
   </update>
 
     <select id="getLastRecord" resultType="com.deepsoft.haolifa.model.domain.BizOtherBill">
-        select * from biz_other_bill order by id desc limit 1
+        select * from biz_other_bill
+        <where>
+            <if test="companyQuery != null and companyQuery != ''">
+                and company = #{companyQuery}
+            </if>
+            <if test="accountQuery != null and accountQuery != ''">
+                and account = #{accountQuery}
+            </if>
+            and del_flag = 0
+        </where>
+        order by id desc limit 1
+
     </select>
 </mapper>

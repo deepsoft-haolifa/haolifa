@@ -146,9 +146,6 @@ public class PayPlanServiceImpl implements PayPlanService {
                         BizOtherBillAddDTO bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
                         otherBillService.save(bizBillAddDTO);
                         break;
-                    default:
-
-                        break;
                 }
             });
 
@@ -174,16 +171,20 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     private BizOtherBillAddDTO buildBizOtherBillAddDTO(BizPayPlan bizPayPlan, BizPayPlanPayDTO.PayWayDTO payWayDTO, BookingTypeEnum bookingTypeEnum) {
-        BizOtherBillAddDTO bizBill = new BizOtherBillAddDTO();
-        bizBill.setType(bookingTypeEnum.getCode());
-        bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
-        bizBill.setOperateDate(bizPayPlan.getPayDate());
-        bizBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
-        bizBill.setPayment(payWayDTO.getAmount());
-        bizBill.setRemark(bizPayPlan.getRemark());
-        bizBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
-        bizBill.setPayCompany(bizPayPlan.getPayCompany());
-        return bizBill;
+        BizOtherBillAddDTO otherBillAddDTO = new BizOtherBillAddDTO();
+        // 付款
+        otherBillAddDTO.setType("2");
+        otherBillAddDTO.setCompany(bizPayPlan.getApplyCollectionCompany());
+        otherBillAddDTO.setCertificateNumber(bizPayPlan.getApplyNo());
+        otherBillAddDTO.setOperateDate(bizPayPlan.getPayDate());
+        otherBillAddDTO.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
+        otherBillAddDTO.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
+        otherBillAddDTO.setPayment(payWayDTO.getAmount());
+        otherBillAddDTO.setRemark(bizPayPlan.getRemark());
+        otherBillAddDTO.setPayCompany(bizPayPlan.getPayCompany());
+        otherBillAddDTO.setPayAccount(bizPayPlan.getPayAccount());
+        otherBillAddDTO.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
+        return otherBillAddDTO;
     }
 
     private BizBankBillAddDTO buildBizBankBillAddDTO(BizPayPlan bizPayPlan, BizPayPlanPayDTO.PayWayDTO payWayDTO, BookingTypeEnum bookingTypeEnum) {

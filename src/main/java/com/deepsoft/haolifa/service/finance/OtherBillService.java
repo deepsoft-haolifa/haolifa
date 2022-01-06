@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.domain.BizOtherBill;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillUpDTO;
 
 public interface OtherBillService {
     /**
@@ -26,10 +27,10 @@ public interface OtherBillService {
     /**
      * 更新
      *
-     * @param model
+     * @param otherBillUpDTO
      * @return
      */
-    ResultBean update(BizOtherBill model);
+    ResultBean update(BizOtherBillUpDTO otherBillUpDTO);
 
     /**
      * 获取详情

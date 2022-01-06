@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillUpDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.OtherBillService;
 import com.github.pagehelper.Page;
@@ -41,23 +42,31 @@ public class OtherBillServiceImpl implements OtherBillService {
         }
         BizOtherBill billOther = new BizOtherBill();
         BeanUtils.copyProperties(model, billOther);
-
-
+        // 设置公司和账户，用来统计余额
+        if (billOther.getType().equals("1")) {
+            billOther.setCompany(billOther.getCollectCompany());
+            billOther.setAccount(billOther.getPayAccount());
+        } else if (billOther.getType().equals("2")) {
+            billOther.setCompany(billOther.getPayCompany());
+            billOther.setAccount(billOther.getPayAccount());
+        }
+        String companyQuery = billOther.getCompany();
+        String accountQuery = billOther.getAccount();
         // 设置上月结转
-        //bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2, null, null));
+        // bizBankBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(1, companyQuery, accountQuery));
 
         // 设置余额 start
         // 查找最新一条记录的余额
-        BizOtherBill lastRecord = bizOtherBillMapper.getLastRecord();
+        BizOtherBill lastRecord = bizOtherBillMapper.getLastRecord(companyQuery, accountQuery);
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
 
         // 收款，上次余额 + 本次收款
-        if (StringUtils.isNotEmpty(billOther.getCollectionType())) {
+        if (billOther.getType().equals("1")) {
             BigDecimal collectionMoney = billOther.getCollectionMoney();
             BigDecimal add = collectionMoney.add(lastBalance);
             billOther.setBalance(add);
-        } else if (StringUtils.isNotEmpty(billOther.getPaymentType())) {
+        } else if (billOther.getType().equals("2")) {
             // 付款 , 上次余额 - 本次付款
             BigDecimal payment = billOther.getPayment();
             BigDecimal subtract = lastBalance.subtract(payment);
@@ -90,9 +99,28 @@ public class OtherBillServiceImpl implements OtherBillService {
     }
 
     @Override
-    public ResultBean update(BizOtherBill billOther) {
+    public ResultBean update(BizOtherBillUpDTO otherBillUpDTO) {
+
+        BizOtherBill billOther = new BizOtherBill();
+        BeanUtils.copyProperties(otherBillUpDTO,billOther);
+        BizOtherBill selectByPrimaryKey = bizOtherBillMapper.selectByPrimaryKey(otherBillUpDTO.getId());
+
+        switch (billOther.getType()){
+            case "1":
+                BigDecimal collectionMoney = billOther.getCollectionMoney().subtract(selectByPrimaryKey.getCollectionMoney());
+                BigDecimal balance = selectByPrimaryKey.getBalance().add(collectionMoney);
+                billOther.setBalance(balance);
+                break;
+            case "2":
+                BigDecimal payment = billOther.getPayment().subtract(selectByPrimaryKey.getPayment());
+                BigDecimal bigDecimal = selectByPrimaryKey.getBalance().add(payment);
+                billOther.setBalance(bigDecimal);
+                break;
+        }
+
         billOther.setUpdateTime(new Date());
         billOther.setUpdateUser(sysUserService.selectLoginUser().getId());
+
         int update = bizOtherBillMapper.updateByPrimaryKeySelective(billOther);
         return ResultBean.success(update);
     }

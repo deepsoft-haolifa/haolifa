@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.domain.BizOtherBill;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillUpDTO;
 import com.deepsoft.haolifa.service.finance.OtherBillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,8 +37,8 @@ public class OtherBillController {
 
     @ApiOperation("更新节点")
     @PostMapping("/updateOtherBill")
-    public ResultBean updateOtherBill(@RequestBody BizOtherBill otherBill) {
-        return otherBillService.update(otherBill);
+    public ResultBean updateOtherBill(@RequestBody BizOtherBillUpDTO otherBillUpDTO) {
+        return otherBillService.update(otherBillUpDTO);
     }
 
     @ApiOperation("获取节点列表")

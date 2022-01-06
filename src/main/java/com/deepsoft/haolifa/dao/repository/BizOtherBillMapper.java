@@ -28,5 +28,6 @@ public interface BizOtherBillMapper {
 
     int updateByPrimaryKey(BizOtherBill record);
 
-    BizOtherBill getLastRecord();
+    BizOtherBill getLastRecord(@Param("companyQuery") String companyQuery, @Param("accountQuery") String accountQuery);
+
 }
