@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
-import com.deepsoft.haolifa.enums.BookingTypeEnum;
-import com.deepsoft.haolifa.enums.OrderPayStatusEnum;
-import com.deepsoft.haolifa.enums.PayWayEnum;
-import com.deepsoft.haolifa.enums.RoleEnum;
+import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
@@ -74,6 +71,10 @@ public class PayPlanServiceImpl implements PayPlanService {
 
     @Autowired
     private OtherBillService otherBillService;
+    @Autowired
+    private BizPayApplyDetailMapper bizPayApplyDetailMapper;
+    @Autowired
+    private BizPayApplyMapper bizPayApplyMapper;
 
     @Override
     public ResultBean save(BizPayPlanAddDTO model) {
@@ -113,6 +114,7 @@ public class PayPlanServiceImpl implements PayPlanService {
             throw new BaseException("当前付款计划以付款");
         }
 
+        // 当前用户
         CustomUser customUser = sysUserService.selectLoginUser();
 
         BizPayPlan record = buildBizPayPlan(planPayDTO, customUser);
@@ -123,49 +125,78 @@ public class PayPlanServiceImpl implements PayPlanService {
         PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
 
         // 1 支付方式
-        planPayDTO.getPayWayList()
-            .forEach(payWayDTO -> {
-                BizPayPlanPayLog payPlanPayLog = buildBizPayPlanPayLog(customUser, bizPayPlan, purchaseOrder, payWayDTO);
-                bizPayPlanPayLogMapper.insert(payPlanPayLog);
-            });
+        {
+            planPayDTO.getPayWayList()
+                .forEach(payWayDTO -> {
+                    BizPayPlanPayLog payPlanPayLog = buildBizPayPlanPayLog(customUser, bizPayPlan, purchaseOrder, payWayDTO);
+                    bizPayPlanPayLogMapper.insert(payPlanPayLog);
+                });
+        }
         // 2 记账方式
-        planPayDTO.getPayWayList().stream()
-            .forEach(payWayDTO -> {
+        {
+            planPayDTO.getPayWayList().stream()
+                .forEach(payWayDTO -> {
 
-                BookingTypeEnum bookingTypeEnum = BookingTypeEnum.valueOfCode(payWayDTO.getBookingType());
-                switch (bookingTypeEnum) {
-                    case cash_bill:
-                        BizBillAddDTO bizBill = buildBizBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                        billService.save(bizBill);
-                        break;
-                    case bank_bill:
-                        BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                        bankBillService.save(bizBankBillAddDTO);
-                        break;
-                    case other_bill:
-                        BizOtherBillAddDTO bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                        otherBillService.save(bizBillAddDTO);
-                        break;
-                }
-            });
+                    BookingTypeEnum bookingTypeEnum = BookingTypeEnum.valueOfCode(payWayDTO.getBookingType());
+                    switch (bookingTypeEnum) {
+                        case cash_bill:
+                            BizBillAddDTO bizBill = buildBizBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
+                            billService.save(bizBill);
+                            break;
+                        case bank_bill:
+                            BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
+                            bankBillService.save(bizBankBillAddDTO);
+                            break;
+                        case other_bill:
+                            BizOtherBillAddDTO bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
+                            otherBillService.save(bizBillAddDTO);
+                            break;
+                    }
+                });
 
-        // 付款完成后，将采购订单的状态更新为已付款
-        PurchaseOrder purchaseOrderU = new PurchaseOrder();
-        purchaseOrderU.setId(Integer.parseInt(bizPayPlan.getContractId()));
-        //  支付状态 1 未付款 2 部分付款 3 付款完成
-        BigDecimal currentPaid = purchaseOrder.getPaidAccount().add(bizPayPlan.getApplyAmount());
+        }
+        // 3 付款完成后，将采购订单的状态更新为已付款
+        {
+            PurchaseOrder purchaseOrderU = new PurchaseOrder();
+            purchaseOrderU.setId(Integer.parseInt(bizPayPlan.getContractId()));
+            //  支付状态 1 未付款 2 部分付款 3 付款完成
+            BigDecimal currentPaid = purchaseOrder.getPaidAccount().add(bizPayPlan.getApplyAmount());
 
-        BigDecimal totalPrice = purchaseOrder.getTotalPrice();
-        Byte payStatus = null;
-        if (totalPrice.doubleValue() >= currentPaid.doubleValue()) {
-            payStatus = Byte.valueOf(OrderPayStatusEnum.all_pay.getCode());
-        } else {
-            payStatus = Byte.valueOf(OrderPayStatusEnum.partial_pay.getCode());
+            BigDecimal totalPrice = purchaseOrder.getTotalPrice();
+            Byte payStatus = null;
+            if (totalPrice.doubleValue() >= currentPaid.doubleValue()) {
+                payStatus = Byte.valueOf(OrderPayStatusEnum.all_pay.getCode());
+            } else {
+                payStatus = Byte.valueOf(OrderPayStatusEnum.partial_pay.getCode());
+            }
+            purchaseOrderU.setPayStatus(payStatus);
+            purchaseOrderU.setPaidAccount(currentPaid);
+            int selective = purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrderU);
+
         }
 
-        purchaseOrderU.setPayStatus(payStatus);
-        purchaseOrderU.setPaidAccount(currentPaid);
-        int selective = purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrderU);
+        // 4 付款申请支付状态改变
+        {
+            BizPayApply bizPayApply = bizPayApplyMapper.selectByPrimaryKey(Math.toIntExact(bizPayPlan.getPayDataId()));
+
+            BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
+            BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
+            criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+            // 申请编号 ==
+            criteria.andPayDataIdEqualTo(bizPayPlan.getPayDataId());
+            List<BizPayPlan> bizPayPlanList = bizPayPlanMapper.selectByExample(bizPayPlanExample);
+            BigDecimal bigDecimal = bizPayPlanList.stream()
+                .map(BizPayPlan::getApplyAmount)
+                .reduce(BigDecimal::add)
+                .get();
+
+            if (bigDecimal.compareTo(bizPayApply.getTotalPrice()) == 0){
+                BizPayApply payApply = new BizPayApply();
+                payApply.setStatus(PayStatusEnum.PAYMENT_COMPLETED.getCode());
+                payApply.setId(bizPayApply.getId());
+                bizPayApplyMapper.updateByPrimaryKeySelective(payApply);
+            }
+        }
 
         return ResultBean.success(update);
     }

@@ -71,7 +71,7 @@ public class OtherBillServiceImpl implements OtherBillService {
             BigDecimal payment = billOther.getPayment();
             BigDecimal subtract = lastBalance.subtract(payment);
             if (subtract.compareTo(BigDecimal.ZERO) < 0) {
-                throw new BaseException("现金余额不足以付款");
+                throw new BaseException("其他货币日记账余额不足以付款");
             }
             billOther.setBalance(subtract);
         }
@@ -82,6 +82,7 @@ public class OtherBillServiceImpl implements OtherBillService {
         billOther.setCreateUser(sysUserService.selectLoginUser().getId());
         billOther.setUpdateUser(sysUserService.selectLoginUser().getId());
         int insertId = bizOtherBillMapper.insertSelective(billOther);
+
         return ResultBean.success(insertId);
     }
 

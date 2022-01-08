@@ -75,7 +75,7 @@ public class BankBillServiceImpl implements BankBillService {
             BigDecimal payment = bizBankBill.getPayment();
             BigDecimal subtract = lastBalance.subtract(payment);
             if (subtract.compareTo(BigDecimal.ZERO) < 0) {
-                throw new BaseException("现金余额不足以付款");
+                throw new BaseException("银行日记账余额不足以付款");
             }
             bizBankBill.setBalance(subtract);
         }
