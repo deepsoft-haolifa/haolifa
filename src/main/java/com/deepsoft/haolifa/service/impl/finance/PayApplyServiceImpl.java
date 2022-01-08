@@ -6,13 +6,12 @@ import com.deepsoft.haolifa.dao.repository.BizPayApplyDetailMapper;
 import com.deepsoft.haolifa.dao.repository.BizPayApplyMapper;
 import com.deepsoft.haolifa.dao.repository.BizPayPlanMapper;
 import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
-import com.deepsoft.haolifa.enums.PayStatusEnum;
+import com.deepsoft.haolifa.enums.PayApplyPayStatusEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.*;
-import com.deepsoft.haolifa.model.dto.order.CheckReplaceMaterialAuditDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
@@ -20,7 +19,6 @@ import com.deepsoft.haolifa.service.finance.PayApplyService;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -34,7 +32,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.APYAPP_FLOW;
 import static com.deepsoft.haolifa.constant.CommonEnum.FormType.PAYAPP_TYPE;
@@ -72,7 +69,7 @@ public class PayApplyServiceImpl implements PayApplyService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
 
-        if (CollectionUtils.isEmpty(model.getApplyDetailAddDTOList())){
+        if (CollectionUtils.isEmpty(model.getApplyDetailAddDTOList())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
 
@@ -80,7 +77,7 @@ public class PayApplyServiceImpl implements PayApplyService {
             .map(PayApplyDetailAddDTO::getApplyPayCompany)
             .distinct()
             .count();
-        if (count>1){
+        if (count > 1) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
 
@@ -93,16 +90,16 @@ public class PayApplyServiceImpl implements PayApplyService {
         model.getApplyDetailAddDTOList().stream()
             .forEach(payApplyDetailAddDTO -> {
                 BizPayApplyDetail payApplyDetail =
-                    buildBizPayApplyDetail(currentDate, payApplyDetailAddDTO,payApply);
+                    buildBizPayApplyDetail(currentDate, payApplyDetailAddDTO, payApply);
                 bizPayApplyDetailMapper.insertSelective(payApplyDetail);
             });
         return ResultBean.success(insertId);
     }
 
-    private BizPayApplyDetail buildBizPayApplyDetail(Date currentDate, PayApplyDetailAddDTO payApplyDetailAddDTO,BizPayApply payApply) {
+    private BizPayApplyDetail buildBizPayApplyDetail(Date currentDate, PayApplyDetailAddDTO payApplyDetailAddDTO, BizPayApply payApply) {
         BizPayApplyDetail payApplyDetail = new BizPayApplyDetail();
         BeanUtils.copyProperties(payApplyDetailAddDTO, payApplyDetail);
-        payApplyDetail.setPayApplyId((long)payApply.getId());
+        payApplyDetail.setPayApplyId((long) payApply.getId());
         payApplyDetail.setCreateTime(currentDate);
         payApplyDetail.setUpdateTime(currentDate);
         payApplyDetail.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
@@ -117,7 +114,7 @@ public class PayApplyServiceImpl implements PayApplyService {
         payApply.setCreateTime(currentDate);
         payApply.setUpdateTime(currentDate);
         // `status`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
-        payApply.setStatus(PayStatusEnum.PENDING_APPROVAL.getCode());
+        payApply.setStatus(PayApplyPayStatusEnum.PENDING_APPROVAL.getCode());
         payApply.setTotalPrice(model.getTotalPrice());
         payApply.setRemark(model.getRemark());
         String applyPayCompany = model.getApplyDetailAddDTOList().stream()
@@ -160,9 +157,9 @@ public class PayApplyServiceImpl implements PayApplyService {
     public ResultBean getInfo(Integer id) {
         BizPayApply payApply = bizPayApplyMapper.selectByPrimaryKey(id);
 
-        if (payApply !=null){
+        if (payApply != null) {
             PayApplyRSDTO payApplyRSDTO = new PayApplyRSDTO();
-            BeanUtils.copyProperties(payApply,payApplyRSDTO);
+            BeanUtils.copyProperties(payApply, payApplyRSDTO);
 
             // 查询付款申请详情
             BizPayApplyDetailExample example = new BizPayApplyDetailExample();
@@ -238,9 +235,9 @@ public class PayApplyServiceImpl implements PayApplyService {
         if (StringUtils.isNotEmpty(model.getStatus())) {
             List<String> stringList = new ArrayList<>();
             // 0 全部 1 代办 2 已办
-            switch (model.getStatus()){
+            switch (model.getStatus()) {
                 case "0":
-                   stringList = Arrays.stream(PayStatusEnum.values()).map(PayStatusEnum::getCode).collect(Collectors.toList());
+                    stringList = Arrays.stream(PayApplyPayStatusEnum.values()).map(PayApplyPayStatusEnum::getCode).collect(Collectors.toList());
             }
             criteria.andStatusIn(stringList);
         }
@@ -254,9 +251,9 @@ public class PayApplyServiceImpl implements PayApplyService {
 
 
         Map<Long, List<PayApplyDetailRSDTO>> applyDetailRSDTOMap = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(pageData.getResult())){
+        if (CollectionUtils.isNotEmpty(pageData.getResult())) {
             List<Long> payApplyIdList = pageData.getResult().stream()
-                .map(bizPayApply->(long)bizPayApply.getId())
+                .map(bizPayApply -> (long) bizPayApply.getId())
                 .collect(Collectors.toList());
 
             // 查询付款申请详情
@@ -265,16 +262,14 @@ public class PayApplyServiceImpl implements PayApplyService {
             bizPayApplyDetailExampleCriteria.andPayApplyIdIn(payApplyIdList);
             List<BizPayApplyDetail> payApplyDetailList = bizPayApplyDetailMapper.selectByExample(bizPayApplyDetailExample);
 
-             applyDetailRSDTOMap = payApplyDetailList.stream()
-                 .map(bizPayApplyDetail -> {
-                     PayApplyDetailRSDTO applyDetailRSDTO = new PayApplyDetailRSDTO();
-                     BeanUtils.copyProperties(bizPayApplyDetail, applyDetailRSDTO);
-                     return applyDetailRSDTO;
-                 })
+            applyDetailRSDTOMap = payApplyDetailList.stream()
+                .map(bizPayApplyDetail -> {
+                    PayApplyDetailRSDTO applyDetailRSDTO = new PayApplyDetailRSDTO();
+                    BeanUtils.copyProperties(bizPayApplyDetail, applyDetailRSDTO);
+                    return applyDetailRSDTO;
+                })
                 .collect(Collectors.groupingBy(PayApplyDetailRSDTO::getPayApplyId));
         }
-
-
 
 
         PageDTO<PayApplyRSDTO> pageDTO = new PageDTO<>();
@@ -284,7 +279,7 @@ public class PayApplyServiceImpl implements PayApplyService {
             .map(bizPayApply -> {
                 PayApplyRSDTO payApply = new PayApplyRSDTO();
                 BeanUtils.copyProperties(bizPayApply, payApply);
-                payApply.setApplyDetailRSDTOList(finalApplyDetailRSDTOMap.get((long)bizPayApply.getId()));
+                payApply.setApplyDetailRSDTOList(finalApplyDetailRSDTOMap.get((long) bizPayApply.getId()));
                 return payApply;
             })
             .collect(Collectors.toList());
@@ -293,7 +288,7 @@ public class PayApplyServiceImpl implements PayApplyService {
     }
 
     @Override
-   public int auditReplaceMaterial(Integer item_id,String auditResult){
+    public int auditReplaceMaterial(Integer item_id, String auditResult) {
         BizPayApply payApply = bizPayApplyMapper.selectByPrimaryKey(item_id);
         payApply.setStatus(auditResult);
         payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
@@ -304,7 +299,7 @@ public class PayApplyServiceImpl implements PayApplyService {
         BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
         BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
-        criteria.andPayDataIdEqualTo((long)payApply.getId());
+        criteria.andPayDataIdEqualTo((long) payApply.getId());
         List<BizPayPlan> bizPayPlanList = bizPayPlanMapper.selectByExample(bizPayPlanExample);
 
         bizPayPlanList.stream()
@@ -318,7 +313,9 @@ public class PayApplyServiceImpl implements PayApplyService {
                 bizPayPlanMapper.updateByPrimaryKeySelective(bizPay);
             });
         return 1;
-    };
+    }
+
+    ;
 
 
     @Override
@@ -327,7 +324,7 @@ public class PayApplyServiceImpl implements PayApplyService {
         // 查询&修改 付款申请
         BizPayApply payApply = bizPayApplyMapper.selectByPrimaryKey(id);
         //审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成
-        payApply.setStatus(PayStatusEnum.UNDER_APPROVAL.getCode());
+        payApply.setStatus(PayApplyPayStatusEnum.UNDER_APPROVAL.getCode());
         payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         payApply.setUpdateTime(new Date());
         bizPayApplyMapper.updateByPrimaryKeySelective(payApply);
@@ -390,7 +387,7 @@ public class PayApplyServiceImpl implements PayApplyService {
         payPlan.setPayCompany(purchaseOrder.getDemander());
         payPlan.setStatus("0");
         //`applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
-        payPlan.setDataStatus(PayStatusEnum.UNDER_APPROVAL.getCode());
+        payPlan.setDataStatus(PayApplyPayStatusEnum.UNDER_APPROVAL.getCode());
         Date currentDate = new Date();
         payPlan.setCreateTime(currentDate);
         payPlan.setUpdateTime(currentDate);

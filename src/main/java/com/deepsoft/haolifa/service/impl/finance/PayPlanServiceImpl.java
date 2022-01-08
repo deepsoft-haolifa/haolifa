@@ -108,9 +108,12 @@ public class PayPlanServiceImpl implements PayPlanService {
     @Override
     public ResultBean update(BizPayPlanPayDTO planPayDTO) {
 
+
+        log.info("出纳付款 rq={}",JSON.toJSONString(planPayDTO));
+
         BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(planPayDTO.getId());
 
-        if (StringUtils.equalsIgnoreCase("2", bizPayPlan.getStatus())) {
+        if (StringUtils.equalsIgnoreCase(PayPlanPayStatusEnum.paid.getCode(), bizPayPlan.getStatus())) {
             throw new BaseException("当前付款计划以付款");
         }
 
@@ -185,14 +188,11 @@ public class PayPlanServiceImpl implements PayPlanService {
             // 申请编号 ==
             criteria.andPayDataIdEqualTo(bizPayPlan.getPayDataId());
             List<BizPayPlan> bizPayPlanList = bizPayPlanMapper.selectByExample(bizPayPlanExample);
-            BigDecimal bigDecimal = bizPayPlanList.stream()
-                .map(BizPayPlan::getApplyAmount)
-                .reduce(BigDecimal::add)
-                .get();
-
-            if (bigDecimal.compareTo(bizPayApply.getTotalPrice()) == 0){
+            boolean match = bizPayPlanList.stream()
+                .allMatch(p -> StringUtils.equalsIgnoreCase(p.getStatus(), PayPlanPayStatusEnum.paid.getCode()));
+            if (match){
                 BizPayApply payApply = new BizPayApply();
-                payApply.setStatus(PayStatusEnum.PAYMENT_COMPLETED.getCode());
+                payApply.setStatus(PayApplyPayStatusEnum.PAYMENT_COMPLETED.getCode());
                 payApply.setId(bizPayApply.getId());
                 bizPayApplyMapper.updateByPrimaryKeySelective(payApply);
             }

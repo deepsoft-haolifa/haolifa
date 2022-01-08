@@ -3,7 +3,7 @@ package com.deepsoft.haolifa.enums;
 /***
  * 付款审批-审批状态
  */
-public enum PayStatusEnum {
+public enum PayApplyPayStatusEnum {
 
     //1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成
     PENDING_APPROVAL("1", "待审批"),
@@ -31,7 +31,7 @@ public enum PayStatusEnum {
         this.desc = desc;
     }
 
-     PayStatusEnum(String code, String desc) {
+    PayApplyPayStatusEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
