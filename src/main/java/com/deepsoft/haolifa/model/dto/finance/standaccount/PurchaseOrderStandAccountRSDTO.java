@@ -81,6 +81,9 @@ public class PurchaseOrderStandAccountRSDTO {
     @ApiModelProperty(value = "订单状态：1 待审批 2 审批中 3 采购中 4 审批不通过 5 采购完成")
     private Byte status;
 
+    @ApiModelProperty(value = "付款状态 1 未付款 2 部分付款 3 付款完成")
+    private Byte payStatus;
+
     @ApiModelProperty(value = "付款方式")
     private String payType;
 
@@ -107,6 +110,9 @@ public class PurchaseOrderStandAccountRSDTO {
 
     @ApiModelProperty(value = "检验合格数量")
     private Integer qualifiedNumber;
+
+    @ApiModelProperty(value = "检验合格金额")
+    private BigDecimal qualifiedAmount;
 
     @ApiModelProperty(value = "合同总金额")
     private BigDecimal totalPrice;

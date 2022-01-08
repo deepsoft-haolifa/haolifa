@@ -50,7 +50,7 @@ public interface PurcahseOrderService {
   ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName, String startDate, String endDate);
 
   /**
-   * 列表
+   * 财务挂账列表
    * @return
    */
   ResultBean<PurchaseOrderStandAccountRSDTO> standAccountList(PurchaseOrderStandAccountRQDTO purchaseOrderDTO);

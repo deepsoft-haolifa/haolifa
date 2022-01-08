@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
@@ -10,6 +11,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.PurchaseOrderItemExtendMapper;
+import com.deepsoft.haolifa.enums.OrderPayStatusEnum;
 import com.deepsoft.haolifa.model.domain.PurchaseOrderItem;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
@@ -18,6 +20,8 @@ import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAcc
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.UpperMoney;
+import com.deepsoft.haolifa.util.tuples.Tuple2;
+import com.deepsoft.haolifa.util.tuples.Tuple4;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +64,11 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     private PurchaseOrderMapper purchaseOrderMapper;
     @Autowired
     private PurchaseOrderItemMapper purchaseOrderItemMapper;
+
+      @Autowired
+    private InspectHistoryMapper inspectHistoryMapper;
+
+
     @Autowired
     private PurchaseOrderItemExtendMapper itemExtendMapper;
     @Lazy
@@ -339,6 +348,108 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 //        }
 
 
+        // 查询列表
+        PurchaseOrderExample purchaseOrderExample = buildPurchaseOrderExample(purchaseOrderDTO);
+        Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(purchaseOrderDTO.getPageNum(), purchaseOrderDTO.getPageSize(), "create_time desc")
+            .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
+
+
+        List<String> purchaseOrderNoList = purchaseOrderList.getResult().stream()
+            .map(PurchaseOrder::getPurchaseOrderNo)
+            .collect(Collectors.toList());
+
+
+        // 查询检测记录 获取检测合格的数量
+        InspectHistoryExample inspectHistoryExample = new InspectHistoryExample();
+        inspectHistoryExample.or().andPurchaseNoIn(purchaseOrderNoList);
+        List<InspectHistory> inspectHistoryList = inspectHistoryMapper.selectByExample(inspectHistoryExample);
+        Map<String, Map<String, Tuple4<String, Integer, Integer, Integer>>> inspectHistoryMap = convertInspectHistoryMap(inspectHistoryList);
+
+
+        // 查询订单详情 获取单价
+        PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
+        purchaseOrderItemExample.or().andPurchaseOrderNoIn(purchaseOrderNoList);
+        List<PurchaseOrderItem> purchaseOrderItemList = purchaseOrderItemMapper.selectByExample(purchaseOrderItemExample);
+
+        // 单价 * 合格数量 = 应付款（检验合格金额）
+        Map<String, BigDecimal> qualifiedAmountMap = convertQualifiedAmountMap(inspectHistoryMap, purchaseOrderItemList);
+
+        // convert page
+        PageDTO<PurchaseOrderStandAccountRSDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(purchaseOrderList, pageDTO);
+        List<PurchaseOrderStandAccountRSDTO> purchaseOrderReceivableRSDTOList = purchaseOrderList.getResult().stream()
+            .map(purchaseOrder -> {
+                PurchaseOrderStandAccountRSDTO rsdto = new PurchaseOrderStandAccountRSDTO();
+                BeanUtils.copyProperties(purchaseOrder, rsdto);
+                BigDecimal bigDecimal = qualifiedAmountMap.getOrDefault(purchaseOrder.getPurchaseOrderNo(), BigDecimal.ZERO);
+                rsdto.setQualifiedAmount(bigDecimal);
+                return rsdto;
+            })
+            .collect(Collectors.toList());
+        pageDTO.setList(purchaseOrderReceivableRSDTOList);
+        return ResultBean.success(pageDTO);
+    }
+
+    private Map<String, BigDecimal> convertQualifiedAmountMap(Map<String, Map<String, Tuple4<String, Integer, Integer, Integer>>> inspectHistoryMap, List<PurchaseOrderItem> purchaseOrderItemList) {
+        Map<String, BigDecimal> decimalMap = purchaseOrderItemList.stream()
+            .collect(Collectors.groupingBy(PurchaseOrderItem::getPurchaseOrderNo))
+            .entrySet().stream()
+            .map(e -> {
+                Map<String, Tuple4<String, Integer, Integer, Integer>> stringTuple4Map = inspectHistoryMap.get(e.getKey());
+                if (stringTuple4Map == null) {
+                    return new Pair<>(e.getKey(), BigDecimal.ZERO);
+                }
+                BigDecimal decimal = e.getValue().stream()
+                    .map(purchaseOrderItem -> {
+                            Tuple4<String, Integer, Integer, Integer> stringIntegerIntegerIntegerTuple4 = stringTuple4Map.get(purchaseOrderItem.getMaterialGraphNo());
+                            if (stringIntegerIntegerIntegerTuple4 == null) {
+                                return BigDecimal.ZERO;
+                            }
+                            // 单价 * 合格数量
+                            return purchaseOrderItem.getUnitPrice().divide(new BigDecimal(stringIntegerIntegerIntegerTuple4.getThird()));
+                        }
+                    )
+                    .reduce(BigDecimal::add)
+                    .orElse(BigDecimal.ZERO);
+                return new Pair<>(e.getKey(), decimal);
+            })
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+        return decimalMap;
+    }
+
+    private Map<String, Map<String, Tuple4<String, Integer, Integer, Integer>>> convertInspectHistoryMap(List<InspectHistory> inspectHistoryList) {
+        // PurchaseNo (MaterialGraphNo 检测数量 合格数量 不合格数量)
+        Map<String, Map<String, Tuple4<String, Integer, Integer, Integer>>> mapMap = inspectHistoryList.stream()
+            .collect(Collectors.groupingBy(InspectHistory::getPurchaseNo))
+            .entrySet().stream()
+            .map(e -> {
+                // MaterialGraphNo 检测数量 合格数量 不合格数量
+                Map<String, Tuple4<String, Integer, Integer, Integer>> tuple4Map = e.getValue().stream()
+                    .collect(Collectors.groupingBy(InspectHistory::getMaterialGraphNo))
+                    .entrySet().stream()
+                    .map(ee -> {
+                        // 检测数量
+                        int testNumber = 0;
+                        // 合格数量
+                        int qualifiedNumber = 0;
+                        // 不合格数量
+                        int unqualifiedNumber = 0;
+                        for (InspectHistory inspectHistory : ee.getValue()) {
+                            testNumber += inspectHistory.getTestNumber();
+                            qualifiedNumber += inspectHistory.getQualifiedNumber();
+                            unqualifiedNumber += inspectHistory.getUnqualifiedNumber();
+                        }
+                        return new Tuple4<String, Integer, Integer, Integer>(ee.getKey(), testNumber, qualifiedNumber, unqualifiedNumber);
+                    })
+                    .collect(Collectors.toMap(Tuple2::getFirst, Function.identity()));
+
+                return new Pair<String, Map<String, Tuple4<String, Integer, Integer, Integer>>>(e.getKey(), tuple4Map);
+            })
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+        return mapMap;
+    }
+
+    private PurchaseOrderExample buildPurchaseOrderExample(PurchaseOrderStandAccountRQDTO purchaseOrderDTO) {
         PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
         PurchaseOrderExample.Criteria criteria = purchaseOrderExample.createCriteria();
         // --
@@ -358,22 +469,12 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             criteria.andDemanderLike(purchaseOrderDTO.getDemander());
         }
 
-
-        Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(purchaseOrderDTO.getPageNum(), purchaseOrderDTO.getPageSize(), "create_time desc")
-            .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
-
-        PageDTO<PurchaseOrderStandAccountRSDTO> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(purchaseOrderList, pageDTO);
-        List<PurchaseOrderStandAccountRSDTO> purchaseOrderReceivableRSDTOList = purchaseOrderList.getResult().stream()
-            .map(purchaseOrder -> {
-                PurchaseOrderStandAccountRSDTO rsdto = new PurchaseOrderStandAccountRSDTO();
-                BeanUtils.copyProperties(purchaseOrder, rsdto);
-                return rsdto;
-            })
-            .collect(Collectors.toList());
-
-        pageDTO.setList(purchaseOrderReceivableRSDTOList);
-        return ResultBean.success(pageDTO);
+        // 收货大于0
+        criteria.andQualifiedNumberGreaterThan(0);
+        // 排除 已付款&已完成
+        criteria.andStatusNotEqualTo(Byte.valueOf("5"))
+            .andPayStatusNotEqualTo(Byte.valueOf(OrderPayStatusEnum.all_pay.getCode()));
+        return purchaseOrderExample;
     }
 
     @Override
