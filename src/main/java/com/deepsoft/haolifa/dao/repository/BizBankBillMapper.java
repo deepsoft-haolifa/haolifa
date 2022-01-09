@@ -35,5 +35,7 @@ public interface BizBankBillMapper {
 
     List<ContractBillRSDTO> getBillContractList(ContractBillRQDTO billDTO);
 
+    ContractBillRSDTO getBillContractById(@Param("id") Integer id, @Param("billType") String billType);
+
 
 }

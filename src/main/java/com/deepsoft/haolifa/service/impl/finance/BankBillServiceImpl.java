@@ -195,19 +195,5 @@ public class BankBillServiceImpl implements BankBillService {
         return ResultBean.success(pageDTO);
     }
 
-    @Override
-    public ResultBean getBillContractList(ContractBillRQDTO billDTO) {
-        Page<ContractBillRSDTO> pageData = PageHelper
-            .startPage(billDTO.getPageNum(), billDTO.getPageSize())
-            .doSelectPage(() -> {
-                bizBankBillMapper.getBillContractList(billDTO);
-            });
-
-        PageDTO<ContractBillRSDTO> pageDTO = new PageDTO<>();
-        BeanUtils.copyProperties(pageData, pageDTO);
-        pageDTO.setList(pageData.getResult());
-        return  ResultBean.success(pageDTO);
-    }
-
 
 }

@@ -49,5 +49,4 @@ public interface BankBillService {
     ResultBean getList(BizBankBillDTO model);
 
 
-    ResultBean getBillContractList(ContractBillRQDTO billDTO);
 }
