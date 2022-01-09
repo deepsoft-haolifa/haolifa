@@ -608,6 +608,32 @@
             <if test="billType != null and billType != 0 ">
                 and al.bill_type = #{billType}
             </if>
+
+            <if test="operateDateStart != null and operateDateStart != '' ">
+                and al.operate_date &gt;= #{operateDateStart}
+            </if>
+
+            <if test="operateDateEnd != null and operateDateEnd != '' ">
+                and al.operate_date &lt;=  #{operateDateEnd}
+            </if>
+
+            <if test="certificateNumber != null and certificateNumber != '' ">
+                and al.certificate_number like CONCAT('%',#{certificateNumber},'%')
+            </if>
+
+            <if test="payAccount != null and payAccount != '' ">
+                and al.pay_account like CONCAT('%',#{payAccount},'%')
+            </if>
+
+            <if test="collectCompany != null and collectCompany != '' ">
+                and al.collect_company like CONCAT('%',#{collectCompany},'%')
+            </if>
+            <if test="payCompany != null and payCompany != '' ">
+                and al.pay_company like CONCAT('%',#{payCompany},'%')
+            </if>
+            <if test="paymentType != null and paymentType != '' ">
+                and al.payment_type = #{paymentType}
+            </if>
             and al.del_flag = 0
             and al.type = 1
             and al.collection_type = 2
