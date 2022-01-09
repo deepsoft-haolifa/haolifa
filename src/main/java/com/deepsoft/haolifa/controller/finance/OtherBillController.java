@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/finance/otherbill")
-@Api(tags = {"其他货币资金日记账管理"})
+@Api(tags = {"好利财务-其他货币资金日记账管理"})
 public class OtherBillController {
     @Autowired
     private OtherBillService otherBillService;

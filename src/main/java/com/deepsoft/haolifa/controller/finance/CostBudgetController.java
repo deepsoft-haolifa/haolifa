@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/finance/costbudget")
-@Api(tags = {"费用预算账管理"})
+@Api(tags = {"好利财务-费用预算账管理"})
 public class CostBudgetController {
     @Autowired
     private CostBudgetService costBudgetService;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/finance/payplan")
-@Api(tags = {"付款计划管理"})
+@Api(tags = {"好利财务-付款计划管理"})
 public class PayPlanController {
     @Autowired
     private PayPlanService payPlanService;

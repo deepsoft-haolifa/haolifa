@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/finance/payapply")
-@Api(tags = {"付款申请管理"})
+@Api(tags = {"好利财务-付款申请管理"})
 public class PayApplyController {
     @Autowired
     private PayApplyService payApplyService;

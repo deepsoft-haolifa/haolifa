@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/finance/standaccount")
-@Api(tags = {"财务挂账管理"})
+@Api(tags = {"好利财务-财务挂账管理"})
 public class StandAccountController {
 
 

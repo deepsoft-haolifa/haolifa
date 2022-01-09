@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/finance/receivable")
-@Api(tags = {"应收货款管理"})
+@Api(tags = {"好利财务-应收货款管理"})
 public class ReceivableController {
 
     @Autowired

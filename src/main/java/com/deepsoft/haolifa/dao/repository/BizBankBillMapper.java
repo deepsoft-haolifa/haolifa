@@ -3,6 +3,9 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.domain.BizBankBillExample;
 import java.util.List;
+
+import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface BizBankBillMapper {
@@ -29,5 +32,8 @@ public interface BizBankBillMapper {
     int updateByPrimaryKey(BizBankBill record);
 
     BizBankBill getLastRecord(@Param("companyQuery") String companyQuery, @Param("accountQuery") String accountQuery);
+
+    List<ContractBillRSDTO> getBillContractList(ContractBillRQDTO billDTO);
+
 
 }

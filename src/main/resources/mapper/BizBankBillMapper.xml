@@ -32,6 +32,37 @@
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
+
+    <resultMap id="getBillContractListResultMap" type="com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO">
+        <result column="bill_type" property="billType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="id" property="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="company" property="company" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="account" property="account" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="operate_date" property="operateDate" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        <result column="certificate_number" property="certificateNumber" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="pay_way" property="payWay" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="pay_account" property="payAccount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="pay_company" property="payCompany" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="pay_company_id" property="payCompanyId" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="collect_company" property="collectCompany" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="pre_month_money" property="preMonthMoney" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+        <result column="collection_money" property="collectionMoney" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+        <result column="collection_type" property="collectionType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="payment" property="payment" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+        <result column="payment_type" property="paymentType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="balance" property="balance" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+        <result column="type" property="type" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="dept_id" property="deptId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="contract_status" property="contractStatus" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="contract_user" property="contractUser" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="create_user" property="createUser" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        <result column="update_user" property="updateUser" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    </resultMap>
+
     <sql id="Example_Where_Clause">
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -564,6 +595,25 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+
+    <select id="getBillContractList" resultMap="getBillContractListResultMap"
+            parameterType="com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO">
+
+        select al.* from (
+        select '1' as bill_type, bb.* from biz_bank_bill bb
+        UNION all
+        select '2' as bill_type,ob.* from biz_other_bill ob
+        ) al
+        <where>
+            <if test="billType != null and billType != 0 ">
+                and al.bill_type = #{billType}
+            </if>
+            and al.del_flag = 0
+            and al.type = 1
+            and al.collection_type = 2
+        </where>
+        order by al.id desc
+    </select>
 
     <select id="getLastRecord" resultType="com.deepsoft.haolifa.model.domain.BizBankBill">
         select * from biz_bank_bill

@@ -13,6 +13,8 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import com.github.pagehelper.Page;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -190,6 +193,20 @@ public class BankBillServiceImpl implements BankBillService {
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean getBillContractList(ContractBillRQDTO billDTO) {
+        Page<ContractBillRSDTO> pageData = PageHelper
+            .startPage(billDTO.getPageNum(), billDTO.getPageSize())
+            .doSelectPage(() -> {
+                bizBankBillMapper.getBillContractList(billDTO);
+            });
+
+        PageDTO<ContractBillRSDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+        pageDTO.setList(pageData.getResult());
+        return  ResultBean.success(pageDTO);
     }
 
 
