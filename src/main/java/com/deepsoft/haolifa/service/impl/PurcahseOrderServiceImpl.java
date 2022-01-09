@@ -347,7 +347,6 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 //            supplierNoList = suppliers.stream().map(Supplier::getSuppilerNo).collect(Collectors.toList());
 //        }
 
-
         // 查询列表
         PurchaseOrderExample purchaseOrderExample = buildPurchaseOrderExample(purchaseOrderDTO);
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(purchaseOrderDTO.getPageNum(), purchaseOrderDTO.getPageSize(), "create_time desc")
@@ -360,28 +359,33 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 
 
         // 查询检测记录 获取检测合格的数量
-        InspectHistoryExample inspectHistoryExample = new InspectHistoryExample();
-        inspectHistoryExample.or().andPurchaseNoIn(purchaseOrderNoList);
-        List<InspectHistory> inspectHistoryList = inspectHistoryMapper.selectByExample(inspectHistoryExample);
-        Map<String, Map<String, Tuple4<String, Integer, Integer, Integer>>> inspectHistoryMap = convertInspectHistoryMap(inspectHistoryList);
-
+        Map<String, Map<String, Tuple4<String, Integer, Integer, Integer>>> inspectHistoryMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(purchaseOrderList)) {
+            InspectHistoryExample inspectHistoryExample = new InspectHistoryExample();
+            inspectHistoryExample.or().andPurchaseNoIn(purchaseOrderNoList);
+            List<InspectHistory> inspectHistoryList = inspectHistoryMapper.selectByExample(inspectHistoryExample);
+            inspectHistoryMap = convertInspectHistoryMap(inspectHistoryList);
+        }
 
         // 查询订单详情 获取单价
-        PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
-        purchaseOrderItemExample.or().andPurchaseOrderNoIn(purchaseOrderNoList);
-        List<PurchaseOrderItem> purchaseOrderItemList = purchaseOrderItemMapper.selectByExample(purchaseOrderItemExample);
-
-        // 单价 * 合格数量 = 应付款（检验合格金额）
-        Map<String, BigDecimal> qualifiedAmountMap = convertQualifiedAmountMap(inspectHistoryMap, purchaseOrderItemList);
+        Map<String, BigDecimal> qualifiedAmountMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(purchaseOrderList)) {
+            PurchaseOrderItemExample purchaseOrderItemExample = new PurchaseOrderItemExample();
+            purchaseOrderItemExample.or().andPurchaseOrderNoIn(purchaseOrderNoList);
+            List<PurchaseOrderItem> purchaseOrderItemList = purchaseOrderItemMapper.selectByExample(purchaseOrderItemExample);
+            // 单价 * 合格数量 = 应付款（检验合格金额）
+            qualifiedAmountMap = convertQualifiedAmountMap(inspectHistoryMap, purchaseOrderItemList);
+        }
 
         // convert page
         PageDTO<PurchaseOrderStandAccountRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(purchaseOrderList, pageDTO);
+        Map<String, BigDecimal> finalQualifiedAmountMap = qualifiedAmountMap;
         List<PurchaseOrderStandAccountRSDTO> purchaseOrderReceivableRSDTOList = purchaseOrderList.getResult().stream()
             .map(purchaseOrder -> {
                 PurchaseOrderStandAccountRSDTO rsdto = new PurchaseOrderStandAccountRSDTO();
                 BeanUtils.copyProperties(purchaseOrder, rsdto);
-                BigDecimal bigDecimal = qualifiedAmountMap.getOrDefault(purchaseOrder.getPurchaseOrderNo(), BigDecimal.ZERO);
+                BigDecimal bigDecimal = finalQualifiedAmountMap.getOrDefault(purchaseOrder.getPurchaseOrderNo(), BigDecimal.ZERO);
                 rsdto.setQualifiedAmount(bigDecimal);
                 return rsdto;
             })
@@ -406,7 +410,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                                 return BigDecimal.ZERO;
                             }
                             // 单价 * 合格数量
-                            return purchaseOrderItem.getUnitPrice().divide(new BigDecimal(stringIntegerIntegerIntegerTuple4.getThird()));
+                            return purchaseOrderItem.getUnitPrice().multiply(new BigDecimal(stringIntegerIntegerIntegerTuple4.getThird()));
                         }
                     )
                     .reduce(BigDecimal::add)
@@ -472,8 +476,33 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         // 收货大于0
         criteria.andQualifiedNumberGreaterThan(0);
         // 排除 已付款&已完成
-        criteria.andStatusNotEqualTo(Byte.valueOf("5"))
-            .andPayStatusNotEqualTo(Byte.valueOf(OrderPayStatusEnum.all_pay.getCode()));
+        criteria.andStatusNotEqualTo(Byte.valueOf("5"));
+        criteria.andPayStatusNotEqualTo(Byte.valueOf(OrderPayStatusEnum.all_pay.getCode()));
+
+        {
+            PurchaseOrderExample.Criteria criteriaOr = purchaseOrderExample.or();
+            // 合同编号
+            if (StringUtils.isNotEmpty(purchaseOrderDTO.getPurchaseOrderNo())) {
+                criteriaOr.andPurchaseOrderNoEqualTo(purchaseOrderDTO.getPurchaseOrderNo());
+            }
+            // 客户名称
+            if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
+                criteriaOr.andSupplierNameLike(purchaseOrderDTO.getSupplierName());
+            }
+
+            // 结算方
+            if (StringUtils.isNotEmpty(purchaseOrderDTO.getDemander())) {
+                criteriaOr.andDemanderLike(purchaseOrderDTO.getDemander());
+            }
+
+            // 收货大于0
+            criteriaOr.andQualifiedNumberGreaterThan(0);
+            // 排除 已付款&已完成
+            criteriaOr.andStatusNotEqualTo(Byte.valueOf("5"));
+            criteriaOr.andPayStatusIsNull();
+        }
+
+
         return purchaseOrderExample;
     }
 
