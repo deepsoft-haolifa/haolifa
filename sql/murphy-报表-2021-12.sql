@@ -41,3 +41,37 @@ CREATE TABLE `auto_control_entry_out_record`
     `update_time`        timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=7244 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='自控物资出入库记录表';
+CREATE TABLE `auto_control_entrust`
+(
+    `id`               int(11) NOT NULL AUTO_INCREMENT,
+    `entrust_no`       varchar(64)  NOT NULL DEFAULT '' comment '委托单号',
+    `name`             varchar(64)  NOT NULL DEFAULT '' COMMENT '产品名称',
+    `graph_no`         varchar(64)  NOT NULL DEFAULT '' COMMENT '图号',
+    `specifications`   varchar(255) NOT NULL DEFAULT '' COMMENT '规格',
+    `model`            varchar(255) NOT NULL DEFAULT '' COMMENT '型号',
+    `work_type`        varchar(64)  NOT NULL DEFAULT '' COMMENT '委托工种类别',
+    `qty`              int(11) NOT NULL DEFAULT '0' COMMENT '数量',
+    `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '合格数',
+    `status`           tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工',
+    `inspect_status`   tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 待质检 1 质检中 2 质检完成',
+    `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='自控委托单';
+
+CREATE TABLE `valve_seat_entrust`
+(
+    `id`               int(11) NOT NULL AUTO_INCREMENT,
+    `entrust_no`       varchar(64)  NOT NULL DEFAULT '' comment '委托单号',
+    `name`             varchar(64)  NOT NULL DEFAULT '' COMMENT '产品名称',
+    `graph_no`         varchar(64)  NOT NULL DEFAULT '' COMMENT '图号',
+    `specifications`   varchar(255) NOT NULL DEFAULT '' COMMENT '规格',
+    `model`            varchar(255) NOT NULL DEFAULT '' COMMENT '型号',
+    `qty`              int(11) NOT NULL DEFAULT '0' COMMENT '数量',
+    `qualified_number` int(11) NOT NULL DEFAULT '0' COMMENT '合格数',
+    `status`           tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工',
+    `inspect_status`   tinyint(4) NOT NULL DEFAULT '0' COMMENT '0 待质检 1 质检中 2 质检完成',
+    `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='阀座委托单';
