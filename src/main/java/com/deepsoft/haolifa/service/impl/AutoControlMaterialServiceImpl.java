@@ -49,7 +49,7 @@ public class AutoControlMaterialServiceImpl extends BaseService implements AutoC
         if (StrUtil.hasBlank(material.getMaterialName())) {
             throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-        material.setGraphNo("lx_" + RandomUtils.orderNoStr());
+        material.setGraphNo("zk_" + RandomUtils.orderNoStr());
         int loginUserId = getLoginUserId();
         material.setCreateUser(loginUserId);
         int i = autoControlMaterialMapper.insertSelective(material);
