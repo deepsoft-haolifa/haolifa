@@ -3,12 +3,14 @@ package com.deepsoft.haolifa.model.dto;
 
 
 import com.deepsoft.haolifa.constant.CommonEnum;
+import lombok.Data;
 
 import java.io.Serializable;
 
 /**
  * 自定义响应结构
  */
+@Data
 public class ResultBean<T> implements Serializable {
 
     /**
@@ -64,30 +66,6 @@ public class ResultBean<T> implements Serializable {
         this.code = responseEnum.code;
         this.message = responseEnum.msg;
 
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Object getResult() {
-        return result;
-    }
-
-    public void setResult(T result) {
-        this.result = result;
     }
 
 }
