@@ -86,13 +86,16 @@
             <property name="enableSubPackages" value="true"/>
 
         </javaClientGenerator>
-        <!--<javaServiceGenerator targetPackage="com.deepsoft.haolifa.service" targetProject="src/main/java"-->
-                              <!--implementationPackage="com.deepsoft.haolifa.service">-->
-        <!--</javaServiceGenerator>-->
+        <javaServiceGenerator targetPackage="com.deepsoft.haolifa.service" targetProject="src/main/java"
+                              implementationPackage="com.deepsoft.haolifa.service">
+        </javaServiceGenerator>
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-    <table tableName="entrust" domainObjectName="Entrust">
+    <table tableName="auto_control_material" domainObjectName="AutoControlMaterial">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="auto_control_entry_out_record" domainObjectName="AutoControlEntryOutRecord">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 <!--        <table tableName="stock" domainObjectName="Stock">-->
