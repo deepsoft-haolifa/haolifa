@@ -16,6 +16,8 @@ import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import com.deepsoft.haolifa.service.finance.BillContractService;
@@ -67,12 +69,16 @@ public class BillContractServiceImpl implements BillContractService {
         return ResultBean.success(pageDTO);
     }
 
+    /***
+     * 修改合同分解
+     * @param contractListRQDTO
+     * @return
+     */
     @Override
     public ResultBean contractList(ContractListRQDTO contractListRQDTO) {
 
         // 获取银行日记账中 收款 中的付款单位，未付款的完成销售订单
         ContractBillRSDTO bizBankBill = bizBankBillMapper.getBillContractById(contractListRQDTO.getId(), contractListRQDTO.getBillType());
-
 
         //销售合同
         OrderProductExample example = new OrderProductExample();
@@ -80,16 +86,19 @@ public class BillContractServiceImpl implements BillContractService {
         //  todo 山西系统没有需求方列表 因此没有支付单位ID
         criteria.andDemandNameEqualTo(bizBankBill.getPayCompany());
         List<OrderProduct> orderProductList = orderProductMapper.selectByExample(example);
-        //        如果已付金额=合同金额，则不显示
+        //  如果已付金额=合同金额，则不显示
         orderProductList = orderProductList.stream()
             .filter(e -> e.getReceivedAccount().compareTo(e.getTotalPrice()) == 0)
             .collect(Collectors.toList());
-//        BizProcessData newBizProcessData = new BizProcessData();
-//        newBizProcessData.setString2(bizBankBill.getPayCompanyId());
-//        newBizProcessData.setBizId(BizConstants.BIZ_contract);
-//        List<BizProcessData> list = bizProcessDataService.selectBizProcessDataListRefBill(newBizProcessData);
 
-        return null;
+        List<ContractListRSDTO> rsDTOList = orderProductList.stream()
+            .map(orderProduct -> {
+                ContractListRSDTO rsdto = new ContractListRSDTO();
+                BeanUtils.copyProperties(orderProduct, rsdto);
+                return rsdto;
+            })
+            .collect(Collectors.toList());
+        return ResultBean.success(rsDTOList);
     }
 
 

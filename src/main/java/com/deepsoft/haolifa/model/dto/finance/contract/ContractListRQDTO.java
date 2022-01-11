@@ -10,6 +10,6 @@ public class ContractListRQDTO {
 
     @ApiModelProperty(value = "记账类型 0||null 全部 1.银行日记账；2.其他货币日记账")
     private String billType;
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "记账表里的ID")
     private Integer id;
 }
