@@ -1,10 +1,12 @@
 package com.deepsoft.haolifa.enums;
 
-public enum RoleEnum {
+/***
+ * 付款计划-确认状态
+ */
+public enum PayPlanConfirmStatusEnum {
 
-    ROLE_ADMIN("ROLE_ADMIN", "系统管理员"),
-    ROLE_ZJL("ROLE_ZJL", "总经理"),
-    ROLE_CN("ROLE_CN", "出纳");
+    ZJJL_Confirm("0", "待资金经理确认"),
+    CN_Confirm("1", "出纳付款");
 
     private String code;
     private String desc;
@@ -25,9 +27,8 @@ public enum RoleEnum {
         this.desc = desc;
     }
 
-    RoleEnum(String code, String desc) {
+    PayPlanConfirmStatusEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
-
 }

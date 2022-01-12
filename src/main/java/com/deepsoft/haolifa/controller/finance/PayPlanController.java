@@ -74,12 +74,6 @@ public class PayPlanController {
     @ApiOperation("付款计划（确认）")
     @GetMapping("/confirm")
     public ResultBean updateDateStatus(@RequestBody List<Integer> ids) {
-       // Arrays.stream(ids.split(",")).collect(Collectors.toList());
-
-
-
         return payPlanService.updateDateStatus(ids);
-
-
     }
 }

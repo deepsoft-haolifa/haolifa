@@ -60,5 +60,8 @@ public interface PayPlanService {
 
     ResultBean<BookingTypeRSDTO> getAllPayWayList();
 
+    /**
+     * 付款计划（确认）
+     */
     ResultBean updateDateStatus(List<Integer> ids);
 }

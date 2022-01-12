@@ -15,8 +15,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BizPayPlanRSDTO  {
-
+public class BizPayPlanRSDTO {
 
 
     @ApiModelProperty(value = "ID")
@@ -82,9 +81,6 @@ public class BizPayPlanRSDTO  {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    @ApiModelProperty(value = "是否出纳角色付款（出纳角色可显示付款按钮）")
-    private Boolean isCN = false;
-
     @ApiModelProperty(value = "删除标志（0代表存在 2代表删除）")
     private String delFlag;
     @ApiModelProperty(value = "创建者")
@@ -95,7 +91,22 @@ public class BizPayPlanRSDTO  {
     private Integer updateUser;
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
+    @ApiModelProperty(value = "按钮权限")
+    private Permission permission;
+
+    @ApiModelProperty(value = "是否出纳角色付款（出纳角色可显示付款按钮）")
+    private Boolean isCN = false;
+    @ApiModelProperty(value = "是否可确认")
+    private Boolean canConfirm = false;
 
 
+    @Data
+    public static class Permission {
+        @ApiModelProperty(value = "是否可付款（出纳角色可显示付款按钮）")
+        private Boolean canPay = false;
+
+        @ApiModelProperty(value = "是否可确认")
+        private Boolean canConfirm = false;
+    }
 
 }

@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.domain.BizPayPlanExample;
 import java.util.List;
+
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRQDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface BizPayPlanMapper {
@@ -27,4 +29,11 @@ public interface BizPayPlanMapper {
     int updateByPrimaryKeySelective(BizPayPlan record);
 
     int updateByPrimaryKey(BizPayPlan record);
+
+
+    // sql
+    List<BizPayPlan> selectListGroupBy(@Param("query") BizPayPlanSummaryRQDTO query);
+
+
+
 }

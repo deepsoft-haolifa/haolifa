@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
-import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
@@ -30,7 +29,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -300,11 +298,16 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         CustomUser customUser = sysUserService.selectLoginUser();
 
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+            .map(a -> (CustomGrantedAuthority) a)
+            .collect(Collectors.toList());
 
         //当前角色是否为出纳
-        boolean iscn = customUser.getAuthorities().stream()
-            .map(a -> (CustomGrantedAuthority) a)
+        boolean iscn = customGrantedAuthorityList.stream()
             .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
+        //当前角色是否资金经理
+        boolean iszjjl = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode()));
 
         // 构造查询条件
         BizPayPlanExample bizPayPlanExample = this.buildBizPayPlanExample(model);
@@ -340,7 +343,14 @@ public class PayPlanServiceImpl implements PayPlanService {
                 List<String> asList = this.convertBoolingTypeList(payApply);
                 payApply.setBookingTypeList(asList);
 
-                payApply.setIsCN(iscn);
+                boolean canPay = iscn && StringUtils.equalsIgnoreCase(bizPayApply.getStatus(), PayPlanPayStatusEnum.un_pay.getCode());
+                boolean canConfirm = iszjjl && StringUtils.equalsIgnoreCase(bizPayApply.getDataStatus(), PayPlanConfirmStatusEnum.ZJJL_Confirm.getCode());
+                payApply.setIsCN(canPay);
+                payApply.setCanConfirm(canConfirm);
+                BizPayPlanRSDTO.Permission permission = new BizPayPlanRSDTO.Permission();
+                permission.setCanPay(canPay);
+                permission.setCanConfirm(canConfirm);
+                payApply.setPermission(permission);
                 return payApply;
             })
             .collect(Collectors.toList());
@@ -440,63 +450,12 @@ public class PayPlanServiceImpl implements PayPlanService {
         if (model.getPageSize() == null || model.getPageSize() == 0) {
             model.setPageSize(10);
         }
-        BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
-        BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
-        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
-
-
-        // 申请编号 ==
-        if (StringUtils.isNotEmpty(model.getApplyNo())) {
-            criteria.andApplyNoEqualTo(model.getApplyNo());
-        }
-        //开始时间
-        //结束时间
-        if (model.getApplyDateStart() != null && model.getApplyDateEnd() != null) {
-            // 区间
-            criteria.andApplyDateBetween(model.getApplyDateStart(), model.getApplyDateEnd());
-        } else if (model.getApplyDateStart() != null) {
-            // 大于
-            criteria.andApplyDateGreaterThanOrEqualTo(model.getApplyDateStart());
-        } else if (model.getApplyDateEnd() != null) {
-            // 小于
-            criteria.andApplyDateLessThanOrEqualTo(model.getApplyDateEnd());
-        }
-        //采购合同号
-        if (StringUtils.isNotEmpty(model.getContractNo())) {
-            criteria.andContractNoEqualTo(model.getContractNo());
-        }
-
-        //收款单位：like
-        if (StringUtils.isNotEmpty(model.getApplyCollectionCompany())) {
-            criteria.andApplyCollectionCompanyLike(model.getApplyCollectionCompany());
-        }
-        //付款单位：like
-        if (StringUtils.isNotEmpty(model.getApplyPayCompany())) {
-            criteria.andApplyPayCompanyLike(model.getApplyPayCompany());
-        }
-
-        // 付款方式 ==
-        if (StringUtils.isNotEmpty(model.getPayWay())) {
-            criteria.andPayWayEqualTo(model.getPayWay());
-        }
-
-        //付款状态
-        if (StringUtils.isNotEmpty(model.getStatus())) {
-            criteria.andStatusEqualTo(model.getStatus());
-        }
-        //数据状态
-        if (StringUtils.isNotEmpty(model.getDataStatus())) {
-            criteria.andDataStatusEqualTo(model.getDataStatus());
-        }
-
-        bizPayPlanExample.setOrderByClause("id desc");
-
-        Page<BizPayPlan> pageData = PageHelper
+        Page<BizPayPlanSummaryRSDTO> pageData = PageHelper
             .startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> {
-                bizPayPlanMapper.selectByExample(bizPayPlanExample);
+                bizPayPlanMapper.selectListGroupBy(model);
             });
-        PageDTO<BizPayPlan> pageDTO = new PageDTO<>();
+        PageDTO<BizPayPlanSummaryRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
@@ -549,7 +508,7 @@ public class PayPlanServiceImpl implements PayPlanService {
             next = "1";
         }
         int nextInt = Integer.parseInt(next);
-        if (nextInt >= 3) {
+        if (nextInt >= 1) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "此状态不能确认");
         }
         String dataStatus = String.valueOf(nextInt + 1);
