@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
@@ -109,7 +110,7 @@ public class PayPlanServiceImpl implements PayPlanService {
     public ResultBean update(BizPayPlanPayDTO planPayDTO) {
 
 
-        log.info("出纳付款 rq={}",JSON.toJSONString(planPayDTO));
+        log.info("出纳付款 rq={}", JSON.toJSONString(planPayDTO));
 
         BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(planPayDTO.getId());
 
@@ -190,7 +191,7 @@ public class PayPlanServiceImpl implements PayPlanService {
             List<BizPayPlan> bizPayPlanList = bizPayPlanMapper.selectByExample(bizPayPlanExample);
             boolean match = bizPayPlanList.stream()
                 .allMatch(p -> StringUtils.equalsIgnoreCase(p.getStatus(), PayPlanPayStatusEnum.paid.getCode()));
-            if (match){
+            if (match) {
                 BizPayApply payApply = new BizPayApply();
                 payApply.setStatus(PayApplyPayStatusEnum.PAYMENT_COMPLETED.getCode());
                 payApply.setId(bizPayApply.getId());
@@ -302,7 +303,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         //当前角色是否为出纳
         boolean iscn = customUser.getAuthorities().stream()
-            .map(a->(CustomGrantedAuthority)a)
+            .map(a -> (CustomGrantedAuthority) a)
             .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
 
         // 构造查询条件
@@ -530,6 +531,34 @@ public class PayPlanServiceImpl implements PayPlanService {
             .collect(Collectors.toList());
 
         return ResultBean.success(bookingTypeRSDTOList);
+    }
+
+    @Override
+    public ResultBean updateDateStatus(List<Integer> ids) {
+        BizPayPlanExample bizPayPlanExample = new BizPayPlanExample();
+        BizPayPlanExample.Criteria criteria = bizPayPlanExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andIdIn(ids);
+        List<BizPayPlan> bizPayPlans = bizPayPlanMapper.selectByExample(bizPayPlanExample);
+        Set<String> dataStatusSet = bizPayPlans.stream().map(BizPayPlan::getDataStatus).collect(Collectors.toSet());
+        if (dataStatusSet.size() > 1) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "不同数据状态的数据不能同时确认");
+        }
+        String next = dataStatusSet.iterator().next();
+        if (StringUtils.isEmpty(next)) {
+            next = "1";
+        }
+        int nextInt = Integer.parseInt(next);
+        if (nextInt >= 3) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "此状态不能确认");
+        }
+        String dataStatus = String.valueOf(nextInt + 1);
+
+        BizPayPlan payPlan = new BizPayPlan();
+        payPlan.setDataStatus(dataStatus);
+
+        Integer c = bizPayPlanMapper.updateByExampleSelective(payPlan, bizPayPlanExample);
+        return ResultBean.success(c);
     }
 
 

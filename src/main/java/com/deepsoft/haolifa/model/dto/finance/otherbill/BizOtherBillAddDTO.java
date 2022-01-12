@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.dto.finance.otherbill;
 
-import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,8 +12,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BizOtherBillAddDTO extends PageParam {
-
+public class BizOtherBillAddDTO {
 
     @ApiModelProperty(value = "公司（收款是收款公司，付款是付款公司")
     private String company;
@@ -36,8 +34,6 @@ public class BizOtherBillAddDTO extends PageParam {
     private String payCompanyId;
     @ApiModelProperty(value = "收款单位")
     private String collectCompany;
-    @ApiModelProperty(value = "上月结转")
-    private BigDecimal preMonthMoney;
     @ApiModelProperty(value = "收款")
     private BigDecimal collectionMoney;
     @ApiModelProperty(value = "收款类别")
@@ -46,16 +42,12 @@ public class BizOtherBillAddDTO extends PageParam {
     private BigDecimal payment;
     @ApiModelProperty(value = "付款类别")
     private String paymentType;
-    @ApiModelProperty(value = "余额（某个公司，某个账户下面）")
-    private BigDecimal balance;
     @ApiModelProperty(value = "类型 1.收款；2.付款")
     private String type;
     @ApiModelProperty(value = "部门ID")
     private Integer deptId;
     @ApiModelProperty(value = "备注摘要")
     private String remark;
-    @ApiModelProperty(value = "删除标志（0代表存在 1代表删除）")
-    private String delFlag;
     @ApiModelProperty(value = "收款合同分解状态；0未完成；1.完成")
     private String contractStatus;
     @ApiModelProperty(value = "创建者")

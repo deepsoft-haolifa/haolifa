@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import cn.hutool.core.convert.Convert;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.service.finance.PayPlanService;
@@ -9,6 +10,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 付款计划
@@ -61,4 +67,19 @@ public class PayPlanController {
     }
 
 
+
+    /**
+     * 付款计划（确认）
+     */
+    @ApiOperation("付款计划（确认）")
+    @GetMapping("/confirm")
+    public ResultBean updateDateStatus(@RequestBody List<Integer> ids) {
+       // Arrays.stream(ids.split(",")).collect(Collectors.toList());
+
+
+
+        return payPlanService.updateDateStatus(ids);
+
+
+    }
 }

@@ -4,6 +4,8 @@ import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 
+import java.util.List;
+
 public interface PayPlanService {
 
 
@@ -57,4 +59,6 @@ public interface PayPlanService {
     ResultBean<BizPayPlanSummaryRSDTO>  getPayPlanSummaryList(BizPayPlanSummaryRQDTO  model);
 
     ResultBean<BookingTypeRSDTO> getAllPayWayList();
+
+    ResultBean updateDateStatus(List<Integer> ids);
 }
