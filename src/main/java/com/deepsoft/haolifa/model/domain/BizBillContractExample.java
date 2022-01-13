@@ -226,6 +226,66 @@ public class BizBillContractExample {
             return (Criteria) this;
         }
 
+        public Criteria andBillTypeIsNull() {
+            addCriterion("bill_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeIsNotNull() {
+            addCriterion("bill_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeEqualTo(Byte value) {
+            addCriterion("bill_type =", value, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeNotEqualTo(Byte value) {
+            addCriterion("bill_type <>", value, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeGreaterThan(Byte value) {
+            addCriterion("bill_type >", value, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("bill_type >=", value, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeLessThan(Byte value) {
+            addCriterion("bill_type <", value, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("bill_type <=", value, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeIn(List<Byte> values) {
+            addCriterion("bill_type in", values, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeNotIn(List<Byte> values) {
+            addCriterion("bill_type not in", values, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeBetween(Byte value1, Byte value2) {
+            addCriterion("bill_type between", value1, value2, "billType");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("bill_type not between", value1, value2, "billType");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderIdIsNull() {
             addCriterion("order_id is null");
             return (Criteria) this;
@@ -296,52 +356,62 @@ public class BizBillContractExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoEqualTo(Long value) {
+        public Criteria andOrderNoEqualTo(String value) {
             addCriterion("order_no =", value, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotEqualTo(Long value) {
+        public Criteria andOrderNoNotEqualTo(String value) {
             addCriterion("order_no <>", value, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThan(Long value) {
+        public Criteria andOrderNoGreaterThan(String value) {
             addCriterion("order_no >", value, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoGreaterThanOrEqualTo(Long value) {
+        public Criteria andOrderNoGreaterThanOrEqualTo(String value) {
             addCriterion("order_no >=", value, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLessThan(Long value) {
+        public Criteria andOrderNoLessThan(String value) {
             addCriterion("order_no <", value, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoLessThanOrEqualTo(Long value) {
+        public Criteria andOrderNoLessThanOrEqualTo(String value) {
             addCriterion("order_no <=", value, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoIn(List<Long> values) {
+        public Criteria andOrderNoLike(String value) {
+            addCriterion("order_no like", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoNotLike(String value) {
+            addCriterion("order_no not like", value, "orderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNoIn(List<String> values) {
             addCriterion("order_no in", values, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotIn(List<Long> values) {
+        public Criteria andOrderNoNotIn(List<String> values) {
             addCriterion("order_no not in", values, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoBetween(Long value1, Long value2) {
+        public Criteria andOrderNoBetween(String value1, String value2) {
             addCriterion("order_no between", value1, value2, "orderNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrderNoNotBetween(Long value1, Long value2) {
+        public Criteria andOrderNoNotBetween(String value1, String value2) {
             addCriterion("order_no not between", value1, value2, "orderNo");
             return (Criteria) this;
         }
