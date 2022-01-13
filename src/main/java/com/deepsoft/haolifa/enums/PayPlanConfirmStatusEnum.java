@@ -5,8 +5,9 @@ package com.deepsoft.haolifa.enums;
  */
 public enum PayPlanConfirmStatusEnum {
 
-    ZJJL_Confirm("0", "待资金经理确认"),
-    CN_Confirm("1", "出纳付款");
+    ZJJL_CONFIRM("0", "待资金经理确认"),
+    ZGKJ_CONFIRM("0", "待主管会计确认"),
+    CN_CONFIRM("1", "出纳付款");
 
     private String code;
     private String desc;

@@ -305,9 +305,9 @@ public class PayPlanServiceImpl implements PayPlanService {
         //当前角色是否为出纳
         boolean iscn = customGrantedAuthorityList.stream()
             .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
-        //当前角色是否资金经理
-        boolean iszjjl = customGrantedAuthorityList.stream()
-            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode()));
+        //当前角色是否主管会计
+        boolean iszjkj = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode()));
 
         // 构造查询条件
         BizPayPlanExample bizPayPlanExample = this.buildBizPayPlanExample(model);
@@ -343,8 +343,10 @@ public class PayPlanServiceImpl implements PayPlanService {
                 List<String> asList = this.convertBoolingTypeList(payApply);
                 payApply.setBookingTypeList(asList);
 
-                boolean canPay = iscn && StringUtils.equalsIgnoreCase(bizPayApply.getStatus(), PayPlanPayStatusEnum.un_pay.getCode());
-                boolean canConfirm = iszjjl && StringUtils.equalsIgnoreCase(bizPayApply.getDataStatus(), PayPlanConfirmStatusEnum.ZJJL_Confirm.getCode());
+                boolean canPay = iscn
+                    && StringUtils.equalsIgnoreCase(bizPayApply.getStatus(), PayPlanPayStatusEnum.un_pay.getCode())
+                    && StringUtils.equalsIgnoreCase(bizPayApply.getDataStatus(), PayPlanConfirmStatusEnum.CN_CONFIRM.getCode());
+                boolean canConfirm = iszjkj && StringUtils.equalsIgnoreCase(bizPayApply.getDataStatus(), PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode());
                 payApply.setIsCN(canPay);
                 payApply.setCanConfirm(canConfirm);
                 BizPayPlanRSDTO.Permission permission = new BizPayPlanRSDTO.Permission();
