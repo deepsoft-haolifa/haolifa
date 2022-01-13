@@ -546,11 +546,11 @@
         from purchase_order po
         left join biz_pay_plan pp on po.id = pp.contract_id
         <where>
-            <if test="applyCollectionCompany != null and applyCollectionCompany != '' ">
-                po.apply_collection_company like concat('%',${query.applyCollectionCompany},'%')
+            <if test="query.supplierName != null and query.supplierName != '' ">
+                po.supplier_name like concat('%',${query.supplierName},'%')
             </if>
-            <if test="payCompany != null and payCompany != '' ">
-                po.pay_company like concat('%',${query.payCompany},'%')
+            <if test="query.demander != null and query.demander != '' ">
+                po.demander like concat('%',${query.demander},'%')
             </if>
             and pp.del_flag = 0
             and pp.status = 0
