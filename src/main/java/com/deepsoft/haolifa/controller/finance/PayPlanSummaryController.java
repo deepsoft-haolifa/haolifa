@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 应付汇总
  */
-//@RestController
-//@RequestMapping("/finance/payplansummary")
-//@Api(tags = {"好利财务-应付汇总管理"})
-//public class PayPlanSummaryController {
-//    @Autowired
-//    private PayPlanService payPlanService;
-//
-//
-//    @ApiOperation("获取节点列表")
-//    @PostMapping("/getPayPlanList")
-//    public ResultBean getPayPlanList(@RequestBody BizPayPlanSummaryRQDTO rqdto) {
-//        return payPlanService.getPayPlanSummaryList(rqdto);
-//    }
-//
-//
-//}
+@RestController
+@RequestMapping("/finance/payplansummary")
+@Api(tags = {"好利财务-应付汇总管理"})
+public class PayPlanSummaryController {
+    @Autowired
+    private PayPlanService payPlanService;
+
+
+    @ApiOperation("获取节点列表")
+    @PostMapping("/getPayPlanList")
+    public ResultBean getPayPlanList(@RequestBody BizPayPlanSummaryRQDTO rqdto) {
+        return payPlanService.getPayPlanSummaryList(rqdto);
+    }
+
+
+}
