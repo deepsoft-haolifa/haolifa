@@ -91,10 +91,10 @@
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-    <table tableName="valve_seat_entrust" domainObjectName="ValveSeatEntrust">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="auto_control_entrust" domainObjectName="AutoControlEntrust">
+<!--    <table tableName="valve_seat_entrust" domainObjectName="ValveSeatEntrust">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+        <table tableName="biz_pay_plan" domainObjectName="BizPayPlan">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 <!--        <table tableName="stock" domainObjectName="Stock">-->

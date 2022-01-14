@@ -32,10 +32,6 @@ public class BizPayPlan {
 
     private String paymentType;
 
-    // `applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
-    private String applyStatus;
-
-    //付款状态：0.未付；1.已付
     private String status;
 
     private Date payDate;
@@ -56,7 +52,9 @@ public class BizPayPlan {
 
     private Date updateTime;
 
-    public BizPayPlan(Integer id, Long payDataId, String applyNo, Date applyDate, String contractId, String contractNo, String contractPayWay, String applyPayCompany, String applyCollectionCompany, BigDecimal applyAmount, String payCompany, String payAccount, String payWay, String paymentType, String status, Date payDate, String bookingType, String dataStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    private String applyStatus;
+
+    public BizPayPlan(Integer id, Long payDataId, String applyNo, Date applyDate, String contractId, String contractNo, String contractPayWay, String applyPayCompany, String applyCollectionCompany, BigDecimal applyAmount, String payCompany, String payAccount, String payWay, String paymentType, String status, Date payDate, String bookingType, String dataStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime, String applyStatus) {
         this.id = id;
         this.payDataId = payDataId;
         this.applyNo = applyNo;
@@ -81,41 +79,6 @@ public class BizPayPlan {
         this.createTime = createTime;
         this.updateUser = updateUser;
         this.updateTime = updateTime;
-    }
-
-    public BizPayPlan(Integer id, Long payDataId, String applyNo, Date applyDate, String contractId, String contractNo, String contractPayWay, String applyPayCompany, String applyCollectionCompany, BigDecimal applyAmount, String payCompany, String payAccount, String payWay, String paymentType, String applyStatus, String status, Date payDate, String bookingType, String dataStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
-        this.id = id;
-        this.payDataId = payDataId;
-        this.applyNo = applyNo;
-        this.applyDate = applyDate;
-        this.contractId = contractId;
-        this.contractNo = contractNo;
-        this.contractPayWay = contractPayWay;
-        this.applyPayCompany = applyPayCompany;
-        this.applyCollectionCompany = applyCollectionCompany;
-        this.applyAmount = applyAmount;
-        this.payCompany = payCompany;
-        this.payAccount = payAccount;
-        this.payWay = payWay;
-        this.paymentType = paymentType;
-        this.applyStatus = applyStatus;
-        this.status = status;
-        this.payDate = payDate;
-        this.bookingType = bookingType;
-        this.dataStatus = dataStatus;
-        this.remark = remark;
-        this.delFlag = delFlag;
-        this.createUser = createUser;
-        this.createTime = createTime;
-        this.updateUser = updateUser;
-        this.updateTime = updateTime;
-    }
-
-    public String getApplyStatus() {
-        return applyStatus;
-    }
-
-    public void setApplyStatus(String applyStatus) {
         this.applyStatus = applyStatus;
     }
 
@@ -313,5 +276,13 @@ public class BizPayPlan {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus == null ? null : applyStatus.trim();
     }
 }

@@ -73,7 +73,7 @@ public class PayPlanController {
      */
     @ApiOperation("付款计划（确认）")
     @PostMapping("/confirm")
-    public ResultBean updateDateStatus(@RequestBody List<Integer> ids) {
-        return payPlanService.updateDateStatus(ids);
+    public ResultBean updateDateStatus(@RequestBody BizPayPlanConfirmRQDTO ids) {
+        return payPlanService.updateDateStatus(ids.getIds());
     }
 }

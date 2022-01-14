@@ -57,9 +57,6 @@ public class BizPayPlanRSDTO {
     @ApiModelProperty(value = "付款类型:默认是货款")
     private String paymentType;
 
-    @ApiModelProperty(value = "付款状态 0.未付；1.付款中 2已付款")
-    private String status;
-
     @ApiModelProperty(value = "付款日期")
     private Date payDate;
 
@@ -75,7 +72,22 @@ public class BizPayPlanRSDTO {
     @ApiModelProperty(value = "记账方式list：1.现金日记账；2.银行日记账；")
     private List<String> bookingTypeList;
 
-    @ApiModelProperty(value = "数据状态：1. 老总选择； 2. 财务主管选择；3.出纳付款")
+
+    @ApiModelProperty(value = "付款状态 0.未付；1.付款中 2已付款")
+    private String status;
+
+    /***
+     *    //1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成
+     *     PENDING_APPROVAL("1", "待审批"),
+     *     UNDER_APPROVAL("2", "审批中"),
+     *     IN_PAYMENT("3", "付款中"),
+     *     APPROVAL_FAILED("4", "审批不通过"),
+     *     PAYMENT_COMPLETED("5", "付款完成");
+     */
+    @ApiModelProperty(value = "审核状态 1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成")
+    private String applyStatus;
+
+    @ApiModelProperty(value = "数据状态：0财务主管选择；1.出纳付款")
     private String dataStatus;
 
     @ApiModelProperty(value = "备注")

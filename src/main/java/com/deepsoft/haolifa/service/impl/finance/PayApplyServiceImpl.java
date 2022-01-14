@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.dao.repository.BizPayApplyMapper;
 import com.deepsoft.haolifa.dao.repository.BizPayPlanMapper;
 import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
 import com.deepsoft.haolifa.enums.PayApplyPayStatusEnum;
+import com.deepsoft.haolifa.enums.PayPlanConfirmStatusEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -308,8 +309,10 @@ public class PayApplyServiceImpl implements PayApplyService {
                 bizPay.setId(bizPayPlan.getId());
                 // `applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
                 bizPay.setApplyStatus(auditResult);
-                // `applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
-                bizPay.setDataStatus(auditResult);
+                //   ZJJL_CONFIRM("0", "待资金经理确认"),
+                //    ZGKJ_CONFIRM("0", "待主管会计确认"),
+                //    CN_CONFIRM("1", "出纳付款");
+                bizPay.setDataStatus(PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode());
                 bizPayPlanMapper.updateByPrimaryKeySelective(bizPay);
             });
         return 1;
@@ -386,8 +389,10 @@ public class PayApplyServiceImpl implements PayApplyService {
         payPlan.setApplyAmount(bizPayApplyDetailMap.get(purchaseOrder.getId()).getPrice());
         payPlan.setPayCompany(purchaseOrder.getDemander());
         payPlan.setStatus("0");
-        //`applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
-        payPlan.setDataStatus(PayApplyPayStatusEnum.UNDER_APPROVAL.getCode());
+        //  ZJJL_CONFIRM("0", "待资金经理确认"),
+        //    ZGKJ_CONFIRM("0", "待主管会计确认"),
+        //    CN_CONFIRM("1", "出纳付款");
+        payPlan.setDataStatus(PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode());
         Date currentDate = new Date();
         payPlan.setCreateTime(currentDate);
         payPlan.setUpdateTime(currentDate);

@@ -1695,6 +1695,76 @@ public class BizPayPlanExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andApplyStatusIsNull() {
+            addCriterion("apply_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusIsNotNull() {
+            addCriterion("apply_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusEqualTo(String value) {
+            addCriterion("apply_status =", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusNotEqualTo(String value) {
+            addCriterion("apply_status <>", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusGreaterThan(String value) {
+            addCriterion("apply_status >", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("apply_status >=", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusLessThan(String value) {
+            addCriterion("apply_status <", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusLessThanOrEqualTo(String value) {
+            addCriterion("apply_status <=", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusLike(String value) {
+            addCriterion("apply_status like", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusNotLike(String value) {
+            addCriterion("apply_status not like", value, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusIn(List<String> values) {
+            addCriterion("apply_status in", values, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusNotIn(List<String> values) {
+            addCriterion("apply_status not in", values, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusBetween(String value1, String value2) {
+            addCriterion("apply_status between", value1, value2, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyStatusNotBetween(String value1, String value2) {
+            addCriterion("apply_status not between", value1, value2, "applyStatus");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

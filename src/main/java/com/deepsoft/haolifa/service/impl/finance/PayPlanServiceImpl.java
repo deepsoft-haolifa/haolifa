@@ -343,10 +343,15 @@ public class PayPlanServiceImpl implements PayPlanService {
                 List<String> asList = this.convertBoolingTypeList(payApply);
                 payApply.setBookingTypeList(asList);
 
+                // 角色 == 出纳 && 支付状态 == 0（未付款）&& 确认状态 == 1（出纳付款）
                 boolean canPay = iscn
                     && StringUtils.equalsIgnoreCase(bizPayApply.getStatus(), PayPlanPayStatusEnum.un_pay.getCode())
                     && StringUtils.equalsIgnoreCase(bizPayApply.getDataStatus(), PayPlanConfirmStatusEnum.CN_CONFIRM.getCode());
-                boolean canConfirm = iszjkj && StringUtils.equalsIgnoreCase(bizPayApply.getDataStatus(), PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode());
+
+                // 角色 == 会计主管 && 审核状态 == 3（付款中）&& 确认状态 == 0（待主管会计确认）
+                boolean canConfirm = iszjkj
+                    && StringUtils.equalsIgnoreCase(bizPayApply.getDataStatus(), PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode())
+                    && StringUtils.equalsIgnoreCase(bizPayApply.getApplyStatus(), PayApplyPayStatusEnum.IN_PAYMENT.getCode());
                 payApply.setIsCN(canPay);
                 payApply.setCanConfirm(canConfirm);
                 BizPayPlanRSDTO.Permission permission = new BizPayPlanRSDTO.Permission();
