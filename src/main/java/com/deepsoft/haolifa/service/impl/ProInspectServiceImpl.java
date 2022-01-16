@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectConditionDTO;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectListDTO;
 import com.deepsoft.haolifa.model.dto.InspectReason;
@@ -26,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import org.springframework.util.CollectionUtils;
 
 @Slf4j
@@ -161,5 +164,28 @@ public class ProInspectServiceImpl extends BaseService implements ProInspectServ
       setStorageStatus(storageStatus);
       setId(id);
     }});
+  }
+
+  @Override
+  public List<ProInspectRecord> getProInspectList (PayCalculateDTO proInspectRecord) {
+      ProInspectRecordExample example = new ProInspectRecordExample();
+      ProInspectRecordExample.Criteria criteria = example.createCriteria();
+      if (StringUtils.isNotBlank(proInspectRecord.getOrderNo())) {
+          criteria.andOrderNoEqualTo(proInspectRecord.getOrderNo());
+      }
+      if (StringUtils.isNotBlank(proInspectRecord.getProductNo())) {
+          criteria.andProductNoEqualTo(proInspectRecord.getProductNo());
+      }
+      if (Objects.nonNull(proInspectRecord.getStorageStatus())) {
+          criteria.andStorageStatusEqualTo(proInspectRecord.getStorageStatus());
+      }
+      if (Objects.nonNull(proInspectRecord.getStartTime())) {
+          criteria.andUpdateTimeGreaterThanOrEqualTo(proInspectRecord.getStartTime());
+      }
+      if (Objects.nonNull(proInspectRecord.getEndTime())) {
+          criteria.andUpdateTimeLessThanOrEqualTo(proInspectRecord.getEndTime());
+      }
+      List<ProInspectRecord> proInspectRecords = proInspectRecordMapper.selectByExample(example);
+      return proInspectRecords;
   }
 }

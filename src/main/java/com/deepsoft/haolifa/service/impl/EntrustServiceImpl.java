@@ -267,4 +267,14 @@ public class EntrustServiceImpl extends BaseService implements EntrustService {
         entrustMapper.updateByExampleSelective(entrust, entrustExample);
         return ResultBean.success(1);
     }
+
+    @Override
+    public ResultBean updateInspectTaskStatus(String entrustNo, Integer taskStatus) {
+        Entrust entrust = new Entrust();
+        entrust.setTaskStatus(taskStatus.byteValue());
+        EntrustExample entrustExample = new EntrustExample();
+        entrustExample.or().andEntrustNoEqualTo(entrustNo);
+        entrustMapper.updateByExampleSelective(entrust, entrustExample);
+        return ResultBean.success(1);
+    }
 }

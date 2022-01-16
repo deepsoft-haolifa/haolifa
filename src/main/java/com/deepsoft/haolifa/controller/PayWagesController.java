@@ -63,10 +63,16 @@ public class PayWagesController {
 
     @ApiOperation("计算工资")
     @PostMapping("/calculateSalary")
-    public ResultBean calculateSalary(@RequestBody PayWagesVO payWagesVO) {
-        return payWagesService.calculateSalary(payWagesVO);
+    public ResultBean calculateSalary(@RequestBody PayWagesVO payWagesVO) throws Exception {
+        payWagesService.calculateSalary(payWagesVO);
+        return ResultBean.success("ok");
     }
 
+    @ApiOperation("test")
+    @PostMapping("/import")
+    public ResultBean test(@RequestParam(value = "userId") Integer userId) {
+        return payWagesService.test(userId);
+    }
     @ApiOperation("导入工资数据")
     @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
     public ResultBean uploadMaterial(@ApiParam(value = "工资Excel表格", required = true) MultipartFile file) {
