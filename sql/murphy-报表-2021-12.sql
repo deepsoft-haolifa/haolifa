@@ -8,6 +8,30 @@ alter table entrust
     add column material_graph_name varchar(64) NOT NULL DEFAULT '' COMMENT '图号' after material_graph_no,add column `specifications` varchar(255) NOT NULL DEFAULT '' COMMENT '规格' after material_graph_name,add column `model` varchar(255) NOT NULL DEFAULT '' COMMENT '型号' after specifications;
 
 
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (193, 'm', '自控物资管理', 'zkwzgl', 50, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 193, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (194, 'm', '新增自控委托加工', 'xzzkwtjg', 95, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 194, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (195, 'm', '自控委托加工列表', 'zkwtjglb', 95, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 195, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (196, 'm', '新增阀座委托加工', 'xzfzwtjg', 95, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 196, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (197, 'm', '阀座委托加工列表', 'fzwtjglb', 95, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 197, NOW(), NOW());
+
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (198, 'm', '自控加工列表', 'scgc-zkjglb', 76, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 198, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (199, 'm', '阀座加工列表', 'scgc-fzjglb', 76, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 199, NOW(), NOW());
+
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (200, 'm', '新增自控质检', 'xzzkzj', 92, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 200, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (201, 'm', '自控质检列表', 'zkzjlb', 92, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 201, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (202, 'm', '新增阀座质检', 'xzfzzj', 92, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 202, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`) VALUES (203, 'm', '阀座质检列表', 'fzzjlb', 92, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`) VALUES (1, 203, NOW(), NOW());
 
 CREATE TABLE `auto_control_material`
 (

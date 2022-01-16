@@ -15,6 +15,7 @@ public class Constant {
         String ENTRUST_NO_PREFIX_JJ = "JJ";
         String DELIVERY_NO_PREFIX_FHTZD = "FHTZD";
         String REJECT_MATERIAL_NO_PREFIX_BHG = "BHG";
+        String AC_NO_PREFIX_AC = "AC";
     }
 
     public interface PurchaseOrderType {

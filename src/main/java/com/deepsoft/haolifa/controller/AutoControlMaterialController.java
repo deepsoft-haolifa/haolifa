@@ -324,12 +324,12 @@ public class AutoControlMaterialController {
     @GetMapping("/material/surplus")
     public void materialSurplus(HttpServletResponse response, HttpServletRequest request)
         throws IOException {
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("零件结存明细", "utf-8") + ".xls");
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("自控物资结存明细", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.setWrapText(true);
-        Sheet sheet = workbook.createSheet("零件结存明细");
+        Sheet sheet = workbook.createSheet("自控物资结存明细");
         // 单元格样式
         CellStyle center = workbook.createCellStyle();
         center.setAlignment(HorizontalAlignment.CENTER);
@@ -340,7 +340,7 @@ public class AutoControlMaterialController {
         CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 8);
         sheet.addMergedRegion(cra1);
         Cell cell_title_1 = title_1.createCell(0);
-        cell_title_1.setCellValue("零 件 结 存 明 细");
+        cell_title_1.setCellValue("自 控 物 资 结 存 明 细");
         cell_title_1.setCellStyle(center);
 
         Row columnTitle = sheet.createRow(1);

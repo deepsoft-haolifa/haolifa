@@ -10,7 +10,9 @@ public class CacheKey {
   public static String REJECT_MATERIAL_NO_KEY = "deepsoft:haolifa:cache:rejectRecordNo:%s";
   public static String TOTAL_INVENTORY_MATERIAL = "total_inventory_material";
   public static String TOTAL_MONEY_ORDER = "total_money_order";
-  /*
+    public static String AC_ENTRUST_NO_KEY = "deepsoft:haolifa:cache:autoControlEntrust:%s";
+
+    /*
   采购订单质检合格数
    */
   public static String QUALIFIED_NUMBER_PURCHASE_ORDER = "qualified_number_purchase_order:%s";
