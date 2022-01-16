@@ -1,24 +1,23 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.PayOrderUserRelationProcedureMapper;
-import com.deepsoft.haolifa.dao.repository.PayWorkingProcedureMapper;
-import com.deepsoft.haolifa.model.domain.PayOrderUserRelationProcedure;
-import com.deepsoft.haolifa.model.domain.PayOrderUserRelationProcedureExample;
-import com.deepsoft.haolifa.model.domain.PayWorkingProcedure;
+import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayOrderUserRelationProcedureVO;
-import com.deepsoft.haolifa.service.OrderProductService;
-import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
-import com.deepsoft.haolifa.service.SprayService;
+import com.deepsoft.haolifa.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author liuyaofei
@@ -35,10 +34,26 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
     private OrderProductService orderProductService;
     @Resource
     private SprayService sprayService;
+    @Resource
+    private SprayItemMapper sprayItemMapper;
+    @Resource
+    private EntrustService entrustService;
+    @Resource
+    private EntrustMapper entrustMapper;
+    @Resource
+    private OrderProductAssociateMapper orderProductAssociateMapper;
+    @Resource
+    private PayHourQuotaService payHourQuotaService;
+
     @Override
-    public List<PayOrderUserRelationProcedure> getPayOrderUserRelationProcedureList() {
-        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedures = payOrderUserRelationProcedureMapper.selectByExample(new PayOrderUserRelationProcedureExample());
-        return payOrderUserRelationProcedures;
+    public List<PayOrderUserRelationProcedure> getPayOrderUserRelationProcedureList(PayOrderUserRelationProcedure payOrderUserRelationProcedures) {
+        PayOrderUserRelationProcedureExample payOrderUserRelationProcedureExample = new PayOrderUserRelationProcedureExample();
+        PayOrderUserRelationProcedureExample.Criteria criteria = payOrderUserRelationProcedureExample.createCriteria();
+        if (Objects.nonNull(payOrderUserRelationProcedures.getUserId())) {
+            criteria.andUserIdEqualTo(payOrderUserRelationProcedures.getUserId());
+        }
+        List<PayOrderUserRelationProcedure> list = payOrderUserRelationProcedureMapper.selectByExample(payOrderUserRelationProcedureExample);
+        return list;
     }
 
     @Override
@@ -48,16 +63,48 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL, "传的数据为空");
         }
         for (PayOrderUserRelationProcedureDTO payOrderUserRelationProcedureDTO : payOrderUserRelationProcedureList) {
-            PayOrderUserRelationProcedure procedure = new PayOrderUserRelationProcedure();
-            BeanUtils.copyProperties(payOrderUserRelationProcedureDTO, procedure);
-            PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(procedure.getId());
+            PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getId());
+            // 工序代码
+            String postCode = payWorkingProcedure.getPostCode();
+            // 车间名称
             String workshopName = payWorkingProcedure.getWorkshopName();
+            // 型号
+            String model = "";
+            // 规格
+            String specifications = "";
             if (CommonEnum.WorkShopTypeEnum.PRODUCT.name.equals(workshopName)) {
-                orderProductService.updateOrderTaskStatus(procedure.getOrderId(), 1);
+                orderProductService.updateOrderTaskStatus(payOrderUserRelationProcedureDTO.getOrderId(), 1);
+                OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
+                model = StringUtils.isEmpty(orderProductAssociate.getProductModel()) ? "" : orderProductAssociate.getProductModel().substring(0, 4);
+                specifications = orderProductAssociate.getSpecifications();
             } else if (CommonEnum.WorkShopTypeEnum.SPRAY.name.equals(workshopName)) {
-                sprayService.updateTaskStatus(procedure.getOrderId(), 1);
+                sprayService.updateTaskStatus(payOrderUserRelationProcedureDTO.getOrderId(), 1);
+                SprayItem sprayItem = sprayItemMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
+                model = sprayItem.getModel();
+                specifications = sprayItem.getSpecifications();
+            } else if (CommonEnum.WorkShopTypeEnum.MACHINING.name.equals(workshopName)) {
+                entrustService.updateInspectTaskStatus(payOrderUserRelationProcedureDTO.getOrderId(), 1);
+                Entrust entrust = entrustMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
+                model = entrust.getModel();
+                specifications = entrust.getSpecifications();
             }
+            PayHourQuotaDTO payHourQuotaDTO = new PayHourQuotaDTO();
+            payHourQuotaDTO.setAppModel(model);
+            payHourQuotaDTO.setAppSpecifications(specifications);
+            payHourQuotaDTO.setPostCode(postCode);
+            List<PayHourQuota> list = payHourQuotaService.getList(payHourQuotaDTO);
+            // 获取工时定额
+            BigDecimal hourQuotaPrice = null;
+            if (null != list && list.size() > 0) {
+                PayHourQuota payHourQuota = list.get(0);
+                hourQuotaPrice = payHourQuota.getHourQuotaPrice();
+            }
+            PayOrderUserRelationProcedure procedure = new PayOrderUserRelationProcedure();
+            procedure.setHourPrice(hourQuotaPrice);
+            procedure.setUserId(payOrderUserRelationProcedureDTO.getUserId());
+            procedure.setProductId(payOrderUserRelationProcedureDTO.getProductId());
             procedure.setProcedureId(payOrderUserRelationProcedureDTO.getId());
+            procedure.setOrderId(payOrderUserRelationProcedureDTO.getOrderId());
             procedure.setCreateUser(getLoginUserName());
             procedure.setUpdateUser(getLoginUserName());
             procedure.setCreateTime(new Date());

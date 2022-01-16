@@ -7,7 +7,7 @@ import com.deepsoft.haolifa.model.vo.pay.PayOrderUserRelationProcedureVO;
 import java.util.List;
 
 public interface PayOrderUserRelationProcedureService {
-    List<PayOrderUserRelationProcedure> getPayOrderUserRelationProcedureList();
+    List<PayOrderUserRelationProcedure> getPayOrderUserRelationProcedureList(PayOrderUserRelationProcedure payOrderUserRelationProcedure);
 
     ResultBean insertSelective(PayOrderUserRelationProcedureVO procedure);
 

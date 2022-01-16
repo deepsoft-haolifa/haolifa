@@ -24,6 +24,7 @@ import com.deepsoft.haolifa.model.domain.PurchaseOrderItem;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.vo.InspectHistoryVo;
 import com.deepsoft.haolifa.model.vo.InspectItemQtyVo;
 import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
@@ -543,23 +544,25 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     }
 
     @Override
-    public List<InspectHistory> historyList(String purchaseNo, String startTime, String endTime) {
-        Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, startTime);
-        Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, endTime);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(endDate);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (day >= 26) {
-            cal.set(Calendar.DAY_OF_MONTH, 25);
+    public List<InspectHistory> getInspectHistoryList(PayCalculateDTO payCalculateDTO) {
+        InspectHistoryExample inspectHistoryExample = new InspectHistoryExample();
+        InspectHistoryExample.Criteria criteria = inspectHistoryExample.createCriteria();
+        if (StringUtils.isNotBlank(payCalculateDTO.getOrderNo())) {
+            criteria.andInspectNoEqualTo(payCalculateDTO.getOrderNo());
         }
-        Date time = cal.getTime();
-        InspectHistoryExample historyExample = new InspectHistoryExample();
-        InspectHistoryExample.Criteria criteria = historyExample.createCriteria();
-        criteria.andPurchaseNoEqualTo(purchaseNo)
-            .andUpdateTimeGreaterThanOrEqualTo(startDate)
-            .andUpdateTimeLessThanOrEqualTo(time)
-            .andStatusEqualTo((byte) 2);
-        List<InspectHistory> histories = historyMapper.selectByExample(historyExample);
+        if (StringUtils.isNotBlank(payCalculateDTO.getProductNo())) {
+            criteria.andMaterialGraphNoEqualTo(payCalculateDTO.getProductNo());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStorageStatus())) {
+            criteria.andStatusEqualTo(payCalculateDTO.getStorageStatus());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStartTime())) {
+            criteria.andUpdateTimeGreaterThanOrEqualTo(payCalculateDTO.getStartTime());
+        }
+        if (Objects.nonNull(payCalculateDTO.getEndTime())) {
+            criteria.andUpdateTimeLessThanOrEqualTo(payCalculateDTO.getEndTime());
+        }
+        List<InspectHistory> histories = historyMapper.selectByExample(inspectHistoryExample);
         return histories;
     }
 }
