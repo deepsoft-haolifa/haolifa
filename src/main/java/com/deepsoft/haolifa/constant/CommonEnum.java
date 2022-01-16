@@ -235,7 +235,10 @@ public class CommonEnum {
         SUPPLIER_FLOW(3, "供应商合格审批"),
         REPLACE_FLOW(4, "替换料审批"),
         ENTRUST_FLOW(5, "外部委托审批流程"),
-        APYAPP_FLOW(10, "付款申请审批流程");
+        APYAPP_FLOW(10, "付款申请审批流程"),
+        REIMBURSE_APP_FLOW(11, "报销申请审批流程"),
+        LOAN_APP_FLOW(12, "借款申请审批流程"),
+        ;
 
         public int id;
         public String desc;
@@ -254,7 +257,10 @@ public class CommonEnum {
         PURCHASE_TYPE((byte) 3, "采购合同"),
         REPLACE_TYPE((byte) 4, "替换料"),
         SUPPLIER_TYPE((byte) 5, "供应商审批"),
-        PAYAPP_TYPE((byte) 10, "付款申请审批");
+        PAYAPP_TYPE((byte) 10, "付款申请审批"),
+        REIMBURSE_APP_TYPE((byte) 11, "报销申请审批"),
+        LOAN_APP_TYPE((byte) 11, "借款申请审批"),
+        ;
 
 
         public final int code;

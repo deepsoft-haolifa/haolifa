@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BizBankBillUpDTO {
+public class BizBankBillUpDTO extends PageParam {
 
 
     @ApiModelProperty(value = "id")
@@ -52,7 +52,7 @@ public class BizBankBillUpDTO {
     private Integer deptId;
     @ApiModelProperty(value = "备注摘要")
     private String remark;
-    @ApiModelProperty(value = "收款合同分解状态；0未完成；1.完成")
+    @ApiModelProperty(value = "收款合同分解状态；0未完成；1.分解中  2.完成")
     private String contractStatus;
 
 }

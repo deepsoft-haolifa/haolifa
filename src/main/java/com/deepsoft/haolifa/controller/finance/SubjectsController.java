@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.controller;
+package com.deepsoft.haolifa.controller.finance;
 
 
 import com.deepsoft.haolifa.model.domain.BizSubjects;
@@ -12,33 +12,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/finance")
-@Api(tags = {"财务模块"})
-public class FinanceController {
+@RequestMapping("/finance/subjects")
+@Api(tags = {"好利财务-科目管理"})
+public class SubjectsController {
     @Autowired
     private SubjectService subjectService;
 
 
     @ApiOperation("添加科目节点")
-    @PostMapping("/subjects/save")
+    @PostMapping("/save")
     public ResultBean save(@RequestBody BizSubjectsAddDTO model) {
         return subjectService.save(model);
     }
 
     @ApiOperation("删除科目节点")
-    @GetMapping("/subjects/delete/{subjectsId}")
+    @GetMapping("/delete/{subjectsId}")
     public ResultBean delete(@PathVariable("subjectsId") int id) {
         return subjectService.delete(id);
     }
 
     @ApiOperation("更新科目节点")
-    @PostMapping("/subjects/updateSubjects")
+    @PostMapping("/updateSubjects")
     public ResultBean updateSubjects(@RequestBody BizSubjects bizSubjects) {
         return subjectService.update(bizSubjects);
     }
 
     @ApiOperation("获取节点列表")
-    @PostMapping("/subjects/getSubjectsList")
+    @PostMapping("/getSubjectsList")
     public ResultBean getSubjectsList(@RequestBody BizSubjectsDTO bizSubjectsDTO) {
         return subjectService.getList(bizSubjectsDTO);
     }
