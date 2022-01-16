@@ -19,7 +19,7 @@
             <arg column="payment_type" javaType="java.lang.String" jdbcType="CHAR"/>
             <arg column="status" javaType="java.lang.String" jdbcType="CHAR"/>
             <arg column="pay_date" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
-            <arg column="booking_type" javaType="java.lang.String" jdbcType="CHAR"/>
+            <arg column="booking_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="data_status" javaType="java.lang.String" jdbcType="CHAR"/>
             <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR"/>
@@ -27,6 +27,7 @@
             <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
             <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER"/>
             <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="apply_status" javaType="java.lang.String" jdbcType="VARCHAR"/>
         </constructor>
     </resultMap>
     <sql id="Example_Where_Clause">
@@ -94,7 +95,7 @@
         , pay_data_id, apply_no, apply_date, contract_id, contract_no, contract_pay_way,
     apply_pay_company, apply_collection_company, apply_amount, pay_company, pay_account,
     pay_way, payment_type, status, pay_date, booking_type, data_status, remark, del_flag,
-    create_user, create_time, update_user, update_time
+    create_user, create_time, update_user, update_time, apply_status
     </sql>
     <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizPayPlanExample"
             resultMap="BaseResultMap">
@@ -135,22 +136,21 @@
         insert into biz_pay_plan (pay_data_id, apply_no, apply_date,
         contract_id, contract_no, contract_pay_way,
         apply_pay_company, apply_collection_company,
-        apply_amount,apply_status, pay_company, pay_account,
+        apply_amount, pay_company, pay_account,
         pay_way, payment_type, status,
         pay_date, booking_type, data_status,
         remark, del_flag, create_user,
-        create_time, update_user, update_time
-        )
+        create_time, update_user, update_time,
+        apply_status)
         values (#{payDataId,jdbcType=BIGINT}, #{applyNo,jdbcType=VARCHAR}, #{applyDate,jdbcType=TIMESTAMP},
         #{contractId,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR}, #{contractPayWay,jdbcType=VARCHAR},
         #{applyPayCompany,jdbcType=VARCHAR}, #{applyCollectionCompany,jdbcType=VARCHAR},
-        #{applyAmount,jdbcType=DECIMAL},#{applyStatus,jdbcType=VARCHAR}, #{payCompany,jdbcType=VARCHAR},
-        #{payAccount,jdbcType=VARCHAR},
+        #{applyAmount,jdbcType=DECIMAL}, #{payCompany,jdbcType=VARCHAR}, #{payAccount,jdbcType=VARCHAR},
         #{payWay,jdbcType=VARCHAR}, #{paymentType,jdbcType=CHAR}, #{status,jdbcType=CHAR},
-        #{payDate,jdbcType=TIMESTAMP}, #{bookingType,jdbcType=CHAR}, #{dataStatus,jdbcType=CHAR},
+        #{payDate,jdbcType=TIMESTAMP}, #{bookingType,jdbcType=VARCHAR}, #{dataStatus,jdbcType=CHAR},
         #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER},
-        #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
-        )
+        #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP},
+        #{applyStatus,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizPayPlan">
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -227,6 +227,9 @@
             <if test="updateTime != null">
                 update_time,
             </if>
+            <if test="applyStatus != null">
+                apply_status,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="payDataId != null">
@@ -275,7 +278,7 @@
                 #{payDate,jdbcType=TIMESTAMP},
             </if>
             <if test="bookingType != null">
-                #{bookingType,jdbcType=CHAR},
+                #{bookingType,jdbcType=VARCHAR},
             </if>
             <if test="dataStatus != null">
                 #{dataStatus,jdbcType=CHAR},
@@ -297,6 +300,9 @@
             </if>
             <if test="updateTime != null">
                 #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="applyStatus != null">
+                #{applyStatus,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -359,7 +365,7 @@
                 pay_date = #{record.payDate,jdbcType=TIMESTAMP},
             </if>
             <if test="record.bookingType != null">
-                booking_type = #{record.bookingType,jdbcType=CHAR},
+                booking_type = #{record.bookingType,jdbcType=VARCHAR},
             </if>
             <if test="record.dataStatus != null">
                 data_status = #{record.dataStatus,jdbcType=CHAR},
@@ -381,6 +387,9 @@
             </if>
             <if test="record.updateTime != null">
                 update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.applyStatus != null">
+                apply_status = #{record.applyStatus,jdbcType=VARCHAR},
             </if>
         </set>
         <if test="_parameter != null">
@@ -405,14 +414,15 @@
         payment_type = #{record.paymentType,jdbcType=CHAR},
         status = #{record.status,jdbcType=CHAR},
         pay_date = #{record.payDate,jdbcType=TIMESTAMP},
-        booking_type = #{record.bookingType,jdbcType=CHAR},
+        booking_type = #{record.bookingType,jdbcType=VARCHAR},
         data_status = #{record.dataStatus,jdbcType=CHAR},
         remark = #{record.remark,jdbcType=VARCHAR},
         del_flag = #{record.delFlag,jdbcType=CHAR},
         create_user = #{record.createUser,jdbcType=INTEGER},
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
         update_user = #{record.updateUser,jdbcType=INTEGER},
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        apply_status = #{record.applyStatus,jdbcType=VARCHAR}
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
@@ -444,9 +454,6 @@
             <if test="applyCollectionCompany != null">
                 apply_collection_company = #{applyCollectionCompany,jdbcType=VARCHAR},
             </if>
-            <if test="applyStatus != null">
-                apply_status = #{applyStatus,jdbcType=VARCHAR},
-            </if>
             <if test="applyAmount != null">
                 apply_amount = #{applyAmount,jdbcType=DECIMAL},
             </if>
@@ -469,7 +476,7 @@
                 pay_date = #{payDate,jdbcType=TIMESTAMP},
             </if>
             <if test="bookingType != null">
-                booking_type = #{bookingType,jdbcType=CHAR},
+                booking_type = #{bookingType,jdbcType=VARCHAR},
             </if>
             <if test="dataStatus != null">
                 data_status = #{dataStatus,jdbcType=CHAR},
@@ -492,6 +499,9 @@
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="applyStatus != null">
+                apply_status = #{applyStatus,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -512,27 +522,28 @@
             payment_type             = #{paymentType,jdbcType=CHAR},
             status                   = #{status,jdbcType=CHAR},
             pay_date                 = #{payDate,jdbcType=TIMESTAMP},
-            booking_type             = #{bookingType,jdbcType=CHAR},
+            booking_type             = #{bookingType,jdbcType=VARCHAR},
             data_status              = #{dataStatus,jdbcType=CHAR},
             remark                   = #{remark,jdbcType=VARCHAR},
             del_flag                 = #{delFlag,jdbcType=CHAR},
             create_user              = #{createUser,jdbcType=INTEGER},
             create_time              = #{createTime,jdbcType=TIMESTAMP},
             update_user              = #{updateUser,jdbcType=INTEGER},
-            update_time              = #{updateTime,jdbcType=TIMESTAMP}
+            update_time              = #{updateTime,jdbcType=TIMESTAMP},
+            apply_status             = #{applyStatus,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
 
-
-    <resultMap id="selectListGroupByResultMap" type="com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRSDTO">
-        <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="demander" property="demander" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        <result column="total_price" property="totalPrice" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
-        <result column="arrear_price" property="arrearPrice" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
-        <result column="paid_account" property="paidAccount" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
-        <result column="apply_amount" property="applyAmount" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
-        <result column="entry_price" property="entryPrice" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+    <resultMap id="selectListGroupByResultMap"
+               type="com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRSDTO">
+        <result column="supplier_name" javaType="java.lang.String" jdbcType="VARCHAR" property="supplierName"/>
+        <result column="demander" javaType="java.lang.String" jdbcType="VARCHAR" property="demander"/>
+        <result column="total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" property="totalPrice"/>
+        <result column="arrear_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" property="arrearPrice"/>
+        <result column="paid_account" javaType="java.math.BigDecimal" jdbcType="DECIMAL" property="paidAccount"/>
+        <result column="apply_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" property="applyAmount"/>
+        <result column="entry_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" property="entryPrice"/>
     </resultMap>
     <select id="selectListGroupBy" parameterType="com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRQDTO"
             resultMap="selectListGroupByResultMap">

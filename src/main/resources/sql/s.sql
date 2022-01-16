@@ -55,3 +55,20 @@ CREATE TABLE `order_product`
     UNIQUE KEY `uk_order_no` (`order_no`) USING BTREE,
     UNIQUE KEY `uk_order_contract_no` (`order_contract_no`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5138 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
+CREATE TABLE `biz_bill_contract`
+(
+    `id`           int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `bill_id`      bigint(20) DEFAULT NULL COMMENT '收款id',
+    `bill_type`    tinyint(4) DEFAULT NULL COMMENT '记账类型 1 银行日记账 2 其他货币日记账',
+    `order_id`     bigint(20) DEFAULT NULL COMMENT '订单ID',
+    `order_no`     bigint(20) DEFAULT NULL COMMENT '订单号',
+    `amount`       decimal(15, 4) DEFAULT '0.0000' COMMENT '收款金额',
+    `book_keeper`  varchar(64)    DEFAULT '' COMMENT '记账员',
+    `audit_status` tinyint(4) DEFAULT '0' COMMENT '审批状态（0未审批；1.通过；2.不通过）',
+    `remark`       varchar(30)    DEFAULT '' COMMENT '备注',
+    `create_user`  int(11) DEFAULT NULL COMMENT '创建者',
+    `create_time`  datetime       DEFAULT NULL COMMENT '创建时间',
+    `update_user`  int(11) DEFAULT NULL COMMENT '更新者',
+    `update_time`  datetime       DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='合同收款表(合同分解)';

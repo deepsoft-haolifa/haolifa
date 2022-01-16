@@ -8,9 +8,11 @@ public class BizBillContract {
 
     private Long billId;
 
+    private Byte billType;
+
     private Long orderId;
 
-    private Long orderNo;
+    private String orderNo;
 
     private BigDecimal amount;
 
@@ -28,9 +30,10 @@ public class BizBillContract {
 
     private Date updateTime;
 
-    public BizBillContract(Integer id, Long billId, Long orderId, Long orderNo, BigDecimal amount, String bookKeeper, Byte auditStatus, String remark, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizBillContract(Integer id, Long billId, Byte billType, Long orderId, String orderNo, BigDecimal amount, String bookKeeper, Byte auditStatus, String remark, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.billId = billId;
+        this.billType = billType;
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.amount = amount;
@@ -63,6 +66,14 @@ public class BizBillContract {
         this.billId = billId;
     }
 
+    public Byte getBillType() {
+        return billType;
+    }
+
+    public void setBillType(Byte billType) {
+        this.billType = billType;
+    }
+
     public Long getOrderId() {
         return orderId;
     }
@@ -71,12 +82,12 @@ public class BizBillContract {
         this.orderId = orderId;
     }
 
-    public Long getOrderNo() {
+    public String getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(Long orderNo) {
-        this.orderNo = orderNo;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
     public BigDecimal getAmount() {

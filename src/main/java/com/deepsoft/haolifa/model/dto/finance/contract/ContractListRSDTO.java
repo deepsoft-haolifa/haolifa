@@ -90,6 +90,9 @@ public class ContractListRSDTO {
     @ApiModelProperty(value = "s-已收货款")
     private BigDecimal receivedAccount;
 
+    @ApiModelProperty(value = "付款方式 TODO 值待定")
+    private String payType;
+
     @ApiModelProperty(value = "备注")
     private String remark;
 

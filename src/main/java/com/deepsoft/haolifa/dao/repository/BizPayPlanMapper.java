@@ -30,10 +30,7 @@ public interface BizPayPlanMapper {
 
     int updateByPrimaryKey(BizPayPlan record);
 
-
     // sql
     List<BizPayPlan> selectListGroupBy(@Param("query") BizPayPlanSummaryRQDTO query);
-
-
 
 }

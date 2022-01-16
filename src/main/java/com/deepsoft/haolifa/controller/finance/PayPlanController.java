@@ -52,11 +52,11 @@ public class PayPlanController {
         return payPlanService.getList(payPlanDTO);
     }
 
-    @ApiOperation("获取应付汇总节点列表")
-    @PostMapping("/summary/getPayPlanList")
-    public ResultBean<BizPayPlanSummaryRSDTO> getPayPlanSummaryList(@RequestBody BizPayPlanSummaryRQDTO payPlanDTO) {
-        return payPlanService.getPayPlanSummaryList(payPlanDTO);
-    }
+//    @ApiOperation("获取应付汇总节点列表")
+//    @PostMapping("/summary/getPayPlanList")
+//    public ResultBean<BizPayPlanSummaryRSDTO> getPayPlanSummaryList(@RequestBody BizPayPlanSummaryRQDTO payPlanDTO) {
+//        return payPlanService.getPayPlanSummaryList(payPlanDTO);
+//    }
 
 
     //
@@ -73,7 +73,7 @@ public class PayPlanController {
      */
     @ApiOperation("付款计划（确认）")
     @PostMapping("/confirm")
-    public ResultBean updateDateStatus(@RequestBody List<Integer> ids) {
-        return payPlanService.updateDateStatus(ids);
+    public ResultBean updateDateStatus(@RequestBody BizPayPlanConfirmRQDTO ids) {
+        return payPlanService.updateDateStatus(ids.getIds());
     }
 }
