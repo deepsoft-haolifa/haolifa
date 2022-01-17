@@ -14,7 +14,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class ContractBillRQDTO extends PageParam {
 
-    @ApiModelProperty(value = "记账类型 0||null 全部 1.银行日记账；2.其他货币日记账")
+    @ApiModelProperty(value = "记账类型 0||null 全部 2.银行日记账；3.其他货币日记账")
     private String billType;
 
     // query

@@ -26,7 +26,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,22 +80,37 @@ public class BillContractServiceImpl implements BillContractService {
      */
     @Override
     public ResultBean orderContractList(ContractListRQDTO contractListRQDTO) {
+        if (contractListRQDTO.getPageNum() == null || contractListRQDTO.getPageNum() == 0) {
+            contractListRQDTO.setPageNum(1);
+        }
+        if (contractListRQDTO.getPageSize() == null || contractListRQDTO.getPageSize() == 0) {
+            contractListRQDTO.setPageSize(10);
+        }
 
         // 获取银行日记账中 收款 中的付款单位，未付款的完成销售订单
         ContractBillRSDTO bizBankBill = bizBankBillMapper.getBillContractById(contractListRQDTO.getId(), contractListRQDTO.getBillType());
 
         //销售合同
-        OrderProductExample example = new OrderProductExample();
-        OrderProductExample.Criteria criteria = example.createCriteria();
-        //  todo 山西系统没有需求方列表 因此没有支付单位ID
-        criteria.andDemandNameEqualTo(bizBankBill.getPayCompany());
-        List<OrderProduct> orderProductList = orderProductMapper.selectByExample(example);
-        //  如果已付金额=合同金额，则不显示
-        orderProductList = orderProductList.stream()
-            .filter(e -> e.getReceivedAccount().compareTo(e.getTotalPrice()) == 0)
-            .collect(Collectors.toList());
+        Map<String,Object> query = new HashMap<>();
+        query.put("demandName",bizBankBill.getPayCompany());
+        if (StringUtils.isNotEmpty(contractListRQDTO.getOrderNo())){
+            query.put("orderNo",contractListRQDTO.getOrderNo());
+        }
+        if (StringUtils.isNotEmpty(contractListRQDTO.getOrderContractNo())){
+            query.put("orderContractNo",contractListRQDTO.getOrderContractNo());
+        }
+        Page<OrderProduct> pageData = PageHelper
+            .startPage(contractListRQDTO.getPageNum(), contractListRQDTO.getPageSize())
+            .doSelectPage(() -> {
+                orderProductMapper.selectByMap(query);
+            });
 
-        List<ContractListRSDTO> rsDTOList = orderProductList.stream()
+        PageDTO<ContractListRSDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+
+        //  只显示 已付金额 < 合同金额
+        List<ContractListRSDTO> rsDTOList = pageData.getResult().stream()
+            .filter(e -> e.getReceivedAccount().compareTo(e.getTotalPrice()) < 0)
             .map(orderProduct -> {
                 ContractListRSDTO rsdto = new ContractListRSDTO();
                 BeanUtils.copyProperties(orderProduct, rsdto);
@@ -101,7 +118,9 @@ public class BillContractServiceImpl implements BillContractService {
                 return rsdto;
             })
             .collect(Collectors.toList());
-        return ResultBean.success(rsDTOList);
+
+        pageDTO.setList(rsDTOList);
+        return ResultBean.success(pageDTO);
     }
 
     /****

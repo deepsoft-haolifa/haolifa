@@ -115,15 +115,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, create_time, update_time, create_user, update_user, order_no, order_contract_no, 
-    order_status, order_contract_url, order_contract_extend_url, technical_require, finish_feedback_time, 
-    feedback_time_confirm_user, purchase_feedback_time, production_feedback_time, assembly_shop, 
-    assembly_group, demand_name, demand_agent_name, demand_phone, demand_fax, demand_bank_name, 
-    demand_bank_card_no, supply_name, supply_agent_name, supply_phone, supply_fax, supply_bank_name, 
-    contract_bank_card_no, delivery_place, delivery_date, contract_sign_date, total_count, 
-    discount_total_price, total_price, special_require, cargo_information, sign_board, 
-    acceptance_criteria, warranty_period, packaging_specification, remark, deliver_status, 
-    accessory, qualified_number, pressure_qualified_number, delivered_number, received_account, 
+    id, create_time, update_time, create_user, update_user, order_no, order_contract_no,
+    order_status, order_contract_url, order_contract_extend_url, technical_require, finish_feedback_time,
+    feedback_time_confirm_user, purchase_feedback_time, production_feedback_time, assembly_shop,
+    assembly_group, demand_name, demand_agent_name, demand_phone, demand_fax, demand_bank_name,
+    demand_bank_card_no, supply_name, supply_agent_name, supply_phone, supply_fax, supply_bank_name,
+    contract_bank_card_no, delivery_place, delivery_date, contract_sign_date, total_count,
+    discount_total_price, total_price, special_require, cargo_information, sign_board,
+    acceptance_criteria, warranty_period, packaging_specification, remark, deliver_status,
+    accessory, qualified_number, pressure_qualified_number, delivered_number, received_account,
     gen_picking_list, is_check_material, task_status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.OrderProductExample" >
@@ -141,7 +141,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from order_product
     where id = #{id,jdbcType=INTEGER}
@@ -160,41 +160,41 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order_product (create_time, update_time, create_user, 
-      update_user, order_no, order_contract_no, 
-      order_status, order_contract_url, order_contract_extend_url, 
-      technical_require, finish_feedback_time, feedback_time_confirm_user, 
-      purchase_feedback_time, production_feedback_time, 
-      assembly_shop, assembly_group, demand_name, 
-      demand_agent_name, demand_phone, demand_fax, 
-      demand_bank_name, demand_bank_card_no, supply_name, 
-      supply_agent_name, supply_phone, supply_fax, 
-      supply_bank_name, contract_bank_card_no, delivery_place, 
-      delivery_date, contract_sign_date, total_count, 
-      discount_total_price, total_price, special_require, 
-      cargo_information, sign_board, acceptance_criteria, 
-      warranty_period, packaging_specification, 
-      remark, deliver_status, accessory, 
-      qualified_number, pressure_qualified_number, 
-      delivered_number, received_account, gen_picking_list, 
+    insert into order_product (create_time, update_time, create_user,
+      update_user, order_no, order_contract_no,
+      order_status, order_contract_url, order_contract_extend_url,
+      technical_require, finish_feedback_time, feedback_time_confirm_user,
+      purchase_feedback_time, production_feedback_time,
+      assembly_shop, assembly_group, demand_name,
+      demand_agent_name, demand_phone, demand_fax,
+      demand_bank_name, demand_bank_card_no, supply_name,
+      supply_agent_name, supply_phone, supply_fax,
+      supply_bank_name, contract_bank_card_no, delivery_place,
+      delivery_date, contract_sign_date, total_count,
+      discount_total_price, total_price, special_require,
+      cargo_information, sign_board, acceptance_criteria,
+      warranty_period, packaging_specification,
+      remark, deliver_status, accessory,
+      qualified_number, pressure_qualified_number,
+      delivered_number, received_account, gen_picking_list,
       is_check_material, task_status)
-    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER}, 
-      #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR}, 
-      #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{orderContractExtendUrl,jdbcType=VARCHAR}, 
-      #{technicalRequire,jdbcType=VARCHAR}, #{finishFeedbackTime,jdbcType=VARCHAR}, #{feedbackTimeConfirmUser,jdbcType=VARCHAR}, 
-      #{purchaseFeedbackTime,jdbcType=VARCHAR}, #{productionFeedbackTime,jdbcType=VARCHAR}, 
-      #{assemblyShop,jdbcType=VARCHAR}, #{assemblyGroup,jdbcType=VARCHAR}, #{demandName,jdbcType=VARCHAR}, 
-      #{demandAgentName,jdbcType=VARCHAR}, #{demandPhone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR}, 
-      #{demandBankName,jdbcType=VARCHAR}, #{demandBankCardNo,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR}, 
-      #{supplyAgentName,jdbcType=VARCHAR}, #{supplyPhone,jdbcType=VARCHAR}, #{supplyFax,jdbcType=VARCHAR}, 
-      #{supplyBankName,jdbcType=VARCHAR}, #{contractBankCardNo,jdbcType=VARCHAR}, #{deliveryPlace,jdbcType=VARCHAR}, 
-      #{deliveryDate,jdbcType=VARCHAR}, #{contractSignDate,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, 
-      #{discountTotalPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{specialRequire,jdbcType=VARCHAR}, 
-      #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, #{acceptanceCriteria,jdbcType=VARCHAR}, 
-      #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{deliverStatus,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR}, 
-      #{qualifiedNumber,jdbcType=INTEGER}, #{pressureQualifiedNumber,jdbcType=INTEGER}, 
-      #{deliveredNumber,jdbcType=INTEGER}, #{receivedAccount,jdbcType=DECIMAL}, #{genPickingList,jdbcType=TINYINT}, 
+    values (#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=INTEGER},
+      #{updateUser,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{orderContractNo,jdbcType=VARCHAR},
+      #{orderStatus,jdbcType=TINYINT}, #{orderContractUrl,jdbcType=VARCHAR}, #{orderContractExtendUrl,jdbcType=VARCHAR},
+      #{technicalRequire,jdbcType=VARCHAR}, #{finishFeedbackTime,jdbcType=VARCHAR}, #{feedbackTimeConfirmUser,jdbcType=VARCHAR},
+      #{purchaseFeedbackTime,jdbcType=VARCHAR}, #{productionFeedbackTime,jdbcType=VARCHAR},
+      #{assemblyShop,jdbcType=VARCHAR}, #{assemblyGroup,jdbcType=VARCHAR}, #{demandName,jdbcType=VARCHAR},
+      #{demandAgentName,jdbcType=VARCHAR}, #{demandPhone,jdbcType=VARCHAR}, #{demandFax,jdbcType=VARCHAR},
+      #{demandBankName,jdbcType=VARCHAR}, #{demandBankCardNo,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR},
+      #{supplyAgentName,jdbcType=VARCHAR}, #{supplyPhone,jdbcType=VARCHAR}, #{supplyFax,jdbcType=VARCHAR},
+      #{supplyBankName,jdbcType=VARCHAR}, #{contractBankCardNo,jdbcType=VARCHAR}, #{deliveryPlace,jdbcType=VARCHAR},
+      #{deliveryDate,jdbcType=VARCHAR}, #{contractSignDate,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER},
+      #{discountTotalPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, #{specialRequire,jdbcType=VARCHAR},
+      #{cargoInformation,jdbcType=VARCHAR}, #{signBoard,jdbcType=VARCHAR}, #{acceptanceCriteria,jdbcType=VARCHAR},
+      #{warrantyPeriod,jdbcType=VARCHAR}, #{packagingSpecification,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{deliverStatus,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR},
+      #{qualifiedNumber,jdbcType=INTEGER}, #{pressureQualifiedNumber,jdbcType=INTEGER},
+      #{deliveredNumber,jdbcType=INTEGER}, #{receivedAccount,jdbcType=DECIMAL}, #{genPickingList,jdbcType=TINYINT},
       #{isCheckMaterial,jdbcType=TINYINT}, #{taskStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderProduct" >
@@ -941,4 +941,25 @@
       task_status = #{taskStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+    <select id="selectByMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_product
+        <where>
+            <if test="query.demandName != null and query.demandName != '' ">
+                and demand_name = #{query.demandName}
+            </if>
+            <if test="query.orderNo != null and query.orderNo != '' ">
+                and order_no like CONCAT('%',#{query.orderNo},'%')
+            </if>
+            <if test="query.orderContractNo != null and query.orderContractNo != '' ">
+                and order_contract_no like CONCAT('%',#{query.orderContractNo},'%')
+            </if>
+            and total_price &gt; received_account
+        </where>
+        order by id desc
+    </select>
+
 </mapper>

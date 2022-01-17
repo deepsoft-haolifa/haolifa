@@ -600,9 +600,9 @@
             parameterType="com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO">
 
         select al.* from (
-        select '1' as bill_type, bb.* from biz_bank_bill bb
+        select '2' as bill_type, bb.* from biz_bank_bill bb
         UNION all
-        select '2' as bill_type,ob.* from biz_other_bill ob
+        select '3' as bill_type,ob.* from biz_other_bill ob
         ) al
         <where>
             <if test="billType != null and billType != 0 ">
