@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.BillContractStatusEnum;
-import com.deepsoft.haolifa.model.domain.BizBillContract;
-import com.deepsoft.haolifa.model.domain.BizBillContractExample;
-import com.deepsoft.haolifa.model.domain.OrderProduct;
-import com.deepsoft.haolifa.model.domain.OrderProductExample;
+import com.deepsoft.haolifa.enums.BillTypeEnum;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -99,6 +97,7 @@ public class BillContractServiceImpl implements BillContractService {
             .map(orderProduct -> {
                 ContractListRSDTO rsdto = new ContractListRSDTO();
                 BeanUtils.copyProperties(orderProduct, rsdto);
+                rsdto.setBillType(bizBankBill.getBillType());
                 return rsdto;
             })
             .collect(Collectors.toList());
@@ -203,8 +202,36 @@ public class BillContractServiceImpl implements BillContractService {
         contractBillUpRQDTO.setId(Integer.parseInt(String.valueOf(bizBillContract.getBillId())));
         contractBillUpRQDTO.setBillType(bizBillContract.getBillType().toString());
         contractBillUpRQDTO.setContractStatus(BillContractStatusEnum.decompose_un.getCode());
-        int i = bizBankBillMapper.updateStatusBy(contractBillUpRQDTO);
+        int i = updateStatusBy(contractBillUpRQDTO);
         return ResultBean.success(1);
+    }
+
+    private Integer updateStatusBy(ContractBillUpRQDTO contractBillUpRQDTO) {
+        BillTypeEnum billTypeEnum = BillTypeEnum.valueOf(contractBillUpRQDTO.getBillType());
+        Integer i = 0;
+        switch (billTypeEnum) {
+            case bank_bill: {
+                BizBankBill bizBankBill = new BizBankBill();
+                bizBankBill.setId(contractBillUpRQDTO.getId());
+                if (contractBillUpRQDTO.getContractUser() != null) {
+                    bizBankBill.setContractUser(contractBillUpRQDTO.getContractUser());
+                }
+                bizBankBill.setContractStatus(contractBillUpRQDTO.getContractStatus());
+                i = bizBankBillMapper.updateByPrimaryKeySelective(bizBankBill);
+                break;
+            }
+            case other_bill: {
+                BizOtherBill otherBill = new BizOtherBill();
+                otherBill.setId(contractBillUpRQDTO.getId());
+                if (contractBillUpRQDTO.getContractUser() != null) {
+                    otherBill.setContractStatus(contractBillUpRQDTO.getContractStatus());
+                }
+                otherBill.setContractStatus(contractBillUpRQDTO.getContractStatus());
+                i = bizOtherBillMapper.updateByPrimaryKeySelective(otherBill);
+                break;
+            }
+        }
+        return i;
     }
 
     @Override
@@ -243,7 +270,7 @@ public class BillContractServiceImpl implements BillContractService {
             contractBillUpRQDTO.setContractUser(customUser.getId());
             contractBillUpRQDTO.setId(Integer.parseInt(String.valueOf(bizBillContract.getBillId())));
             contractBillUpRQDTO.setBillType(bizBillContract.getBillType().toString());
-            int i = bizBankBillMapper.updateStatusBy(contractBillUpRQDTO);
+            int i = updateStatusBy(contractBillUpRQDTO);
 
 
             //一.判断合同的金额是否够分

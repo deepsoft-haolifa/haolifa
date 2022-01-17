@@ -15,6 +15,9 @@ public class ContractListRSDTO {
     @ApiModelProperty(value = "id")
     private Integer id;
 
+    @ApiModelProperty(value = "记账类型   2.银行日记账；3.其他货币日记账")
+    private String billType;
+
     @ApiModelProperty(value = "订单号")
     private String orderNo;
 

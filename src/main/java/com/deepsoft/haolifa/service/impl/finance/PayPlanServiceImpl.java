@@ -119,6 +119,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         // 当前用户
         CustomUser customUser = sysUserService.selectLoginUser();
 
+        // todo  支付状态必须是已付款  金额必须和申请金额一样
         BizPayPlan record = buildBizPayPlan(planPayDTO, customUser);
         int update = bizPayPlanMapper.updateByPrimaryKeySelective(record);
         if (update < 1) {

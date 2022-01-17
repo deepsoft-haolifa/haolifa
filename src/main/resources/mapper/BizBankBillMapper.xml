@@ -644,10 +644,10 @@
     <select id="getBillContractById" resultMap="getBillContractListResultMap">
         select al.*
         from (
-                 select '1' as bill_type, bb.*
+                 select '2' as bill_type, bb.*
                  from biz_bank_bill bb
                  UNION all
-                 select '2' as bill_type, ob.*
+                 select '3' as bill_type, ob.*
                  from biz_other_bill ob
              ) al
         where   al.bill_type = #{billType}

@@ -39,6 +39,4 @@ public interface BizBankBillMapper {
     ContractBillRSDTO getBillContractById(@Param("id") Integer id, @Param("billType") String billType);
 
 
-    int updateStatusBy( @Param("contractBillUp") ContractBillUpRQDTO contractBillUp);
-
 }
