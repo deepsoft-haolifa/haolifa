@@ -999,6 +999,15 @@ public class ExportExcelController {
         Cell cellTitle7 = rowTitle.createCell(7);
         cellTitle7.setCellValue("机加供应商");
         cellTitle7.setCellStyle(border);
+        Cell cellTitle8 = rowTitle.createCell(8);
+        cellTitle8.setCellValue("规格");
+        cellTitle8.setCellStyle(border);
+        Cell cellTitle9 = rowTitle.createCell(9);
+        cellTitle9.setCellValue("型号");
+        cellTitle9.setCellStyle(border);
+        Cell cellTitle10 = rowTitle.createCell(10);
+        cellTitle10.setCellValue("零件类别");
+        cellTitle10.setCellStyle(border);
 
         Row row = sheet.createRow(++rowIdx);
         Cell cell = row.createCell(0);
@@ -1028,6 +1037,15 @@ public class ExportExcelController {
         Cell cell7 = row.createCell(7);
         cell7.setCellValue(entrust.getSupplierName());
         cell7.setCellStyle(border);
+        Cell cell8 = row.createCell(8);
+        cell8.setCellValue(entrust.getSpecifications());
+        cell8.setCellStyle(border);
+        Cell cell9 = row.createCell(9);
+        cell9.setCellValue(entrust.getModel());
+        cell9.setCellStyle(border);
+        Cell cell10 = row.createCell(10);
+        cell10.setCellValue(entrust.getMaterialClassifyName());
+        cell10.setCellStyle(border);
 
         Row rowsp = sheet.createRow(++rowIdx);
         CellRangeAddress crasp = new CellRangeAddress(rowIdx, rowIdx, 0, 3);
