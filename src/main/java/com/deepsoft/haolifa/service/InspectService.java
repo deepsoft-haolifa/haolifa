@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
 import com.deepsoft.haolifa.model.dto.InspectResDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.vo.InspectItemQtyVo;
 
 import java.util.List;
@@ -112,6 +113,6 @@ public interface InspectService {
      *
      * @return
      */
-    List<InspectHistory> historyList(String inspectNo, String startTime, String endTime);
+    List<InspectHistory> getInspectHistoryList(PayCalculateDTO payCalculateDTO);
 
 }

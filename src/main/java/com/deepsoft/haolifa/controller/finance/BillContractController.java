@@ -1,8 +1,10 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.deepsoft.haolifa.model.domain.BizBillContract;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAddOrUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAuditDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRQDTO;
@@ -53,29 +55,20 @@ public class BillContractController {
         return billContractService.addOrUpContract(billContract);
     }
 
-//
-//    @PostMapping("/auditContract")
-//    @ResponseBody
-//    public AjaxResult auditContract(BizBillContract billContract) {
-//        return toAjax(bizBillContractService.updateBizBillContract(billContract));
-//    }
-//
-//    @PostMapping("/removeContract")
-//    @ResponseBody
-//    public AjaxResult removeTest() {
-//        String bcId = getRequest().getParameter("bcId");
-//        String billId = getRequest().getParameter("billId");//业务数据id
-//        if ("0".equals(bcId)) {
-//            return toAjax(1);
-//        }
-//        bizBillContractService.deleteBizBillContractById(Long.parseLong(bcId));
-//        BizBankBill updateBill = new BizBankBill();
-//        updateBill.setBillId(Long.parseLong(billId));
-//        bizBankBillService.updateBizBankBill(updateBill);
-//        updateBill.setContractStatus("0");
-//        return toAjax(1);
-//    }
-//
+
+    @PostMapping("/auditContract")
+    @ResponseBody
+    public ResultBean auditContract(@RequestBody BillContractAuditDTO billContract) {
+        return billContractService.auditContract(billContract);
+    }
+
+    @PostMapping("/removeContract/{id}")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public ResultBean removeContract(@PathVariable("id") int id) {
+        return billContractService.removeContract(id);
+    }
+
 
 
 }

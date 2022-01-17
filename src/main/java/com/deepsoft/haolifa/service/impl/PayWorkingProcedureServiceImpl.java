@@ -172,9 +172,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             criteria.andEntrustNoEqualTo(orderNo);
             List<Entrust> entrusts = entrustMapper.selectByExample(example);
             for (Entrust entrust : entrusts) {
-                String materialGraphNo = entrust.getMaterialGraphNo();
-                String model = materialGraphNo.split("-")[0];
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, 0, orderNo);
+                String model = entrust.getModel();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, entrust.getId(), orderNo);
             }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {

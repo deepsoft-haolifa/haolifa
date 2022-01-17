@@ -108,14 +108,17 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
     public List<PayHourQuota> getList(PayHourQuotaDTO model) {
         PayHourQuotaExample example = new PayHourQuotaExample();
         PayHourQuotaExample.Criteria criteria = example.createCriteria();
-        if (Objects.nonNull(model.getAppModel())) {
-            criteria.andAppModelEqualTo(model.getAppModel());
+        if (StringUtils.isNotBlank(model.getAppModel())) {
+            criteria.andAppModelLike('%' + model.getAppModel() + '%');
         }
         if (StringUtils.isNotBlank(model.getAppSpecifications())) {
-            criteria.andAppSpecificationsEqualTo(model.getAppSpecifications());
+            criteria.andAppSpecificationsLike('%' + model.getAppSpecifications() + '%');
         }
         if (StringUtils.isNotBlank(model.getWorkType())) {
             criteria.andWorkTypeEqualTo(model.getWorkType());
+        }
+        if (StringUtils.isNotBlank(model.getPostCode())) {
+            criteria.andPostCodeEqualTo(model.getPostCode());
         }
         List<PayHourQuota> list = payHourQuotaMapper.selectByExample(example);
         return list;

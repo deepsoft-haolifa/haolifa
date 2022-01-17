@@ -3,20 +3,17 @@ package com.deepsoft.haolifa.service.impl.finance;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
-import com.deepsoft.haolifa.model.domain.BizBillContract;
-import com.deepsoft.haolifa.model.domain.BizBillContractExample;
-import com.deepsoft.haolifa.model.domain.OrderProduct;
-import com.deepsoft.haolifa.model.domain.OrderProductExample;
+import com.deepsoft.haolifa.enums.BillContractStatusEnum;
+import com.deepsoft.haolifa.enums.BillTypeEnum;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAddOrUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAuditDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.*;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillContractService;
 import com.github.pagehelper.Page;
@@ -100,6 +97,7 @@ public class BillContractServiceImpl implements BillContractService {
             .map(orderProduct -> {
                 ContractListRSDTO rsdto = new ContractListRSDTO();
                 BeanUtils.copyProperties(orderProduct, rsdto);
+                rsdto.setBillType(bizBankBill.getBillType());
                 return rsdto;
             })
             .collect(Collectors.toList());
@@ -193,29 +191,110 @@ public class BillContractServiceImpl implements BillContractService {
             bizBillContract.setUpdateUser(customUser.getId());
             bizBillContractMapper.updateByPrimaryKeySelective(bizBillContract);
         }
-//         todo  应该放在审核的地方
-//        //判断合同分解是否完成
-//        BizBankBill updateBill = new BizBankBill();
-//        if (totalAmount >= collectionMoney) {
-//            // 将分解状态更改为分解完成
-//            updateBill.setContractStatus("1");
-//        } else {
-//            updateBill.setContractStatus("0");
-//        }
-//        updateBill.setContractUser(ShiroUtils.getSysUser().getUserName());
-//        updateBill.setBillId(bizBankBill.getBillId());
-//        bizBankBillService.updateBizBankBill(updateBill);
-//
-//        // 更新合同的回款状态
-//        BizProcessData updateProcessData = new BizProcessData();
-//        updateProcessData.setDataId(Long.parseLong(dataId));
-//        if (splitAmount.compareTo(contractAmount) < 0) {
-//            updateProcessData.setString17(Constant.collectionStatus.PART);
-//        } else {
-//            updateProcessData.setString17(Constant.collectionStatus.ALREADY);
-//        }
-//        bizProcessDataService.updateBizProcessData(updateProcessData);
+
         return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean removeContract(int id) {
+        BizBillContract bizBillContract = bizBillContractMapper.selectByPrimaryKey(id);
+        ContractBillUpRQDTO contractBillUpRQDTO = new ContractBillUpRQDTO();
+        contractBillUpRQDTO.setId(Integer.parseInt(String.valueOf(bizBillContract.getBillId())));
+        contractBillUpRQDTO.setBillType(bizBillContract.getBillType().toString());
+        contractBillUpRQDTO.setContractStatus(BillContractStatusEnum.decompose_un.getCode());
+        int i = updateStatusBy(contractBillUpRQDTO);
+        return ResultBean.success(1);
+    }
+
+    private Integer updateStatusBy(ContractBillUpRQDTO contractBillUpRQDTO) {
+        BillTypeEnum billTypeEnum = BillTypeEnum.valueOf(contractBillUpRQDTO.getBillType());
+        Integer i = 0;
+        switch (billTypeEnum) {
+            case bank_bill: {
+                BizBankBill bizBankBill = new BizBankBill();
+                bizBankBill.setId(contractBillUpRQDTO.getId());
+                if (contractBillUpRQDTO.getContractUser() != null) {
+                    bizBankBill.setContractUser(contractBillUpRQDTO.getContractUser());
+                }
+                bizBankBill.setContractStatus(contractBillUpRQDTO.getContractStatus());
+                i = bizBankBillMapper.updateByPrimaryKeySelective(bizBankBill);
+                break;
+            }
+            case other_bill: {
+                BizOtherBill otherBill = new BizOtherBill();
+                otherBill.setId(contractBillUpRQDTO.getId());
+                if (contractBillUpRQDTO.getContractUser() != null) {
+                    otherBill.setContractStatus(contractBillUpRQDTO.getContractStatus());
+                }
+                otherBill.setContractStatus(contractBillUpRQDTO.getContractStatus());
+                i = bizOtherBillMapper.updateByPrimaryKeySelective(otherBill);
+                break;
+            }
+        }
+        return i;
+    }
+
+    @Override
+    public ResultBean auditContract(BillContractAuditDTO billContract) {
+        CustomUser customUser = sysUserService.selectLoginUser();
+
+        BizBillContract bizBillContract = bizBillContractMapper.selectByPrimaryKey(billContract.getId());
+
+        // 审核通过
+        if (StringUtils.equalsIgnoreCase("1", billContract.getAuditStatus().toString())) {
+
+            //二.判断银行日记账的金额是否够分
+            // 1. 查询银行日记账的总价
+            ContractBillRSDTO billRSDTO = bizBankBillMapper.getBillContractById(Integer.parseInt(String.valueOf(bizBillContract.getBillId())),
+                String.valueOf(bizBillContract.getBillType()));
+            BigDecimal collectionMoney = billRSDTO.getCollectionMoney();
+            // 2. 查询合同已经分解的金额
+            BizBillContractExample bizBillContractExample2 = buildBizBillContractExample(bizBillContract.getBillId(), bizBillContract.getBillType());
+            List<BizBillContract> bizBillContractList2 = bizBillContractMapper.selectByExample(bizBillContractExample2);
+            BigDecimal totalAmount = bizBillContractList2.stream()
+                .filter(e -> !e.getId().equals(bizBillContract.getId()))
+                .map(BizBillContract::getAmount)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO)
+                .add(bizBillContract.getAmount());
+
+
+            //判断合同分解是否完成
+            ContractBillUpRQDTO contractBillUpRQDTO = new ContractBillUpRQDTO();
+            if (totalAmount.compareTo(collectionMoney) >= 0) {
+                // 将分解状态更改为分解完成
+                contractBillUpRQDTO.setContractStatus(BillContractStatusEnum.decompose_done.getCode());
+            } else {
+                contractBillUpRQDTO.setContractStatus(BillContractStatusEnum.decompose_un.getCode());
+            }
+            contractBillUpRQDTO.setContractUser(customUser.getId());
+            contractBillUpRQDTO.setId(Integer.parseInt(String.valueOf(bizBillContract.getBillId())));
+            contractBillUpRQDTO.setBillType(bizBillContract.getBillType().toString());
+            int i = updateStatusBy(contractBillUpRQDTO);
+
+
+            //一.判断合同的金额是否够分
+            // 1. 查询合同的总价
+            OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(Integer.parseInt(String.valueOf(bizBillContract.getOrderId())));
+            // 更新合同的回款状态 todo 没有回款状态 目前仅更新回款金额
+            OrderProduct orderProductUp = new OrderProduct();
+            orderProduct.setId(Integer.parseInt(String.valueOf(bizBillContract.getOrderId())));
+            BigDecimal receivedAccount = orderProduct.getReceivedAccount() == null ? BigDecimal.ZERO : orderProduct.getReceivedAccount();
+            BigDecimal add = receivedAccount.add(bizBillContract.getAmount());
+            orderProductUp.setReceivedAccount(add);
+            orderProductMapper.updateByPrimaryKeySelective(orderProduct);
+        }
+
+
+        BizBillContract bizBillContractUp = new BizBillContract();
+        bizBillContractUp.setBillId(Long.valueOf(String.valueOf(billContract.getId())));
+        bizBillContractUp.setAuditStatus(billContract.getAuditStatus());
+        bizBillContractUp.setUpdateUser(customUser.getId());
+        bizBillContractUp.setUpdateTime(new Date());
+        bizBillContractUp.setRemark(billContract.getRemark());
+        int i = bizBillContractMapper.updateByPrimaryKeySelective(bizBillContractUp);
+
+        return ResultBean.success(i);
     }
 
     private OrderProductExample buildOrderProductExample(BillContractAddOrUpDTO billContract) {

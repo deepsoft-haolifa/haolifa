@@ -21,5 +21,8 @@ public interface PayWagesService {
 
     void insert(List<PayWages> objects);
 
-    ResultBean calculateSalary(PayWagesVO payWagesVO);
-}
+    ResultBean calculateSalary(PayWagesVO payWagesVO) throws Exception;
+
+    public ResultBean test (Integer userId);
+
+    }

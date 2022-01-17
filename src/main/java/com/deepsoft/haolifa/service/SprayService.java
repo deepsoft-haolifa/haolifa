@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
@@ -46,7 +47,7 @@ public interface SprayService {
 
     SprayInspectHistory getHistoryInfo(Integer historyId);
 
-    List<SprayInspectHistory> getInspectList(String sprayNo, String startTime, String endTime);
+    List<SprayInspectHistory> getSprayInspectHistoryList(PayCalculateDTO payCalculateDTO);
 
     void updateTaskStatus(String sprayNo, int status);
 

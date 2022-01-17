@@ -65,4 +65,13 @@ public interface EntrustService {
     int obtainEntrustNumber(String materialGraphNo, String processedGraphNo);
 
     ResultBean updateInspectStatus(String entrustNo, Integer status);
-}
+
+    /**
+     * 修改分配任务状态
+     * @param entrustNo
+     * @param taskStatus
+     * @return
+     */
+    ResultBean updateInspectTaskStatus(String entrustNo, Integer taskStatus);
+
+    }

@@ -29,12 +29,14 @@ public class PayPlanController {
 
     @ApiOperation("添加节点")
     @PostMapping("/save")
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean save(@RequestBody BizPayPlanAddDTO model) {
         return payPlanService.save(model);
     }
 
     @ApiOperation("删除节点")
     @GetMapping("/delete/{payPlanId}")
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean delete(@PathVariable("payPlanId") int id) {
         return payPlanService.delete(id);
     }
@@ -73,6 +75,7 @@ public class PayPlanController {
      */
     @ApiOperation("付款计划（确认）")
     @PostMapping("/confirm")
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean updateDateStatus(@RequestBody BizPayPlanConfirmRQDTO ids) {
         return payPlanService.updateDateStatus(ids.getIds());
     }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillUpRQDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface BizBankBillMapper {

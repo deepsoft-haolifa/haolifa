@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.dao.repository.extend.SparyExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.spray.*;
 import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
 import com.deepsoft.haolifa.model.vo.SprayVo;
@@ -439,20 +440,24 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     }
 
     @Override
-    public List<SprayInspectHistory> getInspectList(String sprayNo, String startTime, String endTime) {
-        Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, startTime);
-        Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, endTime);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(endDate);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (day >= 26) {
-            cal.set(Calendar.DAY_OF_MONTH, 25);
-        }
-        Date time = cal.getTime();
+    public List<SprayInspectHistory> getSprayInspectHistoryList(PayCalculateDTO payCalculateDTO) {
         SprayInspectHistoryExample inspectHistoryExample = new SprayInspectHistoryExample();
-        inspectHistoryExample.createCriteria().andSprayNoEqualTo(sprayNo)
-        .andUpdateTimeGreaterThanOrEqualTo(startDate)
-        .andUpdateTimeLessThanOrEqualTo(time);
+        SprayInspectHistoryExample.Criteria criteria = inspectHistoryExample.createCriteria();
+        if (StringUtils.isNotBlank(payCalculateDTO.getOrderNo())) {
+            criteria.andSprayNoEqualTo(payCalculateDTO.getOrderNo());
+        }
+        if (StringUtils.isNotBlank(payCalculateDTO.getProductNo())) {
+            criteria.andMaterialGraphNoEqualTo(payCalculateDTO.getProductNo());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStorageStatus())) {
+            criteria.andStatusEqualTo(payCalculateDTO.getStorageStatus());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStartTime())) {
+            criteria.andUpdateTimeGreaterThanOrEqualTo(payCalculateDTO.getStartTime());
+        }
+        if (Objects.nonNull(payCalculateDTO.getEndTime())) {
+            criteria.andUpdateTimeLessThanOrEqualTo(payCalculateDTO.getEndTime());
+        }
         List<SprayInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
         return inspectHistories;
     }
