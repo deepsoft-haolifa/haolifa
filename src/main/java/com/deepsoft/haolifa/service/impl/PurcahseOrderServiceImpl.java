@@ -338,7 +338,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     }
 
     @Override
-    public ResultBean<PurchaseOrderStandAccountRSDTO> standAccountList(PurchaseOrderStandAccountRQDTO purchaseOrderDTO) {
+    public ResultBean<PageDTO<PurchaseOrderStandAccountRSDTO>> standAccountList(PurchaseOrderStandAccountRQDTO purchaseOrderDTO) {
 //        List<String> supplierNoList = new ArrayList<>();
 //        if (StringUtils.isNotEmpty(purchaseOrderDTO.getSupplierName())) {
 //            SupplierExample supplierExample = new SupplierExample();

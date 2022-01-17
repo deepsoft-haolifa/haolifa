@@ -143,7 +143,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public ResultBean<BizBillRSDTO> getList(BizBillRQDTO model) {
+    public ResultBean<PageDTO<BizBillRSDTO>> getList(BizBillRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }

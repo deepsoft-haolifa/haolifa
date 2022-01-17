@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = {"零件送检管理"})
 @RestController
 @RequestMapping("material-inspect")
@@ -54,8 +56,8 @@ public class InspectController {
                                    @ApiParam("采购合同号") String purchaseOrderNo,
                                    @ApiParam("供应商名称") String supplierName,
                                    @ApiParam("批次号") String batchNumber,
-                                   @ApiParam("质检状态 2 待处理 3 质检完成 4待入库 5入库完成") @RequestParam(defaultValue ="0")Byte status) {
-        return inspectService.getList(type, pageNum, pageSize, inspectNo, purchaseOrderNo, supplierName, batchNumber,status);
+                                   @ApiParam("质检状态 2 待处理 3 质检完成 4待入库 5入库完成") @RequestParam(defaultValue = "0") Byte status) {
+        return inspectService.getList(type, pageNum, pageSize, inspectNo, purchaseOrderNo, supplierName, batchNumber, status);
     }
 
     @ApiOperation("更新送检单状态")
@@ -105,7 +107,7 @@ public class InspectController {
 
     @ApiOperation("根据采购订单号获取报检相关数量(用于采购合同，点击合格数，展示的信息)")
     @GetMapping("purchase-all-qty")
-    public ResultBean<InspectItemQtyVo> getPurchaseAllQty(@RequestParam("purchaseNo") String purchaseNo) {
+    public ResultBean<List<InspectItemQtyVo>> getPurchaseAllQty(@RequestParam("purchaseNo") String purchaseNo) {
         return ResultBean.success(inspectService.getPurchaseAllQty(purchaseNo));
     }
 

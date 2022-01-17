@@ -64,7 +64,7 @@ public class PayPlanController {
     //
     @ApiOperation("获取所有支付方式节点列表")
     @GetMapping("/getAllPayWayList")
-    public ResultBean<BookingTypeRSDTO> getAllPayWayList() {
+    public ResultBean<List<BookingTypeRSDTO>> getAllPayWayList() {
         return payPlanService.getAllPayWayList();
     }
 

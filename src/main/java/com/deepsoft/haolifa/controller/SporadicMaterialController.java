@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.dao.repository.SporadicMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.extend.SporadicMaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.SporadicMaterial;
 import com.deepsoft.haolifa.model.domain.SporadicMaterialExample;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutDto;
 import com.deepsoft.haolifa.model.dto.sporadic.SporadicEntryOutPage;
@@ -82,7 +83,7 @@ public class SporadicMaterialController {
 
     @PostMapping("/page")
     @ApiOperation("零星物料分页列表")
-    public ResultBean<SporadicMaterial> pageList(@RequestBody SporadicMaterialPageDto sporadicMaterial) {
+    public ResultBean<PageDTO<SporadicMaterial>> pageList(@RequestBody SporadicMaterialPageDto sporadicMaterial) {
         return ResultBean.success(sporadicMaterialService.pageList(sporadicMaterial));
     }
 

@@ -235,7 +235,7 @@ public class StoreRoomController {
 
     @PostMapping("/pre-material-out/page")
     @ApiOperation("零件待出库列表")
-    public ResultBean<Page<PreOutMaterialVo>> pageInfoEntryOutRecord(@RequestBody PreOutMaterialPageVo preOutMaterialPageVo) {
+    public ResultBean<PageDTO<PreOutMaterialVo>> pageInfoEntryOutRecord(@RequestBody PreOutMaterialPageVo preOutMaterialPageVo) {
         return ResultBean.success(materialRequisitionService.preOutMaterialPage(preOutMaterialPageVo));
     }
 

@@ -451,7 +451,7 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     @Override
-    public ResultBean<BizPayPlanSummaryRSDTO> getPayPlanSummaryList(BizPayPlanSummaryRQDTO model) {
+    public ResultBean<PageDTO<BizPayPlanSummaryRSDTO>> getPayPlanSummaryList(BizPayPlanSummaryRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -470,7 +470,7 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     @Override
-    public ResultBean<BookingTypeRSDTO> getAllPayWayList() {
+    public ResultBean<List<BookingTypeRSDTO>> getAllPayWayList() {
 
         Map<BookingTypeEnum, List<PayWayEnum>> typeEnumPayWayEnumMap = Arrays.stream(PayWayEnum.values())
             .collect(Collectors.groupingBy(PayWayEnum::getBookingTypeEnum));

@@ -2,10 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.export.DemandSaleAmountRespDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO;
-import com.deepsoft.haolifa.model.dto.export.PaymentRespDTO;
-import com.deepsoft.haolifa.model.dto.export.TotalAmountDTO;
+import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportPurchaseConditionDTO;
@@ -65,13 +62,13 @@ public class ReportExtendController {
 
     @ApiOperation("每月产值总额统计--用于销售报表（2021-12-hd）")
     @PostMapping("/report-sale-output-list")
-    public ResultBean<PageDTO<DemandSaleAmountRespDTO>> reportSaleOutputList(@RequestBody ReportOrderConditionDTO dto) {
+    public ResultBean<PageDTO<SaleOutputRespDTO>> reportSaleOutputList(@RequestBody ReportOrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportSaleOutputList(dto));
     }
 
     @ApiOperation("每月产值总额汇总--用于销售报表（2021-12-hd）")
     @PostMapping("/report-sale-output-summary")
-    public ResultBean<DemandSaleAmountRespDTO> reportSaleOutputSummary(@RequestBody ReportOrderConditionDTO dto) {
+    public ResultBean<BigDecimal> reportSaleOutputSummary(@RequestBody ReportOrderConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportSaleOutputSummary(dto));
     }
 

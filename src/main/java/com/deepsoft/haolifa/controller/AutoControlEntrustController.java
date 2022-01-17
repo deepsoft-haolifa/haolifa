@@ -5,11 +5,13 @@ import com.deepsoft.haolifa.dao.repository.AutoControlEntrustMapper;
 import com.deepsoft.haolifa.model.domain.AutoControlEntrust;
 import com.deepsoft.haolifa.model.domain.AutoControlMaterial;
 import com.deepsoft.haolifa.model.domain.DeliveryRecord;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlMaterialPageDto;
 import com.deepsoft.haolifa.model.dto.autoControlEntrust.AutoControlEntrustConditionDto;
 import com.deepsoft.haolifa.model.dto.autoControlEntrust.AutoControlEntrustReqDto;
 import com.deepsoft.haolifa.model.dto.autoControlEntrust.InspectDto;
+import com.deepsoft.haolifa.model.dto.autoControlEntrust.InspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.delivery.DeliveryRecordConditionDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
 import com.deepsoft.haolifa.service.AutoControlEntrustService;
@@ -18,6 +20,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 自控委托单
@@ -69,16 +73,17 @@ public class AutoControlEntrustController {
 
     @PostMapping("/detail/{id}")
     @ApiOperation("获取详情")
-    public ResultBean detail(@PathVariable Integer id) {
+    public ResultBean<AutoControlEntrust> detail(@PathVariable Integer id) {
         AutoControlEntrust autoControlEntrust = autoControlEntrustMapper.selectByPrimaryKey(id);
         return ResultBean.success(autoControlEntrust);
     }
 
     @PostMapping("/page")
     @ApiOperation("分页列表")
-    public ResultBean<AutoControlEntrust> pageList(@RequestBody AutoControlEntrustConditionDto pageDto) {
+    public ResultBean<PageDTO<AutoControlEntrust>> pageList(@RequestBody AutoControlEntrustConditionDto pageDto) {
         return ResultBean.success(autoControlEntrustService.pageList(pageDto));
     }
+
     @ApiOperation("更新喷涂加工单状态")
     @PutMapping("status/{id}/{status}")
     public ResultBean updateStatus(@PathVariable("id") Integer id, @ApiParam("0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工") @PathVariable("status") int status) {
@@ -100,7 +105,7 @@ public class AutoControlEntrustController {
 
     @ApiOperation("查询检验记录")
     @GetMapping("inspect/list/{no}")
-    public ResultBean getInspectList(@PathVariable("no") String no) {
+    public ResultBean<List<InspectHistoryDto>> getInspectList(@PathVariable("no") String no) {
         return ResultBean.success(autoControlEntrustService.getInspectList(no));
     }
 }

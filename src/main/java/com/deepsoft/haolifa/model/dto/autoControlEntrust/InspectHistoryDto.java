@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.model.dto.autoControlEntrust;
 import com.deepsoft.haolifa.model.domain.AutoControlInspectHistory;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.InspectReason;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,11 +12,12 @@ import java.util.List;
 
 @Data
 @ToString
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class InspectHistoryDto extends AutoControlInspectHistory {
 
-  private List<Accessory> accessoryList;
-
-  private List<InspectReason> reasonList;
+    @ApiModelProperty("附件列表")
+    private List<Accessory> accessoryList;
+    @ApiModelProperty("原因列表")
+    private List<InspectReason> reasonList;
 
 }

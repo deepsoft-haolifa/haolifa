@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.dao.repository.AutoControlMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.extend.AutoControlMaterialExtendMapper;
 import com.deepsoft.haolifa.model.domain.AutoControlMaterial;
 import com.deepsoft.haolifa.model.domain.AutoControlMaterialExample;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntryOutDto;
@@ -83,7 +84,7 @@ public class AutoControlMaterialController {
 
     @PostMapping("/page")
     @ApiOperation("自控物资分页列表")
-    public ResultBean<AutoControlMaterial> pageList(@RequestBody AutoControlMaterialPageDto autoControlMaterial) {
+    public ResultBean<PageDTO<AutoControlMaterial>> pageList(@RequestBody AutoControlMaterialPageDto autoControlMaterial) {
         return ResultBean.success(autoControlMaterialService.pageList(autoControlMaterial));
     }
 

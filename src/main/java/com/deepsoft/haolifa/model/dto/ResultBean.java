@@ -1,7 +1,6 @@
 package com.deepsoft.haolifa.model.dto;
 
 
-
 import com.deepsoft.haolifa.constant.CommonEnum;
 import lombok.Data;
 
@@ -46,26 +45,25 @@ public class ResultBean<T> implements Serializable {
         this.message = CommonEnum.ResponseEnum.SUCCESS.msg;
     }
 
-
-    public static ResultBean error(CommonEnum.ResponseEnum responseEnum) {
-        String code = responseEnum.code;
-        String message = responseEnum.msg;
-        return new ResultBean(code, message, null);
-    }
-
-    public static ResultBean error(CommonEnum.ResponseEnum responseEnum, String message) {
-        String code = responseEnum.code;
-        return new ResultBean(code, message, null);
-    }
-
-    public static ResultBean success(Object result) {
-        return new ResultBean(result);
-    }
-
     public ResultBean(CommonEnum.ResponseEnum responseEnum) {
         this.code = responseEnum.code;
         this.message = responseEnum.msg;
-
     }
+
+    public static <T> ResultBean<T> error(CommonEnum.ResponseEnum responseEnum) {
+        String code = responseEnum.code;
+        String message = responseEnum.msg;
+        return new ResultBean<T>(code, message, null);
+    }
+
+    public static <T> ResultBean<T> error(CommonEnum.ResponseEnum responseEnum, String message) {
+        String code = responseEnum.code;
+        return new ResultBean<T>(code, message, null);
+    }
+
+    public static <T> ResultBean<T> success(T result) {
+        return new ResultBean<T>(result);
+    }
+
 
 }

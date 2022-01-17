@@ -1,9 +1,6 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.PurchaseOrderCompleteDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRSDTO;
 
@@ -53,7 +50,7 @@ public interface PurcahseOrderService {
    * 财务挂账列表
    * @return
    */
-  ResultBean<PurchaseOrderStandAccountRSDTO> standAccountList(PurchaseOrderStandAccountRQDTO purchaseOrderDTO);
+  ResultBean<PageDTO<PurchaseOrderStandAccountRSDTO>> standAccountList(PurchaseOrderStandAccountRQDTO purchaseOrderDTO);
 
   /**
    * 采购完成

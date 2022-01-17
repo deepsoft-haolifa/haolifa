@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.controller.finance;
 
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.model.domain.BizBill;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
@@ -45,7 +46,7 @@ public class BillController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getBillList")
-    public ResultBean<BizBillRSDTO> getBillList(@RequestBody BizBillRQDTO bizBillDTO) {
+    public ResultBean<PageDTO<BizBillRSDTO>> getBillList(@RequestBody BizBillRQDTO bizBillDTO) {
         return billService.getList(bizBillDTO);
     }
 

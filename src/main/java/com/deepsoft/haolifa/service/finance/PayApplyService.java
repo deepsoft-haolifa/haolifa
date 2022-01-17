@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.finance;
 
 import com.deepsoft.haolifa.model.domain.BizPayApply;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRQDTO;
@@ -47,7 +48,7 @@ public interface PayApplyService {
      * @param model
      * @return
      */
-    ResultBean<PayApplyRSDTO> getList(PayApplyRQDTO model);
+    ResultBean<PageDTO<PayApplyRSDTO>> getList(PayApplyRQDTO model);
 
     int auditReplaceMaterial(Integer item_id,String auditResult);
     /**

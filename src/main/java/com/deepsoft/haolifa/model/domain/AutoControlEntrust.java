@@ -1,32 +1,66 @@
 package com.deepsoft.haolifa.model.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.ToString;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class AutoControlEntrust {
+@Data
+@ApiModel("自控委托单")
+public class AutoControlEntrust  {
+
+
+    @ApiModelProperty("id")
     private Integer id;
 
+    @ApiModelProperty("委托单号")
     private String entrustNo;
 
+
+    @ApiModelProperty("产品名称")
     private String name;
 
+
+    @ApiModelProperty("图号")
     private String graphNo;
 
+
+    @ApiModelProperty("规格")
     private String specifications;
 
+
+    @ApiModelProperty("型号")
     private String model;
 
+
+    @ApiModelProperty("委托工种类别")
     private String workType;
 
+
+    @ApiModelProperty("数量")
     private Integer qty;
 
+
+    @ApiModelProperty("合格数")
     private Integer qualifiedNumber;
 
+
+    @ApiModelProperty("状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工")
     private Byte status;
 
+
+    @ApiModelProperty("0 待质检 1 质检中 2 质检完成")
     private Byte inspectStatus;
 
+
+    @ApiModelProperty("create_time")
     private Date createTime;
 
+
+    @ApiModelProperty("update_time")
     private Date updateTime;
 
     public AutoControlEntrust(Integer id, String entrustNo, String name, String graphNo, String specifications, String model, String workType, Integer qty, Integer qualifiedNumber, Byte status, Byte inspectStatus, Date createTime, Date updateTime) {
@@ -49,107 +83,4 @@ public class AutoControlEntrust {
         super();
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getEntrustNo() {
-        return entrustNo;
-    }
-
-    public void setEntrustNo(String entrustNo) {
-        this.entrustNo = entrustNo == null ? null : entrustNo.trim();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getGraphNo() {
-        return graphNo;
-    }
-
-    public void setGraphNo(String graphNo) {
-        this.graphNo = graphNo == null ? null : graphNo.trim();
-    }
-
-    public String getSpecifications() {
-        return specifications;
-    }
-
-    public void setSpecifications(String specifications) {
-        this.specifications = specifications == null ? null : specifications.trim();
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model == null ? null : model.trim();
-    }
-
-    public String getWorkType() {
-        return workType;
-    }
-
-    public void setWorkType(String workType) {
-        this.workType = workType == null ? null : workType.trim();
-    }
-
-    public Integer getQty() {
-        return qty;
-    }
-
-    public void setQty(Integer qty) {
-        this.qty = qty;
-    }
-
-    public Integer getQualifiedNumber() {
-        return qualifiedNumber;
-    }
-
-    public void setQualifiedNumber(Integer qualifiedNumber) {
-        this.qualifiedNumber = qualifiedNumber;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public Byte getInspectStatus() {
-        return inspectStatus;
-    }
-
-    public void setInspectStatus(Byte inspectStatus) {
-        this.inspectStatus = inspectStatus;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

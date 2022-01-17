@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.finance;
 
 import com.deepsoft.haolifa.model.domain.BizBill;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
@@ -42,7 +43,7 @@ public interface BillService {
      * @param model
      * @return
      */
-    ResultBean<BizBillRSDTO> getList(BizBillRQDTO model);
+    ResultBean<PageDTO<BizBillRSDTO>> getList(BizBillRQDTO model);
 
 
     /**

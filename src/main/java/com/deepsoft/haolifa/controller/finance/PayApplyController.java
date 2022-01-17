@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller.finance;
 
 
 import com.deepsoft.haolifa.model.domain.BizPayApply;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRQDTO;
@@ -50,7 +51,7 @@ public class PayApplyController {
 
     @ApiOperation("查询付款申请列表")
     @PostMapping("/getPayAppList")
-    public ResultBean<PayApplyRSDTO> getPayAppList(@RequestBody PayApplyRQDTO payAppDTO) {
+    public ResultBean<PageDTO<PayApplyRSDTO>> getPayAppList(@RequestBody PayApplyRQDTO payAppDTO) {
         return payApplyService.getList(payAppDTO);
     }
 

@@ -221,7 +221,7 @@ public class PayApplyServiceImpl implements PayApplyService {
     }
 
     @Override
-    public ResultBean<PayApplyRSDTO> getList(PayApplyRQDTO model) {
+    public ResultBean<PageDTO<PayApplyRSDTO>> getList(PayApplyRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }

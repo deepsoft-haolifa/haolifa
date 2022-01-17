@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRSDTO;
@@ -30,7 +31,7 @@ public class StandAccountController {
 
     @ApiOperation("查询财务挂账列表")
     @PostMapping("/list")
-    public ResultBean<PurchaseOrderStandAccountRSDTO> list(@RequestBody PurchaseOrderStandAccountRQDTO purchaseOrderDTO) {
+    public ResultBean<PageDTO<PurchaseOrderStandAccountRSDTO>> list(@RequestBody PurchaseOrderStandAccountRQDTO purchaseOrderDTO) {
         return purcahseOrderService.standAccountList(purchaseOrderDTO);
     }
 
