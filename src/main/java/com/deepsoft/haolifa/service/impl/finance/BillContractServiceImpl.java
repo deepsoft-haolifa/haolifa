@@ -60,7 +60,7 @@ public class BillContractServiceImpl implements BillContractService {
      * @return
      */
     @Override
-    public ResultBean getBillContractList(ContractBillRQDTO billDTO) {
+    public ResultBean<PageDTO<ContractBillRSDTO>> getBillContractList(ContractBillRQDTO billDTO) {
         Page<ContractBillRSDTO> pageData = PageHelper
             .startPage(billDTO.getPageNum(), billDTO.getPageSize())
             .doSelectPage(() -> {
@@ -69,6 +69,7 @@ public class BillContractServiceImpl implements BillContractService {
 
         PageDTO<ContractBillRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
+
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
     }
@@ -79,7 +80,7 @@ public class BillContractServiceImpl implements BillContractService {
      * @return
      */
     @Override
-    public ResultBean orderContractList(ContractListRQDTO contractListRQDTO) {
+    public ResultBean<PageDTO<ContractListRSDTO>> orderContractList(ContractListRQDTO contractListRQDTO) {
         if (contractListRQDTO.getPageNum() == null || contractListRQDTO.getPageNum() == 0) {
             contractListRQDTO.setPageNum(1);
         }
@@ -129,7 +130,7 @@ public class BillContractServiceImpl implements BillContractService {
      * @return
      */
     @Override
-    public ResultBean selectBizBillContractList(BillContractRQDTO bizBillContract) {
+    public ResultBean<List<BillContractRSDTO>> selectBizBillContractList(BillContractRQDTO bizBillContract) {
         BizBillContractExample example = buildBizBillContractExample(bizBillContract.getBillId(),
             bizBillContract.getBillType(), bizBillContract.getOrderId(), bizBillContract.getOrderNo());
         List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(example);
@@ -165,7 +166,7 @@ public class BillContractServiceImpl implements BillContractService {
             .reduce(BigDecimal::add)
             .orElse(BigDecimal.ZERO)
             .add(billContract.getAmount());
-        if (contractAmount.compareTo(splitAmount) > 0) {
+        if (contractAmount.compareTo(splitAmount) < 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "此合同的已付金额+这次分解的金额 大于合同金额");
         }
 
@@ -185,7 +186,7 @@ public class BillContractServiceImpl implements BillContractService {
             .orElse(BigDecimal.ZERO)
             .add(billContract.getAmount());
         // logger.info("add contract totalAmount:{},dataAmount:{},billId:{}", totalAmount, alreadyAmount, billId);
-        if (totalAmount.compareTo(collectionMoney) > 0) {
+        if (collectionMoney.compareTo(totalAmount) < 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "已分配金额+这次分解的金额 大于此笔收款金额");
         }
 
@@ -201,7 +202,9 @@ public class BillContractServiceImpl implements BillContractService {
         bizBillContract.setAmount(billContract.getAmount());
         bizBillContract.setBookKeeper(customUser.getId() + "");
         bizBillContract.setRemark(billContract.getRemark());
-        if (billContract.getId() != null) {
+        bizBillContract.setOrderId(billContract.getOrderId());
+        bizBillContract.setOrderNo(billContract.getOrderNo());
+        if (billContract.getId() == null) {
             bizBillContract.setCreateTime(new Date());
             bizBillContract.setCreateUser(customUser.getId());
             bizBillContractMapper.insertSelective(bizBillContract);
