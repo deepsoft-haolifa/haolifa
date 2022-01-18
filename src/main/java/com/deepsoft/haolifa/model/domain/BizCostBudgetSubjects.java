@@ -1,24 +1,17 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
-public class BizCostBudget {
+public class BizCostBudgetSubjects {
     private Integer id;
 
     private String name;
-
-    private Date d;
-
-    private String y;
-
-    private String m;
 
     private Integer deptId;
 
     private Integer subjectsId;
 
-    private BigDecimal amount;
+    private Integer costRatio;
 
     private String status;
 
@@ -34,15 +27,12 @@ public class BizCostBudget {
 
     private Date updateTime;
 
-    public BizCostBudget(Integer id, String name, Date d, String y, String m, Integer deptId, Integer subjectsId, BigDecimal amount, String status, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizCostBudgetSubjects(Integer id, String name, Integer deptId, Integer subjectsId, Integer costRatio, String status, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.name = name;
-        this.d = d;
-        this.y = y;
-        this.m = m;
         this.deptId = deptId;
         this.subjectsId = subjectsId;
-        this.amount = amount;
+        this.costRatio = costRatio;
         this.status = status;
         this.remark = remark;
         this.delFlag = delFlag;
@@ -52,7 +42,7 @@ public class BizCostBudget {
         this.updateTime = updateTime;
     }
 
-    public BizCostBudget() {
+    public BizCostBudgetSubjects() {
         super();
     }
 
@@ -72,30 +62,6 @@ public class BizCostBudget {
         this.name = name == null ? null : name.trim();
     }
 
-    public Date getD() {
-        return d;
-    }
-
-    public void setD(Date d) {
-        this.d = d;
-    }
-
-    public String getY() {
-        return y;
-    }
-
-    public void setY(String y) {
-        this.y = y == null ? null : y.trim();
-    }
-
-    public String getM() {
-        return m;
-    }
-
-    public void setM(String m) {
-        this.m = m == null ? null : m.trim();
-    }
-
     public Integer getDeptId() {
         return deptId;
     }
@@ -112,12 +78,12 @@ public class BizCostBudget {
         this.subjectsId = subjectsId;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public Integer getCostRatio() {
+        return costRatio;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setCostRatio(Integer costRatio) {
+        this.costRatio = costRatio;
     }
 
     public String getStatus() {

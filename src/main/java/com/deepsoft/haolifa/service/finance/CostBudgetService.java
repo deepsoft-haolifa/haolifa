@@ -1,59 +1,38 @@
 package com.deepsoft.haolifa.service.finance;
 
-import com.deepsoft.haolifa.model.domain.BizCostBudget;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.BizCostBudgetAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.BizCostBudgetDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsUpDTO;
 
 import java.util.List;
 
 public interface CostBudgetService {
 
-    /**
-     * 添加
-     *
-     * @param model
-     * @return
-     */
-    ResultBean save(BizCostBudgetAddDTO model);
+
+    ResultBean saveDeptBudget(CostBudgetDeptAddDTO model);
+
+    ResultBean deleteDeptBudget(int id);
+
+    ResultBean updateDeptBudget(CostBudgetDeptUpDTO model);
+
+    ResultBean<List<CostBudgetDeptTree>>  getDeptBudgetListTree(CostBudgetDeptRQDTO model);
 
 
-    /**
-     * 删除
-     *
-     * @param id
-     * @return
-     */
-    ResultBean delete(Integer id);
 
-    /**
-     * 更新
-     *
-     * @param model
-     * @return
-     */
-    ResultBean update(BizCostBudget model);
+    ResultBean saveSubjectsBudget(CostBudgetSubjectsAddDTO model);
 
-    /**
-     * 获取详情
-     *
-     * @param id
-     * @return
-     */
-    ResultBean getInfo(Integer id);
+    ResultBean deleteSubjectsBudget(int id);
 
-    /**
-     * 获取列表
-     *
-     * @param model
-     * @return
-     */
-    ResultBean getList(BizCostBudgetDTO model);
-    /**
-     * 批量删除
-     *
-     * @param ids
-     * @return
-     */
-    ResultBean deleteBatch(List<Integer> ids);
+    ResultBean updateSubjectsBudget(CostBudgetSubjectsUpDTO model);
+
+    ResultBean<PageDTO<CostBudgetSubjectsRSDTO>> getSubjectsBudgetList(CostBudgetSubjectsRQDTO model);
+
+    ResultBean deleteSubjectsBudgetBatch(List<Integer> ids);
 }

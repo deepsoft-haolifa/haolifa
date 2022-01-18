@@ -1,9 +1,15 @@
 package com.deepsoft.haolifa.controller.finance;
 
-import com.deepsoft.haolifa.model.domain.BizCostBudget;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.BizCostBudgetAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.BizCostBudgetDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsUpDTO;
 import com.deepsoft.haolifa.service.finance.CostBudgetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,34 +30,63 @@ public class CostBudgetController {
     private CostBudgetService costBudgetService;
 
 
-    @ApiOperation("添加节点")
-    @PostMapping("/save")
-    public ResultBean save(@RequestBody BizCostBudgetAddDTO model) {
-        return costBudgetService.save(model);
+    //--- 部门
+    @ApiOperation("添加部门预算节点")
+    @PostMapping("/dept/save")
+    public ResultBean saveDeptBudget(@RequestBody CostBudgetDeptAddDTO model) {
+        return costBudgetService.saveDeptBudget(model);
     }
 
-    @ApiOperation("删除节点")
-    @GetMapping("/delete/{costBudgetId}")
-    public ResultBean delete(@PathVariable("costBudgetId") int id) {
-        return costBudgetService.delete(id);
+    @ApiOperation("删除部门预算节点")
+    @GetMapping("/dept/delete/{id}")
+    public ResultBean deleteDeptBudget(@PathVariable("id") int id) {
+        return costBudgetService.deleteDeptBudget(id);
     }
 
-    @ApiOperation("批量删除节点")
-    @PostMapping("/deleteBatch")
-    public ResultBean deleteBatch(@RequestBody List<Integer> ids) {
-        return costBudgetService.deleteBatch(ids);
+
+    @ApiOperation("更新部门预算节点")
+    @PostMapping("/dept/updateDeptBudget")
+    public ResultBean updateDeptBudget(@RequestBody CostBudgetDeptUpDTO model) {
+        return costBudgetService.updateDeptBudget(model);
     }
 
-    @ApiOperation("更新节点")
-    @PostMapping("/updateCostBudget")
-    public ResultBean updateCostBudget(@RequestBody BizCostBudget costBudget) {
-        return costBudgetService.update(costBudget);
+    @ApiOperation("获取部门预算节点列表")
+    @PostMapping("/dept/getDeptBudgetList")
+    public  ResultBean<List<CostBudgetDeptTree>>  getDeptBudgetList(@RequestBody CostBudgetDeptRQDTO model) {
+        return costBudgetService.getDeptBudgetListTree(model);
     }
 
-    @ApiOperation("获取节点列表")
-    @PostMapping("/getCostBudgetList")
-    public ResultBean getCostBudgetList(@RequestBody BizCostBudgetDTO costBudgetDTO) {
-        return costBudgetService.getList(costBudgetDTO);
+
+    //--- 科目
+
+    @ApiOperation("添加科目预算节点")
+    @PostMapping("/subjects/saveSubjectsBudget")
+    public ResultBean saveSubjectsBudget(@RequestBody CostBudgetSubjectsAddDTO model) {
+        return costBudgetService.saveSubjectsBudget(model);
+    }
+
+    @ApiOperation("删除科目预算节点")
+    @GetMapping("/subjects/deleteSubjectsBudget/{id}")
+    public ResultBean deleteSubjectsBudget(@PathVariable("id") int id) {
+        return costBudgetService.deleteSubjectsBudget(id);
+    }
+
+    @ApiOperation("批量删除科目预算节点")
+    @PostMapping("/subjects/deleteSubjectsBudgetBatch")
+    public ResultBean deleteSubjectsBudgetBatch(@RequestBody List<Integer> ids) {
+        return costBudgetService.deleteSubjectsBudgetBatch(ids);
+    }
+
+    @ApiOperation("更新科目预算节点")
+    @PostMapping("/subjects/updateSubjectsBudget")
+    public ResultBean updateSubjectsBudget(@RequestBody CostBudgetSubjectsUpDTO model) {
+        return costBudgetService.updateSubjectsBudget(model);
+    }
+
+    @ApiOperation("获取科目预算节点列表")
+    @PostMapping("/subjects/getSubjectsBudgetList")
+    public ResultBean<PageDTO<CostBudgetSubjectsRSDTO>> getSubjectsBudgetList(@RequestBody CostBudgetSubjectsRQDTO model) {
+        return costBudgetService.getSubjectsBudgetList(model);
     }
 
 }

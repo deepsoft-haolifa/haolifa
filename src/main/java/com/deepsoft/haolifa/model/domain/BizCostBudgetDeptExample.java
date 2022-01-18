@@ -1,18 +1,17 @@
 package com.deepsoft.haolifa.model.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BizCostBudgetExample {
+public class BizCostBudgetDeptExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public BizCostBudgetExample() {
+    public BizCostBudgetDeptExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -236,206 +235,6 @@ public class BizCostBudgetExample {
             return (Criteria) this;
         }
 
-        public Criteria andDIsNull() {
-            addCriterion("d is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDIsNotNull() {
-            addCriterion("d is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDEqualTo(Date value) {
-            addCriterion("d =", value, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDNotEqualTo(Date value) {
-            addCriterion("d <>", value, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDGreaterThan(Date value) {
-            addCriterion("d >", value, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDGreaterThanOrEqualTo(Date value) {
-            addCriterion("d >=", value, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDLessThan(Date value) {
-            addCriterion("d <", value, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDLessThanOrEqualTo(Date value) {
-            addCriterion("d <=", value, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDIn(List<Date> values) {
-            addCriterion("d in", values, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDNotIn(List<Date> values) {
-            addCriterion("d not in", values, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDBetween(Date value1, Date value2) {
-            addCriterion("d between", value1, value2, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andDNotBetween(Date value1, Date value2) {
-            addCriterion("d not between", value1, value2, "d");
-            return (Criteria) this;
-        }
-
-        public Criteria andYIsNull() {
-            addCriterion("y is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andYIsNotNull() {
-            addCriterion("y is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andYEqualTo(String value) {
-            addCriterion("y =", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYNotEqualTo(String value) {
-            addCriterion("y <>", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYGreaterThan(String value) {
-            addCriterion("y >", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYGreaterThanOrEqualTo(String value) {
-            addCriterion("y >=", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYLessThan(String value) {
-            addCriterion("y <", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYLessThanOrEqualTo(String value) {
-            addCriterion("y <=", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYLike(String value) {
-            addCriterion("y like", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYNotLike(String value) {
-            addCriterion("y not like", value, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYIn(List<String> values) {
-            addCriterion("y in", values, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYNotIn(List<String> values) {
-            addCriterion("y not in", values, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYBetween(String value1, String value2) {
-            addCriterion("y between", value1, value2, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andYNotBetween(String value1, String value2) {
-            addCriterion("y not between", value1, value2, "y");
-            return (Criteria) this;
-        }
-
-        public Criteria andMIsNull() {
-            addCriterion("m is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMIsNotNull() {
-            addCriterion("m is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMEqualTo(String value) {
-            addCriterion("m =", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMNotEqualTo(String value) {
-            addCriterion("m <>", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMGreaterThan(String value) {
-            addCriterion("m >", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMGreaterThanOrEqualTo(String value) {
-            addCriterion("m >=", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMLessThan(String value) {
-            addCriterion("m <", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMLessThanOrEqualTo(String value) {
-            addCriterion("m <=", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMLike(String value) {
-            addCriterion("m like", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMNotLike(String value) {
-            addCriterion("m not like", value, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMIn(List<String> values) {
-            addCriterion("m in", values, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMNotIn(List<String> values) {
-            addCriterion("m not in", values, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMBetween(String value1, String value2) {
-            addCriterion("m between", value1, value2, "m");
-            return (Criteria) this;
-        }
-
-        public Criteria andMNotBetween(String value1, String value2) {
-            addCriterion("m not between", value1, value2, "m");
-            return (Criteria) this;
-        }
-
         public Criteria andDeptIdIsNull() {
             addCriterion("dept_id is null");
             return (Criteria) this;
@@ -496,123 +295,123 @@ public class BizCostBudgetExample {
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdIsNull() {
-            addCriterion("subjects_id is null");
+        public Criteria andDeptPidIsNull() {
+            addCriterion("dept_pid is null");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdIsNotNull() {
-            addCriterion("subjects_id is not null");
+        public Criteria andDeptPidIsNotNull() {
+            addCriterion("dept_pid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdEqualTo(Integer value) {
-            addCriterion("subjects_id =", value, "subjectsId");
+        public Criteria andDeptPidEqualTo(Integer value) {
+            addCriterion("dept_pid =", value, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdNotEqualTo(Integer value) {
-            addCriterion("subjects_id <>", value, "subjectsId");
+        public Criteria andDeptPidNotEqualTo(Integer value) {
+            addCriterion("dept_pid <>", value, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdGreaterThan(Integer value) {
-            addCriterion("subjects_id >", value, "subjectsId");
+        public Criteria andDeptPidGreaterThan(Integer value) {
+            addCriterion("dept_pid >", value, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("subjects_id >=", value, "subjectsId");
+        public Criteria andDeptPidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dept_pid >=", value, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdLessThan(Integer value) {
-            addCriterion("subjects_id <", value, "subjectsId");
+        public Criteria andDeptPidLessThan(Integer value) {
+            addCriterion("dept_pid <", value, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdLessThanOrEqualTo(Integer value) {
-            addCriterion("subjects_id <=", value, "subjectsId");
+        public Criteria andDeptPidLessThanOrEqualTo(Integer value) {
+            addCriterion("dept_pid <=", value, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdIn(List<Integer> values) {
-            addCriterion("subjects_id in", values, "subjectsId");
+        public Criteria andDeptPidIn(List<Integer> values) {
+            addCriterion("dept_pid in", values, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdNotIn(List<Integer> values) {
-            addCriterion("subjects_id not in", values, "subjectsId");
+        public Criteria andDeptPidNotIn(List<Integer> values) {
+            addCriterion("dept_pid not in", values, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdBetween(Integer value1, Integer value2) {
-            addCriterion("subjects_id between", value1, value2, "subjectsId");
+        public Criteria andDeptPidBetween(Integer value1, Integer value2) {
+            addCriterion("dept_pid between", value1, value2, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("subjects_id not between", value1, value2, "subjectsId");
+        public Criteria andDeptPidNotBetween(Integer value1, Integer value2) {
+            addCriterion("dept_pid not between", value1, value2, "deptPid");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIsNull() {
-            addCriterion("amount is null");
+        public Criteria andCostRatioIsNull() {
+            addCriterion("cost_ratio is null");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIsNotNull() {
-            addCriterion("amount is not null");
+        public Criteria andCostRatioIsNotNull() {
+            addCriterion("cost_ratio is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAmountEqualTo(BigDecimal value) {
-            addCriterion("amount =", value, "amount");
+        public Criteria andCostRatioEqualTo(Integer value) {
+            addCriterion("cost_ratio =", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotEqualTo(BigDecimal value) {
-            addCriterion("amount <>", value, "amount");
+        public Criteria andCostRatioNotEqualTo(Integer value) {
+            addCriterion("cost_ratio <>", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThan(BigDecimal value) {
-            addCriterion("amount >", value, "amount");
+        public Criteria andCostRatioGreaterThan(Integer value) {
+            addCriterion("cost_ratio >", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("amount >=", value, "amount");
+        public Criteria andCostRatioGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cost_ratio >=", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThan(BigDecimal value) {
-            addCriterion("amount <", value, "amount");
+        public Criteria andCostRatioLessThan(Integer value) {
+            addCriterion("cost_ratio <", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("amount <=", value, "amount");
+        public Criteria andCostRatioLessThanOrEqualTo(Integer value) {
+            addCriterion("cost_ratio <=", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountIn(List<BigDecimal> values) {
-            addCriterion("amount in", values, "amount");
+        public Criteria andCostRatioIn(List<Integer> values) {
+            addCriterion("cost_ratio in", values, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotIn(List<BigDecimal> values) {
-            addCriterion("amount not in", values, "amount");
+        public Criteria andCostRatioNotIn(List<Integer> values) {
+            addCriterion("cost_ratio not in", values, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("amount between", value1, value2, "amount");
+        public Criteria andCostRatioBetween(Integer value1, Integer value2) {
+            addCriterion("cost_ratio between", value1, value2, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("amount not between", value1, value2, "amount");
+        public Criteria andCostRatioNotBetween(Integer value1, Integer value2) {
+            addCriterion("cost_ratio not between", value1, value2, "costRatio");
             return (Criteria) this;
         }
 
