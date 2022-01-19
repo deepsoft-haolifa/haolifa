@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.model.dto.finance.billcontract;
 
 
+import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BillContractRQDTO {
+public class BillContractRQDTO  extends PageParam {
 
     @ApiModelProperty(value = "记账id")
     private Long billId;

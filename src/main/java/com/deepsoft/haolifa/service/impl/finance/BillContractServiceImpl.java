@@ -130,11 +130,29 @@ public class BillContractServiceImpl implements BillContractService {
      * @return
      */
     @Override
-    public ResultBean<List<BillContractRSDTO>> selectBizBillContractList(BillContractRQDTO bizBillContract) {
+    public ResultBean<PageDTO<BillContractRSDTO>> selectBizBillContractList(BillContractRQDTO bizBillContract) {
+
+        if (bizBillContract.getPageNum() == null || bizBillContract.getPageNum() == 0) {
+            bizBillContract.setPageNum(1);
+        }
+        if (bizBillContract.getPageSize() == null || bizBillContract.getPageSize() == 0) {
+            bizBillContract.setPageSize(10);
+        }
+
+
         BizBillContractExample example = buildBizBillContractExample(bizBillContract.getBillId(),
             bizBillContract.getBillType(), bizBillContract.getOrderId(), bizBillContract.getOrderNo());
-        List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(example);
-        List<BillContractRSDTO> billContractRSDTOList = bizBillContractList.stream()
+
+        Page<BizBillContract> pageData = PageHelper
+            .startPage(bizBillContract.getPageNum(), bizBillContract.getPageSize())
+            .doSelectPage(() -> {
+                bizBillContractMapper.selectByExample(example);
+            });
+
+        PageDTO<BillContractRSDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+
+        List<BillContractRSDTO> billContractRSDTOList = pageData.getResult().stream()
             .map(bc -> {
                 BillContractRSDTO billContractRSDTO = new BillContractRSDTO();
                 BeanUtils.copyProperties(bc, billContractRSDTO);
@@ -142,7 +160,8 @@ public class BillContractServiceImpl implements BillContractService {
             })
             .collect(Collectors.toList());
 
-        return ResultBean.success(billContractRSDTOList);
+        pageDTO.setList(billContractRSDTOList);
+        return ResultBean.success(pageDTO);
     }
 
     @Override
@@ -229,7 +248,7 @@ public class BillContractServiceImpl implements BillContractService {
     }
 
     private Integer updateStatusBy(ContractBillUpRQDTO contractBillUpRQDTO) {
-        BillTypeEnum billTypeEnum = BillTypeEnum.valueOf(contractBillUpRQDTO.getBillType());
+        BillTypeEnum billTypeEnum = BillTypeEnum.valueOfCode(contractBillUpRQDTO.getBillType());
         Integer i = 0;
         switch (billTypeEnum) {
             case bank_bill: {

@@ -20,7 +20,7 @@ public interface BillContractService {
 
     ResultBean<PageDTO<ContractListRSDTO>> orderContractList(ContractListRQDTO contractListRQDTO);
 
-    ResultBean<List<BillContractRSDTO>> selectBizBillContractList(BillContractRQDTO bizBillContract);
+    ResultBean<PageDTO<BillContractRSDTO>> selectBizBillContractList(BillContractRQDTO bizBillContract);
 
     ResultBean addOrUpContract(BillContractAddOrUpDTO billContract);
 

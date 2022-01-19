@@ -31,6 +31,8 @@ public class BillContractRSDTO {
     private String bookKeeper;
     @ApiModelProperty(value = "审批状态（0未审批；1.通过；2.不通过）")
     private Byte auditStatus;
+    @ApiModelProperty(value = "是否可审批")
+    private Boolean canAudit = true;
     @ApiModelProperty(value = "备注")
     private String remark;
     @ApiModelProperty(value = "创建者")
