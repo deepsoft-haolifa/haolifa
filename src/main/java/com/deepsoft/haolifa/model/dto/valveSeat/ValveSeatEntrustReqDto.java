@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto.autoControlEntrust;
+package com.deepsoft.haolifa.model.dto.valveSeat;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author murphy.he
  **/
 @Data
-public class AutoControlEntrustReqDto {
+public class ValveSeatEntrustReqDto {
     /**
      * id
      */
@@ -37,12 +37,6 @@ public class AutoControlEntrustReqDto {
      */
     @ApiModelProperty("型号")
     private String model;
-
-    /**
-     * 委托工种类别
-     */
-    @ApiModelProperty("委托工种类别")
-    private String workType;
 
     /**
      * 数量

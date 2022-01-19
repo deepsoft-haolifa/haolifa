@@ -1,19 +1,17 @@
-package com.deepsoft.haolifa.model.dto.autoControlEntrust;
+package com.deepsoft.haolifa.model.dto.valveSeat;
 
-import com.deepsoft.haolifa.model.domain.AutoControlInspectHistory;
+import com.deepsoft.haolifa.model.domain.ValveSeatInspectHistory;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.InspectReason;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.util.List;
 
 @Data
-@ToString
 @EqualsAndHashCode(callSuper = false)
-public class InspectHistoryDto extends AutoControlInspectHistory {
+public class ValveSeatInspectHistoryDto extends ValveSeatInspectHistory {
 
     @ApiModelProperty("附件列表")
     private List<Accessory> accessoryList;

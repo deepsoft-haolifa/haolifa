@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto.autoControlEntrust;
+package com.deepsoft.haolifa.model.dto.autoControl;
 
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.InspectReason;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @ToString
-public class InspectDto {
+public class AutoControlInspectDto {
     @ApiModelProperty("自控单ID")
     private Integer autoControlId;
     @ApiModelProperty("自控单NO")

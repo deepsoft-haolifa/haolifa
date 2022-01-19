@@ -7,11 +7,10 @@ import com.deepsoft.haolifa.dao.repository.AutoControlEntrustMapper;
 import com.deepsoft.haolifa.dao.repository.AutoControlInspectHistoryMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
-import com.deepsoft.haolifa.model.dto.autoControlEntrust.AutoControlEntrustConditionDto;
-import com.deepsoft.haolifa.model.dto.autoControlEntrust.AutoControlEntrustReqDto;
-import com.deepsoft.haolifa.model.dto.autoControlEntrust.InspectDto;
-import com.deepsoft.haolifa.model.dto.autoControlEntrust.InspectHistoryDto;
-import com.deepsoft.haolifa.model.dto.spray.SprayInspectHistoryDto;
+import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustConditionDto;
+import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustReqDto;
+import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectDto;
+import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectHistoryDto;
 import com.deepsoft.haolifa.service.AutoControlEntrustService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -106,32 +105,32 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int saveInspect(InspectDto inspectDto) {
-        if (inspectDto.getTestNumber() == 0) {
+    public int saveInspect(AutoControlInspectDto autoControlInspectDto) {
+        if (autoControlInspectDto.getTestNumber() == 0) {
             throw new BaseException(CommonEnum.ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
         // 不合格原因
         AutoControlInspectHistory history = new AutoControlInspectHistory();
-        BeanUtils.copyProperties(inspectDto, history);
-        boolean isEmpty = CollectionUtils.isEmpty(inspectDto.getReasonList());
+        BeanUtils.copyProperties(autoControlInspectDto, history);
+        boolean isEmpty = CollectionUtils.isEmpty(autoControlInspectDto.getReasonList());
         if (!isEmpty) {
-            int unqualifiedNum = inspectDto.getReasonList().stream().mapToInt(InspectReason::getNumber).sum();
-            inspectDto.setUnqualifiedNumber(unqualifiedNum);
+            int unqualifiedNum = autoControlInspectDto.getReasonList().stream().mapToInt(InspectReason::getNumber).sum();
+            autoControlInspectDto.setUnqualifiedNumber(unqualifiedNum);
             history.setUnqualifiedNumber(unqualifiedNum);
-            history.setReasons(JSON.toJSONString(inspectDto.getReasonList()));
+            history.setReasons(JSON.toJSONString(autoControlInspectDto.getReasonList()));
         } else {
-            inspectDto.setUnqualifiedNumber(0);
+            autoControlInspectDto.setUnqualifiedNumber(0);
             history.setUnqualifiedNumber(0);
         }
-        if (inspectDto.getQualifiedNumber() + inspectDto.getUnqualifiedNumber() != inspectDto.getTestNumber()) {
+        if (autoControlInspectDto.getQualifiedNumber() + autoControlInspectDto.getUnqualifiedNumber() != autoControlInspectDto.getTestNumber()) {
             throw new BaseException(CommonEnum.ResponseEnum.INSPECT_RECORD_DATA_ERROR);
         }
         // 质检附件
-        if (!CollectionUtils.isEmpty(inspectDto.getAccessoryList())) {
-            history.setAccessory(JSON.toJSONString(inspectDto.getAccessoryList()));
+        if (!CollectionUtils.isEmpty(autoControlInspectDto.getAccessoryList())) {
+            history.setAccessory(JSON.toJSONString(autoControlInspectDto.getAccessoryList()));
         }
-        AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(inspectDto.getAutoControlId());
-        entrust.setQualifiedNumber(entrust.getQualifiedNumber() + inspectDto.getQualifiedNumber());
+        AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(autoControlInspectDto.getAutoControlId());
+        entrust.setQualifiedNumber(entrust.getQualifiedNumber() + autoControlInspectDto.getQualifiedNumber());
         if (entrust.getQty() < entrust.getQualifiedNumber()) {
             throw new BaseException(CommonEnum.ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);
         }
@@ -140,13 +139,13 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
     }
 
     @Override
-    public List<InspectHistoryDto> getInspectList(String no) {
+    public List<AutoControlInspectHistoryDto> getInspectList(String no) {
         AutoControlInspectHistoryExample inspectHistoryExample = new AutoControlInspectHistoryExample();
         inspectHistoryExample.createCriteria().andNoEqualTo(no);
         List<AutoControlInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
-        List<InspectHistoryDto> inspectHistoryDtos = new ArrayList<>(inspectHistories.size());
+        List<AutoControlInspectHistoryDto> autoControlInspectHistoryDtos = new ArrayList<>(inspectHistories.size());
         for (AutoControlInspectHistory history : inspectHistories) {
-            InspectHistoryDto dto = new InspectHistoryDto();
+            AutoControlInspectHistoryDto dto = new AutoControlInspectHistoryDto();
             BeanUtils.copyProperties(history, dto);
             if (StringUtils.isNotEmpty(history.getAccessory())) {
                 dto.setAccessoryList(JSON.parseArray(history.getAccessory(), Accessory.class));
@@ -158,8 +157,8 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
             } else {
                 dto.setReasonList(Collections.emptyList());
             }
-            inspectHistoryDtos.add(dto);
+            autoControlInspectHistoryDtos.add(dto);
         }
-        return inspectHistoryDtos;
+        return autoControlInspectHistoryDtos;
     }
 }

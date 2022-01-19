@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto.autoControlEntrust;
+package com.deepsoft.haolifa.model.dto.autoControl;
 
 import com.deepsoft.haolifa.model.dto.BaseCondition;
 import io.swagger.annotations.ApiModelProperty;

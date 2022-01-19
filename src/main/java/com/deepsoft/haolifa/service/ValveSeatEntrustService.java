@@ -1,32 +1,32 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.domain.AutoControlEntrust;
+import com.deepsoft.haolifa.model.domain.ValveSeatEntrust;
+import com.deepsoft.haolifa.model.domain.ValveSeatInspectHistory;
 import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustConditionDto;
-import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustReqDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectHistoryDto;
+import com.deepsoft.haolifa.model.dto.valveSeat.*;
 
 import java.util.List;
 
 /**
  * @author murphy.he
  **/
-public interface AutoControlEntrustService {
+public interface ValveSeatEntrustService {
     /**
      * 新增
      */
-    public int add(AutoControlEntrustReqDto reqDto);
+    public int add(ValveSeatEntrustReqDto reqDto);
     /**
      * 更新
      */
-    public int update(AutoControlEntrustReqDto reqDto);
+    public int update(ValveSeatEntrustReqDto reqDto);
 
 
     /**
      * 分页查询
      */
-    public PageDTO<AutoControlEntrust> pageList(AutoControlEntrustConditionDto pageDto);
+    public PageDTO<ValveSeatEntrust> pageList(ValveSeatEntrustConditionDto pageDto);
 
     /**
      * 更新状态
@@ -51,7 +51,7 @@ public interface AutoControlEntrustService {
      * @param autoControlInspectDto
      * @return
      */
-    int saveInspect(AutoControlInspectDto autoControlInspectDto);
+    int saveInspect(ValveSeatInspectDto autoControlInspectDto);
 
 
     /**
@@ -59,5 +59,17 @@ public interface AutoControlEntrustService {
      * @param no
      * @return
      */
-    List<AutoControlInspectHistoryDto> getInspectList(String no);
+    List<ValveSeatInspectHistoryDto> getInspectList(String no);
+
+    /**
+     * 阀座待入库
+     * @param pageDto
+     * @return
+     */
+    PageDTO<ValveSeatInspectHistory> historyList(HistoryConditionDto pageDto);
+
+    /**
+     * 入库后更新入库状态
+     */
+    int updateHistoryStatus(Integer historyId);
 }

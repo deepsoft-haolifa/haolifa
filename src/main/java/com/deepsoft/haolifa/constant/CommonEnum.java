@@ -395,9 +395,13 @@ public class CommonEnum {
 
     }
 
+    /**
+     * 质检历史状态
+     */
     public enum InspectHistoryStatus {
-
+        // 待入库
         WAITING_STORE_1((byte) 1),
+        // 已入库
         BEEN_STORE_2((byte) 2);
         public final byte code;
 
