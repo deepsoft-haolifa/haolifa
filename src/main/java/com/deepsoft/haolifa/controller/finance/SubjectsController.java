@@ -2,14 +2,18 @@ package com.deepsoft.haolifa.controller.finance;
 
 
 import com.deepsoft.haolifa.model.domain.BizSubjects;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.BizSubjectsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.BizSubjectsDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 import com.deepsoft.haolifa.service.SubjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/finance/subjects")
@@ -39,8 +43,14 @@ public class SubjectsController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getSubjectsList")
-    public ResultBean getSubjectsList(@RequestBody BizSubjectsDTO bizSubjectsDTO) {
+    public ResultBean<PageDTO<BizSubjects>> getSubjectsList(@RequestBody BizSubjectsRQDTO bizSubjectsDTO) {
         return subjectService.getList(bizSubjectsDTO);
+    }
+
+    @ApiOperation("获取一级节点列表")
+    @GetMapping("/getSubjectsListFirst")
+    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListFirst() {
+        return subjectService.getSubjectsListFirst();
     }
 
 

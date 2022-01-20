@@ -4,19 +4,53 @@ import java.util.Date;
 
 public class BizSubjects {
     private Integer id;
+
     private String name;
+
     private String type;
-    private Integer parentId;
+
+    private String parentId;
+
     private Integer level;
+
     private String code;
+
     private String remark;
+
     private String status;
+
     private String delFlag;
-    private Double percent;
+
+    private Float percent;
+
     private Integer createUser;
-    private Integer updateUser;
+
     private Date createTime;
+
+    private Integer updateUser;
+
     private Date updateTime;
+
+    public BizSubjects(Integer id, String name, String type, String parentId, Integer level, String code, String remark, String status, String delFlag, Float percent, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.parentId = parentId;
+        this.level = level;
+        this.code = code;
+        this.remark = remark;
+        this.status = status;
+        this.delFlag = delFlag;
+        this.percent = percent;
+        this.createUser = createUser;
+        this.createTime = createTime;
+        this.updateUser = updateUser;
+        this.updateTime = updateTime;
+    }
+
+    public BizSubjects() {
+        super();
+    }
 
     public Integer getId() {
         return id;
@@ -31,7 +65,7 @@ public class BizSubjects {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
     }
 
     public String getType() {
@@ -39,15 +73,15 @@ public class BizSubjects {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = type == null ? null : type.trim();
     }
 
-    public Integer getParentId() {
+    public String getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setParentId(String parentId) {
+        this.parentId = parentId == null ? null : parentId.trim();
     }
 
     public Integer getLevel() {
@@ -63,7 +97,7 @@ public class BizSubjects {
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.code = code == null ? null : code.trim();
     }
 
     public String getRemark() {
@@ -71,7 +105,7 @@ public class BizSubjects {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark;
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public String getStatus() {
@@ -79,7 +113,7 @@ public class BizSubjects {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status == null ? null : status.trim();
     }
 
     public String getDelFlag() {
@@ -87,49 +121,23 @@ public class BizSubjects {
     }
 
     public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
+        this.delFlag = delFlag == null ? null : delFlag.trim();
     }
 
-    public Double getPercent() {
+    public Float getPercent() {
         return percent;
     }
 
-    public void setPercent(Double percent) {
+    public void setPercent(Float percent) {
         this.percent = percent;
     }
 
     public Integer getCreateUser() {
-
         return createUser;
     }
 
     public void setCreateUser(Integer createUser) {
         this.createUser = createUser;
-    }
-    public BizSubjects(Integer id, String name, String type, Integer parentId, Integer level, String code, String remark, String status, String delFlag, Double percent, Integer createUser, Integer updateUser, Date createTime, Date updateTime) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.parentId = parentId;
-        this.level = level;
-        this.code = code;
-        this.remark = remark;
-        this.status = status;
-        this.delFlag = delFlag;
-        this.percent = percent;
-        this.createUser = createUser;
-        this.updateUser = updateUser;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
-
-    public Integer getUpdateUser() {
-
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
     }
 
     public Date getCreateTime() {
@@ -140,15 +148,19 @@ public class BizSubjects {
         this.createTime = createTime;
     }
 
+    public Integer getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Integer updateUser) {
+        this.updateUser = updateUser;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public BizSubjects() {
-        super();
     }
 }

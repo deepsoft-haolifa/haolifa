@@ -2,13 +2,11 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.BizSubjects;
 import com.deepsoft.haolifa.model.domain.BizSubjectsExample;
-import com.deepsoft.haolifa.model.domain.SysDepartment;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
-public interface SubjectsMapper {
-    long countByExample(BizSubjectsExample example);
+public interface BizSubjectsMapper {
+    int countByExample(BizSubjectsExample example);
 
     int deleteByExample(BizSubjectsExample example);
 
@@ -22,9 +20,9 @@ public interface SubjectsMapper {
 
     BizSubjects selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") SysDepartment record, @Param("example") BizSubjectsExample example);
+    int updateByExampleSelective(@Param("record") BizSubjects record, @Param("example") BizSubjectsExample example);
 
-    int updateByExample(@Param("record") SysDepartment record, @Param("example") BizSubjectsExample example);
+    int updateByExample(@Param("record") BizSubjects record, @Param("example") BizSubjectsExample example);
 
     int updateByPrimaryKeySelective(BizSubjects record);
 

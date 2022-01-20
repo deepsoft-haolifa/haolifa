@@ -2,15 +2,14 @@ package com.deepsoft.haolifa.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.SubjectsMapper;
-import com.deepsoft.haolifa.dao.repository.extend.SubjectsExtentMapper;
+import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
 import com.deepsoft.haolifa.model.domain.BizSubjects;
 import com.deepsoft.haolifa.model.domain.BizSubjectsExample;
-import com.deepsoft.haolifa.model.domain.Supplier;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.BizSubjectsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.BizSubjectsDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 import com.deepsoft.haolifa.service.SubjectService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
@@ -22,15 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class SubjectsServiceImpl implements SubjectService {
 
     @Autowired
-    private SubjectsMapper subjectsMapper;
-    @Autowired
-    private SubjectsExtentMapper subjectsExtentMapper;
+    private BizSubjectsMapper subjectsMapper;
+
     @Autowired
     private SysUserService sysUserService;
 
@@ -71,7 +71,7 @@ public class SubjectsServiceImpl implements SubjectService {
     }
 
     @Override
-    public ResultBean getList(BizSubjectsDTO model) {
+    public ResultBean<PageDTO<BizSubjects>> getList(BizSubjectsRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -80,9 +80,9 @@ public class SubjectsServiceImpl implements SubjectService {
         }
         BizSubjectsExample bizSubjectsExample = new BizSubjectsExample();
         BizSubjectsExample.Criteria criteria = bizSubjectsExample.createCriteria();
-        if (model.getParentId() != null && model.getParentId() != 0) {
-            criteria.andParentIdNotEqualTo( model.getParentId());
-        }
+//        if (model.getParentId() != null ) {
+//            criteria.andParentIdNotEqualTo(model.getParentId());
+//        }
 
         bizSubjectsExample.setOrderByClause("id desc");
         Page<BizSubjects> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {
@@ -92,5 +92,20 @@ public class SubjectsServiceImpl implements SubjectService {
         BeanUtils.copyProperties(pageData, pageDTO);
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListFirst() {
+        BizSubjectsExample bizSubjectsExample = new BizSubjectsExample();
+        BizSubjectsExample.Criteria criteria = bizSubjectsExample.createCriteria();
+        criteria.andParentIdEqualTo("0");
+        bizSubjectsExample.setOrderByClause("id desc");
+        List<BizSubjects> bizSubjects = subjectsMapper.selectByExample(bizSubjectsExample);
+        List<BizSubjectsRSDTO> bizSubjectsRSDTOList = bizSubjects.stream().map(c -> {
+            BizSubjectsRSDTO subjectsRSDTO = new BizSubjectsRSDTO();
+            BeanUtils.copyProperties(c, subjectsRSDTO);
+            return subjectsRSDTO;
+        }).collect(Collectors.toList());
+        return ResultBean.success(bizSubjectsRSDTOList);
     }
 }

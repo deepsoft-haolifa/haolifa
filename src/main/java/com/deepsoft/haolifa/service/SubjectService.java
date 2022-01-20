@@ -1,9 +1,13 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.BizSubjects;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.BizSubjectsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.BizSubjectsDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
+
+import java.util.List;
 
 public interface SubjectService {
     /**
@@ -40,6 +44,7 @@ public interface SubjectService {
      * @param model
      * @return
      */
-    ResultBean getList(BizSubjectsDTO model);
+    ResultBean<PageDTO<BizSubjects>> getList(BizSubjectsRQDTO model);
 
+    ResultBean<List<BizSubjectsRSDTO>> getSubjectsListFirst();
 }
