@@ -3,14 +3,17 @@ package com.deepsoft.haolifa.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
+import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.BizSubjects;
 import com.deepsoft.haolifa.model.domain.BizSubjectsExample;
+import com.deepsoft.haolifa.model.domain.SysDict;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 import com.deepsoft.haolifa.service.SubjectService;
+import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +37,9 @@ public class SubjectsServiceImpl implements SubjectService {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private SysDictService sysDictService;
 
     @Override
     public ResultBean save(BizSubjectsAddDTO model) {
@@ -71,7 +78,7 @@ public class SubjectsServiceImpl implements SubjectService {
     }
 
     @Override
-    public ResultBean<PageDTO<BizSubjects>> getList(BizSubjectsRQDTO model) {
+    public ResultBean<PageDTO<BizSubjectsRSDTO>> getList(BizSubjectsRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -80,30 +87,46 @@ public class SubjectsServiceImpl implements SubjectService {
         }
         BizSubjectsExample bizSubjectsExample = new BizSubjectsExample();
         BizSubjectsExample.Criteria criteria = bizSubjectsExample.createCriteria();
-//        if (model.getParentId() != null ) {
-//            criteria.andParentIdNotEqualTo(model.getParentId());
-//        }
+        if (model.getType() != null ) {
+            criteria.andTypeEqualTo(model.getType());
+        }
 
         bizSubjectsExample.setOrderByClause("id desc");
         Page<BizSubjects> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {
             subjectsMapper.selectByExample(bizSubjectsExample);
         });
-        PageDTO<BizSubjects> pageDTO = new PageDTO<>();
+
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+        PageDTO<BizSubjectsRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
-        pageDTO.setList(pageData.getResult());
+        List<BizSubjectsRSDTO> bizSubjectsRSDTOList = pageData.getResult().stream()
+            .map(subject -> {
+                BizSubjectsRSDTO bizSubjectsRSDTO = new BizSubjectsRSDTO();
+                BeanUtils.copyProperties(subject, bizSubjectsRSDTO);
+                bizSubjectsRSDTO.setTypeCN(dictMap.get(subject.getType()));
+                return bizSubjectsRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        pageDTO.setList(bizSubjectsRSDTOList);
         return ResultBean.success(pageDTO);
     }
 
     @Override
-    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListFirst() {
+    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAll() {
         BizSubjectsExample bizSubjectsExample = new BizSubjectsExample();
-        BizSubjectsExample.Criteria criteria = bizSubjectsExample.createCriteria();
-        criteria.andParentIdEqualTo("0");
         bizSubjectsExample.setOrderByClause("id desc");
         List<BizSubjects> bizSubjects = subjectsMapper.selectByExample(bizSubjectsExample);
+
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
         List<BizSubjectsRSDTO> bizSubjectsRSDTOList = bizSubjects.stream().map(c -> {
             BizSubjectsRSDTO subjectsRSDTO = new BizSubjectsRSDTO();
             BeanUtils.copyProperties(c, subjectsRSDTO);
+            subjectsRSDTO.setTypeCN(dictMap.get(c.getType()));
             return subjectsRSDTO;
         }).collect(Collectors.toList());
         return ResultBean.success(bizSubjectsRSDTOList);

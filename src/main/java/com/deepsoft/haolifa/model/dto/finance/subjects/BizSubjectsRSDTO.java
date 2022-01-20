@@ -21,6 +21,8 @@ public class BizSubjectsRSDTO {
     private String name;
     @ApiModelProperty(value = "科目类别")
     private String type;
+    @ApiModelProperty(value = "科目类别中文")
+    private String typeCN;
     @ApiModelProperty(value = "父节点")
     private String parentId;
     @ApiModelProperty(value = "几级节点")

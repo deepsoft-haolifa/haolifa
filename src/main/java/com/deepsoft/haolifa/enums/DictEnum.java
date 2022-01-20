@@ -10,6 +10,7 @@ public enum DictEnum {
         PAY_WAY("PAY_WAY", "付款方式"),
         PAY_ACCOUNT("PAY_ACCOUNT", "付款账号"),
         PAYMENT_TYPE("PAY_ACCOUNT", "付款账号"),
+    SUBJECTS_TYPE("SUBJECTS_TYPE", "科目类型"),
         COLLECTION_TYPE("PAYMENT_TYPE", "收款类型");
 
     private String code;

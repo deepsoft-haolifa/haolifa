@@ -43,14 +43,14 @@ public class SubjectsController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getSubjectsList")
-    public ResultBean<PageDTO<BizSubjects>> getSubjectsList(@RequestBody BizSubjectsRQDTO bizSubjectsDTO) {
+    public ResultBean<PageDTO<BizSubjectsRSDTO>> getSubjectsList(@RequestBody BizSubjectsRQDTO bizSubjectsDTO) {
         return subjectService.getList(bizSubjectsDTO);
     }
 
-    @ApiOperation("获取一级节点列表")
-    @GetMapping("/getSubjectsListFirst")
-    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListFirst() {
-        return subjectService.getSubjectsListFirst();
+    @ApiOperation("获取全部节点列表-不分页")
+    @GetMapping("/getSubjectsListAll")
+    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAll() {
+        return subjectService.getSubjectsListAll();
     }
 
 

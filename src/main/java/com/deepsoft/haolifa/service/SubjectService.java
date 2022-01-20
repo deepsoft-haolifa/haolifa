@@ -44,7 +44,7 @@ public interface SubjectService {
      * @param model
      * @return
      */
-    ResultBean<PageDTO<BizSubjects>> getList(BizSubjectsRQDTO model);
+    ResultBean<PageDTO<BizSubjectsRSDTO>> getList(BizSubjectsRQDTO model);
 
-    ResultBean<List<BizSubjectsRSDTO>> getSubjectsListFirst();
+    ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAll();
 }
