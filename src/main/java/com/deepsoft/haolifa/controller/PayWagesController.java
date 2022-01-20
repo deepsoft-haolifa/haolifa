@@ -68,6 +68,13 @@ public class PayWagesController {
         return ResultBean.success("ok");
     }
 
+    @ApiOperation("生成工资列表")
+    @PostMapping("/createWages")
+    public ResultBean createWages(@RequestBody PayWagesVO payWagesVO) throws Exception {
+        payWagesService.createWages(payWagesVO);
+        return ResultBean.success("ok");
+    }
+
     @ApiOperation("test")
     @PostMapping("/import")
     public ResultBean test(@RequestParam(value = "userId") Integer userId) {

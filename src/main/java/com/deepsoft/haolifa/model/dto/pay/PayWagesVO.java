@@ -11,8 +11,12 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 public class PayWagesVO {
-    @ApiModelProperty(value = "计算开始时间")
+    @ApiModelProperty(value = "年, 格式：1970")
     @NonNull
-    private String calculateTime;
+    private String year;
+
+    @ApiModelProperty(value = "月份，格式：01")
+    @NonNull
+    private String month;
 
 }

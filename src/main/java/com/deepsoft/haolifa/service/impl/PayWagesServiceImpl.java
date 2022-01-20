@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.*;
 import com.deepsoft.haolifa.service.*;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -60,6 +61,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private SprayService sprayService;
     @Resource
     private SprayItemMapper sprayItemMapper;
+    @Resource
+    private PayWagesSearchMapper payWagesSearchMapper;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -181,10 +184,11 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     @Override
     @Async
     public ResultBean calculateSalary(PayWagesVO payWagesVO) throws Exception {
-        if (StringUtils.isBlank(payWagesVO.getCalculateTime())) {
-            throw new Exception("时间不能为空");
+        if (StringUtils.isBlank(payWagesVO.getYear()) || StringUtils.isBlank(payWagesVO.getMonth())) {
+            throw new Exception("年份或月份不能为空");
         }
-        Date calTime = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, payWagesVO.getCalculateTime());
+        String calDate = payWagesVO.getMonth() + "-" + payWagesVO.getMonth() + "01";
+        Date calTime = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, calDate);
         // 开始时间 上个月26号
         Calendar cal = Calendar.getInstance();
         cal.setTime(calTime);
@@ -314,7 +318,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     totalAmount = totalAmount.add(multiply);
                 }
             }
-
             minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
             PayWages model = new PayWages();
             model.setId(payWage.getId());
@@ -349,6 +352,51 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         }
         System.out.println("22222");
         return null;
+    }
+
+    @Override
+    public void createWages(PayWagesVO payWagesVO) throws Exception {
+        if (StringUtils.isBlank(payWagesVO.getYear()) || StringUtils.isBlank(payWagesVO.getMonth())) {
+            throw new Exception("年份或月份不能为空");
+        }
+        List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
+        for (PayWages payWage : payWages) {
+            // 先查关联表
+            PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
+            payWagesRelationUser.setWagesId(payWage.getId());
+            List<PayWagesRelationUser> list = payWagesRelationUserService.getList(payWagesRelationUser);
+            if (CollectionUtils.isEmpty(list)) {
+                log.info("PayWagesRelationUser is null, wagesId:{}", payWage.getId());
+                continue;
+            }
+            Integer userId = list.get(0).getUserId();
+            // 生成工资列表
+            PayWagesSearchExample example = new PayWagesSearchExample();
+            PayWagesSearchExample.Criteria criteria = example.createCriteria();
+            criteria.andUserIdEqualTo(userId);
+            criteria.andWagesYearEqualTo(payWagesVO.getYear());
+            criteria.andWagesMonthEqualTo(payWagesVO.getMonth());
+            List<PayWagesSearch> payWagesSearches = payWagesSearchMapper.selectByExample(example);
+            if (CollectionUtils.isEmpty(payWagesSearches)) {
+                PayWagesSearch payWagesSearch = new PayWagesSearch();
+                BeanCopyUtils.copyProperties(payWage, payWagesSearch);
+                payWagesSearch.setUserId(userId);
+                payWagesSearch.setId(null);
+                payWagesSearch.setWagesYear(payWagesVO.getYear());
+                payWagesSearch.setWagesMonth(payWagesVO.getMonth());
+                payWagesSearch.setCreateTime(new Date());
+                payWagesSearch.setUpdateTime(new Date());
+                payWagesSearch.setCreateUser(getLoginUserName());
+                payWagesSearch.setUpdateUser(getLoginUserName());
+                payWagesSearchMapper.insertSelective(payWagesSearch);
+            } else {
+                PayWagesSearch payWagesSearch = payWagesSearches.get(0);
+                payWagesSearch.setUpdateTime(new Date());
+                payWagesSearch.setUpdateUser(getLoginUserName());
+                payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
+            }
+        }
+
     }
 
     /**

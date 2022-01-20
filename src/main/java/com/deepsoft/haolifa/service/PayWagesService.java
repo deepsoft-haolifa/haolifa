@@ -25,4 +25,5 @@ public interface PayWagesService {
 
     public ResultBean test (Integer userId);
 
-    }
+    void createWages(PayWagesVO payWagesVO) throws Exception;
+}
