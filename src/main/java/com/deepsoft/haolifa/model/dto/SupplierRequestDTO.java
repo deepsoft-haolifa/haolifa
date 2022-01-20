@@ -60,7 +60,12 @@ public class SupplierRequestDTO {
     private String suppilerPreparer;
     @ApiModelProperty(value = "供应商评价")
     private String evaluation;
-
+    @ApiModelProperty(value = "开户行")
+    private String openBank;
+    @ApiModelProperty(value = "银行帐号")
+    private String bankAccount;
+    @ApiModelProperty(value = "付款方式")
+    private String paymentMethod;
 }
 
 @Data

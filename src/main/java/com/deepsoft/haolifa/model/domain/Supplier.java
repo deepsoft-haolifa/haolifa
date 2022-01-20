@@ -49,6 +49,12 @@ public class Supplier {
 
     private String responsiblePerson;
 
+    private String openBank;
+
+    private String bankAccount;
+
+    private String paymentMethod;
+
     private String evaluation;
 
     private Byte isQualified;
@@ -63,7 +69,7 @@ public class Supplier {
 
     private String accessory;
 
-    public Supplier(Integer id, String suppilerNo, String suppilerName, String website, Byte nature, String phone, String address, String postcode, String fax, String legalPerson, String legalPersonPhone, String supplierProduct, Integer totalFactoryArea, Integer totalArchitArea, Byte workType, String staffInfo, String credentialsInfo, String financialInfo, String mainOrgan, String qualityAssuranceInfo, String processRoute, String suppilerPreparer, String responsiblePerson, String evaluation, Byte isQualified, Integer createUserId, Date updateTime, Date createTime, Byte isDelete, String accessory) {
+    public Supplier(Integer id, String suppilerNo, String suppilerName, String website, Byte nature, String phone, String address, String postcode, String fax, String legalPerson, String legalPersonPhone, String supplierProduct, Integer totalFactoryArea, Integer totalArchitArea, Byte workType, String staffInfo, String credentialsInfo, String financialInfo, String mainOrgan, String qualityAssuranceInfo, String processRoute, String suppilerPreparer, String responsiblePerson, String openBank, String bankAccount, String paymentMethod, String evaluation, Byte isQualified, Integer createUserId, Date updateTime, Date createTime, Byte isDelete, String accessory) {
         this.id = id;
         this.suppilerNo = suppilerNo;
         this.suppilerName = suppilerName;
@@ -87,6 +93,9 @@ public class Supplier {
         this.processRoute = processRoute;
         this.suppilerPreparer = suppilerPreparer;
         this.responsiblePerson = responsiblePerson;
+        this.openBank = openBank;
+        this.bankAccount = bankAccount;
+        this.paymentMethod = paymentMethod;
         this.evaluation = evaluation;
         this.isQualified = isQualified;
         this.createUserId = createUserId;
@@ -282,6 +291,30 @@ public class Supplier {
 
     public void setResponsiblePerson(String responsiblePerson) {
         this.responsiblePerson = responsiblePerson == null ? null : responsiblePerson.trim();
+    }
+
+    public String getOpenBank() {
+        return openBank;
+    }
+
+    public void setOpenBank(String openBank) {
+        this.openBank = openBank == null ? null : openBank.trim();
+    }
+
+    public String getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount == null ? null : bankAccount.trim();
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod == null ? null : paymentMethod.trim();
     }
 
     public String getEvaluation() {

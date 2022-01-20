@@ -176,3 +176,6 @@ CREATE TABLE `valve_seat_inspect_history`
     `update_time`         timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='自控检验历史';
+alter table `supplier` add column `open_bank` varchar(64) NOT NULL DEFAULT '' COMMENT '开户行' after responsible_person,
+ add column `bank_account` varchar(64) NOT NULL DEFAULT '' COMMENT '银行帐号' after open_bank,
+ add column `payment_method` varchar(64) NOT NULL DEFAULT '' COMMENT '付款方式' after bank_account;
