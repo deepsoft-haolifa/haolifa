@@ -160,7 +160,7 @@ CREATE TABLE `valve_seat_entrust`
 CREATE TABLE `valve_seat_inspect_history`
 (
     `id`                  int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `valve_seat_id`     int(11) NOT NULL COMMENT '单据Id',
+    `valve_seat_id`       int(11) NOT NULL COMMENT '单据Id',
     `no`                  varchar(64)   NOT NULL DEFAULT '' COMMENT '单号',
     `material_graph_no`   varchar(64)   NOT NULL DEFAULT '' COMMENT '物料图号',
     `material_graph_name` varchar(255)  NOT NULL DEFAULT '' COMMENT '物料名称',
@@ -176,6 +176,26 @@ CREATE TABLE `valve_seat_inspect_history`
     `update_time`         timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='自控检验历史';
-alter table `supplier` add column `open_bank` varchar(64) NOT NULL DEFAULT '' COMMENT '开户行' after responsible_person,
+CREATE TABLE `customer_info`
+(
+    `id`              INT ( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name`            VARCHAR(128) NOT NULL COMMENT '客户名称',
+    `address`         VARCHAR(64)  NOT NULL DEFAULT '' COMMENT '地址',
+    `contract_person` VARCHAR(64)  NOT NULL DEFAULT '' COMMENT '联系人',
+    `phone`           VARCHAR(255) NOT NULL DEFAULT '' COMMENT '电话',
+    `fax`             VARCHAR(64)  NOT NULL DEFAULT '' COMMENT '传真',
+    `open_bank`       VARCHAR(64)  NOT NULL DEFAULT '' COMMENT '开户行',
+    `bank_account`    VARCHAR(64)  NOT NULL DEFAULT '' COMMENT '帐号',
+    `payment_method`  VARCHAR(64)  NOT NULL DEFAULT '' COMMENT '付款方式',
+    `remark`          VARCHAR(255) NOT NULL DEFAULT '' COMMENT '备注',
+    `create_time`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = INNODB DEFAULT CHARSET = utf8 ROW_FORMAT = DYNAMIC COMMENT = '客户信息';
+
+alter table `supplier`
+    add column `open_bank` varchar(64) NOT NULL DEFAULT '' COMMENT '开户行' after responsible_person,
  add column `bank_account` varchar(64) NOT NULL DEFAULT '' COMMENT '银行帐号' after open_bank,
  add column `payment_method` varchar(64) NOT NULL DEFAULT '' COMMENT '付款方式' after bank_account;
+
+
