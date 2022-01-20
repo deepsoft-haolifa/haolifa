@@ -5,10 +5,16 @@ import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
 import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
 import com.deepsoft.haolifa.model.domain.Invoice;
 import com.deepsoft.haolifa.model.domain.InvoiceExample;
+import com.deepsoft.haolifa.model.domain.PurchaseOrder;
+import com.deepsoft.haolifa.model.domain.PurchaseOrderExample;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
 import com.deepsoft.haolifa.service.InvoiceService;
+import com.deepsoft.haolifa.service.OrderProductService;
+import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +35,12 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
     @Autowired
     OrderProductMapper orderProductMapper;
 
+    @Autowired
+    private OrderProductService orderProductService;
+
+    @Autowired
+    private PurchaseOrderMapper purchaseOrderMapper;
+
     @Override
     public ResultBean save(InvoiceCreateDTO model) {
         if (validateIsEmpty(model)) {
@@ -38,7 +50,8 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         Invoice invoice = new Invoice();
         invoice.setStatus(model.getStatus().byteValue());
         invoice.setType(model.getType().byteValue());
-        invoice.setOrderNo(model.getOrderNo());
+        String orderNo = model.getOrderNo();
+        invoice.setOrderNo(orderNo);
         invoice.setRemark(model.getRemark());
         invoice.setTotalAmount(model.getTotalAmount());
         invoice.setOrderAmount(model.getOrderAmount());
@@ -49,8 +62,20 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
         invoice.setInvoiceIssuing(model.getInvoiceIssuing());
         invoice.setInvoiceDate(model.getInvoiceDate());
         if (model.getType() == 1) {
+            // 判断是否存在此生产订单
+            OrderProductDTO orderProductInfo = orderProductService.getOrderProductInfo(orderNo);
+            if (null == orderProductInfo) {
+                throw new BaseException("订单号找不到对应的生产订单");
+            }
             invoice.setConstractParty(model.getInvoiceCompany());
         } else {
+            // 判断是否存在此采购订单
+            PurchaseOrderExample example = new PurchaseOrderExample();
+            example.or().andPurchaseOrderNoEqualTo(model.getOrderNo());
+            List<PurchaseOrder> orders = purchaseOrderMapper.selectByExample(example);
+            if (CollectionUtil.isEmpty(orders)) {
+                throw new BaseException("单号找不到对应的采购订单");
+            }
             invoice.setConstractParty(model.getInvoiceIssuing());
         }
         if (invoice.getId() != null) {

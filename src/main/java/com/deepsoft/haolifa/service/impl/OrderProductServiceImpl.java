@@ -90,7 +90,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private EntrustRelationService entrustRelationService;
     @Autowired
-    private PriceProductService priceProductService;
+    private EntryOutStoreRecordService entryOutStoreRecordService;
     @Lazy
     @Autowired
     FlowInstanceService flowInstanceService;
@@ -995,6 +995,26 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         example.setOrderByClause("id desc");
         Page<OrderProduct> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> orderProductMapper.selectByExample(example));
+        List<OrderProduct> result = materials.getResult();
+        /**
+         * 发货状态的变更
+         */
+        if (CollectionUtil.isNotEmpty(result)) {
+            List<String> orderNoList = result.stream().map(OrderProduct::getOrderNo).collect(Collectors.toList());
+            Map<String, Integer> mapOutProductCount = entryOutStoreRecordService.mapOutProductCount(orderNoList);
+            for (OrderProduct orderProduct : result) {
+                Integer totalCount = orderProduct.getTotalCount();
+                Integer outCount = mapOutProductCount.getOrDefault(orderProduct.getOrderNo(), 0);
+                int abs = Math.abs(outCount);
+                if (abs == 0) {
+                    orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_NO_BEGIN_0.getCode());
+                } else if (totalCount <= abs) {
+                    orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_PART_1.getCode());
+                } else {
+                    orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
+                }
+            }
+        }
 
         PageDTO<OrderProduct> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materials, pageDTO);
@@ -1015,7 +1035,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (StringUtils.isNotBlank(model.getDemandName())) {
             criteria.andDemandNameLike("%" + model.getDemandName() + "%");
         }
-        if (model.getContractSignDate() != null ) {
+        if (model.getContractSignDate() != null) {
             Date contractSignDate = model.getContractSignDate();
             String dateString = DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, contractSignDate);
             criteria.andContractSignDateEqualTo(dateString);

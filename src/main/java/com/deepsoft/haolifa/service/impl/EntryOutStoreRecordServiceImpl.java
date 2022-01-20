@@ -280,10 +280,23 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         criteria.andOperationTypeEqualTo(CommonEnum.OperationType.OUT.code);
         criteria.andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
         List<EntryOutStoreRecord> recordList = entryOutStoreRecordMapper.selectByExample(recordExample);
-        int storeCount = recordList.stream().map(EntryOutStoreRecord::getQuantity).reduce(0, (a, b) -> a + b);
+        int storeCount = recordList.stream().map(EntryOutStoreRecord::getQuantity).reduce(0, Integer::sum);
         storeCount = Math.abs(storeCount);
         return storeCount;
     }
+    @Override
+    public Map<String,Integer> mapOutProductCount(List<String> orderNos) {
+        EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
+        EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
+        if (CollectionUtil.isNotEmpty(orderNos)) {
+            criteria.andOrderNoIn(orderNos);
+        }
+        criteria.andOperationTypeEqualTo(CommonEnum.OperationType.OUT.code);
+        criteria.andTypeEqualTo(CommonEnum.StorageType.PRODUCT.code);
+        List<EntryOutStoreRecord> recordList = entryOutStoreRecordMapper.selectByExample(recordExample);
+        return recordList.stream().collect(Collectors.groupingBy(EntryOutStoreRecord::getOrderNo, Collectors.summingInt(EntryOutStoreRecord::getQuantity)));
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
