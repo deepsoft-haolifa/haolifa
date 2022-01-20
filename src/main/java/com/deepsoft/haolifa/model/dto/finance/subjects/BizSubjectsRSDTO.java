@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.model.dto.finance.subjects;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * 科目表
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BizSubjectsRSDTO {
 
     @ApiModelProperty(value = "科目id")

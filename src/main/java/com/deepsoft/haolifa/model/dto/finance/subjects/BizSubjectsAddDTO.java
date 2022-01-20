@@ -3,11 +3,13 @@ package com.deepsoft.haolifa.model.dto.finance.subjects;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 科目表
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BizSubjectsAddDTO {
 
     @ApiModelProperty(value = "科目名称")
