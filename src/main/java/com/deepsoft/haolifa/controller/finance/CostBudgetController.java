@@ -2,14 +2,11 @@ package com.deepsoft.haolifa.controller.finance;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.*;
 import com.deepsoft.haolifa.service.finance.CostBudgetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,21 +28,21 @@ public class CostBudgetController {
 
 
     //--- 部门
-    @ApiOperation("添加部门预算节点")
-    @PostMapping("/dept/save")
-    public ResultBean saveDeptBudget(@RequestBody CostBudgetDeptAddDTO model) {
-        return costBudgetService.saveDeptBudget(model);
+    @ApiOperation("添加或修改部门预算节点")
+    @PostMapping("/dept/saveOrUp")
+    public ResultBean saveDeptBudget(@RequestBody CostBudgetDeptAddUpDTO model) {
+        return costBudgetService.saveOrUpDeptBudget(model);
     }
 
     @ApiOperation("删除部门预算节点")
-    @GetMapping("/dept/delete/{id}")
-    public ResultBean deleteDeptBudget(@PathVariable("id") int id) {
-        return costBudgetService.deleteDeptBudget(id);
+    @GetMapping("/dept/delete/{deptId}")
+    public ResultBean deleteDeptBudget(@PathVariable("deptId") int deptId) {
+        return costBudgetService.deleteDeptBudget(deptId);
     }
 
 
-    @ApiOperation("更新部门预算节点")
-    @PostMapping("/dept/updateDeptBudget")
+//    @ApiOperation("更新部门预算节点")
+//    @PostMapping("/dept/updateDeptBudget")
     public ResultBean updateDeptBudget(@RequestBody CostBudgetDeptUpDTO model) {
         return costBudgetService.updateDeptBudget(model);
     }
@@ -73,8 +70,8 @@ public class CostBudgetController {
 
     @ApiOperation("批量删除科目预算节点")
     @PostMapping("/subjects/deleteSubjectsBudgetBatch")
-    public ResultBean deleteSubjectsBudgetBatch(@RequestBody List<Integer> ids) {
-        return costBudgetService.deleteSubjectsBudgetBatch(ids);
+    public ResultBean deleteSubjectsBudgetBatch(@RequestBody CostBudgetSubjectsDelBatchDTO costBudgetSubjectsDelBatchDTO) {
+        return costBudgetService.deleteSubjectsBudgetBatch(costBudgetSubjectsDelBatchDTO.getIds());
     }
 
     @ApiOperation("更新科目预算节点")

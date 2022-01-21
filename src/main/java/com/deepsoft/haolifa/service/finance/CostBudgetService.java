@@ -2,7 +2,7 @@ package com.deepsoft.haolifa.service.finance;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
@@ -16,7 +16,7 @@ import java.util.List;
 public interface CostBudgetService {
 
 
-    ResultBean saveDeptBudget(CostBudgetDeptAddDTO model);
+    ResultBean saveOrUpDeptBudget(CostBudgetDeptAddUpDTO model);
 
     ResultBean deleteDeptBudget(int id);
 
