@@ -8,6 +8,8 @@ public class PayUser {
 
     private String userName;
 
+    private Integer parentId;
+
     private String onceUserName;
 
     private Byte sex;
@@ -74,9 +76,10 @@ public class PayUser {
 
     private Date updateTime;
 
-    public PayUser(Integer id, String userName, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, Integer departId, String departName, String userType, String superiorName, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayUser(Integer id, String userName, Integer parentId, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, Integer departId, String departName, String userType, String superiorName, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userName = userName;
+        this.parentId = parentId;
         this.onceUserName = onceUserName;
         this.sex = sex;
         this.birthday = birthday;
@@ -130,6 +133,14 @@ public class PayUser {
 
     public void setUserName(String userName) {
         this.userName = userName == null ? null : userName.trim();
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getOnceUserName() {
