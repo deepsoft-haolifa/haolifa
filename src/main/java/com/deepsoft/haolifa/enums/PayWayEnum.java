@@ -1,7 +1,11 @@
 package com.deepsoft.haolifa.enums;
 
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /***
  * //现金记账    现金                 100
@@ -31,9 +35,6 @@ public enum PayWayEnum {
             .filter(e -> e.code.equalsIgnoreCase(code))
             .findFirst()
             .orElse(null);
-        if (bookingTypeEnum == null) {
-            throw new RuntimeException();
-        }
         return bookingTypeEnum;
     }
 
@@ -62,4 +63,11 @@ public enum PayWayEnum {
         this.desc = desc;
     }
 
+    public static void main(String[] args) {
+
+        List<PayWayEnum> collect = Arrays.stream(PayWayEnum.values()).collect(Collectors.toList());
+
+        System.out.println(JSON.toJSONString(collect));
+        System.out.println(JSON.toJSON(PayWayEnum.cash_pay));
+    }
 }

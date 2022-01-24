@@ -1,9 +1,8 @@
 package com.deepsoft.haolifa.service.finance;
 
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 
 public interface ReimburseApplyService {
     /**
@@ -45,7 +44,10 @@ public interface ReimburseApplyService {
      * @param model
      * @return
      */
-    ResultBean getList(ReimburseApplyRQDTO model);
+    ResultBean<PageDTO<ReimburseApplyRSDTO>> getList(ReimburseApplyRQDTO model);
 
     public ResultBean approve(Integer id);
+
+    ResultBean pay(ReimburseApplyPayDTO payDTO);
+
 }

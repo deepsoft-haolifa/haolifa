@@ -2,9 +2,8 @@ package com.deepsoft.haolifa.enums;
 
 import java.util.Arrays;
 
-public enum BillTypeEnum {
+public enum LoanBillTypeEnum {
     //
-    all("0", "全部"),
     bill("1", "现金"),
     bank_bill("2", "银行"),
     other_bill("3", "其他");
@@ -13,8 +12,8 @@ public enum BillTypeEnum {
     private String desc;
 
 
-    public static BillTypeEnum valueOfCode(String code) {
-        BillTypeEnum billTypeEnum = Arrays.stream(BillTypeEnum.values())
+    public static LoanBillTypeEnum valueOfCode(String code) {
+        LoanBillTypeEnum billTypeEnum = Arrays.stream(LoanBillTypeEnum.values())
             .filter(e -> e.code.equalsIgnoreCase(code))
             .findFirst()
             .orElse(null);
@@ -39,7 +38,7 @@ public enum BillTypeEnum {
         this.desc = desc;
     }
 
-    BillTypeEnum(String code, String desc) {
+    LoanBillTypeEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }

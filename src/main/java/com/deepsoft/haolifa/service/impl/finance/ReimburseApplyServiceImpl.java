@@ -3,16 +3,16 @@ package com.deepsoft.haolifa.service.impl.finance;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizReimburseApplyMapper;
+import com.deepsoft.haolifa.enums.LoanApplyStatusEnum;
+import com.deepsoft.haolifa.enums.LoanrPayStatusEnum;
 import com.deepsoft.haolifa.model.domain.BizLoanApply;
+import com.deepsoft.haolifa.model.domain.BizLoanApplyExample;
 import com.deepsoft.haolifa.model.domain.BizReimburseApply;
 import com.deepsoft.haolifa.model.domain.BizReimburseApplyExample;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.ReimburseApplyService;
@@ -97,7 +97,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     }
 
     @Override
-    public ResultBean getList(ReimburseApplyRQDTO model) {
+    public ResultBean<PageDTO<ReimburseApplyRSDTO>> getList(ReimburseApplyRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -151,6 +151,29 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         return ResultBean.success(pageDTO);
     }
 
+
+//    @Override
+//    public int auditReplaceMaterial(String item_id, LoanApplyStatusEnum auditResult) {
+//        BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
+//        BizLoanApplyExample.Criteria criteria = loanApplyExample.createCriteria();
+//        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+//        criteria.andSerialNoEqualTo(item_id);
+//        List<BizLoanApply> bizLoanApplies = bizLoanApplyMapper.selectByExample(loanApplyExample);
+//
+//        BizLoanApply  loanApplyS = bizLoanApplies.get(0);
+//        if (loanApplyS == null){
+//            log.error("auditReplaceMaterial 无该条记录,id:{}",item_id);
+//            return 0;
+//        }
+//
+//        BizLoanApply loanApply = new BizLoanApply();
+//        loanApply.setApplyStatus(auditResult.getCode());
+//        loanApply.setUpdateTime(new Date());
+//        loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+//        int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
+//        return 1;
+//    }
+
     @Override
     public ResultBean approve(Integer id) {
 
@@ -162,11 +185,29 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         reimburseApply.setUpdateTime(new Date());
         bizReimburseApplyMapper.updateByPrimaryKeySelective(reimburseApply);
 
-
         // 添加申请流程
         FlowInstanceDTO flowInstanceDTO = buildFlowInstanceDTO(reimburseApply);
         flowInstanceService.create(flowInstanceDTO);
         return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean pay(ReimburseApplyPayDTO payDTO) {
+        BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(payDTO.getId());
+
+        // 有些状态不能付款
+        LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(bizReimburseApplyS.getPayStatus());
+        if (!LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
+        }
+        BizReimburseApply apply = new BizReimburseApply();
+        BeanUtils.copyProperties(payDTO, apply);
+        apply.setPayStatus(LoanrPayStatusEnum.all_pay.getCode());
+        apply.setPayTime(new Date());
+        apply.setUpdateTime(new Date());
+        apply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int update = bizReimburseApplyMapper.updateByPrimaryKeySelective(apply);
+        return ResultBean.success(update);
     }
 
     private FlowInstanceDTO buildFlowInstanceDTO(BizReimburseApply reimburseApply ) {

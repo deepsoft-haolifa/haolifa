@@ -29,9 +29,6 @@ public class LoanApplyAddDTO {
     @ApiModelProperty(value = "资金性质（1現金 2支票）")
     private String amountType;
 
-    @ApiModelProperty(value = "记账方式（1現金 2銀行 3 其他貨幣）")
-    private String billNature;
-
     @ApiModelProperty(value = "户名")
     private String accountName;
 
@@ -40,7 +37,6 @@ public class LoanApplyAddDTO {
 
     @ApiModelProperty(value = "开户行")
     private String bankOfDeposit;
-
 
     @ApiModelProperty(value = "备注摘要")
     private String remark;

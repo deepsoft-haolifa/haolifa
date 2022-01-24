@@ -20,9 +20,8 @@ public class LoanApplyRSDTO {
 
     @ApiModelProperty(value = "借款部门id")
     private Integer deptId;
-    @ApiModelProperty(value = "部门")
-    private DepartmentDTO departmentDTO;
-
+    @ApiModelProperty(value = "借款部门名称")
+    private String deptName;
 
     @ApiModelProperty(value = "借款日期")
     private Date loanDate;
@@ -39,14 +38,20 @@ public class LoanApplyRSDTO {
     @ApiModelProperty(value = "借款人id")
     private Integer loanUser;
 
-    @ApiModelProperty(value = "借款人")
-    private UserBaseDTO loanUserDTO;
+    @ApiModelProperty(value = "借款人名称")
+    private String loanUserName;
 
     @ApiModelProperty(value = "资金性质（1現金 2支票）")
     private String amountType;
 
+    @ApiModelProperty(value = "资金性质中文")
+    private String amountTypeCN;
+
     @ApiModelProperty(value = "记账方式（1現金 2銀行 3 其他貨幣）")
     private String billNature;
+
+    @ApiModelProperty(value = "记账方式中文")
+    private String billNatureCN;
 
     @ApiModelProperty(value = "户名")
     private String accountName;
@@ -59,6 +64,9 @@ public class LoanApplyRSDTO {
 
     @ApiModelProperty(value = "审批节点")
     private String applyStatus;
+
+    @ApiModelProperty(value = "审批节点中文")
+    private String applyStatusCN;
 
     @ApiModelProperty(value = "付款单位")
     private String payCompany;
@@ -74,6 +82,9 @@ public class LoanApplyRSDTO {
 
     @ApiModelProperty(value = "付款状态（1未付款 2付款中 3付款完成）")
     private String payStatus;
+
+    @ApiModelProperty(value = "付款状态中文")
+    private String payStatusCN;
 
     @ApiModelProperty(value = "备注摘要")
     private String remark;
@@ -92,4 +103,6 @@ public class LoanApplyRSDTO {
 
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
+    @ApiModelProperty(value = "是否可以支付")
+    private Boolean canPay = false;
 }
