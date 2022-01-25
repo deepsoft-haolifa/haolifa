@@ -87,7 +87,7 @@ public class SubjectsServiceImpl implements SubjectService {
         }
         BizSubjectsExample bizSubjectsExample = new BizSubjectsExample();
         BizSubjectsExample.Criteria criteria = bizSubjectsExample.createCriteria();
-        if (model.getType() != null ) {
+        if (StringUtils.isNotEmpty(model.getType()) ) {
             criteria.andTypeEqualTo(model.getType());
         }
 
