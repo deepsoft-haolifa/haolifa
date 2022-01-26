@@ -14,6 +14,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -51,6 +52,7 @@ public class PayWagesSearchServiceImpl extends BaseService implements PayWagesSe
         Page<PayWagesSearch> payWagesSearches = PageHelper.startPage(payWagesSearchReqVO.getPageNum(), payWagesSearchReqVO.getPageSize())
             .doSelectPage(() -> payWagesSearchMapper.selectByExample(example));
         PageDTO<PayWagesSearchResVO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(payWagesSearches, pageDTO);
         List<PayWagesSearchResVO> payWagesSearchResVOList = BeanCopyUtils.copyPropertiesForNewList(payWagesSearches, () -> new PayWagesSearchResVO());
         pageDTO.setList(payWagesSearchResVOList);
         return ResultBean.success(pageDTO);

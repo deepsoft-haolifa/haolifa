@@ -5,6 +5,7 @@
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="once_user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="sex" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="birthday" jdbcType="TIMESTAMP" javaType="java.util.Date" />
@@ -99,7 +100,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, user_name, once_user_name, sex, birthday, nation, native_place, political_outlook, 
+    id, user_name, parent_id, once_user_name, sex, birthday, nation, native_place, political_outlook, 
     blood_type, health, marry_status, id_card, registered, university_from, major, education, 
     graduation_time, working_time, address, insurance_base, phone, mail, team_id, base_pay, 
     merit_pay, post_id, depart_id, depart_name, user_type, superior_name, superior_id, 
@@ -139,30 +140,30 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_user (user_name, once_user_name, sex, 
-      birthday, nation, native_place, 
-      political_outlook, blood_type, health, 
-      marry_status, id_card, registered, 
-      university_from, major, education, 
-      graduation_time, working_time, address, 
-      insurance_base, phone, mail, 
-      team_id, base_pay, merit_pay, 
-      post_id, depart_id, depart_name, 
-      user_type, superior_name, superior_id, 
-      create_user, update_user, create_time, 
-      update_time)
-    values (#{userName,jdbcType=VARCHAR}, #{onceUserName,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
-      #{birthday,jdbcType=TIMESTAMP}, #{nation,jdbcType=VARCHAR}, #{nativePlace,jdbcType=VARCHAR}, 
-      #{politicalOutlook,jdbcType=VARCHAR}, #{bloodType,jdbcType=VARCHAR}, #{health,jdbcType=VARCHAR}, 
-      #{marryStatus,jdbcType=TINYINT}, #{idCard,jdbcType=VARCHAR}, #{registered,jdbcType=VARCHAR}, 
-      #{universityFrom,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, #{education,jdbcType=TINYINT}, 
-      #{graduationTime,jdbcType=TIMESTAMP}, #{workingTime,jdbcType=TIMESTAMP}, #{address,jdbcType=VARCHAR}, 
-      #{insuranceBase,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, 
-      #{teamId,jdbcType=INTEGER}, #{basePay,jdbcType=DECIMAL}, #{meritPay,jdbcType=DECIMAL}, 
-      #{postId,jdbcType=INTEGER}, #{departId,jdbcType=INTEGER}, #{departName,jdbcType=VARCHAR}, 
-      #{userType,jdbcType=VARCHAR}, #{superiorName,jdbcType=VARCHAR}, #{superiorId,jdbcType=INTEGER}, 
-      #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into pay_user (user_name, parent_id, once_user_name, 
+      sex, birthday, nation, 
+      native_place, political_outlook, blood_type, 
+      health, marry_status, id_card, 
+      registered, university_from, major, 
+      education, graduation_time, working_time, 
+      address, insurance_base, phone, 
+      mail, team_id, base_pay, 
+      merit_pay, post_id, depart_id, 
+      depart_name, user_type, superior_name, 
+      superior_id, create_user, update_user, 
+      create_time, update_time)
+    values (#{userName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{onceUserName,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=TIMESTAMP}, #{nation,jdbcType=VARCHAR}, 
+      #{nativePlace,jdbcType=VARCHAR}, #{politicalOutlook,jdbcType=VARCHAR}, #{bloodType,jdbcType=VARCHAR}, 
+      #{health,jdbcType=VARCHAR}, #{marryStatus,jdbcType=TINYINT}, #{idCard,jdbcType=VARCHAR}, 
+      #{registered,jdbcType=VARCHAR}, #{universityFrom,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, 
+      #{education,jdbcType=TINYINT}, #{graduationTime,jdbcType=TIMESTAMP}, #{workingTime,jdbcType=TIMESTAMP}, 
+      #{address,jdbcType=VARCHAR}, #{insuranceBase,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR}, 
+      #{mail,jdbcType=VARCHAR}, #{teamId,jdbcType=INTEGER}, #{basePay,jdbcType=DECIMAL}, 
+      #{meritPay,jdbcType=DECIMAL}, #{postId,jdbcType=INTEGER}, #{departId,jdbcType=INTEGER}, 
+      #{departName,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{superiorName,jdbcType=VARCHAR}, 
+      #{superiorId,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayUser" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -172,6 +173,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userName != null" >
         user_name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
       </if>
       <if test="onceUserName != null" >
         once_user_name,
@@ -276,6 +280,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userName != null" >
         #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
       </if>
       <if test="onceUserName != null" >
         #{onceUserName,jdbcType=VARCHAR},
@@ -393,6 +400,9 @@
       <if test="record.userName != null" >
         user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+      </if>
       <if test="record.onceUserName != null" >
         once_user_name = #{record.onceUserName,jdbcType=VARCHAR},
       </if>
@@ -501,6 +511,7 @@
     update pay_user
     set id = #{record.id,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=INTEGER},
       once_user_name = #{record.onceUserName,jdbcType=VARCHAR},
       sex = #{record.sex,jdbcType=TINYINT},
       birthday = #{record.birthday,jdbcType=TIMESTAMP},
@@ -543,6 +554,9 @@
     <set >
       <if test="userName != null" >
         user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
       </if>
       <if test="onceUserName != null" >
         once_user_name = #{onceUserName,jdbcType=VARCHAR},
@@ -649,6 +663,7 @@
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayUser" >
     update pay_user
     set user_name = #{userName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
       once_user_name = #{onceUserName,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=TINYINT},
       birthday = #{birthday,jdbcType=TIMESTAMP},

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizCostBudgetDeptMapper;
@@ -11,7 +12,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudget;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudgetQuery;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
@@ -23,7 +24,6 @@ import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.CostBudgetService;
 import com.deepsoft.haolifa.util.TreeUtils;
-import com.deepsoft.haolifa.util.tuples.Tuple2;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -60,36 +60,70 @@ public class CostBudgetServiceImpl implements CostBudgetService {
     private DepartmentService departmentService;
 
     @Override
-    public ResultBean saveDeptBudget(CostBudgetDeptAddDTO model) {
+    public ResultBean saveOrUpDeptBudget(CostBudgetDeptAddUpDTO model) {
         log.info("CostBudgetService saveDeptBudget start|{}", JSONObject.toJSON(model));
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
-         if (model.getCostRatio() > 100 || model.getCostRatio()<0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"比例介于0~100之间");
+        if (model.getCostRatio() > 100 || model.getCostRatio() < 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "比例介于0~100之间");
         }
 
+        BizCostBudgetDeptExample bizCostBudgetDeptExample = new BizCostBudgetDeptExample();
+        BizCostBudgetDeptExample.Criteria criteria = bizCostBudgetDeptExample.createCriteria();
+        criteria.andDeptIdEqualTo(model.getDeptId());
+        List<BizCostBudgetDept> bizCostBudgetDepts = bizCostBudgetDeptMapper.selectByExample(bizCostBudgetDeptExample);
+        BizCostBudgetDept bizCostBudgetDept = null;
+        if (CollectionUtil.isNotEmpty(bizCostBudgetDepts)) {
+            bizCostBudgetDept = bizCostBudgetDepts.get(0);
+        }
 
-        BizCostBudgetDept costBudget = new BizCostBudgetDept();
-        BeanUtils.copyProperties(model, costBudget);
-        costBudget.setCreateTime(new Date());
-        costBudget.setUpdateTime(new Date());
-        costBudget.setCreateUser(sysUserService.selectLoginUser().getId());
-        costBudget.setUpdateUser(sysUserService.selectLoginUser().getId());
-        int insertId = bizCostBudgetDeptMapper.insertSelective(costBudget);
-        return ResultBean.success(insertId);
+        int i = 0;
+        if (bizCostBudgetDept != null) {
+            SysDepartment department = departmentMapper.selectByPrimaryKey(model.getDeptId());
+
+            BizCostBudgetDept bizCostBudgetDeptUp = new BizCostBudgetDept();
+            bizCostBudgetDeptUp.setId(bizCostBudgetDept.getId());
+            bizCostBudgetDeptUp.setName(department.getDeptName());
+            bizCostBudgetDeptUp.setCostRatio(bizCostBudgetDept.getCostRatio());
+            bizCostBudgetDeptUp.setRemark(bizCostBudgetDept.getRemark());
+            bizCostBudgetDeptUp.setUpdateTime(new Date());
+            bizCostBudgetDeptUp.setUpdateUser(sysUserService.selectLoginUser().getId());
+            i = bizCostBudgetDeptMapper.updateByPrimaryKeySelective(bizCostBudgetDeptUp);
+        } else {
+            BizCostBudgetDept costBudget = new BizCostBudgetDept();
+            BeanUtils.copyProperties(model, costBudget);
+            SysDepartment department = departmentMapper.selectByPrimaryKey(model.getDeptId());
+            costBudget.setDeptPid(department.getPid());
+            costBudget.setName(department.getDeptName());
+            costBudget.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
+            costBudget.setCreateTime(new Date());
+            costBudget.setUpdateTime(new Date());
+            costBudget.setCreateUser(sysUserService.selectLoginUser().getId());
+            costBudget.setUpdateUser(sysUserService.selectLoginUser().getId());
+            i = bizCostBudgetDeptMapper.insertSelective(costBudget);
+        }
+        return ResultBean.success(i);
     }
 
     @Override
     public ResultBean deleteDeptBudget(int id) {
-        int delete = bizCostBudgetDeptMapper.deleteByPrimaryKey(id);
+        BizCostBudgetDeptExample bizCostBudgetDeptExample = new BizCostBudgetDeptExample();
+        BizCostBudgetDeptExample.Criteria criteria = bizCostBudgetDeptExample.createCriteria();
+        criteria.andDeptIdEqualTo(id);
+        List<BizCostBudgetDept> bizCostBudgetDepts = bizCostBudgetDeptMapper.selectByExample(bizCostBudgetDeptExample);
+        BizCostBudgetDept bizCostBudgetDept = null;
+        if (CollectionUtil.isNotEmpty(bizCostBudgetDepts)) {
+            bizCostBudgetDept = bizCostBudgetDepts.get(0);
+        }
+        int delete = bizCostBudgetDeptMapper.deleteByPrimaryKey(bizCostBudgetDept.getId());
         return ResultBean.success(delete);
     }
 
     @Override
     public ResultBean updateDeptBudget(CostBudgetDeptUpDTO model) {
-        if (model.getCostRatio() > 100 || model.getCostRatio()<0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"比例介于0~100之间");
+        if (model.getCostRatio() > 100 || model.getCostRatio() < 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "比例介于0~100之间");
         }
 
         BizCostBudgetDept costBudget = new BizCostBudgetDept();
@@ -182,8 +216,8 @@ public class CostBudgetServiceImpl implements CostBudgetService {
     public ResultBean saveSubjectsBudget(CostBudgetSubjectsAddDTO model) {
 
         log.info("CostBudgetService saveSubjectsBudget start|{}", JSONObject.toJSON(model));
-        if (model.getCostRatio() > 100 || model.getCostRatio()<0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"比例介于0~100之间");
+        if (model.getCostRatio() > 100 || model.getCostRatio() < 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "比例介于0~100之间");
         }
 
         if (StringUtils.isAnyBlank()) {
@@ -213,8 +247,8 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
     @Override
     public ResultBean updateSubjectsBudget(CostBudgetSubjectsUpDTO model) {
-        if (model.getCostRatio() > 100 || model.getCostRatio()<0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"比例介于0~100之间");
+        if (model.getCostRatio() > 100 || model.getCostRatio() < 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "比例介于0~100之间");
         }
 
         BizCostBudgetSubjects costBudget = new BizCostBudgetSubjects();
@@ -254,6 +288,11 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             });
         PageDTO<CostBudgetSubjectsRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
+
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
         List<CostBudgetSubjectsRSDTO> rqdtoList = pageData.getResult().stream()
             .map(bizCostBudgetSubjects -> {
                 CostBudgetSubjectsRSDTO costBudgetSubjectsRQDTO = new CostBudgetSubjectsRSDTO();
@@ -261,6 +300,8 @@ public class CostBudgetServiceImpl implements CostBudgetService {
                 // todo 公式待补充
                 costBudgetSubjectsRQDTO.setCostRatioFormula(bizCostBudgetSubjects.getCostRatio() + "%");
                 costBudgetSubjectsRQDTO.setCostRatioFormulaCN(bizCostBudgetSubjects.getCostRatio() + "%");
+                SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
+                costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
                 return costBudgetSubjectsRQDTO;
             })
             .collect(Collectors.toList());

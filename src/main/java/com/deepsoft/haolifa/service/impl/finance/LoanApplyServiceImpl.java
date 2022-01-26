@@ -1,17 +1,17 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizLoanApplyMapper;
-import com.deepsoft.haolifa.model.domain.BizLoanApply;
-import com.deepsoft.haolifa.model.domain.BizLoanApplyExample;
+import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
+import com.deepsoft.haolifa.dao.repository.SysUserMapper;
+import com.deepsoft.haolifa.enums.*;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
@@ -24,8 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.LOAN_APP_FLOW;
@@ -43,16 +43,26 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     @Autowired
     private FlowInstanceService flowInstanceService;
 
+    @Autowired
+    private SysDepartmentMapper departmentMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
     @Override
     public ResultBean save(LoanApplyAddDTO model) {
         log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+        // todo 校验金额是否满足
+
 
         BizLoanApply loanApply = new BizLoanApply();
         BeanUtils.copyProperties(model, loanApply);
-
+        loanApply.setApplyStatus(LoanApplyStatusEnum.PENDING_APPROVAL.getCode());
+        loanApply.setPayStatus(LoanrPayStatusEnum.un_pay.getCode());
+        loanApply.setLoanUser(sysUserService.selectLoginUser().getId());
         loanApply.setCreateTime(new Date());
         loanApply.setUpdateTime(new Date());
         loanApply.setCreateUser(sysUserService.selectLoginUser().getId());
@@ -63,24 +73,35 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
     @Override
     public ResultBean delete(Integer id) {
-        //int delete = bizLoanApplyMapper.deleteByPrimaryKey(id);
 
-        BizLoanApply billBank = new BizLoanApply();
-        billBank.setId(id);
-        billBank.setDelFlag("1");
-        billBank.setUpdateTime(new Date());
-        billBank.setUpdateUser(sysUserService.selectLoginUser().getId());
-        int update = bizLoanApplyMapper.updateByPrimaryKeySelective(billBank);
-        return ResultBean.success(update);
+        BizLoanApply selectByPrimaryKey = bizLoanApplyMapper.selectByPrimaryKey(id);
+        // 有些状态不能删除
+        LoanApplyStatusEnum statusEnum = LoanApplyStatusEnum.valueOfCode(selectByPrimaryKey.getApplyStatus());
+        if (!LoanApplyStatusEnum.PENDING_APPROVAL.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "状态不允许删除");
+        }
+        int delete = bizLoanApplyMapper.deleteByPrimaryKey(id);
+//        BizLoanApply billBank = new BizLoanApply();
+//        billBank.setId(id);
+//        billBank.setDelFlag("1");
+//        billBank.setUpdateTime(new Date());
+//        billBank.setUpdateUser(sysUserService.selectLoginUser().getId());
+//        int update = bizLoanApplyMapper.updateByPrimaryKeySelective(billBank);
+        return ResultBean.success(delete);
     }
 
     @Override
     public ResultBean update(LoanApplyUpDTO loanApplyUpDTO) {
+        BizLoanApply selectByPrimaryKey = bizLoanApplyMapper.selectByPrimaryKey(loanApplyUpDTO.getId());
+
+        // 有些状态不能删除
+        LoanApplyStatusEnum statusEnum = LoanApplyStatusEnum.valueOfCode(selectByPrimaryKey.getApplyStatus());
+        if (!LoanApplyStatusEnum.PENDING_APPROVAL.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "状态不允许修改");
+        }
 
         BizLoanApply loanApply = new BizLoanApply();
         BeanUtils.copyProperties(loanApplyUpDTO, loanApply);
-        BizLoanApply selectByPrimaryKey = bizLoanApplyMapper.selectByPrimaryKey(loanApplyUpDTO.getId());
-
         loanApply.setUpdateTime(new Date());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
@@ -94,7 +115,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     }
 
     @Override
-    public ResultBean getList(LoanApplyRQDTO model) {
+    public ResultBean<PageDTO<LoanApplyRSDTO>> getList(LoanApplyRQDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -137,10 +158,44 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         BeanUtils.copyProperties(pageData, pageDTO);
 
 
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+        Map<Integer, SysUser> sysUserMap = new HashMap<>();
+        List<Integer> loadUserIdList = pageData.getResult().stream().map(BizLoanApply::getLoanUser).collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(loadUserIdList)) {
+            SysUserExample sysUserExample = new SysUserExample();
+            sysUserExample.createCriteria().andIdIn(loadUserIdList);
+            List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+            sysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
+        }
+
+        Map<Integer, SysUser> finalSysUserMap = sysUserMap;
         List<LoanApplyRSDTO> loanApplyRSDTOList = pageData.getResult().stream()
             .map(loanApply -> {
                 LoanApplyRSDTO loanApplyRSDTO = new LoanApplyRSDTO();
                 BeanUtils.copyProperties(loanApply, loanApplyRSDTO);
+                SysDepartment sysDepartment = sysDepartmentMap.get(loanApply.getDeptId());
+                if (sysDepartment != null) {
+                    loanApplyRSDTO.setDeptName(sysDepartment.getDeptName());
+                }
+                SysUser sysUser = finalSysUserMap.get(loanApply.getLoanUser());
+                if (sysUser != null) {
+                    loanApplyRSDTO.setLoanUserName(sysUser.getRealName());
+                }
+                LoanApplyStatusEnum applyStatusEnum = LoanApplyStatusEnum.valueOfCode(loanApply.getApplyStatus());
+
+                loanApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
+                    LoanApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
+                LoanPayWayEnum payWayEnum = LoanPayWayEnum.valueOfCode(loanApply.getAmountType());
+                loanApplyRSDTO.setAmountTypeCN(payWayEnum == null ? null : payWayEnum.getDesc());
+
+                LoanBillTypeEnum billTypeEnum = LoanBillTypeEnum.valueOfCode(loanApply.getBillNature());
+                loanApplyRSDTO.setBillNatureCN(billTypeEnum == null ? null : billTypeEnum.getDesc());
+
+                LoanrPayStatusEnum payStatusEnum = LoanrPayStatusEnum.valueOfCode(loanApply.getPayStatus());
+                loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+
                 return loanApplyRSDTO;
             })
             .collect(Collectors.toList());
@@ -149,22 +204,63 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     }
 
 
+
+    @Override
+    public int auditReplaceMaterial(String item_id, LoanApplyStatusEnum auditResult) {
+        BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
+        BizLoanApplyExample.Criteria criteria = loanApplyExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andSerialNoEqualTo(item_id);
+        List<BizLoanApply> bizLoanApplies = bizLoanApplyMapper.selectByExample(loanApplyExample);
+
+        BizLoanApply  loanApplyS = bizLoanApplies.get(0);
+        if (loanApplyS == null){
+            log.error("auditReplaceMaterial 无该条记录,id:{}",item_id);
+            return 0;
+        }
+
+        BizLoanApply loanApply = new BizLoanApply();
+        loanApply.setApplyStatus(auditResult.getCode());
+        loanApply.setUpdateTime(new Date());
+        loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
+        return 1;
+    }
+
+    ;
     @Override
     public ResultBean approve(Integer id) {
-
-        // 查询&修改 付款申请
-        BizLoanApply loanApply = bizLoanApplyMapper.selectByPrimaryKey(id);
-        //审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成
-        loanApply.setApplyStatus("1");
+        BizLoanApply loanApply = new BizLoanApply();
+        loanApply.setId(id);
+        loanApply.setApplyStatus(LoanApplyStatusEnum.PENDING_APPROVAL.getCode());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         loanApply.setUpdateTime(new Date());
-        bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
 
+        bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
 
         // 添加申请流程
         FlowInstanceDTO flowInstanceDTO = buildFlowInstanceDTO(loanApply);
         flowInstanceService.create(flowInstanceDTO);
         return ResultBean.success(1);
+    }
+
+    @Override
+    public ResultBean pay(LoanApplyPayDTO loanApplyPayDTO) {
+        BizLoanApply selectByPrimaryKey = bizLoanApplyMapper.selectByPrimaryKey(loanApplyPayDTO.getId());
+
+        // 有些状态不能付款
+        LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(selectByPrimaryKey.getPayStatus());
+        if (!LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
+        }
+        BizLoanApply loanApply = new BizLoanApply();
+        BeanUtils.copyProperties(loanApplyPayDTO, loanApply);
+        loanApply.setPayStatus(LoanrPayStatusEnum.all_pay.getCode());
+        loanApply.setPayTime(new Date());
+        loanApply.setUpdateTime(new Date());
+        loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
+        return ResultBean.success(update);
     }
 
     private FlowInstanceDTO buildFlowInstanceDTO(BizLoanApply loanApply) {

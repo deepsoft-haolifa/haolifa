@@ -17,6 +17,10 @@ public class PayUserDTO extends BaseCondition {
     private Integer id;
     @ApiModelProperty(value = "姓名")
     private String userName;
+    @ApiModelProperty(value = "父ID")
+    private Integer parentId;
+    @ApiModelProperty(value = "父用户名称")
+    private String parentUserName;
     @ApiModelProperty(value = "曾用名")
     private String onceUserName;
     @ApiModelProperty(value = "性别默认为0， 1：男， 2：女")

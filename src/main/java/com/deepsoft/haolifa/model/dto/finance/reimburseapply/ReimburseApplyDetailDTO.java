@@ -1,15 +1,18 @@
 package com.deepsoft.haolifa.model.dto.finance.reimburseapply;
 
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostDetailRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailRSDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ReimburseApplyRSDTO {
+public class ReimburseApplyDetailDTO {
 
     @ApiModelProperty(value = "ID")
     private Integer id;
@@ -86,5 +89,10 @@ public class ReimburseApplyRSDTO {
     @ApiModelProperty(value = "是否可以支付")
     private Boolean canPay = false;
 
+    @ApiModelProperty(value = "费用报销")
+    List<ReimburseCostDetailRSDTO> reimburseCostDetailRSDTOList;
+
+    @ApiModelProperty(value = "差旅报销")
+    List<ReimburseTravelDetailRSDTO> reimburseTravelDetailRSDTOList;
 
 }

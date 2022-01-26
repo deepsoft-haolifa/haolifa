@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 
-public enum OrderPayStatusEnum {
+public enum LoanrPayStatusEnum {
 
     // 1 未付款 2 部分付款 3 付款完成
     un_pay("1", "未付款"),
@@ -15,14 +15,11 @@ public enum OrderPayStatusEnum {
     private String desc;
 
 
-    public static OrderPayStatusEnum valueOfCode(String code) {
-        OrderPayStatusEnum orderPayStatusEnum = Arrays.stream(OrderPayStatusEnum.values())
+    public static LoanrPayStatusEnum valueOfCode(String code) {
+        LoanrPayStatusEnum orderPayStatusEnum = Arrays.stream(LoanrPayStatusEnum.values())
             .filter(e -> StringUtils.equalsIgnoreCase(e.code,code))
             .findFirst()
             .orElse(null);
-        if (orderPayStatusEnum == null) {
-            throw new RuntimeException();
-        }
         return orderPayStatusEnum;
     }
 
@@ -42,7 +39,7 @@ public enum OrderPayStatusEnum {
         this.desc = desc;
     }
 
-    OrderPayStatusEnum(String code, String desc) {
+    LoanrPayStatusEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }

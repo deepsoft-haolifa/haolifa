@@ -2,26 +2,25 @@ package com.deepsoft.haolifa.enums;
 
 import java.util.Arrays;
 
-public enum BillTypeEnum {
-    //
-    all("0", "全部"),
-    bill("1", "现金"),
-    bank_bill("2", "银行"),
-    other_bill("3", "其他");
+public enum ReimburseTypeEnum {
+    travle("1", "差旅报销"),
+    cost("2", "费用报销");
 
     private String code;
     private String desc;
 
+    ReimburseTypeEnum(String code, String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
 
-    public static BillTypeEnum valueOfCode(String code) {
-        BillTypeEnum billTypeEnum = Arrays.stream(BillTypeEnum.values())
+    public static ReimburseTypeEnum valueOfCode(String code) {
+        ReimburseTypeEnum bookingTypeEnum = Arrays.stream(ReimburseTypeEnum.values())
             .filter(e -> e.code.equalsIgnoreCase(code))
             .findFirst()
             .orElse(null);
-        return billTypeEnum;
+        return bookingTypeEnum;
     }
-
-
 
     public String getCode() {
         return code;
@@ -39,8 +38,5 @@ public enum BillTypeEnum {
         this.desc = desc;
     }
 
-    BillTypeEnum(String code, String desc) {
-        this.code = code;
-        this.desc = desc;
-    }
+
 }

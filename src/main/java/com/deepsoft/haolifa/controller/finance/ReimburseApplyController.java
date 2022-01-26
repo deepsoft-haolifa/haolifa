@@ -1,10 +1,10 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyPayDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 import com.deepsoft.haolifa.service.finance.ReimburseApplyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,7 +47,7 @@ public class ReimburseApplyController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getReimburseApplyList")
-    public ResultBean getBankBillList(@RequestBody ReimburseApplyRQDTO model) {
+    public ResultBean<PageDTO<ReimburseApplyRSDTO>> getBankBillList(@RequestBody ReimburseApplyRQDTO model) {
         return reimburseApplyService.getList(model);
     }
 
@@ -58,6 +58,14 @@ public class ReimburseApplyController {
     public ResultBean approve(@ApiParam("报销申请ID") @PathVariable("id") Integer id) {
         return reimburseApplyService.approve(id);
     }
+
+    @ApiOperation("付款(出纳付款列表使用)")
+    @PostMapping("/pay")
+    @Transactional(rollbackFor = Exception.class)
+    public ResultBean pay(@RequestBody ReimburseApplyPayDTO payDTO) {
+        return reimburseApplyService.pay(payDTO);
+    }
+
 
 
 }
