@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.ValveSeatEntrustMapper;
 import com.deepsoft.haolifa.dao.repository.ValveSeatInspectHistoryMapper;
-import com.deepsoft.haolifa.model.domain.ValveSeatEntrust;
-import com.deepsoft.haolifa.model.domain.ValveSeatEntrustExample;
-import com.deepsoft.haolifa.model.domain.ValveSeatInspectHistory;
-import com.deepsoft.haolifa.model.domain.ValveSeatInspectHistoryExample;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.InspectReason;
@@ -58,9 +55,22 @@ public class ValveSeatEntrustServiceImpl extends BaseService implements ValveSea
 
     @Override
     public int update(ValveSeatEntrustReqDto reqDto) {
-        ValveSeatEntrust model = new ValveSeatEntrust();
+        ValveSeatEntrust model = valveSeatEntrustMapper.selectByPrimaryKey(reqDto.getId());
+        if(!model.getStatus().equals(CommonEnum.SprayStatus.SPRAY_CREATE.code)){
+            throw new BaseException("只有待加工才能操作");
+        }
         BeanUtil.copyProperties(reqDto, model);
         return valveSeatEntrustMapper.updateByPrimaryKeySelective(model);
+
+    }
+
+    @Override
+    public int delete(Integer id) {
+        ValveSeatEntrust model = valveSeatEntrustMapper.selectByPrimaryKey(id);
+        if(!model.getStatus().equals(CommonEnum.SprayStatus.SPRAY_CREATE.code)){
+            throw new BaseException("只有待加工才能操作");
+        }
+        return valveSeatEntrustMapper.deleteByPrimaryKey(id);
 
     }
 

@@ -22,6 +22,10 @@ public interface ValveSeatEntrustService {
      */
     public int update(ValveSeatEntrustReqDto reqDto);
 
+    /**
+     * 删除
+     */
+    public int delete(Integer id);
 
     /**
      * 分页查询

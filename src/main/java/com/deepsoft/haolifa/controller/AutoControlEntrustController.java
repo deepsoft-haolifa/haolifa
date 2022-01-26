@@ -58,7 +58,7 @@ public class AutoControlEntrustController {
     @PostMapping("/del/{id}")
     @ApiOperation("删除")
     public ResultBean del(@PathVariable Integer id) {
-        int del = autoControlEntrustMapper.deleteByPrimaryKey(id);
+        int del = autoControlEntrustService.delete(id);
         if (del > 0) {
             return ResultBean.success(del);
         } else {

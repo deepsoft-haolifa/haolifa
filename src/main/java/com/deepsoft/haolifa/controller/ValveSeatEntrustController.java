@@ -58,7 +58,7 @@ public class ValveSeatEntrustController {
     @PostMapping("/del/{id}")
     @ApiOperation("删除")
     public ResultBean del(@PathVariable Integer id) {
-        int del = valveSeatEntrustMapper.deleteByPrimaryKey(id);
+        int del = valveSeatEntrustService.delete(id);
         if (del > 0) {
             return ResultBean.success(del);
         } else {

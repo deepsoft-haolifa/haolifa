@@ -17,11 +17,19 @@ public interface AutoControlEntrustService {
      * 新增
      */
     public int add(AutoControlEntrustReqDto reqDto);
+
     /**
      * 更新
      */
     public int update(AutoControlEntrustReqDto reqDto);
 
+    /**
+     * 删除
+     *
+     * @param id
+     * @return
+     */
+    int delete(Integer id);
 
     /**
      * 分页查询
@@ -30,6 +38,7 @@ public interface AutoControlEntrustService {
 
     /**
      * 更新状态
+     *
      * @param id
      * @param status
      * @return
@@ -39,6 +48,7 @@ public interface AutoControlEntrustService {
 
     /**
      * 更新质检状态
+     *
      * @param id
      * @param status
      * @return
@@ -48,6 +58,7 @@ public interface AutoControlEntrustService {
 
     /**
      * 保存质检记录
+     *
      * @param autoControlInspectDto
      * @return
      */
@@ -56,6 +67,7 @@ public interface AutoControlEntrustService {
 
     /**
      * 查询质检记录
+     *
      * @param no
      * @return
      */

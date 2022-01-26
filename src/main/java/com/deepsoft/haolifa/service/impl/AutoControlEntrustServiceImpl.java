@@ -54,9 +54,22 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
 
     @Override
     public int update(AutoControlEntrustReqDto reqDto) {
-        AutoControlEntrust model = new AutoControlEntrust();
+        AutoControlEntrust model = autoControlEntrustMapper.selectByPrimaryKey(reqDto.getId());
+        if(!model.getStatus().equals(CommonEnum.SprayStatus.SPRAY_CREATE.code)){
+            throw new BaseException("只有待加工才能操作");
+        }
         BeanUtil.copyProperties(reqDto, model);
         return autoControlEntrustMapper.updateByPrimaryKeySelective(model);
+
+    }
+
+    @Override
+    public int delete(Integer id) {
+        AutoControlEntrust autoControlEntrust = autoControlEntrustMapper.selectByPrimaryKey(id);
+        if(!autoControlEntrust.getStatus().equals(CommonEnum.SprayStatus.SPRAY_CREATE.code)){
+            throw new BaseException("只有待加工才能操作");
+        }
+        return autoControlEntrustMapper.deleteByPrimaryKey(id);
 
     }
 

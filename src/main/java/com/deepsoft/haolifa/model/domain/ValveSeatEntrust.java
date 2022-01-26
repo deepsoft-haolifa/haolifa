@@ -46,11 +46,11 @@ public class ValveSeatEntrust implements Serializable {
 
 
     @ApiModelProperty("状态：0 创建 1 加工中 2 质检完成 3 加工完成 4 暂停加工")
-    private int status;
+    private Byte status;
 
 
     @ApiModelProperty("0 待质检 1 质检中 2 质检完成")
-    private int inspectStatus;
+    private Byte inspectStatus;
 
 
     @ApiModelProperty("create_time")
