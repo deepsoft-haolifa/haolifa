@@ -108,15 +108,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
     @Override
     public ResultBean deleteDeptBudget(int id) {
-        BizCostBudgetDeptExample bizCostBudgetDeptExample = new BizCostBudgetDeptExample();
-        BizCostBudgetDeptExample.Criteria criteria = bizCostBudgetDeptExample.createCriteria();
-        criteria.andDeptIdEqualTo(id);
-        List<BizCostBudgetDept> bizCostBudgetDepts = bizCostBudgetDeptMapper.selectByExample(bizCostBudgetDeptExample);
-        BizCostBudgetDept bizCostBudgetDept = null;
-        if (CollectionUtil.isNotEmpty(bizCostBudgetDepts)) {
-            bizCostBudgetDept = bizCostBudgetDepts.get(0);
-        }
-        int delete = bizCostBudgetDeptMapper.deleteByPrimaryKey(bizCostBudgetDept.getId());
+        int delete = bizCostBudgetDeptMapper.deleteByPrimaryKey(id);
         return ResultBean.success(delete);
     }
 
@@ -201,6 +193,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
                 departmentTree.setCostRatio(bizCostBudgetDept.getCostRatio());
                 departmentTree.setCostRatioFormula(bizCostBudgetDept.getCostRatio() + "%");
                 departmentTree.setCostRatioFormulaCN(bizCostBudgetDept.getCostRatio() + "%");
+                departmentTree.setRemark(bizCostBudgetDept.getRemark());
             } else {
                 departmentTree.setCostRatio(0);
                 departmentTree.setCostRatioFormula(null);

@@ -26,5 +26,7 @@ public class CostBudgetDeptTree implements TreeEntity<CostBudgetDeptTree> {
     private String costRatioFormulaCN;
     @ApiModelProperty(value = "子部门")
     public List<CostBudgetDeptTree> childList;
+    @ApiModelProperty(value = "备注")
+    private String remark;
 
 }
