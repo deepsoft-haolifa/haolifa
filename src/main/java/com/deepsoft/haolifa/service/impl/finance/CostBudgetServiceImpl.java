@@ -108,7 +108,15 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
     @Override
     public ResultBean deleteDeptBudget(int id) {
-        int delete = bizCostBudgetDeptMapper.deleteByPrimaryKey(id);
+        BizCostBudgetDeptExample bizCostBudgetDeptExample = new BizCostBudgetDeptExample();
+        BizCostBudgetDeptExample.Criteria criteria = bizCostBudgetDeptExample.createCriteria();
+        criteria.andDeptIdEqualTo(id);
+        List<BizCostBudgetDept> bizCostBudgetDepts = bizCostBudgetDeptMapper.selectByExample(bizCostBudgetDeptExample);
+        if (CollectionUtil.isEmpty(bizCostBudgetDepts)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门没有费用比例数据");
+        }
+        BizCostBudgetDept bizCostBudgetDept = bizCostBudgetDepts.get(0);
+        int delete = bizCostBudgetDeptMapper.deleteByPrimaryKey(bizCostBudgetDept.getId());
         return ResultBean.success(delete);
     }
 
