@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizLoanApplyMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.enums.*;
@@ -15,9 +16,11 @@ import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +63,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         BizLoanApply loanApply = new BizLoanApply();
         BeanUtils.copyProperties(model, loanApply);
+        loanApply.setSerialNo("BP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         loanApply.setApplyStatus(LoanApplyStatusEnum.PENDING_APPROVAL.getCode());
         loanApply.setPayStatus(LoanrPayStatusEnum.un_pay.getCode());
         loanApply.setLoanUser(sysUserService.selectLoginUser().getId());
@@ -227,12 +231,12 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         return 1;
     }
 
-    ;
+
     @Override
     public ResultBean approve(Integer id) {
         BizLoanApply loanApply = new BizLoanApply();
         loanApply.setId(id);
-        loanApply.setApplyStatus(LoanApplyStatusEnum.PENDING_APPROVAL.getCode());
+        loanApply.setApplyStatus(LoanApplyStatusEnum.UNDER_APPROVAL.getCode());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         loanApply.setUpdateTime(new Date());
 

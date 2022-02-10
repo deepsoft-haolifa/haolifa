@@ -27,4 +27,6 @@ public interface PayUserMapper {
     int updateByPrimaryKeySelective(PayUser record);
 
     int updateByPrimaryKey(PayUser record);
+
+    PayUser selectByPhoneOrIdCard(@Param("phone") String phone,@Param("idCard")  String idCard);
 }

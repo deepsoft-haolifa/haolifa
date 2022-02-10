@@ -27,4 +27,6 @@ public interface SysUserMapper {
     int updateByPrimaryKeySelective(SysUser record);
 
     int updateByPrimaryKey(SysUser record);
+
+    SysUser selectByPhoneOrIdCard(@Param("phone") String phone,@Param("idCard")  String idCard);
 }

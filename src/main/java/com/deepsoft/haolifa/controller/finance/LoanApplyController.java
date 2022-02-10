@@ -1,20 +1,32 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.deepsoft.haolifa.config.CustomGrantedAuthority;
+import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.dao.repository.*;
+import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
+import com.deepsoft.haolifa.enums.RoleEnum;
+import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
+import com.deepsoft.haolifa.model.dto.UserPipLineDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
-import com.deepsoft.haolifa.service.finance.BankBillService;
+import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
+import com.deepsoft.haolifa.service.impl.CustomUserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * 借款申请
@@ -26,6 +38,26 @@ public class LoanApplyController {
     @Autowired
     private LoanApplyService loanApplyService;
 
+    @Autowired
+    private SysUserService sysUserService;
+    @Autowired
+    private SysUserMapper userMapper;
+    @Autowired
+    private PayUserMapper payUserMapper;
+    @Resource
+    private PayProductionWorkshopMapper payProductionWorkshopMapper;
+    @Resource
+    private PayTeamMapper payTeamMapper;
+    @Autowired
+    private CustomUserServiceImpl customUserService;
+
+    @ApiOperation("添加节点(借款申請列表使用)")
+    @PostMapping("/te")
+    @Transactional(rollbackFor = Exception.class)
+    public ResultBean te() {
+        List<UserPipLineDTO> userPipLineDTOS = sysUserService.currentUserPipLine();
+        return ResultBean.success(userPipLineDTOS);
+    }
 
     @ApiOperation("添加节点(借款申請列表使用)")
     @PostMapping("/save")
@@ -71,11 +103,9 @@ public class LoanApplyController {
     @ApiOperation("付款(出纳付款列表使用)")
     @PostMapping("/pay")
     @Transactional(rollbackFor = Exception.class)
-    public ResultBean pay(@RequestBody  LoanApplyPayDTO loanApplyPayDTO) {
+    public ResultBean pay(@RequestBody LoanApplyPayDTO loanApplyPayDTO) {
         return loanApplyService.pay(loanApplyPayDTO);
     }
-
-
 
 
 }

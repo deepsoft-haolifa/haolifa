@@ -1,702 +1,721 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.deepsoft.haolifa.dao.repository.PayUserMapper" >
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PayUser" >
-    <constructor >
-      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="once_user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="sex" jdbcType="TINYINT" javaType="java.lang.Byte" />
-      <arg column="birthday" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="nation" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="native_place" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="political_outlook" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="blood_type" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="health" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="marry_status" jdbcType="TINYINT" javaType="java.lang.Byte" />
-      <arg column="id_card" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="registered" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="university_from" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="major" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="education" jdbcType="TINYINT" javaType="java.lang.Byte" />
-      <arg column="graduation_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="working_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="insurance_base" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="mail" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="team_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="base_pay" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="merit_pay" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="post_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="depart_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="depart_name" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="user_type" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="superior_name" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="superior_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-    </constructor>
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PayUserMapper">
+    <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PayUser">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="once_user_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="sex" jdbcType="TINYINT" javaType="java.lang.Byte"/>
+            <arg column="birthday" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="nation" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="native_place" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="political_outlook" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="blood_type" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="health" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="marry_status" jdbcType="TINYINT" javaType="java.lang.Byte"/>
+            <arg column="id_card" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="registered" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="university_from" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="major" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="education" jdbcType="TINYINT" javaType="java.lang.Byte"/>
+            <arg column="graduation_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="working_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="insurance_base" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+            <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="mail" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="team_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="base_pay" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+            <arg column="merit_pay" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+            <arg column="post_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="depart_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="depart_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="user_type" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="superior_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="superior_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, user_name, parent_id, once_user_name, sex, birthday, nation, native_place, political_outlook, 
-    blood_type, health, marry_status, id_card, registered, university_from, major, education, 
-    graduation_time, working_time, address, insurance_base, phone, mail, team_id, base_pay, 
-    merit_pay, post_id, depart_id, depart_name, user_type, superior_name, superior_id, 
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id
+        , user_name, parent_id, once_user_name, sex, birthday, nation, native_place, political_outlook,
+    blood_type, health, marry_status, id_card, registered, university_from, major, education,
+    graduation_time, working_time, address, insurance_base, phone, mail, team_id, base_pay,
+    merit_pay, post_id, depart_id, depart_name, user_type, superior_name, superior_id,
     create_user, update_user, create_time, update_time
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayUserExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from pay_user
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from pay_user
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from pay_user
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PayUserExample" >
-    delete from pay_user
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PayUser" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into pay_user (user_name, parent_id, once_user_name, 
-      sex, birthday, nation, 
-      native_place, political_outlook, blood_type, 
-      health, marry_status, id_card, 
-      registered, university_from, major, 
-      education, graduation_time, working_time, 
-      address, insurance_base, phone, 
-      mail, team_id, base_pay, 
-      merit_pay, post_id, depart_id, 
-      depart_name, user_type, superior_name, 
-      superior_id, create_user, update_user, 
-      create_time, update_time)
-    values (#{userName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{onceUserName,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=TIMESTAMP}, #{nation,jdbcType=VARCHAR}, 
-      #{nativePlace,jdbcType=VARCHAR}, #{politicalOutlook,jdbcType=VARCHAR}, #{bloodType,jdbcType=VARCHAR}, 
-      #{health,jdbcType=VARCHAR}, #{marryStatus,jdbcType=TINYINT}, #{idCard,jdbcType=VARCHAR}, 
-      #{registered,jdbcType=VARCHAR}, #{universityFrom,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, 
-      #{education,jdbcType=TINYINT}, #{graduationTime,jdbcType=TIMESTAMP}, #{workingTime,jdbcType=TIMESTAMP}, 
-      #{address,jdbcType=VARCHAR}, #{insuranceBase,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR}, 
-      #{mail,jdbcType=VARCHAR}, #{teamId,jdbcType=INTEGER}, #{basePay,jdbcType=DECIMAL}, 
-      #{meritPay,jdbcType=DECIMAL}, #{postId,jdbcType=INTEGER}, #{departId,jdbcType=INTEGER}, 
-      #{departName,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{superiorName,jdbcType=VARCHAR}, 
-      #{superiorId,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayUser" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into pay_user
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="userName != null" >
-        user_name,
-      </if>
-      <if test="parentId != null" >
-        parent_id,
-      </if>
-      <if test="onceUserName != null" >
-        once_user_name,
-      </if>
-      <if test="sex != null" >
-        sex,
-      </if>
-      <if test="birthday != null" >
-        birthday,
-      </if>
-      <if test="nation != null" >
-        nation,
-      </if>
-      <if test="nativePlace != null" >
-        native_place,
-      </if>
-      <if test="politicalOutlook != null" >
-        political_outlook,
-      </if>
-      <if test="bloodType != null" >
-        blood_type,
-      </if>
-      <if test="health != null" >
-        health,
-      </if>
-      <if test="marryStatus != null" >
-        marry_status,
-      </if>
-      <if test="idCard != null" >
-        id_card,
-      </if>
-      <if test="registered != null" >
-        registered,
-      </if>
-      <if test="universityFrom != null" >
-        university_from,
-      </if>
-      <if test="major != null" >
-        major,
-      </if>
-      <if test="education != null" >
-        education,
-      </if>
-      <if test="graduationTime != null" >
-        graduation_time,
-      </if>
-      <if test="workingTime != null" >
-        working_time,
-      </if>
-      <if test="address != null" >
-        address,
-      </if>
-      <if test="insuranceBase != null" >
-        insurance_base,
-      </if>
-      <if test="phone != null" >
-        phone,
-      </if>
-      <if test="mail != null" >
-        mail,
-      </if>
-      <if test="teamId != null" >
-        team_id,
-      </if>
-      <if test="basePay != null" >
-        base_pay,
-      </if>
-      <if test="meritPay != null" >
-        merit_pay,
-      </if>
-      <if test="postId != null" >
-        post_id,
-      </if>
-      <if test="departId != null" >
-        depart_id,
-      </if>
-      <if test="departName != null" >
-        depart_name,
-      </if>
-      <if test="userType != null" >
-        user_type,
-      </if>
-      <if test="superiorName != null" >
-        superior_name,
-      </if>
-      <if test="superiorId != null" >
-        superior_id,
-      </if>
-      <if test="createUser != null" >
-        create_user,
-      </if>
-      <if test="updateUser != null" >
-        update_user,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="userName != null" >
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="parentId != null" >
-        #{parentId,jdbcType=INTEGER},
-      </if>
-      <if test="onceUserName != null" >
-        #{onceUserName,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        #{sex,jdbcType=TINYINT},
-      </if>
-      <if test="birthday != null" >
-        #{birthday,jdbcType=TIMESTAMP},
-      </if>
-      <if test="nation != null" >
-        #{nation,jdbcType=VARCHAR},
-      </if>
-      <if test="nativePlace != null" >
-        #{nativePlace,jdbcType=VARCHAR},
-      </if>
-      <if test="politicalOutlook != null" >
-        #{politicalOutlook,jdbcType=VARCHAR},
-      </if>
-      <if test="bloodType != null" >
-        #{bloodType,jdbcType=VARCHAR},
-      </if>
-      <if test="health != null" >
-        #{health,jdbcType=VARCHAR},
-      </if>
-      <if test="marryStatus != null" >
-        #{marryStatus,jdbcType=TINYINT},
-      </if>
-      <if test="idCard != null" >
-        #{idCard,jdbcType=VARCHAR},
-      </if>
-      <if test="registered != null" >
-        #{registered,jdbcType=VARCHAR},
-      </if>
-      <if test="universityFrom != null" >
-        #{universityFrom,jdbcType=VARCHAR},
-      </if>
-      <if test="major != null" >
-        #{major,jdbcType=VARCHAR},
-      </if>
-      <if test="education != null" >
-        #{education,jdbcType=TINYINT},
-      </if>
-      <if test="graduationTime != null" >
-        #{graduationTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="workingTime != null" >
-        #{workingTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="address != null" >
-        #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="insuranceBase != null" >
-        #{insuranceBase,jdbcType=DECIMAL},
-      </if>
-      <if test="phone != null" >
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="mail != null" >
-        #{mail,jdbcType=VARCHAR},
-      </if>
-      <if test="teamId != null" >
-        #{teamId,jdbcType=INTEGER},
-      </if>
-      <if test="basePay != null" >
-        #{basePay,jdbcType=DECIMAL},
-      </if>
-      <if test="meritPay != null" >
-        #{meritPay,jdbcType=DECIMAL},
-      </if>
-      <if test="postId != null" >
-        #{postId,jdbcType=INTEGER},
-      </if>
-      <if test="departId != null" >
-        #{departId,jdbcType=INTEGER},
-      </if>
-      <if test="departName != null" >
-        #{departName,jdbcType=VARCHAR},
-      </if>
-      <if test="userType != null" >
-        #{userType,jdbcType=VARCHAR},
-      </if>
-      <if test="superiorName != null" >
-        #{superiorName,jdbcType=VARCHAR},
-      </if>
-      <if test="superiorId != null" >
-        #{superiorId,jdbcType=INTEGER},
-      </if>
-      <if test="createUser != null" >
-        #{createUser,jdbcType=VARCHAR},
-      </if>
-      <if test="updateUser != null" >
-        #{updateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PayUserExample" resultType="java.lang.Integer" >
-    select count(*) from pay_user
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update pay_user
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.userName != null" >
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.deepsoft.haolifa.model.domain.PayUserExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from pay_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from pay_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from pay_user
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PayUserExample">
+        delete from pay_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PayUser">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into pay_user (user_name, parent_id, once_user_name,
+        sex, birthday, nation,
+        native_place, political_outlook, blood_type,
+        health, marry_status, id_card,
+        registered, university_from, major,
+        education, graduation_time, working_time,
+        address, insurance_base, phone,
+        mail, team_id, base_pay,
+        merit_pay, post_id, depart_id,
+        depart_name, user_type, superior_name,
+        superior_id, create_user, update_user,
+        create_time, update_time)
+        values (#{userName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{onceUserName,jdbcType=VARCHAR},
+        #{sex,jdbcType=TINYINT}, #{birthday,jdbcType=TIMESTAMP}, #{nation,jdbcType=VARCHAR},
+        #{nativePlace,jdbcType=VARCHAR}, #{politicalOutlook,jdbcType=VARCHAR}, #{bloodType,jdbcType=VARCHAR},
+        #{health,jdbcType=VARCHAR}, #{marryStatus,jdbcType=TINYINT}, #{idCard,jdbcType=VARCHAR},
+        #{registered,jdbcType=VARCHAR}, #{universityFrom,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR},
+        #{education,jdbcType=TINYINT}, #{graduationTime,jdbcType=TIMESTAMP}, #{workingTime,jdbcType=TIMESTAMP},
+        #{address,jdbcType=VARCHAR}, #{insuranceBase,jdbcType=DECIMAL}, #{phone,jdbcType=VARCHAR},
+        #{mail,jdbcType=VARCHAR}, #{teamId,jdbcType=INTEGER}, #{basePay,jdbcType=DECIMAL},
+        #{meritPay,jdbcType=DECIMAL}, #{postId,jdbcType=INTEGER}, #{departId,jdbcType=INTEGER},
+        #{departName,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{superiorName,jdbcType=VARCHAR},
+        #{superiorId,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayUser">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into pay_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="onceUserName != null">
+                once_user_name,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
+            <if test="nation != null">
+                nation,
+            </if>
+            <if test="nativePlace != null">
+                native_place,
+            </if>
+            <if test="politicalOutlook != null">
+                political_outlook,
+            </if>
+            <if test="bloodType != null">
+                blood_type,
+            </if>
+            <if test="health != null">
+                health,
+            </if>
+            <if test="marryStatus != null">
+                marry_status,
+            </if>
+            <if test="idCard != null">
+                id_card,
+            </if>
+            <if test="registered != null">
+                registered,
+            </if>
+            <if test="universityFrom != null">
+                university_from,
+            </if>
+            <if test="major != null">
+                major,
+            </if>
+            <if test="education != null">
+                education,
+            </if>
+            <if test="graduationTime != null">
+                graduation_time,
+            </if>
+            <if test="workingTime != null">
+                working_time,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="insuranceBase != null">
+                insurance_base,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="mail != null">
+                mail,
+            </if>
+            <if test="teamId != null">
+                team_id,
+            </if>
+            <if test="basePay != null">
+                base_pay,
+            </if>
+            <if test="meritPay != null">
+                merit_pay,
+            </if>
+            <if test="postId != null">
+                post_id,
+            </if>
+            <if test="departId != null">
+                depart_id,
+            </if>
+            <if test="departName != null">
+                depart_name,
+            </if>
+            <if test="userType != null">
+                user_type,
+            </if>
+            <if test="superiorName != null">
+                superior_name,
+            </if>
+            <if test="superiorId != null">
+                superior_id,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="onceUserName != null">
+                #{onceUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="birthday != null">
+                #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="nation != null">
+                #{nation,jdbcType=VARCHAR},
+            </if>
+            <if test="nativePlace != null">
+                #{nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="politicalOutlook != null">
+                #{politicalOutlook,jdbcType=VARCHAR},
+            </if>
+            <if test="bloodType != null">
+                #{bloodType,jdbcType=VARCHAR},
+            </if>
+            <if test="health != null">
+                #{health,jdbcType=VARCHAR},
+            </if>
+            <if test="marryStatus != null">
+                #{marryStatus,jdbcType=TINYINT},
+            </if>
+            <if test="idCard != null">
+                #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="registered != null">
+                #{registered,jdbcType=VARCHAR},
+            </if>
+            <if test="universityFrom != null">
+                #{universityFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="major != null">
+                #{major,jdbcType=VARCHAR},
+            </if>
+            <if test="education != null">
+                #{education,jdbcType=TINYINT},
+            </if>
+            <if test="graduationTime != null">
+                #{graduationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workingTime != null">
+                #{workingTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="insuranceBase != null">
+                #{insuranceBase,jdbcType=DECIMAL},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="mail != null">
+                #{mail,jdbcType=VARCHAR},
+            </if>
+            <if test="teamId != null">
+                #{teamId,jdbcType=INTEGER},
+            </if>
+            <if test="basePay != null">
+                #{basePay,jdbcType=DECIMAL},
+            </if>
+            <if test="meritPay != null">
+                #{meritPay,jdbcType=DECIMAL},
+            </if>
+            <if test="postId != null">
+                #{postId,jdbcType=INTEGER},
+            </if>
+            <if test="departId != null">
+                #{departId,jdbcType=INTEGER},
+            </if>
+            <if test="departName != null">
+                #{departName,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                #{userType,jdbcType=VARCHAR},
+            </if>
+            <if test="superiorName != null">
+                #{superiorName,jdbcType=VARCHAR},
+            </if>
+            <if test="superiorId != null">
+                #{superiorId,jdbcType=INTEGER},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PayUserExample"
+            resultType="java.lang.Integer">
+        select count(*) from pay_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update pay_user
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.userName != null">
+                user_name = #{record.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.parentId != null">
+                parent_id = #{record.parentId,jdbcType=INTEGER},
+            </if>
+            <if test="record.onceUserName != null">
+                once_user_name = #{record.onceUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sex != null">
+                sex = #{record.sex,jdbcType=TINYINT},
+            </if>
+            <if test="record.birthday != null">
+                birthday = #{record.birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.nation != null">
+                nation = #{record.nation,jdbcType=VARCHAR},
+            </if>
+            <if test="record.nativePlace != null">
+                native_place = #{record.nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="record.politicalOutlook != null">
+                political_outlook = #{record.politicalOutlook,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bloodType != null">
+                blood_type = #{record.bloodType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.health != null">
+                health = #{record.health,jdbcType=VARCHAR},
+            </if>
+            <if test="record.marryStatus != null">
+                marry_status = #{record.marryStatus,jdbcType=TINYINT},
+            </if>
+            <if test="record.idCard != null">
+                id_card = #{record.idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="record.registered != null">
+                registered = #{record.registered,jdbcType=VARCHAR},
+            </if>
+            <if test="record.universityFrom != null">
+                university_from = #{record.universityFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="record.major != null">
+                major = #{record.major,jdbcType=VARCHAR},
+            </if>
+            <if test="record.education != null">
+                education = #{record.education,jdbcType=TINYINT},
+            </if>
+            <if test="record.graduationTime != null">
+                graduation_time = #{record.graduationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.workingTime != null">
+                working_time = #{record.workingTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.address != null">
+                address = #{record.address,jdbcType=VARCHAR},
+            </if>
+            <if test="record.insuranceBase != null">
+                insurance_base = #{record.insuranceBase,jdbcType=DECIMAL},
+            </if>
+            <if test="record.phone != null">
+                phone = #{record.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.mail != null">
+                mail = #{record.mail,jdbcType=VARCHAR},
+            </if>
+            <if test="record.teamId != null">
+                team_id = #{record.teamId,jdbcType=INTEGER},
+            </if>
+            <if test="record.basePay != null">
+                base_pay = #{record.basePay,jdbcType=DECIMAL},
+            </if>
+            <if test="record.meritPay != null">
+                merit_pay = #{record.meritPay,jdbcType=DECIMAL},
+            </if>
+            <if test="record.postId != null">
+                post_id = #{record.postId,jdbcType=INTEGER},
+            </if>
+            <if test="record.departId != null">
+                depart_id = #{record.departId,jdbcType=INTEGER},
+            </if>
+            <if test="record.departName != null">
+                depart_name = #{record.departName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userType != null">
+                user_type = #{record.userType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.superiorName != null">
+                superior_name = #{record.superiorName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.superiorId != null">
+                superior_id = #{record.superiorId,jdbcType=INTEGER},
+            </if>
+            <if test="record.createUser != null">
+                create_user = #{record.createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="record.updateUser != null">
+                update_user = #{record.updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update pay_user
+        set id = #{record.id,jdbcType=INTEGER},
         user_name = #{record.userName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.parentId != null" >
         parent_id = #{record.parentId,jdbcType=INTEGER},
-      </if>
-      <if test="record.onceUserName != null" >
         once_user_name = #{record.onceUserName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sex != null" >
         sex = #{record.sex,jdbcType=TINYINT},
-      </if>
-      <if test="record.birthday != null" >
         birthday = #{record.birthday,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.nation != null" >
         nation = #{record.nation,jdbcType=VARCHAR},
-      </if>
-      <if test="record.nativePlace != null" >
         native_place = #{record.nativePlace,jdbcType=VARCHAR},
-      </if>
-      <if test="record.politicalOutlook != null" >
         political_outlook = #{record.politicalOutlook,jdbcType=VARCHAR},
-      </if>
-      <if test="record.bloodType != null" >
         blood_type = #{record.bloodType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.health != null" >
         health = #{record.health,jdbcType=VARCHAR},
-      </if>
-      <if test="record.marryStatus != null" >
         marry_status = #{record.marryStatus,jdbcType=TINYINT},
-      </if>
-      <if test="record.idCard != null" >
         id_card = #{record.idCard,jdbcType=VARCHAR},
-      </if>
-      <if test="record.registered != null" >
         registered = #{record.registered,jdbcType=VARCHAR},
-      </if>
-      <if test="record.universityFrom != null" >
         university_from = #{record.universityFrom,jdbcType=VARCHAR},
-      </if>
-      <if test="record.major != null" >
         major = #{record.major,jdbcType=VARCHAR},
-      </if>
-      <if test="record.education != null" >
         education = #{record.education,jdbcType=TINYINT},
-      </if>
-      <if test="record.graduationTime != null" >
         graduation_time = #{record.graduationTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.workingTime != null" >
         working_time = #{record.workingTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.address != null" >
         address = #{record.address,jdbcType=VARCHAR},
-      </if>
-      <if test="record.insuranceBase != null" >
         insurance_base = #{record.insuranceBase,jdbcType=DECIMAL},
-      </if>
-      <if test="record.phone != null" >
         phone = #{record.phone,jdbcType=VARCHAR},
-      </if>
-      <if test="record.mail != null" >
         mail = #{record.mail,jdbcType=VARCHAR},
-      </if>
-      <if test="record.teamId != null" >
         team_id = #{record.teamId,jdbcType=INTEGER},
-      </if>
-      <if test="record.basePay != null" >
         base_pay = #{record.basePay,jdbcType=DECIMAL},
-      </if>
-      <if test="record.meritPay != null" >
         merit_pay = #{record.meritPay,jdbcType=DECIMAL},
-      </if>
-      <if test="record.postId != null" >
         post_id = #{record.postId,jdbcType=INTEGER},
-      </if>
-      <if test="record.departId != null" >
         depart_id = #{record.departId,jdbcType=INTEGER},
-      </if>
-      <if test="record.departName != null" >
         depart_name = #{record.departName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.userType != null" >
         user_type = #{record.userType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.superiorName != null" >
         superior_name = #{record.superiorName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.superiorId != null" >
         superior_id = #{record.superiorId,jdbcType=INTEGER},
-      </if>
-      <if test="record.createUser != null" >
         create_user = #{record.createUser,jdbcType=VARCHAR},
-      </if>
-      <if test="record.updateUser != null" >
         update_user = #{record.updateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update pay_user
-    set id = #{record.id,jdbcType=INTEGER},
-      user_name = #{record.userName,jdbcType=VARCHAR},
-      parent_id = #{record.parentId,jdbcType=INTEGER},
-      once_user_name = #{record.onceUserName,jdbcType=VARCHAR},
-      sex = #{record.sex,jdbcType=TINYINT},
-      birthday = #{record.birthday,jdbcType=TIMESTAMP},
-      nation = #{record.nation,jdbcType=VARCHAR},
-      native_place = #{record.nativePlace,jdbcType=VARCHAR},
-      political_outlook = #{record.politicalOutlook,jdbcType=VARCHAR},
-      blood_type = #{record.bloodType,jdbcType=VARCHAR},
-      health = #{record.health,jdbcType=VARCHAR},
-      marry_status = #{record.marryStatus,jdbcType=TINYINT},
-      id_card = #{record.idCard,jdbcType=VARCHAR},
-      registered = #{record.registered,jdbcType=VARCHAR},
-      university_from = #{record.universityFrom,jdbcType=VARCHAR},
-      major = #{record.major,jdbcType=VARCHAR},
-      education = #{record.education,jdbcType=TINYINT},
-      graduation_time = #{record.graduationTime,jdbcType=TIMESTAMP},
-      working_time = #{record.workingTime,jdbcType=TIMESTAMP},
-      address = #{record.address,jdbcType=VARCHAR},
-      insurance_base = #{record.insuranceBase,jdbcType=DECIMAL},
-      phone = #{record.phone,jdbcType=VARCHAR},
-      mail = #{record.mail,jdbcType=VARCHAR},
-      team_id = #{record.teamId,jdbcType=INTEGER},
-      base_pay = #{record.basePay,jdbcType=DECIMAL},
-      merit_pay = #{record.meritPay,jdbcType=DECIMAL},
-      post_id = #{record.postId,jdbcType=INTEGER},
-      depart_id = #{record.departId,jdbcType=INTEGER},
-      depart_name = #{record.departName,jdbcType=VARCHAR},
-      user_type = #{record.userType,jdbcType=VARCHAR},
-      superior_name = #{record.superiorName,jdbcType=VARCHAR},
-      superior_id = #{record.superiorId,jdbcType=INTEGER},
-      create_user = #{record.createUser,jdbcType=VARCHAR},
-      update_user = #{record.updateUser,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PayUser" >
-    update pay_user
-    <set >
-      <if test="userName != null" >
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="parentId != null" >
-        parent_id = #{parentId,jdbcType=INTEGER},
-      </if>
-      <if test="onceUserName != null" >
-        once_user_name = #{onceUserName,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        sex = #{sex,jdbcType=TINYINT},
-      </if>
-      <if test="birthday != null" >
-        birthday = #{birthday,jdbcType=TIMESTAMP},
-      </if>
-      <if test="nation != null" >
-        nation = #{nation,jdbcType=VARCHAR},
-      </if>
-      <if test="nativePlace != null" >
-        native_place = #{nativePlace,jdbcType=VARCHAR},
-      </if>
-      <if test="politicalOutlook != null" >
-        political_outlook = #{politicalOutlook,jdbcType=VARCHAR},
-      </if>
-      <if test="bloodType != null" >
-        blood_type = #{bloodType,jdbcType=VARCHAR},
-      </if>
-      <if test="health != null" >
-        health = #{health,jdbcType=VARCHAR},
-      </if>
-      <if test="marryStatus != null" >
-        marry_status = #{marryStatus,jdbcType=TINYINT},
-      </if>
-      <if test="idCard != null" >
-        id_card = #{idCard,jdbcType=VARCHAR},
-      </if>
-      <if test="registered != null" >
-        registered = #{registered,jdbcType=VARCHAR},
-      </if>
-      <if test="universityFrom != null" >
-        university_from = #{universityFrom,jdbcType=VARCHAR},
-      </if>
-      <if test="major != null" >
-        major = #{major,jdbcType=VARCHAR},
-      </if>
-      <if test="education != null" >
-        education = #{education,jdbcType=TINYINT},
-      </if>
-      <if test="graduationTime != null" >
-        graduation_time = #{graduationTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="workingTime != null" >
-        working_time = #{workingTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="insuranceBase != null" >
-        insurance_base = #{insuranceBase,jdbcType=DECIMAL},
-      </if>
-      <if test="phone != null" >
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="mail != null" >
-        mail = #{mail,jdbcType=VARCHAR},
-      </if>
-      <if test="teamId != null" >
-        team_id = #{teamId,jdbcType=INTEGER},
-      </if>
-      <if test="basePay != null" >
-        base_pay = #{basePay,jdbcType=DECIMAL},
-      </if>
-      <if test="meritPay != null" >
-        merit_pay = #{meritPay,jdbcType=DECIMAL},
-      </if>
-      <if test="postId != null" >
-        post_id = #{postId,jdbcType=INTEGER},
-      </if>
-      <if test="departId != null" >
-        depart_id = #{departId,jdbcType=INTEGER},
-      </if>
-      <if test="departName != null" >
-        depart_name = #{departName,jdbcType=VARCHAR},
-      </if>
-      <if test="userType != null" >
-        user_type = #{userType,jdbcType=VARCHAR},
-      </if>
-      <if test="superiorName != null" >
-        superior_name = #{superiorName,jdbcType=VARCHAR},
-      </if>
-      <if test="superiorId != null" >
-        superior_id = #{superiorId,jdbcType=INTEGER},
-      </if>
-      <if test="createUser != null" >
-        create_user = #{createUser,jdbcType=VARCHAR},
-      </if>
-      <if test="updateUser != null" >
-        update_user = #{updateUser,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayUser" >
-    update pay_user
-    set user_name = #{userName,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=INTEGER},
-      once_user_name = #{onceUserName,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=TINYINT},
-      birthday = #{birthday,jdbcType=TIMESTAMP},
-      nation = #{nation,jdbcType=VARCHAR},
-      native_place = #{nativePlace,jdbcType=VARCHAR},
-      political_outlook = #{politicalOutlook,jdbcType=VARCHAR},
-      blood_type = #{bloodType,jdbcType=VARCHAR},
-      health = #{health,jdbcType=VARCHAR},
-      marry_status = #{marryStatus,jdbcType=TINYINT},
-      id_card = #{idCard,jdbcType=VARCHAR},
-      registered = #{registered,jdbcType=VARCHAR},
-      university_from = #{universityFrom,jdbcType=VARCHAR},
-      major = #{major,jdbcType=VARCHAR},
-      education = #{education,jdbcType=TINYINT},
-      graduation_time = #{graduationTime,jdbcType=TIMESTAMP},
-      working_time = #{workingTime,jdbcType=TIMESTAMP},
-      address = #{address,jdbcType=VARCHAR},
-      insurance_base = #{insuranceBase,jdbcType=DECIMAL},
-      phone = #{phone,jdbcType=VARCHAR},
-      mail = #{mail,jdbcType=VARCHAR},
-      team_id = #{teamId,jdbcType=INTEGER},
-      base_pay = #{basePay,jdbcType=DECIMAL},
-      merit_pay = #{meritPay,jdbcType=DECIMAL},
-      post_id = #{postId,jdbcType=INTEGER},
-      depart_id = #{departId,jdbcType=INTEGER},
-      depart_name = #{departName,jdbcType=VARCHAR},
-      user_type = #{userType,jdbcType=VARCHAR},
-      superior_name = #{superiorName,jdbcType=VARCHAR},
-      superior_id = #{superiorId,jdbcType=INTEGER},
-      create_user = #{createUser,jdbcType=VARCHAR},
-      update_user = #{updateUser,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PayUser">
+        update pay_user
+        <set>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="onceUserName != null">
+                once_user_name = #{onceUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="nation != null">
+                nation = #{nation,jdbcType=VARCHAR},
+            </if>
+            <if test="nativePlace != null">
+                native_place = #{nativePlace,jdbcType=VARCHAR},
+            </if>
+            <if test="politicalOutlook != null">
+                political_outlook = #{politicalOutlook,jdbcType=VARCHAR},
+            </if>
+            <if test="bloodType != null">
+                blood_type = #{bloodType,jdbcType=VARCHAR},
+            </if>
+            <if test="health != null">
+                health = #{health,jdbcType=VARCHAR},
+            </if>
+            <if test="marryStatus != null">
+                marry_status = #{marryStatus,jdbcType=TINYINT},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="registered != null">
+                registered = #{registered,jdbcType=VARCHAR},
+            </if>
+            <if test="universityFrom != null">
+                university_from = #{universityFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="major != null">
+                major = #{major,jdbcType=VARCHAR},
+            </if>
+            <if test="education != null">
+                education = #{education,jdbcType=TINYINT},
+            </if>
+            <if test="graduationTime != null">
+                graduation_time = #{graduationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workingTime != null">
+                working_time = #{workingTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="insuranceBase != null">
+                insurance_base = #{insuranceBase,jdbcType=DECIMAL},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="mail != null">
+                mail = #{mail,jdbcType=VARCHAR},
+            </if>
+            <if test="teamId != null">
+                team_id = #{teamId,jdbcType=INTEGER},
+            </if>
+            <if test="basePay != null">
+                base_pay = #{basePay,jdbcType=DECIMAL},
+            </if>
+            <if test="meritPay != null">
+                merit_pay = #{meritPay,jdbcType=DECIMAL},
+            </if>
+            <if test="postId != null">
+                post_id = #{postId,jdbcType=INTEGER},
+            </if>
+            <if test="departId != null">
+                depart_id = #{departId,jdbcType=INTEGER},
+            </if>
+            <if test="departName != null">
+                depart_name = #{departName,jdbcType=VARCHAR},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType,jdbcType=VARCHAR},
+            </if>
+            <if test="superiorName != null">
+                superior_name = #{superiorName,jdbcType=VARCHAR},
+            </if>
+            <if test="superiorId != null">
+                superior_id = #{superiorId,jdbcType=INTEGER},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayUser">
+        update pay_user
+        set user_name         = #{userName,jdbcType=VARCHAR},
+            parent_id         = #{parentId,jdbcType=INTEGER},
+            once_user_name    = #{onceUserName,jdbcType=VARCHAR},
+            sex               = #{sex,jdbcType=TINYINT},
+            birthday          = #{birthday,jdbcType=TIMESTAMP},
+            nation            = #{nation,jdbcType=VARCHAR},
+            native_place      = #{nativePlace,jdbcType=VARCHAR},
+            political_outlook = #{politicalOutlook,jdbcType=VARCHAR},
+            blood_type        = #{bloodType,jdbcType=VARCHAR},
+            health            = #{health,jdbcType=VARCHAR},
+            marry_status      = #{marryStatus,jdbcType=TINYINT},
+            id_card           = #{idCard,jdbcType=VARCHAR},
+            registered        = #{registered,jdbcType=VARCHAR},
+            university_from   = #{universityFrom,jdbcType=VARCHAR},
+            major             = #{major,jdbcType=VARCHAR},
+            education         = #{education,jdbcType=TINYINT},
+            graduation_time   = #{graduationTime,jdbcType=TIMESTAMP},
+            working_time      = #{workingTime,jdbcType=TIMESTAMP},
+            address           = #{address,jdbcType=VARCHAR},
+            insurance_base    = #{insuranceBase,jdbcType=DECIMAL},
+            phone             = #{phone,jdbcType=VARCHAR},
+            mail              = #{mail,jdbcType=VARCHAR},
+            team_id           = #{teamId,jdbcType=INTEGER},
+            base_pay          = #{basePay,jdbcType=DECIMAL},
+            merit_pay         = #{meritPay,jdbcType=DECIMAL},
+            post_id           = #{postId,jdbcType=INTEGER},
+            depart_id         = #{departId,jdbcType=INTEGER},
+            depart_name       = #{departName,jdbcType=VARCHAR},
+            user_type         = #{userType,jdbcType=VARCHAR},
+            superior_name     = #{superiorName,jdbcType=VARCHAR},
+            superior_id       = #{superiorId,jdbcType=INTEGER},
+            create_user       = #{createUser,jdbcType=VARCHAR},
+            update_user       = #{updateUser,jdbcType=VARCHAR},
+            create_time       = #{createTime,jdbcType=TIMESTAMP},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="selectByPhoneOrIdCard" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from pay_user
+        where phone = #{phone}
+        <if test="idCard != null and idCard != ''">
+            or id_card = #{idCard}
+        </if>
+        limit 1
+    </select>
 </mapper>

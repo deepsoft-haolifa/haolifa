@@ -5,11 +5,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.cache.CacheKeyManager;
 import com.deepsoft.haolifa.cache.redis.RedisDao;
+import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
+import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysRoleUserMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
+import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
 import com.deepsoft.haolifa.dao.repository.extend.MyUserMapper;
+import com.deepsoft.haolifa.enums.RoleEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
@@ -29,8 +33,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum.PARAM_ERROR;
@@ -60,6 +67,12 @@ public class SysUserServiceImpl implements SysUserService {
     @Resource
     private PayProductionWorkshopMapper payProductionWorkshopMapper;
 
+    @Autowired
+    private PayUserMapper payUserMapper;
+
+    @Autowired
+    private MyPermissionMapper myPermissionMapper;
+
 
     @Override
     public CustomUser selectLoginUser() {
@@ -76,8 +89,71 @@ public class SysUserServiceImpl implements SysUserService {
             return (CustomUser) customUserService.loadUserByUsername("admin");
         else
             return (CustomUser) principal;
-//        return (CustomUser) customUserService.loadUserByUsername("admin");
+//        return (CustomUser) customUserService.loadUserByUsername("tzhiyuan");
     }
+
+    public List<UserPipLineDTO> currentUserPipLine(){
+        List<UserPipLineDTO> userDTOList = new ArrayList<>();
+        SysUser sysUser = getSysUser(selectLoginUser().getId());
+        if (StringUtils.isEmpty(sysUser.getPhone())) {
+            throw new BaseException("系统用户"+sysUser.getRealName() + "phone is null");
+        }
+        if (StringUtils.isEmpty(sysUser.getIdCard())) {
+            throw new BaseException("系统用户"+sysUser.getRealName() + "IdCard is null");
+        }
+
+        PayUser payUser = payUserMapper.selectByPhoneOrIdCard(sysUser.getPhone(), sysUser.getIdCard());
+        if (payUser == null) {
+            return userDTOList;
+        }
+        // 深度不能超过10层 防止程序&数据bug cpu打满
+        AtomicInteger atomicInteger = new AtomicInteger(10);
+        queryPayUserPipLine(userDTOList, payUser.getId(), atomicInteger);
+        return userDTOList;
+    }
+
+    public void queryPayUserPipLine(List<UserPipLineDTO> userDTOList, Integer id, AtomicInteger atomicInteger) {
+        int incrementAndGet = atomicInteger.decrementAndGet();
+        if (incrementAndGet == 0) {
+            return;
+        }
+        // 绩效用户
+        PayUser payUser = payUserMapper.selectByPrimaryKey(id);
+        if (payUser == null) {
+            return;
+        }
+        if (StringUtils.isEmpty(payUser.getPhone())) {
+            throw new BaseException("绩效用户"+payUser.getUserName() + "phone is null");
+        }
+        if (StringUtils.isEmpty(payUser.getIdCard())) {
+            throw new BaseException("绩效用户"+payUser.getUserName() + "IdCard is null");
+        }
+
+        SysUser sysUser = userMapper.selectByPhoneOrIdCard(payUser.getPhone(), payUser.getIdCard());
+        if (sysUser == null){
+            return;
+        }
+        Set<SysRole> roles = myPermissionMapper.findRolesByUserId(sysUser.getId());
+        // 是否总经理
+        boolean is_zjl = roles.stream()
+            .anyMatch(sysRole -> StringUtils.equalsIgnoreCase(sysRole.getRoleName(), RoleEnum.ROLE_ZJL.getCode()));
+        if (is_zjl){
+            return;
+        }
+
+        UserPipLineDTO payUserDTO = new UserPipLineDTO();
+        payUserDTO.setId(sysUser.getId());
+        payUserDTO.setUserName(sysUser.getRealName());
+        payUserDTO.setIdCard(sysUser.getIdCard());
+        payUserDTO.setPhone(sysUser.getPhone());
+//        payUserDTO.setParentId();
+//        payUserDTO.setParentUserName();
+        payUserDTO.setRoles(roles);
+        userDTOList.add(payUserDTO);
+
+        queryPayUserPipLine(userDTOList, payUser.getParentId(), atomicInteger);
+    }
+
 
     @Override
     public UserInfoVO selectUserInfo() {
