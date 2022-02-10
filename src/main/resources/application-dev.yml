@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
     username: haolifa
-    password: haolifa3306
+    password: lZqDoJPuUb3Vp
     hikari:
       maximum-pool-size: 15
       idle-timeout: 30000
