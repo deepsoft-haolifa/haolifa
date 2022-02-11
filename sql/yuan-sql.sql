@@ -376,3 +376,58 @@ VALUES
 ( 'm', '分解审核', 'fjsh', 172, 0, '2021-11-14 13:37:21', '2021-11-14 13:37:21');
 INSERT INTO `sys_permission` (`perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`, `update_time`)
 VALUES ( 'm', '新增付款申请', 'xzfksq', 73, 0, '2019-04-16 21:51:02', '2019-04-16 21:51:02');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2021-03-03 15:36:12', 1, 10, 50, '', 26, 0, 51, 0, '', 1);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:42:56', 1, 10, 51, '64', 19, 50, 52, 0, '', 2);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 52, '48', 3, 51, 84, 0, '', 3);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 84, '74', 29, 52, 80, 0, '', 4);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 80, '76', 31, 84, 55, 0, '', 5);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 55, '51', 6, 80, 56, 0, '', 6);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:43:08', 1, 10, 56, '92', 8, 55, 57, 0, '', 7);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 57, '72', 27, 56, 0, 0, '', 8);
+
+
+
+
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2021-03-03 15:36:12', 1, 12, 50, '', 26, 0, 51, 0, '', 1);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:42:56', 1, 12, 51, '64', 19, 50, 52, 0, '', 2);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 52, '48', 3, 51, 84, 0, '', 3);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 84, '74', 29, 52, 80, 0, '', 4);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 80, '76', 31, 84, 55, 0, '', 5);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 55, '51', 6, 80, 56, 0, '', 6);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:43:08', 1, 12, 56, '92', 8, 55, 57, 0, '', 7);
+INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 57, '72', 27, 56, 0, 0, '', 8);
+
+
+
+
+
+
+INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '采购员审批', '付款流程-采购员审批');
+INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '采购主管（经理）审批', '付款流程-采购主管（经理）审批');
+INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '主管领导审批', '付款流程-主管领导审批');
+INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '往来会计审批', '付款流程-往来会计审批');
+INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '总经理审批', '付款流程-总经理审批');
+
+
+
+
+
+
+
+
+
+

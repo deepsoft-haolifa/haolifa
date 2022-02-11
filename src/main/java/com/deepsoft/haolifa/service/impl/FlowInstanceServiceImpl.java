@@ -25,6 +25,7 @@ import com.deepsoft.haolifa.service.finance.LoanApplyService;
 import com.deepsoft.haolifa.service.finance.PayApplyService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,79 +79,102 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     public ResultBean create(FlowInstanceDTO model) {
         Map<String, Object> result = null;
         // 如果是报销流程或者借款流程 需要改造流程
-        if (model.getFlowId() == LOAN_APP_FLOW.id || model.getFlowId() == REIMBURSE_APP_FLOW.id){
-            // 获取当前用户
-            List<UserPipLineDTO> userPipLineDTOList = sysUserService.currentUserPipLine();
-            String formNo = model.getFormNo();
+        if (model.getFlowId() == LOAN_APP_FLOW.id || model.getFlowId() == REIMBURSE_APP_FLOW.id) {
+            loan(model);
+        } else {
+            result = baseFlow(model);
+        }
+        return ResultBean.success(result);
+    }
 
-            // 判断该表单是否存在处于审批中的流程
-            FlowInstanceExample preInstanceExample = new FlowInstanceExample();
-            FlowInstanceExample.Criteria criteria = preInstanceExample.createCriteria();
-            criteria
-                .andIsOverEqualTo(Consts.NO.code)
-                .andFlowIdEqualTo(model.getFlowId());
-            if (StringUtils.isEmpty(model.getFormNo()) && model.getFormId() == null) {
-                throw new BaseException(ResponseEnum.PARAM_ERROR);
-            } else if (StringUtils.isNotEmpty(model.getFormNo())) {
-                criteria.andFormNoEqualTo(model.getFormNo());
-            } else if (model.getFormId() != null) {
-                criteria.andFormIdEqualTo(model.getFormId());
-            }
-            criteria.andFormTypeEqualTo(model.getFormType().byteValue());
-            List<FlowInstance> flowInstances = instanceMapper.selectByExample(preInstanceExample);
-            if (flowInstances != null && flowInstances.size() > 0) {
-                throw new BaseException(ResponseEnum.FLOW_EXIST);
-            }
-            //1、 添加一条初始化历史记录（流程节点表单内容通过单独的接口，前端调用添加）
-            //2、添加实例信息，当前节点为初始化后节点
-            //3、返回实例id
-//            FlowStepExample flowStepExample = new FlowStepExample();
-//            flowStepExample.createCriteria().andFlowIdEqualTo(model.getFlowId());
-//            List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
-//
-//            FlowStep initStep = flowSteps.stream()
-//                .filter(f -> f.getPrevStepId() == 0)
-//                .findFirst()
-//                .get();
-//
-//            // 获取第一个节点
-//            FlowStep currentStep = flowSteps.stream()
-//                .filter(f -> f.getStepId() == initStep.getConditionTrue())
-//                .findFirst()
-//                .get();
+    private void loan(FlowInstanceDTO model) {
+        // 判断该表单是否存在处于审批中的流程
+        FlowInstanceExample preInstanceExample = new FlowInstanceExample();
+        FlowInstanceExample.Criteria criteria = preInstanceExample.createCriteria();
+        criteria
+            .andIsOverEqualTo(Consts.NO.code)
+            .andFlowIdEqualTo(model.getFlowId());
+        if (StringUtils.isEmpty(model.getFormNo()) && model.getFormId() == null) {
+            throw new BaseException(ResponseEnum.PARAM_ERROR);
+        } else if (StringUtils.isNotEmpty(model.getFormNo())) {
+            criteria.andFormNoEqualTo(model.getFormNo());
+        } else if (model.getFormId() != null) {
+            criteria.andFormIdEqualTo(model.getFormId());
+        }
+        criteria.andFormTypeEqualTo(model.getFormType().byteValue());
+        List<FlowInstance> flowInstances = instanceMapper.selectByExample(preInstanceExample);
+        if (flowInstances != null && flowInstances.size() > 0) {
+            throw new BaseException(ResponseEnum.FLOW_EXIST);
+        }
 
-            UserPipLineDTO userPipLineDTO = userPipLineDTOList.get(0);
+
+        //1、 添加一条初始化历史记录（流程节点表单内容通过单独的接口，前端调用添加）
+        //2、添加实例信息，当前节点为初始化后节点
+        //3、返回实例id
+        FlowStepExample flowStepExample = new FlowStepExample();
+        flowStepExample.createCriteria().andFlowIdEqualTo(model.getFlowId());
+        List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
+        FlowStep initStep = flowSteps.stream()
+            .filter(f -> f.getPrevStepId() == 0)
+            .findFirst()
+            .get();
+
+        // 获取第一个节点
+        FlowStep currentStep = flowSteps.stream()
+            .filter(f -> f.getStepId() == initStep.getConditionTrue())
+            .findFirst()
+            .get();
+
+        // 获取当前用户
+        List<UserPipLineDTO> userPipLineDTOList = sysUserService.currentUserPipLine();
+        String formNo = model.getFormNo();
+        String nextUserId = "";
+        Integer currentStepId = 1;
+        Integer roleId = 0;
+        // > 1 上级领导不止一个
+        if (userPipLineDTOList.size() > 1) {
+            UserPipLineDTO userPipLineDTO = userPipLineDTOList.get(1);
+            nextUserId = userPipLineDTO.getId().toString();
+            currentStepId = 1;
             SysRole sysRole = userPipLineDTO.getRoles().stream().findFirst().get();
+            roleId = sysRole.getId();
+            // 当前领导已经是总经理
+        } else if (userPipLineDTOList.size() == 1) {
+            nextUserId = initStep.getUserId();
+            currentStepId = initStep.getStepId();
+            roleId = initStep.getRoleId();
+            //
+        } else {
+            nextUserId = currentStep.getUserId();
+            currentStepId = currentStep.getStepId();
+            roleId = currentStep.getRoleId();
+        }
 
-            // 添加当前流程实例
-            FlowInstance flowInstance = new FlowInstance();
-            flowInstance.setCreateUserId(getLoginUserId());
-            flowInstance.setFlowId(model.getFlowId());
-            flowInstance.setSummary(model.getSummary());
-            flowInstance.setUserId(userPipLineDTO.getIdCard());
-            flowInstance.setRoleId(sysRole.getId());
-            flowInstance.setCurrentStepId(0);
-            flowInstance.setFormNo(model.getFormNo());// 流程初始化关联的主表单编号（采购单、生产订单、发票编号、机加工等）
-            flowInstance.setFormId(model.getFormId());
-            flowInstance.setFormType(model.getFormType().byteValue());
-            instanceMapper.insertSelective(flowInstance);
-            // 添加初始化流程实例历史（默认第一条已处理）
-            FlowHistory flowHistory = new FlowHistory();
-            flowHistory.setInstanceId(flowInstance.getId());
-            flowHistory.setFormId(model.getFormId());
-            flowHistory.setFormNo(model.getFormNo());
-            flowHistory.setAuditUserId(getLoginUserId());
-            flowHistory.setFormType(model.getFormType().byteValue());
-            flowHistory.setAuditResult(Consts.FLOW_INIT.code);// 流程初始化历史
-            flowHistory.setStepId(0);
-            historyMapper.insertSelective(flowHistory);
+        // 添加当前流程实例
+        FlowInstance flowInstance = new FlowInstance();
+        flowInstance.setCreateUserId(getLoginUserId());
+        flowInstance.setFlowId(model.getFlowId());
+        flowInstance.setSummary(model.getSummary());
+        flowInstance.setUserId(nextUserId);
+        flowInstance.setRoleId(roleId);
+        flowInstance.setCurrentStepId(currentStepId);
+        flowInstance.setFormNo(model.getFormNo());// 流程初始化关联的主表单编号（采购单、生产订单、发票编号、机加工等）
+        flowInstance.setFormId(model.getFormId());
+        flowInstance.setFormType(model.getFormType().byteValue());
+        instanceMapper.insertSelective(flowInstance);
+        // 添加初始化流程实例历史（默认第一条已处理）
+        FlowHistory flowHistory = new FlowHistory();
+        flowHistory.setInstanceId(flowInstance.getId());
+        flowHistory.setFormId(model.getFormId());
+        flowHistory.setFormNo(model.getFormNo());
+        flowHistory.setAuditUserId(getLoginUserId());
+        flowHistory.setFormType(model.getFormType().byteValue());
+        flowHistory.setAuditResult(Consts.FLOW_INIT.code);// 流程初始化历史
+        flowHistory.setStepId(0);
+        historyMapper.insertSelective(flowHistory);
 //            Map<String, Object> result = new HashMap<>(4);
 //            result.put("instanceId", flowInstance.getId());
 //            return result;
-        }else {
-          result = baseFlow(model);
-        }
-        return ResultBean.success(result);
     }
 
     private Map<String, Object> baseFlow(FlowInstanceDTO model) {
@@ -233,9 +257,53 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         if (flowInstance.getIsOver() == 1) {
             return ResultBean.error(ResponseEnum.FLOW_IS_OVER);
         }
-        // 获取当前待处理节点
-        FlowStep currentStep = instanceHistoryMapper
-            .selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
+
+        FlowStep currentStep = new FlowStep();
+        if (flowInstance.getCurrentStepId() == 1 &&
+            (flowInstance.getFlowId() == LOAN_APP_FLOW.id || flowInstance.getFlowId() == REIMBURSE_APP_FLOW.id)) {
+            String userId = flowInstance.getUserId();
+
+            // 获取当前用户
+            List<UserPipLineDTO> userPipLineDTOList = sysUserService.currentUserPipLine();
+            String nextUserId = "";
+            Integer currentStepId = 1;
+            Integer roleId = 0;
+            // > 1 上级领导不止一个
+            if (userPipLineDTOList.size() > 1) {
+                UserPipLineDTO userPipLineDTO = userPipLineDTOList.get(0);
+                nextUserId = userPipLineDTO.getId().toString();
+                currentStepId = 1;
+                SysRole sysRole = userPipLineDTO.getRoles().stream().findFirst().get();
+                roleId = sysRole.getId();
+                // 当前领导已经是总经理
+            } else if (userPipLineDTOList.size() == 1) {
+                FlowStepExample flowStepExample = new FlowStepExample();
+                flowStepExample.createCriteria().andFlowIdEqualTo(flowInstance.getFlowId());
+                List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
+                FlowStep initStep = flowSteps.stream()
+                    .filter(f -> f.getPrevStepId() == 0)
+                    .findFirst()
+                    .get();
+
+                nextUserId = initStep.getUserId();
+                currentStepId = initStep.getStepId();
+                roleId = initStep.getRoleId();
+                //
+            }
+
+            currentStep.setStepId(currentStepId);
+            currentStep.setFlowId(flowInstance.getFlowId());
+            currentStep.setRoleId(roleId);
+            currentStep.setConditionTrue(currentStepId);
+            currentStep.setConditionFalse(0);
+//            currentStep.setPrevStepId();
+        } else {
+            // 获取当前待处理节点
+             currentStep = instanceHistoryMapper
+                .selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
+        }
+
+
         // 添加历史
         FlowHistory flowHistory = new FlowHistory();
         flowHistory.setAccessory(JSON.toJSONString(model.getAccessorys()));
@@ -414,7 +482,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                     // 审核不通过
                     auditResult = "4";
                 }
-                payApplyService.auditReplaceMaterial(formId,auditResult);
+                payApplyService.auditReplaceMaterial(formId, auditResult);
                 break;
             case 12:
                 // 替换料审批
@@ -426,7 +494,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                     // 审核不通过
                     audit = LoanApplyStatusEnum.APPROVAL_FAILED;
                 }
-                loanApplyService.auditReplaceMaterial(formNo,audit);
+                loanApplyService.auditReplaceMaterial(formNo, audit);
                 break;
             default:
                 ;
@@ -554,7 +622,6 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
 //        if (model.getFlowId() == LOAN_APP_FLOW.id || model.getFlowId() == REIMBURSE_APP_FLOW.id){
 //
 //        }
-
 
 
         FlowStepExample flowStepExample = new FlowStepExample();

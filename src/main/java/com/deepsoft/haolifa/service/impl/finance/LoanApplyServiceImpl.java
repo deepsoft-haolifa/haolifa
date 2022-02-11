@@ -242,8 +242,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
 
+
+        BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(id);
         // 添加申请流程
-        FlowInstanceDTO flowInstanceDTO = buildFlowInstanceDTO(loanApply);
+        FlowInstanceDTO flowInstanceDTO = buildFlowInstanceDTO(bizLoanApply);
         flowInstanceService.create(flowInstanceDTO);
         return ResultBean.success(1);
     }
