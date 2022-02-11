@@ -1,5 +1,7 @@
 package com.deepsoft.haolifa.service.finance;
 
+import com.deepsoft.haolifa.enums.LoanApplyStatusEnum;
+import com.deepsoft.haolifa.enums.ReimburseApplyStatusEnum;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
@@ -45,6 +47,8 @@ public interface ReimburseApplyService {
      * @return
      */
     ResultBean<PageDTO<ReimburseApplyRSDTO>> getList(ReimburseApplyRQDTO model);
+
+    public int auditReplaceMaterial(String item_id, ReimburseApplyStatusEnum auditResult);
 
     public ResultBean approve(Integer id);
 

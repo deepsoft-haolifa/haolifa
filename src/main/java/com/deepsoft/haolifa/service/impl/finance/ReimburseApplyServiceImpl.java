@@ -6,13 +6,9 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizReimburseApplyMapper;
 import com.deepsoft.haolifa.dao.repository.BizReimburseCostDetailMapper;
 import com.deepsoft.haolifa.dao.repository.BizReimburseTravelDetailMapper;
-import com.deepsoft.haolifa.enums.LoanrPayStatusEnum;
-import com.deepsoft.haolifa.enums.ReimbursePayStatusEnum;
-import com.deepsoft.haolifa.enums.ReimburseTypeEnum;
-import com.deepsoft.haolifa.model.domain.BizReimburseApply;
-import com.deepsoft.haolifa.model.domain.BizReimburseApplyExample;
-import com.deepsoft.haolifa.model.domain.BizReimburseCostDetail;
-import com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail;
+import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
+import com.deepsoft.haolifa.enums.*;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -33,6 +29,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.deepsoft.haolifa.constant.CommonEnum.FlowId.REIMBURSE_APP_FLOW;
@@ -53,6 +51,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private BizReimburseTravelDetailMapper bizReimburseTravelDetailMapper;
     @Autowired
     private BizReimburseCostDetailMapper bizReimburseCostDetailMapper;
+    @Autowired
+    private SysDepartmentMapper departmentMapper;
 
     //
     @Override
@@ -190,11 +190,26 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         PageDTO<ReimburseApplyRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
 
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
 
         List<ReimburseApplyRSDTO> reimburseApplyRSDTOList = pageData.getResult().stream()
             .map(reimburseApply -> {
                 ReimburseApplyRSDTO reimburseApplyRSDTO = new ReimburseApplyRSDTO();
                 BeanUtils.copyProperties(reimburseApply, reimburseApplyRSDTO);
+
+                ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(reimburseApply.getApplyStatus());
+
+                reimburseApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
+                    LoanApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
+
+                ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(reimburseApply.getPayStatus());
+                reimburseApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+
+                ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
+                reimburseApplyRSDTO.setTypeCN(payStatusEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
+
                 return reimburseApplyRSDTO;
             })
             .collect(Collectors.toList());
@@ -203,27 +218,28 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     }
 
 
-//    @Override
-//    public int auditReplaceMaterial(String item_id, LoanApplyStatusEnum auditResult) {
-//        BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
-//        BizLoanApplyExample.Criteria criteria = loanApplyExample.createCriteria();
-//        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
-//        criteria.andSerialNoEqualTo(item_id);
-//        List<BizLoanApply> bizLoanApplies = bizLoanApplyMapper.selectByExample(loanApplyExample);
-//
-//        BizLoanApply  loanApplyS = bizLoanApplies.get(0);
-//        if (loanApplyS == null){
-//            log.error("auditReplaceMaterial 无该条记录,id:{}",item_id);
-//            return 0;
-//        }
-//
-//        BizLoanApply loanApply = new BizLoanApply();
-//        loanApply.setApplyStatus(auditResult.getCode());
-//        loanApply.setUpdateTime(new Date());
-//        loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
-//        int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
-//        return 1;
-//    }
+    @Override
+    public int auditReplaceMaterial(String item_id, ReimburseApplyStatusEnum auditResult) {
+        BizReimburseApplyExample reimburseApplyExample = new BizReimburseApplyExample();
+        BizReimburseApplyExample.Criteria criteria = reimburseApplyExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andSerialNoEqualTo(item_id);
+        List<BizReimburseApply> bizLoanApplies = bizReimburseApplyMapper.selectByExample(reimburseApplyExample);
+
+        BizReimburseApply  loanApplyS = bizLoanApplies.get(0);
+        if (loanApplyS == null){
+            log.error("auditReplaceMaterial 无该条记录,id:{}",item_id);
+            return 0;
+        }
+
+        BizReimburseApply reimburseApply = new BizReimburseApply();
+        reimburseApply.setId(loanApplyS.getId());
+        reimburseApply.setApplyStatus(auditResult.getCode());
+        reimburseApply.setUpdateTime(new Date());
+        reimburseApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        int update = bizReimburseApplyMapper.updateByPrimaryKeySelective(reimburseApply);
+        return update;
+    }
 
     @Override
     public ResultBean approve(Integer id) {
@@ -231,7 +247,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 查询&修改 付款申请
         BizReimburseApply reimburseApply = bizReimburseApplyMapper.selectByPrimaryKey(id);
         //审核状态：
-        reimburseApply.setApplyStatus("1");
+        reimburseApply.setApplyStatus(ReimburseApplyStatusEnum.UNDER_APPROVAL.getCode());
         reimburseApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         reimburseApply.setUpdateTime(new Date());
         bizReimburseApplyMapper.updateByPrimaryKeySelective(reimburseApply);

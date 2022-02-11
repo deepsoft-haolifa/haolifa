@@ -214,40 +214,151 @@ CREATE TABLE `biz_bill_contract`
 
 
 -- 借款审批
+
+
 CREATE TABLE `biz_loan_apply`
 (
     `id`                    int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-    `serial_no`             varchar(255)   DEFAULT '' COMMENT '编号',
-    `dept_id`               int(11) DEFAULT NULL COMMENT '借款部门id',
+    `serial_no`             varchar(50)    DEFAULT '' COMMENT '编号',
+    `dept_id`               int(11) DEFAULT NULL COMMENT '借款部门',
     `loan_date`             datetime       DEFAULT NULL COMMENT '借款日期',
     `expect_repayment_date` datetime       DEFAULT NULL COMMENT '预计还款日期',
     `amount`                decimal(15, 4) DEFAULT '0.0000' COMMENT '借款金额',
-    `purpose`               varchar(255)   DEFAULT '' COMMENT '用途',
-    `loan_user`             int(11) DEFAULT NULL COMMENT '借款人id',
-    `amount_type`           varchar(30)    DEFAULT '' COMMENT '资金性质（1現金 2支票）',
-    `bill_nature`           varchar(30)    DEFAULT '' COMMENT '记账方式（1現金 2銀行 3 其他貨幣）',
-    `account_name`          varchar(255)   DEFAULT '' COMMENT '户名',
-    `card_number`           varchar(255)   DEFAULT '' COMMENT '卡号',
-    `bank_of_deposit`       varchar(255)   DEFAULT '' COMMENT '开户行',
-    `apply_status`          varchar(30)    DEFAULT '' COMMENT '审批节点',
-    `pay_company`           varchar(255)   DEFAULT '' COMMENT '付款单位',
-    `pay_company_id`        varchar(255)   DEFAULT '' COMMENT '付款单位Id',
-    `pay_account`           varchar(255)   DEFAULT '' COMMENT '付款账户',
+    `purpose`               varchar(30)    DEFAULT '' COMMENT '用途',
+    `loan_user`             int(11) DEFAULT NULL COMMENT '借款人',
+    `amount_type`           char(1)        DEFAULT '0' COMMENT '资金性质（1現金 2支票）',
+    `bill_nature`           char(1)        DEFAULT '0' COMMENT '记账方式（1現金 2銀行 3 其他貨幣）',
+    `account_name`          varchar(64)    DEFAULT '' COMMENT '户名',
+    `card_number`           varchar(64)    DEFAULT '' COMMENT '卡号',
+    `bank_of_deposit`       varchar(64)    DEFAULT '' COMMENT '开户行',
+    `apply_status`          char(1)        DEFAULT '0' COMMENT '审批节点',
+    `pay_company`           varchar(64)    DEFAULT '' COMMENT '付款单位',
+    `pay_company_id`        varchar(64)    DEFAULT '' COMMENT '付款单位Id',
+    `pay_account`           varchar(64)    DEFAULT '' COMMENT '付款账户',
     `pay_time`              datetime       DEFAULT NULL COMMENT '付款日期',
-    `pay_status`            varchar(30)    DEFAULT '' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
-    `remark`                varchar(30)    DEFAULT '' COMMENT '备注',
-    `del_flag`                 char(1)               DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+    `pay_status`            char(1)        DEFAULT '0' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
+    `remark`                varchar(30)    DEFAULT '' COMMENT '备注摘要',
+    `del_flag`              char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
     `create_user`           int(11) DEFAULT NULL COMMENT '创建者',
     `create_time`           datetime       DEFAULT NULL COMMENT '创建时间',
     `update_user`           int(11) DEFAULT NULL COMMENT '更新者',
     `update_time`           datetime       DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='借款审批';
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='借款申请（出纳付款）';
+
+CREATE TABLE `biz_reimburse_apply`
+(
+    `id`              int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `serial_no`       varchar(50)    DEFAULT '' COMMENT '编号',
+    `type`            char(1)        DEFAULT '0' COMMENT '类型 1 费用报销 2 费用报销',
+    `reimburse_type`  char(1)        DEFAULT '0' COMMENT '报销方式	1普通报销 2借款冲抵',
+    `reimburse_date`  datetime       DEFAULT NULL COMMENT '报销日期',
+    `account_name`    varchar(64)    DEFAULT '' COMMENT '收款账户',
+    `card_number`     varchar(64)    DEFAULT '' COMMENT '收款账号',
+    `bank_of_deposit` varchar(64)    DEFAULT '' COMMENT '开户行',
+    `dept_id`         int(11) DEFAULT NULL COMMENT '报销部门',
+    `amount`          decimal(15, 4) DEFAULT '0.0000' COMMENT '报销金额',
+    `pay_company`     varchar(64)    DEFAULT '' COMMENT '付款单位',
+    `pay_company_id`  varchar(64)    DEFAULT '' COMMENT '付款单位Id',
+    `pay_account`     varchar(64)    DEFAULT '' COMMENT '付款账户',
+    `pay_time`        datetime       DEFAULT NULL COMMENT '付款日期',
+    `pay_status`      char(1)        DEFAULT '0' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
+    `reimburse_user`  int(11) DEFAULT NULL COMMENT '报销人',
+    `apply_status`    char(1)        DEFAULT '0' COMMENT '审批节点',
+    `remark`          varchar(30)    DEFAULT '' COMMENT '备注摘要',
+    `del_flag`        char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
+    `create_user`     int(11) DEFAULT NULL COMMENT '创建者',
+    `create_time`     datetime       DEFAULT NULL COMMENT '创建时间',
+    `update_user`     int(11) DEFAULT NULL COMMENT '更新者',
+    `update_time`     datetime       DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报销申请';
+
+
+CREATE TABLE `biz_reimburse_travel_detail`
+(
+    `id`                    int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `reimburse_id`          int(11) NOT NULL COMMENT '报销申请ID',
+    `serial_no`             varchar(50)    DEFAULT '' COMMENT '编号',
+    `dep_time`              datetime       DEFAULT NULL COMMENT '出发日期',
+    `dep_address`           varchar(30)    DEFAULT '' COMMENT '出发地',
+    `arr_time`              datetime       DEFAULT NULL COMMENT '到达日期',
+    `arr_address`           varchar(30)    DEFAULT '' COMMENT '到达地',
+    `vehicle`               int(3) DEFAULT NULL COMMENT '交通工具',
+    `vehicle_doc_num`       int(3) DEFAULT NULL COMMENT '交通单据张数',
+    `vehicle_amount`        decimal(15, 4) DEFAULT '0.0000' COMMENT '交通金额',
+    `travel_days`           int(3) DEFAULT NULL COMMENT '出差天数',
+    `travel_subsidy_amount` decimal(15, 4) DEFAULT '0.0000' COMMENT '出差补贴金额',
+    `project_type`          int(3) DEFAULT NULL COMMENT '项目',
+    `project_doc_num`       int(3) DEFAULT NULL COMMENT '单据张数',
+    `project_amount`        decimal(15, 4) DEFAULT '0.0000' COMMENT '金额',
+    `type`                  char(1)        DEFAULT '0' COMMENT '类型 1 费用报销 2 费用报销',
+    `pay_status`            char(1)        DEFAULT '0' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
+    `remark`                varchar(30)    DEFAULT '' COMMENT '备注摘要',
+    `del_flag`              char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
+    `create_user`           int(11) DEFAULT NULL COMMENT '创建者',
+    `create_time`           datetime       DEFAULT NULL COMMENT '创建时间',
+    `update_user`           int(11) DEFAULT NULL COMMENT '更新者',
+    `update_time`           datetime       DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报销申请-差旅类别详情';
+
+
+CREATE TABLE `biz_reimburse_cost_detail`
+(
+    `id`           int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `reimburse_id` int(11) NOT NULL COMMENT '报销申请ID',
+    `serial_no`    varchar(50)    DEFAULT '' COMMENT '编号',
+    `time`         datetime       DEFAULT NULL COMMENT '日期',
+    `doc_num`      int(3) DEFAULT NULL COMMENT '单据张数',
+    `amount`       decimal(15, 4) DEFAULT '0.0000' COMMENT '金额',
+    `type`         char(1)        DEFAULT '0' COMMENT '类型 1 费用报销 2 费用报销',
+    `pay_status`   char(1)        DEFAULT '0' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
+    `remark`       varchar(30)    DEFAULT '' COMMENT '备注摘要',
+    `del_flag`     char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
+    `create_user`  int(11) DEFAULT NULL COMMENT '创建者',
+    `create_time`  datetime       DEFAULT NULL COMMENT '创建时间',
+    `update_user`  int(11) DEFAULT NULL COMMENT '更新者',
+    `update_time`  datetime       DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报销申请-费用类别详情';
+
+
+CREATE TABLE `biz_cost_budget_dept`
+(
+    `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `name`        varchar(50)    DEFAULT NULL COMMENT '名称',
+    `dept_id`     int(20) DEFAULT NULL COMMENT '组织机构id',
+    `dept_pid` int(20) DEFAULT NULL COMMENT '父组织机构id',
+    `cost_ratio` int(20) DEFAULT NULL COMMENT '费用比例',
+    `status`      char(1)        DEFAULT '0' COMMENT '状态（0正常 1停用）',
+    `remark`      varchar(30)    DEFAULT '' COMMENT '备注',
+    `del_flag`    char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+    `create_user` int(11) DEFAULT NULL COMMENT '创建者',
+    `create_time` datetime       DEFAULT NULL COMMENT '创建时间',
+    `update_user` int(11) DEFAULT NULL COMMENT '更新者',
+    `update_time` datetime       DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='部门费用预算表';
 
 
 
-
-
+CREATE TABLE `biz_cost_budget_subjects`
+(
+    `id`          int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `name`        varchar(50)    DEFAULT NULL COMMENT '名称',
+    `dept_id`     int(20) DEFAULT NULL COMMENT '组织机构id',
+    `subjects_id` int(20) DEFAULT NULL COMMENT '科目id',
+    `cost_ratio` int(20) DEFAULT NULL COMMENT '费用比例',
+    `status`      char(1)        DEFAULT '0' COMMENT '状态（0正常 1停用）',
+    `remark`      varchar(30)    DEFAULT '' COMMENT '备注',
+    `del_flag`    char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+    `create_user` int(11) DEFAULT NULL COMMENT '创建者',
+    `create_time` datetime       DEFAULT NULL COMMENT '创建时间',
+    `update_user` int(11) DEFAULT NULL COMMENT '更新者',
+    `update_time` datetime       DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='科目费用预算表';
 
 
 
@@ -378,55 +489,30 @@ INSERT INTO `sys_permission` (`perm_name`, `description`, `url`, `pid`, `is_dele
 VALUES ( 'm', '新增付款申请', 'xzfksq', 73, 0, '2019-04-16 21:51:02', '2019-04-16 21:51:02');
 
 
+-- 流程节点
+
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (85, '2022-02-11 11:35:20', '2022-02-11 11:35:20', 1, '往来会计审批', '借款流程-往来会计审批');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (86, '2022-02-11 11:35:30', '2022-02-11 11:35:40', 1, '总经理审批', '借款流程-总经理审批');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (87, '2022-02-11 12:00:35', '2022-02-11 13:44:55', 1, '采购员申请', '付款流程-采购员申请');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (88, '2022-02-11 12:00:35', '2022-02-11 12:00:35', 1, '采购主管（经理）审批', '付款流程-采购主管（经理）审批');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (89, '2022-02-11 12:00:35', '2022-02-11 12:00:35', 1, '主管领导审批', '付款流程-主管领导审批');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (90, '2022-02-11 12:00:35', '2022-02-11 12:00:35', 1, '往来会计审批', '付款流程-往来会计审批');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (91, '2022-02-11 12:00:35', '2022-02-11 12:00:35', 1, '总经理审批', '付款流程-总经理审批');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (92, '2022-02-11 11:35:20', '2022-02-11 15:37:42', 1, '往来会计审批', '报销流程-往来会计审批');
+INSERT INTO `haolifa`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (93, '2022-02-11 11:35:30', '2022-02-11 11:35:40', 1, '总经理审批', '报销流程-总经理审批');
 
 
+-- 流程配置
 
-
-
-
-
-
-
-
-
-
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2021-03-03 15:36:12', 1, 10, 50, '', 26, 0, 51, 0, '', 1);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:42:56', 1, 10, 51, '64', 19, 50, 52, 0, '', 2);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 52, '48', 3, 51, 84, 0, '', 3);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 84, '74', 29, 52, 80, 0, '', 4);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 80, '76', 31, 84, 55, 0, '', 5);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 55, '51', 6, 80, 56, 0, '', 6);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:43:08', 1, 10, 56, '92', 8, 55, 57, 0, '', 7);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 10, 57, '72', 27, 56, 0, 0, '', 8);
-
-
-
-
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2021-03-03 15:36:12', 1, 12, 50, '', 26, 0, 51, 0, '', 1);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:42:56', 1, 12, 51, '64', 19, 50, 52, 0, '', 2);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 52, '48', 3, 51, 84, 0, '', 3);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 84, '74', 29, 52, 80, 0, '', 4);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 80, '76', 31, 84, 55, 0, '', 5);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 55, '51', 6, 80, 56, 0, '', 6);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2020-06-17 21:43:08', 1, 12, 56, '92', 8, 55, 57, 0, '', 7);
-INSERT INTO `haolifa`.`flow_step` (`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES ( '2019-12-28 17:46:59', '2019-12-28 17:46:59', 1, 12, 57, '72', 27, 56, 0, 0, '', 8);
-
-
-
-
-
-
-INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '采购员审批', '付款流程-采购员审批');
-INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '采购主管（经理）审批', '付款流程-采购主管（经理）审批');
-INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '主管领导审批', '付款流程-主管领导审批');
-INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '往来会计审批', '付款流程-往来会计审批');
-INSERT INTO `haolifa`.`step` ( `create_user_id`, `name`, `description`) VALUES ( 1, '总经理审批', '付款流程-总经理审批');
-
-
-
-
-
-
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (111, '2019-12-28 17:46:59', '2022-02-11 11:39:01', 1, 12, 86, '47', 2, 85, 0, 0, '', 2);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (110, '2019-12-28 17:46:59', '2022-02-11 15:12:01', 1, 12, 85, '87', 42, 0, 86, 0, '', 1);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (103, '2019-12-28 17:46:59', '2022-02-11 15:40:42', 1, 11, 93, '64', 2, 0, 0, 0, '', 2);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (102, '2019-12-28 17:46:59', '2022-02-11 15:40:31', 1, 11, 92, '', 42, 0, 92, 0, '', 1);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (98, '2019-12-28 17:46:59', '2022-02-11 14:37:55', 1, 10, 91, '47', 2, 90, 0, 0, '87', 5);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (97, '2019-12-28 17:46:59', '2022-02-11 14:37:55', 1, 10, 90, '87', 42, 89, 91, 0, '87', 4);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (96, '2019-12-28 17:46:59', '2022-02-11 14:37:55', 1, 10, 89, '48', 3, 88, 90, 0, '87', 3);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (95, '2019-12-28 17:46:59', '2022-02-11 14:37:55', 1, 10, 88, '113', 9, 87, 89, 0, '87', 2);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`, `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`, `form_show_step_id`, `step_order`) VALUES (94, '2019-12-28 17:46:59', '2022-02-11 14:37:55', 1, 10, 87, '77', 32, 0, 88, 0, '87', 1);
 
 
 

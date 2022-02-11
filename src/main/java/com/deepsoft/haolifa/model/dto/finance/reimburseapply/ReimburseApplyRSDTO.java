@@ -25,6 +25,10 @@ public class ReimburseApplyRSDTO {
 
     @ApiModelProperty(value = "类型 1 差旅报销 2 费用报销")
     private String type;
+
+    @ApiModelProperty(value = "类型 1 差旅报销 2 费用报销")
+    private String typeCN;
+
     @ApiModelProperty(value = "报销方式	1普通报销 2借款冲抵")
     private String reimburseType;
     @ApiModelProperty(value = "报销日期")

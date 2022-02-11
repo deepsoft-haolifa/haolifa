@@ -224,11 +224,12 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         }
 
         BizLoanApply loanApply = new BizLoanApply();
+        loanApply.setId(loanApplyS.getId());
         loanApply.setApplyStatus(auditResult.getCode());
         loanApply.setUpdateTime(new Date());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
-        return 1;
+        return update;
     }
 
 

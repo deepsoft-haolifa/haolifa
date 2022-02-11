@@ -14,6 +14,7 @@ import com.deepsoft.haolifa.dao.repository.StepMapper;
 import com.deepsoft.haolifa.dao.repository.SysRoleMapper;
 import com.deepsoft.haolifa.dao.repository.extend.FlowInstanceHistoryMapper;
 import com.deepsoft.haolifa.enums.LoanApplyStatusEnum;
+import com.deepsoft.haolifa.enums.ReimburseApplyStatusEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.order.CheckReplaceMaterialAuditDTO;
@@ -23,6 +24,7 @@ import com.deepsoft.haolifa.service.PurcahseOrderService;
 import com.deepsoft.haolifa.service.SupplierService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
 import com.deepsoft.haolifa.service.finance.PayApplyService;
+import com.deepsoft.haolifa.service.finance.ReimburseApplyService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.swagger.models.auth.In;
@@ -70,6 +72,8 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
     private PayApplyService payApplyService;
     @Autowired
     private LoanApplyService loanApplyService;
+    @Autowired
+    private ReimburseApplyService reimburseApplyService;
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
@@ -483,6 +487,18 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                     auditResult = "4";
                 }
                 payApplyService.auditReplaceMaterial(formId, auditResult);
+                break;
+            case 11:
+                // 替换料审批
+                ReimburseApplyStatusEnum reimburseApplyStatusEnum = null;
+                if (auditRes == 1) {
+                    // 审核通过
+                    reimburseApplyStatusEnum = ReimburseApplyStatusEnum.IN_PAYMENT;
+                } else if (auditRes == 0) {
+                    // 审核不通过
+                    reimburseApplyStatusEnum = ReimburseApplyStatusEnum.APPROVAL_FAILED;
+                }
+                reimburseApplyService.auditReplaceMaterial(formNo, reimburseApplyStatusEnum);
                 break;
             case 12:
                 // 替换料审批
