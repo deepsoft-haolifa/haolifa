@@ -206,8 +206,8 @@
     <!--生产环境:输出到文件-->
     <springProfile name="prod">
         <root level="info">
-            <!--<appender-ref ref="CONSOLE"/>-->
-            <!--<appender-ref ref="DEBUG_FILE"/>-->
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="DEBUG_FILE"/>
             <appender-ref ref="INFO_FILE"/>
             <appender-ref ref="ERROR_FILE"/>
             <appender-ref ref="WARN_FILE"/>

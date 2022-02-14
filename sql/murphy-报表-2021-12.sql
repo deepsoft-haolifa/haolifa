@@ -193,6 +193,12 @@ CREATE TABLE `customer_info`
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = INNODB DEFAULT CHARSET = utf8 ROW_FORMAT = DYNAMIC COMMENT = '客户信息';
 
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`,
+                                       `update_time`)
+VALUES (235, 'm', '客户管理', 'khgl', 87, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`)
+VALUES (1, 235, NOW(), NOW());
+
 alter table `supplier`
     add column `open_bank` varchar(64) NOT NULL DEFAULT '' COMMENT '开户行' after responsible_person,
  add column `bank_account` varchar(64) NOT NULL DEFAULT '' COMMENT '银行帐号' after open_bank,
