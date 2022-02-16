@@ -260,6 +260,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 productRequestDTO.setEntryOutRecordId(entryOutStoreRecord.getId());
                 productService.addOrUpdateProduct(productRequestDTO);
             }
+
+            // 更新订单发货状态和数量
+            orderProductService.finishedGoodsDelivery(model.getOrderNo());
         }
         return ResultBean.success(null);
     }
