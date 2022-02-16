@@ -1008,7 +1008,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 int abs = Math.abs(outCount);
                 if (abs == 0) {
                     orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_NO_BEGIN_0.getCode());
-                } else if (totalCount <= abs) {
+                } else if (totalCount > abs) {
                     orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_PART_1.getCode());
                 } else {
                     orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
