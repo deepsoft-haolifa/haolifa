@@ -1,74 +1,115 @@
-CREATE TABLE `order_product`
-(
-    `id`                         int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `create_time`                timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`                timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `create_user`                int(11) NOT NULL COMMENT '创建用户',
-    `update_user`                int(11) NOT NULL DEFAULT '0' COMMENT '更新用户',
-    `order_no`                   varchar(64)    NOT NULL COMMENT '订单编号（目前暂时和合同编号一致）',
-    `order_contract_no`          varchar(128)   NOT NULL DEFAULT '' COMMENT '合同编号',
-    `order_status`               tinyint(4) NOT NULL DEFAULT '0' COMMENT '订单状态',
-    `order_contract_url`         varchar(128)   NOT NULL DEFAULT '' COMMENT '订单合同url',
-    `order_contract_extend_url`  varchar(128)   NOT NULL DEFAULT '' COMMENT '订单合同url（价格隐藏）',
-    `technical_require`          varchar(1024)  NOT NULL DEFAULT '[{"name":"","xinhao":"","guige":"","num":"","biaozhun":"","lianjiek":"","jiaodu":"","zhongxinju":"","xinshi":"","length":"","tuhao":"","jinniuju":"","jishuxinhao":"","guodupan":""}]' COMMENT '技术清单（技术员填写）',
-    `finish_feedback_time`       varchar(32)    NOT NULL DEFAULT '' COMMENT '工厂反馈完成时间',
-    `feedback_time_confirm_user` varchar(32)    NOT NULL DEFAULT '' COMMENT '反馈确认人',
-    `purchase_feedback_time`     varchar(32)    NOT NULL DEFAULT '' COMMENT '采购反馈时间',
-    `production_feedback_time`   varchar(32)    NOT NULL DEFAULT '' COMMENT '生产反馈时间',
-    `assembly_shop`              varchar(32)    NOT NULL DEFAULT '' COMMENT '装配车间',
-    `assembly_group`             varchar(32)    NOT NULL DEFAULT '' COMMENT '装配小组',
-    `demand_name`                varchar(32)    NOT NULL DEFAULT '' COMMENT '需求方名称',
-    `demand_agent_name`          varchar(32)    NOT NULL DEFAULT '' COMMENT '需求方代理人',
-    `demand_phone`               varchar(32)    NOT NULL DEFAULT '' COMMENT '需求方电话',
-    `demand_fax`                 varchar(32)    NOT NULL DEFAULT '' COMMENT '需求方传真',
-    `demand_bank_name`           varchar(32)    NOT NULL DEFAULT '' COMMENT '需求开户银行',
-    `demand_bank_card_no`        varchar(64)    NOT NULL DEFAULT '' COMMENT '需求开户银行账号',
-    `supply_name`                varchar(32)    NOT NULL DEFAULT '' COMMENT '供应方',
-    `supply_agent_name`          varchar(32)    NOT NULL DEFAULT '' COMMENT '供应方代理人',
-    `supply_phone`               varchar(32)    NOT NULL DEFAULT '' COMMENT '供应方电话',
-    `supply_fax`                 varchar(32)    NOT NULL DEFAULT '' COMMENT '供应方传真',
-    `supply_bank_name`           varchar(32)    NOT NULL DEFAULT '' COMMENT '供应方开户银行',
-    `contract_bank_card_no`      varchar(64)    NOT NULL DEFAULT '' COMMENT '供应方开户银行账号',
-    `delivery_place`             varchar(64)    NOT NULL DEFAULT '' COMMENT '交货地点',
-    `delivery_date`              varchar(64)    NOT NULL DEFAULT '' COMMENT '交货日期',
-    `contract_sign_date`         varchar(32)    NOT NULL DEFAULT '' COMMENT '合同签订日期',
-    `total_count`                int(11) NOT NULL DEFAULT '0' COMMENT '数量合计',
-    `discount_total_price`       decimal(12, 4) NOT NULL DEFAULT '0.0000' COMMENT '优惠后总价',
-    `total_price`                decimal(12, 4) NOT NULL DEFAULT '0.0000' COMMENT '总价',
-    `special_require`            varchar(256)   NOT NULL DEFAULT '' COMMENT '特殊要求',
-    `cargo_information`          varchar(256)   NOT NULL DEFAULT '' COMMENT '随货资料',
-    `sign_board`                 varchar(256)   NOT NULL DEFAULT '' COMMENT '标牌',
-    `acceptance_criteria`        varchar(256)   NOT NULL DEFAULT '' COMMENT '验收标准',
-    `warranty_period`            varchar(256)   NOT NULL DEFAULT '' COMMENT '质保期限',
-    `packaging_specification`    varchar(256)   NOT NULL DEFAULT '' COMMENT '包装规范',
-    `remark`                     varchar(256)   NOT NULL DEFAULT '' COMMENT '备注',
-    `deliver_status`             tinyint(4) NOT NULL DEFAULT '0' COMMENT '发货状态：0 待发货（默认） 1 部分发货 2 发货完成',
-    `accessory`                  varchar(2048)  NOT NULL DEFAULT '' COMMENT '订单附件',
-    `qualified_number`           int(11) NOT NULL DEFAULT '0' COMMENT '成品检验合格数量',
-    `pressure_qualified_number`  int(11) NOT NULL DEFAULT '0' COMMENT '压力检测合格数量',
-    `delivered_number`           int(11) NOT NULL DEFAULT '0' COMMENT '已发货数量',
-    `received_account`           decimal(12, 2) NOT NULL DEFAULT '0.00' COMMENT '已收货款',
-    `gen_picking_list`           tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否生成了领料单（0 否；1.是）',
-    `is_check_material`          tinyint(4) NOT NULL DEFAULT '1' COMMENT '此订单是否需要核料（0 不需要；1 需要）',
-    `task_status`                tinyint(4) NOT NULL DEFAULT '0' COMMENT '任务状态 0：未分配；1：已分配',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `uk_order_no` (`order_no`) USING BTREE,
-    UNIQUE KEY `uk_order_contract_no` (`order_contract_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5138 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='成品订单表(商务销售发起订单流程的时候插入)';
-CREATE TABLE `biz_bill_contract`
-(
-    `id`           int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-    `bill_id`      bigint(20) DEFAULT NULL COMMENT '收款id',
-    `bill_type`    tinyint(4) DEFAULT NULL COMMENT '记账类型 1 银行日记账 2 其他货币日记账',
-    `order_id`     bigint(20) DEFAULT NULL COMMENT '订单ID',
-    `order_no`     bigint(20) DEFAULT NULL COMMENT '订单号',
-    `amount`       decimal(15, 4) DEFAULT '0.0000' COMMENT '收款金额',
-    `book_keeper`  varchar(64)    DEFAULT '' COMMENT '记账员',
-    `audit_status` tinyint(4) DEFAULT '0' COMMENT '审批状态（0未审批；1.通过；2.不通过）',
-    `remark`       varchar(30)    DEFAULT '' COMMENT '备注',
-    `create_user`  int(11) DEFAULT NULL COMMENT '创建者',
-    `create_time`  datetime       DEFAULT NULL COMMENT '创建时间',
-    `update_user`  int(11) DEFAULT NULL COMMENT '更新者',
-    `update_time`  datetime       DEFAULT NULL COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='合同收款表(合同分解)';
+
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('差旅费','00001','0000101','职工出差发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('招待费','00001','0000102','对外招待客户发生的餐费及职工内部聚餐发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('通讯费','00001','0000103','办公室有线电话使用费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('交通费','00001','0000104','管理部门市内办公发生的交通费，培训期间发生的市内交通费等');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('知识产权费','00001','0000105','申请的知识产权费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('劳保费','00001','0000106','公司为职工购买劳保用品所发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('办公费','00001','0000107','书报费，印刷费，日常办公用品费，消耗用品费，年检，审计费，其他。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('修理费','00001','0000108','包含电脑，空调，打印机，复印机等的修理安装费，硬件升级费，办公楼装修费，其他管理部办公用品移动和安装费等。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('职工福利费','00001','0000109','包括医疗用品，公司组织职工体检费，工伤医疗费，工作人员租房费，餐厅用厨具，夜班补助，职工慰问金。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('折旧费','00001','0000110','管理部使用的固定资产每月所计提的折旧。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('咨询服务费','00001','0000111','包含公司聘请律师顾问费、会计税务咨询费及其他信息咨询费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('物料消耗','00001','0000112','购买硬盘、光盘、软盘等电脑用品，以及插座等维修零件');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('礼品费','00001','0000113','节日福利');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('售后运费','00001','0000114','通过运输公司发生的售后运费，售后问题不归属于生产部分的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('售后费用','00001','0000115','为履行合同约定的明确的售后条款内容应发生的一切费用，售后问题不归属于生产部分的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('会议费','00001','0000116','公司召开董事会发生的会议费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('审计费','00001','0000117','审计所出具审计报告费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('培训费','00001','0000118','讲师费/资料费/餐费/其他');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('无形资产摊销','00001','0000119','指月底对公司所拥有的无形资产分期摊销，结转费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('其它','00001','0000120','与管理有关未列明的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('办公费','00002','0000201','书报费，印刷费，日常办公用品费，消耗用品费，年检，审计费，其他。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('差旅费','00002','0000202','职工出差发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('软件费','00002','0000203','购买软件的服务费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('交通费','00002','0000204','管理部门市内办公发生的交通费，培训期间发生的市内交通费等');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('贷款','00002','0000205','银行贷款及其他筹资方式贷款');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('手续费','00002','0000206','在银行结算过程中支付的手续费，办理电汇所支付的手续费、邮电费，购买空白支票、电汇单、汇票等所支付的工本费、银行转账手续费、电子回单柜年费等。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('贷款利息','00002','0000207','银行贷款利息支出及其他筹资方式下支付利息支出');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('差旅费','00003','0000301','职工出差发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('招待费','00003','0000302','对外招待供应商发生的餐费及职工内部聚餐发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('办公费','00003','0000303','书报费，印刷费，日常办公用品费，消耗用品费，其他。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('运输费','00003','0000304','采购材料通过运输公司发生的运费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('交通费','00003','0000305','管理部门市内办公发生的交通费，培训期间发生的市内交通费等');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('其它','00003','0000306','与采购有关未列明的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('折旧费','00004','0000401','生产车间使用的固定资产每月所计提的折旧。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('刀具','00004','0000402','生产车间购买的低值易耗品');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('夹具','00004','0000403','生产车间购买的低值易耗品');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('量具','00004','0000404','生产车间购买的低值易耗品');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('工具','00004','0000405','生产车间购买的低值易耗品');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('售后费用','00004','0000406','为履行合同约定的明确的售后条款内容应发生的一切费用，售后问题不归属于生产部分的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('维修费','00004','0000409','生产线的日常修理费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('招待费','00004','0000407','对外招待客户发生的餐费及职工内部聚餐发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('劳保费','00004','0000408','公司为职工购买劳保用品所发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('委托加工费','00004','0000410','委托外单位加工的各种物资的实际成本');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('差旅费','00005','0000501','职工出差发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('认证费','00005','0000502','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('培训费','00005','0000503','讲师费/资料费/餐费/其他');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('检测费','00005','0000504','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('运费','00005','0000505','通过运输公司发生的运费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('差旅费','00006','0000601','研究开发活动直接相关的其他费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('培训费','00006','0000602','研究开发活动直接相关的其他费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('检测费','00006','0000603','用于研究开发活动的仪器、设备的运行维护、调整、检验、检测、维修等费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('00006','0000604','直接消耗的材料、燃料和动力费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('委托加工费','00006','0000605','企业委托境内其他机构或个人进行研究开发活动所发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('设备费','00006','0000606','用于研究开发活动投入的设备');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('工装费','00006','0000607','用于中间试验和产品试制的模具、工艺装备开发及制造费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('试验费','00006','0000608','用于研究开发活动的仪器、设备的运行维护、调整、检验、检测、维修等费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('模具','00006','0000609','用于中间试验和产品试制的模具');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('生产电费','00007','0000701','生产车间消耗电的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('生产水费','00007','0000702','生产车间消耗水的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('办公电费','00007','0000703','管理部门消耗电的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('办公水费','00007','0000704','管理部门消耗水的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('差旅费','00008','0000801','职工因工作外出期间发生的住宿费，交通费等，包括：交通车费、交通机票、住宿费、伙食补贴、其他相关的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('招待费','00008','0000802','销售部门发生的与销售活动有关的业务招待费支出，具体包括：餐饮费、礼品费、其他相关的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('运费','00008','0000803','为销售货物而发生的产品运输费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('包装费','00008','0000804','为销售产品而直接发生的包装货物的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('展会费','00008','0000805','为开展促销或宣传产品等举办展览、展销会所支出的各项具有公共性质的费用，包括：资料费、礼品费、及其他相关的开支。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('油费','00009','0000901','车辆使用汽油、机油的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('年检费','00009','0000902','车辆发生的年检费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('保险费','00009','0000903','包含公司投的车辆保险费等');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('维修费','00009','0000904','车辆的修理维护费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('过路费','00009','0000905','使用的车辆按国家规定所交的公路过路费');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('租赁费','00009','0000906','租用车辆发生的费用');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('','租金','00010','','包括厂房租赁费，会议室租赁费，职工宿舍房租，其他的管理部门使用场地时发生的场地费用。');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('养老保险','00011','0001101','公司和个人按一定工资比例交纳的保险');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('工伤保险','00011','0001102','公司按一定工资比例交纳的保险');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('医疗保险','00011','0001103','公司和个人按一定工资比例交纳的保险');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('失业保险','00011','0001104','公司按一定工资比例交纳的保险');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('房屋','00012','0001201','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('建筑物','00012','0001202','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('机器','00012','0001203','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('设备','00012','0001204','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('模具','00012','0001205','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('运输工具','00012','0001206','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('器具','00012','0001207','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('工具','00012','0001208','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('家具','00012','0001209','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('电子设备','00012','0001210','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('增值税','00013','0001301','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('城市维护建设税','00013','0001302','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('教育费附加','00013','0001303','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('地方教育费附加','00013','0001304','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('印花税','00013','0001305','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('土地使用税','00013','0001306','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('企业所得税','00013','0001307','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('残疾人就业保障金','00013','0001308','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('房产税','00013','0001309','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('工会经费','00013','0001310','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('原材料','00014','0001401','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('辅助材料','00014','0001402','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('整机采购','00014','0001403','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('行政管理中心','00015','0001501','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('经营管理中心','00015','0001502','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('技术质量管理中心','00015','0001503','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('财务管理中心','00015','0001504','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('产品研发中心','00015','0001505','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('采购部','00015','0001506','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('库房','00015','0001507','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('机加事业部','00015','0001508','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('控制阀事业部','00015','0001509','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('覆层事业部','00015','0001510','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('装配事业部','00015','0001511','');
+insert into biz_subjects (`name`, `type`,   `code`, `remark`) values ('橡胶事业部','00015','0001512','');
+
+
