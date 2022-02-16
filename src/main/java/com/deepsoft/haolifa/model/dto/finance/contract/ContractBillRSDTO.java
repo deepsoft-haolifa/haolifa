@@ -55,10 +55,14 @@ public class ContractBillRSDTO {
     private String type;
     @ApiModelProperty(value = "部门ID")
     private Integer deptId;
+    @ApiModelProperty(value = "部门名称")
+    private String deptName;
     @ApiModelProperty(value = "备注摘要")
     private String remark;
     @ApiModelProperty(value = "收款合同分解状态；0未完成；1.完成")
     private String contractStatus;
+    @ApiModelProperty(value = "收款合同分解状态；0未完成；1.完成")
+    private String contractStatusCN;
     @ApiModelProperty(value = "")
     private Integer contractUser;
 
