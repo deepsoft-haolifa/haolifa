@@ -59,7 +59,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
         }
         if (StringUtils.isNotBlank(model.getProductModel())) {
-            criteria.andProductModelEqualTo("%" + model.getProductModel() + "%");
+            criteria.andProductModelLike("%" + model.getProductModel() + "%");
         }
         if (StringUtils.isNotBlank(model.getPostCapability())) {
             criteria.andPostCapabilityLike("%" + model.getPostCapability() + "%");
@@ -170,14 +170,15 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             for (OrderProductAssociate orderProductAssociate : list) {
                 // 产品型号
                 String model = orderProductAssociate.getProductModel().substring(0, 4);
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.PRODUCT.name, orderProductAssociate.getId(), orderNo);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.PRODUCT.name, orderProductAssociate.getId(), orderNo, null);
             }
         } else if (CommonEnum.WorkShopTypeEnum.SPRAY.code.equals(type)) {
             // 喷涂订单
             List<SprayItem> sprayItems = (List<SprayItem>) sprayService.getItemsList(orderNo).getResult();
             for (SprayItem sprayItem : sprayItems) {
                 String model = sprayItem.getModel();
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo);
+                String materialName = sprayItem.getMaterialName();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo, materialName);
             }
         } else if (CommonEnum.WorkShopTypeEnum.MACHINING.code.equals(type)) {
             // 机加工订单
@@ -187,7 +188,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             List<Entrust> entrusts = entrustMapper.selectByExample(example);
             for (Entrust entrust : entrusts) {
                 String model = entrust.getModel();
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, entrust.getId(), orderNo);
+                String materialClassifyName = entrust.getMaterialClassifyName();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, entrust.getId(), orderNo, materialClassifyName);
             }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
@@ -198,10 +200,13 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         return ResultBean.success(distinctList);
     }
 
-    private void buildProductAndUser(List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS, String model, String workShopName, Integer productId, String orderNo) {
+    private void buildProductAndUser(List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS, String model, String workShopName, Integer productId, String orderNo, String workType) {
         PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
         payWorkingProcedure.setProductModel(model);
         payWorkingProcedure.setWorkshopName(workShopName);
+        if (StringUtils.isNotBlank(workType)) {
+            payWorkingProcedure.setWorkType(workType);
+        }
         List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
         for (PayWorkingProcedure workingProcedure : payWorkingProcedures) {
             // copy 工序人员表

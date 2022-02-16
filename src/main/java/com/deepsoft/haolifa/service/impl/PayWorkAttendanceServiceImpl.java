@@ -95,7 +95,8 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
         BeanUtils.copyProperties(model, payWorkAttendance);
         payWorkAttendance.setUpdateTime(new Date());
         payWorkAttendance.setUpdateUser(getLoginUserName());
-        return ResultBean.success(payWorkAttendanceMapper.updateByPrimaryKeySelective(payWorkAttendance));
+        payWorkAttendanceMapper.updateByPrimaryKeySelective(payWorkAttendance);
+        return ResultBean.success(1);
     }
 
     @Override

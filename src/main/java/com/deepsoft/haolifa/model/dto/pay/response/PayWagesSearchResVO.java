@@ -27,8 +27,10 @@ public class PayWagesSearchResVO {
     private Integer userId;
     @ApiModelProperty(value = "姓名")
     private String userName;
+    @ApiModelProperty(value = "工资年份")
+    private String wagesYear;
     @ApiModelProperty(value = "工资月份")
-    private Date wagesMonth;
+    private String wagesMonth;
     @ApiModelProperty(value = "应出勤天数")
     private Integer requiredAttendanceDays;
     @ApiModelProperty(value = "实出勤天数")
