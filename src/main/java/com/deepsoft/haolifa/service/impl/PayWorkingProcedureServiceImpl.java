@@ -121,6 +121,20 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     }
 
     @Override
+    public ResultBean save(List<PayWorkingProcedureDTO> list) {
+        for (PayWorkingProcedureDTO payWorkingProcedureDTO : list) {
+            PayWorkingProcedure payWorkingProcedure = new PayWorkingProcedure();
+            BeanUtils.copyProperties(payWorkingProcedureDTO, payWorkingProcedure);
+            payWorkingProcedure.setCreateTime(new Date());
+            payWorkingProcedure.setUpdateTime(new Date());
+            payWorkingProcedure.setCreateUser(getLoginUserName());
+            payWorkingProcedure.setUpdateUser(getLoginUserName());
+            payWorkingProcedureMapper.insert(payWorkingProcedure);
+        }
+        return ResultBean.success(1);
+    }
+
+    @Override
     public ResultBean getInfo(Integer id) {
         return ResultBean.success(payWorkingProcedureMapper.selectByPrimaryKey(id));
     }

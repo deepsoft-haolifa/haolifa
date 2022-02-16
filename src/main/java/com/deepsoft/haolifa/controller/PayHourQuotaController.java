@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
 /**
@@ -65,13 +67,12 @@ public class PayHourQuotaController {
     }
 
     @ApiOperation("导入工时定额")
-    @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
-    public ResultBean uploadMaterial(@ApiParam(value = "工时定额Excel表格", required = true) MultipartFile file) {
+    @PostMapping(value = "/import")
+    public ResultBean uploadMaterial() {
         try {
-            if (file == null) {
-                return ResultBean.error(CommonEnum.ResponseEnum.FILE_IS_NULL);
-            }
-            List<PayHourQuota> objects = (List<PayHourQuota>) ExcelUtils.importExcelReadColumn(file.getInputStream(), PayHourQuota.class);
+            File file2 =new File("/Users/liuyaofei/newself/批量上传/生产车间工时定额明细表(批量上传测试版）(1).xlsx");
+            FileInputStream fileInputStream = new FileInputStream(file2);
+            List<PayHourQuota> objects = (List<PayHourQuota>) ExcelUtils.importExcelReadColumn(fileInputStream, PayHourQuota.class);
             payHourQuotaService.save(objects);
             return ResultBean.success(1);
         } catch (Exception e) {

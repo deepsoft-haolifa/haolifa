@@ -63,6 +63,9 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL, "传的数据为空");
         }
         for (PayOrderUserRelationProcedureDTO payOrderUserRelationProcedureDTO : payOrderUserRelationProcedureList) {
+            if (Objects.isNull(payOrderUserRelationProcedureDTO.getUserId())) {
+                continue;
+            }
             PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getId());
             // 工序代码
             String postCode = payWorkingProcedure.getPostCode();

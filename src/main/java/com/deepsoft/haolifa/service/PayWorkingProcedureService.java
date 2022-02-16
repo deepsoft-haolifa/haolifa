@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.service;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
 
+import java.util.List;
+
 public interface PayWorkingProcedureService {
 
     ResultBean pageInfo(PayWorkingProcedureDTO model);
@@ -10,6 +12,8 @@ public interface PayWorkingProcedureService {
     ResultBean getAllList(PayWorkingProcedureDTO model);
 
     ResultBean save(PayWorkingProcedureDTO model);
+
+    ResultBean save(List<PayWorkingProcedureDTO> list);
 
     ResultBean getInfo(Integer id);
 
