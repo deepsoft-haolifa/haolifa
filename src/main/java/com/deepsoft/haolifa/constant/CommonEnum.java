@@ -744,7 +744,7 @@ public class CommonEnum {
     public enum WorkShopTypeEnum {
         PRODUCT("1", "装配车间"),
         SPRAY("2", "喷涂车间"),
-        MACHINING("3", "机加工车间");
+        MACHINING("3", "机加车间");
         public final String code;
         public final String name;
         WorkShopTypeEnum(String code, String name) {

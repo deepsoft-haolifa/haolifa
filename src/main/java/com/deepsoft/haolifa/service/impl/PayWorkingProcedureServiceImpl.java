@@ -219,7 +219,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 for (Entrust entrust : entrusts) {
                     String model = entrust.getModel();
                     String materialClassifyName = entrust.getMaterialClassifyName();
-                    buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, entrust.getId(), orderNo, materialClassifyName);
+                    buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.MACHINING.name, entrust.getId(), orderNo, materialClassifyName);
                 }
             } else {
                 // 直接返回已分配的 数据
