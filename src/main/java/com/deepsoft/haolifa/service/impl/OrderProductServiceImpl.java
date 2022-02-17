@@ -29,6 +29,7 @@ import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.model.dto.material.MaterialQuantityDTO;
 import com.deepsoft.haolifa.model.dto.material.MaterialResultDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
+import com.deepsoft.haolifa.model.dto.storage.ProductStorageDto;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.Base64;
 import com.deepsoft.haolifa.util.CommonUtil;
@@ -48,6 +49,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,6 +98,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     FlowInstanceService flowInstanceService;
     @Autowired
     private CheckMaterialLockService checkMaterialLockService;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public ResultBean generateOrder(GenerateOrderDTO generateOrderDTO) {
@@ -1008,7 +1012,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 int abs = Math.abs(outCount);
                 if (abs == 0) {
                     orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_NO_BEGIN_0.getCode());
-                } else if (totalCount <= abs) {
+                } else if (totalCount > abs) {
                     orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_PART_1.getCode());
                 } else {
                     orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
@@ -2207,6 +2211,34 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         example.createCriteria().andOrderNoEqualTo(orderNo);
         return ResultBean.success(orderProductMapper.updateByExampleSelective(orderProduct, example));
     }
+
+    @Override
+    public void finishedGoodsDelivery(String orderNo) {
+        // 获取出库数量
+        ProductStorageDto productStorageDto = new ProductStorageDto();
+        productStorageDto.setOrderNo(orderNo);
+        int outProductCount = entryOutStoreRecordService.getOutProductCount(productStorageDto);
+
+        // 更新 订单发货状态
+        OrderProductAssociateExample associateExample = new OrderProductAssociateExample();
+        associateExample.createCriteria().andOrderNoEqualTo(orderNo);
+        List<OrderProductAssociate> orderProducts = orderProductAssociateMapper.selectByExample(associateExample);
+        int productCount = orderProducts.stream().map(OrderProductAssociate::getProductNumber).reduce(0, Integer::sum);
+        if (!CollectionUtils.isEmpty(orderProducts)) {
+            if (outProductCount > 0 && outProductCount < productCount) {
+                // 部分发货
+                updateOrderDeliverStatus(orderNo, CommonEnum.DeliverStatus.DELIVER_PART_1.getCode(), outProductCount);
+            } else if (outProductCount >= productCount) {
+                // 全部发货
+                updateOrderDeliverStatus(orderNo, CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode(), productCount);
+                // 发货完成的话，将达标的订单同步到 经管下面的代开发票列表
+                InvoiceCreateDTO invoiceCreateDTO = new InvoiceCreateDTO();
+                invoiceCreateDTO.setOrderNo(orderNo);
+                applicationEventPublisher.publishEvent(invoiceCreateDTO);
+            }
+        }
+    }
+
 
     @Override
     public ResultBean uploadAccessory(String orderNo, List<Accessory> accessories) {

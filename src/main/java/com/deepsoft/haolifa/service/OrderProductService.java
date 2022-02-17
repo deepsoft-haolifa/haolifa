@@ -151,6 +151,11 @@ public interface OrderProductService {
 
     ResultBean updateOrderDeliverStatus(String orderNo, int status, Integer number);
 
+    /**
+     * 成品出库，更新订单状态和数量
+     */
+    void finishedGoodsDelivery(String orderNo);
+
     ResultBean uploadAccessory(String orderNo, List<Accessory> orderUploadDTOs);
 
     ResultBean getAccessory(String orderNo);

@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +55,9 @@ public class BillContractServiceImpl implements BillContractService {
     private BizBillContractMapper bizBillContractMapper;
 
 
+    @Autowired
+    private SysDepartmentMapper departmentMapper;
+
     /***
      * 查询合同分解列表
      * @param billDTO
@@ -70,7 +74,32 @@ public class BillContractServiceImpl implements BillContractService {
         PageDTO<ContractBillRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
 
-        pageDTO.setList(pageData.getResult());
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream()
+            .collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+        //  只显示 已付金额 < 合同金额
+        List<ContractBillRSDTO> rsDTOList = pageData.getResult().stream()
+            .map(orderProduct -> {
+                ContractBillRSDTO rsdto = new ContractBillRSDTO();
+                BeanUtils.copyProperties(orderProduct, rsdto);
+
+                String contractStatusCN = "";
+                if (StringUtils.equalsIgnoreCase("0", rsdto.getContractStatus())) {
+                    contractStatusCN = "未完成";
+                } else if (StringUtils.equalsIgnoreCase("1", rsdto.getContractStatus())) {
+                    contractStatusCN = "完成";
+                }
+
+                rsdto.setContractStatusCN(contractStatusCN);
+                SysDepartment sysDepartment = sysDepartmentMap.get(rsdto.getDeptId());
+                rsdto.setDeptName(sysDepartment.getDeptName());
+                return rsdto;
+            })
+            .collect(Collectors.toList());
+
+        pageDTO.setList(rsDTOList);
         return ResultBean.success(pageDTO);
     }
 
@@ -81,6 +110,9 @@ public class BillContractServiceImpl implements BillContractService {
      */
     @Override
     public ResultBean<PageDTO<ContractListRSDTO>> orderContractList(ContractListRQDTO contractListRQDTO) {
+        if (contractListRQDTO.getId() == null) {
+            return ResultBean.success(new PageDTO<>());
+        }
         if (contractListRQDTO.getPageNum() == null || contractListRQDTO.getPageNum() == 0) {
             contractListRQDTO.setPageNum(1);
         }
@@ -92,13 +124,13 @@ public class BillContractServiceImpl implements BillContractService {
         ContractBillRSDTO bizBankBill = bizBankBillMapper.getBillContractById(contractListRQDTO.getId(), contractListRQDTO.getBillType());
 
         //销售合同
-        Map<String,Object> query = new HashMap<>();
-        query.put("demandName",bizBankBill.getPayCompany());
-        if (StringUtils.isNotEmpty(contractListRQDTO.getOrderNo())){
-            query.put("orderNo",contractListRQDTO.getOrderNo());
+        Map<String, Object> query = new HashMap<>();
+        query.put("demandName", bizBankBill.getPayCompany());
+        if (StringUtils.isNotEmpty(contractListRQDTO.getOrderNo())) {
+            query.put("orderNo", contractListRQDTO.getOrderNo());
         }
-        if (StringUtils.isNotEmpty(contractListRQDTO.getOrderContractNo())){
-            query.put("orderContractNo",contractListRQDTO.getOrderContractNo());
+        if (StringUtils.isNotEmpty(contractListRQDTO.getOrderContractNo())) {
+            query.put("orderContractNo", contractListRQDTO.getOrderContractNo());
         }
         Page<OrderProduct> pageData = PageHelper
             .startPage(contractListRQDTO.getPageNum(), contractListRQDTO.getPageSize())
@@ -141,7 +173,7 @@ public class BillContractServiceImpl implements BillContractService {
 
 
         BizBillContractExample example = buildBizBillContractExample(bizBillContract.getBillId(),
-            bizBillContract.getBillType(), bizBillContract.getOrderId(), bizBillContract.getOrderNo());
+            bizBillContract.getBillType(), bizBillContract.getOrderId(), bizBillContract.getOrderNo(),null);
 
         Page<BizBillContract> pageData = PageHelper
             .startPage(bizBillContract.getPageNum(), bizBillContract.getPageSize())
@@ -156,6 +188,16 @@ public class BillContractServiceImpl implements BillContractService {
             .map(bc -> {
                 BillContractRSDTO billContractRSDTO = new BillContractRSDTO();
                 BeanUtils.copyProperties(bc, billContractRSDTO);
+                // 审批状态（0未审批；1.通过；2.不通过
+                String auditStatusCN = "";
+                if (StringUtils.equalsIgnoreCase("0", billContractRSDTO.getAuditStatus()+"")) {
+                    auditStatusCN = "未审批";
+                } else if (StringUtils.equalsIgnoreCase("1", billContractRSDTO.getAuditStatus()+"")) {
+                    auditStatusCN = "通过";
+                } else if (StringUtils.equalsIgnoreCase("2", billContractRSDTO.getAuditStatus()+"")) {
+                    auditStatusCN = "不通过";
+                }
+                billContractRSDTO.setAuditStatusCN(auditStatusCN);
                 return billContractRSDTO;
             })
             .collect(Collectors.toList());
@@ -176,7 +218,7 @@ public class BillContractServiceImpl implements BillContractService {
         BigDecimal contractAmount = orderProduct.getTotalPrice();
         // 2. 查询该合同已经分解的金额
         BizBillContractExample bizBillContractExample = buildBizBillContractExample(billContract.getBillId(), billContract.getBillType(),
-            billContract.getOrderId(), billContract.getOrderNo());
+            null,null,new Byte("1"));
         List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(bizBillContractExample);
 
         BigDecimal splitAmount = bizBillContractList.stream()
@@ -319,16 +361,16 @@ public class BillContractServiceImpl implements BillContractService {
             OrderProduct orderProduct = orderProductMapper.selectByPrimaryKey(Integer.parseInt(String.valueOf(bizBillContract.getOrderId())));
             // 更新合同的回款状态 todo 没有回款状态 目前仅更新回款金额
             OrderProduct orderProductUp = new OrderProduct();
-            orderProduct.setId(Integer.parseInt(String.valueOf(bizBillContract.getOrderId())));
+            orderProductUp.setId(Integer.parseInt(String.valueOf(bizBillContract.getOrderId())));
             BigDecimal receivedAccount = orderProduct.getReceivedAccount() == null ? BigDecimal.ZERO : orderProduct.getReceivedAccount();
             BigDecimal add = receivedAccount.add(bizBillContract.getAmount());
             orderProductUp.setReceivedAccount(add);
-            orderProductMapper.updateByPrimaryKeySelective(orderProduct);
+            orderProductMapper.updateByPrimaryKeySelective(orderProductUp);
         }
 
 
         BizBillContract bizBillContractUp = new BizBillContract();
-        bizBillContractUp.setBillId(Long.valueOf(String.valueOf(billContract.getId())));
+        bizBillContractUp.setId(billContract.getId());
         bizBillContractUp.setAuditStatus(billContract.getAuditStatus());
         bizBillContractUp.setUpdateUser(customUser.getId());
         bizBillContractUp.setUpdateTime(new Date());
@@ -350,7 +392,7 @@ public class BillContractServiceImpl implements BillContractService {
         return example;
     }
 
-    private BizBillContractExample buildBizBillContractExample(Long billId2, Byte billType, Long orderId, String orderNo) {
+    private BizBillContractExample buildBizBillContractExample(Long billId2, Byte billType, Long orderId, String orderNo,Byte auditStatus) {
         BizBillContractExample example = new BizBillContractExample();
         BizBillContractExample.Criteria criteria = example.createCriteria();
 
@@ -361,6 +403,9 @@ public class BillContractServiceImpl implements BillContractService {
         }
         if (StringUtils.isNotEmpty(orderNo)) {
             criteria.andOrderNoEqualTo(orderNo);
+        }
+        if (StringUtils.isNotEmpty(orderNo)) {
+            criteria.andAuditStatusEqualTo(auditStatus);
         }
         return example;
     }

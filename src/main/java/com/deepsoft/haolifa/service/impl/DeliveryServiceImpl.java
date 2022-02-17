@@ -139,31 +139,7 @@ public class DeliveryServiceImpl extends BaseService implements DeliveryService 
         model.setCreateUserId(getLoginUserId());
         int insert = deliveryRecordMapper.insertSelective(model);
         if (insert > 0) {
-            // 更新 订单发货状态
-            DeliveryRecordExample recordExample = new DeliveryRecordExample();
-            String contractOrderNo = model.getContractOrderNo();
-            recordExample.createCriteria().andContractOrderNoEqualTo(contractOrderNo);
-            List<DeliveryRecord> records = deliveryRecordMapper.selectByExample(recordExample);
-            int count = records.stream().map(DeliveryRecord::getProductCount).reduce(0, (a, b) -> a + b);
-            OrderProductAssociateExample associateExample = new OrderProductAssociateExample();
-            associateExample.createCriteria().andOrderNoEqualTo(contractOrderNo);
-            List<OrderProductAssociate> orderProducts = orderProductAssociateMapper.selectByExample(associateExample);
-            int productCount = orderProducts.stream().map(OrderProductAssociate::getProductNumber).reduce(0, (a, b) -> a + b);
-            if (!CollectionUtils.isEmpty(orderProducts)) {
-                if (count > 0 && count < productCount) {
-                    // 部分发货
-                    orderProductService
-                        .updateOrderDeliverStatus(contractOrderNo, DeliverStatus.DELIVER_PART_1.getCode(), count);
-                } else if (count >= productCount) {
-                    // 全部发货
-                    orderProductService
-                        .updateOrderDeliverStatus(contractOrderNo, DeliverStatus.DELIVER_COMPLETE_2.getCode(), productCount);
-                    // 发货完成的话，将达标的订单同步到 经管下面的代开发票列表
-                    InvoiceCreateDTO invoiceCreateDTO = new InvoiceCreateDTO();
-                    invoiceCreateDTO.setOrderNo(contractOrderNo);
-                    applicationEventPublisher.publishEvent(invoiceCreateDTO);
-                }
-            }
+
             return ResultBean.success(insert);
         } else {
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);

@@ -5,8 +5,10 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 时间工具类
@@ -182,6 +184,84 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         return day;
     }
 
+
+    /**
+     * 获取当月的所有周末
+     * @param year
+     * @param month
+     * @return
+     */
+    public static List getWeekendInMonth(int year, int month) {
+        List list = new ArrayList();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);// 不设置的话默认为当年
+        calendar.set(Calendar.MONTH, month - 1);// 设置月份
+        calendar.set(Calendar.DAY_OF_MONTH, 1);// 设置为当月第一天
+        int daySize = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);// 当月最大天数
+        for (int i = 0; i < daySize-1; i++) {
+            calendar.add(Calendar.DATE, 1);//在第一天的基础上加1
+            int week = calendar.get(Calendar.DAY_OF_WEEK);
+            if (week == Calendar.SUNDAY) {// 1代表周日，7代表周六 判断这是一个星期的第几天从而判断是否是周末
+                list.add(year+"-"+month+"-"+calendar.get(Calendar.DAY_OF_MONTH));// 得到当天是一个月的第几天
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 取得当月天数
+     * */
+    public static int getCurrentMonthLastDay()
+    {
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.DATE, 1);//把日期设置为当月第一天
+        a.roll(Calendar.DATE, -1);//日期回滚一天，也就是最后一天
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
+    }
+
+    /**
+     * 两个时间段有多少个周日
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws ParseException
+     */
+    public static int computeHolidays(Date startTime,Date endTime) throws ParseException{
+        //初始化第一个日期
+        Calendar cal1 = Calendar.getInstance();
+        //初始化第二个日期，这里的天数可以随便的设置
+        Calendar cal2 = Calendar.getInstance();
+
+
+        // 设置传入的时间格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 指定一个日期
+        Date date1 = dateFormat.parse(dateFormat.format(startTime));
+        Date date2 = dateFormat.parse(dateFormat.format(endTime));
+        // 对 calendar 设置为 date 所定的日期
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+
+        int holidays = 0;
+        //确定一个 大日期
+        if(cal1.compareTo(cal2) > 0){
+            Calendar temp = cal1;
+            cal1 = cal2;
+            cal2 = temp;
+            temp = null;
+        }
+        while(cal1.compareTo(cal2)<=0){
+            // ==1 是周日  ==7是周六
+            if(cal1.get(Calendar.DAY_OF_WEEK)==1){
+                holidays++;
+                System.out.println("周末："+new SimpleDateFormat("yyyy-MM-dd").format(cal1.getTime()));
+            }
+            cal1.add(Calendar.DAY_OF_YEAR,1);
+
+        }
+        return holidays;
+    }
     public static String getSysYear() {
         Calendar date = Calendar.getInstance();
         String year = String.valueOf(date.get(Calendar.YEAR));

@@ -177,7 +177,6 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             List<SprayItem> sprayItems = (List<SprayItem>) sprayService.getItemsList(orderNo).getResult();
             for (SprayItem sprayItem : sprayItems) {
                 String model = sprayItem.getModel();
-                // 工种类别
                 String materialName = sprayItem.getMaterialName();
                 buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo, materialName);
             }
@@ -189,7 +188,6 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             List<Entrust> entrusts = entrustMapper.selectByExample(example);
             for (Entrust entrust : entrusts) {
                 String model = entrust.getModel();
-                // 工种类别
                 String materialClassifyName = entrust.getMaterialClassifyName();
                 buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, entrust.getId(), orderNo, materialClassifyName);
             }

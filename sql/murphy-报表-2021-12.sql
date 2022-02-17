@@ -204,4 +204,11 @@ alter table `supplier`
  add column `bank_account` varchar(64) NOT NULL DEFAULT '' COMMENT '银行帐号' after open_bank,
  add column `payment_method` varchar(64) NOT NULL DEFAULT '' COMMENT '付款方式' after bank_account;
 
-
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '1', '普通开关型电动执行器装配', 0, 0, '', NOW());
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '2', '调节型电动执行器装配', 0, 0, '', NOW());
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '3', '公共件准备工作', 0, 0, '', NOW());
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '4', '气动蝶阀装配', 0, 0, '', NOW());
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '5', '外调普通精巧型执行器装配', 0, 0, '', NOW());
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '6', '外调精巧调节型执行器装配', 0, 0, '', NOW());
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '7', '外调通用调节型执行器装配', 0, 0, '', NOW());
+INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '8', '外调通用开关型执行器装配', 0, 0, '', NOW());

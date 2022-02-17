@@ -85,7 +85,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             BizCostBudgetDept bizCostBudgetDeptUp = new BizCostBudgetDept();
             bizCostBudgetDeptUp.setId(bizCostBudgetDept.getId());
             bizCostBudgetDeptUp.setName(department.getDeptName());
-            bizCostBudgetDeptUp.setCostRatio(bizCostBudgetDept.getCostRatio());
+            bizCostBudgetDeptUp.setCostRatio(model.getCostRatio());
             bizCostBudgetDeptUp.setRemark(bizCostBudgetDept.getRemark());
             bizCostBudgetDeptUp.setUpdateTime(new Date());
             bizCostBudgetDeptUp.setUpdateUser(sysUserService.selectLoginUser().getId());
