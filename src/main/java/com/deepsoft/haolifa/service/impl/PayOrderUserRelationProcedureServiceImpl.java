@@ -8,7 +8,6 @@ import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayOrderUserRelationProcedureVO;
 import com.deepsoft.haolifa.service.*;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -102,12 +101,18 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
                 PayHourQuota payHourQuota = list.get(0);
                 hourQuotaPrice = payHourQuota.getHourQuotaPrice();
             }
+            // 保存之前先删除以前的 数据
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(payOrderUserRelationProcedureDTO.getOrderId())) {
+                PayOrderUserRelationProcedureExample example = new PayOrderUserRelationProcedureExample();
+                example.createCriteria().andOrderIdEqualTo(payOrderUserRelationProcedureDTO.getOrderId());
+                payOrderUserRelationProcedureMapper.deleteByExample(example);
+            }
             PayOrderUserRelationProcedure procedure = new PayOrderUserRelationProcedure();
+            procedure.setOrderId(payOrderUserRelationProcedureDTO.getOrderId());
             procedure.setHourPrice(hourQuotaPrice);
             procedure.setUserId(payOrderUserRelationProcedureDTO.getUserId());
             procedure.setProductId(payOrderUserRelationProcedureDTO.getProductId());
             procedure.setProcedureId(payOrderUserRelationProcedureDTO.getId());
-            procedure.setOrderId(payOrderUserRelationProcedureDTO.getOrderId());
             procedure.setCreateUser(getLoginUserName());
             procedure.setUpdateUser(getLoginUserName());
             procedure.setCreateTime(new Date());

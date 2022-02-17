@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.pay.*;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -187,7 +188,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         if (StringUtils.isBlank(payWagesVO.getYear()) || StringUtils.isBlank(payWagesVO.getMonth())) {
             throw new Exception("年份或月份不能为空");
         }
-        String calDate = payWagesVO.getMonth() + "-" + payWagesVO.getMonth() + "01";
+        String calDate = payWagesVO.getYear() + "-" + payWagesVO.getMonth() + "-01";
         Date calTime = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, calDate);
         // 开始时间 上个月26号
         Calendar cal = Calendar.getInstance();
@@ -224,10 +225,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 payOrderUserRelationProcedure.setUserId(userId);
                 // TODO 加一个时间
                 List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
-                if (CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
-                    continue;
-                }
-
                 // 每个人做了那些工序
                 for (PayOrderUserRelationProcedure procedure : payOrderUserRelationProcedureList) {
                     // 工序价格
@@ -283,9 +280,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             } else if (CommonEnum.UserType.MARRIED.type.equals(userType)) {
                 PayCalculateDTO proInspectRecord = buildPayCalculateDTO("", "", startTime, endTime);
                 List<ProInspectRecord> proInspectList = proInspectService.getProInspectList(proInspectRecord);
-                if (CollectionUtils.isEmpty(proInspectList)) {
-                    continue;
-                }
                 // 查岗位
                 PayProductionWorkshop workshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
                 // 查部门
@@ -319,14 +313,17 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 }
             }
             minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
-            PayWages model = new PayWages();
-            model.setId(payWage.getId());
-            model.setUpdateUser(getLoginUserName());
-            model.setUpdateTime(new Date());
-            model.setByPieceCount(totalCount);
-            model.setByPieceMoney(totalAmount);
-            model.setTotalMoney(minLiveSecurityFund);
-            payWagesMapper.updateByPrimaryKeySelective(model);
+            payWage.setUpdateUser(getLoginUserName());
+            payWage.setUpdateTime(new Date());
+            payWage.setByPieceCount(totalCount);
+            payWage.setByPieceMoney(totalAmount);
+            payWage.setTotalMoney(minLiveSecurityFund);
+            System.out.println("======"+payWage.getUserName());
+            // 当月总天数
+            int daysBetween= (int) ((endTime.getTime()-startTime.getTime()+1000000)/(60*60*24*1000));
+            int count = DateUtils.computeHolidays(startTime, endTime);
+            payWage.setRequiredAttendanceDays(daysBetween-count);
+            payWagesMapper.updateByPrimaryKeySelective(payWage);
         }
         return null;
     }
