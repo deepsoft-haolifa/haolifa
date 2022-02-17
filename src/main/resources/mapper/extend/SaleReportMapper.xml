@@ -246,7 +246,7 @@
         GROUP BY order_no ) iv ON iv.order_no = op.order_no
         LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no
         = op.order_no
-        LEFT JOIN ( SELECT order_no, sum( price ) price FROM entry_out_store_record WHERE type = 1 AND operation_type =
+        LEFT JOIN ( SELECT order_no, sum( price*abs(quantity) ) price FROM entry_out_store_record WHERE type = 1 AND operation_type =
         1 AND price > 0 GROUP BY order_no ) e ON e.order_no = op.order_no
         <include refid="saleByDemandSql"></include>
         GROUP BY op.order_no,op.demand_name
@@ -274,7 +274,7 @@
         GROUP BY order_no ) iv ON iv.order_no = op.order_no
         LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no
         = op.order_no
-        LEFT JOIN ( SELECT order_no, sum( price ) price FROM entry_out_store_record WHERE type = 1 AND operation_type =
+        LEFT JOIN ( SELECT order_no, sum( price *abs(quantity)) price FROM entry_out_store_record WHERE type = 1 AND operation_type =
         1 AND price > 0 GROUP BY order_no ) e ON e.order_no = op.order_no
         <include refid="saleByDemandSql"></include>
         GROUP BY
