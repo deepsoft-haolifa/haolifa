@@ -102,10 +102,14 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
                 hourQuotaPrice = payHourQuota.getHourQuotaPrice();
             }
             // 保存之前先删除以前的 数据
-            if (org.apache.commons.lang3.StringUtils.isNotBlank(payOrderUserRelationProcedureDTO.getOrderId())) {
-                PayOrderUserRelationProcedureExample example = new PayOrderUserRelationProcedureExample();
-                example.createCriteria().andOrderIdEqualTo(payOrderUserRelationProcedureDTO.getOrderId());
-                payOrderUserRelationProcedureMapper.deleteByExample(example);
+            PayOrderUserRelationProcedureExample example = new PayOrderUserRelationProcedureExample();
+            example.createCriteria().andOrderIdEqualTo(payOrderUserRelationProcedureDTO.getOrderId())
+            .andProcedureIdEqualTo(payOrderUserRelationProcedureDTO.getId())
+            .andUserIdEqualTo(payOrderUserRelationProcedureDTO.getUserId())
+            .andProductIdEqualTo(payOrderUserRelationProcedureDTO.getProductId());
+            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedures = payOrderUserRelationProcedureMapper.selectByExample(example);
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payOrderUserRelationProcedures)) {
+                payOrderUserRelationProcedureMapper.deleteByPrimaryKey(payOrderUserRelationProcedures.get(0).getId());
             }
             PayOrderUserRelationProcedure procedure = new PayOrderUserRelationProcedure();
             procedure.setOrderId(payOrderUserRelationProcedureDTO.getOrderId());
