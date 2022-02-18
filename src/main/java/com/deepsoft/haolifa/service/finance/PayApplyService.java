@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyUpDTO;
 
 public interface PayApplyService {
 
@@ -32,7 +33,7 @@ public interface PayApplyService {
      * @param model
      * @return
      */
-    ResultBean update(BizPayApply model);
+    ResultBean update(PayApplyUpDTO model);
 
     /**
      * 获取详情

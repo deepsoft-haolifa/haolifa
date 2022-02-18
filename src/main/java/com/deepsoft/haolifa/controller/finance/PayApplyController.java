@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyUpDTO;
 import com.deepsoft.haolifa.service.finance.PayApplyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,7 +66,7 @@ public class PayApplyController {
     @ApiOperation("更新节点")
     @PostMapping("/updatePayApp")
     @Transactional(rollbackFor = Exception.class)
-    public ResultBean updatePayAppn(@RequestBody BizPayApply payPlan) {
+    public ResultBean updatePayAppn(@RequestBody PayApplyUpDTO payPlan) {
         return payApplyService.update(payPlan);
     }
 

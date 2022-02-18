@@ -109,6 +109,18 @@ public class PayApplyServiceImpl implements PayApplyService {
         return payApplyDetail;
     }
 
+    private BizPayApplyDetail buildBizPayApplyDetailUp(Date currentDate, PayApplyDetailUpDTO payApplyDetailAddDTO, BizPayApply payApply) {
+        BizPayApplyDetail payApplyDetail = new BizPayApplyDetail();
+        BeanUtils.copyProperties(payApplyDetailAddDTO, payApplyDetail);
+        payApplyDetail.setPayApplyId((long) payApply.getId());
+        payApplyDetail.setCreateTime(currentDate);
+        payApplyDetail.setUpdateTime(currentDate);
+        payApplyDetail.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
+        payApplyDetail.setCreateUser(sysUserService.selectLoginUser().getId());
+        payApplyDetail.setUpdateUser(sysUserService.selectLoginUser().getId());
+        return payApplyDetail;
+    }
+
     private BizPayApply buildBizPayApply(PayApplyAddDTO model, Date currentDate) {
         BizPayApply payApply = new BizPayApply();
 
@@ -132,6 +144,29 @@ public class PayApplyServiceImpl implements PayApplyService {
         payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         return payApply;
     }
+    private BizPayApply buildBizPayApplyUp(PayApplyUpDTO model, Date currentDate) {
+        BizPayApply payApply = new BizPayApply();
+
+        payApply.setId(model.getId());
+        payApply.setCreateTime(currentDate);
+        payApply.setUpdateTime(currentDate);
+        // `status`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
+        payApply.setStatus(PayApplyPayStatusEnum.PENDING_APPROVAL.getCode());
+        payApply.setTotalPrice(model.getTotalPrice());
+        payApply.setRemark(model.getRemark());
+        String applyPayCompany = model.getApplyDetailAddDTOList().stream()
+            .map(PayApplyDetailUpDTO::getApplyPayCompany)
+            .distinct()
+            .findFirst()
+            .orElse(null);
+
+        payApply.setApplyPayCompany(applyPayCompany);
+        payApply.setApplyTime(currentDate);
+        payApply.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
+        //payApply.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
+        payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        return payApply;
+    }
 
     @Override
     public ResultBean delete(Integer id) {
@@ -147,7 +182,38 @@ public class PayApplyServiceImpl implements PayApplyService {
     }
 
     @Override
-    public ResultBean update(BizPayApply payApply) {
+    public ResultBean update(PayApplyUpDTO model) {
+
+        log.info("PayPlanService update start|{}", JSONObject.toJSON(model));
+        if (StringUtils.isAnyBlank()) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+
+        if (CollectionUtils.isEmpty(model.getApplyDetailAddDTOList())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+
+        long count = model.getApplyDetailAddDTOList().stream()
+            .map(PayApplyDetailUpDTO::getApplyPayCompany)
+            .distinct()
+            .count();
+        if (count > 1) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+
+        Date currentDate = new Date();
+        BizPayApply payApply = buildBizPayApplyUp(model, currentDate);
+
+        model.getApplyDetailAddDTOList().stream()
+            .forEach(payApplyDetailUpDTO -> {
+                BizPayApplyDetail payApplyDetail =
+                    buildBizPayApplyDetailUp(currentDate, payApplyDetailUpDTO, payApply);
+                if (payApplyDetailUpDTO.getId() == null){
+                    bizPayApplyDetailMapper.insertSelective(payApplyDetail);
+                }else {
+                    bizPayApplyDetailMapper.updateByPrimaryKeySelective(payApplyDetail);
+                }
+            });
         payApply.setUpdateTime(new Date());
         payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizPayApplyMapper.updateByPrimaryKeySelective(payApply);

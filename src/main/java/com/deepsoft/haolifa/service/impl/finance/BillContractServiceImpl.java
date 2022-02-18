@@ -404,7 +404,7 @@ public class BillContractServiceImpl implements BillContractService {
         if (StringUtils.isNotEmpty(orderNo)) {
             criteria.andOrderNoEqualTo(orderNo);
         }
-        if (StringUtils.isNotEmpty(orderNo)) {
+        if (auditStatus !=null) {
             criteria.andAuditStatusEqualTo(auditStatus);
         }
         return example;
