@@ -387,7 +387,10 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 payWagesSearch.setUpdateUser(getLoginUserName());
                 payWagesSearchMapper.insertSelective(payWagesSearch);
             } else {
-                PayWagesSearch payWagesSearch = payWagesSearches.get(0);
+                PayWagesSearch payWagesSearch = new PayWagesSearch();
+                BeanCopyUtils.copyProperties(payWage, payWagesSearch);
+                payWagesSearch.setUserId(userId);
+                payWagesSearch.setId(payWagesSearches.get(0).getId());
                 payWagesSearch.setUpdateTime(new Date());
                 payWagesSearch.setUpdateUser(getLoginUserName());
                 payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
