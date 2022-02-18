@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -46,11 +47,15 @@ public class JacksonConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd");
         objectMapper.setDateFormat(smt);
+
+        // 忽略不匹配的属性 或者 在响应对象上面添加 @JsonIgnoreProperties(ignoreUnknown = true)注解
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
         //设置中文编码格式
         List<MediaType> list = new ArrayList<MediaType>();
         list.add(MediaType.APPLICATION_JSON_UTF8);
         mappingJackson2HttpMessageConverter.setSupportedMediaTypes(list);
+
         return mappingJackson2HttpMessageConverter;
     }
 
