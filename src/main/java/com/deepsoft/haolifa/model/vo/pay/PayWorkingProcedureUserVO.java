@@ -29,6 +29,8 @@ public class PayWorkingProcedureUserVO {
     private String postCapability;
     @ApiModelProperty(value = "岗位（工序）代码")
     private String postCode;
+    @ApiModelProperty(value = "用户ID")
+    private Integer userId;
     @ApiModelProperty(value = "工序对应的人员列表")
     private List<ProcedureUserVO> userList;
 }
