@@ -8,10 +8,7 @@ import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,5 +96,12 @@ public class PurchaseOrderController {
             applyBuyService.updateStatus(itemId);
         }
         return purcahseOrderService.save(model, orderType);
+    }
+
+    @ApiOperation("获取采购订单详情")
+    @GetMapping("/details")
+    @ApiImplicitParam(name = "purchaseOrderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean details(String purchaseOrderNo) {
+        return ResultBean.success(purcahseOrderService.details(purchaseOrderNo));
     }
 }

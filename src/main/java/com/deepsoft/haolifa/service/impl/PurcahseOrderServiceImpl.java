@@ -65,7 +65,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     @Autowired
     private PurchaseOrderItemMapper purchaseOrderItemMapper;
 
-      @Autowired
+    @Autowired
     private InspectHistoryMapper inspectHistoryMapper;
 
 
@@ -642,6 +642,18 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
                 });
             }
         }
+    }
+
+    @Override
+    public PurchaseOrder details(String purchaseOrderNo) {
+        // 判断是否存在此采购订单
+        PurchaseOrderExample example = new PurchaseOrderExample();
+        example.or().andPurchaseOrderNoEqualTo(purchaseOrderNo);
+        List<PurchaseOrder> orders = purchaseOrderMapper.selectByExample(example);
+        if (CollectionUtil.isEmpty(orders)) {
+            return null;
+        }
+        return orders.get(0);
     }
 }
 
