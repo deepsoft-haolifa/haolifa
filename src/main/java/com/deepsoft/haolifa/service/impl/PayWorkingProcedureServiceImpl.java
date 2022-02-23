@@ -260,7 +260,10 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 .andProductIdEqualTo(productId);
             List<PayOrderUserRelationProcedure> payOrderUserRelationProcedures = payOrderUserRelationProcedureMapper.selectByExample(example);
             if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payOrderUserRelationProcedures)) {
-                payWorkingProcedureUserVO.setUserId(payOrderUserRelationProcedures.get(0).getUserId());
+                PayOrderUserRelationProcedure payOrderUserRelationProcedure = payOrderUserRelationProcedures.get(0);
+                payWorkingProcedureUserVO.setUserId(payOrderUserRelationProcedure.getUserId());
+                payWorkingProcedureUserVO.setTotalPrice(payOrderUserRelationProcedure.getTotalPrice());
+                payWorkingProcedureUserVO.setTotalCount(payOrderUserRelationProcedure.getTotalCount());
             }
             // 找人员
             List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());

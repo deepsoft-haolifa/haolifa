@@ -64,6 +64,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private SprayItemMapper sprayItemMapper;
     @Resource
     private PayWagesSearchMapper payWagesSearchMapper;
+    @Resource
+    private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -249,6 +251,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
+                        procedure.setTotalCount(qualifiedNumber);
+                        procedure.setTotalPrice(multiply);
+                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.SPRAY.name.equals(workshopName)) {
                         SprayItem sprayItem = sprayItemMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, sprayItem.getSprayedGraphNo(), startTime, endTime);
@@ -262,6 +267,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
+                        procedure.setTotalCount(qualifiedNumber);
+                        procedure.setTotalPrice(multiply);
+                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.MACHINING.name.equals(workshopName)) {
                         Entrust entrust = entrustMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getProcessedGraphNo(), startTime, endTime);
@@ -275,6 +283,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
+                        procedure.setTotalCount(qualifiedNumber);
+                        procedure.setTotalPrice(multiply);
+                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     }
                 }
             } else if (CommonEnum.UserType.MARRIED.type.equals(userType)) {

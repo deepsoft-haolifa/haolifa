@@ -16,6 +16,10 @@ public class PayOrderUserRelationProcedure {
 
     private BigDecimal hourPrice;
 
+    private BigDecimal totalPrice;
+
+    private Integer totalCount;
+
     private String createUser;
 
     private String updateUser;
@@ -24,13 +28,15 @@ public class PayOrderUserRelationProcedure {
 
     private Date updateTime;
 
-    public PayOrderUserRelationProcedure(Integer id, Integer userId, String orderId, Integer procedureId, Integer productId, BigDecimal hourPrice, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayOrderUserRelationProcedure(Integer id, Integer userId, String orderId, Integer procedureId, Integer productId, BigDecimal hourPrice, BigDecimal totalPrice, Integer totalCount, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.orderId = orderId;
         this.procedureId = procedureId;
         this.productId = productId;
         this.hourPrice = hourPrice;
+        this.totalPrice = totalPrice;
+        this.totalCount = totalCount;
         this.createUser = createUser;
         this.updateUser = updateUser;
         this.createTime = createTime;
@@ -87,6 +93,22 @@ public class PayOrderUserRelationProcedure {
 
     public void setHourPrice(BigDecimal hourPrice) {
         this.hourPrice = hourPrice;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 
     public String getCreateUser() {

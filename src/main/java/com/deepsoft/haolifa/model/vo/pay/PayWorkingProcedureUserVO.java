@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -31,6 +32,10 @@ public class PayWorkingProcedureUserVO {
     private String postCode;
     @ApiModelProperty(value = "用户ID")
     private Integer userId;
+    @ApiModelProperty(value = "总金额")
+    private BigDecimal totalPrice;
+    @ApiModelProperty(value = "总件数")
+    private Integer totalCount;
     @ApiModelProperty(value = "工序对应的人员列表")
     private List<ProcedureUserVO> userList;
 }
