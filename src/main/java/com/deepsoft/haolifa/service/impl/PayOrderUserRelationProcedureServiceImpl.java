@@ -105,11 +105,10 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             PayOrderUserRelationProcedureExample example = new PayOrderUserRelationProcedureExample();
             example.createCriteria().andOrderIdEqualTo(payOrderUserRelationProcedureDTO.getOrderId())
             .andProcedureIdEqualTo(payOrderUserRelationProcedureDTO.getId())
-            .andUserIdEqualTo(payOrderUserRelationProcedureDTO.getUserId())
             .andProductIdEqualTo(payOrderUserRelationProcedureDTO.getProductId());
             List<PayOrderUserRelationProcedure> payOrderUserRelationProcedures = payOrderUserRelationProcedureMapper.selectByExample(example);
             if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payOrderUserRelationProcedures)) {
-                payOrderUserRelationProcedureMapper.deleteByPrimaryKey(payOrderUserRelationProcedures.get(0).getId());
+                payOrderUserRelationProcedures.stream().forEach(pp -> payOrderUserRelationProcedureMapper.deleteByPrimaryKey(pp.getId()));
             }
             PayOrderUserRelationProcedure procedure = new PayOrderUserRelationProcedure();
             procedure.setOrderId(payOrderUserRelationProcedureDTO.getOrderId());
