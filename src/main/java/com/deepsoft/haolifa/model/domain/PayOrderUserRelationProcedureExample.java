@@ -476,6 +476,126 @@ public class PayOrderUserRelationProcedureExample {
             return (Criteria) this;
         }
 
+        public Criteria andTotalPriceIsNull() {
+            addCriterion("total_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIsNotNull() {
+            addCriterion("total_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceEqualTo(BigDecimal value) {
+            addCriterion("total_price =", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotEqualTo(BigDecimal value) {
+            addCriterion("total_price <>", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThan(BigDecimal value) {
+            addCriterion("total_price >", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price >=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThan(BigDecimal value) {
+            addCriterion("total_price <", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price <=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIn(List<BigDecimal> values) {
+            addCriterion("total_price in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotIn(List<BigDecimal> values) {
+            addCriterion("total_price not in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price not between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountIsNull() {
+            addCriterion("total_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountIsNotNull() {
+            addCriterion("total_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountEqualTo(Integer value) {
+            addCriterion("total_count =", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotEqualTo(Integer value) {
+            addCriterion("total_count <>", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountGreaterThan(Integer value) {
+            addCriterion("total_count >", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_count >=", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountLessThan(Integer value) {
+            addCriterion("total_count <", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountLessThanOrEqualTo(Integer value) {
+            addCriterion("total_count <=", value, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountIn(List<Integer> values) {
+            addCriterion("total_count in", values, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotIn(List<Integer> values) {
+            addCriterion("total_count not in", values, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountBetween(Integer value1, Integer value2) {
+            addCriterion("total_count between", value1, value2, "totalCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_count not between", value1, value2, "totalCount");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateUserIsNull() {
             addCriterion("create_user is null");
             return (Criteria) this;

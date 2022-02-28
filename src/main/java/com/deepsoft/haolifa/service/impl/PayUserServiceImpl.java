@@ -74,11 +74,35 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
                 criteria.andSuperiorIdEqualTo(sysUser.getPostId());
             }
         }
+        if (StringUtils.isNotBlank(model.getPostName())) {
+            PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
+            payProductionWorkshopExample.createCriteria().andPostNameEqualTo(model.getPostName());
+            List<PayProductionWorkshop> list = payProductionWorkshopMapper.selectByExample(payProductionWorkshopExample);
+            if (CollectionUtils.isNotEmpty(list)) {
+                List<Integer> collect = list.stream().map(pp -> pp.getId()).collect(Collectors.toList());
+                criteria.andPostIdIn(collect);
+            }
+        }
+        if (StringUtils.isNotBlank(model.getSuperiorName())) {
+            PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
+            payProductionWorkshopExample.createCriteria().andPostNameEqualTo(model.getSuperiorName());
+            List<PayProductionWorkshop> list = payProductionWorkshopMapper.selectByExample(payProductionWorkshopExample);
+            if (CollectionUtils.isNotEmpty(list)) {
+                List<Integer> collect = list.stream().map(pp -> pp.getId()).collect(Collectors.toList());
+                criteria.andSuperiorIdIn(collect);
+            }
+        }
+        if (StringUtils.isNotBlank(model.getDepartName())) {
+            criteria.andDepartNameEqualTo(model.getDepartName());
+        }
         if (StringUtils.isNotBlank(model.getUserName())) {
             criteria.andUserNameLike("%" + model.getUserName() + "%");
         }
         if (null != model.getSex() && model.getSex() > 0) {
             criteria.andSexEqualTo(model.getSex());
+        }
+        if (StringUtils.isNotBlank(model.getUserType())) {
+            criteria.andUserTypeEqualTo(model.getUserType());
         }
         if (StringUtils.isNotBlank(model.getNation())) {
             criteria.andNationLike("%" + model.getNation() + "%");
@@ -148,7 +172,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
             payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
-            PayProductionWorkshop workshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getSuperiorId());
+                PayProductionWorkshop workshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getSuperiorId());
             payUserDTO.setSuperiorName(Objects.isNull(workshop) ? "" : workshop.getPostName());
             PayUser parentUser = payUserMapper.selectByPrimaryKey(payUser.getParentId());
             payUserDTO.setParentUserName(Objects.isNull(parentUser) ? "" : parentUser.getUserName());

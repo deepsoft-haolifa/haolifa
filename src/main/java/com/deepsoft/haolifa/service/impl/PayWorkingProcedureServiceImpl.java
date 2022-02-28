@@ -165,48 +165,26 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         // 工序对应人的列表
         List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS = new ArrayList<>();
         if (CommonEnum.WorkShopTypeEnum.PRODUCT.code.equals(type)) {
-            // 先查询订单状态
-            OrderProductExample orderProductExample = new OrderProductExample();
-            orderProductExample.createCriteria().andOrderNoEqualTo(orderNo);
-            List<OrderProduct> orderProducts = orderProductMapper.selectByExample(orderProductExample);
-            OrderProduct orderProduct = orderProducts.get(0);
-            // 装配订单只有生产中才可以分配任务
-            if (CommonEnum.OrderStatus.PRODUCTION.code == orderProduct.getOrderStatus()) {
-                // 生产装配订单
-                OrderProductAssociateExample example = new OrderProductAssociateExample();
-                example.createCriteria().andOrderNoEqualTo(orderNo);
-                List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
-                if (CollectionUtils.isEmpty(list)) {
-                    ResultBean.success(null);
-                }
-                // 循环所有产品
-                for (OrderProductAssociate orderProductAssociate : list) {
-                    // 产品型号
-                    String model = orderProductAssociate.getProductModel().substring(0, 4);
-                    buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.PRODUCT.name, orderProductAssociate.getId(), orderNo, null);
-                }
-            } else {
-                // 直接返回已分配的 数据
-                wrapperPayWorkingProcedureUserVOS(payWorkingProcedureUserVOS, orderNo);
-                return ResultBean.success(payWorkingProcedureUserVOS);
+            // 生产装配订单
+            OrderProductAssociateExample example = new OrderProductAssociateExample();
+            example.createCriteria().andOrderNoEqualTo(orderNo);
+            List<OrderProductAssociate> list = orderProductAssociateMapper.selectByExample(example);
+            if (CollectionUtils.isEmpty(list)) {
+                ResultBean.success(null);
+            }
+            // 循环所有产品
+            for (OrderProductAssociate orderProductAssociate : list) {
+                // 产品型号
+                String model = orderProductAssociate.getProductModel().substring(0, 4);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.PRODUCT.name, orderProductAssociate.getId(), orderNo, null);
             }
         } else if (CommonEnum.WorkShopTypeEnum.SPRAY.code.equals(type)) {
             // 喷涂订单
-            SprayExample sprayExample = new SprayExample();
-            sprayExample.createCriteria().andSprayNoEqualTo(orderNo);
-            Spray spray = sprayMapper.selectByExample(sprayExample).get(0);
-            // 待质检的 单子直接分配任务
-            if (0 == spray.getInspectStatus()) {
-                List<SprayItem> sprayItems = (List<SprayItem>) sprayService.getItemsList(orderNo).getResult();
-                for (SprayItem sprayItem : sprayItems) {
-                    String model = sprayItem.getModel();
-                    String materialName = sprayItem.getMaterialName();
-                    buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo, materialName);
-                }
-            } else {
-                // 直接返回已分配的 数据
-                wrapperPayWorkingProcedureUserVOS(payWorkingProcedureUserVOS, orderNo);
-                return ResultBean.success(payWorkingProcedureUserVOS);
+            List<SprayItem> sprayItems = (List<SprayItem>) sprayService.getItemsList(orderNo).getResult();
+            for (SprayItem sprayItem : sprayItems) {
+                String model = sprayItem.getModel();
+                String materialName = sprayItem.getMaterialName();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo, materialName);
             }
         } else if (CommonEnum.WorkShopTypeEnum.MACHINING.code.equals(type)) {
             // 机加工订单
@@ -215,16 +193,10 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             criteria.andEntrustNoEqualTo(orderNo);
             List<Entrust> entrusts = entrustMapper.selectByExample(example);
             // 待质检的 单子直接分配任务
-            if (0 == entrusts.get(0).getInspectStatus()) {
-                for (Entrust entrust : entrusts) {
-                    String model = entrust.getModel();
-                    String materialClassifyName = entrust.getMaterialClassifyName();
-                    buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.MACHINING.name, entrust.getId(), orderNo, materialClassifyName);
-                }
-            } else {
-                // 直接返回已分配的 数据
-                wrapperPayWorkingProcedureUserVOS(payWorkingProcedureUserVOS, orderNo);
-                return ResultBean.success(payWorkingProcedureUserVOS);
+            for (Entrust entrust : entrusts) {
+                String model = entrust.getModel();
+                String materialClassifyName = entrust.getMaterialClassifyName();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.MACHINING.name, entrust.getId(), orderNo, materialClassifyName);
             }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
@@ -237,6 +209,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
 
     /**
      * 分配任务时 查看详情参数拼装
+     *
      * @param payWorkingProcedureUserVOS
      * @param orderNo
      */
@@ -280,6 +253,18 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             payWorkingProcedureUserVO.setOrderNo(orderNo);
             payWorkingProcedureUserVO.setProductId(productId);
             payWorkingProcedureUserVOS.add(payWorkingProcedureUserVO);
+            // 查询分配的任务
+            PayOrderUserRelationProcedureExample example = new PayOrderUserRelationProcedureExample();
+            example.createCriteria().andOrderIdEqualTo(orderNo)
+                .andProcedureIdEqualTo(workingProcedure.getId())
+                .andProductIdEqualTo(productId);
+            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedures = payOrderUserRelationProcedureMapper.selectByExample(example);
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payOrderUserRelationProcedures)) {
+                PayOrderUserRelationProcedure payOrderUserRelationProcedure = payOrderUserRelationProcedures.get(0);
+                payWorkingProcedureUserVO.setUserId(payOrderUserRelationProcedure.getUserId());
+                payWorkingProcedureUserVO.setTotalPrice(payOrderUserRelationProcedure.getTotalPrice());
+                payWorkingProcedureUserVO.setTotalCount(payOrderUserRelationProcedure.getTotalCount());
+            }
             // 找人员
             List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
             if (CollectionUtils.isEmpty(listByUserIdList) && listByUserIdList.size() == 0) {
