@@ -9,6 +9,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class LoanApplyRQDTO extends PageParam {
 
+    @ApiModelProperty(value = "列表类型 1 借款审批列表  2 出纳付款列表")
+    private String type;
+
     @ApiModelProperty(value = "编号")
     private String serialNo;
 
@@ -23,6 +26,9 @@ public class LoanApplyRQDTO extends PageParam {
 
     @ApiModelProperty(value = "付款单位")
     private String payCompany;
+
+    @ApiModelProperty(value = "审批节点 例：2,3（1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成）")
+    private String applyStatus;
 
     @ApiModelProperty(value = "付款状态（1未付款 2付款中 3付款完成）")
     private String payStatus;

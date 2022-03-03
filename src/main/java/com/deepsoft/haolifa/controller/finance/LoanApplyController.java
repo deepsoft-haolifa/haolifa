@@ -51,7 +51,7 @@ public class LoanApplyController {
     @Autowired
     private CustomUserServiceImpl customUserService;
 
-    @ApiOperation("添加节点(借款申請列表使用)")
+//    @ApiOperation("添加节点(借款申請列表使用)")
     @PostMapping("/te")
     @Transactional(rollbackFor = Exception.class)
     public ResultBean te() {
@@ -71,6 +71,13 @@ public class LoanApplyController {
     @Transactional(rollbackFor = Exception.class)
     public ResultBean delete(@PathVariable("id") int id) {
         return loanApplyService.delete(id);
+    }
+
+      @ApiOperation("详情")
+    @GetMapping("/info/{id}")
+    @Transactional(rollbackFor = Exception.class)
+    public ResultBean<LoanApplyInfoRSDTO> info(@PathVariable("id") int id) {
+        return loanApplyService.getInfo(id);
     }
 
     @ApiOperation("更新节点(借款申請列表使用)")

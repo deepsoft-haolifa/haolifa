@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.PurchaseOrder;
 import com.deepsoft.haolifa.model.domain.PurchaseOrderExample;
 import java.util.List;
+
+import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRQDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface PurchaseOrderMapper {
@@ -27,4 +29,7 @@ public interface PurchaseOrderMapper {
     int updateByPrimaryKeySelective(PurchaseOrder record);
 
     int updateByPrimaryKey(PurchaseOrder record);
+
+    List<PurchaseOrder> selectListBy(PurchaseOrderStandAccountRQDTO example);
+
 }

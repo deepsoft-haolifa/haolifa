@@ -120,6 +120,14 @@ public class PayPlanServiceImpl implements PayPlanService {
         CustomUser customUser = sysUserService.selectLoginUser();
 
         // todo  支付状态必须是已付款  金额必须和申请金额一样
+        BigDecimal bigDecimal = planPayDTO.getPayWayList().stream()
+            .map(BizPayPlanPayDTO.PayWayDTO::getAmount)
+            .reduce(BigDecimal::add)
+            .get();
+        if (bizPayPlan.getApplyAmount().doubleValue() !=bigDecimal.doubleValue() ){
+            throw new BaseException("当前付款金额与申请金额不一致");
+        }
+
         BizPayPlan record = buildBizPayPlan(planPayDTO, customUser);
         int update = bizPayPlanMapper.updateByPrimaryKeySelective(record);
         if (update < 1) {
@@ -254,6 +262,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         BizPayPlan record = new BizPayPlan();
         BeanUtils.copyProperties(planPayDTO, record);
 
+        record.setStatus("2");
         //  添加付款方式日志表
         record.setPayWay(JSON.toJSONString(planPayDTO.getPayWayList()));
 

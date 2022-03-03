@@ -113,9 +113,42 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     }
 
     @Override
-    public ResultBean getInfo(Integer id) {
+    public ResultBean<LoanApplyInfoRSDTO> getInfo(Integer id) {
         BizLoanApply loanApply = bizLoanApplyMapper.selectByPrimaryKey(id);
-        return ResultBean.success(loanApply);
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+        SysUserExample sysUserExample = new SysUserExample();
+        sysUserExample.createCriteria().andIdEqualTo(loanApply.getLoanUser());
+        List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+        Map<Integer, SysUser> finalSysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
+
+
+        LoanApplyInfoRSDTO loanApplyRSDTO = new LoanApplyInfoRSDTO();
+        BeanUtils.copyProperties(loanApply, loanApplyRSDTO);
+        SysDepartment sysDepartment = sysDepartmentMap.get(loanApply.getDeptId());
+        if (sysDepartment != null) {
+            loanApplyRSDTO.setDeptName(sysDepartment.getDeptName());
+        }
+        SysUser sysUser = finalSysUserMap.get(loanApply.getLoanUser());
+        if (sysUser != null) {
+            loanApplyRSDTO.setLoanUserName(sysUser.getRealName());
+        }
+        LoanApplyStatusEnum applyStatusEnum = LoanApplyStatusEnum.valueOfCode(loanApply.getApplyStatus());
+
+        loanApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
+            LoanApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
+        LoanPayWayEnum payWayEnum = LoanPayWayEnum.valueOfCode(loanApply.getAmountType());
+        loanApplyRSDTO.setAmountTypeCN(payWayEnum == null ? null : payWayEnum.getDesc());
+
+        LoanBillTypeEnum billTypeEnum = LoanBillTypeEnum.valueOfCode(loanApply.getBillNature());
+        loanApplyRSDTO.setBillNatureCN(billTypeEnum == null ? null : billTypeEnum.getDesc());
+
+        LoanrPayStatusEnum payStatusEnum = LoanrPayStatusEnum.valueOfCode(loanApply.getPayStatus());
+        loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+
+        return ResultBean.success(loanApplyRSDTO);
     }
 
     @Override
@@ -129,6 +162,27 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
         BizLoanApplyExample.Criteria criteria = loanApplyExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+
+        String type = model.getType();
+
+        // 借款审批列表 todo 是否只展示自己申请的记录
+        if (StringUtils.equalsIgnoreCase("1",type)){
+            //审核状态
+            if (StringUtils.isNotEmpty(model.getApplyStatus())) {
+                criteria.andApplyStatusIn(Arrays.asList(model.getApplyStatus().split(",").clone()));
+            }
+
+            // 出纳付款列表
+        }else if (StringUtils.equalsIgnoreCase("2",type)){
+            //审核状态
+            if (StringUtils.isNotEmpty(model.getApplyStatus())) {
+                criteria.andApplyStatusIn(Arrays.asList(model.getApplyStatus().split(",").clone()));
+            }else {
+                // 2 审批中 3 付款中 4 审批不通过 5 付款完成
+                criteria.andApplyStatusIn(Arrays.asList("3","5"));
+            }
+        }
+
 
         // 状态 1 代办 2 已办
         if (model.getStatus() != null) {
@@ -151,6 +205,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         if (StringUtils.isNotEmpty(model.getPayStatus())) {
             criteria.andPayStatusEqualTo(model.getPayStatus());
         }
+
 
         loanApplyExample.setOrderByClause("id desc");
         Page<BizLoanApply> pageData = PageHelper
@@ -208,7 +263,6 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     }
 
 
-
     @Override
     public int auditReplaceMaterial(String item_id, LoanApplyStatusEnum auditResult) {
         BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
@@ -217,9 +271,9 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         criteria.andSerialNoEqualTo(item_id);
         List<BizLoanApply> bizLoanApplies = bizLoanApplyMapper.selectByExample(loanApplyExample);
 
-        BizLoanApply  loanApplyS = bizLoanApplies.get(0);
-        if (loanApplyS == null){
-            log.error("auditReplaceMaterial 无该条记录,id:{}",item_id);
+        BizLoanApply loanApplyS = bizLoanApplies.get(0);
+        if (loanApplyS == null) {
+            log.error("auditReplaceMaterial 无该条记录,id:{}", item_id);
             return 0;
         }
 

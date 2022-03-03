@@ -671,4 +671,31 @@
       paid_account = #{paidAccount,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+
+    <select id="selectListBy" parameterType="com.deepsoft.haolifa.model.domain.PurchaseOrderExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from purchase_order
+        <where>
+            <if test="purchaseOrderNo != null and purchaseOrderNo != '' ">
+                and purchase_order_no = #{purchaseOrderNo}
+            </if>
+            <if test="supplierName != null and supplierName != '' ">
+                and  supplier_name like concat('%',#{supplierName},'%')
+            </if>
+            <if test="demander != null and demander != '' ">
+                and  demander like concat('%',#{demander},'%')
+            </if>
+            and status = 5
+            and qualified_number &gt;  0
+            and paid_account &lt;  total_price
+            order by delivery_time desc
+        </where>
+
+    </select>
+
+
+
 </mapper>

@@ -1,8 +1,10 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.service.OrderProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +31,7 @@ public class ReceivableController {
 
     @ApiOperation("查询应收货款列表")
     @PostMapping("/list")
-    public ResultBean list(@RequestBody ReceivableOrderRQDTO model) {
+    public ResultBean<PageDTO<ReceivableOrderRSDTO>> list(@RequestBody ReceivableOrderRQDTO model) {
         return orderProductService.receivableOrderList(model);
     }
 

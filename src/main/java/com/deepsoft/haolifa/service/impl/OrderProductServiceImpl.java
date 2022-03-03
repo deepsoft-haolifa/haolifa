@@ -1027,7 +1027,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
-    public ResultBean receivableOrderList(ReceivableOrderRQDTO model) {
+    public ResultBean<PageDTO<ReceivableOrderRSDTO>> receivableOrderList(ReceivableOrderRQDTO model) {
         OrderProductExample example = new OrderProductExample();
         OrderProductExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(model.getOrderNo())) {

@@ -35,9 +35,9 @@ public class BizPayPlanPayDTO {
 
     //@ApiModelProperty(value = "付款类型:默认是货款")
     // private String paymentType;
-
-    @ApiModelProperty(value = "付款状态 0.未付； 2已付款")
-    private String status;
+//
+//    @ApiModelProperty(value = "付款状态 0.未付； 2已付款")
+//    private String status;
 
     @ApiModelProperty(value = "付款日期")
     private Date payDate;

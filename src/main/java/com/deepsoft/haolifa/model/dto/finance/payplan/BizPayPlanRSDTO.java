@@ -76,6 +76,9 @@ public class BizPayPlanRSDTO {
     @ApiModelProperty(value = "付款状态 0.未付；1.付款中 2已付款")
     private String status;
 
+    @ApiModelProperty(value = "付款状态 未付；付款中 已付款")
+    private String statusCN;
+
     /***
      *    //1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成
      *     PENDING_APPROVAL("1", "待审批"),

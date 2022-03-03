@@ -348,9 +348,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 //        }
 
         // 查询列表
-        PurchaseOrderExample purchaseOrderExample = buildPurchaseOrderExample(purchaseOrderDTO);
+//        PurchaseOrderExample purchaseOrderExample = buildPurchaseOrderExample(purchaseOrderDTO);
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(purchaseOrderDTO.getPageNum(), purchaseOrderDTO.getPageSize(), "create_time desc")
-            .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
+            .doSelectPage(() -> purchaseOrderMapper.selectListBy(purchaseOrderDTO));
 
 
         List<String> purchaseOrderNoList = purchaseOrderList.getResult().stream()
@@ -476,7 +476,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         // 收货大于0
         criteria.andQualifiedNumberGreaterThan(0);
         // 排除 已付款&已完成
-        criteria.andStatusNotEqualTo(Byte.valueOf("5"));
+        criteria.andStatusEqualTo(Byte.valueOf("5"));
         criteria.andPayStatusNotEqualTo(Byte.valueOf(OrderPayStatusEnum.all_pay.getCode()));
 
         {
@@ -498,7 +498,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             // 收货大于0
             criteriaOr.andQualifiedNumberGreaterThan(0);
             // 排除 已付款&已完成
-            criteriaOr.andStatusNotEqualTo(Byte.valueOf("5"));
+            criteriaOr.andStatusEqualTo(Byte.valueOf("5"));
             criteriaOr.andPayStatusIsNull();
         }
 

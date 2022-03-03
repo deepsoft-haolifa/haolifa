@@ -37,7 +37,7 @@ public interface LoanApplyService {
      * @param id
      * @return
      */
-    ResultBean getInfo(Integer id);
+    ResultBean<LoanApplyInfoRSDTO> getInfo(Integer id);
 
     /**
      * 获取列表

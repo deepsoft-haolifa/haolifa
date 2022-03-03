@@ -2,8 +2,10 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
 import com.deepsoft.haolifa.model.dto.Accessory;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
 
 import java.util.List;
@@ -97,7 +99,7 @@ public interface OrderProductService {
     /**
      * 获取 订单列表
      */
-    public ResultBean receivableOrderList(ReceivableOrderRQDTO model);
+    public ResultBean<PageDTO<ReceivableOrderRSDTO>> receivableOrderList(ReceivableOrderRQDTO model);
 
     /**
      * 核料（将前端提交过来的零件，进行核料）
