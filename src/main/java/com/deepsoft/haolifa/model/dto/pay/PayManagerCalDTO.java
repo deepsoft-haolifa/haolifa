@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @ApiModel(description = "管理计提工时定额表")
 public class PayManagerCalDTO {
@@ -25,5 +27,5 @@ public class PayManagerCalDTO {
     @ApiModelProperty(value = "工种类别")
     private String workType;
     @ApiModelProperty(value = "工时定额")
-    private String price;
+    private BigDecimal price;
 }
