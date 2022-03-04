@@ -5,7 +5,6 @@ import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.DepartmentDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.*;
 import com.deepsoft.haolifa.service.*;
@@ -24,7 +23,10 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author liuyaofei
