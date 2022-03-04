@@ -191,6 +191,13 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         if (StringUtils.isNotBlank(s)) {
             return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_INVALID, s);
         }
+        PayUserExample example = new PayUserExample();
+        example.createCriteria().andPhoneEqualTo(model.getPhone())
+            .andIdCardEqualTo(model.getIdCard());
+        List<PayUser> payUsers = payUserMapper.selectByExample(example);
+        if (CollectionUtils.isNotEmpty(payUsers)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
+        }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
         payUser.setCreateTime(new Date());
@@ -232,6 +239,13 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         String s = CommonUtil.IDCardValidate(model.getIdCard());
         if (StringUtils.isNotBlank(s)) {
             return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_INVALID, s);
+        }
+        PayUserExample payUserExample = new PayUserExample();
+        payUserExample.createCriteria().andPhoneEqualTo(model.getPhone())
+            .andIdCardEqualTo(model.getIdCard());
+        List<PayUser> payUsers = payUserMapper.selectByExample(payUserExample);
+        if (CollectionUtils.isNotEmpty(payUsers)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);

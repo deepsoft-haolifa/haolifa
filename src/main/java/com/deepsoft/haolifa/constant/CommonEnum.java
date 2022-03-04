@@ -99,7 +99,10 @@ public class CommonEnum {
         MATERIAL_REQUISITION_EXIST("5002", "这个订单的领料单已经保存过，请确认"),
         PRODUCT_COUNT_ERROR("5003", "数量不够扣减"),
         FILE_IS_NULL("5004", "文件为空请重新选择"),
-        ID_CARD_INVALID("5005", "身份证校验失败");
+        ID_CARD_INVALID("5005", "身份证校验失败"),
+        ID_CARD_OR_PHONE_REPEAT("5006", "身份证号或手机号和其他人重复"),
+
+        ;
 
         public final String code;
 
