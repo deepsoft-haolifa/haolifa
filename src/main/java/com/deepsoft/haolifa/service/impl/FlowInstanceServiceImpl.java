@@ -262,50 +262,7 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
             return ResultBean.error(ResponseEnum.FLOW_IS_OVER);
         }
 
-        FlowStep currentStep = new FlowStep();
-        if (flowInstance.getCurrentStepId() == 1 &&
-            (flowInstance.getFlowId() == LOAN_APP_FLOW.id || flowInstance.getFlowId() == REIMBURSE_APP_FLOW.id)) {
-            String userId = flowInstance.getUserId();
-
-            // 获取当前用户
-            List<UserPipLineDTO> userPipLineDTOList = sysUserService.currentUserPipLine();
-            String nextUserId = "";
-            Integer currentStepId = 1;
-            Integer roleId = 0;
-            // > 1 上级领导不止一个
-            if (userPipLineDTOList.size() > 1) {
-                UserPipLineDTO userPipLineDTO = userPipLineDTOList.get(0);
-                nextUserId = userPipLineDTO.getId().toString();
-                currentStepId = 1;
-                SysRole sysRole = userPipLineDTO.getRoles().stream().findFirst().get();
-                roleId = sysRole.getId();
-                // 当前领导已经是总经理
-            } else if (userPipLineDTOList.size() == 1) {
-                FlowStepExample flowStepExample = new FlowStepExample();
-                flowStepExample.createCriteria().andFlowIdEqualTo(flowInstance.getFlowId());
-                List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
-                FlowStep initStep = flowSteps.stream()
-                    .filter(f -> f.getPrevStepId() == 0)
-                    .findFirst()
-                    .get();
-
-                nextUserId = initStep.getUserId();
-                currentStepId = initStep.getStepId();
-                roleId = initStep.getRoleId();
-                //
-            }
-
-            currentStep.setStepId(currentStepId);
-            currentStep.setFlowId(flowInstance.getFlowId());
-            currentStep.setRoleId(roleId);
-            currentStep.setConditionTrue(currentStepId);
-            currentStep.setConditionFalse(0);
-//            currentStep.setPrevStepId();
-        } else {
-            // 获取当前待处理节点
-             currentStep = instanceHistoryMapper
-                .selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
-        }
+        FlowStep currentStep = getCurrentStep(flowInstance);
 
 
         // 添加历史
@@ -355,21 +312,11 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
                 } else {
                     // 流程实例更新
                     // 获取孩子节点
-                    FlowStep nextStep = new FlowStep();
-                    if (model.getCondition()) {
-                        updateInstance.setCurrentStepId(currentStep.getConditionTrue());
-                        nextStep = instanceHistoryMapper
-                            .selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionTrue());
-                    } else {
-                        updateInstance.setCurrentStepId(currentStep.getConditionFalse());
-                        nextStep = instanceHistoryMapper
-                            .selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionFalse());
-                    }
+                    FlowStep nextStep = getNextStep( model, currentStep, updateInstance, flowInstance);
                     updateInstance.setRoleId(nextStep.getRoleId());
                     // 指定人 则填写分配的人，若无，则正常
                     updateInstance
                         .setUserId(model.getAllotUserId() == null ? nextStep.getUserId() : model.getAllotUserId().toString());
-
                 }
             } else {
                 // 退回
@@ -404,6 +351,112 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         Map<String, Object> result = new HashMap<>();
         result.put("instanceId", model.getId());
         return ResultBean.success(result);
+    }
+
+    private FlowStep getCurrentStep(FlowInstance flowInstance) {
+        FlowStep currentStep = new FlowStep();
+        if (flowInstance.getCurrentStepId() == 1 &&
+            (flowInstance.getFlowId() == LOAN_APP_FLOW.id || flowInstance.getFlowId() == REIMBURSE_APP_FLOW.id)) {
+            String userId = flowInstance.getUserId();
+
+            // 获取当前用户
+            List<UserPipLineDTO> userPipLineDTOList = sysUserService.currentUserPipLine();
+            String nextUserId = "";
+            Integer currentStepId = 1;
+            Integer roleId = 0;
+            // > 1 上级领导不止一个
+            if (userPipLineDTOList.size() > 1) {
+                UserPipLineDTO userPipLineDTO = userPipLineDTOList.get(0);
+                nextUserId = userPipLineDTO.getId().toString();
+                currentStepId = 1;
+                SysRole sysRole = userPipLineDTO.getRoles().stream().findFirst().get();
+                roleId = sysRole.getId();
+                // 当前领导已经是总经理
+            } else if (userPipLineDTOList.size() == 1) {
+                FlowStepExample flowStepExample = new FlowStepExample();
+                flowStepExample.createCriteria().andFlowIdEqualTo(flowInstance.getFlowId());
+                List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
+                FlowStep initStep = flowSteps.stream()
+                    .filter(f -> f.getPrevStepId() == 0)
+                    .findFirst()
+                    .get();
+
+                nextUserId = initStep.getUserId();
+                currentStepId = initStep.getStepId();
+                roleId = initStep.getRoleId();
+                //
+            }
+
+            currentStep.setStepId(currentStepId);
+            currentStep.setFlowId(flowInstance.getFlowId());
+            currentStep.setRoleId(roleId);
+            currentStep.setConditionTrue(currentStepId);
+            currentStep.setConditionFalse(0);
+//            currentStep.setPrevStepId();
+        } else {
+            // 获取当前待处理节点
+             currentStep = instanceHistoryMapper
+                .selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
+        }
+        return currentStep;
+    }
+
+    private FlowStep getNextStep(FlowHandleStepDTO model,FlowStep currentStep,FlowInstance updateInstance,FlowInstance flowInstance) {
+        FlowStep nextStep = new FlowStep();
+        if (flowInstance.getCurrentStepId() == 1 &&
+            (flowInstance.getFlowId() == LOAN_APP_FLOW.id || flowInstance.getFlowId() == REIMBURSE_APP_FLOW.id)) {
+            String userId = flowInstance.getUserId();
+
+            // 获取当前用户
+            List<UserPipLineDTO> userPipLineDTOList = sysUserService.currentUserPipLine();
+            String nextUserId = "";
+            Integer currentStepId = 1;
+            Integer roleId = 0;
+            // > 1 上级领导不止一个
+            if (userPipLineDTOList.size() > 1) {
+                UserPipLineDTO userPipLineDTO = userPipLineDTOList.get(1);
+                nextUserId = userPipLineDTO.getId().toString();
+                currentStepId = 1;
+                SysRole sysRole = userPipLineDTO.getRoles().stream().findFirst().get();
+                roleId = sysRole.getId();
+                // 当前领导已经是总经理
+            } else if (userPipLineDTOList.size() == 1) {
+                FlowStepExample flowStepExample = new FlowStepExample();
+                flowStepExample.createCriteria().andFlowIdEqualTo(flowInstance.getFlowId());
+                List<FlowStep> flowSteps = flowStepMapper.selectByExample(flowStepExample);
+                FlowStep initStep = flowSteps.stream()
+                    .filter(f -> f.getPrevStepId() == 0)
+                    .findFirst()
+                    .get();
+
+                nextUserId = initStep.getUserId();
+                currentStepId = initStep.getStepId();
+                roleId = initStep.getRoleId();
+                //
+            }
+
+            updateInstance.setCurrentStepId(currentStepId);
+            nextStep.setStepId(currentStepId);
+            nextStep.setFlowId(flowInstance.getFlowId());
+            nextStep.setRoleId(roleId);
+            nextStep.setConditionTrue(currentStepId);
+            nextStep.setConditionFalse(0);
+            nextStep.setUserId(nextUserId);
+//            currentStep.setPrevStepId();
+        } else {
+            // 流程实例更新
+            // 获取孩子节点
+            if (model.getCondition()) {
+                updateInstance.setCurrentStepId(currentStep.getConditionTrue());
+                nextStep = instanceHistoryMapper
+                    .selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionTrue());
+            } else {
+                updateInstance.setCurrentStepId(currentStep.getConditionFalse());
+                nextStep = instanceHistoryMapper
+                    .selectFlowStepByStepId(flowInstance.getFlowId(), currentStep.getConditionFalse());
+            }
+        }
+        return nextStep;
     }
 
     /**
