@@ -1,14 +1,17 @@
 package com.deepsoft.haolifa.controller;
 
+import com.deepsoft.haolifa.model.domain.PayAssessmentQuota;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaVO;
 import com.deepsoft.haolifa.service.PayAssessmentQuotaService;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author liuyaofei
@@ -53,4 +56,11 @@ public class PayAssessmentQuotaController {
         return payAssessmentQuotaService.delete(quotaId);
     }
 
+    @ApiOperation("列表")
+    @PostMapping("/getAllList")
+    public ResultBean<List<PayAssessmentQuotaDTO>> getAllList(@RequestBody PayAssessmentQuotaVO model) {
+        List<PayAssessmentQuota> quotaList = payAssessmentQuotaService.getQuotaList(model);
+        List<PayAssessmentQuotaDTO> payAssessmentQuotaDTOS = BeanCopyUtils.copyPropertiesForNewList(quotaList, () -> new PayAssessmentQuotaDTO());
+        return ResultBean.success(payAssessmentQuotaDTOS);
+    }
 }

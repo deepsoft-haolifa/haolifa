@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaVO;
 import com.deepsoft.haolifa.service.PayAssessmentQuotaService;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;

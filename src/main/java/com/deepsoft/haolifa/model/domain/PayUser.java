@@ -8,6 +8,8 @@ public class PayUser {
 
     private String userName;
 
+    private String userNo;
+
     private Integer parentId;
 
     private String onceUserName;
@@ -76,9 +78,10 @@ public class PayUser {
 
     private Date updateTime;
 
-    public PayUser(Integer id, String userName, Integer parentId, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, Integer departId, String departName, String userType, String superiorName, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayUser(Integer id, String userName, String userNo, Integer parentId, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, Integer departId, String departName, String userType, String superiorName, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userName = userName;
+        this.userNo = userNo;
         this.parentId = parentId;
         this.onceUserName = onceUserName;
         this.sex = sex;
@@ -133,6 +136,14 @@ public class PayUser {
 
     public void setUserName(String userName) {
         this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo == null ? null : userNo.trim();
     }
 
     public Integer getParentId() {

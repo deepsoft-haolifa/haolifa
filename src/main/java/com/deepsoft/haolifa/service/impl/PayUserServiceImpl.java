@@ -19,6 +19,7 @@ import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
+import io.swagger.models.auth.In;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,10 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -59,6 +58,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     private RoleService roleService;
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private SysUserMapper userMapper;
     @Override
     public ResultBean pageInfo(PayUserDTO model) {
         PayUserExample example = new PayUserExample();
@@ -70,8 +71,11 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
             if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
                 .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
+                Set<Integer> postList = new HashSet<>();
                 SysUser sysUser = sysUserService.getSysUser(customUser.getId());
-                criteria.andSuperiorIdEqualTo(sysUser.getPostId());
+                postList.add(sysUser.getPostId());
+                querySubordinates(sysUser.getPostId(), postList);
+                criteria.andPostIdIn(new ArrayList<>(postList));
             }
         }
         if (StringUtils.isNotBlank(model.getPostName())) {
@@ -182,6 +186,21 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         BeanUtils.copyProperties(payUsers, pageDTO);
         pageDTO.setList(list);
         return ResultBean.success(pageDTO);
+    }
+
+    private void querySubordinates(Integer postId, Set<Integer> postList) {
+        PayUserExample userExample = new PayUserExample();
+        PayUserExample.Criteria userCriteria = userExample.createCriteria();
+        userCriteria.andSuperiorIdEqualTo(postId);
+        List<PayUser> payUsers = payUserMapper.selectByExample(userExample);
+        for (PayUser payUser : payUsers) {
+            SysUser sys = userMapper.selectByPhoneOrIdCard(payUser.getPhone(), payUser.getIdCard());
+            if (Objects.isNull(sys)) {
+                continue;
+            }
+            postList.add(sys.getPostId());
+            querySubordinates(sys.getPostId(), postList);
+        }
     }
 
     @Override
