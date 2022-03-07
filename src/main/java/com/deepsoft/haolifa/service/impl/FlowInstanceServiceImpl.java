@@ -533,11 +533,29 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
         // 2、返回当前要处理的节点
         FlowInstanceWrapper flowInstance = instanceHistoryMapper.selectByPrimaryKey(instanceId);
         // 3、获取FlowStep详情
-        FlowStep flowStep = instanceHistoryMapper
-            .selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
+        FlowStep flowStep = new FlowStep();
+        if (flowInstance.getCurrentStepId() == 1 &&
+            (flowInstance.getFlowId() == LOAN_APP_FLOW.id || flowInstance.getFlowId() == REIMBURSE_APP_FLOW.id)) {
+            flowStep.setStepId(1);
+            flowStep.setFlowId(flowInstance.getFlowId());
+            flowStep.setRoleId(1);
+            flowStep.setConditionTrue(1);
+            flowStep.setConditionFalse(0);
+        }else {
+            flowStep = instanceHistoryMapper
+                .selectFlowStepByStepId(flowInstance.getFlowId(), flowInstance.getCurrentStepId());
+        }
+
+
         List<String> userIds = Arrays.asList(flowInstance.getUserId().split(","));
         String loginUserId = String.valueOf(getLoginUserId());
         if (userIds.contains(loginUserId) && flowInstance.getIsOver() == 0) {
+
+
+
+
+
+
             // 当前查看用户是该节点的处理人 并且流程未结束
             // 如果当前实例的退回标示为true，则查询当前节点的审核历史，供审核人重新审核
             HistoryInfo dealStep = new HistoryInfo();
