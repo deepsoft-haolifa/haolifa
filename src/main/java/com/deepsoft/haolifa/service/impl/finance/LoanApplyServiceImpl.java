@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizLoanApplyMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
@@ -9,12 +10,16 @@ import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanPayDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
+import com.deepsoft.haolifa.service.finance.BillService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
@@ -52,9 +57,12 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    @Autowired
+    private BillService billService;
+
     @Override
     public ResultBean save(LoanApplyAddDTO model) {
-        log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
+//        log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
@@ -166,20 +174,20 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         String type = model.getType();
 
         // 借款审批列表 todo 是否只展示自己申请的记录
-        if (StringUtils.equalsIgnoreCase("1",type)){
+        if (StringUtils.equalsIgnoreCase("1", type)) {
             //审核状态
             if (StringUtils.isNotEmpty(model.getApplyStatus())) {
                 criteria.andApplyStatusIn(Arrays.asList(model.getApplyStatus().split(",").clone()));
             }
-
+            criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
             // 出纳付款列表
-        }else if (StringUtils.equalsIgnoreCase("2",type)){
+        } else if (StringUtils.equalsIgnoreCase("2", type)) {
             //审核状态
             if (StringUtils.isNotEmpty(model.getApplyStatus())) {
                 criteria.andApplyStatusIn(Arrays.asList(model.getApplyStatus().split(",").clone()));
-            }else {
+            } else {
                 // 2 审批中 3 付款中 4 审批不通过 5 付款完成
-                criteria.andApplyStatusIn(Arrays.asList("3","5"));
+                criteria.andApplyStatusIn(Arrays.asList("3", "5"));
             }
         }
 
@@ -229,6 +237,18 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             sysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
         }
 
+        // 查询当前用户的角色
+
+        CustomUser customUser = sysUserService.selectLoginUser();
+
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+            .map(a -> (CustomGrantedAuthority) a)
+            .collect(Collectors.toList());
+
+        //当前角色是否为出纳
+        boolean iscn = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
+
         Map<Integer, SysUser> finalSysUserMap = sysUserMap;
         List<LoanApplyRSDTO> loanApplyRSDTOList = pageData.getResult().stream()
             .map(loanApply -> {
@@ -255,6 +275,15 @@ public class LoanApplyServiceImpl implements LoanApplyService {
                 LoanrPayStatusEnum payStatusEnum = LoanrPayStatusEnum.valueOfCode(loanApply.getPayStatus());
                 loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
 
+                // 角色 == 出纳 && 支付状态 == 0（未付款）&& 确认状态 == 1（出纳付款）
+                boolean canPay = iscn
+                    && StringUtils.equalsIgnoreCase(loanApply.getApplyStatus(), LoanApplyStatusEnum.IN_PAYMENT.getCode())
+                    && (
+                    StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.un_pay.getCode())
+                        || StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.partial_pay.getCode())
+                );
+
+                loanApplyRSDTO.setCanPay(canPay);
                 return loanApplyRSDTO;
             })
             .collect(Collectors.toList());
@@ -273,7 +302,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         BizLoanApply loanApplyS = bizLoanApplies.get(0);
         if (loanApplyS == null) {
-            log.error("auditReplaceMaterial 无该条记录,id:{}", item_id);
+//            log.error("auditReplaceMaterial 无该条记录,id:{}", item_id);
             return 0;
         }
 
@@ -311,9 +340,25 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         // 有些状态不能付款
         LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(selectByPrimaryKey.getPayStatus());
-        if (!LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+        if (LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
         }
+
+
+        SysUser sysUser = sysUserService.getSysUser(selectByPrimaryKey.getLoanUser());
+        // todo 扣减日记账金额
+        BizBillAddDTO bizBill = new BizBillAddDTO();
+        bizBill.setType(BookingTypeEnum.cash_bill.getCode());
+        bizBill.setCertificateNumber(loanApplyPayDTO.getPayAccount());
+        bizBill.setD(new Date());
+        bizBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+        bizBill.setPayment(selectByPrimaryKey.getAmount());
+        bizBill.setRemark("借款付款 "+selectByPrimaryKey.getAmount());
+        bizBill.setString1(sysUser.getRealName());
+        bizBill.setString2(loanApplyPayDTO.getPayCompany());
+        ResultBean save = billService.save(bizBill);
+
+
         BizLoanApply loanApply = new BizLoanApply();
         BeanUtils.copyProperties(loanApplyPayDTO, loanApply);
         loanApply.setPayStatus(LoanrPayStatusEnum.all_pay.getCode());
@@ -322,6 +367,19 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
         return ResultBean.success(update);
+    }
+    private BizBillAddDTO buildBizBillAddDTO(BizPayPlan bizPayPlan, BizPayPlanPayDTO.PayWayDTO payWayDTO, BookingTypeEnum bookingTypeEnum) {
+        BizBillAddDTO bizBill = new BizBillAddDTO();
+        bizBill.setType(bookingTypeEnum.getCode());
+        bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
+        bizBill.setD(bizPayPlan.getPayDate());
+        // todo
+        bizBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
+        bizBill.setPayment(payWayDTO.getAmount());
+        bizBill.setRemark(bizPayPlan.getRemark());
+        bizBill.setString1(bizPayPlan.getApplyCollectionCompany());
+        bizBill.setString2(bizPayPlan.getPayCompany());
+        return bizBill;
     }
 
     private FlowInstanceDTO buildFlowInstanceDTO(BizLoanApply loanApply) {
