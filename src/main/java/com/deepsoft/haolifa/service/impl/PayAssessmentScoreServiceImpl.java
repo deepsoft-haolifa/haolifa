@@ -1,7 +1,9 @@
 package com.deepsoft.haolifa.service.impl;
 
+import com.deepsoft.haolifa.dao.repository.PayAssessmentQuotaMapper;
 import com.deepsoft.haolifa.dao.repository.PayAssessmentScoreMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
+import com.deepsoft.haolifa.model.domain.PayAssessmentQuota;
 import com.deepsoft.haolifa.model.domain.PayAssessmentScore;
 import com.deepsoft.haolifa.model.domain.PayAssessmentScoreExample;
 import com.deepsoft.haolifa.model.domain.PayUser;
@@ -32,6 +34,8 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     private PayAssessmentScoreMapper payAssessmentScoreMapper;
     @Resource
     private PayUserMapper payUserMapper;
+    @Resource
+    private PayAssessmentQuotaMapper payAssessmentQuotaMapper;
 
     @Override
     public ResultBean pageInfo(Integer pageNum, Integer pageSize) {
@@ -42,6 +46,8 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
         scoreDTOList.stream().forEach(score -> {
             PayUser payUser = payUserMapper.selectByPrimaryKey(score.getUserId());
             score.setUserName(Objects.isNull(payUser) ? "" : payUser.getUserName());
+            PayAssessmentQuota payAssessmentQuota = payAssessmentQuotaMapper.selectByPrimaryKey(score.getAssessmentId());
+            score.setAssessmentName(Objects.isNull(payAssessmentQuota) ? "" : payAssessmentQuota.getQuotaContent());
         });
         PageDTO<PayAssessmentScoreDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(payTeams, pageDTO);

@@ -14,6 +14,8 @@ public class PayAssessmentScoreDTO {
     private Integer id;
     @ApiModelProperty(name = "考核ID")
     private Integer assessmentId;
+    @ApiModelProperty(name = "考核名称")
+    private String assessmentName;
     @ApiModelProperty(name = "人员ID")
     private Integer userId;
     @ApiModelProperty(name = "人员名称")

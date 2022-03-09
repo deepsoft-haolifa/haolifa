@@ -18,13 +18,13 @@ public class PayManagerCalVO {
     private String postName;
     @ApiModelProperty(value = "项目名称")
     private String project;
-    @ApiModelProperty(value = "适用ID类别（图号类别）")
+    @ApiModelProperty(value = "产品ID代码")
     private String idCategory;
     @ApiModelProperty(value = "适用型号")
     private String appModel;
     @ApiModelProperty(value = "适用规格")
     private String appSpecifications;
-    @ApiModelProperty(value = "工种类别")
+    @ApiModelProperty(value = "产品类别")
     private String workType;
     @ApiModelProperty(value = "工时定额")
     private String price;
