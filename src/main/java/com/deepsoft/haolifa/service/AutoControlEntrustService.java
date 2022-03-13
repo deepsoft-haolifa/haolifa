@@ -1,11 +1,13 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.AutoControlEntrust;
+import com.deepsoft.haolifa.model.domain.AutoControlInspectHistory;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustConditionDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustReqDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectHistoryDto;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 
 import java.util.List;
 
@@ -72,4 +74,14 @@ public interface AutoControlEntrustService {
      * @return
      */
     List<AutoControlInspectHistoryDto> getInspectList(String no);
-}
+
+    /**
+     * 查询质检记录
+     * @param payCalculateDTO
+     * @return
+     */
+    List<AutoControlInspectHistory> getInspectHistoryList(PayCalculateDTO payCalculateDTO);
+
+
+
+    }

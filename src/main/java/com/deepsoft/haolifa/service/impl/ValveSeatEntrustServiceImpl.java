@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.InspectReason;
 import com.deepsoft.haolifa.model.dto.PageDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.valveSeat.*;
 import com.deepsoft.haolifa.service.ValveSeatEntrustService;
 import com.github.pagehelper.Page;
@@ -23,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.deepsoft.haolifa.constant.CacheKey.VS_ENTRUST_NO_KEY;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.VS_NO_PREFIX_AC;
@@ -206,4 +204,28 @@ public class ValveSeatEntrustServiceImpl extends BaseService implements ValveSea
         history.setStatus(CommonEnum.InspectHistoryStatus.BEEN_STORE_2.code);
         return valveSeatInspectHistoryMapper.updateByPrimaryKeySelective(history);
     }
+
+    @Override
+    public List<ValveSeatInspectHistory> getInspectHistoryList(PayCalculateDTO payCalculateDTO) {
+        ValveSeatInspectHistoryExample inspectHistoryExample = new ValveSeatInspectHistoryExample();
+        ValveSeatInspectHistoryExample.Criteria criteria = inspectHistoryExample.createCriteria();
+        if (StringUtils.isNotBlank(payCalculateDTO.getOrderNo())) {
+            criteria.andNoEqualTo(payCalculateDTO.getOrderNo());
+        }
+        if (StringUtils.isNotBlank(payCalculateDTO.getProductNo())) {
+            criteria.andMaterialGraphNoEqualTo(payCalculateDTO.getProductNo());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStorageStatus())) {
+            criteria.andStatusEqualTo(payCalculateDTO.getStorageStatus());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStartTime())) {
+            criteria.andUpdateTimeGreaterThanOrEqualTo(payCalculateDTO.getStartTime());
+        }
+        if (Objects.nonNull(payCalculateDTO.getEndTime())) {
+            criteria.andUpdateTimeLessThanOrEqualTo(payCalculateDTO.getEndTime());
+        }
+        List<ValveSeatInspectHistory> inspectHistories = valveSeatInspectHistoryMapper.selectByExample(inspectHistoryExample);
+        return inspectHistories;
+    }
+
 }

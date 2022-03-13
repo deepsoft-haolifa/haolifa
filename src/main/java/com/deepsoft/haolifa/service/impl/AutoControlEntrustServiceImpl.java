@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustConditionDto
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlEntrustReqDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectHistoryDto;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.service.AutoControlEntrustService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -22,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.deepsoft.haolifa.constant.CacheKey.AC_ENTRUST_NO_KEY;
 import static com.deepsoft.haolifa.constant.Constant.SerialNumberPrefix.AC_NO_PREFIX_AC;
@@ -174,4 +172,30 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
         }
         return autoControlInspectHistoryDtos;
     }
+
+    @Override
+    public List<AutoControlInspectHistory> getInspectHistoryList(PayCalculateDTO payCalculateDTO) {
+        AutoControlInspectHistoryExample inspectHistoryExample = new AutoControlInspectHistoryExample();
+        AutoControlInspectHistoryExample.Criteria criteria = inspectHistoryExample.createCriteria();
+        if (StringUtils.isNotBlank(payCalculateDTO.getOrderNo())) {
+            criteria.andNoEqualTo(payCalculateDTO.getOrderNo());
+        }
+        if (StringUtils.isNotBlank(payCalculateDTO.getProductNo())) {
+            criteria.andMaterialGraphNoEqualTo(payCalculateDTO.getProductNo());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStorageStatus())) {
+            criteria.andStatusEqualTo(payCalculateDTO.getStorageStatus());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStartTime())) {
+            criteria.andUpdateTimeGreaterThanOrEqualTo(payCalculateDTO.getStartTime());
+        }
+        if (Objects.nonNull(payCalculateDTO.getEndTime())) {
+            criteria.andUpdateTimeLessThanOrEqualTo(payCalculateDTO.getEndTime());
+        }
+        List<AutoControlInspectHistory> histories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
+        return histories;
+    }
+
+
 }
+

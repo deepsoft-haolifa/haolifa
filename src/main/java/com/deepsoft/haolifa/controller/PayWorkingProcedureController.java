@@ -86,7 +86,7 @@ public class PayWorkingProcedureController {
     @GetMapping(value = "assignTask")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "orderNo", value = "订单号", required = true),
-        @ApiImplicitParam(name = "type", value = "订单类型， 1：生产装配订单；2：喷涂订单；3：机加工订单", required = true)
+        @ApiImplicitParam(name = "type", value = "订单类型， 1：生产装配订单；2：喷涂订单；3：机加工订单;4:自控车间；5：橡胶车间", required = true)
 
     })
     public ResultBean assignTask(@RequestParam(value = "orderNo") String orderNo,

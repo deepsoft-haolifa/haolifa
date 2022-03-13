@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.domain.ValveSeatInspectHistory;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectHistoryDto;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.valveSeat.*;
 
 import java.util.List;
@@ -76,4 +77,12 @@ public interface ValveSeatEntrustService {
      * 入库后更新入库状态
      */
     int updateHistoryStatus(Integer historyId);
-}
+
+    /**
+     * 查询质检记录
+     * @param payCalculateDTO
+     * @return
+     */
+    List<ValveSeatInspectHistory> getInspectHistoryList(PayCalculateDTO payCalculateDTO);
+
+    }

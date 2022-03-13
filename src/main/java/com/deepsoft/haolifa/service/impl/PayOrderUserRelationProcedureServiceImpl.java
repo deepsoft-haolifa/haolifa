@@ -43,6 +43,12 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
     private OrderProductAssociateMapper orderProductAssociateMapper;
     @Resource
     private PayHourQuotaService payHourQuotaService;
+    @Resource
+    private AutoControlEntrustMapper autoControlEntrustMapper;
+    @Resource
+    private ValveSeatEntrustMapper valveSeatEntrustMapper;
+
+
 
     @Override
     public List<PayOrderUserRelationProcedure> getPayOrderUserRelationProcedureList(PayOrderUserRelationProcedure payOrderUserRelationProcedures) {
@@ -87,6 +93,14 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             } else if (CommonEnum.WorkShopTypeEnum.MACHINING.name.equals(workshopName)) {
                 entrustService.updateInspectTaskStatus(payOrderUserRelationProcedureDTO.getOrderId(), 1);
                 Entrust entrust = entrustMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
+                model = entrust.getModel();
+                specifications = entrust.getSpecifications();
+            } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name.equals(workshopName)) {
+                AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
+                model = entrust.getModel();
+                specifications = entrust.getSpecifications();
+            } else if (CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name.equals(workshopName)) {
+                ValveSeatEntrust entrust = valveSeatEntrustMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
                 model = entrust.getModel();
                 specifications = entrust.getSpecifications();
             }

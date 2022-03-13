@@ -747,7 +747,11 @@ public class CommonEnum {
     public enum WorkShopTypeEnum {
         PRODUCT("1", "装配车间"),
         SPRAY("2", "喷涂车间"),
-        MACHINING("3", "机加车间");
+        MACHINING("3", "机加车间"),
+        AUTO_CONTROL("4", "自控车间"),
+        VALVE_SEAT_ENTRUST("5", "橡胶车间"),
+
+        ;
         public final String code;
         public final String name;
         WorkShopTypeEnum(String code, String name) {

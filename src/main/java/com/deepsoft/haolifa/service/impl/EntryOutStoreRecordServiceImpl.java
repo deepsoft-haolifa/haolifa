@@ -13,9 +13,11 @@ import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.EntryOutStorageDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
 import com.deepsoft.haolifa.model.dto.storage.*;
 import com.deepsoft.haolifa.service.*;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -27,8 +29,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.sql.Struct;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -60,6 +65,14 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
     private SprayService sprayService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private PayManagerCalService payManagerCalService;
+    @Autowired
+    private PayProductionWorkshopMapper payProductionWorkshopMapper;
+    @Resource
+    private PayUserMapper payUserMapper;
+    @Resource
+    private PayWagesSearchMapper payWagesSearchMapper;
 
 
     @Override
@@ -88,6 +101,8 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             OrderProductAssociate orderProductAssociate = associates.get(0);
             entryOutStoreRecord.setPrice(orderProductAssociate.getPrice());
         }
+        // 订单入库计算管理人员工资
+        calculateManagerWages(model);
         // 插入出入库记录表
         int insert = entryOutStoreRecordMapper.insertSelective(entryOutStoreRecord);
         if (insert > 0) {
@@ -121,6 +136,107 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }
         }
         return insert;
+    }
+
+    /**
+     * 订单入库新增管理人员工资
+     *
+     * @param model
+     */
+    private void calculateManagerWages(EntryProductStorageDTO model) {
+        try {
+            LocalDate localDate = LocalDate.now();
+            int year = localDate.getYear();
+            Month month = localDate.getMonth();
+            LocalDate localDate2 = LocalDate.of(year, month, 25);
+            if (localDate.isAfter(localDate2)) {
+                month.plus(1);
+            }
+            int monthValue = month.getValue();
+            // 合格数量
+            int quantity = Math.abs(model.getQuantity());
+
+            PayManagerCalDTO payManagerCalDTO = new PayManagerCalDTO();
+            String appModel = model.getProductModel().substring(0, 4);
+            payManagerCalDTO.setAppModel(appModel);
+            payManagerCalDTO.setAppSpecifications(model.getProductSpecifications());
+            // 通过规格型号查管理计提
+            List<PayManagerCal> list = payManagerCalService.getList(payManagerCalDTO);
+            if (CollectionUtils.isEmpty(list)) {
+                return;
+            }
+            for (PayManagerCal payManagerCal : list) {
+                String postName = payManagerCal.getPostName();
+                // 计提价格
+                BigDecimal price = payManagerCal.getPrice();
+                PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
+                payProductionWorkshopExample.createCriteria().andPostNameEqualTo(postName);
+                List<PayProductionWorkshop> payProductionWorkshops = payProductionWorkshopMapper.selectByExample(payProductionWorkshopExample);
+                if (CollectionUtils.isEmpty(payProductionWorkshops)) {
+                    continue;
+                }
+                // 如果不是管理岗位就直接舍弃
+                PayProductionWorkshop workshop = payProductionWorkshops.get(0);
+                if (!CommonEnum.UserType.MARRIED.name.equals(workshop.getWorkType())) {
+                    continue;
+                }
+                // 通过岗位找人
+                PayUserExample payUserExample = new PayUserExample();
+                payUserExample.createCriteria().andPostIdEqualTo(workshop.getId());
+                List<PayUser> payUsers = payUserMapper.selectByExample(payUserExample);
+                if (CollectionUtils.isEmpty(payUsers)) {
+                    continue;
+                }
+
+                for (PayUser payUser : payUsers) {
+                    // 生成工资列表
+                    PayWagesSearchExample example = new PayWagesSearchExample();
+                    PayWagesSearchExample.Criteria criteria = example.createCriteria();
+                    criteria.andUserIdEqualTo(payUser.getId());
+                    criteria.andWagesYearEqualTo(String.valueOf(year));
+                    criteria.andWagesMonthEqualTo(String.valueOf(monthValue));
+                    List<PayWagesSearch> payWagesSearches = payWagesSearchMapper.selectByExample(example);
+                    // 基本工资
+                    BigDecimal basePay = payUser.getBasePay();
+                    // 计提的工资
+                    BigDecimal accrual = price.multiply(new BigDecimal(quantity));
+                    // 总工资
+                    BigDecimal totalAmount = basePay.add(accrual);
+                    // 实发工资 TODO 打分扣款
+                    if (CollectionUtils.isEmpty(payWagesSearches)) {
+                        PayWagesSearch payWagesSearch = new PayWagesSearch();
+                        payWagesSearch.setUserId(payUser.getId());
+                        payWagesSearch.setId(null);
+                        payWagesSearch.setTotalMoney(totalAmount);
+                        payWagesSearch.setMinLiveSecurityFund(basePay);
+                        payWagesSearch.setByPieceCount(quantity);
+                        payWagesSearch.setByPieceMoney(accrual);
+                        payWagesSearch.setWagesYear(String.valueOf(year));
+                        payWagesSearch.setWagesMonth(String.valueOf(monthValue));
+                        payWagesSearch.setCreateTime(new Date());
+                        payWagesSearch.setUpdateTime(new Date());
+                        payWagesSearch.setCreateUser(getLoginUserName());
+                        payWagesSearch.setUpdateUser(getLoginUserName());
+                        payWagesSearchMapper.insertSelective(payWagesSearch);
+                    } else {
+                        PayWagesSearch payWagesSearch = payWagesSearches.get(0);
+                        Integer byPieceCount = payWagesSearch.getByPieceCount() + quantity;
+                        BigDecimal byPieceMoney = payWagesSearch.getByPieceMoney().add(accrual);
+                        BigDecimal totalMoney = payWagesSearch.getTotalMoney().add(accrual);
+                        payWagesSearch.setByPieceCount(byPieceCount);
+                        payWagesSearch.setByPieceMoney(byPieceMoney);
+                        payWagesSearch.setTotalMoney(totalMoney);
+                        payWagesSearch.setId(payWagesSearches.get(0).getId());
+                        payWagesSearch.setUpdateTime(new Date());
+                        payWagesSearch.setUpdateUser(getLoginUserName());
+                        payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
     }
 
     /**
@@ -287,8 +403,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
         storeCount = Math.abs(storeCount);
         return storeCount;
     }
+
     @Override
-    public Map<String,Integer> mapOutProductCount(List<String> orderNos) {
+    public Map<String, Integer> mapOutProductCount(List<String> orderNos) {
         EntryOutStoreRecordExample recordExample = new EntryOutStoreRecordExample();
         EntryOutStoreRecordExample.Criteria criteria = recordExample.createCriteria();
         if (CollectionUtil.isNotEmpty(orderNos)) {
@@ -486,7 +603,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         sprayItemMapper.updateByExampleSelective(sprayItem, sprayItemExample);
 
                         // 将该喷涂订单的状态改为加工中，这样才能核料核到
-                        sprayService.updateStatus(busNo,CommonEnum.SprayStatus.SPRAY_MACHINE.code);
+                        sprayService.updateStatus(busNo, CommonEnum.SprayStatus.SPRAY_MACHINE.code);
                     }
                 }
             }

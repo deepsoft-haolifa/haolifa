@@ -5,6 +5,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -266,5 +267,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         Calendar date = Calendar.getInstance();
         String year = String.valueOf(date.get(Calendar.YEAR));
         return year;
+    }
+
+    public static void main(String[] args) {
+        LocalDate localDate = LocalDate.now();
+        int value = localDate.getMonth().plus(1).getValue();
+        System.out.println(value);
+
+
     }
 }

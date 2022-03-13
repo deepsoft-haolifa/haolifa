@@ -68,6 +68,14 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private PayWagesSearchMapper payWagesSearchMapper;
     @Resource
     private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
+    @Resource
+    private AutoControlEntrustMapper autoControlEntrustMapper;
+    @Resource
+    private ValveSeatEntrustMapper valveSeatEntrustMapper;
+    @Resource
+    private AutoControlEntrustService autoControlEntrustService;
+    @Resource
+    private ValveSeatEntrustService valveSeatEntrustService;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -288,42 +296,42 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         procedure.setTotalCount(qualifiedNumber);
                         procedure.setTotalPrice(multiply);
                         payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
+                    } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name.equals(workshopName)) {
+                        AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(procedure.getProductId());
+                        PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getGraphNo(), startTime, endTime);
+                        List<AutoControlInspectHistory> inspectHistories = autoControlEntrustService.getInspectHistoryList(payCalculateDTO);
+                        if (CollectionUtils.isEmpty(inspectHistories)) {
+                            continue;
+                        }
+                        AutoControlInspectHistory inspectHistory = inspectHistories.get(0);
+                        // 合格数量x工序价格+基本工资
+                        Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                        totalCount = totalCount + qualifiedNumber;
+                        BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                        totalAmount = totalAmount.add(multiply);
+                        procedure.setTotalCount(qualifiedNumber);
+                        procedure.setTotalPrice(multiply);
+                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
+                    } else if (CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name.equals(workshopName)) {
+                        ValveSeatEntrust entrust = valveSeatEntrustMapper.selectByPrimaryKey(procedure.getProductId());
+                        PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getGraphNo(), startTime, endTime);
+                        List<ValveSeatInspectHistory> inspectHistories = valveSeatEntrustService.getInspectHistoryList(payCalculateDTO);
+                        if (CollectionUtils.isEmpty(inspectHistories)) {
+                            continue;
+                        }
+                        ValveSeatInspectHistory inspectHistory = inspectHistories.get(0);
+                        // 合格数量x工序价格+基本工资
+                        Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                        totalCount = totalCount + qualifiedNumber;
+                        BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                        totalAmount = totalAmount.add(multiply);
+                        procedure.setTotalCount(qualifiedNumber);
+                        procedure.setTotalPrice(multiply);
+                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     }
                 }
             } else if (CommonEnum.UserType.MARRIED.type.equals(userType)) {
-                PayCalculateDTO proInspectRecord = buildPayCalculateDTO("", "", startTime, endTime);
-                List<ProInspectRecord> proInspectList = proInspectService.getProInspectList(proInspectRecord);
-                // 查岗位
-                PayProductionWorkshop workshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
-                // 查部门
-                DepartmentDTO departmentDTO = departmentService.selectDepartmentById(payUser.getDepartId());
-
-                for (ProInspectRecord inspectRecord : proInspectList) {
-                    // 合格数量
-                    Integer qualifiedNumber = inspectRecord.getQualifiedNumber();
-                    if (StringUtils.isBlank(inspectRecord.getProductModel())) {
-                        log.info("calculateSalary manager inspectRecord model is null, inspectRecordId:{}", inspectRecord.getId());
-                        continue;
-                    }
-                    // 型号
-                    String model = inspectRecord.getProductModel().substring(0, 4);
-                    // 规格
-                    String productSpecifications = inspectRecord.getProductSpecifications();
-                    PayManagerCalDTO payManagerCalDTO = new PayManagerCalDTO();
-                    payManagerCalDTO.setPostName(workshop.getPostName());
-                    payManagerCalDTO.setAppModel(model);
-                    payManagerCalDTO.setAppSpecifications(productSpecifications);
-                    PayManagerCal info = payManagerCalService.getInfo(payManagerCalDTO);
-                    if (Objects.isNull(info)) {
-                        continue;
-                    }
-                    // 数量X价格
-                    BigDecimal price = info.getPrice();
-
-                    // 合格数量x工序价格+基本工资
-                    BigDecimal multiply = price.multiply(new BigDecimal(qualifiedNumber));
-                    totalAmount = totalAmount.add(multiply);
-                }
+                continue;
             }
             minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
             payWage.setUpdateUser(getLoginUserName());
@@ -400,6 +408,11 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 payWagesSearch.setUpdateUser(getLoginUserName());
                 payWagesSearchMapper.insertSelective(payWagesSearch);
             } else {
+                PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
+                // 如果是管理人员 查询工资列表已有的话 不覆盖
+                if (CommonEnum.UserType.MARRIED.type.equals(payUser.getUserType())) {
+                    continue;
+                }
                 PayWagesSearch payWagesSearch = new PayWagesSearch();
                 BeanCopyUtils.copyProperties(payWage, payWagesSearch);
                 payWagesSearch.setUserId(userId);

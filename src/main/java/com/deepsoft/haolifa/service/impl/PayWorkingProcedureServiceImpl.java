@@ -37,7 +37,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     @Resource
     private OrderProductAssociateMapper orderProductAssociateMapper;
     @Resource
-    private OrderProductMapper orderProductMapper;
+    private ValveSeatEntrustMapper valveSeatEntrustMapper;
     @Resource
     private PayUserMapper payUserMapper;
     @Resource
@@ -49,7 +49,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     @Resource
     private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
     @Resource
-    private SprayMapper sprayMapper;
+    private AutoControlEntrustMapper autoControlEntrustMapper;
 
     @Override
     public ResultBean pageInfo(PayWorkingProcedureDTO model) {
@@ -197,6 +197,30 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 String model = entrust.getModel();
                 String materialClassifyName = entrust.getMaterialClassifyName();
                 buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.MACHINING.name, entrust.getId(), orderNo, materialClassifyName);
+            }
+        } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.code.equals(type)) {
+            // 自控订单
+            AutoControlEntrustExample example = new AutoControlEntrustExample();
+            AutoControlEntrustExample.Criteria criteria = example.createCriteria();
+            criteria.andEntrustNoEqualTo(orderNo);
+            List<AutoControlEntrust> entrusts = autoControlEntrustMapper.selectByExample(example);
+            // 待质检的 单子直接分配任务
+            for (AutoControlEntrust entrust : entrusts) {
+                String model = entrust.getModel();
+                String materialClassifyName = entrust.getName();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name, entrust.getId(), orderNo, materialClassifyName);
+            }
+        } else if (CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.code.equals(type)) {
+            // 橡胶订单
+            ValveSeatEntrustExample example = new ValveSeatEntrustExample();
+            ValveSeatEntrustExample.Criteria criteria = example.createCriteria();
+            criteria.andEntrustNoEqualTo(orderNo);
+            List<ValveSeatEntrust> entrusts = valveSeatEntrustMapper.selectByExample(example);
+            // 待质检的 单子直接分配任务
+            for (ValveSeatEntrust entrust : entrusts) {
+                String model = entrust.getModel();
+                String materialClassifyName = entrust.getName();
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name, entrust.getId(), orderNo, materialClassifyName);
             }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {

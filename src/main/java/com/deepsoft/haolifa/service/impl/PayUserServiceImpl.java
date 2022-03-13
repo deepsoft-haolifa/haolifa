@@ -69,13 +69,19 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         CustomUser customUser = sysUserService.selectLoginUser();
         if (Objects.nonNull(customUser) && Objects.nonNull(customUser.getId())) {
             List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
+//            if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
+//                .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
+//                Set<Integer> postList = new HashSet<>();
+//                SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+//                postList.add(sysUser.getPostId());
+//                querySubordinates(sysUser.getPostId(), postList);
+//                criteria.andPostIdIn(new ArrayList<>(postList));
+//            }
+            // 当前人员的 下级
             if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
                 .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
-                Set<Integer> postList = new HashSet<>();
                 SysUser sysUser = sysUserService.getSysUser(customUser.getId());
-                postList.add(sysUser.getPostId());
-                querySubordinates(sysUser.getPostId(), postList);
-                criteria.andPostIdIn(new ArrayList<>(postList));
+                criteria.andSuperiorIdEqualTo(sysUser.getPostId());
             }
         }
         if (StringUtils.isNotBlank(model.getPostName())) {
@@ -188,6 +194,11 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         return ResultBean.success(pageDTO);
     }
 
+    /**
+     * 通过岗位ID查他自己的下级的下级
+     * @param postId
+     * @param postList
+     */
     private void querySubordinates(Integer postId, Set<Integer> postList) {
         PayUserExample userExample = new PayUserExample();
         PayUserExample.Criteria userCriteria = userExample.createCriteria();

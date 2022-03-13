@@ -5,6 +5,8 @@ import com.deepsoft.haolifa.model.dto.pay.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayManagerCalPageDTO;
 
+import java.util.List;
+
 public interface PayManagerCalService {
 
     ResultBean pageInfo(PayManagerCalPageDTO model);
@@ -17,5 +19,5 @@ public interface PayManagerCalService {
 
     ResultBean delete(Integer id);
 
-    PayManagerCal getInfo(PayManagerCalDTO payManagerCalDTO);
+    List<PayManagerCal> getList(PayManagerCalDTO payManagerCalDTO);
 }

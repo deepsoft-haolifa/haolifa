@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.PayManagerCal;
 import com.deepsoft.haolifa.model.domain.PayManagerCalExample;
 import java.util.List;
+
+import com.deepsoft.haolifa.model.dto.pay.PayManagerCalDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface PayManagerCalMapper {
@@ -27,4 +29,7 @@ public interface PayManagerCalMapper {
     int updateByPrimaryKeySelective(PayManagerCal record);
 
     int updateByPrimaryKey(PayManagerCal record);
+
+    List<PayManagerCal> selectList(PayManagerCalDTO payManagerCalDTO);
+
 }

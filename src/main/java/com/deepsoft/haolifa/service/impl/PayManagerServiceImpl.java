@@ -100,7 +100,7 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
     }
 
     @Override
-    public PayManagerCal getInfo(PayManagerCalDTO payManagerCalDTO) {
+    public List<PayManagerCal> getList(PayManagerCalDTO payManagerCalDTO) {
         PayManagerCalExample example  = new PayManagerCalExample();
         PayManagerCalExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotEmpty(payManagerCalDTO.getPostName())) {
@@ -112,7 +112,7 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
         if (StringUtils.isNotEmpty(payManagerCalDTO.getAppSpecifications())) {
             criteria.andAppSpecificationsEqualTo(payManagerCalDTO.getAppSpecifications());
         }
-        List<PayManagerCal> payManagerCals = payManagerCalMapper.selectByExample(example);
-        return CollectionUtils.isEmpty(payManagerCals) ? null : payManagerCals.get(0);
+        List<PayManagerCal> payManagerCals = payManagerCalMapper.selectList(payManagerCalDTO);
+        return payManagerCals;
     }
 }
