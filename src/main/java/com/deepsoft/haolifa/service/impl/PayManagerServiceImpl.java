@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.poi.excel.ExcelWriter;
 import com.deepsoft.haolifa.dao.repository.PayManagerCalMapper;
 import com.deepsoft.haolifa.model.domain.PayHourQuota;
 import com.deepsoft.haolifa.model.domain.PayManagerCal;
@@ -12,12 +13,14 @@ import com.deepsoft.haolifa.model.dto.pay.response.PayManagerCalVO;
 import com.deepsoft.haolifa.model.dto.pay.response.PayWagesSearchResVO;
 import com.deepsoft.haolifa.service.PayManagerCalService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
+import com.deepsoft.haolifa.util.ExcelUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -112,7 +115,40 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
         if (StringUtils.isNotEmpty(payManagerCalDTO.getAppSpecifications())) {
             criteria.andAppSpecificationsEqualTo(payManagerCalDTO.getAppSpecifications());
         }
-        List<PayManagerCal> payManagerCals = payManagerCalMapper.selectList(payManagerCalDTO);
+        List<PayManagerCal> payManagerCals = payManagerCalMapper.selectByExample(example);
         return payManagerCals;
+    }
+
+    @Override
+    @Transactional
+    public ResultBean save(List<PayManagerCalDTO> list) {
+        for (PayManagerCalDTO payManagerCalDTO : list) {
+            PayManagerCal payManagerCal = new PayManagerCal();
+            BeanUtils.copyProperties(payManagerCalDTO, payManagerCal);
+            payManagerCal.setCreateUser(getLoginUserName());
+            payManagerCal.setUpdateUser(getLoginUserName());
+            payManagerCal.setCreateTime(new Date());
+            payManagerCal.setUpdateTime(new Date());
+            if (Objects.nonNull(payManagerCal.getId())) {
+                PayManagerCal managerCal = payManagerCalMapper.selectByPrimaryKey(payManagerCal.getId());
+                if (Objects.nonNull(managerCal)) {
+                    payManagerCalMapper.updateByPrimaryKey(payManagerCal);
+                } else {
+                    payManagerCalMapper.insert(payManagerCal);
+                }
+            } else {
+                payManagerCalMapper.insert(payManagerCal);
+            }
+
+        }
+        return ResultBean.success(1);
+    }
+
+    @Override
+    public ExcelWriter export(PayManagerCalDTO payManagerCalDTO) {
+        List<PayManagerCal> payManagerCals = getList(payManagerCalDTO);
+        List<PayManagerCalDTO> payManagerCalDTOS = BeanCopyUtils.copyPropertiesForNewList(payManagerCals, () -> new PayManagerCalDTO());
+        ExcelWriter excelWriter = ExcelUtils.exportExcel(payManagerCalDTOS, PayManagerCalDTO.class);
+        return excelWriter;
     }
 }

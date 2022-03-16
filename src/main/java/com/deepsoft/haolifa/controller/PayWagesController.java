@@ -76,7 +76,7 @@ public class PayWagesController {
     }
 
     @ApiOperation("test")
-    @PostMapping("/import")
+    @PostMapping("/test")
     public ResultBean test(@RequestParam(value = "userId") Integer userId) {
         return payWagesService.test(userId);
     }

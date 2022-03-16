@@ -1,19 +1,31 @@
 package com.deepsoft.haolifa.controller;
 
+import cn.hutool.poi.excel.ExcelWriter;
+import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.model.domain.PayHourQuota;
+import com.deepsoft.haolifa.model.domain.PayManagerCal;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayManagerCalPageDTO;
 import com.deepsoft.haolifa.model.dto.pay.response.PayManagerCalVO;
-import com.deepsoft.haolifa.model.dto.pay.response.PayWagesSearchResVO;
 import com.deepsoft.haolifa.service.PayManagerCalService;
-import com.deepsoft.haolifa.service.impl.PayManagerServiceImpl;
+import com.deepsoft.haolifa.util.ExcelUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author ：liuyaofei
@@ -58,4 +70,43 @@ public class PayManagerCalController {
         return payManagerCalService.delete(id);
     }
 
+    @ApiOperation("导入管理人员计提")
+    @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
+    public ResultBean uploadMaterial(@ApiParam(value = "管理人员计提Excel表格", required = true) MultipartFile file) {
+        try {
+            List<PayManagerCalDTO> objects = (List<PayManagerCalDTO>) ExcelUtils.importExcelReadColumn(file.getInputStream(), PayManagerCalDTO.class);
+            payManagerCalService.save(objects);
+            return ResultBean.success(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
+    }
+
+    @ApiOperation("导出管理人员计提")
+    @GetMapping(value = "export")
+    public ResultBean export(HttpServletResponse response) {
+        ExcelWriter writer = null;
+        try {
+            writer = payManagerCalService.export(new PayManagerCalDTO());
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("管理人员计提", "utf-8") + ".xls");
+            response.setContentType("application/octet-stream;");
+            OutputStream outputStream = response.getOutputStream();
+            writer.flush(outputStream, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (Objects.nonNull(writer)) {
+                writer.close();
+            }
+        }
+        return ResultBean.success(1);
+    }
+
+    @ApiOperation(value = "查询所有")
+    @GetMapping(value = "getAllList")
+    public ResultBean getList() {
+        List<PayManagerCal> list = payManagerCalService.getList(new PayManagerCalDTO());
+        return ResultBean.success(list);
+    }
 }

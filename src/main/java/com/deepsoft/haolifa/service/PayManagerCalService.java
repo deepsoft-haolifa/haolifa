@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import cn.hutool.poi.excel.ExcelWriter;
 import com.deepsoft.haolifa.model.domain.PayManagerCal;
 import com.deepsoft.haolifa.model.dto.pay.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -20,4 +21,9 @@ public interface PayManagerCalService {
     ResultBean delete(Integer id);
 
     List<PayManagerCal> getList(PayManagerCalDTO payManagerCalDTO);
+
+    ResultBean save(List<PayManagerCalDTO> model);
+
+    ExcelWriter export(PayManagerCalDTO payManagerCalDTO);
+
 }

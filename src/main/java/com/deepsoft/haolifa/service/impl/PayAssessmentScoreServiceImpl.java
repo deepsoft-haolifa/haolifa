@@ -58,6 +58,9 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     @Override
     public ResultBean save(PayAssessmentScoreDTO model) {
         PayAssessmentScore payTeam = new PayAssessmentScore();
+        // 正整数取反 为负数
+        int abs = abs(model.getScore());
+        model.setScore(abs);
         BeanUtils.copyProperties(model, payTeam);
         payTeam.setScoreTime(new Date());
         payTeam.setCreateUser(getLoginUserName());
@@ -68,6 +71,9 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
         return ResultBean.success(1);
     }
 
+    public int abs(int a) {
+        return (a < 0) ? a : -a;
+    }
     @Override
     public ResultBean getInfo(Integer teamId) {
         return ResultBean.success(payAssessmentScoreMapper.selectByPrimaryKey(teamId));

@@ -30,6 +30,4 @@ public interface PayManagerCalMapper {
 
     int updateByPrimaryKey(PayManagerCal record);
 
-    List<PayManagerCal> selectList(PayManagerCalDTO payManagerCalDTO);
-
 }

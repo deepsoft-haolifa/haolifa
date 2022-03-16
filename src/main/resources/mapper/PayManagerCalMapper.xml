@@ -355,8 +355,11 @@
 
     <select id="selectList" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayManagerCalExample" >
         select
-        *
-        from pay_working_procedure
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from pay_manager_cal
         <where>
             <if test="appModel != null and appModel != ''" >
                 and app_model = #{appModel}
