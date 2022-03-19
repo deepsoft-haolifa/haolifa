@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PayAssessmentScoreExample {
+public class PayAssessmentScoreRecordExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PayAssessmentScoreExample() {
+    public PayAssessmentScoreRecordExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -225,203 +225,63 @@ public class PayAssessmentScoreExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNull() {
-            addCriterion("user_id is null");
+        public Criteria andScoreIdIsNull() {
+            addCriterion("score_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNotNull() {
-            addCriterion("user_id is not null");
+        public Criteria andScoreIdIsNotNull() {
+            addCriterion("score_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdEqualTo(Integer value) {
-            addCriterion("user_id =", value, "userId");
+        public Criteria andScoreIdEqualTo(Integer value) {
+            addCriterion("score_id =", value, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotEqualTo(Integer value) {
-            addCriterion("user_id <>", value, "userId");
+        public Criteria andScoreIdNotEqualTo(Integer value) {
+            addCriterion("score_id <>", value, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThan(Integer value) {
-            addCriterion("user_id >", value, "userId");
+        public Criteria andScoreIdGreaterThan(Integer value) {
+            addCriterion("score_id >", value, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("user_id >=", value, "userId");
+        public Criteria andScoreIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("score_id >=", value, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThan(Integer value) {
-            addCriterion("user_id <", value, "userId");
+        public Criteria andScoreIdLessThan(Integer value) {
+            addCriterion("score_id <", value, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
-            addCriterion("user_id <=", value, "userId");
+        public Criteria andScoreIdLessThanOrEqualTo(Integer value) {
+            addCriterion("score_id <=", value, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIn(List<Integer> values) {
-            addCriterion("user_id in", values, "userId");
+        public Criteria andScoreIdIn(List<Integer> values) {
+            addCriterion("score_id in", values, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotIn(List<Integer> values) {
-            addCriterion("user_id not in", values, "userId");
+        public Criteria andScoreIdNotIn(List<Integer> values) {
+            addCriterion("score_id not in", values, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBetween(Integer value1, Integer value2) {
-            addCriterion("user_id between", value1, value2, "userId");
+        public Criteria andScoreIdBetween(Integer value1, Integer value2) {
+            addCriterion("score_id between", value1, value2, "scoreId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("user_id not between", value1, value2, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearIsNull() {
-            addCriterion("score_year is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearIsNotNull() {
-            addCriterion("score_year is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearEqualTo(String value) {
-            addCriterion("score_year =", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearNotEqualTo(String value) {
-            addCriterion("score_year <>", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearGreaterThan(String value) {
-            addCriterion("score_year >", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearGreaterThanOrEqualTo(String value) {
-            addCriterion("score_year >=", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearLessThan(String value) {
-            addCriterion("score_year <", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearLessThanOrEqualTo(String value) {
-            addCriterion("score_year <=", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearLike(String value) {
-            addCriterion("score_year like", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearNotLike(String value) {
-            addCriterion("score_year not like", value, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearIn(List<String> values) {
-            addCriterion("score_year in", values, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearNotIn(List<String> values) {
-            addCriterion("score_year not in", values, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearBetween(String value1, String value2) {
-            addCriterion("score_year between", value1, value2, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreYearNotBetween(String value1, String value2) {
-            addCriterion("score_year not between", value1, value2, "scoreYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthIsNull() {
-            addCriterion("score_month is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthIsNotNull() {
-            addCriterion("score_month is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthEqualTo(String value) {
-            addCriterion("score_month =", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthNotEqualTo(String value) {
-            addCriterion("score_month <>", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthGreaterThan(String value) {
-            addCriterion("score_month >", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthGreaterThanOrEqualTo(String value) {
-            addCriterion("score_month >=", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthLessThan(String value) {
-            addCriterion("score_month <", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthLessThanOrEqualTo(String value) {
-            addCriterion("score_month <=", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthLike(String value) {
-            addCriterion("score_month like", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthNotLike(String value) {
-            addCriterion("score_month not like", value, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthIn(List<String> values) {
-            addCriterion("score_month in", values, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthNotIn(List<String> values) {
-            addCriterion("score_month not in", values, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthBetween(String value1, String value2) {
-            addCriterion("score_month between", value1, value2, "scoreMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andScoreMonthNotBetween(String value1, String value2) {
-            addCriterion("score_month not between", value1, value2, "scoreMonth");
+        public Criteria andScoreIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("score_id not between", value1, value2, "scoreId");
             return (Criteria) this;
         }
 

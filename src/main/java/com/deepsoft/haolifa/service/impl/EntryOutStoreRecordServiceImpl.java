@@ -152,12 +152,20 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             if (localDate.isAfter(localDate2)) {
                 month.plus(1);
             }
-            int monthValue = month.getValue();
+            String monthValue = String.valueOf(month.getValue());
+            if (monthValue.length() == 1) {
+                monthValue = "0" + monthValue;
+            }
             // 合格数量
             int quantity = Math.abs(model.getQuantity());
 
             PayManagerCalDTO payManagerCalDTO = new PayManagerCalDTO();
-            String appModel = model.getProductModel().substring(0, 4);
+            String appModel = "";
+            if (model.getProductModel().length() < 4) {
+                appModel = model.getProductModel();
+            } else {
+                appModel = model.getProductModel().substring(0, 4);
+            }
             payManagerCalDTO.setAppModel(appModel);
             payManagerCalDTO.setAppSpecifications(model.getProductSpecifications());
             // 通过规格型号查管理计提
@@ -194,7 +202,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                     PayWagesSearchExample.Criteria criteria = example.createCriteria();
                     criteria.andUserIdEqualTo(payUser.getId());
                     criteria.andWagesYearEqualTo(String.valueOf(year));
-                    criteria.andWagesMonthEqualTo(String.valueOf(monthValue));
+                    criteria.andWagesMonthEqualTo(monthValue);
                     List<PayWagesSearch> payWagesSearches = payWagesSearchMapper.selectByExample(example);
                     // 基本工资
                     BigDecimal basePay = payUser.getBasePay();
@@ -206,13 +214,15 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                     if (CollectionUtils.isEmpty(payWagesSearches)) {
                         PayWagesSearch payWagesSearch = new PayWagesSearch();
                         payWagesSearch.setUserId(payUser.getId());
+                        payWagesSearch.setUserName(payUser.getUserName());
+                        payWagesSearch.setDepartment(payUser.getDepartName());
                         payWagesSearch.setId(null);
                         payWagesSearch.setTotalMoney(totalAmount);
                         payWagesSearch.setMinLiveSecurityFund(basePay);
                         payWagesSearch.setByPieceCount(quantity);
                         payWagesSearch.setByPieceMoney(accrual);
                         payWagesSearch.setWagesYear(String.valueOf(year));
-                        payWagesSearch.setWagesMonth(String.valueOf(monthValue));
+                        payWagesSearch.setWagesMonth(monthValue);
                         payWagesSearch.setCreateTime(new Date());
                         payWagesSearch.setUpdateTime(new Date());
                         payWagesSearch.setCreateUser(getLoginUserName());

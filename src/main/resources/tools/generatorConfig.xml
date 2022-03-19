@@ -24,7 +24,7 @@
             driverClass="com.mysql.jdbc.Driver"
             connectionURL="jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true"
             userId="haolifa"
-            password="haolifa3306">
+            password="lZqDoJPuUb3Vp">
         </jdbcConnection>
 
         <!-- java类型处理器
@@ -91,7 +91,7 @@
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-    <table tableName="pay_user" domainObjectName="PayUser">
+    <table tableName="pay_assessment_score_record" domainObjectName="PayAssessmentScoreRecord">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 <!--        <table tableName="auto_control_entrust" domainObjectName="AutoControlEntrust">-->

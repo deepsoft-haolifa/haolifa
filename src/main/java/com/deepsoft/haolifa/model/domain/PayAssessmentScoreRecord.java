@@ -2,16 +2,12 @@ package com.deepsoft.haolifa.model.domain;
 
 import java.util.Date;
 
-public class PayAssessmentScore {
+public class PayAssessmentScoreRecord {
     private Integer id;
 
     private Integer assessmentId;
 
-    private Integer userId;
-
-    private String scoreYear;
-
-    private String scoreMonth;
+    private Integer scoreId;
 
     private Integer score;
 
@@ -25,12 +21,10 @@ public class PayAssessmentScore {
 
     private Date updateTime;
 
-    public PayAssessmentScore(Integer id, Integer assessmentId, Integer userId, String scoreYear, String scoreMonth, Integer score, Date scoreTime, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayAssessmentScoreRecord(Integer id, Integer assessmentId, Integer scoreId, Integer score, Date scoreTime, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.assessmentId = assessmentId;
-        this.userId = userId;
-        this.scoreYear = scoreYear;
-        this.scoreMonth = scoreMonth;
+        this.scoreId = scoreId;
         this.score = score;
         this.scoreTime = scoreTime;
         this.createUser = createUser;
@@ -39,7 +33,7 @@ public class PayAssessmentScore {
         this.updateTime = updateTime;
     }
 
-    public PayAssessmentScore() {
+    public PayAssessmentScoreRecord() {
         super();
     }
 
@@ -59,28 +53,12 @@ public class PayAssessmentScore {
         this.assessmentId = assessmentId;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getScoreId() {
+        return scoreId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getScoreYear() {
-        return scoreYear;
-    }
-
-    public void setScoreYear(String scoreYear) {
-        this.scoreYear = scoreYear == null ? null : scoreYear.trim();
-    }
-
-    public String getScoreMonth() {
-        return scoreMonth;
-    }
-
-    public void setScoreMonth(String scoreMonth) {
-        this.scoreMonth = scoreMonth == null ? null : scoreMonth.trim();
+    public void setScoreId(Integer scoreId) {
+        this.scoreId = scoreId;
     }
 
     public Integer getScore() {

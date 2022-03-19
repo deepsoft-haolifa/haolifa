@@ -76,6 +76,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private AutoControlEntrustService autoControlEntrustService;
     @Resource
     private ValveSeatEntrustService valveSeatEntrustService;
+    @Resource
+    private PayAssessmentScoreMapper payAssessmentScoreMapper;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -334,11 +336,28 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 continue;
             }
             minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
+
+            PayAssessmentScoreExample payAssessmentScoreExample = new PayAssessmentScoreExample();
+            payAssessmentScoreExample.createCriteria().andUserIdEqualTo(userId).andScoreYearEqualTo(payWagesVO.getYear())
+                .andScoreMonthEqualTo(payWagesVO.getMonth());
+
+            // 人员计算扣分项
+            BigDecimal multiply = minLiveSecurityFund;
+            List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(payAssessmentScoreExample);
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payAssessmentScores)) {
+                PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
+                Integer score = payAssessmentScore.getScore();
+                BigDecimal bigDecimal = new BigDecimal(score);
+                BigDecimal divide = bigDecimal.divide(new BigDecimal("100"));
+                // 扣完分工资
+                multiply = minLiveSecurityFund.multiply(divide);
+            }
             payWage.setUpdateUser(getLoginUserName());
             payWage.setUpdateTime(new Date());
             payWage.setByPieceCount(totalCount);
             payWage.setByPieceMoney(totalAmount);
             payWage.setTotalMoney(minLiveSecurityFund);
+            payWage.setNetSalaryMoney(multiply);
             System.out.println("======"+payWage.getUserName());
             // 当月总天数
             int daysBetween= (int) ((endTime.getTime()-startTime.getTime()+1000000)/(60*60*24*1000));
@@ -411,6 +430,27 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
                 // 如果是管理人员 查询工资列表已有的话 不覆盖
                 if (CommonEnum.UserType.MARRIED.type.equals(payUser.getUserType())) {
+
+                    PayWagesSearch payWagesSearch = payWagesSearches.get(0);
+                    PayAssessmentScoreExample payAssessmentScoreExample = new PayAssessmentScoreExample();
+                    payAssessmentScoreExample.createCriteria().andUserIdEqualTo(userId).andScoreYearEqualTo(payWagesVO.getYear())
+                        .andScoreMonthEqualTo(payWagesVO.getMonth());
+
+                    // 管理人员计算扣分项
+                    List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(payAssessmentScoreExample);
+                    if (CollectionUtils.isEmpty(payAssessmentScores)) {
+                        continue;
+                    }
+
+                    PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
+                    Integer score = payAssessmentScore.getScore();
+                    BigDecimal bigDecimal = new BigDecimal(score);
+                    BigDecimal divide = bigDecimal.divide(new BigDecimal("100"));
+                    BigDecimal totalMoney = payWagesSearch.getTotalMoney();
+                    // 扣完分工资
+                    BigDecimal multiply = totalMoney.multiply(divide);
+                    payWagesSearch.setNetSalaryMoney(multiply);
+                    payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
                     continue;
                 }
                 PayWagesSearch payWagesSearch = new PayWagesSearch();

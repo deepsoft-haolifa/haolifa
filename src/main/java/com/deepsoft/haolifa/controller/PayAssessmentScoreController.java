@@ -2,12 +2,16 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentScoreDTO;
+import com.deepsoft.haolifa.model.vo.PayAssessmentScoreRecordVO;
 import com.deepsoft.haolifa.service.PayAssessmentScoreService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author liuyaofei
@@ -37,7 +41,11 @@ public class PayAssessmentScoreController {
 
     @ApiOperation("查看详情")
     @GetMapping(value = "info/{scoreId}")
-    public ResultBean getInfo(@PathVariable("scoreId") Integer scoreId) {
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "scoreId", value = "打分ID", required = true),
+
+    })
+    public ResultBean<List<PayAssessmentScoreRecordVO>> getInfo(@PathVariable("scoreId") Integer scoreId) {
         return payAssessmentScoreService.getInfo(scoreId);
     }
 

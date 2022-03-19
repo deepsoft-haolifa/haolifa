@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -34,6 +35,26 @@ public class DateFormatterUtils {
         }
         return Date.from(LocalDateTime.parse(dateString, getDateTimeFormatter(formatter)).toInstant(ZoneOffset.UTC));
     }
+
+    /**
+     * 获取当前年份
+     * @return
+     */
+    public static int getCurrentYear(LocalDate localDate) {
+        int year = localDate.getYear();
+        return year;
+    }
+
+    /**
+     * 获取当前月份
+     * @return
+     */
+    public static Month getCurrentMonth(LocalDate localDate) {
+        Month month = localDate.getMonth();
+        return month;
+    }
+
+
 
     public static void main(String[] args) {
         System.out.println("yyyy-MM-dd HH:mm:ss:"+formatterDateString(THREE_FORMATTERPATTERN,null));

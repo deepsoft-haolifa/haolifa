@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.deepsoft.haolifa.dao.repository.PayAssessmentScoreMapper" >
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PayAssessmentScore" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PayAssessmentScoreRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecord" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="assessment_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="score_year" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="score_month" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="score_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="score" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="score_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -75,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, assessment_id, user_id, score_year, score_month, score, score_time, create_user, 
-    update_user, create_time, update_time
+    id, assessment_id, score_id, score, score_time, create_user, update_user, create_time, 
+    update_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecordExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from pay_assessment_score
+    from pay_assessment_score_record
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,49 +93,41 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from pay_assessment_score
+    from pay_assessment_score_record
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from pay_assessment_score
+    delete from pay_assessment_score_record
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreExample" >
-    delete from pay_assessment_score
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecordExample" >
+    delete from pay_assessment_score_record
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScore" >
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecord" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_assessment_score (assessment_id, user_id, score_year, 
-      score_month, score, score_time, 
-      create_user, update_user, create_time, 
-      update_time)
-    values (#{assessmentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{scoreYear,jdbcType=VARCHAR}, 
-      #{scoreMonth,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, #{scoreTime,jdbcType=TIMESTAMP}, 
-      #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into pay_assessment_score_record (assessment_id, score_id, score, 
+      score_time, create_user, update_user, 
+      create_time, update_time)
+    values (#{assessmentId,jdbcType=INTEGER}, #{scoreId,jdbcType=INTEGER}, #{score,jdbcType=INTEGER}, 
+      #{scoreTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScore" >
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecord" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_assessment_score
+    insert into pay_assessment_score_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="assessmentId != null" >
         assessment_id,
       </if>
-      <if test="userId != null" >
-        user_id,
-      </if>
-      <if test="scoreYear != null" >
-        score_year,
-      </if>
-      <if test="scoreMonth != null" >
-        score_month,
+      <if test="scoreId != null" >
+        score_id,
       </if>
       <if test="score != null" >
         score,
@@ -162,14 +152,8 @@
       <if test="assessmentId != null" >
         #{assessmentId,jdbcType=INTEGER},
       </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="scoreYear != null" >
-        #{scoreYear,jdbcType=VARCHAR},
-      </if>
-      <if test="scoreMonth != null" >
-        #{scoreMonth,jdbcType=VARCHAR},
+      <if test="scoreId != null" >
+        #{scoreId,jdbcType=INTEGER},
       </if>
       <if test="score != null" >
         #{score,jdbcType=INTEGER},
@@ -191,14 +175,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreExample" resultType="java.lang.Integer" >
-    select count(*) from pay_assessment_score
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecordExample" resultType="java.lang.Integer" >
+    select count(*) from pay_assessment_score_record
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update pay_assessment_score
+    update pay_assessment_score_record
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
@@ -206,14 +190,8 @@
       <if test="record.assessmentId != null" >
         assessment_id = #{record.assessmentId,jdbcType=INTEGER},
       </if>
-      <if test="record.userId != null" >
-        user_id = #{record.userId,jdbcType=INTEGER},
-      </if>
-      <if test="record.scoreYear != null" >
-        score_year = #{record.scoreYear,jdbcType=VARCHAR},
-      </if>
-      <if test="record.scoreMonth != null" >
-        score_month = #{record.scoreMonth,jdbcType=VARCHAR},
+      <if test="record.scoreId != null" >
+        score_id = #{record.scoreId,jdbcType=INTEGER},
       </if>
       <if test="record.score != null" >
         score = #{record.score,jdbcType=INTEGER},
@@ -239,12 +217,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update pay_assessment_score
+    update pay_assessment_score_record
     set id = #{record.id,jdbcType=INTEGER},
       assessment_id = #{record.assessmentId,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER},
-      score_year = #{record.scoreYear,jdbcType=VARCHAR},
-      score_month = #{record.scoreMonth,jdbcType=VARCHAR},
+      score_id = #{record.scoreId,jdbcType=INTEGER},
       score = #{record.score,jdbcType=INTEGER},
       score_time = #{record.scoreTime,jdbcType=TIMESTAMP},
       create_user = #{record.createUser,jdbcType=VARCHAR},
@@ -255,20 +231,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScore" >
-    update pay_assessment_score
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecord" >
+    update pay_assessment_score_record
     <set >
       <if test="assessmentId != null" >
         assessment_id = #{assessmentId,jdbcType=INTEGER},
       </if>
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="scoreYear != null" >
-        score_year = #{scoreYear,jdbcType=VARCHAR},
-      </if>
-      <if test="scoreMonth != null" >
-        score_month = #{scoreMonth,jdbcType=VARCHAR},
+      <if test="scoreId != null" >
+        score_id = #{scoreId,jdbcType=INTEGER},
       </if>
       <if test="score != null" >
         score = #{score,jdbcType=INTEGER},
@@ -291,12 +261,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScore" >
-    update pay_assessment_score
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayAssessmentScoreRecord" >
+    update pay_assessment_score_record
     set assessment_id = #{assessmentId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
-      score_year = #{scoreYear,jdbcType=VARCHAR},
-      score_month = #{scoreMonth,jdbcType=VARCHAR},
+      score_id = #{scoreId,jdbcType=INTEGER},
       score = #{score,jdbcType=INTEGER},
       score_time = #{scoreTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=VARCHAR},
