@@ -292,7 +292,6 @@ CREATE TABLE `biz_payment_history`
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='还款记录';
 
-
 CREATE TABLE `biz_reimburse_apply`
 (
     `id`              int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -311,6 +310,8 @@ CREATE TABLE `biz_reimburse_apply`
     `pay_time`        datetime       DEFAULT NULL COMMENT '付款日期',
     `pay_status`      char(1)        DEFAULT '0' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
     `reimburse_user`  int(11) DEFAULT NULL COMMENT '报销人',
+    `offsetAmount`    decimal(15, 0) DEFAULT NULL COMMENT '冲抵金额',
+    `loan_id`         int(11) DEFAULT NULL COMMENT '借款申请ID',
     `apply_status`    char(1)        DEFAULT '0' COMMENT '审批节点',
     `remark`          varchar(30)    DEFAULT '' COMMENT '备注摘要',
     `del_flag`        char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
@@ -319,8 +320,7 @@ CREATE TABLE `biz_reimburse_apply`
     `update_user`     int(11) DEFAULT NULL COMMENT '更新者',
     `update_time`     datetime       DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报销申请';
-
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='报销申请';
 
 CREATE TABLE `biz_reimburse_travel_detail`
 (

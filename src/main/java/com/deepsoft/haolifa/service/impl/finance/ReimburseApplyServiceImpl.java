@@ -61,6 +61,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    @Autowired
+    private BizPaymentHistoryMapper bizPaymentHistoryMapper;
+
     //
     @Override
     public ResultBean save(ReimburseApplyAddDTO model) {
@@ -317,6 +320,29 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (!LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
         }
+
+        // 如果是借款冲抵
+        if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getReimburseType())) {
+            //
+            Integer loanId = bizReimburseApplyS.getLoanId();
+            BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(loanId);
+            bizReimburseApplyS.getOffsetamount();
+            BizPaymentHistory paymentHistory = new BizPaymentHistory();
+            paymentHistory.setAmount(bizReimburseApplyS.getOffsetamount());
+            paymentHistory.setLoanId(bizReimburseApplyS.getLoanId());
+            paymentHistory.setLoanSerialNo(bizLoanApply.getSerialNo());
+            paymentHistory.setLoanUser(bizLoanApply.getLoanUser());
+            paymentHistory.setLoanDate(bizLoanApply.getLoanDate());
+            paymentHistory.setAmountType(bizLoanApply.getAmountType());
+            paymentHistory.setBillNature("4");
+            paymentHistory.setRepaymentUser(sysUserService.selectLoginUser().getId());
+            paymentHistory.setRepaymentDate(new Date());
+            paymentHistory.setRemark("报销冲抵");
+
+            bizPaymentHistoryMapper.insertSelective(paymentHistory);
+
+        }
+
 
 //        SysUser sysUser = sysUserService.getSysUser(selectByPrimaryKey.getLoanUser());
 //        // todo 扣减日记账金额

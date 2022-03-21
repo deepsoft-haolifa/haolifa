@@ -86,6 +86,15 @@ public class LoanApplyRSDTO {
     @ApiModelProperty(value = "付款状态中文")
     private String payStatusCN;
 
+    @ApiModelProperty(value = "还款总金额（还款总金额 = 还款明细 * n）")
+    private BigDecimal paymentAmount;
+
+    @ApiModelProperty(value = "还款状态（1未还款 2还款中 3还款完成）")
+    private String paymentStatus;
+
+    @ApiModelProperty(value = "付款状态中文")
+    private String paymentStatusCN;
+
     @ApiModelProperty(value = "备注摘要")
     private String remark;
 
