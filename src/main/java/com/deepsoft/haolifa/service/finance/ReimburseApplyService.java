@@ -4,7 +4,11 @@ import com.deepsoft.haolifa.enums.LoanApplyStatusEnum;
 import com.deepsoft.haolifa.enums.ReimburseApplyStatusEnum;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
+
+import java.util.List;
 
 public interface ReimburseApplyService {
     /**
@@ -38,7 +42,7 @@ public interface ReimburseApplyService {
      * @param id
      * @return
      */
-    ResultBean getInfo(Integer id);
+    ResultBean<ReimburseApplyInfoRSDTO> getInfo(Integer id);
 
     /**
      * 获取列表

@@ -13,9 +13,8 @@ public enum ReimburseApplyStatusEnum {
     PENDING_APPROVAL("1", "待审批"),
     // 审批中的状态 需要查询到具体哪个环节在审批 先在审批记录里查吧
     UNDER_APPROVAL("2", "审批中"),
-    IN_PAYMENT("3", "审批完成(待付款)"),
-    APPROVAL_FAILED("4", "审批不通过"),
-    PAYMENT_COMPLETED("5", "付款完成");
+    IN_PAYMENT("3", "审批完成"),
+    APPROVAL_FAILED("4", "审批不通过");
 
     private String code;
     private String desc;

@@ -93,6 +93,16 @@ public class LoanApplyController {
         return loanApplyService.getList(model);
     }
 
+
+    @ApiOperation("获取我的借款申請列表-不分页")
+    @GetMapping("/getLoanList")
+    public ResultBean<List<LoanApplyRSDTO>> getLoanApplyList() {
+        LoanApplyRQDTO model = new LoanApplyRQDTO();
+        model.setPayStatus("3");
+        model.setType("1");
+        return loanApplyService.getLoanApplyList(model);
+    }
+
     @ApiOperation("发起审批(借款申請列表使用)")
     @GetMapping("/approve/{id}")
     @Transactional(rollbackFor = Exception.class)

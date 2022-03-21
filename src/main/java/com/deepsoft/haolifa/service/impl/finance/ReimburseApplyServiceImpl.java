@@ -2,16 +2,19 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.BizReimburseApplyMapper;
-import com.deepsoft.haolifa.dao.repository.BizReimburseCostDetailMapper;
-import com.deepsoft.haolifa.dao.repository.BizReimburseTravelDetailMapper;
-import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyInfoRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
@@ -27,9 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,9 +42,12 @@ import static com.deepsoft.haolifa.constant.CommonEnum.FormType.REIMBURSE_APP_TY
 public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
     @Autowired
+    private BizLoanApplyMapper bizLoanApplyMapper;
+    @Autowired
     private BizReimburseApplyMapper bizReimburseApplyMapper;
     @Autowired
     private SysUserService sysUserService;
+
     @Lazy
     @Autowired
     private FlowInstanceService flowInstanceService;
@@ -54,6 +58,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     @Autowired
     private SysDepartmentMapper departmentMapper;
 
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
     //
     @Override
     public ResultBean save(ReimburseApplyAddDTO model) {
@@ -62,6 +69,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
         // 1 添加主数据
+
+        // todo 如果使用了借款冲抵
+
+
         BizReimburseApply reimburseApply = new BizReimburseApply();
         BeanUtils.copyProperties(model, reimburseApply);
         String ser = "FP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3);
@@ -71,6 +82,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         reimburseApply.setCreateUser(sysUserService.selectLoginUser().getId());
         reimburseApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int insertId = bizReimburseApplyMapper.insertSelective(reimburseApply);
+
 
         // 2 根据类型添加子数据
         ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(model.getType());
@@ -142,9 +154,36 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     }
 
     @Override
-    public ResultBean getInfo(Integer id) {
+    public ResultBean<ReimburseApplyInfoRSDTO> getInfo(Integer id) {
         BizReimburseApply reimburseApply = bizReimburseApplyMapper.selectByPrimaryKey(id);
-        return ResultBean.success(reimburseApply);
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+        SysUserExample sysUserExample = new SysUserExample();
+        sysUserExample.createCriteria().andIdEqualTo(reimburseApply.getReimburseUser());
+        List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+        Map<Integer, SysUser> finalSysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
+
+        ReimburseApplyInfoRSDTO loanApplyRSDTO = new ReimburseApplyInfoRSDTO();
+        BeanUtils.copyProperties(reimburseApply, loanApplyRSDTO);
+        SysDepartment sysDepartment = sysDepartmentMap.get(reimburseApply.getDeptId());
+        if (sysDepartment != null) {
+            loanApplyRSDTO.setDeptName(sysDepartment.getDeptName());
+        }
+        SysUser sysUser = finalSysUserMap.get(reimburseApply.getReimburseUser());
+        if (sysUser != null) {
+            loanApplyRSDTO.setReimburseUserName(sysUser.getRealName());
+        }
+        ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(reimburseApply.getApplyStatus());
+
+        loanApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
+            ReimburseApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
+
+        ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(reimburseApply.getPayStatus());
+        loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+
+        return ResultBean.success(loanApplyRSDTO);
     }
 
     @Override
@@ -159,26 +198,36 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         BizReimburseApplyExample.Criteria criteria = reimburseApplyExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
-        // 状态 1 代办 2 已办
-        if (model.getStatus() != null) {
-//            criteria.andCertificateNumberEqualTo(model.getCertificateNumber());
-        }
-        //借款部门名称
-        if (StringUtils.isNotEmpty(model.getDeptName())) {
-//            criteria.andPayAccountEqualTo(model.getPayAccount());
-        }
-        //借款人名称
-        if (StringUtils.isNotEmpty(model.getLoanUserName())) {
-//            criteria.andTypeEqualTo(model.getType());
+
+        String type = model.getType();
+        // 借款审批列表
+        if (StringUtils.equalsIgnoreCase("1", type)) {
+            criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
         }
 
-        //付款单位
-        if (StringUtils.isNotEmpty(model.getPayCompany())) {
-            criteria.andPayCompanyLike(model.getPayCompany());
+        // 状态 1 代办 2 已办
+        if (model.getType() != null) {
+            criteria.andTypeEqualTo(model.getType());
         }
-        //付款状态（1未付款 2付款中 3付款完成
-        if (StringUtils.isNotEmpty(model.getPayStatus())) {
-            criteria.andPayStatusEqualTo(model.getPayStatus());
+
+
+        //借款部门名称
+        if (model.getDeptName() != null) {
+            SysDepartmentExample departmentExample = new SysDepartmentExample();
+            departmentExample.createCriteria().andDeptNameLike(model.getDeptName());
+            List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
+            if (CollectionUtil.isNotEmpty(sysDepartments)) {
+                List<Integer> integerList = sysDepartments.stream().map(SysDepartment::getId).collect(Collectors.toList());
+                criteria.andDeptIdIn(integerList);
+            }
+        }
+        //借款人名称
+//        if (StringUtils.isNotEmpty(model.getReimburseUser())) {
+//            criteria.andTypeEqualTo(model.getType());
+//        }
+        // 编号
+        if (model.getSerialNo() != null) {
+            criteria.andSerialNoLike(model.getSerialNo());
         }
 
         reimburseApplyExample.setOrderByClause("id desc");
@@ -226,9 +275,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         criteria.andSerialNoEqualTo(item_id);
         List<BizReimburseApply> bizLoanApplies = bizReimburseApplyMapper.selectByExample(reimburseApplyExample);
 
-        BizReimburseApply  loanApplyS = bizLoanApplies.get(0);
-        if (loanApplyS == null){
-            log.error("auditReplaceMaterial 无该条记录,id:{}",item_id);
+        BizReimburseApply loanApplyS = bizLoanApplies.get(0);
+        if (loanApplyS == null) {
+            log.error("auditReplaceMaterial 无该条记录,id:{}", item_id);
             return 0;
         }
 
@@ -246,6 +295,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         // 查询&修改 付款申请
         BizReimburseApply reimburseApply = bizReimburseApplyMapper.selectByPrimaryKey(id);
+
         //审核状态：
         reimburseApply.setApplyStatus(ReimburseApplyStatusEnum.UNDER_APPROVAL.getCode());
         reimburseApply.setUpdateUser(sysUserService.selectLoginUser().getId());
@@ -267,6 +317,20 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (!LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
         }
+
+//        SysUser sysUser = sysUserService.getSysUser(selectByPrimaryKey.getLoanUser());
+//        // todo 扣减日记账金额
+//        BizBillAddDTO bizBill = new BizBillAddDTO();
+//        bizBill.setType(BookingTypeEnum.cash_bill.getCode());
+//        bizBill.setCertificateNumber(loanApplyPayDTO.getPayAccount());
+//        bizBill.setD(new Date());
+//        bizBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+//        bizBill.setPayment(selectByPrimaryKey.getAmount());
+//        bizBill.setRemark("借款付款 "+selectByPrimaryKey.getAmount());
+//        bizBill.setString1(sysUser.getRealName());
+//        bizBill.setString2(loanApplyPayDTO.getPayCompany());
+//        ResultBean save = billService.save(bizBill);
+
         BizReimburseApply apply = new BizReimburseApply();
         BeanUtils.copyProperties(payDTO, apply);
         apply.setPayStatus(LoanrPayStatusEnum.all_pay.getCode());

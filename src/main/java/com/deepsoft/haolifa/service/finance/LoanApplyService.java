@@ -5,6 +5,8 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
 
+import java.util.List;
+
 public interface LoanApplyService {
     /**
      * 添加
@@ -46,6 +48,8 @@ public interface LoanApplyService {
      * @return
      */
     ResultBean<PageDTO<LoanApplyRSDTO>> getList(LoanApplyRQDTO model);
+
+    public ResultBean<List<LoanApplyRSDTO>> getLoanApplyList(LoanApplyRQDTO model);
 
     public int auditReplaceMaterial(String item_id, LoanApplyStatusEnum auditResult);
 
