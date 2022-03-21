@@ -39,7 +39,7 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
     public ResultBean pageInfo(PayManagerCalPageDTO model) {
         PayManagerCalExample example = new PayManagerCalExample();
         PayManagerCalExample.Criteria criteria = example.createCriteria();
-        if (Objects.nonNull(model.getUserName())) {
+        if (StringUtils.isNotBlank(model.getUserName())) {
             criteria.andUserNameLike("%" + model.getUserName() + "%");
         }
         if (StringUtils.isNotBlank(model.getDept())) {
