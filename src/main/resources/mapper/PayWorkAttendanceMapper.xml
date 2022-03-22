@@ -24,6 +24,8 @@
       <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="attend_year" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="attend_month" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -85,10 +87,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, serial, department, user_id, user_name, attendance_days, late_times, leave_early_times,
-    absenteeism_times, middle_days, night_days, business_travel_days, compassionate_leave_days,
-    sick_leave_days, work_overtime_days, late_and_leave_times, remark, create_user, update_user,
-    create_time, update_time
+    id, serial, department, user_id, user_name, attendance_days, late_times, leave_early_times, 
+    absenteeism_times, middle_days, night_days, business_travel_days, compassionate_leave_days, 
+    sick_leave_days, work_overtime_days, late_and_leave_times, remark, create_user, update_user, 
+    create_time, update_time, attend_year, attend_month
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendanceExample" >
     select
@@ -105,7 +107,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from pay_work_attendance
     where id = #{id,jdbcType=INTEGER}
@@ -124,20 +126,22 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pay_work_attendance (serial, department, user_id,
-      user_name, attendance_days, late_times,
-      leave_early_times, absenteeism_times, middle_days,
-      night_days, business_travel_days, compassionate_leave_days,
-      sick_leave_days, work_overtime_days, late_and_leave_times,
-      remark, create_user, update_user,
-      create_time, update_time)
-    values (#{serial,jdbcType=INTEGER}, #{department,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
-      #{userName,jdbcType=VARCHAR}, #{attendanceDays,jdbcType=INTEGER}, #{lateTimes,jdbcType=INTEGER},
-      #{leaveEarlyTimes,jdbcType=INTEGER}, #{absenteeismTimes,jdbcType=INTEGER}, #{middleDays,jdbcType=INTEGER},
-      #{nightDays,jdbcType=INTEGER}, #{businessTravelDays,jdbcType=INTEGER}, #{compassionateLeaveDays,jdbcType=INTEGER},
-      #{sickLeaveDays,jdbcType=INTEGER}, #{workOvertimeDays,jdbcType=INTEGER}, #{lateAndLeaveTimes,jdbcType=INTEGER},
-      #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into pay_work_attendance (serial, department, user_id, 
+      user_name, attendance_days, late_times, 
+      leave_early_times, absenteeism_times, middle_days, 
+      night_days, business_travel_days, compassionate_leave_days, 
+      sick_leave_days, work_overtime_days, late_and_leave_times, 
+      remark, create_user, update_user, 
+      create_time, update_time, attend_year, 
+      attend_month)
+    values (#{serial,jdbcType=INTEGER}, #{department,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{attendanceDays,jdbcType=INTEGER}, #{lateTimes,jdbcType=INTEGER}, 
+      #{leaveEarlyTimes,jdbcType=INTEGER}, #{absenteeismTimes,jdbcType=INTEGER}, #{middleDays,jdbcType=INTEGER}, 
+      #{nightDays,jdbcType=INTEGER}, #{businessTravelDays,jdbcType=INTEGER}, #{compassionateLeaveDays,jdbcType=INTEGER}, 
+      #{sickLeaveDays,jdbcType=INTEGER}, #{workOvertimeDays,jdbcType=INTEGER}, #{lateAndLeaveTimes,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{attendYear,jdbcType=VARCHAR}, 
+      #{attendMonth,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendance" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -205,6 +209,12 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="attendYear != null" >
+        attend_year,
+      </if>
+      <if test="attendMonth != null" >
+        attend_month,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serial != null" >
@@ -266,6 +276,12 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attendYear != null" >
+        #{attendYear,jdbcType=VARCHAR},
+      </if>
+      <if test="attendMonth != null" >
+        #{attendMonth,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -341,6 +357,12 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.attendYear != null" >
+        attend_year = #{record.attendYear,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attendMonth != null" >
+        attend_month = #{record.attendMonth,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -368,7 +390,9 @@
       create_user = #{record.createUser,jdbcType=VARCHAR},
       update_user = #{record.updateUser,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      attend_year = #{record.attendYear,jdbcType=VARCHAR},
+      attend_month = #{record.attendMonth,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -436,6 +460,12 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="attendYear != null" >
+        attend_year = #{attendYear,jdbcType=VARCHAR},
+      </if>
+      <if test="attendMonth != null" >
+        attend_month = #{attendMonth,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -460,7 +490,9 @@
       create_user = #{createUser,jdbcType=VARCHAR},
       update_user = #{updateUser,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      attend_year = #{attendYear,jdbcType=VARCHAR},
+      attend_month = #{attendMonth,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

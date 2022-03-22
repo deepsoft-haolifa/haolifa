@@ -3,7 +3,6 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.DepartmentDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.*;
@@ -53,12 +52,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     @Resource
     private PayUserMapper payUserMapper;
     @Resource
-    private DepartmentService departmentService;
-    @Resource
-    private PayProductionWorkshopMapper payProductionWorkshopMapper;
-    @Resource
-    private PayManagerCalService payManagerCalService;
-    @Resource
     private PayWorkingProcedureMapper payWorkingProcedureMapper;
     @Resource
     private SprayService sprayService;
@@ -78,6 +71,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private ValveSeatEntrustService valveSeatEntrustService;
     @Resource
     private PayAssessmentScoreMapper payAssessmentScoreMapper;
+    @Resource
+    private PayWorkAttendanceMapper payWorkAttendanceMapper;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -352,6 +347,17 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 // 扣完分工资
                 multiply = minLiveSecurityFund.multiply(divide);
             }
+
+            PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
+            payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
+            List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
+                PayWorkAttendance payWorkAttendance = payWorkAttendances.get(0);
+                payWage.setActualAttendanceDays(payWorkAttendance.getAttendanceDays());
+                payWage.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
+                payWage.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
+            }
+
             payWage.setUpdateUser(getLoginUserName());
             payWage.setUpdateTime(new Date());
             payWage.setByPieceCount(totalCount);

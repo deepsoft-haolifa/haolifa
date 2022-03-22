@@ -45,7 +45,11 @@ public class PayWorkAttendance {
 
     private Date updateTime;
 
-    public PayWorkAttendance(Integer id, Integer serial, String department, Integer userId, String userName, Integer attendanceDays, Integer lateTimes, Integer leaveEarlyTimes, Integer absenteeismTimes, Integer middleDays, Integer nightDays, Integer businessTravelDays, Integer compassionateLeaveDays, Integer sickLeaveDays, Integer workOvertimeDays, Integer lateAndLeaveTimes, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
+    private String attendYear;
+
+    private String attendMonth;
+
+    public PayWorkAttendance(Integer id, Integer serial, String department, Integer userId, String userName, Integer attendanceDays, Integer lateTimes, Integer leaveEarlyTimes, Integer absenteeismTimes, Integer middleDays, Integer nightDays, Integer businessTravelDays, Integer compassionateLeaveDays, Integer sickLeaveDays, Integer workOvertimeDays, Integer lateAndLeaveTimes, String remark, String createUser, String updateUser, Date createTime, Date updateTime, String attendYear, String attendMonth) {
         this.id = id;
         this.serial = serial;
         this.department = department;
@@ -67,6 +71,8 @@ public class PayWorkAttendance {
         this.updateUser = updateUser;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.attendYear = attendYear;
+        this.attendMonth = attendMonth;
     }
 
     public PayWorkAttendance() {
@@ -239,5 +245,21 @@ public class PayWorkAttendance {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getAttendYear() {
+        return attendYear;
+    }
+
+    public void setAttendYear(String attendYear) {
+        this.attendYear = attendYear == null ? null : attendYear.trim();
+    }
+
+    public String getAttendMonth() {
+        return attendMonth;
+    }
+
+    public void setAttendMonth(String attendMonth) {
+        this.attendMonth = attendMonth == null ? null : attendMonth.trim();
     }
 }

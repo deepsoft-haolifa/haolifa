@@ -219,8 +219,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         payWagesSearch.setId(null);
                         payWagesSearch.setTotalMoney(totalAmount);
                         payWagesSearch.setMinLiveSecurityFund(basePay);
-                        payWagesSearch.setByPieceCount(quantity);
-                        payWagesSearch.setByPieceMoney(accrual);
+                        payWagesSearch.setAccruedPerformanceSalary(accrual);
                         payWagesSearch.setWagesYear(String.valueOf(year));
                         payWagesSearch.setWagesMonth(monthValue);
                         payWagesSearch.setCreateTime(new Date());
@@ -230,11 +229,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         payWagesSearchMapper.insertSelective(payWagesSearch);
                     } else {
                         PayWagesSearch payWagesSearch = payWagesSearches.get(0);
-                        Integer byPieceCount = payWagesSearch.getByPieceCount() + quantity;
                         BigDecimal byPieceMoney = payWagesSearch.getByPieceMoney().add(accrual);
                         BigDecimal totalMoney = payWagesSearch.getTotalMoney().add(accrual);
-                        payWagesSearch.setByPieceCount(byPieceCount);
-                        payWagesSearch.setByPieceMoney(byPieceMoney);
+                        payWagesSearch.setAccruedPerformanceSalary(byPieceMoney);
                         payWagesSearch.setTotalMoney(totalMoney);
                         payWagesSearch.setId(payWagesSearches.get(0).getId());
                         payWagesSearch.setUpdateTime(new Date());
