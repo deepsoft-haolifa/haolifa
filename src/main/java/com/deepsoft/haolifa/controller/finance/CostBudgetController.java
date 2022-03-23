@@ -1,7 +1,10 @@
 package com.deepsoft.haolifa.controller.finance;
 
+import cn.hutool.json.JSON;
+import com.deepsoft.haolifa.enums.CostBudgetTypeEnum;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudgetQuery;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
@@ -25,6 +28,14 @@ import java.util.List;
 public class CostBudgetController {
     @Autowired
     private CostBudgetService costBudgetService;
+
+
+    @ApiOperation("部门科目预算")
+    @PostMapping("/dept/t")
+    public ResultBean tDeptBudget(@RequestBody CostBudgetQuery model) {
+        return costBudgetService.selectCostBudget(model);
+    }
+
 
 
     //--- 部门

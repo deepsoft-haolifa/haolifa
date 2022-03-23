@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -74,11 +75,14 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setSerialNo("BP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         loanApply.setApplyStatus(LoanApplyStatusEnum.PENDING_APPROVAL.getCode());
         loanApply.setPayStatus(LoanrPayStatusEnum.un_pay.getCode());
+        loanApply.setPaymentStatus(LoanrPaymentStatusEnum.partial_pay.getCode());
+        loanApply.setPaymentAmount(BigDecimal.ZERO);
         loanApply.setLoanUser(sysUserService.selectLoginUser().getId());
         loanApply.setCreateTime(new Date());
         loanApply.setUpdateTime(new Date());
         loanApply.setCreateUser(sysUserService.selectLoginUser().getId());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+
         int insertId = bizLoanApplyMapper.insertSelective(loanApply);
         return ResultBean.success(insertId);
     }

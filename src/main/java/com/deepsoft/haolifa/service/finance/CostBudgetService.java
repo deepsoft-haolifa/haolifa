@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.service.finance;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudget;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudgetQuery;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
@@ -22,6 +24,8 @@ public interface CostBudgetService {
 
     ResultBean updateDeptBudget(CostBudgetDeptUpDTO model);
 
+    public ResultBean<CostBudget> selectCostBudget(CostBudgetQuery model);
+
     ResultBean<List<CostBudgetDeptTree>>  getDeptBudgetListTree(CostBudgetDeptRQDTO model);
 
 
@@ -35,4 +39,6 @@ public interface CostBudgetService {
     ResultBean<PageDTO<CostBudgetSubjectsRSDTO>> getSubjectsBudgetList(CostBudgetSubjectsRQDTO model);
 
     ResultBean deleteSubjectsBudgetBatch(List<Integer> ids);
+
+
 }

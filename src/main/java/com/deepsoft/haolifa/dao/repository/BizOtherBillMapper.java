@@ -30,4 +30,5 @@ public interface BizOtherBillMapper {
 
     BizOtherBill getLastRecord(@Param("companyQuery") String companyQuery, @Param("accountQuery") String accountQuery);
 
+    List<BizOtherBill> getLastRecordList(List<String> stringList);
 }

@@ -239,7 +239,6 @@ CREATE TABLE `biz_bill_contract`
 
 -- 借款审批
 
-
 CREATE TABLE `biz_loan_apply`
 (
     `id`                    int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -261,6 +260,8 @@ CREATE TABLE `biz_loan_apply`
     `pay_account`           varchar(64)    DEFAULT '' COMMENT '付款账户',
     `pay_time`              datetime       DEFAULT NULL COMMENT '付款日期',
     `pay_status`            char(1)        DEFAULT '0' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
+    `payment_amount`        decimal(11, 0) DEFAULT NULL COMMENT '还款金额',
+    `payment_status`        char(1)        DEFAULT NULL COMMENT '还款状态',
     `remark`                varchar(30)    DEFAULT '' COMMENT '备注摘要',
     `del_flag`              char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
     `create_user`           int(11) DEFAULT NULL COMMENT '创建者',
@@ -268,8 +269,7 @@ CREATE TABLE `biz_loan_apply`
     `update_user`           int(11) DEFAULT NULL COMMENT '更新者',
     `update_time`           datetime       DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='借款申请（出纳付款）';
-
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='借款申请（出纳付款）';
 
 CREATE TABLE `biz_payment_history`
 (

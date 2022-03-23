@@ -5,6 +5,7 @@ package com.deepsoft.haolifa.constant;
  * @description: 常量类
  **/
 public class Constant {
+    public static final String company = "山西好利阀机械制造有限公司";
     public static final String METHOD_POST = "POST";
     public static final String METHOD_GET = "GET";
 
