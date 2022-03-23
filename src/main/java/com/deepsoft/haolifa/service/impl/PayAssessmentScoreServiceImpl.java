@@ -62,7 +62,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
                 .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
                 SysUser sysUser = sysUserService.getSysUser(customUser.getId());
                 PayUserExample payUserExample = new PayUserExample();
-                payUserExample.createCriteria().andPostIdEqualTo(sysUser.getPostId());
+                payUserExample.createCriteria().andSuperiorIdEqualTo(sysUser.getPostId());
                 List<PayUser> payUsers = payUserMapper.selectByExample(payUserExample);
                 if (CollectionUtils.isEmpty(payUsers)) {
                     return ResultBean.success(null);
