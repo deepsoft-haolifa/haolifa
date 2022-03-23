@@ -269,7 +269,16 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             .andIdCardEqualTo(model.getIdCard());
         List<PayUser> payUsers = payUserMapper.selectByExample(payUserExample);
         if (CollectionUtils.isNotEmpty(payUsers)) {
-            return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
+            Iterator<PayUser> iterator = payUsers.iterator();
+            while (iterator.hasNext()) {
+                PayUser next = iterator.next();
+                if (next.getId().equals(model.getId())) {
+                    iterator.remove();
+                }
+            }
+            if (CollectionUtils.isNotEmpty(payUsers)) {
+                return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
+            }
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
