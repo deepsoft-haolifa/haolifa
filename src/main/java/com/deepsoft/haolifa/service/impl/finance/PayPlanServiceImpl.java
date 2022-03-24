@@ -124,7 +124,7 @@ public class PayPlanServiceImpl implements PayPlanService {
             .map(BizPayPlanPayDTO.PayWayDTO::getAmount)
             .reduce(BigDecimal::add)
             .get();
-        if (bizPayPlan.getApplyAmount().doubleValue() !=bigDecimal.doubleValue() ){
+        if (bizPayPlan.getApplyAmount().doubleValue() != bigDecimal.doubleValue()) {
             throw new BaseException("当前付款金额与申请金额不一致");
         }
 
@@ -133,37 +133,39 @@ public class PayPlanServiceImpl implements PayPlanService {
         if (update < 1) {
             return ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_EXCEPTION);
         }
+
+
+        bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(planPayDTO.getId());
+
+
         PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
 
         // 1 支付方式
         {
-            planPayDTO.getPayWayList()
-                .forEach(payWayDTO -> {
-                    BizPayPlanPayLog payPlanPayLog = buildBizPayPlanPayLog(customUser, bizPayPlan, purchaseOrder, payWayDTO);
-                    bizPayPlanPayLogMapper.insert(payPlanPayLog);
-                });
+            for (BizPayPlanPayDTO.PayWayDTO payWayDTO : planPayDTO.getPayWayList()) {
+                BizPayPlanPayLog payPlanPayLog = buildBizPayPlanPayLog(customUser, bizPayPlan, purchaseOrder, payWayDTO);
+                bizPayPlanPayLogMapper.insert(payPlanPayLog);
+            }
         }
         // 2 记账方式
         {
-            planPayDTO.getPayWayList().stream()
-                .forEach(payWayDTO -> {
-
-                    BookingTypeEnum bookingTypeEnum = BookingTypeEnum.valueOfCode(payWayDTO.getBookingType());
-                    switch (bookingTypeEnum) {
-                        case cash_bill:
-                            BizBillAddDTO bizBill = buildBizBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                            billService.save(bizBill);
-                            break;
-                        case bank_bill:
-                            BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                            bankBillService.save(bizBankBillAddDTO);
-                            break;
-                        case other_bill:
-                            BizOtherBillAddDTO bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                            otherBillService.save(bizBillAddDTO);
-                            break;
-                    }
-                });
+            for (BizPayPlanPayDTO.PayWayDTO payWayDTO : planPayDTO.getPayWayList()) {
+                BookingTypeEnum bookingTypeEnum = BookingTypeEnum.valueOfCode(payWayDTO.getBookingType());
+                switch (bookingTypeEnum) {
+                    case cash_bill:
+                        BizBillAddDTO bizBill = buildBizBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
+                        billService.save(bizBill);
+                        break;
+                    case bank_bill:
+                        BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
+                        bankBillService.save(bizBankBillAddDTO);
+                        break;
+                    case other_bill:
+                        BizOtherBillAddDTO bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
+                        otherBillService.save(bizBillAddDTO);
+                        break;
+                }
+            }
 
         }
         // 3 付款完成后，将采购订单的状态更新为已付款
@@ -213,7 +215,8 @@ public class PayPlanServiceImpl implements PayPlanService {
         BizOtherBillAddDTO otherBillAddDTO = new BizOtherBillAddDTO();
         // 付款
         otherBillAddDTO.setType("2");
-        otherBillAddDTO.setCompany(bizPayPlan.getApplyCollectionCompany());
+        otherBillAddDTO.setCompany(bizPayPlan.getPayCompany());
+        otherBillAddDTO.setAccount(bizPayPlan.getPayAccount());
         otherBillAddDTO.setCertificateNumber(bizPayPlan.getApplyNo());
         otherBillAddDTO.setOperateDate(bizPayPlan.getPayDate());
         otherBillAddDTO.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
@@ -230,7 +233,8 @@ public class PayPlanServiceImpl implements PayPlanService {
         BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
         // 付款
         bizBankBill.setType("2");
-        bizBankBill.setCompany(bizPayPlan.getApplyCollectionCompany());
+        bizBankBill.setCompany(bizPayPlan.getPayCompany());
+        bizBankBill.setAccount(bizPayPlan.getPayAccount());
         bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
         bizBankBill.setOperateDate(bizPayPlan.getPayDate());
         bizBankBill.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());

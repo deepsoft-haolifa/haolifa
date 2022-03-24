@@ -42,6 +42,10 @@ public class BizLoanApply {
 
     private String payStatus;
 
+    private BigDecimal paymentAmount;
+
+    private String paymentStatus;
+
     private String remark;
 
     private String delFlag;
@@ -54,7 +58,7 @@ public class BizLoanApply {
 
     private Date updateTime;
 
-    public BizLoanApply(Integer id, String serialNo, Integer deptId, Date loanDate, Date expectRepaymentDate, BigDecimal amount, String purpose, Integer loanUser, String amountType, String billNature, String accountName, String cardNumber, String bankOfDeposit, String applyStatus, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizLoanApply(Integer id, String serialNo, Integer deptId, Date loanDate, Date expectRepaymentDate, BigDecimal amount, String purpose, Integer loanUser, String amountType, String billNature, String accountName, String cardNumber, String bankOfDeposit, String applyStatus, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, BigDecimal paymentAmount, String paymentStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.deptId = deptId;
@@ -74,6 +78,8 @@ public class BizLoanApply {
         this.payAccount = payAccount;
         this.payTime = payTime;
         this.payStatus = payStatus;
+        this.paymentAmount = paymentAmount;
+        this.paymentStatus = paymentStatus;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
@@ -236,6 +242,22 @@ public class BizLoanApply {
 
     public void setPayStatus(String payStatus) {
         this.payStatus = payStatus == null ? null : payStatus.trim();
+    }
+
+    public BigDecimal getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(BigDecimal paymentAmount) {
+        this.paymentAmount = paymentAmount;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus == null ? null : paymentStatus.trim();
     }
 
     public String getRemark() {

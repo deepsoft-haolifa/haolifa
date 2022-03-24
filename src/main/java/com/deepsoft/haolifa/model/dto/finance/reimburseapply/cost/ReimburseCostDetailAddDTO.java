@@ -1,10 +1,14 @@
 package com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class ReimburseCostDetailAddDTO {
 
 

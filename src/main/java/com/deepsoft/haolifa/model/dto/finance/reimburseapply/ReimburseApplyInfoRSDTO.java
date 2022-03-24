@@ -1,7 +1,5 @@
-package com.deepsoft.haolifa.model.dto.finance.loanapply;
+package com.deepsoft.haolifa.model.dto.finance.reimburseapply;
 
-import com.deepsoft.haolifa.model.dto.DepartmentDTO;
-import com.deepsoft.haolifa.model.dto.UserBaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,47 +9,36 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LoanApplyRSDTO {
+public class ReimburseApplyInfoRSDTO {
+
     @ApiModelProperty(value = "ID")
     private Integer id;
 
     @ApiModelProperty(value = "编号")
     private String serialNo;
 
-    @ApiModelProperty(value = "借款部门id")
+    @ApiModelProperty(value = "报销部门id")
     private Integer deptId;
-    @ApiModelProperty(value = "借款部门名称")
+    @ApiModelProperty(value = "报销部门名称")
     private String deptName;
 
-    @ApiModelProperty(value = "借款日期")
-    private Date loanDate;
-
-    @ApiModelProperty(value = "预计还款日期")
-    private Date expectRepaymentDate;
-
-    @ApiModelProperty(value = "借款金额")
+    @ApiModelProperty(value = "报销金额")
     private BigDecimal amount;
 
-    @ApiModelProperty(value = "用途")
-    private String purpose;
+    @ApiModelProperty(value = "类型 1 差旅报销 2 费用报销")
+    private String type;
 
-    @ApiModelProperty(value = "借款人id")
-    private Integer loanUser;
+    @ApiModelProperty(value = "类型 1 差旅报销 2 费用报销")
+    private String typeCN;
 
-    @ApiModelProperty(value = "借款人名称")
-    private String loanUserName;
-
-    @ApiModelProperty(value = "资金性质（1現金 2支票）")
-    private String amountType;
-
-    @ApiModelProperty(value = "资金性质中文")
-    private String amountTypeCN;
-
-    @ApiModelProperty(value = "记账方式（1現金 2銀行 3 其他貨幣）")
-    private String billNature;
-
-    @ApiModelProperty(value = "记账方式中文")
-    private String billNatureCN;
+    @ApiModelProperty(value = "报销方式	1普通报销 2借款冲抵")
+    private String reimburseType;
+    @ApiModelProperty(value = "报销日期")
+    private Date reimburseDate;
+    @ApiModelProperty(value = "报销人")
+    private Integer reimburseUser;
+    @ApiModelProperty(value = "报销人名称")
+    private String reimburseUserName;
 
     @ApiModelProperty(value = "户名")
     private String accountName;
@@ -86,15 +73,6 @@ public class LoanApplyRSDTO {
     @ApiModelProperty(value = "付款状态中文")
     private String payStatusCN;
 
-    @ApiModelProperty(value = "还款总金额（还款总金额 = 还款明细 * n）")
-    private BigDecimal paymentAmount;
-
-    @ApiModelProperty(value = "还款状态（1未还款 2还款中 3还款完成）")
-    private String paymentStatus;
-
-    @ApiModelProperty(value = "付款状态中文")
-    private String paymentStatusCN;
-
     @ApiModelProperty(value = "备注摘要")
     private String remark;
 
@@ -112,6 +90,9 @@ public class LoanApplyRSDTO {
 
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
+
     @ApiModelProperty(value = "是否可以支付")
     private Boolean canPay = false;
+
+
 }

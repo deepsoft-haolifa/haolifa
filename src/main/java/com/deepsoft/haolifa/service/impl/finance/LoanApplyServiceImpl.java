@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -74,11 +75,14 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setSerialNo("BP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         loanApply.setApplyStatus(LoanApplyStatusEnum.PENDING_APPROVAL.getCode());
         loanApply.setPayStatus(LoanrPayStatusEnum.un_pay.getCode());
+        loanApply.setPaymentStatus(LoanrPaymentStatusEnum.partial_pay.getCode());
+        loanApply.setPaymentAmount(BigDecimal.ZERO);
         loanApply.setLoanUser(sysUserService.selectLoginUser().getId());
         loanApply.setCreateTime(new Date());
         loanApply.setUpdateTime(new Date());
         loanApply.setCreateUser(sysUserService.selectLoginUser().getId());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+
         int insertId = bizLoanApplyMapper.insertSelective(loanApply);
         return ResultBean.success(insertId);
     }
@@ -252,43 +256,103 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         Map<Integer, SysUser> finalSysUserMap = sysUserMap;
         List<LoanApplyRSDTO> loanApplyRSDTOList = pageData.getResult().stream()
             .map(loanApply -> {
-                LoanApplyRSDTO loanApplyRSDTO = new LoanApplyRSDTO();
-                BeanUtils.copyProperties(loanApply, loanApplyRSDTO);
-                SysDepartment sysDepartment = sysDepartmentMap.get(loanApply.getDeptId());
-                if (sysDepartment != null) {
-                    loanApplyRSDTO.setDeptName(sysDepartment.getDeptName());
-                }
-                SysUser sysUser = finalSysUserMap.get(loanApply.getLoanUser());
-                if (sysUser != null) {
-                    loanApplyRSDTO.setLoanUserName(sysUser.getRealName());
-                }
-                LoanApplyStatusEnum applyStatusEnum = LoanApplyStatusEnum.valueOfCode(loanApply.getApplyStatus());
-
-                loanApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
-                    LoanApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
-                LoanPayWayEnum payWayEnum = LoanPayWayEnum.valueOfCode(loanApply.getAmountType());
-                loanApplyRSDTO.setAmountTypeCN(payWayEnum == null ? null : payWayEnum.getDesc());
-
-                LoanBillTypeEnum billTypeEnum = LoanBillTypeEnum.valueOfCode(loanApply.getBillNature());
-                loanApplyRSDTO.setBillNatureCN(billTypeEnum == null ? null : billTypeEnum.getDesc());
-
-                LoanrPayStatusEnum payStatusEnum = LoanrPayStatusEnum.valueOfCode(loanApply.getPayStatus());
-                loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
-
-                // 角色 == 出纳 && 支付状态 == 0（未付款）&& 确认状态 == 1（出纳付款）
-                boolean canPay = iscn
-                    && StringUtils.equalsIgnoreCase(loanApply.getApplyStatus(), LoanApplyStatusEnum.IN_PAYMENT.getCode())
-                    && (
-                    StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.un_pay.getCode())
-                        || StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.partial_pay.getCode())
-                );
-
-                loanApplyRSDTO.setCanPay(canPay);
+                LoanApplyRSDTO loanApplyRSDTO = convertLoanApplyRSDTO(sysDepartmentMap, iscn, finalSysUserMap, loanApply);
                 return loanApplyRSDTO;
             })
             .collect(Collectors.toList());
         pageDTO.setList(loanApplyRSDTOList);
         return ResultBean.success(pageDTO);
+    }
+
+
+    @Override
+    public ResultBean<List<LoanApplyRSDTO>> getLoanApplyList(LoanApplyRQDTO model) {
+        BizLoanApplyExample loanApplyExample = buildBizLoanApplyExample(model);
+        List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(loanApplyExample);
+
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+        Map<Integer, SysUser> sysUserMap = new HashMap<>();
+        List<Integer> loadUserIdList = bizLoanApplyList.stream().map(BizLoanApply::getLoanUser).collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(loadUserIdList)) {
+            SysUserExample sysUserExample = new SysUserExample();
+            sysUserExample.createCriteria().andIdIn(loadUserIdList);
+            List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+            sysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
+        }
+
+        // 查询当前用户的角色
+
+        CustomUser customUser = sysUserService.selectLoginUser();
+
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+            .map(a -> (CustomGrantedAuthority) a)
+            .collect(Collectors.toList());
+
+        //当前角色是否为出纳
+        boolean iscn = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
+
+        Map<Integer, SysUser> finalSysUserMap = sysUserMap;
+        List<LoanApplyRSDTO> loanApplyRSDTOList = bizLoanApplyList.stream()
+            .map(loanApply -> {
+                LoanApplyRSDTO loanApplyRSDTO = convertLoanApplyRSDTO(sysDepartmentMap, iscn, finalSysUserMap, loanApply);
+                return loanApplyRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        return ResultBean.success(loanApplyRSDTOList);
+    }
+
+    private LoanApplyRSDTO convertLoanApplyRSDTO(Map<Integer, SysDepartment> sysDepartmentMap, boolean iscn, Map<Integer, SysUser> finalSysUserMap, BizLoanApply loanApply) {
+        LoanApplyRSDTO loanApplyRSDTO = new LoanApplyRSDTO();
+        BeanUtils.copyProperties(loanApply, loanApplyRSDTO);
+        SysDepartment sysDepartment = sysDepartmentMap.get(loanApply.getDeptId());
+        if (sysDepartment != null) {
+            loanApplyRSDTO.setDeptName(sysDepartment.getDeptName());
+        }
+        SysUser sysUser = finalSysUserMap.get(loanApply.getLoanUser());
+        if (sysUser != null) {
+            loanApplyRSDTO.setLoanUserName(sysUser.getRealName());
+        }
+        LoanApplyStatusEnum applyStatusEnum = LoanApplyStatusEnum.valueOfCode(loanApply.getApplyStatus());
+
+        loanApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
+            LoanApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
+        LoanPayWayEnum payWayEnum = LoanPayWayEnum.valueOfCode(loanApply.getAmountType());
+        loanApplyRSDTO.setAmountTypeCN(payWayEnum == null ? null : payWayEnum.getDesc());
+
+        LoanBillTypeEnum billTypeEnum = LoanBillTypeEnum.valueOfCode(loanApply.getBillNature());
+        loanApplyRSDTO.setBillNatureCN(billTypeEnum == null ? null : billTypeEnum.getDesc());
+
+        LoanrPayStatusEnum payStatusEnum = LoanrPayStatusEnum.valueOfCode(loanApply.getPayStatus());
+        loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+
+        // 角色 == 出纳 && 支付状态 == 0（未付款）&& 确认状态 == 1（出纳付款）
+        boolean canPay = iscn
+            && StringUtils.equalsIgnoreCase(loanApply.getApplyStatus(), LoanApplyStatusEnum.IN_PAYMENT.getCode())
+            && (
+            StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.un_pay.getCode())
+                || StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.partial_pay.getCode())
+        );
+
+        loanApplyRSDTO.setCanPay(canPay);
+        return loanApplyRSDTO;
+    }
+
+    private BizLoanApplyExample buildBizLoanApplyExample(LoanApplyRQDTO model) {
+        BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
+        BizLoanApplyExample.Criteria criteria = loanApplyExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+
+        criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
+        //付款状态（1未付款 2付款中 3付款完成
+        criteria.andPayStatusEqualTo(model.getPayStatus());
+
+        loanApplyExample.setOrderByClause("id desc");
+        return loanApplyExample;
     }
 
 

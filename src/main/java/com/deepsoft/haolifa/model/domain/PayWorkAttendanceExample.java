@@ -1414,6 +1414,146 @@ public class PayWorkAttendanceExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andAttendYearIsNull() {
+            addCriterion("attend_year is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearIsNotNull() {
+            addCriterion("attend_year is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearEqualTo(String value) {
+            addCriterion("attend_year =", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearNotEqualTo(String value) {
+            addCriterion("attend_year <>", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearGreaterThan(String value) {
+            addCriterion("attend_year >", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearGreaterThanOrEqualTo(String value) {
+            addCriterion("attend_year >=", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearLessThan(String value) {
+            addCriterion("attend_year <", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearLessThanOrEqualTo(String value) {
+            addCriterion("attend_year <=", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearLike(String value) {
+            addCriterion("attend_year like", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearNotLike(String value) {
+            addCriterion("attend_year not like", value, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearIn(List<String> values) {
+            addCriterion("attend_year in", values, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearNotIn(List<String> values) {
+            addCriterion("attend_year not in", values, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearBetween(String value1, String value2) {
+            addCriterion("attend_year between", value1, value2, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendYearNotBetween(String value1, String value2) {
+            addCriterion("attend_year not between", value1, value2, "attendYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthIsNull() {
+            addCriterion("attend_month is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthIsNotNull() {
+            addCriterion("attend_month is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthEqualTo(String value) {
+            addCriterion("attend_month =", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthNotEqualTo(String value) {
+            addCriterion("attend_month <>", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthGreaterThan(String value) {
+            addCriterion("attend_month >", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthGreaterThanOrEqualTo(String value) {
+            addCriterion("attend_month >=", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthLessThan(String value) {
+            addCriterion("attend_month <", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthLessThanOrEqualTo(String value) {
+            addCriterion("attend_month <=", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthLike(String value) {
+            addCriterion("attend_month like", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthNotLike(String value) {
+            addCriterion("attend_month not like", value, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthIn(List<String> values) {
+            addCriterion("attend_month in", values, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthNotIn(List<String> values) {
+            addCriterion("attend_month not in", values, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthBetween(String value1, String value2) {
+            addCriterion("attend_month between", value1, value2, "attendMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAttendMonthNotBetween(String value1, String value2) {
+            addCriterion("attend_month not between", value1, value2, "attendMonth");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

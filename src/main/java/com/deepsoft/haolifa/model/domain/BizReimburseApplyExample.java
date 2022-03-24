@@ -1166,6 +1166,126 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andOffsetamountIsNull() {
+            addCriterion("offsetAmount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountIsNotNull() {
+            addCriterion("offsetAmount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountEqualTo(BigDecimal value) {
+            addCriterion("offsetAmount =", value, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountNotEqualTo(BigDecimal value) {
+            addCriterion("offsetAmount <>", value, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountGreaterThan(BigDecimal value) {
+            addCriterion("offsetAmount >", value, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("offsetAmount >=", value, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountLessThan(BigDecimal value) {
+            addCriterion("offsetAmount <", value, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("offsetAmount <=", value, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountIn(List<BigDecimal> values) {
+            addCriterion("offsetAmount in", values, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountNotIn(List<BigDecimal> values) {
+            addCriterion("offsetAmount not in", values, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("offsetAmount between", value1, value2, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andOffsetamountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("offsetAmount not between", value1, value2, "offsetamount");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdIsNull() {
+            addCriterion("loan_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdIsNotNull() {
+            addCriterion("loan_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdEqualTo(Integer value) {
+            addCriterion("loan_id =", value, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdNotEqualTo(Integer value) {
+            addCriterion("loan_id <>", value, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdGreaterThan(Integer value) {
+            addCriterion("loan_id >", value, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("loan_id >=", value, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdLessThan(Integer value) {
+            addCriterion("loan_id <", value, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdLessThanOrEqualTo(Integer value) {
+            addCriterion("loan_id <=", value, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdIn(List<Integer> values) {
+            addCriterion("loan_id in", values, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdNotIn(List<Integer> values) {
+            addCriterion("loan_id not in", values, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdBetween(Integer value1, Integer value2) {
+            addCriterion("loan_id between", value1, value2, "loanId");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("loan_id not between", value1, value2, "loanId");
+            return (Criteria) this;
+        }
+
         public Criteria andApplyStatusIsNull() {
             addCriterion("apply_status is null");
             return (Criteria) this;

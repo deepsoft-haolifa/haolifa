@@ -5,12 +5,15 @@ import com.deepsoft.haolifa.dao.repository.PayAssessmentScoreMapper;
 import com.deepsoft.haolifa.dao.repository.PayAssessmentScoreRecordMapper;
 import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayAssessmentScoreDTO;
 import com.deepsoft.haolifa.model.vo.PayAssessmentScoreRecordVO;
 import com.deepsoft.haolifa.service.PayAssessmentScoreService;
+import com.deepsoft.haolifa.service.RoleService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -25,6 +28,7 @@ import java.time.Month;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author liuyaofei
@@ -41,12 +45,32 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     private PayAssessmentQuotaMapper payAssessmentQuotaMapper;
     @Resource
     private PayAssessmentScoreRecordMapper payAssessmentScoreRecordMapper;
+    @Resource
+    private RoleService roleService;
 
     private static final int TOTAL_SCORE = 100;
 
     @Override
     public ResultBean pageInfo(Integer pageNum, Integer pageSize) {
         PayAssessmentScoreExample example = new PayAssessmentScoreExample();
+        PayAssessmentScoreExample.Criteria criteria = example.createCriteria();
+        CustomUser customUser = sysUserService.selectLoginUser();
+        if (Objects.nonNull(customUser) && Objects.nonNull(customUser.getId())) {
+            List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
+            // 当前人员的 下级
+            if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
+                .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
+                SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+                PayUserExample payUserExample = new PayUserExample();
+                payUserExample.createCriteria().andSuperiorIdEqualTo(sysUser.getPostId());
+                List<PayUser> payUsers = payUserMapper.selectByExample(payUserExample);
+                if (CollectionUtils.isEmpty(payUsers)) {
+                    return ResultBean.success(null);
+                }
+                List<Integer> userIds = payUsers.stream().map(pay -> pay.getId()).collect(Collectors.toList());
+                criteria.andUserIdIn(userIds);
+            }
+        }
         Page<PayAssessmentScore> payTeams = PageHelper.startPage(pageNum, pageSize)
             .doSelectPage(() -> payAssessmentScoreMapper.selectByExample(example));
         List<PayAssessmentScoreDTO> scoreDTOList = BeanCopyUtils.copyPropertiesForNewList(payTeams, () -> new PayAssessmentScoreDTO());

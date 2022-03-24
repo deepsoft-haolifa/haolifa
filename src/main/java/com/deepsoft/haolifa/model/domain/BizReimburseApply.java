@@ -36,6 +36,10 @@ public class BizReimburseApply {
 
     private Integer reimburseUser;
 
+    private BigDecimal offsetamount;
+
+    private Integer loanId;
+
     private String applyStatus;
 
     private String remark;
@@ -50,7 +54,7 @@ public class BizReimburseApply {
 
     private Date updateTime;
 
-    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String applyStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, BigDecimal offsetamount, Integer loanId, String applyStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.type = type;
@@ -67,6 +71,8 @@ public class BizReimburseApply {
         this.payTime = payTime;
         this.payStatus = payStatus;
         this.reimburseUser = reimburseUser;
+        this.offsetamount = offsetamount;
+        this.loanId = loanId;
         this.applyStatus = applyStatus;
         this.remark = remark;
         this.delFlag = delFlag;
@@ -206,6 +212,22 @@ public class BizReimburseApply {
 
     public void setReimburseUser(Integer reimburseUser) {
         this.reimburseUser = reimburseUser;
+    }
+
+    public BigDecimal getOffsetamount() {
+        return offsetamount;
+    }
+
+    public void setOffsetamount(BigDecimal offsetamount) {
+        this.offsetamount = offsetamount;
+    }
+
+    public Integer getLoanId() {
+        return loanId;
+    }
+
+    public void setLoanId(Integer loanId) {
+        this.loanId = loanId;
     }
 
     public String getApplyStatus() {

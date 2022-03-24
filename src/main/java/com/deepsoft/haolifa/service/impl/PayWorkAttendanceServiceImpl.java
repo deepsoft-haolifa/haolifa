@@ -41,6 +41,12 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
         if (StringUtils.isNotBlank(model.getUserName())) {
             criteria.andUserNameLike("%" + model.getUserName() + "%");
         }
+        if (StringUtils.isNotBlank(model.getAttendYear())) {
+            criteria.andAttendYearEqualTo(model.getAttendYear());
+        }
+        if (StringUtils.isNotBlank(model.getAttendMonth())) {
+            criteria.andAttendMonthEqualTo(model.getAttendMonth());
+        }
         example.setOrderByClause("id desc");
         Page<PayWorkAttendance> payWorkAttendances = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> payWorkAttendanceMapper.selectByExample(example));

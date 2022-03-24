@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.BizPaymentHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.BizPaymentHistory" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="loan_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="loan_serial_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="loan_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="repayment_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="amount" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="loan_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="repayment_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="amount_type" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="bill_nature" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="del_flag" jdbcType="CHAR" javaType="java.lang.String" />
+      <arg column="create_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, loan_id, loan_serial_no, loan_date, repayment_date, amount, loan_user, repayment_user, 
+    amount_type, bill_nature, remark, del_flag, create_user, create_time, update_user, 
+    update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.BizPaymentHistoryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from biz_payment_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from biz_payment_history
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from biz_payment_history
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BizPaymentHistoryExample" >
+    delete from biz_payment_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BizPaymentHistory" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into biz_payment_history (loan_id, loan_serial_no, loan_date, 
+      repayment_date, amount, loan_user, 
+      repayment_user, amount_type, bill_nature, 
+      remark, del_flag, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{loanId,jdbcType=INTEGER}, #{loanSerialNo,jdbcType=VARCHAR}, #{loanDate,jdbcType=TIMESTAMP}, 
+      #{repaymentDate,jdbcType=TIMESTAMP}, #{amount,jdbcType=DECIMAL}, #{loanUser,jdbcType=INTEGER}, 
+      #{repaymentUser,jdbcType=INTEGER}, #{amountType,jdbcType=CHAR}, #{billNature,jdbcType=CHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizPaymentHistory" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into biz_payment_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loanId != null" >
+        loan_id,
+      </if>
+      <if test="loanSerialNo != null" >
+        loan_serial_no,
+      </if>
+      <if test="loanDate != null" >
+        loan_date,
+      </if>
+      <if test="repaymentDate != null" >
+        repayment_date,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="loanUser != null" >
+        loan_user,
+      </if>
+      <if test="repaymentUser != null" >
+        repayment_user,
+      </if>
+      <if test="amountType != null" >
+        amount_type,
+      </if>
+      <if test="billNature != null" >
+        bill_nature,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loanId != null" >
+        #{loanId,jdbcType=INTEGER},
+      </if>
+      <if test="loanSerialNo != null" >
+        #{loanSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="loanDate != null" >
+        #{loanDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repaymentDate != null" >
+        #{repaymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="loanUser != null" >
+        #{loanUser,jdbcType=INTEGER},
+      </if>
+      <if test="repaymentUser != null" >
+        #{repaymentUser,jdbcType=INTEGER},
+      </if>
+      <if test="amountType != null" >
+        #{amountType,jdbcType=CHAR},
+      </if>
+      <if test="billNature != null" >
+        #{billNature,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.BizPaymentHistoryExample" resultType="java.lang.Integer" >
+    select count(*) from biz_payment_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update biz_payment_history
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.loanId != null" >
+        loan_id = #{record.loanId,jdbcType=INTEGER},
+      </if>
+      <if test="record.loanSerialNo != null" >
+        loan_serial_no = #{record.loanSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loanDate != null" >
+        loan_date = #{record.loanDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.repaymentDate != null" >
+        repayment_date = #{record.repaymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.loanUser != null" >
+        loan_user = #{record.loanUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.repaymentUser != null" >
+        repayment_user = #{record.repaymentUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.amountType != null" >
+        amount_type = #{record.amountType,jdbcType=CHAR},
+      </if>
+      <if test="record.billNature != null" >
+        bill_nature = #{record.billNature,jdbcType=CHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null" >
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null" >
+        update_user = #{record.updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update biz_payment_history
+    set id = #{record.id,jdbcType=INTEGER},
+      loan_id = #{record.loanId,jdbcType=INTEGER},
+      loan_serial_no = #{record.loanSerialNo,jdbcType=VARCHAR},
+      loan_date = #{record.loanDate,jdbcType=TIMESTAMP},
+      repayment_date = #{record.repaymentDate,jdbcType=TIMESTAMP},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      loan_user = #{record.loanUser,jdbcType=INTEGER},
+      repayment_user = #{record.repaymentUser,jdbcType=INTEGER},
+      amount_type = #{record.amountType,jdbcType=CHAR},
+      bill_nature = #{record.billNature,jdbcType=CHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      del_flag = #{record.delFlag,jdbcType=CHAR},
+      create_user = #{record.createUser,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.BizPaymentHistory" >
+    update biz_payment_history
+    <set >
+      <if test="loanId != null" >
+        loan_id = #{loanId,jdbcType=INTEGER},
+      </if>
+      <if test="loanSerialNo != null" >
+        loan_serial_no = #{loanSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="loanDate != null" >
+        loan_date = #{loanDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="repaymentDate != null" >
+        repayment_date = #{repaymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="loanUser != null" >
+        loan_user = #{loanUser,jdbcType=INTEGER},
+      </if>
+      <if test="repaymentUser != null" >
+        repayment_user = #{repaymentUser,jdbcType=INTEGER},
+      </if>
+      <if test="amountType != null" >
+        amount_type = #{amountType,jdbcType=CHAR},
+      </if>
+      <if test="billNature != null" >
+        bill_nature = #{billNature,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BizPaymentHistory" >
+    update biz_payment_history
+    set loan_id = #{loanId,jdbcType=INTEGER},
+      loan_serial_no = #{loanSerialNo,jdbcType=VARCHAR},
+      loan_date = #{loanDate,jdbcType=TIMESTAMP},
+      repayment_date = #{repaymentDate,jdbcType=TIMESTAMP},
+      amount = #{amount,jdbcType=DECIMAL},
+      loan_user = #{loanUser,jdbcType=INTEGER},
+      repayment_user = #{repaymentUser,jdbcType=INTEGER},
+      amount_type = #{amountType,jdbcType=CHAR},
+      bill_nature = #{billNature,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

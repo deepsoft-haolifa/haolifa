@@ -241,12 +241,6 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         payWages.setDepartment(payUser.getDepartName());
         payWages.setMinLiveSecurityFund(payUser.getBasePay());
         payWagesMapper.insertSelective(payWages);
-        // 同步考勤表
-        PayWorkAttendance dance = new PayWorkAttendance();
-        dance.setDepartment(payUser.getDepartName());
-        dance.setUserName(payUser.getUserName());
-        dance.setUserId(payUser.getId());
-        payWorkAttendanceMapper.insertSelective(dance);
         // 人员工资关联表
         PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
         payWagesRelationUser.setUserId(payUser.getId());
@@ -275,7 +269,16 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             .andIdCardEqualTo(model.getIdCard());
         List<PayUser> payUsers = payUserMapper.selectByExample(payUserExample);
         if (CollectionUtils.isNotEmpty(payUsers)) {
-            return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
+            Iterator<PayUser> iterator = payUsers.iterator();
+            while (iterator.hasNext()) {
+                PayUser next = iterator.next();
+                if (next.getId().equals(model.getId())) {
+                    iterator.remove();
+                }
+            }
+            if (CollectionUtils.isNotEmpty(payUsers)) {
+                return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
+            }
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
@@ -294,14 +297,6 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payWages.setId(list.get(0).getWagesId());
             payWagesMapper.updateByPrimaryKeySelective(payWages);
         }
-        // 同步考勤表
-        PayWorkAttendance dance = new PayWorkAttendance();
-        dance.setDepartment(payUser.getDepartName());
-        dance.setUserName(payUser.getUserName());
-        dance.setUserId(payUser.getId());
-        PayWorkAttendanceExample example = new PayWorkAttendanceExample();
-        example.createCriteria().andUserIdEqualTo(payUser.getId());
-        payWorkAttendanceMapper.updateByExampleSelective(dance, example);
         return ResultBean.success(1);
     }
 
@@ -316,10 +311,6 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payWagesMapper.deleteByPrimaryKey(list.get(0).getWagesId());
             payWagesRelationUserService.delete(list.get(0).getId());
         }
-        // 考勤人员
-        PayWorkAttendanceExample example = new PayWorkAttendanceExample();
-        example.createCriteria().andUserIdEqualTo(userId);
-        payWorkAttendanceMapper.deleteByExample(example);
         return ResultBean.success(1);
     }
 

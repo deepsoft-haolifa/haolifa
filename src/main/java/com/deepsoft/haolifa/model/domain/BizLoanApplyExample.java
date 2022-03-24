@@ -1366,6 +1366,136 @@ public class BizLoanApplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andPaymentAmountIsNull() {
+            addCriterion("payment_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountIsNotNull() {
+            addCriterion("payment_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountEqualTo(BigDecimal value) {
+            addCriterion("payment_amount =", value, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountNotEqualTo(BigDecimal value) {
+            addCriterion("payment_amount <>", value, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountGreaterThan(BigDecimal value) {
+            addCriterion("payment_amount >", value, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("payment_amount >=", value, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountLessThan(BigDecimal value) {
+            addCriterion("payment_amount <", value, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("payment_amount <=", value, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountIn(List<BigDecimal> values) {
+            addCriterion("payment_amount in", values, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountNotIn(List<BigDecimal> values) {
+            addCriterion("payment_amount not in", values, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("payment_amount between", value1, value2, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("payment_amount not between", value1, value2, "paymentAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusIsNull() {
+            addCriterion("payment_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusIsNotNull() {
+            addCriterion("payment_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusEqualTo(String value) {
+            addCriterion("payment_status =", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusNotEqualTo(String value) {
+            addCriterion("payment_status <>", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusGreaterThan(String value) {
+            addCriterion("payment_status >", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("payment_status >=", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusLessThan(String value) {
+            addCriterion("payment_status <", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusLessThanOrEqualTo(String value) {
+            addCriterion("payment_status <=", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusLike(String value) {
+            addCriterion("payment_status like", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusNotLike(String value) {
+            addCriterion("payment_status not like", value, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusIn(List<String> values) {
+            addCriterion("payment_status in", values, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusNotIn(List<String> values) {
+            addCriterion("payment_status not in", values, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusBetween(String value1, String value2) {
+            addCriterion("payment_status between", value1, value2, "paymentStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentStatusNotBetween(String value1, String value2) {
+            addCriterion("payment_status not between", value1, value2, "paymentStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

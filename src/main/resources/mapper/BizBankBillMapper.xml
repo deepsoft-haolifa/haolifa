@@ -667,4 +667,17 @@
         </where>
         order by id desc limit 1
     </select>
+
+    <select id="getLastRecordList" resultType="com.deepsoft.haolifa.model.domain.BizBankBill">
+        select * from biz_bank_bill
+        <where>
+           and  account in
+            <foreach item="account" collection="list" open="(" separator="," close=")">
+                #{account}
+            </foreach>
+            and del_flag = 0
+        </where>
+        group by account
+        order by id desc limit 1
+    </select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa.model.dto.pay;
 
-import com.deepsoft.haolifa.annotation.ExcelHandle;
 import com.deepsoft.haolifa.model.dto.BaseCondition;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -48,10 +47,8 @@ public class PayWorkAttendancePageDTO extends BaseCondition {
     private Integer lateAndLeaveTimes;
     @ApiModelProperty(value = "备注")
     private String remark;
-    @ApiModelProperty(value = "创建人")
-    private String createUser;
-    @ApiModelProperty(value = "创建开始时间")
-    private String startCreateTime;
-    @ApiModelProperty(value = "创建结束时间")
-    private String endCreateTime;
+    @ApiModelProperty(value = "年份")
+    private String attendYear;
+    @ApiModelProperty(value = "月份")
+    private String attendMonth;
 }
