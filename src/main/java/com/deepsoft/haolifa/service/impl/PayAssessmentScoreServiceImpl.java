@@ -147,14 +147,15 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     }
     @Override
     public ResultBean getInfo(Integer scoreId) {
+        PayAssessmentScore payAssessmentScore = payAssessmentScoreMapper.selectByPrimaryKey(scoreId);
+
         PayAssessmentScoreRecordExample payAssessmentScoreRecordExample = new PayAssessmentScoreRecordExample();
         payAssessmentScoreRecordExample.createCriteria().andScoreIdEqualTo(scoreId);
         List<PayAssessmentScoreRecord> payAssessmentScoreRecords = payAssessmentScoreRecordMapper.selectByExample(payAssessmentScoreRecordExample);
 
         List<PayAssessmentScoreRecordVO> list = Lists.newArrayList();
         for (PayAssessmentScoreRecord payAssessmentScoreRecord : payAssessmentScoreRecords) {
-            Integer assessmentId = payAssessmentScoreRecord.getAssessmentId();
-            PayAssessmentQuota payAssessmentQuota = payAssessmentQuotaMapper.selectByPrimaryKey(assessmentId);
+            PayAssessmentQuota payAssessmentQuota = payAssessmentQuotaMapper.selectByPrimaryKey(payAssessmentScore.getAssessmentId());
             PayAssessmentScoreRecordVO vo = BeanCopyUtils.copyProperties(payAssessmentQuota, () -> new PayAssessmentScoreRecordVO());
             vo.setScore(payAssessmentScoreRecord.getScore());
             list.add(vo);
