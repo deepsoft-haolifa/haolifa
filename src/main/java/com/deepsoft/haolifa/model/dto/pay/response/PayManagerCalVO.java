@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -27,7 +28,7 @@ public class PayManagerCalVO {
     @ApiModelProperty(value = "产品类别")
     private String workType;
     @ApiModelProperty(value = "工时定额")
-    private String price;
+    private BigDecimal price;
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
     @ApiModelProperty(value = "修改时间")
