@@ -21,7 +21,9 @@ public class PayAssessmentScoreRecord {
 
     private Date updateTime;
 
-    public PayAssessmentScoreRecord(Integer id, Integer assessmentId, Integer scoreId, Integer score, Date scoreTime, String createUser, String updateUser, Date createTime, Date updateTime) {
+    private String remark;
+
+    public PayAssessmentScoreRecord(Integer id, Integer assessmentId, Integer scoreId, Integer score, Date scoreTime, String createUser, String updateUser, Date createTime, Date updateTime, String remark) {
         this.id = id;
         this.assessmentId = assessmentId;
         this.scoreId = scoreId;
@@ -31,6 +33,7 @@ public class PayAssessmentScoreRecord {
         this.updateUser = updateUser;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.remark = remark;
     }
 
     public PayAssessmentScoreRecord() {
@@ -107,5 +110,13 @@ public class PayAssessmentScoreRecord {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }

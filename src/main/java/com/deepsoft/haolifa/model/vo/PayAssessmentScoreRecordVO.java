@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.model.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @Author liuyaofei
  * @Date create in 下午5:58 2022/3/19
@@ -19,4 +21,8 @@ public class PayAssessmentScoreRecordVO {
     private String standard;
     @ApiModelProperty(value = "扣分")
     private Integer score;
+    @ApiModelProperty(value = "备注")
+    private String remark;
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
 }

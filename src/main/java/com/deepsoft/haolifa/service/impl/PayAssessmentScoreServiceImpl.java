@@ -138,6 +138,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
         record.setUpdateUser(getLoginUserName());
         record.setCreateTime(new Date());
         record.setUpdateTime(new Date());
+        record.setRemark(model.getRemark());
         payAssessmentScoreRecordMapper.insert(record);
         return ResultBean.success(1);
     }
@@ -158,6 +159,8 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
             PayAssessmentQuota payAssessmentQuota = payAssessmentQuotaMapper.selectByPrimaryKey(payAssessmentScore.getAssessmentId());
             PayAssessmentScoreRecordVO vo = BeanCopyUtils.copyProperties(payAssessmentQuota, () -> new PayAssessmentScoreRecordVO());
             vo.setScore(payAssessmentScoreRecord.getScore());
+            vo.setRemark(payAssessmentScoreRecord.getRemark());
+            vo.setCreateTime(payAssessmentScoreRecord.getCreateTime());
             list.add(vo);
         }
         return ResultBean.success(list);
