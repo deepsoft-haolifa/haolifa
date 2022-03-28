@@ -19,7 +19,7 @@ public class CostBudgetDeptTree implements TreeEntity<CostBudgetDeptTree> {
     @ApiModelProperty(value = "描述")
     public String description;
     @ApiModelProperty(value = "费用预算比例 1~100")
-    private Integer costRatio;
+    private Double costRatio;
     @ApiModelProperty(value = "费用预算计算公式")
     private String costRatioFormula;
     @ApiModelProperty(value = "费用预算计算公式中文")

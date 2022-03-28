@@ -146,14 +146,6 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         int update = bizCostBudgetDeptMapper.updateByPrimaryKeySelective(costBudget);
         return ResultBean.success(update);
     }
-    public static void main(String[] args) {
-        CostBudgetQuery model = new CostBudgetQuery();
-        model.setDeptId(1);
-        model.setSubjectsId(1);
-        model.setCostBudgetTypeEnum(CostBudgetTypeEnum.dept);
-
-        System.out.println(JSON.toJSONString(model));
-    }
 
     /***
      * 获取预算
@@ -169,22 +161,22 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         AtomicInteger atomicInteger = new AtomicInteger(5);
         List<BizCostBudgetDept> costBudgetDeptList = new ArrayList<>();
         getBizCostBudgetDept(model.getDeptId(), costBudgetDeptList, atomicInteger);
-        List<CostBudget.CostBudgetDetail>  costBudgetDetailList = costBudgetDeptList.stream()
+        List<CostBudget.CostBudgetDetail> costBudgetDetailList = costBudgetDeptList.stream()
             .map(bizCostBudgetDept -> {
                 CostBudget.CostBudgetDetail costBudgetRS = new CostBudget.CostBudgetDetail();
                 costBudgetRS.setCostRatio(new BigDecimal(bizCostBudgetDept.getCostRatio()).divide(one_h));
-                costBudgetRS.setDeptId( bizCostBudgetDept.getDeptId());
+                costBudgetRS.setDeptId(bizCostBudgetDept.getDeptId());
                 costBudgetRS.setDeptName(bizCostBudgetDept.getName());
                 costBudgetRS.setCostBudgetTypeEnum(CostBudgetTypeEnum.dept);
                 return costBudgetRS;
             })
             .collect(Collectors.toList());
 
-        if (CollectionUtil.isEmpty(costBudgetDetailList)){
+        if (CollectionUtil.isEmpty(costBudgetDetailList)) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门未配置预算");
         }
 
-        if (StringUtils.equalsIgnoreCase(costBudgetTypeEnum.getCode(),CostBudgetTypeEnum.subjects.getCode())){
+        if (StringUtils.equalsIgnoreCase(costBudgetTypeEnum.getCode(), CostBudgetTypeEnum.subjects.getCode())) {
 
             BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
             BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
@@ -193,7 +185,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             criteria.andSubjectsIdEqualTo(model.getSubjectsId());
 
             List<BizCostBudgetSubjects> bizCostBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
-            if (CollectionUtil.isEmpty(bizCostBudgetSubjectsList)){
+            if (CollectionUtil.isEmpty(bizCostBudgetSubjectsList)) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前科目未配置预算");
             }
             BizCostBudgetSubjects bizCostBudgetSubjects = bizCostBudgetSubjectsList.get(0);
@@ -206,9 +198,9 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         }
 
         CostBudget costBudget = new CostBudget();
-        BigDecimal  totalCostRatio = costBudgetDetailList.stream()
+        BigDecimal totalCostRatio = costBudgetDetailList.stream()
             .map(CostBudget.CostBudgetDetail::getCostRatio)
-            .reduce(BigDecimal.ONE,BigDecimal::multiply);
+            .reduce(BigDecimal.ONE, BigDecimal::multiply);
 
         // 日记账总金额
         BizBill lastRecordBill = bizBillMapper.getLastRecord();
@@ -221,21 +213,21 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             .collect(Collectors.toList());
 
         List<BizBankBill> lastRecordBankBillList = new ArrayList<>();
-        List<BizOtherBill> lastRecordOtherBillList  = new ArrayList<>();
+        List<BizOtherBill> lastRecordOtherBillList = new ArrayList<>();
 
-        for (String c :stringList){
+        for (String c : stringList) {
             BizBankBill lastRecordBankBill = bizBankBillMapper.getLastRecord(Constant.company, c);
             BizOtherBill lastRecordOtherBill = bizOtherBillMapper.getLastRecord(Constant.company, c);
             lastRecordBankBillList.add(lastRecordBankBill);
             lastRecordOtherBillList.add(lastRecordOtherBill);
         }
 
-        BigDecimal lastBalanceBankBill = lastRecordBankBillList .stream()
+        BigDecimal lastBalanceBankBill = lastRecordBankBillList.stream()
             .filter(Objects::nonNull)
             .map(BizBankBill::getBalance)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal lastBalanceOtherBill = lastRecordOtherBillList .stream()
+        BigDecimal lastBalanceOtherBill = lastRecordOtherBillList.stream()
             .filter(Objects::nonNull)
             .map(BizOtherBill::getBalance)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -259,10 +251,10 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         criteria.andDeptIdEqualTo(id);
         bizCostBudgetDeptExample.setOrderByClause("create_time desc limit 1");
         List<BizCostBudgetDept> bizCostBudgetDeptList = bizCostBudgetDeptMapper.selectByExample(bizCostBudgetDeptExample);
-        if (CollectionUtil.isEmpty(bizCostBudgetDeptList)){
+        if (CollectionUtil.isEmpty(bizCostBudgetDeptList)) {
             return;
         }
-        BizCostBudgetDept  bizCostBudgetDept =  bizCostBudgetDeptList.get(0);
+        BizCostBudgetDept bizCostBudgetDept = bizCostBudgetDeptList.get(0);
         if (bizCostBudgetDept.getDeptPid() != null && bizCostBudgetDept.getDeptPid() != 0) {
             getBizCostBudgetDept(bizCostBudgetDept.getDeptPid(), costBudgetDeptList, atomicInteger);
         }
@@ -295,7 +287,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
                 departmentTree.setCostRatioFormulaCN(bizCostBudgetDept.getCostRatio() + "%");
                 departmentTree.setRemark(bizCostBudgetDept.getRemark());
             } else {
-                departmentTree.setCostRatio(0);
+                departmentTree.setCostRatio(0.0);
                 departmentTree.setCostRatioFormula(null);
                 departmentTree.setCostRatioFormulaCN(null);
             }
@@ -316,6 +308,21 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+
+        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andDeptIdEqualTo(model.getDeptId());
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+        double doubleValue = costBudgetSubjectsList.stream()
+            .map(c -> BigDecimal.valueOf(c.getCostRatio()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add)
+            .doubleValue();
+        double t = model.getCostRatio() + doubleValue;
+        if (t > 100) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门下总比例不能大于100");
+        }
+
         BizCostBudgetSubjects costBudget = new BizCostBudgetSubjects();
         BeanUtils.copyProperties(model, costBudget);
         costBudget.setCreateTime(new Date());
@@ -411,7 +418,6 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         int c = bizCostBudgetSubjectsMapper.deleteByExample(bizCostBudgetExample);
         return ResultBean.success(c);
     }
-
 
 
 }

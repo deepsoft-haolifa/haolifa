@@ -82,6 +82,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (StringUtils.isAnyBlank()) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
+
+        CustomUser customUser = sysUserService.selectLoginUser();
+        SysUser sysUser = sysUserService.getSysUser(customUser.getId());
         // 1 添加主数据
 
         // todo 如果使用了借款冲抵
@@ -106,7 +109,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 }
                 case cost: {
                     if (CollectionUtil.isNotEmpty(model.getReimburseCostDetailAddDTOList())) {
-                        totalAmount =  model.getReimburseCostDetailAddDTOList().stream()
+                        totalAmount = model.getReimburseCostDetailAddDTOList().stream()
                             .map(ReimburseCostDetailAddDTO::getAmount)
                             .reduce(BigDecimal.ZERO, BigDecimal::add);
                     }
@@ -128,14 +131,16 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
             }
 
-            totalAmount =  totalAmount.subtract(model.getOffsetAmount());
+            totalAmount = totalAmount.subtract(model.getOffsetAmount());
         }
 
         reimburseApply.setAmount(totalAmount);
         reimburseApply.setCreateTime(new Date());
         reimburseApply.setUpdateTime(new Date());
-        reimburseApply.setCreateUser(sysUserService.selectLoginUser().getId());
-        reimburseApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        reimburseApply.setDeptId(sysUser.getDepartId());
+        reimburseApply.setReimburseUser(customUser.getId());
+        reimburseApply.setCreateUser(customUser.getId());
+        reimburseApply.setUpdateUser(customUser.getId());
         int insertId = bizReimburseApplyMapper.insertSelective(reimburseApply);
 
 
@@ -153,8 +158,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                             record.setPayStatus(ReimbursePayStatusEnum.un_pay.getCode());
                             record.setCreateTime(new Date());
                             record.setUpdateTime(new Date());
-                            record.setCreateUser(sysUserService.selectLoginUser().getId());
-                            record.setUpdateUser(sysUserService.selectLoginUser().getId());
+                            record.setCreateUser(customUser.getId());
+                            record.setUpdateUser(customUser.getId());
                             int i = bizReimburseTravelDetailMapper.insertSelective(record);
                         });
                 }
@@ -171,8 +176,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                             record.setPayStatus(ReimbursePayStatusEnum.un_pay.getCode());
                             record.setCreateTime(new Date());
                             record.setUpdateTime(new Date());
-                            record.setCreateUser(sysUserService.selectLoginUser().getId());
-                            record.setUpdateUser(sysUserService.selectLoginUser().getId());
+                            record.setCreateUser(customUser.getId());
+                            record.setUpdateUser(customUser.getId());
                             int i = bizReimburseCostDetailMapper.insertSelective(record);
                         });
                 }
@@ -253,21 +258,19 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         BizReimburseApplyExample.Criteria criteria = reimburseApplyExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
-
-        String type = model.getType();
         // 借款审批列表
-        if (StringUtils.equalsIgnoreCase("1", type)) {
-            criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
+        if (StringUtils.equalsIgnoreCase("1", model.getMyself())) {
+//            criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
         }
 
         // 状态 1 代办 2 已办
-        if (model.getType() != null) {
+        if (StringUtils.isNotEmpty(model.getType())) {
             criteria.andTypeEqualTo(model.getType());
         }
 
 
         //借款部门名称
-        if (model.getDeptName() != null) {
+        if (StringUtils.isNotEmpty(model.getDeptName())) {
             SysDepartmentExample departmentExample = new SysDepartmentExample();
             departmentExample.createCriteria().andDeptNameLike(model.getDeptName());
             List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
@@ -281,7 +284,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 //            criteria.andTypeEqualTo(model.getType());
 //        }
         // 编号
-        if (model.getSerialNo() != null) {
+        if (StringUtils.isNotEmpty(model.getSerialNo())) {
             criteria.andSerialNoLike(model.getSerialNo());
         }
 
@@ -298,6 +301,15 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
 
 
+        List<Integer> reimburseUserIdList = pageData.getResult().stream()
+            .map(BizReimburseApply::getReimburseUser)
+            .distinct()
+            .collect(Collectors.toList());
+
+        List<SysUser> sysUserList = sysUserService.getSysUserList(reimburseUserIdList);
+        Map<Integer, SysUser> sysUserMap = sysUserList.stream()
+            .collect(Collectors.toMap(SysUser::getId, Function.identity(), (a, b) -> a));
+
         List<ReimburseApplyRSDTO> reimburseApplyRSDTOList = pageData.getResult().stream()
             .map(reimburseApply -> {
                 ReimburseApplyRSDTO reimburseApplyRSDTO = new ReimburseApplyRSDTO();
@@ -313,6 +325,11 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
                 ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
                 reimburseApplyRSDTO.setTypeCN(payStatusEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
+                SysDepartment sysDepartment = sysDepartmentMap.get(reimburseApplyRSDTO.getDeptId());
+                reimburseApplyRSDTO.setDeptName(sysDepartment == null ? "" : sysDepartment.getDeptName());
+
+                SysUser sysUser = sysUserMap.get(reimburseApply.getReimburseUser());
+                reimburseApplyRSDTO.setReimburseUserName(sysUser == null ?"":sysUser.getRealName());
 
                 return reimburseApplyRSDTO;
             })

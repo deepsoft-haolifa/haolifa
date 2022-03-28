@@ -289,4 +289,13 @@ public class SysUserServiceImpl implements SysUserService {
         updateSysUser(userBaseDTO);
         return newPassword;
     }
+
+    @Override
+    public List<SysUser> getSysUserList(List<Integer> reimburseUserIdList) {
+        SysUserExample sysUserExample = new SysUserExample();
+        SysUserExample.Criteria criteria = sysUserExample.createCriteria();
+        criteria.andIdIn(reimburseUserIdList);
+        List<SysUser> sysUserList = userMapper.selectByExample(sysUserExample);
+        return sysUserList;
+    }
 }

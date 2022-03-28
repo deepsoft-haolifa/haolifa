@@ -24,7 +24,7 @@ public class CostBudgetDeptUpDTO {
     @ApiModelProperty(value = "父部门ID")
     private Integer deptPid;
     @ApiModelProperty(value = "比例 1~100")
-    private Integer costRatio;
+    private Double costRatio;
     @ApiModelProperty(value = "状态 1 正常 2 禁用")
     private String status;
     @ApiModelProperty(value = "备注")

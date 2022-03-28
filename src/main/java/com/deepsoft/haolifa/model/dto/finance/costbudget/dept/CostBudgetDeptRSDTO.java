@@ -24,7 +24,7 @@ public class CostBudgetDeptRSDTO {
     @ApiModelProperty(value = "父部门ID")
     private Integer deptPid;
     @ApiModelProperty(value = "比例 1~100")
-    private Integer costRatio;
+    private Double costRatio;
     @ApiModelProperty(value = "计算公式")
     private String costRatioFormula;
     @ApiModelProperty(value = "计算公式中文")

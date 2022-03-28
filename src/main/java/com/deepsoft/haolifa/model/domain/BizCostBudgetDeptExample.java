@@ -365,52 +365,52 @@ public class BizCostBudgetDeptExample {
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioEqualTo(Integer value) {
+        public Criteria andCostRatioEqualTo(Double value) {
             addCriterion("cost_ratio =", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioNotEqualTo(Integer value) {
+        public Criteria andCostRatioNotEqualTo(Double value) {
             addCriterion("cost_ratio <>", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioGreaterThan(Integer value) {
+        public Criteria andCostRatioGreaterThan(Double value) {
             addCriterion("cost_ratio >", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCostRatioGreaterThanOrEqualTo(Double value) {
             addCriterion("cost_ratio >=", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioLessThan(Integer value) {
+        public Criteria andCostRatioLessThan(Double value) {
             addCriterion("cost_ratio <", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioLessThanOrEqualTo(Integer value) {
+        public Criteria andCostRatioLessThanOrEqualTo(Double value) {
             addCriterion("cost_ratio <=", value, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioIn(List<Integer> values) {
+        public Criteria andCostRatioIn(List<Double> values) {
             addCriterion("cost_ratio in", values, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioNotIn(List<Integer> values) {
+        public Criteria andCostRatioNotIn(List<Double> values) {
             addCriterion("cost_ratio not in", values, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioBetween(Integer value1, Integer value2) {
+        public Criteria andCostRatioBetween(Double value1, Double value2) {
             addCriterion("cost_ratio between", value1, value2, "costRatio");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioNotBetween(Integer value1, Integer value2) {
+        public Criteria andCostRatioNotBetween(Double value1, Double value2) {
             addCriterion("cost_ratio not between", value1, value2, "costRatio");
             return (Criteria) this;
         }

@@ -25,7 +25,7 @@ public class CostBudgetSubjectsUpDTO {
     @ApiModelProperty(value = "科目ID （二级科目）")
     private Integer subjectsId;
     @ApiModelProperty(value = "比例 1~100")
-    private Integer costRatio;
+    private Double costRatio;
     @ApiModelProperty(value = "状态 1 正常 2 禁用")
     private String status;
     @ApiModelProperty(value = "备注")

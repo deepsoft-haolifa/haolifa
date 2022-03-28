@@ -95,4 +95,5 @@ public interface SysUserService {
      */
     String changePwd(String newPassword);
 
+    List<SysUser> getSysUserList(List<Integer> reimburseUserIdList);
 }

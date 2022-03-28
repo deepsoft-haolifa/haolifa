@@ -20,6 +20,9 @@ public class ReimburseApplyRSDTO {
     @ApiModelProperty(value = "报销部门id")
     private Integer deptId;
 
+    @ApiModelProperty(value = "报销部门名称")
+    private String deptName;
+
     @ApiModelProperty(value = "报销金额")
     private BigDecimal amount;
 
@@ -35,6 +38,9 @@ public class ReimburseApplyRSDTO {
     private Date reimburseDate;
     @ApiModelProperty(value = "报销人")
     private Integer reimburseUser;
+
+    @ApiModelProperty(value = "报销人名称")
+    private String reimburseUserName;
 
     @ApiModelProperty(value = "户名")
     private String accountName;

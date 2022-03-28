@@ -11,7 +11,7 @@ public class BizCostBudgetDept {
 
     private Integer deptPid;
 
-    private Integer costRatio;
+    private Double costRatio;
 
     private String status;
 
@@ -27,7 +27,7 @@ public class BizCostBudgetDept {
 
     private Date updateTime;
 
-    public BizCostBudgetDept(Integer id, String name, Integer deptId, Integer deptPid, Integer costRatio, String status, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizCostBudgetDept(Integer id, String name, Integer deptId, Integer deptPid, Double costRatio, String status, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.name = name;
         this.deptId = deptId;
@@ -78,11 +78,11 @@ public class BizCostBudgetDept {
         this.deptPid = deptPid;
     }
 
-    public Integer getCostRatio() {
+    public Double getCostRatio() {
         return costRatio;
     }
 
-    public void setCostRatio(Integer costRatio) {
+    public void setCostRatio(Double costRatio) {
         this.costRatio = costRatio;
     }
 
