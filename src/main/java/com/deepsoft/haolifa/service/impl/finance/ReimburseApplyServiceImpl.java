@@ -137,6 +137,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         reimburseApply.setAmount(totalAmount);
         reimburseApply.setCreateTime(new Date());
         reimburseApply.setUpdateTime(new Date());
+        //reimburseApply.setApplyStatus(ReimburseApplyStatusEnum.PENDING_APPROVAL.getCode());
+        reimburseApply.setPayStatus(ReimbursePayStatusEnum.un_pay.getCode());
         reimburseApply.setDeptId(sysUser.getDepartId());
         reimburseApply.setReimburseUser(customUser.getId());
         reimburseApply.setCreateUser(customUser.getId());
@@ -261,6 +263,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 借款审批列表
         if (StringUtils.equalsIgnoreCase("1", model.getMyself())) {
 //            criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
+        }else {
+            criteria.andApplyStatusEqualTo(ReimburseApplyStatusEnum.IN_PAYMENT.getCode());
         }
 
         // 状态 1 代办 2 已办
@@ -310,6 +314,16 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         Map<Integer, SysUser> sysUserMap = sysUserList.stream()
             .collect(Collectors.toMap(SysUser::getId, Function.identity(), (a, b) -> a));
 
+        // 查询当前用户的角色
+        CustomUser customUser = sysUserService.selectLoginUser();
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+            .map(a -> (CustomGrantedAuthority) a)
+            .collect(Collectors.toList());
+
+        //当前角色是否为出纳
+        boolean iscn = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
+
         List<ReimburseApplyRSDTO> reimburseApplyRSDTOList = pageData.getResult().stream()
             .map(reimburseApply -> {
                 ReimburseApplyRSDTO reimburseApplyRSDTO = new ReimburseApplyRSDTO();
@@ -318,19 +332,29 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(reimburseApply.getApplyStatus());
 
                 reimburseApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
-                    LoanApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
+                    ReimburseApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
 
                 ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(reimburseApply.getPayStatus());
-                reimburseApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+                reimburseApplyRSDTO.setPayStatusCN(payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
 
                 ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
-                reimburseApplyRSDTO.setTypeCN(payStatusEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
+                reimburseApplyRSDTO.setTypeCN(reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
+
+
                 SysDepartment sysDepartment = sysDepartmentMap.get(reimburseApplyRSDTO.getDeptId());
                 reimburseApplyRSDTO.setDeptName(sysDepartment == null ? "" : sysDepartment.getDeptName());
 
                 SysUser sysUser = sysUserMap.get(reimburseApply.getReimburseUser());
                 reimburseApplyRSDTO.setReimburseUserName(sysUser == null ?"":sysUser.getRealName());
 
+                // 角色 == 出纳 && 支付状态 == 0（未付款）&& 确认状态 == 1（出纳付款）
+                boolean canPay = iscn
+                    && StringUtils.equalsIgnoreCase(reimburseApply.getApplyStatus(), ReimburseApplyStatusEnum.IN_PAYMENT.getCode())
+                    && (
+                    StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.un_pay.getCode())
+                        || StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.partial_pay.getCode())
+                );
+                reimburseApplyRSDTO.setCanPay(canPay);
                 return reimburseApplyRSDTO;
             })
             .collect(Collectors.toList());
