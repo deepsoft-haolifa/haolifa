@@ -230,12 +230,9 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
         }
         PayUser payUser = new PayUser();
-        SysDepartmentExample sysDepartmentExample = new SysDepartmentExample();
-        sysDepartmentExample.createCriteria().andDeptNameEqualTo(model.getDepartName());
-        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(sysDepartmentExample);
-        if (CollectionUtils.isNotEmpty(sysDepartments)) {
-            SysDepartment sysDepartment = sysDepartments.get(0);
-            model.setDepartId(sysDepartment.getId());
+        SysDepartment sysDepartments = departmentMapper.selectByPrimaryKey(model.getDepartId());
+        if (Objects.nonNull(sysDepartments)) {
+            model.setDepartName(sysDepartments.getDeptName());
         }
         BeanUtils.copyProperties(model, payUser);
         payUser.setCreateTime(new Date());
@@ -288,12 +285,9 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
                 return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
             }
         }
-        SysDepartmentExample sysDepartmentExample = new SysDepartmentExample();
-        sysDepartmentExample.createCriteria().andDeptNameEqualTo(model.getDepartName());
-        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(sysDepartmentExample);
-        if (CollectionUtils.isNotEmpty(sysDepartments)) {
-            SysDepartment sysDepartment = sysDepartments.get(0);
-            model.setDepartId(sysDepartment.getId());
+        SysDepartment sysDepartments = departmentMapper.selectByPrimaryKey(model.getDepartId());
+        if (Objects.nonNull(sysDepartments)) {
+            model.setDepartName(sysDepartments.getDeptName());
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
