@@ -75,18 +75,16 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         spray.setPlanner(sprayDto.getPlanner());
         spray.setTotalNumber(0);
         spray.setBusType(sprayDto.getBusType());
+        int sum = sprayDto.getItems().stream().mapToInt(SprayItemDto::getNumber).sum();
+        spray.setTotalNumber(sum);
         sprayMapper.insertSelective(spray);
         sprayDto.getItems().forEach(sprayItemDto -> {
             SprayItem sprayItem = new SprayItem();
             BeanUtils.copyProperties(sprayItemDto, sprayItem);
             sprayItem.setSprayNo(sprayNo);
             sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.NOT_OUT.type);
-            spray.setTotalNumber(spray.getTotalNumber() + sprayItemDto.getNumber());
             sprayItemMapper.insertSelective(sprayItem);
         });
-        SprayExample sprayExample = new SprayExample();
-        sprayExample.createCriteria().andSprayNoEqualTo(sprayNo);
-        sprayMapper.updateByExampleSelective(spray, sprayExample);
         return ResultBean.success(sprayNo);
     }
 
