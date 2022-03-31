@@ -23,6 +23,7 @@ import io.swagger.models.auth.In;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     @Resource
     private PayUserRelationProcedureMapper payUserRelationProcedureMapper;
     @Resource
-    private PayWorkAttendanceMapper payWorkAttendanceMapper;
+    private SysDepartmentMapper departmentMapper;
     @Resource
     private PayWagesMapper payWagesMapper;
     @Resource
@@ -229,6 +230,13 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
         }
         PayUser payUser = new PayUser();
+        SysDepartmentExample sysDepartmentExample = new SysDepartmentExample();
+        sysDepartmentExample.createCriteria().andDeptNameEqualTo(model.getDepartName());
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(sysDepartmentExample);
+        if (CollectionUtils.isNotEmpty(sysDepartments)) {
+            SysDepartment sysDepartment = sysDepartments.get(0);
+            model.setDepartId(sysDepartment.getId());
+        }
         BeanUtils.copyProperties(model, payUser);
         payUser.setCreateTime(new Date());
         payUser.setUpdateTime(new Date());
@@ -279,6 +287,13 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             if (CollectionUtils.isNotEmpty(payUsers)) {
                 return ResultBean.error(CommonEnum.ResponseEnum.ID_CARD_OR_PHONE_REPEAT);
             }
+        }
+        SysDepartmentExample sysDepartmentExample = new SysDepartmentExample();
+        sysDepartmentExample.createCriteria().andDeptNameEqualTo(model.getDepartName());
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(sysDepartmentExample);
+        if (CollectionUtils.isNotEmpty(sysDepartments)) {
+            SysDepartment sysDepartment = sysDepartments.get(0);
+            model.setDepartId(sysDepartment.getId());
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
