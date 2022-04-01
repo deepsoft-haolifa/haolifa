@@ -207,7 +207,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             // 待质检的 单子直接分配任务
             for (AutoControlEntrust entrust : entrusts) {
                 String model = entrust.getModel();
-                String materialClassifyName = entrust.getName();
+                String materialClassifyName = entrust.getWorkType();
                 buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name, entrust.getId(), orderNo, materialClassifyName);
             }
         } else if (CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.code.equals(type)) {
@@ -219,8 +219,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             // 待质检的 单子直接分配任务
             for (ValveSeatEntrust entrust : entrusts) {
                 String model = entrust.getModel();
-                String materialClassifyName = entrust.getName();
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name, entrust.getId(), orderNo, materialClassifyName);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name, entrust.getId(), orderNo, null);
             }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
