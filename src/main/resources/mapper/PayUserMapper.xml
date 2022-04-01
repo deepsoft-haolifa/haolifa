@@ -729,7 +729,7 @@
         from pay_user
         where phone = #{phone}
         <if test="idCard != null and idCard != ''">
-            or id_card = #{idCard}
+            and id_card = #{idCard}
         </if>
         limit 1
     </select>

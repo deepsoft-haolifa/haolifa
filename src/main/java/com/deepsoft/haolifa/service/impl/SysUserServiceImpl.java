@@ -89,7 +89,7 @@ public class SysUserServiceImpl implements SysUserService {
             return (CustomUser) customUserService.loadUserByUsername("admin");
         else
             return (CustomUser) principal;
-//        return (CustomUser) customUserService.loadUserByUsername("tzhiyuan");
+//        return (CustomUser) customUserService.loadUserByUsername("CS1");
     }
 
     public List<UserPipLineDTO> currentUserPipLine(){

@@ -18,7 +18,9 @@ import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostDetailAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostDetailRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailRSDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
@@ -63,6 +65,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private BizReimburseCostDetailMapper bizReimburseCostDetailMapper;
     @Autowired
     private SysDepartmentMapper departmentMapper;
+
+    @Autowired
+    private BizCostBudgetSubjectsMapper bizCostBudgetSubjectsMapper;
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -216,36 +221,82 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     }
 
     @Override
-    public ResultBean<ReimburseApplyInfoRSDTO> getInfo(Integer id) {
+    public ResultBean<ReimburseApplyDetailDTO> getInfo(Integer id) {
         BizReimburseApply reimburseApply = bizReimburseApplyMapper.selectByPrimaryKey(id);
 
         List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
         Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
 
+        // 查询系统用户
         SysUserExample sysUserExample = new SysUserExample();
         sysUserExample.createCriteria().andIdEqualTo(reimburseApply.getReimburseUser());
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
         Map<Integer, SysUser> finalSysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
 
-        ReimburseApplyInfoRSDTO loanApplyRSDTO = new ReimburseApplyInfoRSDTO();
-        BeanUtils.copyProperties(reimburseApply, loanApplyRSDTO);
+
+        // 查询部门预算
+        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+        criteria.andDeptIdEqualTo(reimburseApply.getDeptId());
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+        Map<Integer, String> costBudgetSubjectsMap = costBudgetSubjectsList.stream()
+            .collect(Collectors.toMap(BizCostBudgetSubjects::getId, BizCostBudgetSubjects::getName));
+
+
+        ReimburseApplyDetailDTO reimburseApplyRSDTO = new ReimburseApplyDetailDTO();
+        BeanUtils.copyProperties(reimburseApply, reimburseApplyRSDTO);
         SysDepartment sysDepartment = sysDepartmentMap.get(reimburseApply.getDeptId());
         if (sysDepartment != null) {
-            loanApplyRSDTO.setDeptName(sysDepartment.getDeptName());
+            reimburseApplyRSDTO.setDeptName(sysDepartment.getDeptName());
         }
         SysUser sysUser = finalSysUserMap.get(reimburseApply.getReimburseUser());
         if (sysUser != null) {
-            loanApplyRSDTO.setReimburseUserName(sysUser.getRealName());
+            reimburseApplyRSDTO.setReimburseUserName(sysUser.getRealName());
         }
         ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(reimburseApply.getApplyStatus());
 
-        loanApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
+        reimburseApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
             ReimburseApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
 
         ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(reimburseApply.getPayStatus());
-        loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+        reimburseApplyRSDTO.setPayStatusCN(payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
 
-        return ResultBean.success(loanApplyRSDTO);
+        ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
+        reimburseApplyRSDTO.setTypeCN(reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
+
+        // 差旅
+        if(StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(),ReimburseTypeEnum.travle.getCode())){
+            BizReimburseTravelDetailExample bizReimburseTravelDetailExample = new BizReimburseTravelDetailExample();
+            bizReimburseTravelDetailExample.createCriteria().andReimburseIdEqualTo(id);
+            List<BizReimburseTravelDetail> reimburseTravelDetailList =
+                bizReimburseTravelDetailMapper.selectByExample(bizReimburseTravelDetailExample);
+            List<ReimburseTravelDetailRSDTO> reimburseTravelDetailRSDTOList = reimburseTravelDetailList.stream()
+                .map(reimburseTravelDetail -> {
+                    ReimburseTravelDetailRSDTO reimburseTravelDetailRSDTO = new ReimburseTravelDetailRSDTO();
+                    BeanUtils.copyProperties(reimburseTravelDetail, reimburseTravelDetailRSDTO);
+                    return reimburseTravelDetailRSDTO;
+                })
+                .collect(Collectors.toList());
+            reimburseApplyRSDTO.setReimburseTravelDetailRSDTOList(reimburseTravelDetailRSDTOList);
+            // 费用
+        }else if (StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(),ReimburseTypeEnum.cost.getCode())){
+            BizReimburseCostDetailExample bizReimburseCostDetailExample = new BizReimburseCostDetailExample();
+            bizReimburseCostDetailExample.createCriteria().andReimburseIdEqualTo(id);
+
+            List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(bizReimburseCostDetailExample);
+            List<ReimburseCostDetailRSDTO> reimburseCostDetailRSDTOList = reimburseCostDetailList.stream()
+                .map(reimburseCostDetail -> {
+                    ReimburseCostDetailRSDTO reimburseCostDetailRSDTO = new ReimburseCostDetailRSDTO();
+                    BeanUtils.copyProperties(reimburseCostDetail, reimburseCostDetailRSDTO);
+                    String subjectsMapOrDefault = costBudgetSubjectsMap.getOrDefault(reimburseCostDetail.getSubject(), "");
+                    reimburseCostDetailRSDTO.setSubjectCN(subjectsMapOrDefault);
+                    return reimburseCostDetailRSDTO;
+                })
+                .collect(Collectors.toList());
+            reimburseApplyRSDTO.setReimburseCostDetailRSDTOList(reimburseCostDetailRSDTOList);
+        }
+
+        return ResultBean.success(reimburseApplyRSDTO);
     }
 
     @Override
@@ -362,7 +413,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         return ResultBean.success(pageDTO);
     }
 
-
     @Override
     public int auditReplaceMaterial(String item_id, ReimburseApplyStatusEnum auditResult) {
         BizReimburseApplyExample reimburseApplyExample = new BizReimburseApplyExample();
@@ -404,14 +454,13 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         return ResultBean.success(1);
     }
 
-
     @Override
     public ResultBean pay(ReimburseApplyPayDTO payDTO) {
         BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(payDTO.getId());
 
         // 有些状态不能付款
         LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(bizReimburseApplyS.getPayStatus());
-        if (!LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+        if (LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
         }
 

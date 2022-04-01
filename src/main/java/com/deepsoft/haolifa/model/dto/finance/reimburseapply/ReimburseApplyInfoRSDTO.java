@@ -11,6 +11,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 public class ReimburseApplyInfoRSDTO {
 
+
     @ApiModelProperty(value = "ID")
     private Integer id;
 
@@ -19,6 +20,7 @@ public class ReimburseApplyInfoRSDTO {
 
     @ApiModelProperty(value = "报销部门id")
     private Integer deptId;
+
     @ApiModelProperty(value = "报销部门名称")
     private String deptName;
 
@@ -37,6 +39,7 @@ public class ReimburseApplyInfoRSDTO {
     private Date reimburseDate;
     @ApiModelProperty(value = "报销人")
     private Integer reimburseUser;
+
     @ApiModelProperty(value = "报销人名称")
     private String reimburseUserName;
 
@@ -75,24 +78,6 @@ public class ReimburseApplyInfoRSDTO {
 
     @ApiModelProperty(value = "备注摘要")
     private String remark;
-
-    @ApiModelProperty(value = "删除标志（0代表存在 1代表删除）")
-    private String delFlag;
-
-    @ApiModelProperty(value = "创建者")
-    private Integer createUser;
-
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    @ApiModelProperty(value = "更新者")
-    private Integer updateUser;
-
-    @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
-
-    @ApiModelProperty(value = "是否可以支付")
-    private Boolean canPay = false;
 
 
 }

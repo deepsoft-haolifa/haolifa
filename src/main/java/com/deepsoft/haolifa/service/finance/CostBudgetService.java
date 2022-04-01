@@ -41,4 +41,5 @@ public interface CostBudgetService {
     ResultBean deleteSubjectsBudgetBatch(List<Integer> ids);
 
 
+    ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList();
 }

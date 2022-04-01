@@ -350,7 +350,6 @@ CREATE TABLE `biz_reimburse_travel_detail`
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报销申请-差旅类别详情';
 
-
 CREATE TABLE `biz_reimburse_cost_detail`
 (
     `id`           int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -360,6 +359,7 @@ CREATE TABLE `biz_reimburse_cost_detail`
     `doc_num`      int(3) DEFAULT NULL COMMENT '单据张数',
     `amount`       decimal(15, 4) DEFAULT '0.0000' COMMENT '金额',
     `type`         char(1)        DEFAULT '0' COMMENT '类型 1 费用报销 2 费用报销',
+    `subject`      int(11) DEFAULT NULL COMMENT '报销类别',
     `pay_status`   char(1)        DEFAULT '0' COMMENT '付款状态（1未付款 2付款中 3付款完成）',
     `remark`       varchar(30)    DEFAULT '' COMMENT '备注摘要',
     `del_flag`     char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
@@ -368,8 +368,7 @@ CREATE TABLE `biz_reimburse_cost_detail`
     `update_user`  int(11) DEFAULT NULL COMMENT '更新者',
     `update_time`  datetime       DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报销申请-费用类别详情';
-
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='报销申请-费用类别详情';
 
 CREATE TABLE `biz_cost_budget_dept`
 (
@@ -387,8 +386,6 @@ CREATE TABLE `biz_cost_budget_dept`
     `update_time` datetime    DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='部门费用预算表';
-
-
 
 CREATE TABLE `biz_cost_budget_subjects`
 (

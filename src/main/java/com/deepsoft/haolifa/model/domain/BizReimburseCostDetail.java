@@ -18,6 +18,8 @@ public class BizReimburseCostDetail {
 
     private String type;
 
+    private Integer subject;
+
     private String payStatus;
 
     private String remark;
@@ -32,7 +34,7 @@ public class BizReimburseCostDetail {
 
     private Date updateTime;
 
-    public BizReimburseCostDetail(Integer id, Integer reimburseId, String serialNo, Date time, Integer docNum, BigDecimal amount, String type, String payStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseCostDetail(Integer id, Integer reimburseId, String serialNo, Date time, Integer docNum, BigDecimal amount, String type, Integer subject, String payStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.reimburseId = reimburseId;
         this.serialNo = serialNo;
@@ -40,6 +42,7 @@ public class BizReimburseCostDetail {
         this.docNum = docNum;
         this.amount = amount;
         this.type = type;
+        this.subject = subject;
         this.payStatus = payStatus;
         this.remark = remark;
         this.delFlag = delFlag;
@@ -107,6 +110,14 @@ public class BizReimburseCostDetail {
 
     public void setType(String type) {
         this.type = type == null ? null : type.trim();
+    }
+
+    public Integer getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Integer subject) {
+        this.subject = subject;
     }
 
     public String getPayStatus() {

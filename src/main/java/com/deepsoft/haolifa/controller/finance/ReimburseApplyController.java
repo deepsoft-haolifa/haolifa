@@ -70,7 +70,7 @@ public class ReimburseApplyController {
 
     @ApiOperation("详情")
     @GetMapping("/info/{id}")
-    public ResultBean<ReimburseApplyInfoRSDTO> info(@PathVariable("id") int id) {
+    public ResultBean<ReimburseApplyDetailDTO> info(@PathVariable("id") int id) {
         return reimburseApplyService.getInfo(id);
     }
 

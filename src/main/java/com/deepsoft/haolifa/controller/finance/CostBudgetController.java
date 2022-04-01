@@ -1,7 +1,5 @@
 package com.deepsoft.haolifa.controller.finance;
 
-import cn.hutool.json.JSON;
-import com.deepsoft.haolifa.enums.CostBudgetTypeEnum;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudgetQuery;
@@ -37,7 +35,6 @@ public class CostBudgetController {
     }
 
 
-
     //--- 部门
     @ApiOperation("添加或修改部门预算节点")
     @PostMapping("/dept/saveOrUp")
@@ -52,7 +49,7 @@ public class CostBudgetController {
     }
 
 
-//    @ApiOperation("更新部门预算节点")
+    //    @ApiOperation("更新部门预算节点")
 //    @PostMapping("/dept/updateDeptBudget")
     public ResultBean updateDeptBudget(@RequestBody CostBudgetDeptUpDTO model) {
         return costBudgetService.updateDeptBudget(model);
@@ -60,13 +57,12 @@ public class CostBudgetController {
 
     @ApiOperation("获取部门预算节点列表")
     @PostMapping("/dept/getDeptBudgetList")
-    public  ResultBean<List<CostBudgetDeptTree>>  getDeptBudgetList(@RequestBody CostBudgetDeptRQDTO model) {
+    public ResultBean<List<CostBudgetDeptTree>> getDeptBudgetList(@RequestBody CostBudgetDeptRQDTO model) {
         return costBudgetService.getDeptBudgetListTree(model);
     }
 
 
     //--- 科目
-
     @ApiOperation("添加科目预算节点")
     @PostMapping("/subjects/saveSubjectsBudget")
     public ResultBean saveSubjectsBudget(@RequestBody CostBudgetSubjectsAddDTO model) {
@@ -95,6 +91,12 @@ public class CostBudgetController {
     @PostMapping("/subjects/getSubjectsBudgetList")
     public ResultBean<PageDTO<CostBudgetSubjectsRSDTO>> getSubjectsBudgetList(@RequestBody CostBudgetSubjectsRQDTO model) {
         return costBudgetService.getSubjectsBudgetList(model);
+    }
+
+    @ApiOperation("获取当前用户科目预算节点列表")
+    @GetMapping("/subjects/getCurUserSubjectsBudgetList")
+    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList() {
+        return costBudgetService.getCurUserSubjectsBudgetList();
     }
 
 }

@@ -24,6 +24,9 @@ public class ReimburseCostDetailUpDTO {
     @ApiModelProperty(value = "类型 1 费用报销 2 费用报销")
     private  String type;
 
+    @ApiModelProperty(value = "报销科目(费用预算表中的ID)")
+    private Integer subject;
+
     @ApiModelProperty(value = "备注摘要")
     private  String remark;
 

@@ -38,6 +38,9 @@ public class ReimburseTravelDetailRSDTO {
     private BigDecimal travelSubsidyAmount;
     @ApiModelProperty(value = "项目")
     private Integer projectType;
+    @ApiModelProperty(value = "项目名称")
+    private Integer projectTypeCN;
+
     @ApiModelProperty(value = "单据张数")
     private Integer projectDocNum;
     @ApiModelProperty(value = "金额")
@@ -51,20 +54,6 @@ public class ReimburseTravelDetailRSDTO {
     @ApiModelProperty(value = "备注摘要")
     private  String remark;
 
-    @ApiModelProperty(value = "删除标志（0代表存在 1代表删除）")
-    private  String delFlag;
-
-    @ApiModelProperty(value = "创建者")
-    private  Integer createUser;
-
-    @ApiModelProperty(value = "创建时间")
-    private  Date createTime;
-
-    @ApiModelProperty(value = "更新者'")
-    private  Integer updateUser;
-
-    @ApiModelProperty(value = "更新时间")
-    private  Date updateTime;
 
 
 }

@@ -42,7 +42,7 @@ public interface ReimburseApplyService {
      * @param id
      * @return
      */
-    ResultBean<ReimburseApplyInfoRSDTO> getInfo(Integer id);
+    ResultBean<ReimburseApplyDetailDTO> getInfo(Integer id);
 
     /**
      * 获取列表

@@ -546,6 +546,66 @@ public class BizReimburseCostDetailExample {
             return (Criteria) this;
         }
 
+        public Criteria andSubjectIsNull() {
+            addCriterion("subject is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIsNotNull() {
+            addCriterion("subject is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectEqualTo(Integer value) {
+            addCriterion("subject =", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectNotEqualTo(Integer value) {
+            addCriterion("subject <>", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectGreaterThan(Integer value) {
+            addCriterion("subject >", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectGreaterThanOrEqualTo(Integer value) {
+            addCriterion("subject >=", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectLessThan(Integer value) {
+            addCriterion("subject <", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectLessThanOrEqualTo(Integer value) {
+            addCriterion("subject <=", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIn(List<Integer> values) {
+            addCriterion("subject in", values, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectNotIn(List<Integer> values) {
+            addCriterion("subject not in", values, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectBetween(Integer value1, Integer value2) {
+            addCriterion("subject between", value1, value2, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectNotBetween(Integer value1, Integer value2) {
+            addCriterion("subject not between", value1, value2, "subject");
+            return (Criteria) this;
+        }
+
         public Criteria andPayStatusIsNull() {
             addCriterion("pay_status is null");
             return (Criteria) this;

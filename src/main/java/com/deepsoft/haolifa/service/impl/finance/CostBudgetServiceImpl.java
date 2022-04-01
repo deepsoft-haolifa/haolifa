@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.CostBudgetTypeEnum;
 import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudget;
@@ -82,6 +83,9 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "比例介于0~100之间");
         }
 
+        List<BizCostBudgetDept> bizCostBudgetDeptAllList = bizCostBudgetDeptMapper.selectByExample(new BizCostBudgetDeptExample());
+
+
         BizCostBudgetDeptExample bizCostBudgetDeptExample = new BizCostBudgetDeptExample();
         BizCostBudgetDeptExample.Criteria criteria = bizCostBudgetDeptExample.createCriteria();
         criteria.andDeptIdEqualTo(model.getDeptId());
@@ -91,32 +95,64 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             bizCostBudgetDept = bizCostBudgetDepts.get(0);
         }
 
+        CustomUser customUser = sysUserService.selectLoginUser();
         int i = 0;
         if (bizCostBudgetDept != null) {
-            SysDepartment department = departmentMapper.selectByPrimaryKey(model.getDeptId());
+            // 校验总比例不能大于100
+            BizCostBudgetDept finalBizCostBudgetDept = bizCostBudgetDept;
+            BigDecimal totalCostRatio = bizCostBudgetDeptAllList.stream()
+                .filter(c -> c.getCostRatio() != null)
+                .filter(c-> !c.getId().equals(finalBizCostBudgetDept.getId()))
+                .map(c -> BigDecimal.valueOf(c.getCostRatio()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal currentTotal = totalCostRatio.add(BigDecimal.valueOf(model.getCostRatio()));
+            if (currentTotal.compareTo(BigDecimal.valueOf(100))>0){
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总比例不能大于100");
+            }
 
-            BizCostBudgetDept bizCostBudgetDeptUp = new BizCostBudgetDept();
-            bizCostBudgetDeptUp.setId(bizCostBudgetDept.getId());
-            bizCostBudgetDeptUp.setName(department.getDeptName());
-            bizCostBudgetDeptUp.setCostRatio(model.getCostRatio());
-            bizCostBudgetDeptUp.setRemark(bizCostBudgetDept.getRemark());
-            bizCostBudgetDeptUp.setUpdateTime(new Date());
-            bizCostBudgetDeptUp.setUpdateUser(sysUserService.selectLoginUser().getId());
+            SysDepartment department = departmentMapper.selectByPrimaryKey(model.getDeptId());
+            BizCostBudgetDept bizCostBudgetDeptUp = buildBizCostBudgetDept(model, bizCostBudgetDept, customUser, department);
             i = bizCostBudgetDeptMapper.updateByPrimaryKeySelective(bizCostBudgetDeptUp);
         } else {
-            BizCostBudgetDept costBudget = new BizCostBudgetDept();
-            BeanUtils.copyProperties(model, costBudget);
-            SysDepartment department = departmentMapper.selectByPrimaryKey(model.getDeptId());
-            costBudget.setDeptPid(department.getPid());
-            costBudget.setName(department.getDeptName());
-            costBudget.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
-            costBudget.setCreateTime(new Date());
-            costBudget.setUpdateTime(new Date());
-            costBudget.setCreateUser(sysUserService.selectLoginUser().getId());
-            costBudget.setUpdateUser(sysUserService.selectLoginUser().getId());
+            // 校验总比例不能大于100
+            BigDecimal totalCostRatio = bizCostBudgetDeptAllList.stream()
+                .filter(c -> c.getCostRatio() != null)
+                .map(c -> BigDecimal.valueOf(c.getCostRatio()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal currentTotal = totalCostRatio.add(BigDecimal.valueOf(model.getCostRatio()));
+            if (currentTotal.compareTo(BigDecimal.valueOf(100))>0){
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总比例不能大于100");
+            }
+
+            BizCostBudgetDept costBudget = buildBizCostBudgetDept(model, customUser);
             i = bizCostBudgetDeptMapper.insertSelective(costBudget);
         }
         return ResultBean.success(i);
+    }
+
+    private BizCostBudgetDept buildBizCostBudgetDept(CostBudgetDeptAddUpDTO model, CustomUser customUser) {
+        BizCostBudgetDept costBudget = new BizCostBudgetDept();
+        BeanUtils.copyProperties(model, costBudget);
+        SysDepartment department = departmentMapper.selectByPrimaryKey(model.getDeptId());
+        costBudget.setDeptPid(department.getPid());
+        costBudget.setName(department.getDeptName());
+        costBudget.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
+        costBudget.setCreateTime(new Date());
+        costBudget.setUpdateTime(new Date());
+        costBudget.setCreateUser(customUser.getId());
+        costBudget.setUpdateUser(customUser.getId());
+        return costBudget;
+    }
+
+    private BizCostBudgetDept buildBizCostBudgetDept(CostBudgetDeptAddUpDTO model, BizCostBudgetDept bizCostBudgetDept, CustomUser customUser, SysDepartment department) {
+        BizCostBudgetDept bizCostBudgetDeptUp = new BizCostBudgetDept();
+        bizCostBudgetDeptUp.setId(bizCostBudgetDept.getId());
+        bizCostBudgetDeptUp.setName(department.getDeptName());
+        bizCostBudgetDeptUp.setCostRatio(model.getCostRatio());
+        bizCostBudgetDeptUp.setRemark(bizCostBudgetDept.getRemark());
+        bizCostBudgetDeptUp.setUpdateTime(new Date());
+        bizCostBudgetDeptUp.setUpdateUser(customUser.getId());
+        return bizCostBudgetDeptUp;
     }
 
     @Override
@@ -373,11 +409,21 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
         // 名称 like
         if (StringUtils.isNotEmpty(model.getName())) {
-            criteria.andNameLike(model.getName());
+            criteria.andNameLike("%"+model.getName()+"%");
         }
         //科目id==
         if (model.getSubjectsId() != null) {
             criteria.andSubjectsIdEqualTo(model.getSubjectsId());
+        }
+        if (model.getDeptId() != null) {
+            criteria.andDeptIdEqualTo(model.getDeptId());
+        }
+        if (StringUtils.isNotEmpty(model.getDeptName())) {
+            SysDepartmentExample departmentExample = new SysDepartmentExample();
+            departmentExample.createCriteria().andDeptNameLike("%"+model.getDeptName()+"%");
+            List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
+            List<Integer> didList = sysDepartments.stream().map(SysDepartment::getId).collect(Collectors.toList());
+            criteria.andDeptIdIn(didList);
         }
 
         bizCostBudgetExample.setOrderByClause("id desc");
@@ -417,6 +463,37 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         criteria.andIdIn(ids);
         int c = bizCostBudgetSubjectsMapper.deleteByExample(bizCostBudgetExample);
         return ResultBean.success(c);
+    }
+
+    @Override
+    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList() {
+        CustomUser customUser = sysUserService.selectLoginUser();
+        SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+
+        // 查询部门预算
+        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+        criteria.andDeptIdEqualTo(sysUser.getDepartId());
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+        List<CostBudgetSubjectsRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
+            .map(bizCostBudgetSubjects -> {
+                CostBudgetSubjectsRSDTO costBudgetSubjectsRQDTO = new CostBudgetSubjectsRSDTO();
+                BeanUtils.copyProperties(bizCostBudgetSubjects, costBudgetSubjectsRQDTO);
+                // todo 公式待补充
+                costBudgetSubjectsRQDTO.setCostRatioFormula(bizCostBudgetSubjects.getCostRatio() + "%");
+                costBudgetSubjectsRQDTO.setCostRatioFormulaCN(bizCostBudgetSubjects.getCostRatio() + "%");
+                SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
+                costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
+                return costBudgetSubjectsRQDTO;
+            })
+            .collect(Collectors.toList());
+
+
+        return ResultBean.success(costBudgetSubjectsRSDTOList);
     }
 
 
