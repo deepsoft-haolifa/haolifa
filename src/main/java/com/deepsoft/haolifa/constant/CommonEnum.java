@@ -772,7 +772,14 @@ public class CommonEnum {
         SEMI_FINISHED_VALVE_BODY("4", "阀体半成品"),
         SEMI_FINISHED_VALVE_PLATE("5", "阀板半成品"),
         VALVE_SEAT_MACHINING("6", "阀座加工"),
-        ACTUATOR_MACHINING("7", "执行器加工"),
+        ACTUATOR_ASSEMBLY("7", "普通开关型电动执行器装配"),
+        ACTUATOR_ADJUSTABLE("8", "调节型电动执行器装配"),
+        PREPARATION_OF_COMMON("9", "公共件准备工作"),
+        PNEUMATIC_ASSEMBLY("10", "气动阀装配"),
+        EXTERNAL_ADJUSTMENT_ORDINARY("11", "外调普通精巧型执行器装配"),
+        EXTERNAL_ADJUSTMENT("12", "外调精巧调节型执行器装配"),
+        EXTERNAL_ADJUSTMENT_SWITCH("13", "外调通用开关型执行器装配"),
+        EXTERNAL_ADJUSTMENT_COMMON("14", "外调通用调节型执行器装配"),
         ;
         public final String code;
         public final String name;
