@@ -22,10 +22,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @Author liuyaofei
@@ -229,6 +226,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             BigDecimal minLiveSecurityFund = payWage.getMinLiveSecurityFund();
             BigDecimal totalAmount = new BigDecimal("0");
 
+            // 去重入库数量
+            Map<Integer, Integer> productMap = new HashMap<>();
+
             if (CommonEnum.UserType.UNMARRIED.type.equals(userType)) {
                 PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
                 payOrderUserRelationProcedure.setUserId(userId);
@@ -255,6 +255,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         ProInspectRecord proInspectRecord1 = proInspectList.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = proInspectRecord1.getQualifiedNumber();
+                        productMap.put(procedure.getProductId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -271,6 +272,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         SprayInspectHistory sprayInspectHistory = sprayInspectHistoryList.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = sprayInspectHistory.getQualifiedNumber();
+                        productMap.put(procedure.getProductId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -287,6 +289,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         InspectHistory inspectHistory = inspectHistories.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                        productMap.put(procedure.getProductId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -303,6 +306,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         AutoControlInspectHistory inspectHistory = inspectHistories.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                        productMap.put(procedure.getProductId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -319,6 +323,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         ValveSeatInspectHistory inspectHistory = inspectHistories.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                        productMap.put(procedure.getProductId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -357,10 +362,13 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 payWage.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
                 payWage.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
             }
-
+            int priceCount = 0;
+            for (Map.Entry<Integer, Integer> entry : productMap.entrySet()) {
+                priceCount = priceCount + entry.getValue();
+            }
             payWage.setUpdateUser(getLoginUserName());
             payWage.setUpdateTime(new Date());
-            payWage.setByPieceCount(totalCount);
+            payWage.setByPieceCount(priceCount);
             payWage.setByPieceMoney(totalAmount);
             payWage.setTotalMoney(minLiveSecurityFund);
             payWage.setNetSalaryMoney(multiply);
