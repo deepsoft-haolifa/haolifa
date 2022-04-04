@@ -10,12 +10,14 @@ import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.domain.BizPayPlanExample;
 import com.deepsoft.haolifa.model.domain.PurchaseOrder;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.storage.EntryProductStorageDTO;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.deepsoft.haolifa.service.finance.OtherBillService;
 import com.deepsoft.haolifa.service.finance.PayPlanService;
+import com.deepsoft.haolifa.service.impl.EntryOutStoreRecordServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,8 @@ public class PayPlanServiceTest extends BaseTest {
     private BizPayApplyMapper bizPayApplyMapper;
     @Autowired
     private PayPlanService payPlanService;
+    @Resource
+    private EntryOutStoreRecordServiceImpl entryOutStoreRecordService;
 
     @Test
     public void t1() {
@@ -94,6 +98,16 @@ public class PayPlanServiceTest extends BaseTest {
         id.add(10);
         ResultBean resultBean = payPlanService.updateDateStatus(id);
 
+
+        System.out.println(1);
+    }
+
+    @Test
+    public void t3() {
+        EntryProductStorageDTO entryProductStorageDTO = new EntryProductStorageDTO();
+        entryProductStorageDTO.setProductModel("H100B");
+        entryProductStorageDTO.setQuantity(12);
+        entryOutStoreRecordService.calculateManagerWages(entryProductStorageDTO);
 
         System.out.println(1);
     }

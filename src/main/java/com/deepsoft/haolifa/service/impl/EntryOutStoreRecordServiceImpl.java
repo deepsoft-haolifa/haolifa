@@ -143,7 +143,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
      *
      * @param model
      */
-    private void calculateManagerWages(EntryProductStorageDTO model) {
+    public void calculateManagerWages(EntryProductStorageDTO model) {
         try {
             LocalDate localDate = LocalDate.now();
             int year = localDate.getYear();
@@ -229,7 +229,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         payWagesSearchMapper.insertSelective(payWagesSearch);
                     } else {
                         PayWagesSearch payWagesSearch = payWagesSearches.get(0);
-                        BigDecimal byPieceMoney = payWagesSearch.getByPieceMoney().add(accrual);
+                        BigDecimal byPieceMoney = payWagesSearch.getAccruedPerformanceSalary().add(accrual);
                         BigDecimal totalMoney = payWagesSearch.getTotalMoney().add(accrual);
                         payWagesSearch.setAccruedPerformanceSalary(byPieceMoney);
                         payWagesSearch.setTotalMoney(totalMoney);
