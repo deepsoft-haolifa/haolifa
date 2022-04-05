@@ -255,7 +255,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         ProInspectRecord proInspectRecord1 = proInspectList.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = proInspectRecord1.getQualifiedNumber();
-                        productMap.put(procedure.getProductId(), qualifiedNumber);
+                        productMap.put(proInspectRecord1.getId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -272,7 +272,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         SprayInspectHistory sprayInspectHistory = sprayInspectHistoryList.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = sprayInspectHistory.getQualifiedNumber();
-                        productMap.put(procedure.getProductId(), qualifiedNumber);
+                        productMap.put(sprayInspectHistory.getId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -289,7 +289,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         InspectHistory inspectHistory = inspectHistories.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
-                        productMap.put(procedure.getProductId(), qualifiedNumber);
+                        productMap.put(inspectHistory.getId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -306,7 +306,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         AutoControlInspectHistory inspectHistory = inspectHistories.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
-                        productMap.put(procedure.getProductId(), qualifiedNumber);
+                        productMap.put(inspectHistory.getId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
@@ -323,7 +323,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         ValveSeatInspectHistory inspectHistory = inspectHistories.get(0);
                         // 合格数量x工序价格+基本工资
                         Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
-                        productMap.put(procedure.getProductId(), qualifiedNumber);
+                        productMap.put(inspectHistory.getId(), qualifiedNumber);
                         totalCount = totalCount + qualifiedNumber;
                         BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                         totalAmount = totalAmount.add(multiply);
