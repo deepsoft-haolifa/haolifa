@@ -218,6 +218,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             }
             // 通过用户ID查工序订单用户关联表
             Integer userId = list.get(0).getUserId();
+            if (userId != 21) {
+                continue;
+            }
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
 
@@ -252,15 +255,26 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(proInspectList)) {
                             continue;
                         }
-                        ProInspectRecord proInspectRecord1 = proInspectList.get(0);
-                        // 合格数量x工序价格+基本工资
-                        Integer qualifiedNumber = proInspectRecord1.getQualifiedNumber();
-                        productMap.put(proInspectRecord1.getId(), qualifiedNumber);
-                        totalCount = totalCount + qualifiedNumber;
-                        BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
-                        totalAmount = totalAmount.add(multiply);
-                        procedure.setTotalCount(qualifiedNumber);
-                        procedure.setTotalPrice(multiply);
+                        int qualifiedNumberTotal = 0;
+                        BigDecimal multiplyPrice = new BigDecimal("0");
+                        for (ProInspectRecord inspectRecord : proInspectList) {
+                            // 合格数量x工序价格+基本工资
+                            Integer qualifiedNumber = inspectRecord.getQualifiedNumber();
+                            qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
+                            // 去重数量
+                            Integer integerCount = productMap.get(inspectRecord.getId());
+                            if (Objects.nonNull(integerCount)) {
+                                productMap.put(inspectRecord.getId(), integerCount + qualifiedNumber);
+                            } else {
+                                productMap.put(inspectRecord.getId(), qualifiedNumber);
+                            }
+                            totalCount = totalCount + qualifiedNumber;
+                            BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                            multiplyPrice = multiplyPrice.add(multiply);
+                            totalAmount = totalAmount.add(multiply);
+                        }
+                        procedure.setTotalCount(qualifiedNumberTotal);
+                        procedure.setTotalPrice(multiplyPrice);
                         payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.SPRAY.name.equals(workshopName)) {
                         SprayItem sprayItem = sprayItemMapper.selectByPrimaryKey(procedure.getProductId());
@@ -269,15 +283,27 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(sprayInspectHistoryList)) {
                             continue;
                         }
-                        SprayInspectHistory sprayInspectHistory = sprayInspectHistoryList.get(0);
-                        // 合格数量x工序价格+基本工资
-                        Integer qualifiedNumber = sprayInspectHistory.getQualifiedNumber();
-                        productMap.put(sprayInspectHistory.getId(), qualifiedNumber);
-                        totalCount = totalCount + qualifiedNumber;
-                        BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
-                        totalAmount = totalAmount.add(multiply);
-                        procedure.setTotalCount(qualifiedNumber);
-                        procedure.setTotalPrice(multiply);
+                        int qualifiedNumberTotal = 0;
+                        BigDecimal multiplyPrice = new BigDecimal("0");
+                        for (SprayInspectHistory sprayInspectHistory : sprayInspectHistoryList) {
+                            Integer qualifiedNumber = sprayInspectHistory.getQualifiedNumber();
+                            qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
+                            // 去重数量
+                            Integer integerCount = productMap.get(sprayInspectHistory.getId());
+                            if (Objects.nonNull(integerCount)) {
+                                productMap.put(sprayInspectHistory.getId(), integerCount + qualifiedNumber);
+                            } else {
+                                productMap.put(sprayInspectHistory.getId(), qualifiedNumber);
+                            }
+                            // 合格数量x工序价格+基本工资
+                            productMap.put(sprayInspectHistory.getId(), qualifiedNumber);
+                            totalCount = totalCount + qualifiedNumber;
+                            BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                            multiplyPrice = multiplyPrice.add(multiply);
+                            totalAmount = totalAmount.add(multiply);
+                        }
+                        procedure.setTotalCount(qualifiedNumberTotal);
+                        procedure.setTotalPrice(multiplyPrice);
                         payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.MACHINING.name.equals(workshopName)) {
                         Entrust entrust = entrustMapper.selectByPrimaryKey(procedure.getProductId());
@@ -286,15 +312,27 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;
                         }
-                        InspectHistory inspectHistory = inspectHistories.get(0);
-                        // 合格数量x工序价格+基本工资
-                        Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
-                        productMap.put(inspectHistory.getId(), qualifiedNumber);
-                        totalCount = totalCount + qualifiedNumber;
-                        BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
-                        totalAmount = totalAmount.add(multiply);
-                        procedure.setTotalCount(qualifiedNumber);
-                        procedure.setTotalPrice(multiply);
+                        int qualifiedNumberTotal = 0;
+                        BigDecimal multiplyPrice = new BigDecimal("0");
+                        for (InspectHistory inspectHistory : inspectHistories) {
+                            // 合格数量x工序价格+基本工资
+                            Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                            // 去重数量
+                            Integer integerCount = productMap.get(inspectHistory.getId());
+                            if (Objects.nonNull(integerCount)) {
+                                productMap.put(inspectHistory.getId(), integerCount + qualifiedNumber);
+                            } else {
+                                productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            }
+                            qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
+                            productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            totalCount = totalCount + qualifiedNumber;
+                            BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                            multiplyPrice = multiplyPrice.add(multiply);
+                            totalAmount = totalAmount.add(multiply);
+                        }
+                        procedure.setTotalCount(qualifiedNumberTotal);
+                        procedure.setTotalPrice(multiplyPrice);
                         payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name.equals(workshopName)) {
                         AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(procedure.getProductId());
@@ -303,15 +341,27 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;
                         }
-                        AutoControlInspectHistory inspectHistory = inspectHistories.get(0);
-                        // 合格数量x工序价格+基本工资
-                        Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
-                        productMap.put(inspectHistory.getId(), qualifiedNumber);
-                        totalCount = totalCount + qualifiedNumber;
-                        BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
-                        totalAmount = totalAmount.add(multiply);
-                        procedure.setTotalCount(qualifiedNumber);
-                        procedure.setTotalPrice(multiply);
+                        int qualifiedNumberTotal = 0;
+                        BigDecimal multiplyPrice = new BigDecimal("0");
+                        for (AutoControlInspectHistory inspectHistory : inspectHistories) {
+                            // 合格数量x工序价格+基本工资
+                            Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                            qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
+                            // 去重数量
+                            Integer integerCount = productMap.get(inspectHistory.getId());
+                            if (Objects.nonNull(integerCount)) {
+                                productMap.put(inspectHistory.getId(), integerCount + qualifiedNumber);
+                            } else {
+                                productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            }
+                            productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            totalCount = totalCount + qualifiedNumber;
+                            BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                            multiplyPrice = multiplyPrice.add(multiply);
+                            totalAmount = totalAmount.add(multiply);
+                        }
+                        procedure.setTotalCount(qualifiedNumberTotal);
+                        procedure.setTotalPrice(multiplyPrice);
                         payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name.equals(workshopName)) {
                         ValveSeatEntrust entrust = valveSeatEntrustMapper.selectByPrimaryKey(procedure.getProductId());
@@ -320,15 +370,28 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;
                         }
-                        ValveSeatInspectHistory inspectHistory = inspectHistories.get(0);
-                        // 合格数量x工序价格+基本工资
-                        Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
-                        productMap.put(inspectHistory.getId(), qualifiedNumber);
-                        totalCount = totalCount + qualifiedNumber;
-                        BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
-                        totalAmount = totalAmount.add(multiply);
-                        procedure.setTotalCount(qualifiedNumber);
-                        procedure.setTotalPrice(multiply);
+                        int qualifiedNumberTotal = 0;
+                        BigDecimal multiplyPrice = new BigDecimal("0");
+                        for (ValveSeatInspectHistory inspectHistory : inspectHistories) {
+                            // 合格数量x工序价格+基本工资
+                            Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                            qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
+                            // 去重数量
+                            Integer integerCount = productMap.get(inspectHistory.getId());
+                            if (Objects.nonNull(integerCount)) {
+                                productMap.put(inspectHistory.getId(), integerCount + qualifiedNumber);
+                            } else {
+                                productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            }
+                            productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            totalCount = totalCount + qualifiedNumber;
+                            BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                            multiplyPrice = multiplyPrice.add(multiply);
+                            totalAmount = totalAmount.add(multiply);
+
+                        }
+                        procedure.setTotalCount(qualifiedNumberTotal);
+                        procedure.setTotalPrice(multiplyPrice);
                         payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     }
                 }
