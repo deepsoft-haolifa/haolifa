@@ -218,9 +218,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             }
             // 通过用户ID查工序订单用户关联表
             Integer userId = list.get(0).getUserId();
-            if (userId != 21) {
-                continue;
-            }
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
 
