@@ -227,7 +227,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             BigDecimal totalAmount = new BigDecimal("0");
 
             // 去重入库数量
-            Map<Integer, Integer> productMap = new HashMap<>();
+            Map<String, Integer> productMap = new HashMap<>();
 
             if (CommonEnum.UserType.UNMARRIED.type.equals(userType)) {
                 PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
@@ -259,12 +259,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             Integer qualifiedNumber = inspectRecord.getQualifiedNumber();
                             qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
                             // 去重数量
-                            Integer integerCount = productMap.get(inspectRecord.getId());
-                            if (Objects.nonNull(integerCount)) {
-                                productMap.put(inspectRecord.getId(), integerCount + qualifiedNumber);
-                            } else {
-                                productMap.put(inspectRecord.getId(), qualifiedNumber);
-                            }
+                            productMap.put(inspectRecord.getId() + orderId, qualifiedNumber);
                             totalCount = totalCount + qualifiedNumber;
                             BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                             multiplyPrice = multiplyPrice.add(multiply);
@@ -286,14 +281,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             Integer qualifiedNumber = sprayInspectHistory.getQualifiedNumber();
                             qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
                             // 去重数量
-                            Integer integerCount = productMap.get(sprayInspectHistory.getId());
-                            if (Objects.nonNull(integerCount)) {
-                                productMap.put(sprayInspectHistory.getId(), integerCount + qualifiedNumber);
-                            } else {
-                                productMap.put(sprayInspectHistory.getId(), qualifiedNumber);
-                            }
+                            productMap.put(sprayInspectHistory.getId() + orderId, qualifiedNumber);
                             // 合格数量x工序价格+基本工资
-                            productMap.put(sprayInspectHistory.getId(), qualifiedNumber);
                             totalCount = totalCount + qualifiedNumber;
                             BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                             multiplyPrice = multiplyPrice.add(multiply);
@@ -315,14 +304,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             // 合格数量x工序价格+基本工资
                             Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
                             // 去重数量
-                            Integer integerCount = productMap.get(inspectHistory.getId());
-                            if (Objects.nonNull(integerCount)) {
-                                productMap.put(inspectHistory.getId(), integerCount + qualifiedNumber);
-                            } else {
-                                productMap.put(inspectHistory.getId(), qualifiedNumber);
-                            }
+                            productMap.put(inspectHistory.getId() + orderId, qualifiedNumber);
                             qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
-                            productMap.put(inspectHistory.getId(), qualifiedNumber);
                             totalCount = totalCount + qualifiedNumber;
                             BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                             multiplyPrice = multiplyPrice.add(multiply);
@@ -345,13 +328,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
                             qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
                             // 去重数量
-                            Integer integerCount = productMap.get(inspectHistory.getId());
-                            if (Objects.nonNull(integerCount)) {
-                                productMap.put(inspectHistory.getId(), integerCount + qualifiedNumber);
-                            } else {
-                                productMap.put(inspectHistory.getId(), qualifiedNumber);
-                            }
-                            productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            productMap.put(inspectHistory.getId() + orderId, qualifiedNumber);
                             totalCount = totalCount + qualifiedNumber;
                             BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                             multiplyPrice = multiplyPrice.add(multiply);
@@ -374,13 +351,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
                             qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
                             // 去重数量
-                            Integer integerCount = productMap.get(inspectHistory.getId());
-                            if (Objects.nonNull(integerCount)) {
-                                productMap.put(inspectHistory.getId(), integerCount + qualifiedNumber);
-                            } else {
-                                productMap.put(inspectHistory.getId(), qualifiedNumber);
-                            }
-                            productMap.put(inspectHistory.getId(), qualifiedNumber);
+                            productMap.put(inspectHistory.getId() + orderId, qualifiedNumber);
                             totalCount = totalCount + qualifiedNumber;
                             BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
                             multiplyPrice = multiplyPrice.add(multiply);
@@ -423,7 +394,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 payWage.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
             }
             int priceCount = 0;
-            for (Map.Entry<Integer, Integer> entry : productMap.entrySet()) {
+            for (Map.Entry<String, Integer> entry : productMap.entrySet()) {
                 priceCount = priceCount + entry.getValue();
             }
             payWage.setUpdateUser(getLoginUserName());
