@@ -1,19 +1,26 @@
 package com.deepsoft.haolifa.controller;
 
+import cn.hutool.poi.excel.ExcelWriter;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.PayWorkAttendance;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayManagerCalDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkAttendancePageDTO;
 import com.deepsoft.haolifa.service.PayWorkAttendanceService;
 import com.deepsoft.haolifa.util.ExcelUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author liuyaofei
@@ -72,6 +79,48 @@ public class PayWorkAttendanceController {
             e.printStackTrace();
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
         }
+    }
+
+    @ApiOperation("导出考勤")
+    @GetMapping(value = "export")
+    public void export(HttpServletResponse response, @ApiParam("年份") @RequestParam(name = "attendYear") String attendYear,
+                             @ApiParam("月份") @RequestParam(name = "attendMonth") String attendMonth) throws Exception {
+
+        if (StringUtils.isBlank(attendYear) || StringUtils.isBlank(attendMonth)) {
+            throw new Exception("年份或月份不能为空");
+        }
+        ExcelWriter writer = null;
+        try {
+            PayWorkAttendancePageDTO payWorkAttendancePageDTO = new PayWorkAttendancePageDTO();
+            payWorkAttendancePageDTO.setAttendYear(attendYear);
+            payWorkAttendancePageDTO.setAttendMonth(attendMonth);
+            writer = payWorkAttendanceService.export(payWorkAttendancePageDTO);
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("考勤模板", "utf-8") + ".xls");
+            response.setContentType("application/octet-stream;");
+            OutputStream outputStream = response.getOutputStream();
+            writer.flush(outputStream, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (Objects.nonNull(writer)) {
+                writer.close();
+            }
+        }
+    }
+
+    @ApiOperation("生成固定月份考勤")
+    @GetMapping(value = "createAttendance")
+    public ResultBean createAttendance(@ApiParam("年份") @RequestParam(name = "attendYear") String attendYear,
+                             @ApiParam("月份") @RequestParam(name = "attendMonth") String attendMonth) throws Exception {
+
+        if (StringUtils.isBlank(attendYear) || StringUtils.isBlank(attendMonth)) {
+            throw new Exception("年份或月份不能为空");
+        }
+        PayWorkAttendancePageDTO payWorkAttendancePageDTO = new PayWorkAttendancePageDTO();
+        payWorkAttendancePageDTO.setAttendYear(attendYear);
+        payWorkAttendancePageDTO.setAttendMonth(attendMonth);
+        payWorkAttendanceService.createAttendance(payWorkAttendancePageDTO);
+        return ResultBean.success(1);
     }
 
 }

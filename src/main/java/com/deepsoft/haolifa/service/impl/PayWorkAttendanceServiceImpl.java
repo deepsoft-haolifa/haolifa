@@ -1,15 +1,21 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.poi.excel.ExcelWriter;
+import com.deepsoft.haolifa.dao.repository.PayUserMapper;
 import com.deepsoft.haolifa.dao.repository.PayWorkAttendanceMapper;
+import com.deepsoft.haolifa.model.domain.PayUser;
+import com.deepsoft.haolifa.model.domain.PayUserExample;
 import com.deepsoft.haolifa.model.domain.PayWorkAttendance;
 import com.deepsoft.haolifa.model.domain.PayWorkAttendanceExample;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkAttendancePageDTO;
 import com.deepsoft.haolifa.service.PayWorkAttendanceService;
-import com.deepsoft.haolifa.util.DateFormatterUtils;
+import com.deepsoft.haolifa.util.BeanCopyUtils;
+import com.deepsoft.haolifa.util.ExcelUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -31,6 +37,8 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
 
     @Resource
     private PayWorkAttendanceMapper payWorkAttendanceMapper;
+    @Resource
+    private PayUserMapper payUserMapper;
     @Override
     public ResultBean pageInfo(PayWorkAttendancePageDTO model) {
         PayWorkAttendanceExample example = new PayWorkAttendanceExample();
@@ -108,5 +116,65 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
     @Override
     public ResultBean delete(Integer id) {
         return ResultBean.success(payWorkAttendanceMapper.deleteByPrimaryKey(id));
+    }
+
+    @Override
+    public ExcelWriter export(PayWorkAttendancePageDTO payWorkAttendancePageDTO) {
+        List<PayWorkAttendance> payManagerCals = getList(payWorkAttendancePageDTO);
+        List<PayWorkAttendancePageDTO> payWorkAttendancePageDTOS = BeanCopyUtils.copyPropertiesForNewList(payManagerCals, () -> new PayWorkAttendancePageDTO());
+        ExcelWriter excelWriter = ExcelUtils.exportExcel(payWorkAttendancePageDTOS, PayWorkAttendancePageDTO.class);
+        return excelWriter;
+    }
+
+    @Override
+    @Async
+    @Transactional(rollbackFor = Exception.class)
+    public void createAttendance(PayWorkAttendancePageDTO payWorkAttendancePageDTO) {
+        List<PayUser> payUsers = payUserMapper.selectByExample(new PayUserExample());
+        for (PayUser payUser : payUsers) {
+            PayWorkAttendance payWorkAttendance = new PayWorkAttendance();
+            payWorkAttendance.setSerial(0);
+            payWorkAttendance.setDepartment(payUser.getDepartName());
+            payWorkAttendance.setUserId(payUser.getId());
+            payWorkAttendance.setAttendMonth(payWorkAttendancePageDTO.getAttendMonth());
+            payWorkAttendance.setAttendYear(payWorkAttendancePageDTO.getAttendYear());
+            payWorkAttendance.setUserName(payUser.getUserName());
+            payWorkAttendance.setAttendanceDays(0);
+            payWorkAttendance.setLateTimes(0);
+            payWorkAttendance.setLeaveEarlyTimes(0);
+            payWorkAttendance.setAbsenteeismTimes(0);
+            payWorkAttendance.setMiddleDays(0);
+            payWorkAttendance.setNightDays(0);
+            payWorkAttendance.setBusinessTravelDays(0);
+            payWorkAttendance.setCompassionateLeaveDays(0);
+            payWorkAttendance.setSickLeaveDays(0);
+            payWorkAttendance.setWorkOvertimeDays(0);
+            payWorkAttendance.setLateAndLeaveTimes(0);
+            payWorkAttendance.setRemark("");
+            payWorkAttendance.setCreateUser(getLoginUserName());
+            payWorkAttendance.setUpdateUser(getLoginUserName());
+            payWorkAttendance.setCreateTime(new Date());
+            payWorkAttendance.setUpdateTime(new Date());
+            payWorkAttendanceMapper.insert(payWorkAttendance);
+        }
+    }
+
+    private List<PayWorkAttendance> getList(PayWorkAttendancePageDTO model) {
+        PayWorkAttendanceExample example = new PayWorkAttendanceExample();
+        PayWorkAttendanceExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model.getDepartment())) {
+            criteria.andDepartmentEqualTo(model.getDepartment());
+        }
+        if (StringUtils.isNotBlank(model.getUserName())) {
+            criteria.andUserNameEqualTo(model.getUserName());
+        }
+        if (StringUtils.isNotBlank(model.getAttendYear())) {
+            criteria.andAttendYearEqualTo(model.getAttendYear());
+        }
+        if (StringUtils.isNotBlank(model.getAttendMonth())) {
+            criteria.andAttendMonthEqualTo(model.getAttendMonth());
+        }
+        List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(example);
+        return payWorkAttendances;
     }
 }

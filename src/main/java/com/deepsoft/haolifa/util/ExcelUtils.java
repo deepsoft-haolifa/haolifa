@@ -51,6 +51,7 @@ public class ExcelUtils {
                 writer.addHeaderAlias(field.getName(), annotations.name());
             }
         }
+        writer.setOnlyAlias(true);
         writer.write(list, true);
         return writer;
     }
