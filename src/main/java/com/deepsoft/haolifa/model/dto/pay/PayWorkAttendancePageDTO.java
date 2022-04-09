@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.model.dto.pay;
 
 import com.deepsoft.haolifa.annotation.ExcelHandle;
 import com.deepsoft.haolifa.model.dto.BaseCondition;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,6 +25,9 @@ public class PayWorkAttendancePageDTO extends BaseCondition {
     @ExcelHandle(name = "部门")
     @ApiModelProperty(value = "部门")
     private String department;
+    @ApiModelProperty(value = "用户ID")
+    @ExcelHandle(name = "用户ID")
+    private Integer userId;
     @ApiModelProperty(value = "姓名")
     @ExcelHandle(name = "姓名")
     private String userName;
