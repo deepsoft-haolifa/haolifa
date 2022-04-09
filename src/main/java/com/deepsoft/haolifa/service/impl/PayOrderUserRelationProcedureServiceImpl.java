@@ -80,11 +80,14 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             String model = "";
             // 规格
             String specifications = "";
+            // id类别
+            String idCategory = "";
             if (CommonEnum.WorkShopTypeEnum.PRODUCT.name.equals(workshopName)) {
                 orderProductService.updateOrderTaskStatus(payOrderUserRelationProcedureDTO.getOrderId(), 1);
                 OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
                 model = StringUtils.isEmpty(orderProductAssociate.getProductModel()) ? "" : orderProductAssociate.getProductModel().substring(0, 4);
                 specifications = orderProductAssociate.getSpecifications();
+                idCategory = orderProductAssociate.getProductNo().substring(0, 2);
             } else if (CommonEnum.WorkShopTypeEnum.SPRAY.name.equals(workshopName)) {
                 sprayService.updateTaskStatus(payOrderUserRelationProcedureDTO.getOrderId(), 1);
                 SprayItem sprayItem = sprayItemMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
@@ -108,6 +111,7 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             payHourQuotaDTO.setAppModel(model);
             payHourQuotaDTO.setAppSpecifications(specifications);
             payHourQuotaDTO.setPostCode(postCode);
+            payHourQuotaDTO.setIdCategory(idCategory);
             List<PayHourQuota> list = payHourQuotaService.getList(payHourQuotaDTO);
             // 获取工时定额
             BigDecimal hourQuotaPrice = null;

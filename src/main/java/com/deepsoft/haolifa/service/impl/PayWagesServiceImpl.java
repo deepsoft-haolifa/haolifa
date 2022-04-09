@@ -317,6 +317,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name.equals(workshopName)) {
                         AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getGraphNo(), startTime, endTime);
+                        payCalculateDTO.setStorageStatus(null);
                         List<AutoControlInspectHistory> inspectHistories = autoControlEntrustService.getInspectHistoryList(payCalculateDTO);
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;

@@ -11,6 +11,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -72,10 +73,11 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
     }
 
     @Override
+    @Async
     public ResultBean save(List<PayHourQuota> list) {
         for (PayHourQuota payHourQuota : list) {
-            payHourQuota.setCreateUser(getLoginUserName());
-            payHourQuota.setUpdateUser(getLoginUserName());
+            payHourQuota.setCreateUser("system");
+            payHourQuota.setUpdateUser("system");
             payHourQuota.setCreateTime(new Date());
             payHourQuota.setUpdateTime(new Date());
             payHourQuotaMapper.insert(payHourQuota);
@@ -119,6 +121,9 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
         }
         if (StringUtils.isNotBlank(model.getPostCode())) {
             criteria.andPostCodeEqualTo(model.getPostCode());
+        }
+        if (StringUtils.isNotBlank(model.getIdCategory())) {
+            criteria.andIdCategoryEqualTo(model.getIdCategory());
         }
         List<PayHourQuota> list = payHourQuotaMapper.selectByExample(example);
         return list;
