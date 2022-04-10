@@ -17,6 +17,7 @@ import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
+import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,8 @@ public class BankBillServiceImpl implements BankBillService {
     private BizBankBillMapper bizBankBillMapper;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SubjectBalanceService subjectBalanceService;
 
     @Override
     public ResultBean save(BizBankBillAddDTO model) {
@@ -89,6 +92,18 @@ public class BankBillServiceImpl implements BankBillService {
         bizBankBill.setCreateUser(sysUserService.selectLoginUser().getId());
         bizBankBill.setUpdateUser(sysUserService.selectLoginUser().getId());
         int insertId = bizBankBillMapper.insertSelective(bizBankBill);
+
+
+        // 存入余额 费用 借款 货款
+        // 1
+        //2
+        //3
+        if (bizBankBill.getType().equals("1") && "123".contains(model.getCollectionType())) {
+            subjectBalanceService.increaseAmountBatch(model.getDeptId(),model.getCollectionMoney());
+        } else if (bizBankBill.getType().equals("2")) {
+            subjectBalanceService.decreaseAmountBatch(model.getDeptId(),model.getCollectionMoney());
+        }
+
         return ResultBean.success(insertId);
     }
 

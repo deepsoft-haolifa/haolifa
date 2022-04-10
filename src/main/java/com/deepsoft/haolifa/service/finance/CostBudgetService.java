@@ -8,10 +8,7 @@ import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddU
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.*;
 
 import java.util.List;
 
@@ -41,5 +38,8 @@ public interface CostBudgetService {
     ResultBean deleteSubjectsBudgetBatch(List<Integer> ids);
 
 
-    ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList();
+    ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList( String subjectType);
+
+    ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurUserSubjectsTypeList();
+
 }

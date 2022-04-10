@@ -1,19 +1,26 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class BizCostBudgetSubjects {
+public class BizSubjectsBalanceFlow {
     private Integer id;
 
     private String name;
 
     private Integer deptId;
 
-    private String subjectsType;
+    private String subjectsTypeCode;
 
     private Integer subjectsId;
 
     private Double costRatio;
+
+    private BigDecimal amount;
+
+    private BigDecimal balanceAmount;
+
+    private String type;
 
     private String status;
 
@@ -29,13 +36,16 @@ public class BizCostBudgetSubjects {
 
     private Date updateTime;
 
-    public BizCostBudgetSubjects(Integer id, String name, Integer deptId, String subjectsType, Integer subjectsId, Double costRatio, String status, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizSubjectsBalanceFlow(Integer id, String name, Integer deptId, String subjectsTypeCode, Integer subjectsId, Double costRatio, BigDecimal amount, BigDecimal balanceAmount, String type, String status, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.name = name;
         this.deptId = deptId;
-        this.subjectsType = subjectsType;
+        this.subjectsTypeCode = subjectsTypeCode;
         this.subjectsId = subjectsId;
         this.costRatio = costRatio;
+        this.amount = amount;
+        this.balanceAmount = balanceAmount;
+        this.type = type;
         this.status = status;
         this.remark = remark;
         this.delFlag = delFlag;
@@ -45,7 +55,7 @@ public class BizCostBudgetSubjects {
         this.updateTime = updateTime;
     }
 
-    public BizCostBudgetSubjects() {
+    public BizSubjectsBalanceFlow() {
         super();
     }
 
@@ -73,12 +83,12 @@ public class BizCostBudgetSubjects {
         this.deptId = deptId;
     }
 
-    public String getSubjectsType() {
-        return subjectsType;
+    public String getSubjectsTypeCode() {
+        return subjectsTypeCode;
     }
 
-    public void setSubjectsType(String subjectsType) {
-        this.subjectsType = subjectsType == null ? null : subjectsType.trim();
+    public void setSubjectsTypeCode(String subjectsTypeCode) {
+        this.subjectsTypeCode = subjectsTypeCode == null ? null : subjectsTypeCode.trim();
     }
 
     public Integer getSubjectsId() {
@@ -95,6 +105,30 @@ public class BizCostBudgetSubjects {
 
     public void setCostRatio(Double costRatio) {
         this.costRatio = costRatio;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public BigDecimal getBalanceAmount() {
+        return balanceAmount;
+    }
+
+    public void setBalanceAmount(BigDecimal balanceAmount) {
+        this.balanceAmount = balanceAmount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 
     public String getStatus() {

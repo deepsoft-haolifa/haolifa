@@ -1,17 +1,18 @@
 package com.deepsoft.haolifa.model.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BizCostBudgetSubjectsExample {
+public class BizSubjectsBalanceExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public BizCostBudgetSubjectsExample() {
+    public BizSubjectsBalanceExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -295,73 +296,73 @@ public class BizCostBudgetSubjectsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeIsNull() {
-            addCriterion("subjects_type is null");
+        public Criteria andSubjectsTypeCodeIsNull() {
+            addCriterion("subjects_type_code is null");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeIsNotNull() {
-            addCriterion("subjects_type is not null");
+        public Criteria andSubjectsTypeCodeIsNotNull() {
+            addCriterion("subjects_type_code is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeEqualTo(String value) {
-            addCriterion("subjects_type =", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeEqualTo(String value) {
+            addCriterion("subjects_type_code =", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeNotEqualTo(String value) {
-            addCriterion("subjects_type <>", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeNotEqualTo(String value) {
+            addCriterion("subjects_type_code <>", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeGreaterThan(String value) {
-            addCriterion("subjects_type >", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeGreaterThan(String value) {
+            addCriterion("subjects_type_code >", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("subjects_type >=", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("subjects_type_code >=", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeLessThan(String value) {
-            addCriterion("subjects_type <", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeLessThan(String value) {
+            addCriterion("subjects_type_code <", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeLessThanOrEqualTo(String value) {
-            addCriterion("subjects_type <=", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeLessThanOrEqualTo(String value) {
+            addCriterion("subjects_type_code <=", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeLike(String value) {
-            addCriterion("subjects_type like", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeLike(String value) {
+            addCriterion("subjects_type_code like", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeNotLike(String value) {
-            addCriterion("subjects_type not like", value, "subjectsType");
+        public Criteria andSubjectsTypeCodeNotLike(String value) {
+            addCriterion("subjects_type_code not like", value, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeIn(List<String> values) {
-            addCriterion("subjects_type in", values, "subjectsType");
+        public Criteria andSubjectsTypeCodeIn(List<String> values) {
+            addCriterion("subjects_type_code in", values, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeNotIn(List<String> values) {
-            addCriterion("subjects_type not in", values, "subjectsType");
+        public Criteria andSubjectsTypeCodeNotIn(List<String> values) {
+            addCriterion("subjects_type_code not in", values, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeBetween(String value1, String value2) {
-            addCriterion("subjects_type between", value1, value2, "subjectsType");
+        public Criteria andSubjectsTypeCodeBetween(String value1, String value2) {
+            addCriterion("subjects_type_code between", value1, value2, "subjectsTypeCode");
             return (Criteria) this;
         }
 
-        public Criteria andSubjectsTypeNotBetween(String value1, String value2) {
-            addCriterion("subjects_type not between", value1, value2, "subjectsType");
+        public Criteria andSubjectsTypeCodeNotBetween(String value1, String value2) {
+            addCriterion("subjects_type_code not between", value1, value2, "subjectsTypeCode");
             return (Criteria) this;
         }
 
@@ -425,63 +426,63 @@ public class BizCostBudgetSubjectsExample {
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioIsNull() {
-            addCriterion("cost_ratio is null");
+        public Criteria andBalanceAmountIsNull() {
+            addCriterion("balance_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioIsNotNull() {
-            addCriterion("cost_ratio is not null");
+        public Criteria andBalanceAmountIsNotNull() {
+            addCriterion("balance_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioEqualTo(Double value) {
-            addCriterion("cost_ratio =", value, "costRatio");
+        public Criteria andBalanceAmountEqualTo(BigDecimal value) {
+            addCriterion("balance_amount =", value, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioNotEqualTo(Double value) {
-            addCriterion("cost_ratio <>", value, "costRatio");
+        public Criteria andBalanceAmountNotEqualTo(BigDecimal value) {
+            addCriterion("balance_amount <>", value, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioGreaterThan(Double value) {
-            addCriterion("cost_ratio >", value, "costRatio");
+        public Criteria andBalanceAmountGreaterThan(BigDecimal value) {
+            addCriterion("balance_amount >", value, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioGreaterThanOrEqualTo(Double value) {
-            addCriterion("cost_ratio >=", value, "costRatio");
+        public Criteria andBalanceAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance_amount >=", value, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioLessThan(Double value) {
-            addCriterion("cost_ratio <", value, "costRatio");
+        public Criteria andBalanceAmountLessThan(BigDecimal value) {
+            addCriterion("balance_amount <", value, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioLessThanOrEqualTo(Double value) {
-            addCriterion("cost_ratio <=", value, "costRatio");
+        public Criteria andBalanceAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("balance_amount <=", value, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioIn(List<Double> values) {
-            addCriterion("cost_ratio in", values, "costRatio");
+        public Criteria andBalanceAmountIn(List<BigDecimal> values) {
+            addCriterion("balance_amount in", values, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioNotIn(List<Double> values) {
-            addCriterion("cost_ratio not in", values, "costRatio");
+        public Criteria andBalanceAmountNotIn(List<BigDecimal> values) {
+            addCriterion("balance_amount not in", values, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioBetween(Double value1, Double value2) {
-            addCriterion("cost_ratio between", value1, value2, "costRatio");
+        public Criteria andBalanceAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance_amount between", value1, value2, "balanceAmount");
             return (Criteria) this;
         }
 
-        public Criteria andCostRatioNotBetween(Double value1, Double value2) {
-            addCriterion("cost_ratio not between", value1, value2, "costRatio");
+        public Criteria andBalanceAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("balance_amount not between", value1, value2, "balanceAmount");
             return (Criteria) this;
         }
 

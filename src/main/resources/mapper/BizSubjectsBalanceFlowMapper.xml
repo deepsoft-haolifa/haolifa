@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.deepsoft.haolifa.dao.repository.BizCostBudgetSubjectsMapper">
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjects">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.BizSubjectsBalanceFlowMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlow">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="dept_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="subjects_type" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="subjects_type_code" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="subjects_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="cost_ratio" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="balance_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="type" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="status" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR" />
@@ -77,16 +80,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, dept_id, subjects_type, subjects_id, cost_ratio, status, remark, del_flag,
-    create_user, create_time, update_user, update_time
+    id, name, dept_id, subjects_type_code, subjects_id, cost_ratio, amount, balance_amount,
+    type, status, remark, del_flag, create_user, create_time, update_user, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjectsExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlowExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from biz_cost_budget_subjects
+    from biz_subjects_balance_flow
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,39 +100,41 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from biz_cost_budget_subjects
+    from biz_subjects_balance_flow
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from biz_cost_budget_subjects
+    delete from biz_subjects_balance_flow
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjectsExample">
-    delete from biz_cost_budget_subjects
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlowExample">
+    delete from biz_subjects_balance_flow
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjects">
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlow">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into biz_cost_budget_subjects (name, dept_id, subjects_type,
-      subjects_id, cost_ratio, status,
+    insert into biz_subjects_balance_flow (name, dept_id, subjects_type_code,
+      subjects_id, cost_ratio, amount,
+      balance_amount, type, status,
       remark, del_flag, create_user,
       create_time, update_user, update_time
       )
-    values (#{name,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER}, #{subjectsType,jdbcType=VARCHAR},
-      #{subjectsId,jdbcType=INTEGER}, #{costRatio,jdbcType=DOUBLE}, #{status,jdbcType=CHAR},
+    values (#{name,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER}, #{subjectsTypeCode,jdbcType=VARCHAR},
+      #{subjectsId,jdbcType=INTEGER}, #{costRatio,jdbcType=DOUBLE}, #{amount,jdbcType=DECIMAL},
+      #{balanceAmount,jdbcType=DECIMAL}, #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR},
       #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER},
       #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjects">
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlow">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into biz_cost_budget_subjects
+    insert into biz_subjects_balance_flow
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
         name,
@@ -137,14 +142,23 @@
       <if test="deptId != null">
         dept_id,
       </if>
-      <if test="subjectsType != null">
-        subjects_type,
+      <if test="subjectsTypeCode != null">
+        subjects_type_code,
       </if>
       <if test="subjectsId != null">
         subjects_id,
       </if>
       <if test="costRatio != null">
         cost_ratio,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="balanceAmount != null">
+        balance_amount,
+      </if>
+      <if test="type != null">
+        type,
       </if>
       <if test="status != null">
         status,
@@ -175,14 +189,23 @@
       <if test="deptId != null">
         #{deptId,jdbcType=INTEGER},
       </if>
-      <if test="subjectsType != null">
-        #{subjectsType,jdbcType=VARCHAR},
+      <if test="subjectsTypeCode != null">
+        #{subjectsTypeCode,jdbcType=VARCHAR},
       </if>
       <if test="subjectsId != null">
         #{subjectsId,jdbcType=INTEGER},
       </if>
       <if test="costRatio != null">
         #{costRatio,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceAmount != null">
+        #{balanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=CHAR},
@@ -207,14 +230,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjectsExample" resultType="java.lang.Integer">
-    select count(*) from biz_cost_budget_subjects
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlowExample" resultType="java.lang.Integer">
+    select count(*) from biz_subjects_balance_flow
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update biz_cost_budget_subjects
+    update biz_subjects_balance_flow
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -225,14 +248,23 @@
       <if test="record.deptId != null">
         dept_id = #{record.deptId,jdbcType=INTEGER},
       </if>
-      <if test="record.subjectsType != null">
-        subjects_type = #{record.subjectsType,jdbcType=VARCHAR},
+      <if test="record.subjectsTypeCode != null">
+        subjects_type_code = #{record.subjectsTypeCode,jdbcType=VARCHAR},
       </if>
       <if test="record.subjectsId != null">
         subjects_id = #{record.subjectsId,jdbcType=INTEGER},
       </if>
       <if test="record.costRatio != null">
         cost_ratio = #{record.costRatio,jdbcType=DOUBLE},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.balanceAmount != null">
+        balance_amount = #{record.balanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=CHAR},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=CHAR},
@@ -261,13 +293,16 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update biz_cost_budget_subjects
+    update biz_subjects_balance_flow
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       dept_id = #{record.deptId,jdbcType=INTEGER},
-      subjects_type = #{record.subjectsType,jdbcType=VARCHAR},
+      subjects_type_code = #{record.subjectsTypeCode,jdbcType=VARCHAR},
       subjects_id = #{record.subjectsId,jdbcType=INTEGER},
       cost_ratio = #{record.costRatio,jdbcType=DOUBLE},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      balance_amount = #{record.balanceAmount,jdbcType=DECIMAL},
+      type = #{record.type,jdbcType=CHAR},
       status = #{record.status,jdbcType=CHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       del_flag = #{record.delFlag,jdbcType=CHAR},
@@ -279,8 +314,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjects">
-    update biz_cost_budget_subjects
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlow">
+    update biz_subjects_balance_flow
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -288,14 +323,23 @@
       <if test="deptId != null">
         dept_id = #{deptId,jdbcType=INTEGER},
       </if>
-      <if test="subjectsType != null">
-        subjects_type = #{subjectsType,jdbcType=VARCHAR},
+      <if test="subjectsTypeCode != null">
+        subjects_type_code = #{subjectsTypeCode,jdbcType=VARCHAR},
       </if>
       <if test="subjectsId != null">
         subjects_id = #{subjectsId,jdbcType=INTEGER},
       </if>
       <if test="costRatio != null">
         cost_ratio = #{costRatio,jdbcType=DOUBLE},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceAmount != null">
+        balance_amount = #{balanceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=CHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=CHAR},
@@ -321,13 +365,16 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BizCostBudgetSubjects">
-    update biz_cost_budget_subjects
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsBalanceFlow">
+    update biz_subjects_balance_flow
     set name = #{name,jdbcType=VARCHAR},
       dept_id = #{deptId,jdbcType=INTEGER},
-      subjects_type = #{subjectsType,jdbcType=VARCHAR},
+      subjects_type_code = #{subjectsTypeCode,jdbcType=VARCHAR},
       subjects_id = #{subjectsId,jdbcType=INTEGER},
       cost_ratio = #{costRatio,jdbcType=DOUBLE},
+      amount = #{amount,jdbcType=DECIMAL},
+      balance_amount = #{balanceAmount,jdbcType=DECIMAL},
+      type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       remark = #{remark,jdbcType=VARCHAR},
       del_flag = #{delFlag,jdbcType=CHAR},
@@ -337,5 +384,4 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-</mapper>
+  </mapper>
