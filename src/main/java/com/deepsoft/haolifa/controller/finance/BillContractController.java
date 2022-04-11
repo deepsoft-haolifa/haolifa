@@ -1,7 +1,6 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
-import com.deepsoft.haolifa.model.domain.BizBillContract;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAddOrUpDTO;
@@ -18,8 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 分解审核->>查银行日记账&其他货币日记账
@@ -74,7 +71,6 @@ public class BillContractController {
     public ResultBean removeContract(@PathVariable("id") int id) {
         return billContractService.removeContract(id);
     }
-
 
 
 }

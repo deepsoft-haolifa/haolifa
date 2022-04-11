@@ -18,10 +18,7 @@ import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptAddU
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.*;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.SysDictService;
@@ -30,6 +27,7 @@ import com.deepsoft.haolifa.service.finance.CostBudgetService;
 import com.deepsoft.haolifa.util.TreeUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -72,6 +70,11 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
     @Autowired
     private SysDictService sysDictService;
+    @Autowired
+    private BizSubjectsMapper subjectsMapper;
+
+    @Autowired
+    private BizSubjectsBalanceMapper subjectsBalanceMapper;
 
     @Override
     public ResultBean saveOrUpDeptBudget(CostBudgetDeptAddUpDTO model) {
@@ -102,11 +105,11 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             BizCostBudgetDept finalBizCostBudgetDept = bizCostBudgetDept;
             BigDecimal totalCostRatio = bizCostBudgetDeptAllList.stream()
                 .filter(c -> c.getCostRatio() != null)
-                .filter(c-> !c.getId().equals(finalBizCostBudgetDept.getId()))
+                .filter(c -> !c.getId().equals(finalBizCostBudgetDept.getId()))
                 .map(c -> BigDecimal.valueOf(c.getCostRatio()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
             BigDecimal currentTotal = totalCostRatio.add(BigDecimal.valueOf(model.getCostRatio()));
-            if (currentTotal.compareTo(BigDecimal.valueOf(100))>0){
+            if (currentTotal.compareTo(BigDecimal.valueOf(100)) > 0) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总比例不能大于100");
             }
 
@@ -120,7 +123,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
                 .map(c -> BigDecimal.valueOf(c.getCostRatio()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
             BigDecimal currentTotal = totalCostRatio.add(BigDecimal.valueOf(model.getCostRatio()));
-            if (currentTotal.compareTo(BigDecimal.valueOf(100))>0){
+            if (currentTotal.compareTo(BigDecimal.valueOf(100)) > 0) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总比例不能大于100");
             }
 
@@ -359,10 +362,15 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门下总比例不能大于100");
         }
 
+
+        BizSubjects bizSubjects = subjectsMapper.selectByPrimaryKey(model.getSubjectsId());
+
+
         BizCostBudgetSubjects costBudget = new BizCostBudgetSubjects();
         BeanUtils.copyProperties(model, costBudget);
         costBudget.setCreateTime(new Date());
         costBudget.setUpdateTime(new Date());
+        costBudget.setSubjectsType(bizSubjects.getType());
         costBudget.setCreateUser(sysUserService.selectLoginUser().getId());
         costBudget.setUpdateUser(sysUserService.selectLoginUser().getId());
         int insertId = bizCostBudgetSubjectsMapper.insertSelective(costBudget);
@@ -409,7 +417,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
         // 名称 like
         if (StringUtils.isNotEmpty(model.getName())) {
-            criteria.andNameLike("%"+model.getName()+"%");
+            criteria.andNameLike("%" + model.getName() + "%");
         }
         //科目id==
         if (model.getSubjectsId() != null) {
@@ -420,7 +428,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         }
         if (StringUtils.isNotEmpty(model.getDeptName())) {
             SysDepartmentExample departmentExample = new SysDepartmentExample();
-            departmentExample.createCriteria().andDeptNameLike("%"+model.getDeptName()+"%");
+            departmentExample.createCriteria().andDeptNameLike("%" + model.getDeptName() + "%");
             List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
             List<Integer> didList = sysDepartments.stream().map(SysDepartment::getId).collect(Collectors.toList());
             criteria.andDeptIdIn(didList);
@@ -439,6 +447,22 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
         Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
 
+
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+
+        BizSubjectsBalanceExample bizSubjectsBalanceExample = new BizSubjectsBalanceExample();
+        List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
+
+        Map<String, BigDecimal> bigDecimalMap = bizSubjectsBalanceList.stream()
+            .map(bizSubjectsBalance -> {
+                String k = bizSubjectsBalance.getDeptId() + "_" + bizSubjectsBalance.getSubjectsId();
+                return new Pair<>(k, bizSubjectsBalance.getBalanceAmount());
+            })
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue, (a, b) -> a));
+
+
         List<CostBudgetSubjectsRSDTO> rqdtoList = pageData.getResult().stream()
             .map(bizCostBudgetSubjects -> {
                 CostBudgetSubjectsRSDTO costBudgetSubjectsRQDTO = new CostBudgetSubjectsRSDTO();
@@ -448,6 +472,13 @@ public class CostBudgetServiceImpl implements CostBudgetService {
                 costBudgetSubjectsRQDTO.setCostRatioFormulaCN(bizCostBudgetSubjects.getCostRatio() + "%");
                 SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
                 costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
+
+                costBudgetSubjectsRQDTO.setSubjectsTypeCode(bizCostBudgetSubjects.getSubjectsType());
+                costBudgetSubjectsRQDTO.setSubjectsTypeName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
+                costBudgetSubjectsRQDTO.setSubjectsName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
+                String k = bizCostBudgetSubjects.getDeptId() + "_" + bizCostBudgetSubjects.getSubjectsId();
+                BigDecimal bigDecimal = bigDecimalMap.getOrDefault(k, BigDecimal.ZERO);
+                costBudgetSubjectsRQDTO.setBalanceAmount(bigDecimal);
                 return costBudgetSubjectsRQDTO;
             })
             .collect(Collectors.toList());
@@ -466,7 +497,61 @@ public class CostBudgetServiceImpl implements CostBudgetService {
     }
 
     @Override
-    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList() {
+    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList(String subjectType) {
+        CustomUser customUser = sysUserService.selectLoginUser();
+        SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+
+        // 查询部门预算
+        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+        criteria.andDeptIdEqualTo(sysUser.getDepartId());
+        criteria.andSubjectsTypeEqualTo(subjectType);
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+
+        BizSubjectsBalanceExample bizSubjectsBalanceExample = new BizSubjectsBalanceExample();
+        List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
+
+        Map<String, BigDecimal> bigDecimalMap = bizSubjectsBalanceList.stream()
+            .map(bizSubjectsBalance -> {
+                String k = bizSubjectsBalance.getDeptId() + "_" + bizSubjectsBalance.getSubjectsId();
+                return new Pair<>(k, bizSubjectsBalance.getBalanceAmount());
+            })
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue, (a, b) -> a));
+
+        List<CostBudgetSubjectsRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
+            .map(bizCostBudgetSubjects -> {
+                CostBudgetSubjectsRSDTO costBudgetSubjectsRQDTO = new CostBudgetSubjectsRSDTO();
+                BeanUtils.copyProperties(bizCostBudgetSubjects, costBudgetSubjectsRQDTO);
+                // todo 公式待补充
+                costBudgetSubjectsRQDTO.setCostRatioFormula(bizCostBudgetSubjects.getCostRatio() + "%");
+                costBudgetSubjectsRQDTO.setCostRatioFormulaCN(bizCostBudgetSubjects.getCostRatio() + "%");
+                SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
+                costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
+
+                costBudgetSubjectsRQDTO.setSubjectsTypeCode(bizCostBudgetSubjects.getSubjectsType());
+                costBudgetSubjectsRQDTO.setSubjectsTypeName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
+                costBudgetSubjectsRQDTO.setSubjectsName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
+                String k = bizCostBudgetSubjects.getDeptId() + "_" + bizCostBudgetSubjects.getSubjectsId();
+                BigDecimal bigDecimal = bigDecimalMap.getOrDefault(k, BigDecimal.ZERO);
+                costBudgetSubjectsRQDTO.setBalanceAmount(bigDecimal);
+                return costBudgetSubjectsRQDTO;
+            })
+            .collect(Collectors.toList());
+
+
+        return ResultBean.success(costBudgetSubjectsRSDTOList);
+    }
+
+    @Override
+    public ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurUserSubjectsTypeList() {
         CustomUser customUser = sysUserService.selectLoginUser();
         SysUser sysUser = sysUserService.getSysUser(customUser.getId());
 
@@ -479,19 +564,22 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
         Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
 
-        List<CostBudgetSubjectsRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+        List<CostBudgetSubjectsTypeRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
             .map(bizCostBudgetSubjects -> {
-                CostBudgetSubjectsRSDTO costBudgetSubjectsRQDTO = new CostBudgetSubjectsRSDTO();
+                CostBudgetSubjectsTypeRSDTO costBudgetSubjectsRQDTO = new CostBudgetSubjectsTypeRSDTO();
                 BeanUtils.copyProperties(bizCostBudgetSubjects, costBudgetSubjectsRQDTO);
                 // todo 公式待补充
-                costBudgetSubjectsRQDTO.setCostRatioFormula(bizCostBudgetSubjects.getCostRatio() + "%");
-                costBudgetSubjectsRQDTO.setCostRatioFormulaCN(bizCostBudgetSubjects.getCostRatio() + "%");
                 SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
                 costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
+
+                costBudgetSubjectsRQDTO.setSubjectsTypeCode(bizCostBudgetSubjects.getSubjectsType());
+                costBudgetSubjectsRQDTO.setSubjectsTypeName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
                 return costBudgetSubjectsRQDTO;
             })
             .collect(Collectors.toList());
-
 
         return ResultBean.success(costBudgetSubjectsRSDTOList);
     }

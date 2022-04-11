@@ -93,10 +93,18 @@ public class CostBudgetController {
         return costBudgetService.getSubjectsBudgetList(model);
     }
 
+
+    @ApiOperation("获取当前用户拥有的科目类别节点列表")
+    @GetMapping("/subjects/getCurUserSubjectsTypeList")
+    public ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurUserSubjectsTypeList() {
+        return costBudgetService.getCurUserSubjectsTypeList();
+    }
+
+
     @ApiOperation("获取当前用户科目预算节点列表")
-    @GetMapping("/subjects/getCurUserSubjectsBudgetList")
-    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList() {
-        return costBudgetService.getCurUserSubjectsBudgetList();
+    @GetMapping("/subjects/getCurUserSubjectsBudgetList/{subjectType}")
+    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList(@PathVariable("subjectType") String subjectType) {
+        return costBudgetService.getCurUserSubjectsBudgetList(subjectType);
     }
 
 }

@@ -12,6 +12,7 @@ import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillUpDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillService;
+import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -41,6 +42,8 @@ public class BillServiceImpl implements BillService {
     private BizBillMapper bizBillMapper;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private SubjectBalanceService subjectBalanceService;
 
     @Override
     public ResultBean save(BizBillAddDTO model) {
@@ -83,6 +86,18 @@ public class BillServiceImpl implements BillService {
         bizBill.setCreateUser(customUser.getId());
         bizBill.setUpdateUser(customUser.getId());
         int insertId = bizBillMapper.insertSelective(bizBill);
+
+        // 存入余额 费用 借款 货款
+        // 1
+        //2
+        //3
+        if (StringUtils.isNotEmpty(bizBill.getCollectionType()) && "123".contains(model.getCollectionType())) {
+            subjectBalanceService.increaseAmountBatch(Integer.parseInt(model.getDeptId()),model.getCollectionMoney());
+        } else if (StringUtils.isNotEmpty(bizBill.getPaymentType())) {
+            // 批量扣减知道怎么做
+            subjectBalanceService.decreaseAmountBatch(Integer.parseInt(model.getDeptId()),model.getCollectionMoney());
+        }
+
         return ResultBean.success(insertId);
     }
 

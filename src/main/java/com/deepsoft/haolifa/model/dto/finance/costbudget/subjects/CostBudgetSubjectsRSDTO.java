@@ -22,6 +22,19 @@ public class CostBudgetSubjectsRSDTO {
     private Integer deptId;
     @ApiModelProperty(value = "部门名称")
     private String deptName;
+
+
+    @ApiModelProperty(value = "科目类别")
+    private String subjectsTypeCode;
+    @ApiModelProperty(value = "科目类别中文")
+    private String subjectsTypeName;
+
+    private String subjectsName;
+
+    @ApiModelProperty(value = "余额")
+    private BigDecimal balanceAmount;
+
+
     @ApiModelProperty(value = "科目ID （二级科目）")
     private Integer subjectsId;
     @ApiModelProperty(value = "比例 1~100")
