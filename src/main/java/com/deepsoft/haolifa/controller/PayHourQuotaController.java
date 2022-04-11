@@ -74,6 +74,7 @@ public class PayHourQuotaController {
             FileInputStream fileInputStream = new FileInputStream(file2);
             List<PayHourQuota> objects = (List<PayHourQuota>) ExcelUtils.importExcelReadColumn(fileInputStream, PayHourQuota.class);
             payHourQuotaService.save(objects);
+            System.out.println("dd");
             return ResultBean.success(1);
         } catch (Exception e) {
             e.printStackTrace();
