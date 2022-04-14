@@ -238,6 +238,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 for (PayOrderUserRelationProcedure procedure : payOrderUserRelationProcedureList) {
                     // 工序价格
                     BigDecimal hourPrice = procedure.getHourPrice();
+                    if (Objects.isNull(hourPrice) || hourPrice.equals(new BigDecimal("0.000"))) {
+                        continue;
+                    }
                     // 订单号
                     String orderId = procedure.getOrderId();
                     // 工序ID获取工序
