@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.domain.BizSubjects;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAllRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 import com.deepsoft.haolifa.service.SubjectService;
@@ -51,6 +52,12 @@ public class SubjectsController {
     @GetMapping("/getSubjectsListAll")
     public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAll() {
         return subjectService.getSubjectsListAll();
+    }
+
+    @ApiOperation("获取全部节点列表-不分页(有查询条件)")
+    @PostMapping("/getSubjectsListAllP")
+    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAllP(@RequestBody BizSubjectsAllRQDTO bizSubjectsDTO) {
+        return subjectService.getSubjectsListAllP(bizSubjectsDTO);
     }
 
 

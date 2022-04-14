@@ -31,8 +31,16 @@ public class ReimburseCostDetailRSDTO {
     @ApiModelProperty(value = "类型 1 费用报销 2 费用报销")
     private  String type;
 
-    @ApiModelProperty(value = "报销科目(费用预算表中的ID)")
+    @ApiModelProperty(value = "科目类别")
+    private String subjectsType;
+    @ApiModelProperty(value = "科目类别名称")
+    private String subjectsTypeName;
+
+    @ApiModelProperty(value = "报销科目(费用预算表中的科目ID)")
     private Integer subject;
+
+    @ApiModelProperty(value = "科目余额（余额是动态的）")
+    private  BigDecimal balanceAmount;
 
     @ApiModelProperty(value = "报销科目")
     private String subjectCN;

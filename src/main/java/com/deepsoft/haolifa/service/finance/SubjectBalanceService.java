@@ -15,6 +15,7 @@ import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalance
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface SubjectBalanceService {
 
@@ -49,6 +50,7 @@ public interface SubjectBalanceService {
      */
     public ResultBean<BizSubjectsBalanceRSDTO> getInfo(Integer deptId,Integer subjectsId) ;
 
+    public Map<String, BigDecimal> getSubjectsBalanceAll();
     /**
      * 获取列表
      * @param model

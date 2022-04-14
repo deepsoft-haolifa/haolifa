@@ -6,12 +6,14 @@ package com.deepsoft.haolifa.enums;
  */
 public enum DictEnum {
 
-        BOOKING_TYPE("BOOKING_TYPE", "记账方式"),
-        PAY_WAY("PAY_WAY", "付款方式"),
-        PAY_ACCOUNT("PAY_ACCOUNT", "付款账号"),
-        PAYMENT_TYPE("PAY_ACCOUNT", "付款账号"),
+    BOOKING_TYPE("BOOKING_TYPE", "记账方式"),
+    PAY_WAY("PAY_WAY", "付款方式"),
+    PAY_ACCOUNT("PAY_ACCOUNT", "付款账号"),
+    PAYMENT_TYPE("PAY_ACCOUNT", "付款账号"),
     SUBJECTS_TYPE("SUBJECTS_TYPE", "科目类型"),
-        COLLECTION_TYPE("PAYMENT_TYPE", "收款类型");
+
+    VEHICLE_TYPE("VEHICLE_TYPE", "交通工具"),
+    COLLECTION_TYPE("PAYMENT_TYPE", "收款类型");
 
     private String code;
     private String desc;
@@ -32,7 +34,7 @@ public enum DictEnum {
         this.desc = desc;
     }
 
-     DictEnum(String code, String desc) {
+    DictEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }

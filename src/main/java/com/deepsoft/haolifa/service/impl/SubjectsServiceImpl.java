@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.domain.SysDict;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAllRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 import com.deepsoft.haolifa.service.SubjectService;
@@ -117,6 +118,25 @@ public class SubjectsServiceImpl implements SubjectService {
     @Override
     public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAll() {
         BizSubjectsExample bizSubjectsExample = new BizSubjectsExample();
+        bizSubjectsExample.setOrderByClause("id desc");
+        List<BizSubjects> bizSubjects = subjectsMapper.selectByExample(bizSubjectsExample);
+
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+        List<BizSubjectsRSDTO> bizSubjectsRSDTOList = bizSubjects.stream().map(c -> {
+            BizSubjectsRSDTO subjectsRSDTO = new BizSubjectsRSDTO();
+            BeanUtils.copyProperties(c, subjectsRSDTO);
+            subjectsRSDTO.setTypeCN(dictMap.get(c.getType()));
+            return subjectsRSDTO;
+        }).collect(Collectors.toList());
+        return ResultBean.success(bizSubjectsRSDTOList);
+    }
+
+    @Override
+    public ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAllP(BizSubjectsAllRQDTO bizSubjectsDTO) {
+        BizSubjectsExample bizSubjectsExample = new BizSubjectsExample();
+        bizSubjectsExample.createCriteria().andTypeEqualTo(bizSubjectsDTO.getSubjectsType());
         bizSubjectsExample.setOrderByClause("id desc");
         List<BizSubjects> bizSubjects = subjectsMapper.selectByExample(bizSubjectsExample);
 

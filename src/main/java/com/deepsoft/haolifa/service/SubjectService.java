@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.domain.BizSubjects;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsAllRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 
@@ -47,4 +48,6 @@ public interface SubjectService {
     ResultBean<PageDTO<BizSubjectsRSDTO>> getList(BizSubjectsRQDTO model);
 
     ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAll();
+
+    ResultBean<List<BizSubjectsRSDTO>> getSubjectsListAllP(BizSubjectsAllRQDTO bizSubjectsDTO);
 }

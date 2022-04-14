@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.lang.Pair;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
@@ -18,7 +19,6 @@ import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -293,6 +293,22 @@ public class SubjectsBalanceServiceImpl implements SubjectBalanceService {
         pageDTO.setList(bizSubjectsRSDTOList);
         return ResultBean.success(pageDTO);
     }
+
+    @Override
+    public Map<String, BigDecimal>  getSubjectsBalanceAll(){
+        BizSubjectsBalanceExample bizSubjectsBalanceExample = new BizSubjectsBalanceExample();
+        List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
+
+        Map<String, BigDecimal> bigDecimalMap = bizSubjectsBalanceList.stream()
+            .map(bizSubjectsBalance -> {
+                String k = bizSubjectsBalance.getDeptId() + "_" + bizSubjectsBalance.getSubjectsId();
+                return new cn.hutool.core.lang.Pair<>(k, bizSubjectsBalance.getBalanceAmount());
+            })
+            .collect(Collectors.toMap(cn.hutool.core.lang.Pair::getKey, Pair::getValue, (a, b) -> a));
+
+        return bigDecimalMap;
+    }
+
 
     @Override
     public ResultBean<List<BizSubjectsBalanceRSDTO>> getSubjectsListAll() {

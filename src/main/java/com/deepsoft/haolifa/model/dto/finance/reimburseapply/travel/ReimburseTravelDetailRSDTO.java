@@ -28,6 +28,8 @@ public class ReimburseTravelDetailRSDTO {
     private String arrAddress;
     @ApiModelProperty(value = "交通工具")
     private Integer vehicle;
+    @ApiModelProperty(value = "交通工具")
+    private String vehicleCN;
     @ApiModelProperty(value = "交通单据张数")
     private Integer vehicleDocNum;
     @ApiModelProperty(value = "交通金额")

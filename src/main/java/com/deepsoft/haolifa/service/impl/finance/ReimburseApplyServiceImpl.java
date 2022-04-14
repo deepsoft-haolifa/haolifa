@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Pair;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -22,10 +23,12 @@ import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostD
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailRSDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
+import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.deepsoft.haolifa.service.finance.ReimburseApplyService;
+import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -65,9 +68,14 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private BizReimburseCostDetailMapper bizReimburseCostDetailMapper;
     @Autowired
     private SysDepartmentMapper departmentMapper;
+    @Autowired
+    private BizSubjectsMapper bizSubjectsMapper;
 
     @Autowired
     private BizCostBudgetSubjectsMapper bizCostBudgetSubjectsMapper;
+
+    @Autowired
+    private SysDictService sysDictService;
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -79,6 +87,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private BillService billService;
     @Autowired
     private BankBillService bankBillService;
+    @Autowired
+    private SubjectBalanceService subjectBalanceService;
 
     //
     @Override
@@ -242,6 +252,11 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         Map<Integer, String> costBudgetSubjectsMap = costBudgetSubjectsList.stream()
             .collect(Collectors.toMap(BizCostBudgetSubjects::getId, BizCostBudgetSubjects::getName));
 
+        // 查询当前余额
+
+        Map<String, BigDecimal> subjectsBalanceAll = subjectBalanceService.getSubjectsBalanceAll();
+
+
 
         ReimburseApplyDetailDTO reimburseApplyRSDTO = new ReimburseApplyDetailDTO();
         BeanUtils.copyProperties(reimburseApply, reimburseApplyRSDTO);
@@ -270,19 +285,27 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             bizReimburseTravelDetailExample.createCriteria().andReimburseIdEqualTo(id);
             List<BizReimburseTravelDetail> reimburseTravelDetailList =
                 bizReimburseTravelDetailMapper.selectByExample(bizReimburseTravelDetailExample);
+
+            Map<String, String> vehicle_type_map = sysDictService.getSysDictByTypeCode(DictEnum.VEHICLE_TYPE.getCode()).stream()
+                .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
             List<ReimburseTravelDetailRSDTO> reimburseTravelDetailRSDTOList = reimburseTravelDetailList.stream()
                 .map(reimburseTravelDetail -> {
                     ReimburseTravelDetailRSDTO reimburseTravelDetailRSDTO = new ReimburseTravelDetailRSDTO();
                     BeanUtils.copyProperties(reimburseTravelDetail, reimburseTravelDetailRSDTO);
+                    reimburseTravelDetailRSDTO.setVehicleCN(vehicle_type_map.getOrDefault(reimburseTravelDetail.getVehicle(),""));
                     return reimburseTravelDetailRSDTO;
                 })
                 .collect(Collectors.toList());
             reimburseApplyRSDTO.setReimburseTravelDetailRSDTOList(reimburseTravelDetailRSDTOList);
             // 费用
         }else if (StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(),ReimburseTypeEnum.cost.getCode())){
+            Map<String, String> subjects_type_map = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+                .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+
             BizReimburseCostDetailExample bizReimburseCostDetailExample = new BizReimburseCostDetailExample();
             bizReimburseCostDetailExample.createCriteria().andReimburseIdEqualTo(id);
-
             List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(bizReimburseCostDetailExample);
             List<ReimburseCostDetailRSDTO> reimburseCostDetailRSDTOList = reimburseCostDetailList.stream()
                 .map(reimburseCostDetail -> {
@@ -290,6 +313,14 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                     BeanUtils.copyProperties(reimburseCostDetail, reimburseCostDetailRSDTO);
                     String subjectsMapOrDefault = costBudgetSubjectsMap.getOrDefault(reimburseCostDetail.getSubject(), "");
                     reimburseCostDetailRSDTO.setSubjectCN(subjectsMapOrDefault);
+
+                    BizSubjects bizSubjects = bizSubjectsMapper.selectByPrimaryKey(reimburseCostDetail.getSubject());
+
+                    reimburseCostDetailRSDTO.setSubjectsType(bizSubjects!=null?bizSubjects.getType():"");
+                    reimburseCostDetailRSDTO.setSubjectsTypeName(bizSubjects!=null?subjects_type_map.get(bizSubjects.getType()):"");
+
+                    BigDecimal balanceAmount = subjectsBalanceAll.getOrDefault(reimburseApply.getDeptId() + "_" + reimburseCostDetail.getSubject(), BigDecimal.ZERO);
+                    reimburseCostDetailRSDTO.setBalanceAmount(balanceAmount);
                     return reimburseCostDetailRSDTO;
                 })
                 .collect(Collectors.toList());

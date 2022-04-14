@@ -19,6 +19,8 @@ public class CostBudgetSubjectsAddDTO {
     private String name;
     @ApiModelProperty(value = "部门ID")
     private Integer deptId;
+    @ApiModelProperty(value = "科目类别")
+    private String subjectsType;
     @ApiModelProperty(value = "科目ID （二级科目）")
     private Integer subjectsId;
     @ApiModelProperty(value = "比例 1~100")

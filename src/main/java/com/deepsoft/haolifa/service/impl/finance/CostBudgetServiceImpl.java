@@ -579,6 +579,8 @@ public class CostBudgetServiceImpl implements CostBudgetService {
                 costBudgetSubjectsRQDTO.setSubjectsTypeName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
                 return costBudgetSubjectsRQDTO;
             })
+            .collect(Collectors.toMap(CostBudgetSubjectsTypeRSDTO::getSubjectsTypeCode,Function.identity(),(a,b)->a))
+            .values().stream()
             .collect(Collectors.toList());
 
         return ResultBean.success(costBudgetSubjectsRSDTOList);
