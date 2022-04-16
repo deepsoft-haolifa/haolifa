@@ -766,7 +766,7 @@ public class CommonEnum {
      *
      */
     public enum TypeOfWorkEnum {
-        VALVE_ASSEMBLY("1", "阀门装配"),
+        VALVE_ASSEMBLY("1", "蝶阀装配"),
         VALVE_BODY("2", "阀体"),
         VALVE_PLATE("3", "阀板"),
         SEMI_FINISHED_VALVE_BODY("4", "阀体半成品"),
@@ -780,6 +780,7 @@ public class CommonEnum {
         EXTERNAL_ADJUSTMENT("12", "外调精巧调节型执行器装配"),
         EXTERNAL_ADJUSTMENT_SWITCH("13", "外调通用开关型执行器装配"),
         EXTERNAL_ADJUSTMENT_COMMON("14", "外调通用调节型执行器装配"),
+        CHECK_VALUE_ASSEMBLY("15", "止回阀装配"),
         ;
         public final String code;
         public final String name;
