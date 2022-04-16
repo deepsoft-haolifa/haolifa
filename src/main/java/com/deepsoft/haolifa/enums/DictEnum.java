@@ -13,8 +13,12 @@ public enum DictEnum {
     SUBJECTS_TYPE("SUBJECTS_TYPE", "科目类型"),
 
     VEHICLE_TYPE("VEHICLE_TYPE", "交通工具"),
-    COLLECTION_TYPE("PAYMENT_TYPE", "收款类型");
+    COLLECTION_TYPE("PAYMENT_TYPE", "收款类型"),
 
+    ORDER_WORK_TYPE("ORDER_WORK_TYPE", "装配订单类别"),
+
+
+    ;
     private String code;
     private String desc;
 
