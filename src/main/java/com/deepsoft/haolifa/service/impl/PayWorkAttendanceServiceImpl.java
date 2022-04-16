@@ -21,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -70,19 +71,32 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
     @Async
     public void insert(List<PayWorkAttendance> payWorkAttendances) {
         for (PayWorkAttendance payWorkAttendance : payWorkAttendances) {
-            if (Objects.isNull(payWorkAttendance.getCreateTime())) {
-                payWorkAttendance.setCreateTime(new Date());
-            }
+            PayWorkAttendancePageDTO dto = new PayWorkAttendancePageDTO();
+            dto.setAttendYear(payWorkAttendance.getAttendYear());
+            dto.setAttendMonth(payWorkAttendance.getAttendMonth());
+            dto.setUserId(payWorkAttendance.getUserId());
+            List<PayWorkAttendance> list = getList(dto);
             if (Objects.isNull(payWorkAttendance.getUpdateTime())) {
                 payWorkAttendance.setUpdateTime(new Date());
-            }
-            if (StringUtils.isEmpty(payWorkAttendance.getCreateUser())) {
-                payWorkAttendance.setCreateUser(getLoginUserName());
             }
             if (StringUtils.isEmpty(payWorkAttendance.getUpdateUser())) {
                 payWorkAttendance.setUpdateUser(getLoginUserName());
             }
-            payWorkAttendanceMapper.insert(payWorkAttendance);
+            if (CollectionUtils.isEmpty(list)) {
+                if (Objects.isNull(payWorkAttendance.getCreateTime())) {
+                    payWorkAttendance.setCreateTime(new Date());
+                }
+                if (StringUtils.isEmpty(payWorkAttendance.getCreateUser())) {
+                    payWorkAttendance.setCreateUser(getLoginUserName());
+                }
+                payWorkAttendanceMapper.insert(payWorkAttendance);
+            } else {
+                PayWorkAttendanceExample example = new PayWorkAttendanceExample();
+                example.createCriteria().andAttendYearEqualTo(payWorkAttendance.getAttendYear())
+                        .andAttendMonthEqualTo(payWorkAttendance.getAttendMonth())
+                            .andUserIdEqualTo(payWorkAttendance.getUserId());
+                payWorkAttendanceMapper.updateByExampleSelective(payWorkAttendance, example);
+            }
         }
     }
 
@@ -173,6 +187,9 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
         }
         if (StringUtils.isNotBlank(model.getAttendMonth())) {
             criteria.andAttendMonthEqualTo(model.getAttendMonth());
+        }
+        if (Objects.nonNull(model.getUserId())) {
+            criteria.andUserIdEqualTo(model.getUserId());
         }
         List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(example);
         return payWorkAttendances;
