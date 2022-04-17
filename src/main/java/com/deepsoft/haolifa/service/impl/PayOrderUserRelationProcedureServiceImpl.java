@@ -100,10 +100,10 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
                     String productNo = orderAssociate.getProductNo();
                     String orderFirstType = productNo.substring(0, 1);
                     if (workTypeCode.endsWith(orderFirstType)) {
-                        OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getProductId());
-                        model = StringUtils.isEmpty(orderProductAssociate.getProductModel()) ? "" : orderProductAssociate.getProductModel().substring(0, 4);
-                        specifications = orderProductAssociate.getSpecifications();
-                        idCategory = orderProductAssociate.getProductNo().substring(0, 2);
+                        model = StringUtils.isEmpty(orderAssociate.getProductModel()) ? "" : orderAssociate.getProductModel().substring(0, 4);
+                        specifications = orderAssociate.getSpecifications();
+                        idCategory = orderAssociate.getProductNo().substring(0, 2);
+                        payOrderUserRelationProcedureDTO.setProductId(orderAssociate.getId());
                         saveOrderBindProcedure(model, specifications, idCategory, postCode, payOrderUserRelationProcedureDTO);
                     }
                 }
