@@ -3,33 +3,25 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayUserVO;
 import com.deepsoft.haolifa.service.PayUserService;
 import com.deepsoft.haolifa.service.PayWagesRelationUserService;
-import com.deepsoft.haolifa.service.RoleService;
-import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.util.CommonUtil;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
-import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
-import io.swagger.models.auth.In;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -56,9 +48,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     @Resource
     private PayTeamMapper payTeamMapper;
     @Resource
-    private RoleService roleService;
-    @Resource
-    private SysUserService sysUserService;
+    private SysUserMapper sysUserMapper;
     @Resource
     private SysUserMapper userMapper;
     @Override
@@ -305,6 +295,19 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payWages.setMinLiveSecurityFund(payUser.getBasePay());
             payWages.setId(list.get(0).getWagesId());
             payWagesMapper.updateByPrimaryKeySelective(payWages);
+        }
+        // 同步用户管理列表数据
+        SysUser sys = userMapper.selectByPhoneOrIdCard(payUser.getPhone(), payUser.getIdCard());
+        if (Objects.nonNull(sys)) {
+            sys.setDepartId(payUser.getDepartId());
+            sys.setPostId(payUser.getPostId());
+            sys.setPhone(payUser.getPhone());
+            sys.setIdCard(payUser.getIdCard());
+            sys.setUserNo(payUser.getUserNo());
+            sys.setRealName(payUser.getUserName());
+            sys.setNativePlace(payUser.getAddress());
+            sys.setSex(payUser.getSex());
+            sysUserMapper.updateByPrimaryKeySelective(sys);
         }
         return ResultBean.success(1);
     }
