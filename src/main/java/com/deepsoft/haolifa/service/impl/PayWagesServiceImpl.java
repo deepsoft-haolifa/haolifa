@@ -488,6 +488,17 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     // 管理人员计算扣分项
                     List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(payAssessmentScoreExample);
                     if (CollectionUtils.isEmpty(payAssessmentScores)) {
+                        // 同步考勤
+                        PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
+                        payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
+                        List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
+                        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
+                            PayWorkAttendance payWorkAttendance = payWorkAttendances.get(0);
+                            payWagesSearch.setActualAttendanceDays(payWorkAttendance.getAttendanceDays());
+                            payWagesSearch.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
+                            payWagesSearch.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
+                            payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
+                        }
                         continue;
                     }
 

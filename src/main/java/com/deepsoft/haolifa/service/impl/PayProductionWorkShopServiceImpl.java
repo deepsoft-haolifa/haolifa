@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author liuyaofei
@@ -58,7 +60,8 @@ public class PayProductionWorkShopServiceImpl extends BaseService implements Pay
         PageDTO<PayProductionWorkshopVO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(payTeams, pageDTO);
         List<PayProductionWorkshopVO> payProductionWorkshopVOS = BeanCopyUtils.copyPropertiesForNewList(payTeams, () -> new PayProductionWorkshopVO());
-        pageDTO.setList(payProductionWorkshopVOS);
+        List<PayProductionWorkshopVO> collect = payProductionWorkshopVOS.stream().sorted(Comparator.comparing(PayProductionWorkshopVO::getDepartName)).collect(Collectors.toList());
+        pageDTO.setList(collect);
         return ResultBean.success(pageDTO);
     }
 
