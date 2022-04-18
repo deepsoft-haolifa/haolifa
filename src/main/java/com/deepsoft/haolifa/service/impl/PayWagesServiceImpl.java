@@ -487,29 +487,27 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
 
                     // 管理人员计算扣分项
                     List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(payAssessmentScoreExample);
-                    if (CollectionUtils.isEmpty(payAssessmentScores)) {
-                        // 同步考勤
-                        PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
-                        payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
-                        List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
-                        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
-                            PayWorkAttendance payWorkAttendance = payWorkAttendances.get(0);
-                            payWagesSearch.setActualAttendanceDays(payWorkAttendance.getAttendanceDays());
-                            payWagesSearch.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
-                            payWagesSearch.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
-                            payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
-                        }
-                        continue;
+                    if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payAssessmentScores)) {
+                        PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
+                        Integer score = payAssessmentScore.getScore();
+                        BigDecimal bigDecimal = new BigDecimal(score);
+                        BigDecimal divide = bigDecimal.divide(new BigDecimal("100"));
+                        BigDecimal totalMoney = payWagesSearch.getTotalMoney();
+                        // 扣完分工资
+                        BigDecimal multiply = totalMoney.multiply(divide);
+                        payWagesSearch.setNetSalaryMoney(multiply);
                     }
 
-                    PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
-                    Integer score = payAssessmentScore.getScore();
-                    BigDecimal bigDecimal = new BigDecimal(score);
-                    BigDecimal divide = bigDecimal.divide(new BigDecimal("100"));
-                    BigDecimal totalMoney = payWagesSearch.getTotalMoney();
-                    // 扣完分工资
-                    BigDecimal multiply = totalMoney.multiply(divide);
-                    payWagesSearch.setNetSalaryMoney(multiply);
+                    // 同步考勤
+                    PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
+                    payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
+                    List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
+                    if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
+                        PayWorkAttendance payWorkAttendance = payWorkAttendances.get(0);
+                        payWagesSearch.setActualAttendanceDays(payWorkAttendance.getAttendanceDays());
+                        payWagesSearch.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
+                        payWagesSearch.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
+                    }
                     payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
                     continue;
                 }
