@@ -4,10 +4,12 @@ package com.deepsoft.haolifa.controller.finance;
 import com.deepsoft.haolifa.model.domain.BizPayApply;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyUpDTO;
+import com.deepsoft.haolifa.service.finance.CostBudgetService;
 import com.deepsoft.haolifa.service.finance.PayApplyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +27,10 @@ import org.springframework.web.bind.annotation.*;
 public class PayApplyController {
     @Autowired
     private PayApplyService payApplyService;
+
+
+    @Autowired
+    private CostBudgetService costBudgetService;
 
 
     @ApiOperation("创建付款申请")
@@ -70,5 +76,16 @@ public class PayApplyController {
         return payApplyService.update(payPlan);
     }
 
+
+
+
+    @ApiOperation("获取当前用户材料费预算")
+    @GetMapping("/subjects/getCurUserClfSubjectsBudget")
+    public ResultBean<CostBudgetSubjectsRSDTO> getCurUserClfSubjectsBudget() {
+//        subjectsId: 114
+//        subjectsName: "材料费"
+//        subjectsTypeCode: "00014"
+        return costBudgetService.getCurUserClfSubjectsBudget();
+    }
 
 }

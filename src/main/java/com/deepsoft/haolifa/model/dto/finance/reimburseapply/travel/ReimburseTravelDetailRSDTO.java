@@ -41,7 +41,7 @@ public class ReimburseTravelDetailRSDTO {
     @ApiModelProperty(value = "项目")
     private Integer projectType;
     @ApiModelProperty(value = "项目名称")
-    private Integer projectTypeCN;
+    private String projectTypeCN;
 
     @ApiModelProperty(value = "单据张数")
     private Integer projectDocNum;

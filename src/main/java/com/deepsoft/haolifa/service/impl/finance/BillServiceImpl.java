@@ -92,10 +92,10 @@ public class BillServiceImpl implements BillService {
         //2
         //3
         if (StringUtils.isNotEmpty(bizBill.getCollectionType()) && "123".contains(model.getCollectionType())) {
-            subjectBalanceService.increaseAmountBatch(Integer.parseInt(model.getDeptId()),model.getCollectionMoney());
+            subjectBalanceService.increaseAmountBatch(model.getCollectionMoney());
         } else if (StringUtils.isNotEmpty(bizBill.getPaymentType())) {
             // 批量扣减知道怎么做
-            subjectBalanceService.decreaseAmountBatch(Integer.parseInt(model.getDeptId()),model.getCollectionMoney());
+            //subjectBalanceService.decreaseAmountBatch(model.getCollectionMoney());
         }
 
         return ResultBean.success(insertId);

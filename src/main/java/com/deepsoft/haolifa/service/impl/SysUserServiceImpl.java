@@ -89,9 +89,10 @@ public class SysUserServiceImpl implements SysUserService {
             return (CustomUser) customUserService.loadUserByUsername("admin");
         else
             return (CustomUser) principal;
-//        return (CustomUser) customUserService.loadUserByUsername("CS1");
+//        return (CustomUser) customUserService.loadUserByUsername("admin");
     }
 
+    @Override
     public List<UserPipLineDTO> currentUserPipLine(){
         List<UserPipLineDTO> userDTOList = new ArrayList<>();
         SysUser sysUser = getSysUser(selectLoginUser().getId());

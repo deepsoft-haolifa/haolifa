@@ -17,6 +17,8 @@ public enum DictEnum {
 
     ORDER_WORK_TYPE("ORDER_WORK_TYPE", "装配订单类别"),
 
+    PROJECT_TYPE("PROJECT_TYPE", "报销项目类型"),
+
 
     ;
     private String code;

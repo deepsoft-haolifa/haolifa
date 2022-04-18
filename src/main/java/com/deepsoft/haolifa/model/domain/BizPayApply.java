@@ -14,6 +14,8 @@ public class BizPayApply {
 
     private Date applyTime;
 
+    private Integer deptId;
+
     private String remark;
 
     private String delFlag;
@@ -26,12 +28,13 @@ public class BizPayApply {
 
     private Date updateTime;
 
-    public BizPayApply(Integer id, String status, BigDecimal totalPrice, String applyPayCompany, Date applyTime, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizPayApply(Integer id, String status, BigDecimal totalPrice, String applyPayCompany, Date applyTime, Integer deptId, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.status = status;
         this.totalPrice = totalPrice;
         this.applyPayCompany = applyPayCompany;
         this.applyTime = applyTime;
+        this.deptId = deptId;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
@@ -82,6 +85,14 @@ public class BizPayApply {
 
     public void setApplyTime(Date applyTime) {
         this.applyTime = applyTime;
+    }
+
+    public Integer getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 
     public String getRemark() {

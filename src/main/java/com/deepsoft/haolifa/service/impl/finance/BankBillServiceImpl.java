@@ -99,9 +99,9 @@ public class BankBillServiceImpl implements BankBillService {
         //2
         //3
         if (bizBankBill.getType().equals("1") && "123".contains(model.getCollectionType())) {
-            subjectBalanceService.increaseAmountBatch(model.getDeptId(),model.getCollectionMoney());
+            subjectBalanceService.increaseAmountBatch(model.getCollectionMoney());
         } else if (bizBankBill.getType().equals("2")) {
-            subjectBalanceService.decreaseAmountBatch(model.getDeptId(),model.getCollectionMoney());
+//            subjectBalanceService.decreaseAmountBatch(model.getCollectionMoney());
         }
 
         return ResultBean.success(insertId);

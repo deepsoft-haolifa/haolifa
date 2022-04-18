@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
 import com.deepsoft.haolifa.enums.PayApplyPayStatusEnum;
 import com.deepsoft.haolifa.enums.PayPlanConfirmStatusEnum;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -122,6 +123,11 @@ public class PayApplyServiceImpl implements PayApplyService {
     }
 
     private BizPayApply buildBizPayApply(PayApplyAddDTO model, Date currentDate) {
+
+        CustomUser customUser = sysUserService.selectLoginUser();
+        SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+
+
         BizPayApply payApply = new BizPayApply();
 
         payApply.setCreateTime(currentDate);
@@ -136,12 +142,13 @@ public class PayApplyServiceImpl implements PayApplyService {
             .findFirst()
             .orElse(null);
 
+        payApply.setDeptId(sysUser.getDepartId());
         payApply.setApplyPayCompany(applyPayCompany);
         payApply.setApplyTime(currentDate);
         payApply.setDelFlag(CommonEnum.DelFlagEnum.YES.code);
         //payApply.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
-        payApply.setCreateUser(sysUserService.selectLoginUser().getId());
-        payApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        payApply.setCreateUser(customUser.getId());
+        payApply.setUpdateUser(customUser.getId());
         return payApply;
     }
     private BizPayApply buildBizPayApplyUp(PayApplyUpDTO model, Date currentDate) {
@@ -444,6 +451,7 @@ public class PayApplyServiceImpl implements PayApplyService {
     private BizPayPlan buildBizPayPlan(BizPayApply payApply, Map<Integer, BizPayApplyDetail> bizPayApplyDetailMap, PurchaseOrder purchaseOrder) {
         BizPayPlan payPlan = new BizPayPlan();
 
+        payPlan.setDeptId(payApply.getDeptId());
         payPlan.setPayDataId((long) payApply.getId());
         payPlan.setApplyNo("PP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3));
         payPlan.setApplyDate(payApply.getApplyTime());

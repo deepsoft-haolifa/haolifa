@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -59,42 +60,47 @@ public class SubjectsBalanceServiceImpl implements SubjectBalanceService {
 
 
     @Override
-    public void increaseAmountBatch(Integer deptId, BigDecimal amount) {
-        // 根据部门查询部门预算
-        BizCostBudgetDeptExample bizCostBudgetDeptExample = new BizCostBudgetDeptExample();
-        bizCostBudgetDeptExample.createCriteria().andDeptIdEqualTo(deptId);
-        List<BizCostBudgetDept> bizCostBudgetDepts = costBudgetDeptMapper.selectByExample(bizCostBudgetDeptExample);
-        if (CollectionUtils.isEmpty(bizCostBudgetDepts)) {
-            return;
-        }
-        BizCostBudgetDept bizCostBudgetDept = bizCostBudgetDepts.get(0);
+    public void increaseAmountBatch( BigDecimal amount) {
 
-        // 根据部门查询科目预算
-        BizCostBudgetSubjectsExample bizCostBudgetSubjectsExample = new BizCostBudgetSubjectsExample();
-        bizCostBudgetSubjectsExample.createCriteria().andDeptIdEqualTo(deptId);
-        List<BizCostBudgetSubjects> bizCostBudgetSubjectsList = costBudgetSubjectsMapper.selectByExample(bizCostBudgetSubjectsExample);
-        if (CollectionUtils.isEmpty(bizCostBudgetSubjectsList)) {
+        // 查询所有已经配备比例的部门
+        List<BizCostBudgetDept> costBudgetDeptList = costBudgetDeptMapper.selectByExample(new BizCostBudgetDeptExample());
+        if (CollectionUtils.isEmpty(costBudgetDeptList)) {
             return;
         }
 
-        // 批量添加
-        for (BizCostBudgetSubjects bizCostBudgetSubjects : bizCostBudgetSubjectsList) {
-            BizSubjectsBalanceUpDTO bizSubjectsBalanceUpDTO = new BizSubjectsBalanceUpDTO();
-            bizSubjectsBalanceUpDTO.setDeptId(deptId);
-            bizSubjectsBalanceUpDTO.setSubjectsId(bizCostBudgetSubjects.getSubjectsId());
+        for (BizCostBudgetDept bizCostBudgetDept : costBudgetDeptList) {
+            Integer deptId = bizCostBudgetDept.getDeptId();
 
-            BigDecimal deptCostRatio = BigDecimal.valueOf(bizCostBudgetDept.getCostRatio()).divide(BigDecimal.valueOf(100));
-            BigDecimal subCostRatio = BigDecimal.valueOf(bizCostBudgetSubjects.getCostRatio()).divide(BigDecimal.valueOf(100));
+            if (bizCostBudgetDept.getCostRatio()==null || bizCostBudgetDept.getCostRatio()<=0) {
+                continue;
+            }
 
-            BigDecimal am = amount.multiply(deptCostRatio).multiply(subCostRatio);
+            // 根据部门查询科目预算
+            BizCostBudgetSubjectsExample bizCostBudgetSubjectsExample = new BizCostBudgetSubjectsExample();
+            bizCostBudgetSubjectsExample.createCriteria().andDeptIdEqualTo(deptId);
+            List<BizCostBudgetSubjects> bizCostBudgetSubjectsList = costBudgetSubjectsMapper.selectByExample(bizCostBudgetSubjectsExample);
+            if (CollectionUtils.isEmpty(bizCostBudgetSubjectsList)) {
+                continue;
+            }
+            // 批量添加
+            for (BizCostBudgetSubjects bizCostBudgetSubjects : bizCostBudgetSubjectsList) {
+                BizSubjectsBalanceUpDTO bizSubjectsBalanceUpDTO = new BizSubjectsBalanceUpDTO();
+                bizSubjectsBalanceUpDTO.setDeptId(deptId);
+                bizSubjectsBalanceUpDTO.setSubjectsId(bizCostBudgetSubjects.getSubjectsId());
 
-            bizSubjectsBalanceUpDTO.setAmount(am);
-            increaseAmount(bizSubjectsBalanceUpDTO);
+                BigDecimal deptCostRatio = BigDecimal.valueOf(bizCostBudgetDept.getCostRatio()).divide(BigDecimal.valueOf(100));
+                BigDecimal subCostRatio = BigDecimal.valueOf(bizCostBudgetSubjects.getCostRatio()).divide(BigDecimal.valueOf(100));
+
+                BigDecimal am = amount.multiply(deptCostRatio).multiply(subCostRatio);
+
+                bizSubjectsBalanceUpDTO.setAmount(am);
+                increaseAmount(bizSubjectsBalanceUpDTO);
+            }
         }
     }
 
     @Override
-    public void decreaseAmountBatch(Integer deptId, BigDecimal amount) {
+    public void decreaseAmountBatch( BigDecimal amount) {
 //        // 根据部门查询部门预算
 //        BizCostBudgetDeptExample bizCostBudgetDeptExample = new BizCostBudgetDeptExample();
 //        bizCostBudgetDeptExample.createCriteria().andDeptIdEqualTo(deptId);
@@ -194,12 +200,15 @@ public class SubjectsBalanceServiceImpl implements SubjectBalanceService {
         criteria.andSubjectsIdEqualTo(bizSubjectsUp.getSubjectsId());
         bizSubjectsBalanceExample.setOrderByClause("id desc limit 1");
         List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
+        if (CollectionUtils.isEmpty(bizSubjectsBalanceList)){
+            throw new BaseException("当前科目未配置预算");
+        }
 
         // 更新余额表
         BizSubjectsBalance bizSubjectsBalance = bizSubjectsBalanceList.get(0);
         BigDecimal subtract = bizSubjectsBalance.getBalanceAmount().subtract(bizSubjectsUp.getAmount());
         if (subtract.compareTo(BigDecimal.ZERO) < 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "余额不足");
+            throw new BaseException("当前科目余额不足");
         }
 
         BizSubjectsBalance subjectsBalanceUp = new BizSubjectsBalance();

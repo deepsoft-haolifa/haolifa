@@ -32,6 +32,8 @@ public class BizPayPlan {
 
     private String paymentType;
 
+    private String applyStatus;
+
     private String status;
 
     private Date payDate;
@@ -39,6 +41,8 @@ public class BizPayPlan {
     private String bookingType;
 
     private String dataStatus;
+
+    private Integer deptId;
 
     private String remark;
 
@@ -52,9 +56,7 @@ public class BizPayPlan {
 
     private Date updateTime;
 
-    private String applyStatus;
-
-    public BizPayPlan(Integer id, Long payDataId, String applyNo, Date applyDate, String contractId, String contractNo, String contractPayWay, String applyPayCompany, String applyCollectionCompany, BigDecimal applyAmount, String payCompany, String payAccount, String payWay, String paymentType, String status, Date payDate, String bookingType, String dataStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime, String applyStatus) {
+    public BizPayPlan(Integer id, Long payDataId, String applyNo, Date applyDate, String contractId, String contractNo, String contractPayWay, String applyPayCompany, String applyCollectionCompany, BigDecimal applyAmount, String payCompany, String payAccount, String payWay, String paymentType, String applyStatus, String status, Date payDate, String bookingType, String dataStatus, Integer deptId, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.payDataId = payDataId;
         this.applyNo = applyNo;
@@ -69,17 +71,18 @@ public class BizPayPlan {
         this.payAccount = payAccount;
         this.payWay = payWay;
         this.paymentType = paymentType;
+        this.applyStatus = applyStatus;
         this.status = status;
         this.payDate = payDate;
         this.bookingType = bookingType;
         this.dataStatus = dataStatus;
+        this.deptId = deptId;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
         this.createTime = createTime;
         this.updateUser = updateUser;
         this.updateTime = updateTime;
-        this.applyStatus = applyStatus;
     }
 
     public BizPayPlan() {
@@ -198,6 +201,14 @@ public class BizPayPlan {
         this.paymentType = paymentType == null ? null : paymentType.trim();
     }
 
+    public String getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus == null ? null : applyStatus.trim();
+    }
+
     public String getStatus() {
         return status;
     }
@@ -228,6 +239,14 @@ public class BizPayPlan {
 
     public void setDataStatus(String dataStatus) {
         this.dataStatus = dataStatus == null ? null : dataStatus.trim();
+    }
+
+    public Integer getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 
     public String getRemark() {
@@ -276,13 +295,5 @@ public class BizPayPlan {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public String getApplyStatus() {
-        return applyStatus;
-    }
-
-    public void setApplyStatus(String applyStatus) {
-        this.applyStatus = applyStatus == null ? null : applyStatus.trim();
     }
 }

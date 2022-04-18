@@ -16,12 +16,11 @@ import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.service.finance.BankBillService;
-import com.deepsoft.haolifa.service.finance.BillService;
-import com.deepsoft.haolifa.service.finance.OtherBillService;
-import com.deepsoft.haolifa.service.finance.PayPlanService;
+import com.deepsoft.haolifa.service.finance.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -74,6 +73,8 @@ public class PayPlanServiceImpl implements PayPlanService {
     private BizPayApplyDetailMapper bizPayApplyDetailMapper;
     @Autowired
     private BizPayApplyMapper bizPayApplyMapper;
+    @Autowired
+    private SubjectBalanceService subjectBalanceService;
 
     @Override
     public ResultBean save(BizPayPlanAddDTO model) {
@@ -206,6 +207,15 @@ public class PayPlanServiceImpl implements PayPlanService {
                 payApply.setId(bizPayApply.getId());
                 bizPayApplyMapper.updateByPrimaryKeySelective(payApply);
             }
+        }
+
+        // 余额扣款
+        {
+            BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
+            bizSubjects.setSubjectsId(SubjectEnum.clf_id.getCode());
+            bizSubjects.setDeptId(bizPayPlan.getDeptId());
+            bizSubjects.setAmount(bigDecimal);
+            subjectBalanceService.decreaseAmount(bizSubjects);
         }
 
         return ResultBean.success(update);

@@ -25,10 +25,10 @@ public interface SubjectBalanceService {
      * @param
      * @return
      */
-    public void increaseAmountBatch(Integer deptId , BigDecimal amount) ;
+    public void increaseAmountBatch( BigDecimal amount) ;
 
 
-    public void decreaseAmountBatch(Integer deptId , BigDecimal amount) ;
+    public void decreaseAmountBatch( BigDecimal amount) ;
 
     /**
      * 添加余额
