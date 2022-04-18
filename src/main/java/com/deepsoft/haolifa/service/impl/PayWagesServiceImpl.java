@@ -488,6 +488,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 if (CommonEnum.UserType.MARRIED.type.equals(payUser.getUserType())) {
 
                     PayWagesSearch payWagesSearch = payWagesSearches.get(0);
+                    payWagesSearch.setRequiredAttendanceDays(payWage.getRequiredAttendanceDays());
                     PayAssessmentScoreExample payAssessmentScoreExample = new PayAssessmentScoreExample();
                     payAssessmentScoreExample.createCriteria().andUserIdEqualTo(userId).andScoreYearEqualTo(payWagesVO.getYear())
                         .andScoreMonthEqualTo(payWagesVO.getMonth());
