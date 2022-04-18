@@ -368,6 +368,13 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     }
                 }
             } else if (CommonEnum.UserType.MARRIED.type.equals(userType)) {
+                payWage.setUpdateUser(getLoginUserName());
+                payWage.setUpdateTime(new Date());
+                // 当月总天数
+                int daysBetween= (int) ((endTime.getTime()-startTime.getTime()+1000000)/(60*60*24*1000));
+                int count = DateUtils.computeHolidays(startTime, endTime);
+                payWage.setRequiredAttendanceDays(daysBetween-count);
+                payWagesMapper.updateByPrimaryKeySelective(payWage);
                 continue;
             }
             minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
