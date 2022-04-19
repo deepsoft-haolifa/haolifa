@@ -91,6 +91,12 @@ public class SubjectsServiceImpl implements SubjectService {
         if (StringUtils.isNotEmpty(model.getType()) ) {
             criteria.andTypeEqualTo(model.getType());
         }
+        if (StringUtils.isNotEmpty(model.getName()) ) {
+            criteria.andNameLike("%" + model.getName() + "%");
+        }
+        if (StringUtils.isNotEmpty(model.getCode()) ) {
+            criteria.andCodeLike("%" + model.getCode() + "%");
+        }
 
         bizSubjectsExample.setOrderByClause("id desc");
         Page<BizSubjects> pageData = PageHelper.startPage(model.getPageNum(), model.getPageSize()).doSelectPage(() -> {

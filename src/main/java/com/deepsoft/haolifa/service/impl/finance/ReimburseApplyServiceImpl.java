@@ -347,7 +347,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         // 借款审批列表
         if (StringUtils.equalsIgnoreCase("1", model.getMyself())) {
-//            criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
+            criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
         } else {
             criteria.andApplyStatusEqualTo(ReimburseApplyStatusEnum.IN_PAYMENT.getCode());
         }
