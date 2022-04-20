@@ -395,7 +395,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             .distinct()
             .collect(Collectors.toList());
 
-        List<SysUser> sysUserList = sysUserService.getSysUserList(reimburseUserIdList);
+        List<SysUser> sysUserList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(reimburseUserIdList)) {
+            sysUserList = sysUserService.getSysUserList(reimburseUserIdList);
+        }
         Map<Integer, SysUser> sysUserMap = sysUserList.stream()
             .collect(Collectors.toMap(SysUser::getId, Function.identity(), (a, b) -> a));
 
