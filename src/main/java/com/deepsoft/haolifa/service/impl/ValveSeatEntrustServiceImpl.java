@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.dto.InspectReason;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.valveSeat.*;
+import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.service.ValveSeatEntrustService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -40,6 +41,8 @@ public class ValveSeatEntrustServiceImpl extends BaseService implements ValveSea
     private ValveSeatEntrustMapper valveSeatEntrustMapper;
     @Resource
     private ValveSeatInspectHistoryMapper valveSeatInspectHistoryMapper;
+    @Resource
+    private PayOrderUserRelationProcedureService payOrderUserRelationProcedureService;
 
 
     @Override
@@ -118,6 +121,12 @@ public class ValveSeatEntrustServiceImpl extends BaseService implements ValveSea
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int saveInspect(ValveSeatInspectDto valveSeatInspectDto) {
+        PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
+        payOrderUserRelationProcedure.setOrderId(valveSeatInspectDto.getNo());
+        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+            throw new BaseException(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+        }
         if (valveSeatInspectDto.getTestNumber() == 0) {
             throw new BaseException(CommonEnum.ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }

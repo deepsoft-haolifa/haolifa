@@ -195,7 +195,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             // 待质检的 单子直接分配任务
             for (Entrust entrust : entrusts) {
                 String model = entrust.getModel();
-                String materialClassifyName = entrust.getMaterialClassifyName();
+                String materialClassifyName = entrust.getMaterialGraphName();
                 buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.MACHINING.name, entrust.getId(), orderNo, materialClassifyName);
             }
         } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.code.equals(type)) {

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.poi.excel.ExcelWriter;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
@@ -10,6 +11,7 @@ import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.DateUtils;
+import com.deepsoft.haolifa.util.ExcelUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -184,7 +186,12 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             if (StringUtils.isEmpty(payWage.getUpdateUser())) {
                 payWage.setUpdateUser(getLoginUserName());
             }
-            payWagesMapper.insert(payWage);
+            PayWages payWages = payWagesMapper.selectByPrimaryKey(payWage.getId());
+            if (Objects.isNull(payWage)) {
+                payWagesMapper.insert(payWage);
+            } else {
+                payWagesMapper.updateByPrimaryKeySelective(payWage);
+            }
         }
     }
 
@@ -529,6 +536,13 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             }
         }
 
+    }
+
+    @Override
+    public ExcelWriter export() {
+        List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
+        ExcelWriter excelWriter = ExcelUtils.exportExcel(payWages, PayWages.class);
+        return excelWriter;
     }
 
     /**

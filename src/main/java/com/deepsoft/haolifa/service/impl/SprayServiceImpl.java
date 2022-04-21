@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
+import com.deepsoft.haolifa.dao.repository.PayOrderUserRelationProcedureMapper;
 import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.SprayItemMapper;
 import com.deepsoft.haolifa.dao.repository.SprayMapper;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,7 +60,8 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     private ValidateService validateService;
     @Autowired
     private CheckMaterialLockService checkMaterialLockService;
-
+    @Resource
+    private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean save(SprayDto sprayDto) {
@@ -248,6 +251,12 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean saveInspect(SprayInspectDto inspectDto) {
+        PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
+        payExample.createCriteria().andOrderIdEqualTo(inspectDto.getSprayNo());
+        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+        }
         if (inspectDto.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }

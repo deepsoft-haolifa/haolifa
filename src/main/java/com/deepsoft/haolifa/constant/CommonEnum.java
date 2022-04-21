@@ -101,6 +101,8 @@ public class CommonEnum {
         FILE_IS_NULL("5004", "文件为空请重新选择"),
         ID_CARD_INVALID("5005", "身份证校验失败"),
         ID_CARD_OR_PHONE_REPEAT("5006", "身份证号或手机号和其他人重复"),
+        ORDER_NOT_ASSIGN_TASK("5007", "请先给订单分配任务后再进行操作"),
+        ASSIGN_TASK_SAVE_CHECK("5008", "订单正在质检，如若修改请联系管理员"),
 
         ;
 
@@ -757,6 +759,14 @@ public class CommonEnum {
         WorkShopTypeEnum(String code, String name) {
             this.code = code;
             this.name = name;
+        }
+        public static WorkShopTypeEnum getWorkShopTypeByName(String workTypeName) {
+            for (CommonEnum.WorkShopTypeEnum value : CommonEnum.WorkShopTypeEnum.values()) {
+                if (value.name.endsWith(workTypeName)) {
+                    return value;
+                }
+            }
+            return null;
         }
     }
 

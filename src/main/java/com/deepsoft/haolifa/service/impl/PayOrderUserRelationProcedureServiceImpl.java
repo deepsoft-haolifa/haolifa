@@ -5,10 +5,12 @@ import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayOrderUserRelationProcedureVO;
 import com.deepsoft.haolifa.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
  * @description 订单人员工序关联表
  */
 @Service
+@Slf4j
 public class PayOrderUserRelationProcedureServiceImpl extends BaseService implements PayOrderUserRelationProcedureService {
     @Resource
     private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
@@ -52,7 +55,14 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
     private ValveSeatEntrustMapper valveSeatEntrustMapper;
     @Resource
     private SysDictService sysDictService;
-
+    @Resource
+    private ProInspectService proInspectService;
+    @Resource
+    private InspectService inspectService;
+    @Resource
+    private AutoControlEntrustService autoControlEntrustService;
+    @Resource
+    private ValveSeatEntrustService valveSeatEntrustService;
 
 
     @Override
@@ -61,6 +71,9 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
         PayOrderUserRelationProcedureExample.Criteria criteria = payOrderUserRelationProcedureExample.createCriteria();
         if (Objects.nonNull(payOrderUserRelationProcedures.getUserId())) {
             criteria.andUserIdEqualTo(payOrderUserRelationProcedures.getUserId());
+        }
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(payOrderUserRelationProcedures.getOrderId())) {
+            criteria.andOrderIdEqualTo(payOrderUserRelationProcedures.getOrderId());
         }
         List<PayOrderUserRelationProcedure> list = payOrderUserRelationProcedureMapper.selectByExample(payOrderUserRelationProcedureExample);
         return list;
@@ -77,6 +90,10 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
                 continue;
             }
             PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getId());
+            // 校验是否开始质检
+            if (checkHaveInspectHistory(payWorkingProcedure.getWorkshopName(), payOrderUserRelationProcedureDTO.getOrderId())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.ASSIGN_TASK_SAVE_CHECK);
+            }
             // 工序代码
             String postCode = payWorkingProcedure.getPostCode();
             // 车间名称
@@ -134,6 +151,45 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
         }
         return ResultBean.success(1);
 
+    }
+
+    private boolean checkHaveInspectHistory(String workshopName, String orderId) {
+        CommonEnum.WorkShopTypeEnum workShopType = CommonEnum.WorkShopTypeEnum.getWorkShopTypeByName(workshopName);
+        if (Objects.isNull(workShopType)) {
+            log.info("checkHaveInspectHistory workShopTypeByName is null, orderId:{}", orderId);
+            return true;
+        }
+        PayCalculateDTO payCalculateDTO = new PayCalculateDTO();
+        payCalculateDTO.setOrderNo(orderId);
+        switch (workShopType) {
+            case PRODUCT:
+                List<ProInspectRecord> proInspectList = proInspectService.getProInspectList(payCalculateDTO);
+                if (CollectionUtils.isEmpty(proInspectList)) {
+                    return false;
+                }
+            case SPRAY:
+                List<SprayInspectHistory> sprayInspectHistoryList = sprayService.getSprayInspectHistoryList(payCalculateDTO);
+                if (CollectionUtils.isEmpty(sprayInspectHistoryList)) {
+                    return false;
+                }
+            case MACHINING:
+                List<InspectHistory> inspectHistories = inspectService.getInspectHistoryList(payCalculateDTO);
+                if (CollectionUtils.isEmpty(inspectHistories)) {
+                    return false;
+                }
+            case AUTO_CONTROL:
+                List<AutoControlInspectHistory> autoControlInspectHistories = autoControlEntrustService.getInspectHistoryList(payCalculateDTO);
+                if (CollectionUtils.isEmpty(autoControlInspectHistories)) {
+                    return false;
+                }
+            case VALVE_SEAT_ENTRUST:
+                List<ValveSeatInspectHistory> valveSeatInspectHistories = valveSeatEntrustService.getInspectHistoryList(payCalculateDTO);
+                if (CollectionUtils.isEmpty(valveSeatInspectHistories)) {
+                    return false;
+                }
+            default:
+                return true;
+        }
     }
 
     private void saveOrderBindProcedure(String model, String specifications, String idCategory, String postCode, PayOrderUserRelationProcedureDTO payOrderUserRelationProcedureDTO) {

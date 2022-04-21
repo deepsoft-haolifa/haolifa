@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class PayWages {
+    @ExcelHandle(name = "ID")
     private Integer id;
     @ExcelHandle(name = "序号")
     private String serial;

@@ -1,11 +1,13 @@
 package com.deepsoft.haolifa.controller;
 
+import cn.hutool.poi.excel.ExcelWriter;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.PayWages;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesSaveVO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesVO;
+import com.deepsoft.haolifa.model.dto.pay.PayWorkAttendancePageDTO;
 import com.deepsoft.haolifa.service.PayWagesService;
 import com.deepsoft.haolifa.util.ExcelUtils;
 import io.swagger.annotations.Api;
@@ -15,7 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author liuyaofei
@@ -82,7 +88,7 @@ public class PayWagesController {
     }
     @ApiOperation("导入工资数据")
     @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
-    public ResultBean uploadMaterial(@ApiParam(value = "工资Excel表格", required = true) MultipartFile file) {
+    public ResultBean importWages(@ApiParam(value = "工资Excel表格", required = true) MultipartFile file) {
         try {
             if (file == null) {
                 return ResultBean.error(CommonEnum.ResponseEnum.FILE_IS_NULL);
@@ -93,6 +99,25 @@ public class PayWagesController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL);
+        }
+    }
+
+    @ApiOperation("导出工资数据")
+    @GetMapping(value = "/export")
+    public void export(HttpServletResponse response) {
+        ExcelWriter writer = null;
+        try {
+            writer = payWagesService.export();
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("工资模板", "utf-8") + ".xls");
+            response.setContentType("application/octet-stream;");
+            OutputStream outputStream = response.getOutputStream();
+            writer.flush(outputStream, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (Objects.nonNull(writer)) {
+                writer.close();
+            }
         }
     }
 

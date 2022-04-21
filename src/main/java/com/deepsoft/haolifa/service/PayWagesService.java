@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service;
 
+import cn.hutool.poi.excel.ExcelWriter;
 import com.deepsoft.haolifa.model.domain.PayWages;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
@@ -26,4 +27,7 @@ public interface PayWagesService {
     public ResultBean test (Integer userId);
 
     void createWages(PayWagesVO payWagesVO) throws Exception;
+
+    ExcelWriter export();
+
 }

@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectDto;
 import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.service.AutoControlEntrustService;
+import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 import static com.deepsoft.haolifa.constant.CacheKey.AC_ENTRUST_NO_KEY;
@@ -39,6 +41,8 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
     private AutoControlEntrustMapper autoControlEntrustMapper;
     @Autowired
     private AutoControlInspectHistoryMapper inspectHistoryMapper;
+    @Resource
+    private PayOrderUserRelationProcedureService payOrderUserRelationProcedureService;
 
 
     @Override
@@ -117,6 +121,12 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int saveInspect(AutoControlInspectDto autoControlInspectDto) {
+        PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
+        payOrderUserRelationProcedure.setOrderId(autoControlInspectDto.getNo());
+        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+            throw new BaseException(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+        }
         if (autoControlInspectDto.getTestNumber() == 0) {
             throw new BaseException(CommonEnum.ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }

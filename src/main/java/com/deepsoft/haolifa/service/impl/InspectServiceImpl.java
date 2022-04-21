@@ -30,6 +30,7 @@ import com.deepsoft.haolifa.model.vo.InspectItemQtyVo;
 import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.InspectService;
+import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -48,6 +49,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
 
 @Slf4j
 @Service
@@ -69,6 +72,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     CheckMaterialLockService checkMaterialLockService;
     @Autowired
     CommonExtendMapper commonExtendMapper;
+    @Resource
+    private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -308,6 +313,12 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean historySave(InspectHistoryDto model) {
+        PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
+        payExample.createCriteria().andOrderIdEqualTo(model.getInspectNo());
+        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+        }
         if (model.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
