@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
@@ -63,6 +64,8 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
     private AutoControlEntrustService autoControlEntrustService;
     @Resource
     private ValveSeatEntrustService valveSeatEntrustService;
+    @Resource
+    private RoleService roleService;
 
 
     @Override
@@ -90,8 +93,16 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
                 continue;
             }
             PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getId());
-            // 校验是否开始质检
-            if (checkHaveInspectHistory(payWorkingProcedure.getWorkshopName(), payOrderUserRelationProcedureDTO.getOrderId())) {
+            // 校验是否开始质检 如果是系统管理员则不需校验
+            boolean administrators = false;
+            List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(getLoginUserId());
+            for (RoleDTO role : rolesByUserId) {
+                if ("ROLE_ADMIN".equals(role.getRoleName())) {
+                    administrators = true;
+                    break;
+                }
+            }
+            if (!administrators && checkHaveInspectHistory(payWorkingProcedure.getWorkshopName(), payOrderUserRelationProcedureDTO.getOrderId())) {
                 return ResultBean.error(CommonEnum.ResponseEnum.ASSIGN_TASK_SAVE_CHECK);
             }
             // 工序代码
