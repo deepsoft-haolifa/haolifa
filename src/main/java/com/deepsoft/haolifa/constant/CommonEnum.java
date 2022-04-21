@@ -777,8 +777,8 @@ public class CommonEnum {
      */
     public enum TypeOfWorkEnum {
         VALVE_ASSEMBLY("1", "蝶阀装配"),
-        VALVE_BODY("2", "阀体"),
-        VALVE_PLATE("3", "阀板"),
+        VALVE_BODY("2", "阀体毛坯"),
+        VALVE_PLATE("3", "阀板毛坯"),
         SEMI_FINISHED_VALVE_BODY("4", "阀体半成品"),
         SEMI_FINISHED_VALVE_PLATE("5", "阀板半成品"),
         VALVE_SEAT_MACHINING("6", "阀座加工"),
@@ -791,6 +791,12 @@ public class CommonEnum {
         EXTERNAL_ADJUSTMENT_SWITCH("13", "外调通用开关型执行器装配"),
         EXTERNAL_ADJUSTMENT_COMMON("14", "外调通用调节型执行器装配"),
         CHECK_VALUE_ASSEMBLY("15", "止回阀装配"),
+        PLATE_BLANK("16", "盲板毛坯"),
+        SEAT_PIPE_MATERIAL("17", "螺纹阀座管料"),
+        PIPE_MATERIAL_OF_UPPER_VALVE_SEAT("18", "上阀座管料"),
+        PIPE_MATERIAL_OF_LOWER_VALVE_SEAT("19", "下阀座管料"),
+        SEALING_CASING_MATERIAL("20", "密封套管料"),
+        VALVE_CORE_BLANK("21", "阀芯毛坯"),
         ;
         public final String code;
         public final String name;
