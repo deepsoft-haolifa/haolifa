@@ -110,7 +110,7 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
             criteria.andPostNameEqualTo(payManagerCalDTO.getPostName());
         }
         if (StringUtils.isNotEmpty(payManagerCalDTO.getAppModel())) {
-            criteria.andAppModelLike(payManagerCalDTO.getAppModel());
+            criteria.andAppModelLike("%" + payManagerCalDTO.getAppModel() + "%");
         }
         if (StringUtils.isNotEmpty(payManagerCalDTO.getAppSpecifications())) {
             criteria.andAppSpecificationsEqualTo(payManagerCalDTO.getAppSpecifications());
