@@ -178,29 +178,35 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
                 if (CollectionUtils.isEmpty(proInspectList)) {
                     return false;
                 }
+                break;
             case SPRAY:
                 List<SprayInspectHistory> sprayInspectHistoryList = sprayService.getSprayInspectHistoryList(payCalculateDTO);
                 if (CollectionUtils.isEmpty(sprayInspectHistoryList)) {
                     return false;
                 }
+                break;
             case MACHINING:
                 List<InspectHistory> inspectHistories = inspectService.getInspectHistoryList(payCalculateDTO);
                 if (CollectionUtils.isEmpty(inspectHistories)) {
                     return false;
                 }
+                break;
             case AUTO_CONTROL:
                 List<AutoControlInspectHistory> autoControlInspectHistories = autoControlEntrustService.getInspectHistoryList(payCalculateDTO);
                 if (CollectionUtils.isEmpty(autoControlInspectHistories)) {
                     return false;
                 }
+                break;
             case VALVE_SEAT_ENTRUST:
                 List<ValveSeatInspectHistory> valveSeatInspectHistories = valveSeatEntrustService.getInspectHistoryList(payCalculateDTO);
                 if (CollectionUtils.isEmpty(valveSeatInspectHistories)) {
                     return false;
                 }
+                break;
             default:
                 return true;
         }
+        return true;
     }
 
     private void saveOrderBindProcedure(String model, String specifications, String idCategory, String postCode, PayOrderUserRelationProcedureDTO payOrderUserRelationProcedureDTO) {
