@@ -3,12 +3,15 @@ package com.deepsoft.haolifa.service.impl;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayUserVO;
 import com.deepsoft.haolifa.service.PayUserService;
 import com.deepsoft.haolifa.service.PayWagesRelationUserService;
+import com.deepsoft.haolifa.service.RoleService;
 import com.deepsoft.haolifa.util.CommonUtil;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.github.pagehelper.Page;
@@ -51,6 +54,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     private SysUserMapper sysUserMapper;
     @Resource
     private SysUserMapper userMapper;
+    @Resource
+    private RoleService roleService;
     @Override
     public ResultBean pageInfo(PayUserDTO model) {
         PayUserExample example = new PayUserExample();
@@ -363,5 +368,141 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             list.add(payUserDTO);
         });
         return ResultBean.success(list);
+    }
+
+    @Override
+    public ResultBean getScoreUserList(PayUserDTO model) {
+        PayUserExample example = new PayUserExample();
+        PayUserExample.Criteria criteria = example.createCriteria();
+
+        // 获取当前登录人的岗位ID作为人员列表的直属上级ID。
+        CustomUser customUser = sysUserService.selectLoginUser();
+        if (Objects.nonNull(customUser) && Objects.nonNull(customUser.getId())) {
+            List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
+//            if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
+//                .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
+//                Set<Integer> postList = new HashSet<>();
+//                SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+//                postList.add(sysUser.getPostId());
+//                querySubordinates(sysUser.getPostId(), postList);
+//                criteria.andPostIdIn(new ArrayList<>(postList));
+//            }
+        // 当前人员的 下级
+            if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
+                .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
+                SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+                criteria.andSuperiorIdEqualTo(sysUser.getPostId());
+            }
+        }
+        if (StringUtils.isNotBlank(model.getPostName())) {
+            PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
+            payProductionWorkshopExample.createCriteria().andPostNameEqualTo(model.getPostName());
+            List<PayProductionWorkshop> list = payProductionWorkshopMapper.selectByExample(payProductionWorkshopExample);
+            if (CollectionUtils.isNotEmpty(list)) {
+                List<Integer> collect = list.stream().map(pp -> pp.getId()).collect(Collectors.toList());
+                criteria.andPostIdIn(collect);
+            }
+        }
+        if (StringUtils.isNotBlank(model.getSuperiorName())) {
+            PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
+            payProductionWorkshopExample.createCriteria().andPostNameEqualTo(model.getSuperiorName());
+            List<PayProductionWorkshop> list = payProductionWorkshopMapper.selectByExample(payProductionWorkshopExample);
+            if (CollectionUtils.isNotEmpty(list)) {
+                List<Integer> collect = list.stream().map(pp -> pp.getId()).collect(Collectors.toList());
+                criteria.andSuperiorIdIn(collect);
+            }
+        }
+        if (StringUtils.isNotBlank(model.getDepartName())) {
+            criteria.andDepartNameEqualTo(model.getDepartName());
+        }
+        if (StringUtils.isNotBlank(model.getUserName())) {
+            criteria.andUserNameLike("%" + model.getUserName() + "%");
+        }
+        if (null != model.getSex() && model.getSex() > 0) {
+            criteria.andSexEqualTo(model.getSex());
+        }
+        if (StringUtils.isNotBlank(model.getUserType())) {
+            criteria.andUserTypeEqualTo(model.getUserType());
+        }
+        if (StringUtils.isNotBlank(model.getNation())) {
+            criteria.andNationLike("%" + model.getNation() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getPoliticalOutlook())) {
+            criteria.andPoliticalOutlookLike("%" + model.getPoliticalOutlook() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getBloodType())) {
+            criteria.andBloodTypeEqualTo(model.getBloodType());
+        }
+        if (StringUtils.isNotBlank(model.getHealth())) {
+            criteria.andHealthLike("%" + model.getHealth() + "%");
+        }
+        if (Objects.nonNull(model.getMarryStatus()) && model.getMarryStatus() > 0) {
+            criteria.andMarryStatusEqualTo(model.getMarryStatus());
+        }
+        if (StringUtils.isNotBlank(model.getUniversityFrom())) {
+            criteria.andUniversityFromLike("%" + model.getUniversityFrom() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getMajor())) {
+            criteria.andMajorLike("%" + model.getMajor() + "%");
+        }
+        if (Objects.nonNull(model.getEducation()) && model.getEducation() > 0) {
+            criteria.andEducationEqualTo(model.getMarryStatus());
+        }
+        if (StringUtils.isNotEmpty(model.getStartGraduationTime())) {
+            Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartGraduationTime());
+            criteria.andGraduationTimeGreaterThan(startDate);
+        }
+        if (StringUtils.isNotEmpty(model.getEndGraduationTime())) {
+            Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getEndGraduationTime());
+            criteria.andGraduationTimeLessThan(endDate);
+        }
+        if (StringUtils.isNotEmpty(model.getStartWorkingTime())) {
+            Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartWorkingTime());
+            criteria.andWorkingTimeGreaterThan(startDate);
+        }
+        if (StringUtils.isNotEmpty(model.getEndWorkingTime())) {
+            Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getEndWorkingTime());
+            criteria.andWorkingTimeLessThan(endDate);
+        }
+        if (StringUtils.isNotBlank(model.getPhone())) {
+            criteria.andPhoneEqualTo(model.getPhone());
+        }
+        if (Objects.nonNull(model.getTeamId())) {
+            criteria.andTeamIdEqualTo(model.getTeamId());
+        }
+        if (Objects.nonNull(model.getPostId())) {
+            criteria.andPostIdEqualTo(model.getPostId());
+        }
+        if (StringUtils.isNotEmpty(model.getStartCreateTime())) {
+            Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartCreateTime());
+            criteria.andCreateTimeGreaterThan(startDate);
+        }
+        if (StringUtils.isNotEmpty(model.getEndCreateTime())) {
+            Date endDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getEndCreateTime());
+            criteria.andCreateTimeLessThan(endDate);
+        }
+        example.setOrderByClause("id desc");
+        Page<PayUser> payUsers = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> payUserMapper.selectByExample(example));
+        List<PayUserDTO> list = Lists.newArrayList();
+        payUsers.forEach(payUser -> {
+            PayUserDTO payUserDTO = new PayUserDTO();
+            BeanUtils.copyProperties(payUser, payUserDTO);
+            PayTeam payTeam = payTeamMapper.selectByPrimaryKey(payUser.getTeamId());
+            payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
+            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
+            payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
+            PayProductionWorkshop workshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getSuperiorId());
+            payUserDTO.setSuperiorName(Objects.isNull(workshop) ? "" : workshop.getPostName());
+            PayUser parentUser = payUserMapper.selectByPrimaryKey(payUser.getParentId());
+            payUserDTO.setParentUserName(Objects.isNull(parentUser) ? "" : parentUser.getUserName());
+            list.add(payUserDTO);
+        });
+        PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(payUsers, pageDTO);
+        pageDTO.setList(list);
+        return ResultBean.success(pageDTO);
+
+
     }
 }

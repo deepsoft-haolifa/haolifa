@@ -70,11 +70,10 @@ public class PayHourQuotaController {
     @PostMapping(value = "/import")
     public ResultBean uploadMaterial() {
         try {
-            File file2 =new File("/Users/liuyaofei/Downloads/生产车间工时定额明细表(批量上传测试版）(2).xlsx");
+            File file2 =new File("/Users/liuyaofei/haolifa/各车间工时定额汇总表（第一版终表）(2).xlsx");
             FileInputStream fileInputStream = new FileInputStream(file2);
             List<PayHourQuota> objects = (List<PayHourQuota>) ExcelUtils.importExcelReadColumn(fileInputStream, PayHourQuota.class);
             payHourQuotaService.save(objects);
-            System.out.println("dd");
             return ResultBean.success(1);
         } catch (Exception e) {
             e.printStackTrace();

@@ -20,4 +20,7 @@ public interface PayUserService {
     ResultBean saveUserRelationProcedure(Integer userId, List<Integer> procedureId);
 
     ResultBean getAllList(PayUserVO payUserVO);
+
+    ResultBean getScoreUserList(PayUserDTO model);
+
 }

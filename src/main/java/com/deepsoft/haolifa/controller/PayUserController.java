@@ -25,13 +25,19 @@ public class PayUserController {
     @Resource
     private PayUserService payUserService;
 
-    @ApiOperation("列表")
+    @ApiOperation("分页列表")
     @PostMapping("/getList")
     public ResultBean getList(@RequestBody PayUserDTO model) {
         return payUserService.pageInfo(model);
     }
 
-    @ApiOperation("列表")
+    @ApiOperation("打分人员列表有权限")
+    @PostMapping("/getScoreUserList")
+    public ResultBean getScoreUserList(@RequestBody PayUserDTO model) {
+        return payUserService.getScoreUserList(model);
+    }
+
+    @ApiOperation("全部列表")
     @PostMapping("/getAllList")
     public ResultBean getAllList(@RequestBody PayUserVO payUserVO) {
         return payUserService.getAllList(payUserVO);

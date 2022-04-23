@@ -381,6 +381,12 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 int daysBetween= (int) ((endTime.getTime()-startTime.getTime()+1000000)/(60*60*24*1000));
                 int count = DateUtils.computeHolidays(startTime, endTime);
                 payWage.setRequiredAttendanceDays(daysBetween-count);
+                payWage.setUpdateUser(getLoginUserName());
+                payWage.setUpdateTime(new Date());
+                payWage.setByPieceCount(0);
+                payWage.setByPieceMoney(new BigDecimal("0"));
+                payWage.setTotalMoney(payWage.getMinLiveSecurityFund());
+                payWage.setNetSalaryMoney(payWage.getMinLiveSecurityFund());
                 payWagesMapper.updateByPrimaryKeySelective(payWage);
                 continue;
             }
