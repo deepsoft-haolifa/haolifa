@@ -223,7 +223,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
-            return ResultBean.success(null);
+            return ResultBean.error(CommonEnum.ResponseEnum.ASSIGN_TASK_CHECK);
         }
         List<PayWorkingProcedureUserVO> distinctList = payWorkingProcedureUserVOS.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(
             Comparator.comparing(PayWorkingProcedureUserVO::getId))), ArrayList::new));

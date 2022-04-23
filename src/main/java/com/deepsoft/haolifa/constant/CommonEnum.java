@@ -103,6 +103,7 @@ public class CommonEnum {
         ID_CARD_OR_PHONE_REPEAT("5006", "身份证号或手机号和其他人重复"),
         ORDER_NOT_ASSIGN_TASK("5007", "请先给订单分配任务后再进行操作"),
         ASSIGN_TASK_SAVE_CHECK("5008", "订单正在质检，如若修改请联系管理员"),
+        ASSIGN_TASK_CHECK("5009", "订单没有找到工序，请检查订单规格型号"),
 
         ;
 
