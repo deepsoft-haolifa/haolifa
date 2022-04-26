@@ -218,7 +218,7 @@ public class BillContractServiceImpl implements BillContractService {
         BigDecimal contractAmount = orderProduct.getTotalPrice();
         // 2. 查询该合同已经分解的金额
         BizBillContractExample bizBillContractExample = buildBizBillContractExample(billContract.getBillId(), billContract.getBillType(),
-            null,null,new Byte("1"));
+            billContract.getOrderId(),billContract.getOrderNo(),new Byte("1"));
         List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(bizBillContractExample);
 
         BigDecimal splitAmount = bizBillContractList.stream()
