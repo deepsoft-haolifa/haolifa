@@ -2385,6 +2385,146 @@ public class PayWagesExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andWagesYearIsNull() {
+            addCriterion("wages_year is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearIsNotNull() {
+            addCriterion("wages_year is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearEqualTo(String value) {
+            addCriterion("wages_year =", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearNotEqualTo(String value) {
+            addCriterion("wages_year <>", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearGreaterThan(String value) {
+            addCriterion("wages_year >", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearGreaterThanOrEqualTo(String value) {
+            addCriterion("wages_year >=", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearLessThan(String value) {
+            addCriterion("wages_year <", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearLessThanOrEqualTo(String value) {
+            addCriterion("wages_year <=", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearLike(String value) {
+            addCriterion("wages_year like", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearNotLike(String value) {
+            addCriterion("wages_year not like", value, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearIn(List<String> values) {
+            addCriterion("wages_year in", values, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearNotIn(List<String> values) {
+            addCriterion("wages_year not in", values, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearBetween(String value1, String value2) {
+            addCriterion("wages_year between", value1, value2, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesYearNotBetween(String value1, String value2) {
+            addCriterion("wages_year not between", value1, value2, "wagesYear");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthIsNull() {
+            addCriterion("wages_month is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthIsNotNull() {
+            addCriterion("wages_month is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthEqualTo(String value) {
+            addCriterion("wages_month =", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthNotEqualTo(String value) {
+            addCriterion("wages_month <>", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthGreaterThan(String value) {
+            addCriterion("wages_month >", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthGreaterThanOrEqualTo(String value) {
+            addCriterion("wages_month >=", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthLessThan(String value) {
+            addCriterion("wages_month <", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthLessThanOrEqualTo(String value) {
+            addCriterion("wages_month <=", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthLike(String value) {
+            addCriterion("wages_month like", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthNotLike(String value) {
+            addCriterion("wages_month not like", value, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthIn(List<String> values) {
+            addCriterion("wages_month in", values, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthNotIn(List<String> values) {
+            addCriterion("wages_month not in", values, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthBetween(String value1, String value2) {
+            addCriterion("wages_month between", value1, value2, "wagesMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andWagesMonthNotBetween(String value1, String value2) {
+            addCriterion("wages_month not between", value1, value2, "wagesMonth");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

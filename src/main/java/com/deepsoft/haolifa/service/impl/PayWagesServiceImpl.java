@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -201,19 +202,24 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         if (StringUtils.isBlank(payWagesVO.getYear()) || StringUtils.isBlank(payWagesVO.getMonth())) {
             throw new Exception("年份或月份不能为空");
         }
-        String calDate = payWagesVO.getYear() + "-" + payWagesVO.getMonth() + "-01";
-        Date calTime = DateFormatterUtils.parseDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, calDate);
+        String calDate = payWagesVO.getYear() + "-" + payWagesVO.getMonth() + "-01 " + "00:00:00";
+        Date calTime = DateFormatterUtils.parseDateString(DateFormatterUtils.ONE_FORMATTERPATTERN, calDate);
         // 开始时间 上个月26号
         Calendar cal = Calendar.getInstance();
         cal.setTime(calTime);
         cal.add(Calendar.MONTH, -1);
         cal.set(Calendar.DAY_OF_MONTH, 26);
-        Date startTime = cal.getTime();
+        String s = DateFormatterUtils.formatterDateString(DateFormatterUtils.ZERO_FORMATTERPATTERN, cal.getTime());
+        Date startTime = DateUtils.dateTime(DateFormatterUtils.ONE_FORMATTERPATTERN, s);
+
         // 开始时间 这个月25号
         Calendar cal2 = Calendar.getInstance();
         cal2.setTime(calTime);
         cal2.set(Calendar.DAY_OF_MONTH, 25);
-        Date endTime = cal2.getTime();
+        String str = DateFormatterUtils.formatterDateString(DateFormatterUtils.MAX_FORMATTERPATTERN, cal2.getTime());
+        Date endTime = DateUtils.dateTime(DateFormatterUtils.ONE_FORMATTERPATTERN, str);
+
+
 
         List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
         for (PayWages payWage : payWages) {
@@ -227,7 +233,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             Integer userId = list.get(0).getUserId();
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
-
+            // 处理考勤数据
+            buildPayWorkAttendanceInfo(userId, payWagesVO, payWage);
             int totalCount = 0;
             // 基本工资
             BigDecimal minLiveSecurityFund = payWage.getMinLiveSecurityFund();
@@ -375,48 +382,47 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     }
                 }
             } else if (CommonEnum.UserType.MARRIED.type.equals(userType)) {
-                payWage.setUpdateUser(getLoginUserName());
-                payWage.setUpdateTime(new Date());
-                // 当月总天数
-                int daysBetween= (int) ((endTime.getTime()-startTime.getTime()+1000000)/(60*60*24*1000));
-                int count = DateUtils.computeHolidays(startTime, endTime);
-                payWage.setRequiredAttendanceDays(daysBetween-count);
-                payWage.setUpdateUser(getLoginUserName());
-                payWage.setUpdateTime(new Date());
-                payWage.setByPieceCount(0);
-                payWage.setByPieceMoney(new BigDecimal("0"));
-                payWage.setTotalMoney(payWage.getMinLiveSecurityFund());
-                payWage.setNetSalaryMoney(payWage.getMinLiveSecurityFund());
-                payWagesMapper.updateByPrimaryKeySelective(payWage);
+                // 查询工资查询表
+                PayWagesSearchExample example = new PayWagesSearchExample();
+                PayWagesSearchExample.Criteria criteria = example.createCriteria();
+                criteria.andUserIdEqualTo(userId);
+                criteria.andWagesYearEqualTo(payWagesVO.getYear());
+                criteria.andWagesMonthEqualTo(payWagesVO.getMonth());
+                List<PayWagesSearch> payWagesSearches = payWagesSearchMapper.selectByExample(example);
+                if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWagesSearches)) {
+                    PayWagesSearch payWagesSearch = payWagesSearches.get(0);
+                    payWage.setUpdateUser(getLoginUserName());
+                    payWage.setUpdateTime(new Date());
+                    payWage.setRequiredAttendanceDays(DateFormatterUtils.getCurrentCountDays(startTime, endTime));
+                    payWage.setUpdateUser(getLoginUserName());
+                    payWage.setUpdateTime(new Date());
+                    payWage.setByPieceCount(0);
+                    payWage.setByPieceMoney(new BigDecimal("0"));
+                    payWage.setAccruedPerformanceSalary(payWagesSearch.getAccruedPerformanceSalary());
+                    payWage.setTotalMoney(payWagesSearch.getTotalMoney());
+                    // 计算扣分后的工资
+                    BigDecimal calculateScorec = calculateScore(userId, payWagesVO, payWagesSearch.getTotalMoney());
+                    payWage.setNetSalaryMoney(calculateScorec);
+                    payWagesMapper.updateByPrimaryKeySelective(payWage);
+                } else {
+                    payWage.setUpdateUser(getLoginUserName());
+                    payWage.setUpdateTime(new Date());
+                    payWage.setRequiredAttendanceDays(DateFormatterUtils.getCurrentCountDays(startTime, endTime));
+                    payWage.setUpdateUser(getLoginUserName());
+                    payWage.setUpdateTime(new Date());
+                    payWage.setByPieceCount(0);
+                    payWage.setByPieceMoney(new BigDecimal("0"));
+                    payWage.setTotalMoney(payWage.getMinLiveSecurityFund());
+                    // 计算扣分后的工资
+                    BigDecimal calculateScorec = calculateScore(userId, payWagesVO, minLiveSecurityFund);
+                    payWage.setNetSalaryMoney(calculateScorec);
+                    payWagesMapper.updateByPrimaryKeySelective(payWage);
+                }
                 continue;
             }
             minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
-
-            PayAssessmentScoreExample payAssessmentScoreExample = new PayAssessmentScoreExample();
-            payAssessmentScoreExample.createCriteria().andUserIdEqualTo(userId).andScoreYearEqualTo(payWagesVO.getYear())
-                .andScoreMonthEqualTo(payWagesVO.getMonth());
-
-            // 人员计算扣分项
-            BigDecimal multiply = minLiveSecurityFund;
-            List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(payAssessmentScoreExample);
-            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payAssessmentScores)) {
-                PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
-                Integer score = payAssessmentScore.getScore();
-                BigDecimal bigDecimal = new BigDecimal(score);
-                BigDecimal divide = bigDecimal.divide(new BigDecimal("100"));
-                // 扣完分工资
-                multiply = minLiveSecurityFund.multiply(divide);
-            }
-
-            PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
-            payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
-            List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
-            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
-                PayWorkAttendance payWorkAttendance = payWorkAttendances.get(0);
-                payWage.setActualAttendanceDays(payWorkAttendance.getAttendanceDays());
-                payWage.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
-                payWage.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
-            }
+            // 计算扣分后的工资
+            BigDecimal calculateScorec = calculateScore(userId, payWagesVO, minLiveSecurityFund);
             int priceCount = 0;
             for (Map.Entry<String, Integer> entry : productMap.entrySet()) {
                 priceCount = priceCount + entry.getValue();
@@ -426,15 +432,54 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             payWage.setByPieceCount(priceCount);
             payWage.setByPieceMoney(totalAmount);
             payWage.setTotalMoney(minLiveSecurityFund);
-            payWage.setNetSalaryMoney(multiply);
-            System.out.println("======"+payWage.getUserName());
-            // 当月总天数
-            int daysBetween= (int) ((endTime.getTime()-startTime.getTime()+1000000)/(60*60*24*1000));
-            int count = DateUtils.computeHolidays(startTime, endTime);
-            payWage.setRequiredAttendanceDays(daysBetween-count);
+            payWage.setNetSalaryMoney(calculateScorec);
+            payWage.setRequiredAttendanceDays(DateFormatterUtils.getCurrentCountDays(startTime, endTime));
             payWagesMapper.updateByPrimaryKeySelective(payWage);
         }
         return null;
+    }
+
+    /**
+     * 人员计算扣分项
+     * @param userId
+     * @param payWagesVO
+     * @param minLiveSecurityFund
+     * @return
+     */
+    private BigDecimal calculateScore(Integer userId, PayWagesVO payWagesVO, BigDecimal minLiveSecurityFund) {
+        // 人员计算扣分项
+        PayAssessmentScoreExample payAssessmentScoreExample = new PayAssessmentScoreExample();
+        payAssessmentScoreExample.createCriteria().andUserIdEqualTo(userId).andScoreYearEqualTo(payWagesVO.getYear())
+            .andScoreMonthEqualTo(payWagesVO.getMonth());
+        BigDecimal multiply = minLiveSecurityFund;
+        List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(payAssessmentScoreExample);
+        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payAssessmentScores)) {
+            PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
+            Integer score = payAssessmentScore.getScore();
+            BigDecimal bigDecimal = new BigDecimal(score);
+            BigDecimal divide = bigDecimal.divide(new BigDecimal("100"));
+            // 扣完分工资
+            multiply = minLiveSecurityFund.multiply(divide);
+        }
+        return multiply;
+    }
+
+    /**
+     * 处理考勤数据
+     * @param userId
+     * @param payWagesVO
+     * @param payWage
+     */
+    private void buildPayWorkAttendanceInfo(Integer userId, PayWagesVO payWagesVO, PayWages payWage) {
+        PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
+        payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
+        List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
+        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
+            PayWorkAttendance payWorkAttendance = payWorkAttendances.get(0);
+            payWage.setActualAttendanceDays(payWorkAttendance.getAttendanceDays());
+            payWage.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
+            payWage.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
+        }
     }
 
     private PayCalculateDTO buildPayCalculateDTO(String orderId, String productNo, Date startTime, Date endTime) {
@@ -496,42 +541,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 payWagesSearch.setUpdateUser(getLoginUserName());
                 payWagesSearchMapper.insertSelective(payWagesSearch);
             } else {
-                PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
-                // 如果是管理人员 查询工资列表已有的话 不覆盖
-                if (CommonEnum.UserType.MARRIED.type.equals(payUser.getUserType())) {
-
-                    PayWagesSearch payWagesSearch = payWagesSearches.get(0);
-                    payWagesSearch.setRequiredAttendanceDays(payWage.getRequiredAttendanceDays());
-                    PayAssessmentScoreExample payAssessmentScoreExample = new PayAssessmentScoreExample();
-                    payAssessmentScoreExample.createCriteria().andUserIdEqualTo(userId).andScoreYearEqualTo(payWagesVO.getYear())
-                        .andScoreMonthEqualTo(payWagesVO.getMonth());
-
-                    // 管理人员计算扣分项
-                    List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(payAssessmentScoreExample);
-                    if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payAssessmentScores)) {
-                        PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
-                        Integer score = payAssessmentScore.getScore();
-                        BigDecimal bigDecimal = new BigDecimal(score);
-                        BigDecimal divide = bigDecimal.divide(new BigDecimal("100"));
-                        BigDecimal totalMoney = payWagesSearch.getTotalMoney();
-                        // 扣完分工资
-                        BigDecimal multiply = totalMoney.multiply(divide);
-                        payWagesSearch.setNetSalaryMoney(multiply);
-                    }
-
-                    // 同步考勤
-                    PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
-                    payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
-                    List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
-                    if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
-                        PayWorkAttendance payWorkAttendance = payWorkAttendances.get(0);
-                        payWagesSearch.setActualAttendanceDays(payWorkAttendance.getAttendanceDays());
-                        payWagesSearch.setLateAndLeaveTimes(payWorkAttendance.getLateAndLeaveTimes());
-                        payWagesSearch.setAbsenteeismTimes(payWorkAttendance.getAbsenteeismTimes());
-                    }
-                    payWagesSearchMapper.updateByPrimaryKeySelective(payWagesSearch);
-                    continue;
-                }
                 PayWagesSearch payWagesSearch = new PayWagesSearch();
                 BeanCopyUtils.copyProperties(payWage, payWagesSearch);
                 payWagesSearch.setUserId(userId);
@@ -551,25 +560,4 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         return excelWriter;
     }
 
-    /**
-     * wrapper
-     *
-     * @param materialGraphNo
-     * @param getMaterialGraphName
-     * @return
-     */
-    private PayHourQuotaDTO buildPayHourQuotaDTO(String materialGraphNo, String getMaterialGraphName) {
-        PayHourQuotaDTO payHourQuotaDTO = new PayHourQuotaDTO();
-        // 物料名称
-        payHourQuotaDTO.setWorkType(getMaterialGraphName);
-        // D220-0050-01
-        String[] split = materialGraphNo.split("-");
-        // 型号
-        String type = split[0];
-        // 规格
-        String specs = "DN" + Integer.parseInt(split[1]);
-        payHourQuotaDTO.setAppModel(type);
-        payHourQuotaDTO.setAppSpecifications(specs);
-        return payHourQuotaDTO;
-    }
 }

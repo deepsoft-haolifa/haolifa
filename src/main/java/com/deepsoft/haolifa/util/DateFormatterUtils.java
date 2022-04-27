@@ -1,8 +1,8 @@
 package com.deepsoft.haolifa.util;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -10,6 +10,8 @@ import java.util.Date;
 public class DateFormatterUtils {
 
     public static final String ONE_FORMATTERPATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String ZERO_FORMATTERPATTERN = "yyyy-MM-dd 00:00:00";
+    public static final String MAX_FORMATTERPATTERN = "yyyy-MM-dd 23:59:59";
 
     public static final String TWO_FORMATTERPATTERN = "yyyy-MM-dd";
     public static final String THREE_FORMATTERPATTERN = "yyyy MM dd HH:mm:ss";
@@ -40,23 +42,38 @@ public class DateFormatterUtils {
      * 获取当前年份
      * @return
      */
-    public static int getCurrentYear(LocalDate localDate) {
+    public static String getCurrentYear(LocalDate localDate) {
         int year = localDate.getYear();
-        return year;
+        return String.valueOf(year);
     }
 
     /**
      * 获取当前月份
      * @return
      */
-    public static Month getCurrentMonth(LocalDate localDate) {
-        Month month = localDate.getMonth();
-        return month;
+    public static String getCurrentMonth(LocalDate localDate) {
+        int month = localDate.getMonth().getValue();
+        return String.valueOf(month);
+    }
+
+    /**
+     * 获取当月总天数
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws ParseException
+     */
+    public static int getCurrentCountDays (Date startTime, Date endTime) throws ParseException {
+        // 当月总天数
+        int daysBetween= (int) ((endTime.getTime()-startTime.getTime()+1000000)/(60*60*24*1000));
+        int count = DateUtils.computeHolidays(startTime, endTime);
+        return daysBetween - count;
     }
 
 
 
     public static void main(String[] args) {
+        System.out.println(getCurrentMonth(LocalDate.now()));
         System.out.println("yyyy-MM-dd HH:mm:ss:"+formatterDateString(THREE_FORMATTERPATTERN,null));
         System.out.println("yyyy-MM-dd :"+parseDateString(TWO_FORMATTERPATTERN,"2018-09-10"));
         System.out.println("yyyy-MM-dd HH:mm:ss:"+parseDateString(ONE_FORMATTERPATTERN,"2018-08-15 21:55:32"));

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -240,6 +241,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         payWages.setUserName(payUser.getUserName());
         payWages.setDepartment(payUser.getDepartName());
         payWages.setMinLiveSecurityFund(payUser.getBasePay());
+        payWages.setWagesMonth(DateFormatterUtils.getCurrentMonth(LocalDate.now()));
+        payWages.setWagesYear(DateFormatterUtils.getCurrentYear(LocalDate.now()));
         payWagesMapper.insertSelective(payWages);
         // 人员工资关联表
         PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
@@ -299,6 +302,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payWages.setDepartment(payUser.getDepartName());
             payWages.setMinLiveSecurityFund(payUser.getBasePay());
             payWages.setId(list.get(0).getWagesId());
+            payWages.setWagesMonth(DateFormatterUtils.getCurrentMonth(LocalDate.now()));
+            payWages.setWagesYear(DateFormatterUtils.getCurrentYear(LocalDate.now()));
             payWagesMapper.updateByPrimaryKeySelective(payWages);
         }
         // 同步用户管理列表数据
