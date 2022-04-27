@@ -178,15 +178,11 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             if (Objects.isNull(payWage.getCreateTime())) {
                 payWage.setCreateTime(new Date());
             }
-            if (Objects.isNull(payWage.getUpdateTime())) {
-                payWage.setUpdateTime(new Date());
-            }
             if (StringUtils.isEmpty(payWage.getCreateUser())) {
                 payWage.setCreateUser(getLoginUserName());
             }
-            if (StringUtils.isEmpty(payWage.getUpdateUser())) {
-                payWage.setUpdateUser(getLoginUserName());
-            }
+            payWage.setUpdateTime(new Date());
+            payWage.setUpdateUser(getLoginUserName());
             PayWages payWages = payWagesMapper.selectByPrimaryKey(payWage.getId());
             if (Objects.isNull(payWage)) {
                 payWagesMapper.insert(payWage);
@@ -218,9 +214,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         cal2.set(Calendar.DAY_OF_MONTH, 25);
         String str = DateFormatterUtils.formatterDateString(DateFormatterUtils.MAX_FORMATTERPATTERN, cal2.getTime());
         Date endTime = DateUtils.dateTime(DateFormatterUtils.ONE_FORMATTERPATTERN, str);
-
-
-
         List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
         for (PayWages payWage : payWages) {
             PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
@@ -556,7 +549,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     @Override
     public ExcelWriter export() {
         List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
-        ExcelWriter excelWriter = ExcelUtils.exportExcel(payWages, PayWages.class);
+        List<PayWagesExcelVO> payWagesExcelVOS = BeanCopyUtils.copyPropertiesForNewList(payWages, () -> new PayWagesExcelVO());
+        ExcelWriter excelWriter = ExcelUtils.exportExcel(payWagesExcelVOS, PayWagesExcelVO.class);
         return excelWriter;
     }
 
