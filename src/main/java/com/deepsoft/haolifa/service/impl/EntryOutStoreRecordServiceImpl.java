@@ -18,6 +18,7 @@ import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
 import com.deepsoft.haolifa.model.dto.storage.*;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
+import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.RandomUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -150,7 +151,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             Month month = localDate.getMonth();
             LocalDate localDate2 = LocalDate.of(year, month, 25);
             if (localDate.isAfter(localDate2)) {
-                month.plus(1);
+                month = localDate.plusMonths(1).getMonth();
             }
             String monthValue = String.valueOf(month.getValue());
             if (monthValue.length() == 1) {
