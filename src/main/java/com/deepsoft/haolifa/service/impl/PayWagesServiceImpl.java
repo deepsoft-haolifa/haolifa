@@ -120,6 +120,12 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         if (Objects.nonNull(model.getIndustrialWasteMoney())) {
             criteria.andIndustrialWasteMoneyEqualTo(model.getIndustrialWasteMoney());
         }
+        if (StringUtils.isNotBlank(model.getWagesYear())) {
+            criteria.andWagesYearEqualTo(model.getWagesYear());
+        }
+        if (StringUtils.isNotBlank(model.getWagesMonth())) {
+            criteria.andWagesMonthEqualTo(model.getWagesMonth());
+        }
         if (StringUtils.isNotEmpty(model.getStartCreateTime())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartCreateTime());
             criteria.andCreateTimeGreaterThan(startDate);

@@ -43,5 +43,9 @@ public class PayWagesDTO extends BaseCondition {
     private String startCreateTime;
     @ApiModelProperty(value = "创建结束时间")
     private String endCreateTime;
+    @ApiModelProperty(value = "年份")
+    private String wagesYear;
+    @ApiModelProperty(value = "月份")
+    private String wagesMonth;
 
 }
