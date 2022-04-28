@@ -313,11 +313,13 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean historySave(InspectHistoryDto model) {
-        PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
-        payExample.createCriteria().andOrderIdEqualTo(model.getInspectNo());
-        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
-        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
-            return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+        if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
+            PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
+            payExample.createCriteria().andOrderIdEqualTo(model.getInspectNo());
+            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
+            if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+                return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+            }
         }
         if (model.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);

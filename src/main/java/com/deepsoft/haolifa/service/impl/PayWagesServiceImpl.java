@@ -226,7 +226,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             Integer userId = list.get(0).getUserId();
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
-            // 处理考勤数据
+            // 处理考勤数据 年月
             buildPayWorkAttendanceInfo(userId, payWagesVO, payWage);
             int totalCount = 0;
             // 基本工资
@@ -464,6 +464,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
      * @param payWage
      */
     private void buildPayWorkAttendanceInfo(Integer userId, PayWagesVO payWagesVO, PayWages payWage) {
+        payWage.setWagesYear(payWagesVO.getYear());
+        payWage.setWagesMonth(payWagesVO.getMonth());
         PayWorkAttendanceExample payWorkAttendanceExample = new PayWorkAttendanceExample();
         payWorkAttendanceExample.createCriteria().andUserIdEqualTo(userId).andAttendYearEqualTo(payWagesVO.getYear()).andAttendMonthEqualTo(payWagesVO.getMonth());
         List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(payWorkAttendanceExample);
