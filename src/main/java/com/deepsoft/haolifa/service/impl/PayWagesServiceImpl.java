@@ -249,6 +249,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                 List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
                 // 每个人做了那些工序
                 for (PayOrderUserRelationProcedure procedure : payOrderUserRelationProcedureList) {
+                    int qualifiedNumberTotal = 0;
+                    BigDecimal multiplyPrice = new BigDecimal("0");
                     // 工序价格
                     BigDecimal hourPrice = procedure.getHourPrice();
                     if (Objects.isNull(hourPrice) || hourPrice.equals(new BigDecimal("0.000"))) {
@@ -259,6 +261,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     // 工序ID获取工序
                     Integer procedureId = procedure.getProcedureId();
                     PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(procedureId);
+                    if (Objects.isNull(payWorkingProcedure)) {
+                        continue;
+                    }
                     // 车间名称
                     String workshopName = payWorkingProcedure.getWorkshopName();
                     if (CommonEnum.WorkShopTypeEnum.PRODUCT.name.equals(workshopName)) {
@@ -268,8 +273,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(proInspectList)) {
                             continue;
                         }
-                        int qualifiedNumberTotal = 0;
-                        BigDecimal multiplyPrice = new BigDecimal("0");
                         for (ProInspectRecord inspectRecord : proInspectList) {
                             // 合格数量x工序价格+基本工资
                             Integer qualifiedNumber = inspectRecord.getQualifiedNumber();
@@ -291,8 +294,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(sprayInspectHistoryList)) {
                             continue;
                         }
-                        int qualifiedNumberTotal = 0;
-                        BigDecimal multiplyPrice = new BigDecimal("0");
+
                         for (SprayInspectHistory sprayInspectHistory : sprayInspectHistoryList) {
                             Integer qualifiedNumber = sprayInspectHistory.getQualifiedNumber();
                             qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
@@ -314,8 +316,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;
                         }
-                        int qualifiedNumberTotal = 0;
-                        BigDecimal multiplyPrice = new BigDecimal("0");
                         for (InspectHistory inspectHistory : inspectHistories) {
                             // 合格数量x工序价格+基本工资
                             Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
@@ -338,8 +338,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;
                         }
-                        int qualifiedNumberTotal = 0;
-                        BigDecimal multiplyPrice = new BigDecimal("0");
                         for (AutoControlInspectHistory inspectHistory : inspectHistories) {
                             // 合格数量x工序价格+基本工资
                             Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
@@ -361,8 +359,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;
                         }
-                        int qualifiedNumberTotal = 0;
-                        BigDecimal multiplyPrice = new BigDecimal("0");
                         for (ValveSeatInspectHistory inspectHistory : inspectHistories) {
                             // 合格数量x工序价格+基本工资
                             Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
@@ -380,6 +376,21 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     }
                 }
+                minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
+                // 计算扣分后的工资
+                BigDecimal calculateScorec = calculateScore(userId, payWagesVO, minLiveSecurityFund);
+                int priceCount = 0;
+                for (Map.Entry<String, Integer> entry : productMap.entrySet()) {
+                    priceCount = priceCount + entry.getValue();
+                }
+                payWage.setUpdateUser(getLoginUserName());
+                payWage.setUpdateTime(new Date());
+                payWage.setByPieceCount(priceCount);
+                payWage.setByPieceMoney(totalAmount);
+                payWage.setTotalMoney(minLiveSecurityFund);
+                payWage.setNetSalaryMoney(calculateScorec);
+                payWage.setRequiredAttendanceDays(DateFormatterUtils.getCurrentCountDays(startTime, endTime));
+                payWagesMapper.updateByPrimaryKeySelective(payWage);
             } else if (CommonEnum.UserType.MARRIED.type.equals(userType)) {
                 // 查询工资查询表
                 PayWagesSearchExample example = new PayWagesSearchExample();
@@ -417,23 +428,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     payWage.setNetSalaryMoney(calculateScorec);
                     payWagesMapper.updateByPrimaryKeySelective(payWage);
                 }
-                continue;
             }
-            minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);
-            // 计算扣分后的工资
-            BigDecimal calculateScorec = calculateScore(userId, payWagesVO, minLiveSecurityFund);
-            int priceCount = 0;
-            for (Map.Entry<String, Integer> entry : productMap.entrySet()) {
-                priceCount = priceCount + entry.getValue();
-            }
-            payWage.setUpdateUser(getLoginUserName());
-            payWage.setUpdateTime(new Date());
-            payWage.setByPieceCount(priceCount);
-            payWage.setByPieceMoney(totalAmount);
-            payWage.setTotalMoney(minLiveSecurityFund);
-            payWage.setNetSalaryMoney(calculateScorec);
-            payWage.setRequiredAttendanceDays(DateFormatterUtils.getCurrentCountDays(startTime, endTime));
-            payWagesMapper.updateByPrimaryKeySelective(payWage);
+
         }
         return null;
     }
