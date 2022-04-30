@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.PayWages;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayWagesExcelVO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesSaveVO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesVO;
 import com.deepsoft.haolifa.service.PayWagesService;
@@ -92,7 +93,7 @@ public class PayWagesController {
             if (file == null) {
                 return ResultBean.error(CommonEnum.ResponseEnum.FILE_IS_NULL);
             }
-            List<PayWages> objects = (List<PayWages>) ExcelUtils.importExcelReadColumn(file.getInputStream(), PayWages.class);
+            List<PayWagesExcelVO> objects = (List<PayWagesExcelVO>) ExcelUtils.importExcelReadColumn(file.getInputStream(), PayWagesExcelVO.class);
             payWagesService.insert(objects);
             return ResultBean.success(1);
         } catch (Exception e) {

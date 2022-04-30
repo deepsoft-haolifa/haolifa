@@ -104,7 +104,7 @@ public class PayWorkingProcedureController {
     @PostMapping(value = "/import")
     public ResultBean uploadMaterial() {
         try {
-            File file2 =new File("/Users/liuyaofei/newself/批量上传/各车间产品加工工序明细表（批量上传测试）.xlsx");
+            File file2 =new File("/Users/liuyaofei/haolifa/装配喷涂车间追加工序明细.xlsx");
             FileInputStream fileInputStream = new FileInputStream(file2);
             List<PayWorkingProcedureDTO> objects = (List<PayWorkingProcedureDTO>) ExcelUtils.importExcelReadColumn(fileInputStream, PayWorkingProcedureDTO.class);
             payWorkingProcedureService.save(objects);

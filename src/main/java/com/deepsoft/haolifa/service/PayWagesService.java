@@ -4,6 +4,7 @@ import cn.hutool.poi.excel.ExcelWriter;
 import com.deepsoft.haolifa.model.domain.PayWages;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayWagesExcelVO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesSaveVO;
 import com.deepsoft.haolifa.model.dto.pay.PayWagesVO;
 
@@ -20,7 +21,7 @@ public interface PayWagesService {
 
     ResultBean delete(Integer wagesId);
 
-    void insert(List<PayWages> objects);
+    void insert(List<PayWagesExcelVO> objects);
 
     ResultBean calculateSalary(PayWagesVO payWagesVO) throws Exception;
 

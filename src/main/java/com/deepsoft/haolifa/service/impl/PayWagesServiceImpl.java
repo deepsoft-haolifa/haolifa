@@ -179,8 +179,10 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     @Override
     @Transactional(rollbackFor = Exception.class)
     @Async
-    public void insert(List<PayWages> objects) {
-        for (PayWages payWage : objects) {
+    public void insert(List<PayWagesExcelVO> objects) {
+        List<PayWages> payWagesList = BeanCopyUtils.copyPropertiesForNewList(objects, () -> new PayWages());
+        for (PayWages payWage : payWagesList) {
+
             if (Objects.isNull(payWage.getCreateTime())) {
                 payWage.setCreateTime(new Date());
             }
@@ -190,7 +192,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             payWage.setUpdateTime(new Date());
             payWage.setUpdateUser(getLoginUserName());
             PayWages payWages = payWagesMapper.selectByPrimaryKey(payWage.getId());
-            if (Objects.isNull(payWage)) {
+            if (Objects.isNull(payWages)) {
                 payWagesMapper.insert(payWage);
             } else {
                 payWagesMapper.updateByPrimaryKeySelective(payWage);
