@@ -44,7 +44,7 @@ public class CommonUtil {
         Map<String, Object> haspMap = new HashMap<>();
         if (StrUtil.isNotBlank(year)) {
             haspMap.put("startDate", getLastYear(year) + "-12-26");
-            haspMap.put("endDate", year + "-12-25");
+            haspMap.put("endDate", year + "-12-25 23:59:59");
         }
         return haspMap;
     }
@@ -81,7 +81,7 @@ public class CommonUtil {
         }
         String startYear = yearMonth.substring(0, 4);
         String startMonthStr = yearMonth.substring(5, 7);
-        return startYear + "-" + startMonthStr + "-25";
+        return startYear + "-" + startMonthStr + "-25 23:59:59";
     }
 
 

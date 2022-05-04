@@ -116,12 +116,12 @@
     </select>
     <select id="selectshouhuiContractByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         SELECT
-        ifnull(sum( `received_account` ),0) total_price,
+        ifnull(sum( pm.amount ),0) total_price,
         demand_name,
         FROM_UNIXTIME( UNIX_TIMESTAMP( pm.create_time ), "%Y" ) year
         FROM
         order_product op
-        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        LEFT JOIN biz_bill_contract pm ON pm.order_no = op.order_no
         <include refid="saleCollectionSql"/>
         group by op.demand_name
     </select>
@@ -129,11 +129,11 @@
     <select id="selectshouhuiContractByDemandNameMonth"
             resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         SELECT
-        ifnull(sum( `received_account` ),0) total_price,
+        ifnull(sum( `pm.amount` ),0) total_price,
         demand_name
         FROM
         order_product op
-        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        LEFT JOIN biz_bill_contract pm ON pm.order_no = op.order_no
         <include refid="saleCollectionSql"/>
         group by op.demand_name
     </select>
@@ -148,11 +148,11 @@
         ifnull(op.total_price,0),
         op.deliver_status,
         ifnull(pm.amount,0) collectionAmount,
-        pm.pay_time collectionDate,
+        pm.create_time collectionDate,
         ifnull(op.total_price,0) - ifnull(pm.amount,0) owedAmount
         FROM
         order_product op
-        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        LEFT JOIN biz_bill_contract pm ON pm.order_no = op.order_no
         <include refid="saleCollectionSql"/>
     </select>
 
@@ -163,7 +163,7 @@
         ifnull(sum(op.total_price),0) - ifnull(sum(pm.amount),0) totalOwedAmount
         FROM
         order_product op
-        LEFT JOIN payment_management pm ON pm.order_no = op.order_no
+        LEFT JOIN biz_bill_contract pm ON pm.order_no = op.order_no
         <include refid="saleCollectionSql"/>
     </select>
     <sql id="saleCollectionSql">
