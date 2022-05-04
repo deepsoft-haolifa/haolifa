@@ -56,7 +56,7 @@
             op.create_time,
             op.demand_name,
             op.delivery_date,
-            op.total_price,
+            ope.price * ope.product_number as total_price,
             ope.price,
             ope.product_name,
             ope.specifications,
