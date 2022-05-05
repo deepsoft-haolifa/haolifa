@@ -411,9 +411,13 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     payWage.setByPieceCount(0);
                     payWage.setByPieceMoney(new BigDecimal("0"));
                     payWage.setAccruedPerformanceSalary(payWagesSearch.getAccruedPerformanceSalary());
-                    payWage.setTotalMoney(payWagesSearch.getTotalMoney());
+                    BigDecimal totalMoney = payWagesSearch.getTotalMoney();
+                    if (totalMoney.equals(new BigDecimal("0.000"))) {
+                        totalMoney = payWagesSearch.getAccruedPerformanceSalary();
+                    }
+                    payWage.setTotalMoney(totalMoney);
                     // 计算扣分后的工资
-                    BigDecimal calculateScorec = calculateScore(userId, payWagesVO, payWagesSearch.getTotalMoney());
+                    BigDecimal calculateScorec = calculateScore(userId, payWagesVO, totalMoney);
                     payWage.setNetSalaryMoney(calculateScorec);
                     payWagesMapper.updateByPrimaryKeySelective(payWage);
                 } else {
