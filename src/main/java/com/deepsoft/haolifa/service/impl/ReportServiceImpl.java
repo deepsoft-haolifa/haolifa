@@ -76,16 +76,17 @@ public class ReportServiceImpl extends BaseService implements ReportService {
             model.setStartDate(MapUtil.getStr(param, "startDate"));
             model.setEndDate(MapUtil.getStr(param, "endDate"));
         }
-        if (StrUtil.isNotBlank(model.getMonth())&&StrUtil.isNotBlank(model.getYear())) {
+        if (StrUtil.isNotBlank(model.getMonth()) && StrUtil.isNotBlank(model.getYear())) {
             String yearMonth = String.format("%s-%s", model.getYear(), model.getMonth());
             model.setStartDate(CommonUtil.packYearMonthMapParamStart(yearMonth));
             model.setEndDate(CommonUtil.packYearMonthMapParamEnd(yearMonth));
-        }
-        if (null != model.getStartDate()) {
-            model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
-        }
-        if (null != model.getEndDate()) {
-            model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+        } else {
+            if (null != model.getStartDate()) {
+                model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
+            }
+            if (null != model.getEndDate()) {
+                model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+            }
         }
         List<ExportPurchaseDTO> exportPurchaseDTOS = purchaseReportMapper.selectPurchase(model);
         return ResultBean.success(exportPurchaseDTOS);
