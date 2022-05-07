@@ -143,7 +143,14 @@ public class PayWorkAttendanceServiceImpl extends BaseService implements PayWork
     @Override
     @Async
     @Transactional(rollbackFor = Exception.class)
-    public void createAttendance(PayWorkAttendancePageDTO payWorkAttendancePageDTO) {
+    public void createAttendance(PayWorkAttendancePageDTO payWorkAttendancePageDTO) throws Exception {
+        PayWorkAttendanceExample example = new PayWorkAttendanceExample();
+        example.createCriteria().andAttendYearEqualTo(payWorkAttendancePageDTO.getAttendYear())
+                .andAttendMonthEqualTo(payWorkAttendancePageDTO.getAttendMonth());
+        List<PayWorkAttendance> payWorkAttendances = payWorkAttendanceMapper.selectByExample(example);
+        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payWorkAttendances)) {
+            throw new Exception("已生成"+payWorkAttendancePageDTO.getAttendMonth()+"月绩效，请重新选择");
+        }
         List<PayUser> payUsers = payUserMapper.selectByExample(new PayUserExample());
         for (PayUser payUser : payUsers) {
             PayWorkAttendance payWorkAttendance = new PayWorkAttendance();

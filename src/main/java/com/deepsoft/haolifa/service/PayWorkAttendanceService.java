@@ -23,6 +23,6 @@ public interface PayWorkAttendanceService {
 
     ExcelWriter export(PayWorkAttendancePageDTO payWorkAttendancePageDTO);
 
-    void createAttendance(PayWorkAttendancePageDTO payWorkAttendancePageDTO);
+    void createAttendance(PayWorkAttendancePageDTO payWorkAttendancePageDTO) throws Exception;
 
 }
