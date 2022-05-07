@@ -22,12 +22,12 @@
     <select id="selectPurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
         SELECT
         po.supplier_name,
-        IFNULL( po.total_price, 0 ) total,
-        IFNULL( po.paid_account, 0 ) payTotal,
-        IFNULL( po1.total_price, 0 ) registered,
-        IFNULL( po1.total_price, 0 ) - IFNULL( po.paid_account, 0 ) unpay,
-        IFNULL( iv.total_amount, 0 ) returnTicketAmount,
-        IFNULL( po1.total_price, 0 ) - IFNULL( iv.total_amount, 0 ) unTicketAmount
+        sum(IFNULL( po.total_price, 0 )) total,
+        sum(IFNULL( po.paid_account, 0 )) payTotal,
+        sum(IFNULL( po1.total_price, 0 )) registered,
+        sum(IFNULL( po1.total_price, 0 )) - sum(IFNULL( po.paid_account, 0 )) unpay,
+        sum(IFNULL( iv.total_amount, 0 )) returnTicketAmount,
+        sum(IFNULL( po1.total_price, 0 )) - sum(IFNULL( iv.total_amount, 0 )) unTicketAmount
         FROM
         purchase_order po
         LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 2 AND STATUS IN ( 2 )

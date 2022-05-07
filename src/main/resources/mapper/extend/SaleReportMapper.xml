@@ -129,7 +129,7 @@
     <select id="selectshouhuiContractByDemandNameMonth"
             resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         SELECT
-        ifnull(sum( `pm.amount` ),0) total_price,
+        ifnull(sum(pm.amount),0) total_price,
         demand_name
         FROM
         order_product op
