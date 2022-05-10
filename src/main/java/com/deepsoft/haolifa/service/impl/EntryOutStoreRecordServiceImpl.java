@@ -221,6 +221,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         payWagesSearch.setTotalMoney(totalAmount);
                         payWagesSearch.setMinLiveSecurityFund(basePay);
                         payWagesSearch.setAccruedPerformanceSalary(accrual);
+                        payWagesSearch.setNetSalaryMoney(totalAmount);
                         payWagesSearch.setWagesYear(String.valueOf(year));
                         payWagesSearch.setWagesMonth(monthValue);
                         payWagesSearch.setCreateTime(new Date());
@@ -234,6 +235,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         BigDecimal totalMoney = payWagesSearch.getTotalMoney().add(accrual);
                         payWagesSearch.setAccruedPerformanceSalary(byPieceMoney);
                         payWagesSearch.setTotalMoney(totalMoney);
+                        payWagesSearch.setNetSalaryMoney(totalMoney);
                         payWagesSearch.setId(payWagesSearches.get(0).getId());
                         payWagesSearch.setUpdateTime(new Date());
                         payWagesSearch.setUpdateUser(getLoginUserName());

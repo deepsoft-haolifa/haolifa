@@ -428,6 +428,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     payWage.setUpdateTime(new Date());
                     payWage.setByPieceCount(0);
                     payWage.setByPieceMoney(new BigDecimal("0"));
+                    payWage.setAccruedPerformanceSalary(new BigDecimal("0"));
                     payWage.setTotalMoney(payWage.getMinLiveSecurityFund());
                     // 计算扣分后的工资
                     BigDecimal calculateScorec = calculateScore(userId, payWagesVO, minLiveSecurityFund);
