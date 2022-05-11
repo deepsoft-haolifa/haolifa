@@ -52,14 +52,14 @@ public class OtherBillServiceImpl implements OtherBillService {
         }
         String companyQuery = billOther.getCompany();
         String accountQuery = billOther.getAccount();
-        // 设置上月结转
-        // bizBankBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(1, companyQuery, accountQuery));
 
         // 设置余额 start
         // 查找最新一条记录的余额
         BizOtherBill lastRecord = bizOtherBillMapper.getLastRecord(companyQuery, accountQuery);
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
+        // 设置上月结转
+        billOther.setPreMonthMoney(lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
 
         // 收款，上次余额 + 本次收款
         if (billOther.getType().equals("1")) {

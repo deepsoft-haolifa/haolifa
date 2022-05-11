@@ -638,7 +638,7 @@
             and al.type = 1
             and al.collection_type = 2
         </where>
-        order by al.id desc
+        order by al.operate_date desc
     </select>
 
     <select id="getBillContractById" resultMap="getBillContractListResultMap">

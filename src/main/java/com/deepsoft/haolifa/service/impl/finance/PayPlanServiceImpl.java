@@ -7,10 +7,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.BaseException;
-import com.deepsoft.haolifa.model.dto.CustomUser;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
@@ -18,9 +15,11 @@ import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
+import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.*;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +74,8 @@ public class PayPlanServiceImpl implements PayPlanService {
     private BizPayApplyMapper bizPayApplyMapper;
     @Autowired
     private SubjectBalanceService subjectBalanceService;
+    @Autowired
+    private ExpensesService expensesService;
 
     @Override
     public ResultBean save(BizPayPlanAddDTO model) {
@@ -217,6 +218,18 @@ public class PayPlanServiceImpl implements PayPlanService {
             bizSubjects.setAmount(bigDecimal);
             subjectBalanceService.decreaseAmount(bizSubjects);
         }
+
+        //
+        ExpensesDTO expensesDTO = new ExpensesDTO();
+        expensesDTO.setExpensesClassify("采购费用");
+        expensesDTO.setSecondClassify("其他");
+        expensesDTO.setVoucherNo(bizPayPlan.getApplyNo());
+        expensesDTO.setTotalAmount(bizPayPlan.getApplyAmount().doubleValue());
+        expensesDTO.setCommitUser(customUser.getRealName());
+//        expensesDTO.setDepartment();
+        expensesDTO.setRemark(bizPayPlan.getRemark());
+        expensesDTO.setDataDate(DateUtils.getDate());
+        expensesService.save(expensesDTO);
 
         return ResultBean.success(update);
     }

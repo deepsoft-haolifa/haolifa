@@ -46,7 +46,7 @@ public interface PurcahseOrderService {
      * @param createUserId
      * @return
      */
-    ResultBean list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName, String startDate, String endDate);
+    ResultBean<PageDTO<PurchaseOrder>> list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName, String startDate, String endDate);
 
     /**
      * 财务挂账列表

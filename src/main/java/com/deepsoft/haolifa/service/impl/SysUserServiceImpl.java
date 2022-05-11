@@ -77,19 +77,19 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public CustomUser selectLoginUser() {
         //return (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Object principal = null;
-        try {
-            principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        log.info("login principal:{}",JSONUtil.toJsonStr(principal));
-        if ("anonymousUser".equals(principal))
-            return (CustomUser) customUserService.loadUserByUsername("admin");
-        else
-            return (CustomUser) principal;
-//        return (CustomUser) customUserService.loadUserByUsername("admin");
+//        Object principal = null;
+//        try {
+//            principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//        log.info("login principal:{}",JSONUtil.toJsonStr(principal));
+//        if ("anonymousUser".equals(principal))
+//            return (CustomUser) customUserService.loadUserByUsername("admin");
+//        else
+//            return (CustomUser) principal;
+        return (CustomUser) customUserService.loadUserByUsername("HLCG-01");
     }
 
     @Override

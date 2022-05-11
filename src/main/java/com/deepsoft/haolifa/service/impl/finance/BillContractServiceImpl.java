@@ -173,7 +173,7 @@ public class BillContractServiceImpl implements BillContractService {
 
 
         BizBillContractExample example = buildBizBillContractExample(bizBillContract.getBillId(),
-            bizBillContract.getBillType(), bizBillContract.getOrderId(), bizBillContract.getOrderNo(),null);
+            bizBillContract.getBillType(), bizBillContract.getOrderId(), bizBillContract.getOrderNo(), null);
 
         Page<BizBillContract> pageData = PageHelper
             .startPage(bizBillContract.getPageNum(), bizBillContract.getPageSize())
@@ -190,11 +190,11 @@ public class BillContractServiceImpl implements BillContractService {
                 BeanUtils.copyProperties(bc, billContractRSDTO);
                 // 审批状态（0未审批；1.通过；2.不通过
                 String auditStatusCN = "";
-                if (StringUtils.equalsIgnoreCase("0", billContractRSDTO.getAuditStatus()+"")) {
+                if (StringUtils.equalsIgnoreCase("0", billContractRSDTO.getAuditStatus() + "")) {
                     auditStatusCN = "未审批";
-                } else if (StringUtils.equalsIgnoreCase("1", billContractRSDTO.getAuditStatus()+"")) {
+                } else if (StringUtils.equalsIgnoreCase("1", billContractRSDTO.getAuditStatus() + "")) {
                     auditStatusCN = "通过";
-                } else if (StringUtils.equalsIgnoreCase("2", billContractRSDTO.getAuditStatus()+"")) {
+                } else if (StringUtils.equalsIgnoreCase("2", billContractRSDTO.getAuditStatus() + "")) {
                     auditStatusCN = "不通过";
                 }
                 billContractRSDTO.setAuditStatusCN(auditStatusCN);
@@ -215,10 +215,11 @@ public class BillContractServiceImpl implements BillContractService {
         OrderProductExample example = buildOrderProductExample(billContract);
         List<OrderProduct> orderProductList = orderProductMapper.selectByExample(example);
         OrderProduct orderProduct = orderProductList.stream().findFirst().orElse(null);
+        assert orderProduct != null;
         BigDecimal contractAmount = orderProduct.getTotalPrice();
         // 2. 查询该合同已经分解的金额
         BizBillContractExample bizBillContractExample = buildBizBillContractExample(billContract.getBillId(), billContract.getBillType(),
-            billContract.getOrderId(),billContract.getOrderNo(),new Byte("1"));
+            billContract.getOrderId(), billContract.getOrderNo(), new Byte("1"));
         List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(bizBillContractExample);
 
         BigDecimal splitAmount = bizBillContractList.stream()
@@ -274,6 +275,13 @@ public class BillContractServiceImpl implements BillContractService {
             bizBillContract.setUpdateUser(customUser.getId());
             bizBillContractMapper.updateByPrimaryKeySelective(bizBillContract);
         }
+
+
+        // 直接 审核通过
+        BillContractAuditDTO billContractAuditDTO = new BillContractAuditDTO();
+        billContractAuditDTO.setId(bizBillContract.getId());
+        billContractAuditDTO.setAuditStatus(Byte.valueOf("1"));
+        auditContract(billContractAuditDTO);
 
         return ResultBean.success(1);
     }
@@ -392,7 +400,7 @@ public class BillContractServiceImpl implements BillContractService {
         return example;
     }
 
-    private BizBillContractExample buildBizBillContractExample(Long billId2, Byte billType, Long orderId, String orderNo,Byte auditStatus) {
+    private BizBillContractExample buildBizBillContractExample(Long billId2, Byte billType, Long orderId, String orderNo, Byte auditStatus) {
         BizBillContractExample example = new BizBillContractExample();
         BizBillContractExample.Criteria criteria = example.createCriteria();
 
@@ -404,7 +412,7 @@ public class BillContractServiceImpl implements BillContractService {
         if (StringUtils.isNotEmpty(orderNo)) {
             criteria.andOrderNoEqualTo(orderNo);
         }
-        if (auditStatus !=null) {
+        if (auditStatus != null) {
             criteria.andAuditStatusEqualTo(auditStatus);
         }
         return example;

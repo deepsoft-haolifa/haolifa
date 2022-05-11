@@ -24,4 +24,6 @@ public class CostBudgetSubjectsRQDTO  extends PageParam {
     @ApiModelProperty(value = "科目ID （二级科目）")
     private Integer subjectsId;
 
+    @ApiModelProperty(value = "科目类别")
+    private String subjectsTypeCode;
 }

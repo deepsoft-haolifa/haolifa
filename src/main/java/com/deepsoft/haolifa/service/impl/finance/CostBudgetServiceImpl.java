@@ -427,6 +427,10 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         if (model.getDeptId() != null) {
             criteria.andDeptIdEqualTo(model.getDeptId());
         }
+        // 科目类别
+        if (model.getSubjectsTypeCode() != null) {
+            criteria.andSubjectsTypeEqualTo(model.getSubjectsTypeCode());
+        }
         if (StringUtils.isNotEmpty(model.getDeptName())) {
             SysDepartmentExample departmentExample = new SysDepartmentExample();
             departmentExample.createCriteria().andDeptNameLike("%" + model.getDeptName() + "%");
@@ -449,7 +453,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
 
 
-        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+        Map<String, String> subjects_type_map = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
             .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
 
 
@@ -466,7 +470,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
         List<CostBudgetSubjectsRSDTO> rqdtoList = pageData.getResult().stream()
             .map(bizCostBudgetSubjects -> {
-                return buildCostBudgetSubjectsRSDTO(sysDepartmentMap, dictMap, bigDecimalMap, bizCostBudgetSubjects);
+                return buildCostBudgetSubjectsRSDTO(sysDepartmentMap, subjects_type_map, bigDecimalMap, bizCostBudgetSubjects);
             })
             .collect(Collectors.toList());
 

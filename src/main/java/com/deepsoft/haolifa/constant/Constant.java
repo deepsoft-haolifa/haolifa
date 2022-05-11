@@ -6,6 +6,9 @@ package com.deepsoft.haolifa.constant;
  **/
 public class Constant {
     public static final String company = "山西好利阀机械制造有限公司";
+    public static final String JS_CCB = "中国建行银行股份有限公司侯马开发区支行";
+    public static final String ZG_BOC = "中国银行侯马支行";
+    public static final String YZ_PSBC = "中国邮政储蓄银行股份有限公司侯马市呈王路支行";
     public static final String METHOD_POST = "POST";
     public static final String METHOD_GET = "GET";
 

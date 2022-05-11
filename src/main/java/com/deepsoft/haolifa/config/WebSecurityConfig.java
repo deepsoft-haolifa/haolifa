@@ -38,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     static {
         whiteUrls.add("/code/image");
         whiteUrls.add("/login");
+        whiteUrls.add("/finance/t/te");
 //        whiteUrls.add("*");
     }
 
@@ -70,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             add("/v2/**");
             add("/css/**");
             add("/swagger-resources/**");
+            add("/finance/t/te");
 //            add("/**");
         }};
         web.ignoring().antMatchers(list.toArray(new String[list.size()]));

@@ -51,14 +51,6 @@ public class LoanApplyController {
     @Autowired
     private CustomUserServiceImpl customUserService;
 
-//    @ApiOperation("添加节点(借款申請列表使用)")
-    @PostMapping("/te")
-    @Transactional(rollbackFor = Exception.class)
-    public ResultBean te() {
-        List<UserPipLineDTO> userPipLineDTOS = sysUserService.currentUserPipLine();
-        return ResultBean.success(userPipLineDTOS);
-    }
-
     @ApiOperation("添加节点(借款申請列表使用)")
     @PostMapping("/save")
     @Transactional(rollbackFor = Exception.class)

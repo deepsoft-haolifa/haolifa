@@ -56,14 +56,13 @@ public class BillServiceImpl implements BillService {
         BizBill bizBill = new BizBill();
         BeanUtils.copyProperties(model, bizBill);
 
-        // 设置上月结转
-        //bizBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(2, null, null));
-
         // 设置余额 start
         // 查找最新一条记录的余额
         BizBill lastRecord = bizBillMapper.getLastRecord();
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
+        // 设置上月结转
+        bizBill.setPreMonthMoney(lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
 
         // 收款，上次余额 + 本次收款
         if (StringUtils.isNotEmpty(bizBill.getCollectionType())) {

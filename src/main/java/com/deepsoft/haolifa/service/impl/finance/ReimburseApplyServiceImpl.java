@@ -5,24 +5,24 @@ import cn.hutool.core.lang.Pair;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.CustomUser;
-import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyInfoRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanPayDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostDetailAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostDetailRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
+import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
@@ -90,6 +90,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private BankBillService bankBillService;
     @Autowired
     private SubjectBalanceService subjectBalanceService;
+    @Autowired
+    private ExpensesService expensesService;
 
     //
     @Override
@@ -277,6 +279,16 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
         reimburseApplyRSDTO.setTypeCN(reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
 
+
+        // 报销方式	1普通报销 2借款冲抵
+        String reimburseTypeCN = "";
+        if (StringUtils.equalsIgnoreCase( reimburseApply.getReimburseType(),"1")){
+            reimburseTypeCN = "普通报销";
+        }else if(StringUtils.equalsIgnoreCase( reimburseApply.getReimburseType(),"2")){
+            reimburseTypeCN = "借款冲抵";
+        }
+        reimburseApplyRSDTO.setReimburseTypeCN(reimburseTypeCN);
+
         // 差旅
         if (StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(), ReimburseTypeEnum.travle.getCode())) {
             BizReimburseTravelDetailExample bizReimburseTravelDetailExample = new BizReimburseTravelDetailExample();
@@ -428,6 +440,14 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
                 reimburseApplyRSDTO.setTypeCN(reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
 
+                // 报销方式	1普通报销 2借款冲抵
+               String reimburseTypeCN = "";
+                if (StringUtils.equalsIgnoreCase( reimburseApply.getReimburseType(),"1")){
+                    reimburseTypeCN = "普通报销";
+                }else if(StringUtils.equalsIgnoreCase( reimburseApply.getReimburseType(),"2")){
+                    reimburseTypeCN = "借款冲抵";
+                }
+                reimburseApplyRSDTO.setReimburseTypeCN(reimburseTypeCN);
 
                 SysDepartment sysDepartment = sysDepartmentMap.get(reimburseApplyRSDTO.getDeptId());
                 reimburseApplyRSDTO.setDeptName(sysDepartment == null ? "" : sysDepartment.getDeptName());
@@ -496,6 +516,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(payDTO.getId());
 
         BigDecimal applySAmount = bizReimburseApplyS.getAmount();
+        // 当前用户
+        CustomUser customUser = sysUserService.selectLoginUser();
 
 
         // 有些状态不能付款
@@ -517,6 +539,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
             }
 
+            // 流水
             BizPaymentHistory paymentHistory = buildBizPaymentHistory(bizReimburseApplyS, bizLoanApply);
             bizPaymentHistoryMapper.insertSelective(paymentHistory);
 
@@ -528,7 +551,13 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             } else {
                 bizLoanApplyUp.setPaymentStatus(LoanrPaymentStatusEnum.partial_pay.getCode());
             }
+            // 借款
             bizLoanApplyMapper.updateByPrimaryKeySelective(bizLoanApplyUp);
+
+            // 银行日记账
+            BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizReimburseApplyS);
+            bankBillService.save(bizBankBillAddDTO);
+
         }
 
         // 记账方式（1現金 2銀行 3 其他貨幣）
@@ -585,7 +614,38 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             }
         }
 
+        // 财务管理->费用管理
+        SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(bizReimburseApplyS.getDeptId());
+        ExpensesDTO expensesDTO = new ExpensesDTO();
+        expensesDTO.setExpensesClassify("采购费用");
+        expensesDTO.setSecondClassify("其他");
+        expensesDTO.setVoucherNo(bizReimburseApplyS.getSerialNo());
+        expensesDTO.setTotalAmount(bizReimburseApplyS.getAmount().doubleValue());
+        expensesDTO.setCommitUser(customUser.getRealName());
+        expensesDTO.setDepartment(sysDepartment.getDeptName());
+        expensesDTO.setSummary(bizReimburseApplyS.getRemark());
+        expensesDTO.setRemark(bizReimburseApplyS.getRemark());
+        expensesDTO.setDataDate(DateUtils.getDate());
+        expensesService.save(expensesDTO);
+
         return ResultBean.success(update);
+    }
+    private BizBankBillAddDTO buildBizBankBillAddDTO(BizReimburseApply bizReimburseApplyS ) {
+        BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
+        // 付款
+        bizBankBill.setType("1");
+        bizBankBill.setCompany(Constant.company);
+        bizBankBill.setAccount(Constant.JS_CCB);
+        bizBankBill.setCertificateNumber(bizReimburseApplyS.getSerialNo());
+        bizBankBill.setOperateDate(new Date());
+        bizBankBill.setPayWay(PayWayEnum.cash_pay.getDesc());
+        bizBankBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+        bizBankBill.setPayment(bizReimburseApplyS.getOffsetamount());
+        bizBankBill.setRemark("报销冲抵");
+//        bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
+//        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
+        bizBankBill.setCollectCompany(Constant.company);
+        return bizBankBill;
     }
 
     private BizPaymentHistory buildBizPaymentHistory(BizReimburseApply bizReimburseApplyS, BizLoanApply bizLoanApply) {

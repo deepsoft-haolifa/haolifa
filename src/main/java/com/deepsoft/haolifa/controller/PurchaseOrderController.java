@@ -2,10 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.model.domain.PurchaseOrder;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderCompleteDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
 import io.swagger.annotations.*;
@@ -57,13 +54,13 @@ public class PurchaseOrderController {
 
     @ApiOperation("查询采购订单列表")
     @GetMapping("list/{orderType}")
-    public ResultBean list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
-                           @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,
-                           String orderNo, int createUserId, int status,
-                           @PathVariable("orderType") Integer orderType,
-                           String supplierName,
-                           String startDate,
-                           String endDate
+    public ResultBean<PageDTO<PurchaseOrder>> list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
+                                                   @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,
+                                                   String orderNo, int createUserId, int status,
+                                                   @PathVariable("orderType") Integer orderType,
+                                                   String supplierName,
+                                                   String startDate,
+                                                   String endDate
     ) {
         return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId, status, orderType, supplierName, startDate, endDate);
     }

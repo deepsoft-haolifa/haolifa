@@ -76,6 +76,9 @@ public class PurchaseOrder {
 
     private BigDecimal paidAccount;
 
+    // 开票金额
+    private BigDecimal invoiceAccount;
+
     public PurchaseOrder(Integer id, String purchaseOrderNo, String supplierNo, String supplierName, String demander, String supplierLinkman, String demanderLinkman, String supplierAddr, String demanderAddr, String suppilerPhone, String demanderPhone, Date deliveryTime, String operatorUserName, Date operateTime, String supplierConfirmer, Date confirmTime, Date createTime, Date updateTime, Byte isDelete, Integer createUserId, BigDecimal wreckAmount, String wreckReason, Byte status, String payType, Byte orderType, String fileUrl, Integer totalCount, Integer acceptCount, Integer backCount, Integer processCount, BigDecimal processCharges, Integer qualifiedNumber, BigDecimal totalPrice, BigDecimal paidAccount) {
         this.id = id;
         this.purchaseOrderNo = purchaseOrderNo;

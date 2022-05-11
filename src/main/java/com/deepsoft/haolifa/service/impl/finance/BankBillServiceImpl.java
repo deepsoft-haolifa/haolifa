@@ -49,7 +49,7 @@ public class BankBillServiceImpl implements BankBillService {
         }
 
         BizBankBill bizBankBill = new BizBankBill();
-        BeanUtils.copyProperties(model,bizBankBill);
+        BeanUtils.copyProperties(model, bizBankBill);
 
 
         // 设置公司和账户，用来统计余额
@@ -62,14 +62,15 @@ public class BankBillServiceImpl implements BankBillService {
         }
         String companyQuery = bizBankBill.getCompany();
         String accountQuery = bizBankBill.getAccount();
-        // 设置上月结转
-       // bizBankBill.setPreMonthMoney(bizBillAmountService.getPreMonthAmount(1, companyQuery, accountQuery));
 
         // 设置余额 start
         // 查找最新一条记录的余额
         BizBankBill lastRecord = bizBankBillMapper.getLastRecord(companyQuery, accountQuery);
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
+
+        // 设置上月结转
+        bizBankBill.setPreMonthMoney(lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
 
         // 收款，上次余额 + 本次收款
         if (bizBankBill.getType().equals("1")) {
@@ -124,10 +125,10 @@ public class BankBillServiceImpl implements BankBillService {
     public ResultBean update(BizBankBillUpDTO billBank) {
 
         BizBankBill bizBankBill = new BizBankBill();
-        BeanUtils.copyProperties(billBank,bizBankBill);
+        BeanUtils.copyProperties(billBank, bizBankBill);
         BizBankBill selectByPrimaryKey = bizBankBillMapper.selectByPrimaryKey(billBank.getId());
 
-        switch (bizBankBill.getType()){
+        switch (bizBankBill.getType()) {
             case "1":
                 BigDecimal collectionMoney = bizBankBill.getCollectionMoney().subtract(selectByPrimaryKey.getCollectionMoney());
                 BigDecimal balance = selectByPrimaryKey.getBalance().add(collectionMoney);
@@ -178,13 +179,13 @@ public class BankBillServiceImpl implements BankBillService {
         }
         //开始时间
         //结束时间
-        if (model.getOperateDateStart()!=null && model.getOperateDateEnd()!=null) {
+        if (model.getOperateDateStart() != null && model.getOperateDateEnd() != null) {
             // 区间
-            criteria.andOperateDateBetween(model.getOperateDateStart(),model.getOperateDateEnd());
-        }else if (model.getOperateDateStart()!=null ) {
+            criteria.andOperateDateBetween(model.getOperateDateStart(), model.getOperateDateEnd());
+        } else if (model.getOperateDateStart() != null) {
             // 大于
             criteria.andOperateDateGreaterThanOrEqualTo(model.getOperateDateStart());
-        }else if (model.getOperateDateEnd()!=null ) {
+        } else if (model.getOperateDateEnd() != null) {
             // 小于
             criteria.andOperateDateLessThanOrEqualTo(model.getOperateDateEnd());
         }
