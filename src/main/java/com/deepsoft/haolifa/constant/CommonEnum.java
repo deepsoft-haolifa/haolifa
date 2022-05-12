@@ -798,6 +798,8 @@ public class CommonEnum {
         PIPE_MATERIAL_OF_LOWER_VALVE_SEAT("19", "下阀座管料"),
         SEALING_CASING_MATERIAL("20", "密封套管料"),
         VALVE_CORE_BLANK("21", "阀芯毛坯"),
+        SIEMENS_CONTROL_VALVE_ASSEMBLY("22", "西门子调节阀装配"),
+        CONTROL_VALVE_ASSEMBLY("23", "调节阀装配"),
         ;
         public final String code;
         public final String name;
