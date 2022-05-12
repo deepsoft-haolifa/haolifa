@@ -1,8 +1,8 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.domain.PayProductionCapacity;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
+import com.deepsoft.haolifa.model.vo.pay.ProcedureUserVO;
 
 import java.util.List;
 
@@ -18,5 +18,5 @@ public interface PayProductionCapacityService {
 
     ResultBean delete(Integer capacityId);
 
-    List<PayProductionCapacity> getListByCapacityCode(String postCode);
+    List<ProcedureUserVO> getListByCapacityCode(String postCode);
 }

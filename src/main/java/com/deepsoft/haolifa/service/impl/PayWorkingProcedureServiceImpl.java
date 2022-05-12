@@ -289,14 +289,12 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 payWorkingProcedureUserVO.setTotalCount(payOrderUserRelationProcedure.getTotalCount());
             }
             // 找人员
-            List<PayProductionCapacity> listByUserIdList = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
-            if (CollectionUtils.isEmpty(listByUserIdList) && listByUserIdList.size() == 0) {
+            List<ProcedureUserVO> procedureUserVOS = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
+            if (CollectionUtils.isEmpty(procedureUserVOS) && procedureUserVOS.size() == 0) {
                 log.info("通过工序找人员为空");
                 continue;
             }
-            List<ProcedureUserVO> procedureUserVOS = BeanCopyUtils.copyPropertiesForNewList(listByUserIdList, () -> new ProcedureUserVO());
             // 用户名称匹配
-            procedureUserVOS.forEach(pp -> pp.setUserName(Objects.isNull(payUserMapper.selectByPrimaryKey(pp.getUserId())) ? "" : payUserMapper.selectByPrimaryKey(pp.getUserId()).getUserName()));
             payWorkingProcedureUserVO.setUserList(procedureUserVOS);
         }
     }

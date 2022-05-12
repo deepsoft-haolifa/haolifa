@@ -312,8 +312,9 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="getListByCapacityCode" resultMap="BaseResultMap" parameterType="String">
-        select *
+    <select id="getListByCapacityCode" resultType="com.deepsoft.haolifa.model.vo.pay.ProcedureUserVO" parameterType="String">
+        select user_id as userId,
+               user_name as userName
         from pay_production_capacity
         <where>
             <if test="postCode != null and postCode != ''" >

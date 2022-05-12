@@ -1,14 +1,15 @@
 package com.deepsoft.haolifa.service.impl;
 
 import com.deepsoft.haolifa.dao.repository.PayProductionCapacityMapper;
-import com.deepsoft.haolifa.dao.repository.PayProductionWorkshopMapper;
 import com.deepsoft.haolifa.dao.repository.PayTeamMapper;
-import com.deepsoft.haolifa.dao.repository.PayUserMapper;
-import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.domain.PayProductionCapacity;
+import com.deepsoft.haolifa.model.domain.PayProductionCapacityExample;
+import com.deepsoft.haolifa.model.domain.PayTeam;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayProductCapacityDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayProductCapacityVO;
+import com.deepsoft.haolifa.model.vo.pay.ProcedureUserVO;
 import com.deepsoft.haolifa.service.PayProductionCapacityService;
 import com.deepsoft.haolifa.util.BeanCopyUtils;
 import com.github.pagehelper.Page;
@@ -73,7 +74,7 @@ class PayProductionCapacityServiceImpl extends BaseService implements PayProduct
     }
 
     @Override
-    public List<PayProductionCapacity> getListByCapacityCode(String postCode) {
+    public List<ProcedureUserVO> getListByCapacityCode(String postCode) {
         return PayProductionCapacityMapper.getListByCapacityCode(postCode);
     }
 

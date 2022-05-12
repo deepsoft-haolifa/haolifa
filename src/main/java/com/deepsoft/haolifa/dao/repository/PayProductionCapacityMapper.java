@@ -2,8 +2,10 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.PayProductionCapacity;
 import com.deepsoft.haolifa.model.domain.PayProductionCapacityExample;
-import java.util.List;
+import com.deepsoft.haolifa.model.vo.pay.ProcedureUserVO;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface PayProductionCapacityMapper {
     int countByExample(PayProductionCapacityExample example);
@@ -28,5 +30,5 @@ public interface PayProductionCapacityMapper {
 
     int updateByPrimaryKey(PayProductionCapacity record);
 
-    List<PayProductionCapacity> getListByCapacityCode(@Param("postCode") String postCode);
+    List<ProcedureUserVO> getListByCapacityCode(@Param("postCode") String postCode);
 }
