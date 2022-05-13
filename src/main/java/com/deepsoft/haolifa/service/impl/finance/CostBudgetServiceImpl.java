@@ -565,6 +565,40 @@ public class CostBudgetServiceImpl implements CostBudgetService {
     }
 
     @Override
+    public BizSubjectsBalance getCurUserSubjectsBudget(Integer subjectId, String subjectName) {
+        CustomUser customUser = sysUserService.selectLoginUser();
+        SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+
+        // 查询科目预算
+        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+        criteria.andDeptIdEqualTo(sysUser.getDepartId());
+        if (subjectId !=null){
+            criteria.andSubjectsIdEqualTo(subjectId);
+        }
+        if (subjectName != null){
+            criteria.andNameEqualTo(subjectName);
+        }
+        bizCostBudgetExample.setOrderByClause("limit 1");
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+        if (CollectionUtil.isEmpty(costBudgetSubjectsList)){
+            return null;
+        }
+        BizCostBudgetSubjects bizCostBudgetSubjects = costBudgetSubjectsList.get(0);
+
+        BizSubjectsBalanceExample bizSubjectsBalanceExample = new BizSubjectsBalanceExample();
+        BizSubjectsBalanceExample.Criteria balanceExampleCriteria = bizSubjectsBalanceExample.createCriteria();
+        balanceExampleCriteria.andSubjectsIdEqualTo(bizCostBudgetSubjects.getSubjectsId());
+        balanceExampleCriteria.andDeptIdEqualTo(sysUser.getDepartId());
+        List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
+
+        if (CollectionUtil.isEmpty(bizSubjectsBalanceList)){
+            return null;
+        }
+        return bizSubjectsBalanceList.get(0);
+    }
+
+    @Override
     public ResultBean<CostBudgetSubjectsRSDTO> getCurUserClfSubjectsBudget() {
         CustomUser customUser = sysUserService.selectLoginUser();
         SysUser sysUser = sysUserService.getSysUser(customUser.getId());

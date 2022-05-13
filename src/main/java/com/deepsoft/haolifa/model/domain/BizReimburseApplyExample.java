@@ -1166,63 +1166,63 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountIsNull() {
-            addCriterion("offsetAmount is null");
+        public Criteria andOffsetAmountIsNull() {
+            addCriterion("offset_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountIsNotNull() {
-            addCriterion("offsetAmount is not null");
+        public Criteria andOffsetAmountIsNotNull() {
+            addCriterion("offset_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountEqualTo(BigDecimal value) {
-            addCriterion("offsetAmount =", value, "offsetamount");
+        public Criteria andOffsetAmountEqualTo(BigDecimal value) {
+            addCriterion("offset_amount =", value, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountNotEqualTo(BigDecimal value) {
-            addCriterion("offsetAmount <>", value, "offsetamount");
+        public Criteria andOffsetAmountNotEqualTo(BigDecimal value) {
+            addCriterion("offset_amount <>", value, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountGreaterThan(BigDecimal value) {
-            addCriterion("offsetAmount >", value, "offsetamount");
+        public Criteria andOffsetAmountGreaterThan(BigDecimal value) {
+            addCriterion("offset_amount >", value, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("offsetAmount >=", value, "offsetamount");
+        public Criteria andOffsetAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("offset_amount >=", value, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountLessThan(BigDecimal value) {
-            addCriterion("offsetAmount <", value, "offsetamount");
+        public Criteria andOffsetAmountLessThan(BigDecimal value) {
+            addCriterion("offset_amount <", value, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("offsetAmount <=", value, "offsetamount");
+        public Criteria andOffsetAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("offset_amount <=", value, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountIn(List<BigDecimal> values) {
-            addCriterion("offsetAmount in", values, "offsetamount");
+        public Criteria andOffsetAmountIn(List<BigDecimal> values) {
+            addCriterion("offset_amount in", values, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountNotIn(List<BigDecimal> values) {
-            addCriterion("offsetAmount not in", values, "offsetamount");
+        public Criteria andOffsetAmountNotIn(List<BigDecimal> values) {
+            addCriterion("offset_amount not in", values, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("offsetAmount between", value1, value2, "offsetamount");
+        public Criteria andOffsetAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("offset_amount between", value1, value2, "offsetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andOffsetamountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("offsetAmount not between", value1, value2, "offsetamount");
+        public Criteria andOffsetAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("offset_amount not between", value1, value2, "offsetAmount");
             return (Criteria) this;
         }
 

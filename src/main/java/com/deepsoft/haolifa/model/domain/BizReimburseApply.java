@@ -36,7 +36,7 @@ public class BizReimburseApply {
 
     private Integer reimburseUser;
 
-    private BigDecimal offsetamount;
+    private BigDecimal offsetAmount;
 
     private Integer loanId;
 
@@ -54,7 +54,7 @@ public class BizReimburseApply {
 
     private Date updateTime;
 
-    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, BigDecimal offsetamount, Integer loanId, String applyStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, BigDecimal offsetAmount, Integer loanId, String applyStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.type = type;
@@ -71,7 +71,7 @@ public class BizReimburseApply {
         this.payTime = payTime;
         this.payStatus = payStatus;
         this.reimburseUser = reimburseUser;
-        this.offsetamount = offsetamount;
+        this.offsetAmount = offsetAmount;
         this.loanId = loanId;
         this.applyStatus = applyStatus;
         this.remark = remark;
@@ -214,12 +214,12 @@ public class BizReimburseApply {
         this.reimburseUser = reimburseUser;
     }
 
-    public BigDecimal getOffsetamount() {
-        return offsetamount;
+    public BigDecimal getOffsetAmount() {
+        return offsetAmount;
     }
 
-    public void setOffsetamount(BigDecimal offsetamount) {
-        this.offsetamount = offsetamount;
+    public void setOffsetAmount(BigDecimal offsetAmount) {
+        this.offsetAmount = offsetAmount;
     }
 
     public Integer getLoanId() {

@@ -19,7 +19,7 @@
             <arg column="pay_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
             <arg column="pay_status" javaType="java.lang.String" jdbcType="CHAR"/>
             <arg column="reimburse_user" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="offsetAmount" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+            <arg column="offset_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
             <arg column="loan_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
             <arg column="apply_status" javaType="java.lang.String" jdbcType="CHAR"/>
             <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR"/>
@@ -94,7 +94,7 @@
         id
         , serial_no, type, reimburse_type, reimburse_date, account_name, card_number, bank_of_deposit,
     dept_id, amount, pay_company, pay_company_id, pay_account, pay_time, pay_status,
-    reimburse_user, offsetAmount, loan_id, apply_status, remark, del_flag, create_user,
+    reimburse_user, offset_amount, loan_id, apply_status, remark, del_flag, create_user,
     create_time, update_user, update_time
     </sql>
     <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseApplyExample"
@@ -138,7 +138,7 @@
         bank_of_deposit, dept_id, amount,
         pay_company, pay_company_id, pay_account,
         pay_time, pay_status, reimburse_user,
-        offsetAmount, loan_id, apply_status,
+        offset_amount, loan_id, apply_status,
         remark, del_flag, create_user,
         create_time, update_user, update_time
         )
@@ -147,7 +147,7 @@
         #{bankOfDeposit,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL},
         #{payCompany,jdbcType=VARCHAR}, #{payCompanyId,jdbcType=VARCHAR}, #{payAccount,jdbcType=VARCHAR},
         #{payTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=CHAR}, #{reimburseUser,jdbcType=INTEGER},
-        #{offsetamount,jdbcType=DECIMAL}, #{loanId,jdbcType=INTEGER}, #{applyStatus,jdbcType=CHAR},
+        #{offsetAmount,jdbcType=DECIMAL}, #{loanId,jdbcType=INTEGER}, #{applyStatus,jdbcType=CHAR},
         #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER},
         #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
         )
@@ -203,8 +203,8 @@
             <if test="reimburseUser != null">
                 reimburse_user,
             </if>
-            <if test="offsetamount != null">
-                offsetAmount,
+            <if test="offsetAmount != null">
+                offset_amount,
             </if>
             <if test="loanId != null">
                 loan_id,
@@ -277,8 +277,8 @@
             <if test="reimburseUser != null">
                 #{reimburseUser,jdbcType=INTEGER},
             </if>
-            <if test="offsetamount != null">
-                #{offsetamount,jdbcType=DECIMAL},
+            <if test="offsetAmount != null">
+                #{offsetAmount,jdbcType=DECIMAL},
             </if>
             <if test="loanId != null">
                 #{loanId,jdbcType=INTEGER},
@@ -364,8 +364,8 @@
             <if test="record.reimburseUser != null">
                 reimburse_user = #{record.reimburseUser,jdbcType=INTEGER},
             </if>
-            <if test="record.offsetamount != null">
-                offsetAmount = #{record.offsetamount,jdbcType=DECIMAL},
+            <if test="record.offsetAmount != null">
+                offset_amount = #{record.offsetAmount,jdbcType=DECIMAL},
             </if>
             <if test="record.loanId != null">
                 loan_id = #{record.loanId,jdbcType=INTEGER},
@@ -414,7 +414,7 @@
         pay_time = #{record.payTime,jdbcType=TIMESTAMP},
         pay_status = #{record.payStatus,jdbcType=CHAR},
         reimburse_user = #{record.reimburseUser,jdbcType=INTEGER},
-        offsetAmount = #{record.offsetamount,jdbcType=DECIMAL},
+        offset_amount = #{record.offsetAmount,jdbcType=DECIMAL},
         loan_id = #{record.loanId,jdbcType=INTEGER},
         apply_status = #{record.applyStatus,jdbcType=CHAR},
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -475,8 +475,8 @@
             <if test="reimburseUser != null">
                 reimburse_user = #{reimburseUser,jdbcType=INTEGER},
             </if>
-            <if test="offsetamount != null">
-                offsetAmount = #{offsetamount,jdbcType=DECIMAL},
+            <if test="offsetAmount != null">
+                offset_amount = #{offsetAmount,jdbcType=DECIMAL},
             </if>
             <if test="loanId != null">
                 loan_id = #{loanId,jdbcType=INTEGER},
@@ -522,7 +522,7 @@
             pay_time        = #{payTime,jdbcType=TIMESTAMP},
             pay_status      = #{payStatus,jdbcType=CHAR},
             reimburse_user  = #{reimburseUser,jdbcType=INTEGER},
-            offsetAmount    = #{offsetamount,jdbcType=DECIMAL},
+            offset_amount   = #{offsetAmount,jdbcType=DECIMAL},
             loan_id         = #{loanId,jdbcType=INTEGER},
             apply_status    = #{applyStatus,jdbcType=CHAR},
             remark          = #{remark,jdbcType=VARCHAR},

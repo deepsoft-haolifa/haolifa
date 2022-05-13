@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.finance;
 
+import com.deepsoft.haolifa.model.domain.BizSubjectsBalance;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.CostBudget;
@@ -10,6 +11,7 @@ import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CostBudgetService {
@@ -42,6 +44,15 @@ public interface CostBudgetService {
     ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurUserSubjectsTypeList();
 
     ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList( String subjectType);
+
+
+    /***
+     * 获取当前科目 当前用户部门 的预算余额
+     * @param subjectId
+     * @param subjectName
+     * @return
+     */
+    BizSubjectsBalance getCurUserSubjectsBudget(Integer subjectId, String subjectName);
 
     ResultBean<CostBudgetSubjectsRSDTO> getCurUserClfSubjectsBudget();
 }

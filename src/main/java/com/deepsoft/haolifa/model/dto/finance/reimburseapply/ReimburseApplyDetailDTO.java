@@ -40,6 +40,19 @@ public class ReimburseApplyDetailDTO {
 
     @ApiModelProperty(value = "报销方式	1普通报销 2借款冲抵")
     private String reimburseTypeCN;
+
+
+    @ApiModelProperty(value = "借款冲抵  借款ID")
+    private Integer loanId;
+
+    @ApiModelProperty(value = "借款金额")
+    private BigDecimal loanAmount;
+
+    @ApiModelProperty(value = "借款冲抵")
+    private BigDecimal offsetAmount;
+
+
+
     @ApiModelProperty(value = "报销日期")
     private Date reimburseDate;
     @ApiModelProperty(value = "报销人")
