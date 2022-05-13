@@ -175,7 +175,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             // 循环所有产品
             for (OrderProductAssociate orderProductAssociate : list) {
                 // 产品型号
-                if (StringUtils.isNotBlank(orderProductAssociate.getProductModel())) {
+                if (StringUtils.isBlank(orderProductAssociate.getProductModel())) {
                     continue;
                 }
                 String model = orderProductAssociate.getProductModel().substring(0, 4);
