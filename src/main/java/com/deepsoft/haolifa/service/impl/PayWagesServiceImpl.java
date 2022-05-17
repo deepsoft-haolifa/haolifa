@@ -206,6 +206,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         if (StringUtils.isBlank(payWagesVO.getYear()) || StringUtils.isBlank(payWagesVO.getMonth())) {
             throw new Exception("年份或月份不能为空");
         }
+        log.info("calculateSalary start======");
         String calDate = payWagesVO.getYear() + "-" + payWagesVO.getMonth() + "-01 " + "00:00:00";
         Date calTime = DateFormatterUtils.parseDateString(DateFormatterUtils.ONE_FORMATTERPATTERN, calDate);
         // 开始时间 上个月26号
@@ -427,6 +428,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             }
 
         }
+        log.info("calculateSalary end=====");
         return null;
     }
 
