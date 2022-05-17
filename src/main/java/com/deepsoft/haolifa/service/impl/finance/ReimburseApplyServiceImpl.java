@@ -710,6 +710,15 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 //        bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
 //        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
         bizBankBill.setCollectCompany(Constant.company);
+        // 1	费用
+        //2	货款
+        //3	借款
+        //4	其他
+        //1	费用
+        //2	货款
+        //3	借款
+        //4	其他
+        bizBankBill.setCollectionType("3");
         return bizBankBill;
     }
 
