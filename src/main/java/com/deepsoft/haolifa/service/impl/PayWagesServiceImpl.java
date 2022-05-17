@@ -224,14 +224,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         Date endTime = DateUtils.dateTime(DateFormatterUtils.ONE_FORMATTERPATTERN, str);
         List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
         for (PayWages payWage : payWages) {
-            PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
-            payWagesRelationUser.setWagesId(payWage.getId());
-            List<PayWagesRelationUser> list = payWagesRelationUserService.getList(payWagesRelationUser);
-            if (CollectionUtils.isEmpty(list)) {
-                continue;
-            }
             // 通过用户ID查工序订单用户关联表
-            Integer userId = list.get(0).getUserId();
+            Integer userId = payWage.getUserId();
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
             // 处理考勤数据 年月
@@ -260,14 +254,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     }
                     // 订单号
                     String orderId = procedure.getOrderId();
-                    // 工序ID获取工序
-                    Integer procedureId = procedure.getProcedureId();
-                    PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(procedureId);
-                    if (Objects.isNull(payWorkingProcedure)) {
-                        continue;
-                    }
                     // 车间名称
-                    String workshopName = payWorkingProcedure.getWorkshopName();
+                    String workshopName = payUser.getDepartName();
                     if (CommonEnum.WorkShopTypeEnum.PRODUCT.name.equals(workshopName)) {
                         OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO proInspectRecord = buildPayCalculateDTO(orderId, orderProductAssociate.getProductNo(), startTime, endTime);
@@ -286,9 +274,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             multiplyPrice = multiplyPrice.add(multiply);
                             totalAmount = totalAmount.add(multiply);
                         }
-                        procedure.setTotalCount(qualifiedNumberTotal);
-                        procedure.setTotalPrice(multiplyPrice);
-                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
+//                        procedure.setTotalCount(qualifiedNumberTotal);
+//                        procedure.setTotalPrice(multiplyPrice);
+//                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.SPRAY.name.equals(workshopName)) {
                         SprayItem sprayItem = sprayItemMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, sprayItem.getSprayedGraphNo(), startTime, endTime);
@@ -308,9 +296,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             multiplyPrice = multiplyPrice.add(multiply);
                             totalAmount = totalAmount.add(multiply);
                         }
-                        procedure.setTotalCount(qualifiedNumberTotal);
-                        procedure.setTotalPrice(multiplyPrice);
-                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
+//                        procedure.setTotalCount(qualifiedNumberTotal);
+//                        procedure.setTotalPrice(multiplyPrice);
+//                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.MACHINING.name.equals(workshopName)) {
                         Entrust entrust = entrustMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getProcessedGraphNo(), startTime, endTime);
@@ -329,9 +317,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             multiplyPrice = multiplyPrice.add(multiply);
                             totalAmount = totalAmount.add(multiply);
                         }
-                        procedure.setTotalCount(qualifiedNumberTotal);
-                        procedure.setTotalPrice(multiplyPrice);
-                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
+//                        procedure.setTotalCount(qualifiedNumberTotal);
+//                        procedure.setTotalPrice(multiplyPrice);
+//                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name.equals(workshopName)) {
                         AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getGraphNo(), startTime, endTime);
@@ -351,9 +339,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             multiplyPrice = multiplyPrice.add(multiply);
                             totalAmount = totalAmount.add(multiply);
                         }
-                        procedure.setTotalCount(qualifiedNumberTotal);
-                        procedure.setTotalPrice(multiplyPrice);
-                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
+//                        procedure.setTotalCount(qualifiedNumberTotal);
+//                        procedure.setTotalPrice(multiplyPrice);
+//                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name.equals(workshopName)) {
                         ValveSeatEntrust entrust = valveSeatEntrustMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getGraphNo(), startTime, endTime);
@@ -373,9 +361,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             totalAmount = totalAmount.add(multiply);
 
                         }
-                        procedure.setTotalCount(qualifiedNumberTotal);
-                        procedure.setTotalPrice(multiplyPrice);
-                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
+//                        procedure.setTotalCount(qualifiedNumberTotal);
+//                        procedure.setTotalPrice(multiplyPrice);
+//                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     }
                 }
                 minLiveSecurityFund = minLiveSecurityFund.add(totalAmount);

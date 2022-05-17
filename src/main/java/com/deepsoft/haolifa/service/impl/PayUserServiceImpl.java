@@ -239,20 +239,12 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         // 同步工资表
         PayWages payWages = new PayWages();
         payWages.setUserName(payUser.getUserName());
+        payWages.setUserId(payUser.getId());
         payWages.setDepartment(payUser.getDepartName());
         payWages.setMinLiveSecurityFund(payUser.getBasePay());
         payWages.setWagesMonth(DateFormatterUtils.getCurrentMonth(LocalDate.now()));
         payWages.setWagesYear(DateFormatterUtils.getCurrentYear(LocalDate.now()));
         payWagesMapper.insertSelective(payWages);
-        // 人员工资关联表
-        PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
-        payWagesRelationUser.setUserId(payUser.getId());
-        payWagesRelationUser.setWagesId(payWages.getId());
-        payWagesRelationUser.setCreateTime(new Date());
-        payWagesRelationUser.setUpdateTime(new Date());
-        payWagesRelationUser.setCreateUser(getLoginUserName());
-        payWagesRelationUser.setUpdateUser(getLoginUserName());
-        payWagesRelationUserMapper.insert(payWagesRelationUser);
         return ResultBean.success(1);
     }
 
@@ -292,16 +284,17 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         payUser.setUpdateTime(new Date());
         payUser.setUpdateUser(getLoginUserName());
         payUserMapper.updateByPrimaryKeySelective(payUser);
-        PayWagesRelationUser relationUser = new PayWagesRelationUser();
-        relationUser.setUserId(payUser.getId());
-        List<PayWagesRelationUser> list = payWagesRelationUserService.getList(relationUser);
+        PayWagesExample payWagesExample = new PayWagesExample();
+        payWagesExample.createCriteria().andUserIdEqualTo(payUser.getId());
+        List<PayWages> list = payWagesMapper.selectByExample(payWagesExample);
         if (CollectionUtils.isNotEmpty(list)) {
             // 同步工资表
             PayWages payWages = new PayWages();
             payWages.setUserName(payUser.getUserName());
+            payWages.setUserId(payUser.getId());
             payWages.setDepartment(payUser.getDepartName());
             payWages.setMinLiveSecurityFund(payUser.getBasePay());
-            payWages.setId(list.get(0).getWagesId());
+            payWages.setId(list.get(0).getId());
             payWages.setWagesMonth(DateFormatterUtils.getCurrentMonth(LocalDate.now()));
             payWages.setWagesYear(DateFormatterUtils.getCurrentYear(LocalDate.now()));
             payWagesMapper.updateByPrimaryKeySelective(payWages);
@@ -326,12 +319,11 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     public ResultBean delete(Integer userId) {
         payUserMapper.deleteByPrimaryKey(userId);
         // 工资人员
-        PayWagesRelationUser relationUser = new PayWagesRelationUser();
-        relationUser.setUserId(userId);
-        List<PayWagesRelationUser> list = payWagesRelationUserService.getList(relationUser);
+        PayWagesExample payWagesExample = new PayWagesExample();
+        payWagesExample.createCriteria().andUserIdEqualTo(userId);
+        List<PayWages> list = payWagesMapper.selectByExample(payWagesExample);
         if (CollectionUtils.isNotEmpty(list)) {
-            payWagesMapper.deleteByPrimaryKey(list.get(0).getWagesId());
-            payWagesRelationUserService.delete(list.get(0).getId());
+            payWagesMapper.deleteByPrimaryKey(list.get(0).getId());
         }
         return ResultBean.success(1);
     }
@@ -509,5 +501,19 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         return ResultBean.success(pageDTO);
 
 
+    }
+
+    @Override
+    public ResultBean syncUser() {
+        List<PayUser> payUsers = payUserMapper.selectByExample(new PayUserExample());
+        for (PayUser payUser : payUsers) {
+            PayWagesExample payWagesExample = new PayWagesExample();
+            payWagesExample.createCriteria().andUserNameEqualTo(payUser.getUserName());
+            List<PayWages> payWages = payWagesMapper.selectByExample(payWagesExample);
+            PayWages payWages1 = payWages.get(0);
+            payWages1.setUserId(payUser.getId());
+            payWagesMapper.updateByPrimaryKeySelective(payWages1);
+        }
+        return null;
     }
 }

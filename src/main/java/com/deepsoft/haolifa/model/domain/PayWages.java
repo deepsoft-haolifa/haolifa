@@ -82,7 +82,9 @@ public class PayWages {
 
     private String wagesMonth;
 
-    public PayWages(Integer id, String serial, String department, String userName, Integer requiredAttendanceDays, Integer actualAttendanceDays, Integer lateAndLeaveTimes, BigDecimal lateAndLeaveFine, Integer absenteeismTimes, BigDecimal absenteeismFine, BigDecimal fullAttendanceMoney, Integer byPieceCount, BigDecimal byPieceMoney, Integer temporaryDispatchCount, BigDecimal temporaryDispatchMoney, Integer oddJobCount, BigDecimal oddJobMoney, Integer industrialWasteCount, BigDecimal industrialWasteMoney, BigDecimal minLiveSecurityFund, BigDecimal accruedPerformanceSalary, BigDecimal totalMoney, BigDecimal commendationMoney, BigDecimal lunchAllowanceMoney, BigDecimal overtimePayMoney, BigDecimal otherSubsidiesMoney, BigDecimal totalPayableMoney, BigDecimal deductPersonalInsuranceMoney, BigDecimal totalTaxPayableMoney, BigDecimal taxableWagesMoney, BigDecimal deductionPersonalIncomeTax, BigDecimal netSalaryMoney, String remark, String createUser, String updateUser, Date createTime, Date updateTime, String wagesYear, String wagesMonth) {
+    private Integer userId;
+
+    public PayWages(Integer id, String serial, String department, String userName, Integer requiredAttendanceDays, Integer actualAttendanceDays, Integer lateAndLeaveTimes, BigDecimal lateAndLeaveFine, Integer absenteeismTimes, BigDecimal absenteeismFine, BigDecimal fullAttendanceMoney, Integer byPieceCount, BigDecimal byPieceMoney, Integer temporaryDispatchCount, BigDecimal temporaryDispatchMoney, Integer oddJobCount, BigDecimal oddJobMoney, Integer industrialWasteCount, BigDecimal industrialWasteMoney, BigDecimal minLiveSecurityFund, BigDecimal accruedPerformanceSalary, BigDecimal totalMoney, BigDecimal commendationMoney, BigDecimal lunchAllowanceMoney, BigDecimal overtimePayMoney, BigDecimal otherSubsidiesMoney, BigDecimal totalPayableMoney, BigDecimal deductPersonalInsuranceMoney, BigDecimal totalTaxPayableMoney, BigDecimal taxableWagesMoney, BigDecimal deductionPersonalIncomeTax, BigDecimal netSalaryMoney, String remark, String createUser, String updateUser, Date createTime, Date updateTime, String wagesYear, String wagesMonth, Integer userId) {
         this.id = id;
         this.serial = serial;
         this.department = department;
@@ -122,6 +124,7 @@ public class PayWages {
         this.updateTime = updateTime;
         this.wagesYear = wagesYear;
         this.wagesMonth = wagesMonth;
+        this.userId = userId;
     }
 
     public PayWages() {
@@ -438,5 +441,13 @@ public class PayWages {
 
     public void setWagesMonth(String wagesMonth) {
         this.wagesMonth = wagesMonth == null ? null : wagesMonth.trim();
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

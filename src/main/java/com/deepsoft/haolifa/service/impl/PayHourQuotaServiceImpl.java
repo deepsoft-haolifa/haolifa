@@ -37,7 +37,7 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
             criteria.andWorkshopNameLike("%" + model.getWorkshopName() + "%");
         }
         if (StringUtils.isNotBlank(model.getWorkType())) {
-            criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
+            criteria.andWorkTypeEqualTo(model.getWorkType());
         }
         if (StringUtils.isNotBlank(model.getPostCode())) {
             criteria.andPostCodeLike("%" + model.getPostCode() + "%");
@@ -50,6 +50,12 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
         }
         if (Objects.nonNull(model.getHourQuotaPrice())) {
             criteria.andHourQuotaPriceEqualTo(model.getHourQuotaPrice());
+        }
+        if (StringUtils.isNotBlank(model.getAppModel())) {
+            criteria.andAppModelLike("%" + model.getAppModel() + "%");
+        }
+        if (StringUtils.isNotBlank(model.getIdCategory())) {
+            criteria.andIdCategoryEqualTo(model.getIdCategory());
         }
         example.setOrderByClause("id desc");
         Page<PayHourQuota> payTeams = PageHelper.startPage(model.getPageNum(), model.getPageSize())

@@ -76,4 +76,10 @@ public class PayUserController {
         }
         return payUserService.saveUserRelationProcedure(userId, procedureIdList);
     }
+
+    @ApiOperation("同步用户ID")
+    @GetMapping(value = "syncUser")
+    public ResultBean syncUser() {
+        return payUserService.syncUser();
+    }
 }

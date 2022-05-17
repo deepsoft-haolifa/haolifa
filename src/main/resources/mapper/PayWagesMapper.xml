@@ -42,6 +42,7 @@
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="wages_year" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="wages_month" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -110,7 +111,8 @@
     accrued_performance_salary, total_money, commendation_money, lunch_allowance_money, 
     overtime_pay_money, other_subsidies_money, total_payable_money, deduct_personal_insurance_money, 
     total_tax_payable_money, taxable_wages_money, deduction_personal_income_tax, net_salary_money, 
-    remark, create_user, update_user, create_time, update_time, wages_year, wages_month
+    remark, create_user, update_user, create_time, update_time, wages_year, wages_month, 
+    user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayWagesExample" >
     select
@@ -160,7 +162,8 @@
       taxable_wages_money, deduction_personal_income_tax, 
       net_salary_money, remark, create_user, 
       update_user, create_time, update_time, 
-      wages_year, wages_month)
+      wages_year, wages_month, user_id
+      )
     values (#{serial,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
       #{requiredAttendanceDays,jdbcType=INTEGER}, #{actualAttendanceDays,jdbcType=INTEGER}, 
       #{lateAndLeaveTimes,jdbcType=INTEGER}, #{lateAndLeaveFine,jdbcType=DECIMAL}, #{absenteeismTimes,jdbcType=INTEGER}, 
@@ -175,7 +178,8 @@
       #{taxableWagesMoney,jdbcType=DECIMAL}, #{deductionPersonalIncomeTax,jdbcType=DECIMAL}, 
       #{netSalaryMoney,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
       #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{wagesYear,jdbcType=VARCHAR}, #{wagesMonth,jdbcType=VARCHAR})
+      #{wagesYear,jdbcType=VARCHAR}, #{wagesMonth,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayWages" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -297,6 +301,9 @@
       <if test="wagesMonth != null" >
         wages_month,
       </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serial != null" >
@@ -412,6 +419,9 @@
       </if>
       <if test="wagesMonth != null" >
         #{wagesMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -541,6 +551,9 @@
       <if test="record.wagesMonth != null" >
         wages_month = #{record.wagesMonth,jdbcType=VARCHAR},
       </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -586,7 +599,8 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       wages_year = #{record.wagesYear,jdbcType=VARCHAR},
-      wages_month = #{record.wagesMonth,jdbcType=VARCHAR}
+      wages_month = #{record.wagesMonth,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -708,6 +722,9 @@
       <if test="wagesMonth != null" >
         wages_month = #{wagesMonth,jdbcType=VARCHAR},
       </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -750,7 +767,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       wages_year = #{wagesYear,jdbcType=VARCHAR},
-      wages_month = #{wagesMonth,jdbcType=VARCHAR}
+      wages_month = #{wagesMonth,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

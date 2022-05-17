@@ -23,4 +23,6 @@ public interface PayUserService {
 
     ResultBean getScoreUserList(PayUserDTO model);
 
+    ResultBean syncUser();
+
 }
