@@ -225,7 +225,11 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         Date endTime = DateUtils.dateTime(DateFormatterUtils.ONE_FORMATTERPATTERN, str);
         List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
         for (int i = 0; i < payWages.size(); i++) {
-            PayWages payWage = payWages.get(0);
+            PayWages payWage = payWages.get(i);
+            if (Objects.isNull(payWage)) {
+                log.info("calculateSalary obj is null");
+                continue;
+            }
             log.info("calculateSalary name:{}, count:{},  month:{}", payWage.getUserName(), i, payWage.getWagesMonth());
             // 通过用户ID查工序订单用户关联表
             Integer userId = payWage.getUserId();
