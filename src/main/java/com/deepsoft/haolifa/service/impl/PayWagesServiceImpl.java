@@ -505,14 +505,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
         for (PayWages payWage : payWages) {
             // 先查关联表
-            PayWagesRelationUser payWagesRelationUser = new PayWagesRelationUser();
-            payWagesRelationUser.setWagesId(payWage.getId());
-            List<PayWagesRelationUser> list = payWagesRelationUserService.getList(payWagesRelationUser);
-            if (CollectionUtils.isEmpty(list)) {
-                log.info("PayWagesRelationUser is null, wagesId:{}", payWage.getId());
-                continue;
-            }
-            Integer userId = list.get(0).getUserId();
+            Integer userId = payWage.getUserId();
             // 生成工资列表
             PayWagesSearchExample example = new PayWagesSearchExample();
             PayWagesSearchExample.Criteria criteria = example.createCriteria();
