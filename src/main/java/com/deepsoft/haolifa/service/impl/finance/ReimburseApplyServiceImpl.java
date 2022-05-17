@@ -697,7 +697,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
     private BizBankBillAddDTO buildBizBankBillAddDTO(BizReimburseApply bizReimburseApplyS) {
         BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
-        // 付款
+        // 收款
         bizBankBill.setType("1");
         bizBankBill.setCompany(Constant.company);
         bizBankBill.setAccount(Constant.JS_CCB);
@@ -705,7 +705,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         bizBankBill.setOperateDate(new Date());
         bizBankBill.setPayWay(PayWayEnum.cash_pay.getDesc());
         bizBankBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
-        bizBankBill.setPayment(bizReimburseApplyS.getOffsetAmount());
+        bizBankBill.setCollectionMoney(bizReimburseApplyS.getOffsetAmount());
         bizBankBill.setRemark("报销冲抵");
 //        bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
 //        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());

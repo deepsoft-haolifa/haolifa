@@ -428,7 +428,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             criteria.andDeptIdEqualTo(model.getDeptId());
         }
         // 科目类别
-        if (model.getSubjectsTypeCode() != null) {
+        if (StringUtils.isNotEmpty(model.getSubjectsTypeCode())) {
             criteria.andSubjectsTypeEqualTo(model.getSubjectsTypeCode());
         }
         if (StringUtils.isNotEmpty(model.getDeptName())) {
@@ -579,7 +579,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         if (subjectName != null){
             criteria.andNameEqualTo(subjectName);
         }
-        bizCostBudgetExample.setOrderByClause("limit 1");
+        bizCostBudgetExample.setOrderByClause("id desc limit 1");
         List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
         if (CollectionUtil.isEmpty(costBudgetSubjectsList)){
             return null;
