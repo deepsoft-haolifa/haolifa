@@ -52,16 +52,16 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
             criteria.andProjectLike("%" + model.getProject() + "%");
         }
         if (StringUtils.isNotBlank(model.getAppModel())) {
-            criteria.andAppModelEqualTo(model.getAppModel());
+            criteria.andAppModelLike("%" + model.getAppModel() + "%");
         }
         if (StringUtils.isNotBlank(model.getAppSpecifications())) {
-            criteria.andAppSpecificationsEqualTo(model.getAppSpecifications());
+            criteria.andAppSpecificationsLike("%" + model.getAppSpecifications() + "%");
         }
         if (StringUtils.isNotBlank(model.getWorkType())) {
-            criteria.andWorkTypeEqualTo(model.getWorkType());
+            criteria.andWorkTypeLike("%" + model.getWorkType() + "%");
         }
         if (StringUtils.isNotBlank(model.getIdCategory())) {
-            criteria.andIdCategoryEqualTo(model.getIdCategory());
+            criteria.andIdCategoryLike("%" + model.getIdCategory() + "%");
         }
         example.setOrderByClause("id desc");
         Page<PayManagerCal> payManagerCals = PageHelper.startPage(model.getPageNum(), model.getPageSize())
