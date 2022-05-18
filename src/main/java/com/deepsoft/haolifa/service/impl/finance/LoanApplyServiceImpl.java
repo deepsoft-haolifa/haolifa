@@ -177,8 +177,24 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         String type = model.getType();
 
+        // 查询当前用户的角色
+        CustomUser customUser = sysUserService.selectLoginUser();
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+            .map(a -> (CustomGrantedAuthority) a)
+            .collect(Collectors.toList());
+
+        //当前角色是否为出纳
+        boolean lookAll = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> {
+                return  StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ADMIN.getCode())||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode())||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode())||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CWGLZXFZR.getCode())||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode());
+            });
+
         // 借款审批列表 todo 是否只展示自己申请的记录
-        if (StringUtils.equalsIgnoreCase("1", type)) {
+        if (StringUtils.equalsIgnoreCase("1", type)&& !lookAll) {
             //审核状态
             if (StringUtils.isNotEmpty(model.getApplyStatus())) {
                 criteria.andApplyStatusIn(Arrays.asList(model.getApplyStatus().split(",").clone()));
@@ -240,14 +256,6 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
             sysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
         }
-
-        // 查询当前用户的角色
-
-        CustomUser customUser = sysUserService.selectLoginUser();
-
-        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
-            .map(a -> (CustomGrantedAuthority) a)
-            .collect(Collectors.toList());
 
         //当前角色是否为出纳
         boolean iscn = customGrantedAuthorityList.stream()
@@ -324,6 +332,9 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         LoanPayWayEnum payWayEnum = LoanPayWayEnum.valueOfCode(loanApply.getAmountType());
         loanApplyRSDTO.setAmountTypeCN(payWayEnum == null ? null : payWayEnum.getDesc());
 
+       BigDecimal amount =  loanApply.getAmount() == null ?BigDecimal.ZERO:loanApply.getAmount();
+       BigDecimal paymentAmount =  loanApply.getPaymentAmount() == null ?BigDecimal.ZERO:loanApply.getPaymentAmount();
+        loanApplyRSDTO.setOwedAmount(amount.subtract(paymentAmount));
         LoanBillTypeEnum billTypeEnum = LoanBillTypeEnum.valueOfCode(loanApply.getBillNature());
         loanApplyRSDTO.setBillNatureCN(billTypeEnum == null ? null : billTypeEnum.getDesc());
 

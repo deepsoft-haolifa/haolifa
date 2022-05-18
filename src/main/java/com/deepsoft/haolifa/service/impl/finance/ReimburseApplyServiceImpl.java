@@ -250,6 +250,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         BeanUtils.copyProperties(reimburseApplyUpDTO, reimburseApply);
         BizReimburseApply selectByPrimaryKey = bizReimburseApplyMapper.selectByPrimaryKey(reimburseApplyUpDTO.getId());
 
+        if (StringUtils.equalsIgnoreCase(ReimburseApplyStatusEnum.APPROVAL_FAILED.getCode(),selectByPrimaryKey.getApplyStatus())){
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,  "审批拒绝状态不允许修改，请删除后重新提交！");
+        }
+
         reimburseApply.setUpdateTime(new Date());
         reimburseApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizReimburseApplyMapper.updateByPrimaryKeySelective(reimburseApply);
@@ -382,8 +386,24 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         BizReimburseApplyExample.Criteria criteria = reimburseApplyExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
+        // 查询当前用户的角色
+        CustomUser customUser = sysUserService.selectLoginUser();
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+            .map(a -> (CustomGrantedAuthority) a)
+            .collect(Collectors.toList());
+
+        //当前角色是否为出纳
+        boolean lookAll = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> {
+                return  StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ADMIN.getCode())||
+                StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode())||
+                StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CWGLZXFZR.getCode())||
+                StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode())||
+                StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode());
+            });
+
         // 借款审批列表
-        if (StringUtils.equalsIgnoreCase("1", model.getMyself())) {
+        if (StringUtils.equalsIgnoreCase("1", model.getMyself()) && !lookAll) {
             criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
         } else {
             criteria.andApplyStatusEqualTo(ReimburseApplyStatusEnum.IN_PAYMENT.getCode());
@@ -439,11 +459,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         Map<Integer, SysUser> sysUserMap = sysUserList.stream()
             .collect(Collectors.toMap(SysUser::getId, Function.identity(), (a, b) -> a));
 
-        // 查询当前用户的角色
-        CustomUser customUser = sysUserService.selectLoginUser();
-        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
-            .map(a -> (CustomGrantedAuthority) a)
-            .collect(Collectors.toList());
 
         //当前角色是否为出纳
         boolean iscn = customGrantedAuthorityList.stream()
