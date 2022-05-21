@@ -95,7 +95,7 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     public PageDTO<SaleOutputRespDTO> reportSaleOutputList(ReportOrderConditionDTO model) {
         this.packSaleQuery(model);
         Page<SaleOutputRespDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
-            .doSelectPage(() -> saleReportMapper.reportSaleOutputList(model));
+            .doSelectPage(() -> saleReportMapper.reportOutputList(model));
         PageDTO<SaleOutputRespDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materials, pageDTO);
         pageDTO.setList(materials);
@@ -105,7 +105,8 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     @Override
     public BigDecimal reportSaleOutputSummary(ReportOrderConditionDTO model) {
         this.packSaleQuery(model);
-        return saleReportMapper.reportSaleOutputSummary(model);
+        SaleAllRespDTO saleAllRespDTO = saleReportMapper.selectOutputSummary(model);
+        return saleAllRespDTO.getOutPutTotalAmount();
     }
 
     @Override
@@ -123,6 +124,17 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     public ExportPurchaseDTO reportPurchaseSummary(ReportPurchaseConditionDTO model) {
         this.packPurchaseQuery(model);
         return purchaseReportMapper.reportPurchaseSummary(model);
+    }
+
+    @Override
+    public BusinessAnalysisSaleAmountDTO selectBusinessAnalysis(ReportOrderConditionDTO model) {
+        BusinessAnalysisSaleAmountDTO resultModel = new BusinessAnalysisSaleAmountDTO();
+        this.packSaleQuery(model);
+        resultModel.setSaleAmount(saleReportMapper.selectSaleSummary(model).getSaleTotalAmount());
+        resultModel.setOutPutAmount(saleReportMapper.selectOutputSummary(model).getOutPutTotalAmount());
+        resultModel.setCollectAmount(saleReportMapper.selectCollectSummary(model));
+        resultModel.setInvoiceAmount(saleReportMapper.selectInvoiceSummary(model));
+        return resultModel;
     }
 
     private void packSaleQuery(ReportOrderConditionDTO model) {

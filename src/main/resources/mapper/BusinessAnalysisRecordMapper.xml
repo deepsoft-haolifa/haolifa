@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.BusinessAnalysisRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecord" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="year" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="total_accounts_receivable" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="due_receivable" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="total_accounts_payable" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="total_output_value" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="current_month_output_value" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="total_order" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="current_month_total_order" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="total_profit" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="cost" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="total_expenses" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="various_expenses" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="asset_liability_ratio" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="sales_profit_margin" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="cost_utilization" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="cash_flow" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="manufacturing_cost" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="manage_cost" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, year, total_accounts_receivable, due_receivable, total_accounts_payable, total_output_value, 
+    current_month_output_value, total_order, current_month_total_order, total_profit, 
+    cost, total_expenses, various_expenses, asset_liability_ratio, sales_profit_margin, 
+    cost_utilization, cash_flow, manufacturing_cost, manage_cost, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from business_analysis_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from business_analysis_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from business_analysis_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecordExample" >
+    delete from business_analysis_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into business_analysis_record (year, total_accounts_receivable, due_receivable, 
+      total_accounts_payable, total_output_value, 
+      current_month_output_value, total_order, current_month_total_order, 
+      total_profit, cost, total_expenses, 
+      various_expenses, asset_liability_ratio, sales_profit_margin, 
+      cost_utilization, cash_flow, manufacturing_cost, 
+      manage_cost, create_time, update_time
+      )
+    values (#{year,jdbcType=VARCHAR}, #{totalAccountsReceivable,jdbcType=DECIMAL}, #{dueReceivable,jdbcType=DECIMAL}, 
+      #{totalAccountsPayable,jdbcType=DECIMAL}, #{totalOutputValue,jdbcType=DECIMAL}, 
+      #{currentMonthOutputValue,jdbcType=DECIMAL}, #{totalOrder,jdbcType=DECIMAL}, #{currentMonthTotalOrder,jdbcType=DECIMAL}, 
+      #{totalProfit,jdbcType=DECIMAL}, #{cost,jdbcType=DECIMAL}, #{totalExpenses,jdbcType=DECIMAL}, 
+      #{variousExpenses,jdbcType=DECIMAL}, #{assetLiabilityRatio,jdbcType=DECIMAL}, #{salesProfitMargin,jdbcType=DECIMAL}, 
+      #{costUtilization,jdbcType=DECIMAL}, #{cashFlow,jdbcType=DECIMAL}, #{manufacturingCost,jdbcType=DECIMAL}, 
+      #{manageCost,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into business_analysis_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="totalAccountsReceivable != null" >
+        total_accounts_receivable,
+      </if>
+      <if test="dueReceivable != null" >
+        due_receivable,
+      </if>
+      <if test="totalAccountsPayable != null" >
+        total_accounts_payable,
+      </if>
+      <if test="totalOutputValue != null" >
+        total_output_value,
+      </if>
+      <if test="currentMonthOutputValue != null" >
+        current_month_output_value,
+      </if>
+      <if test="totalOrder != null" >
+        total_order,
+      </if>
+      <if test="currentMonthTotalOrder != null" >
+        current_month_total_order,
+      </if>
+      <if test="totalProfit != null" >
+        total_profit,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="totalExpenses != null" >
+        total_expenses,
+      </if>
+      <if test="variousExpenses != null" >
+        various_expenses,
+      </if>
+      <if test="assetLiabilityRatio != null" >
+        asset_liability_ratio,
+      </if>
+      <if test="salesProfitMargin != null" >
+        sales_profit_margin,
+      </if>
+      <if test="costUtilization != null" >
+        cost_utilization,
+      </if>
+      <if test="cashFlow != null" >
+        cash_flow,
+      </if>
+      <if test="manufacturingCost != null" >
+        manufacturing_cost,
+      </if>
+      <if test="manageCost != null" >
+        manage_cost,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAccountsReceivable != null" >
+        #{totalAccountsReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="dueReceivable != null" >
+        #{dueReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAccountsPayable != null" >
+        #{totalAccountsPayable,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOutputValue != null" >
+        #{totalOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="currentMonthOutputValue != null" >
+        #{currentMonthOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOrder != null" >
+        #{totalOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="currentMonthTotalOrder != null" >
+        #{currentMonthTotalOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="totalProfit != null" >
+        #{totalProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="totalExpenses != null" >
+        #{totalExpenses,jdbcType=DECIMAL},
+      </if>
+      <if test="variousExpenses != null" >
+        #{variousExpenses,jdbcType=DECIMAL},
+      </if>
+      <if test="assetLiabilityRatio != null" >
+        #{assetLiabilityRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="salesProfitMargin != null" >
+        #{salesProfitMargin,jdbcType=DECIMAL},
+      </if>
+      <if test="costUtilization != null" >
+        #{costUtilization,jdbcType=DECIMAL},
+      </if>
+      <if test="cashFlow != null" >
+        #{cashFlow,jdbcType=DECIMAL},
+      </if>
+      <if test="manufacturingCost != null" >
+        #{manufacturingCost,jdbcType=DECIMAL},
+      </if>
+      <if test="manageCost != null" >
+        #{manageCost,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecordExample" resultType="java.lang.Integer" >
+    select count(*) from business_analysis_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update business_analysis_record
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.year != null" >
+        year = #{record.year,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalAccountsReceivable != null" >
+        total_accounts_receivable = #{record.totalAccountsReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dueReceivable != null" >
+        due_receivable = #{record.dueReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalAccountsPayable != null" >
+        total_accounts_payable = #{record.totalAccountsPayable,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalOutputValue != null" >
+        total_output_value = #{record.totalOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.currentMonthOutputValue != null" >
+        current_month_output_value = #{record.currentMonthOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalOrder != null" >
+        total_order = #{record.totalOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="record.currentMonthTotalOrder != null" >
+        current_month_total_order = #{record.currentMonthTotalOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalProfit != null" >
+        total_profit = #{record.totalProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cost != null" >
+        cost = #{record.cost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalExpenses != null" >
+        total_expenses = #{record.totalExpenses,jdbcType=DECIMAL},
+      </if>
+      <if test="record.variousExpenses != null" >
+        various_expenses = #{record.variousExpenses,jdbcType=DECIMAL},
+      </if>
+      <if test="record.assetLiabilityRatio != null" >
+        asset_liability_ratio = #{record.assetLiabilityRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="record.salesProfitMargin != null" >
+        sales_profit_margin = #{record.salesProfitMargin,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costUtilization != null" >
+        cost_utilization = #{record.costUtilization,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cashFlow != null" >
+        cash_flow = #{record.cashFlow,jdbcType=DECIMAL},
+      </if>
+      <if test="record.manufacturingCost != null" >
+        manufacturing_cost = #{record.manufacturingCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.manageCost != null" >
+        manage_cost = #{record.manageCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update business_analysis_record
+    set id = #{record.id,jdbcType=INTEGER},
+      year = #{record.year,jdbcType=VARCHAR},
+      total_accounts_receivable = #{record.totalAccountsReceivable,jdbcType=DECIMAL},
+      due_receivable = #{record.dueReceivable,jdbcType=DECIMAL},
+      total_accounts_payable = #{record.totalAccountsPayable,jdbcType=DECIMAL},
+      total_output_value = #{record.totalOutputValue,jdbcType=DECIMAL},
+      current_month_output_value = #{record.currentMonthOutputValue,jdbcType=DECIMAL},
+      total_order = #{record.totalOrder,jdbcType=DECIMAL},
+      current_month_total_order = #{record.currentMonthTotalOrder,jdbcType=DECIMAL},
+      total_profit = #{record.totalProfit,jdbcType=DECIMAL},
+      cost = #{record.cost,jdbcType=DECIMAL},
+      total_expenses = #{record.totalExpenses,jdbcType=DECIMAL},
+      various_expenses = #{record.variousExpenses,jdbcType=DECIMAL},
+      asset_liability_ratio = #{record.assetLiabilityRatio,jdbcType=DECIMAL},
+      sales_profit_margin = #{record.salesProfitMargin,jdbcType=DECIMAL},
+      cost_utilization = #{record.costUtilization,jdbcType=DECIMAL},
+      cash_flow = #{record.cashFlow,jdbcType=DECIMAL},
+      manufacturing_cost = #{record.manufacturingCost,jdbcType=DECIMAL},
+      manage_cost = #{record.manageCost,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecord" >
+    update business_analysis_record
+    <set >
+      <if test="year != null" >
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAccountsReceivable != null" >
+        total_accounts_receivable = #{totalAccountsReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="dueReceivable != null" >
+        due_receivable = #{dueReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAccountsPayable != null" >
+        total_accounts_payable = #{totalAccountsPayable,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOutputValue != null" >
+        total_output_value = #{totalOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="currentMonthOutputValue != null" >
+        current_month_output_value = #{currentMonthOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOrder != null" >
+        total_order = #{totalOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="currentMonthTotalOrder != null" >
+        current_month_total_order = #{currentMonthTotalOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="totalProfit != null" >
+        total_profit = #{totalProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="totalExpenses != null" >
+        total_expenses = #{totalExpenses,jdbcType=DECIMAL},
+      </if>
+      <if test="variousExpenses != null" >
+        various_expenses = #{variousExpenses,jdbcType=DECIMAL},
+      </if>
+      <if test="assetLiabilityRatio != null" >
+        asset_liability_ratio = #{assetLiabilityRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="salesProfitMargin != null" >
+        sales_profit_margin = #{salesProfitMargin,jdbcType=DECIMAL},
+      </if>
+      <if test="costUtilization != null" >
+        cost_utilization = #{costUtilization,jdbcType=DECIMAL},
+      </if>
+      <if test="cashFlow != null" >
+        cash_flow = #{cashFlow,jdbcType=DECIMAL},
+      </if>
+      <if test="manufacturingCost != null" >
+        manufacturing_cost = #{manufacturingCost,jdbcType=DECIMAL},
+      </if>
+      <if test="manageCost != null" >
+        manage_cost = #{manageCost,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BusinessAnalysisRecord" >
+    update business_analysis_record
+    set year = #{year,jdbcType=VARCHAR},
+      total_accounts_receivable = #{totalAccountsReceivable,jdbcType=DECIMAL},
+      due_receivable = #{dueReceivable,jdbcType=DECIMAL},
+      total_accounts_payable = #{totalAccountsPayable,jdbcType=DECIMAL},
+      total_output_value = #{totalOutputValue,jdbcType=DECIMAL},
+      current_month_output_value = #{currentMonthOutputValue,jdbcType=DECIMAL},
+      total_order = #{totalOrder,jdbcType=DECIMAL},
+      current_month_total_order = #{currentMonthTotalOrder,jdbcType=DECIMAL},
+      total_profit = #{totalProfit,jdbcType=DECIMAL},
+      cost = #{cost,jdbcType=DECIMAL},
+      total_expenses = #{totalExpenses,jdbcType=DECIMAL},
+      various_expenses = #{variousExpenses,jdbcType=DECIMAL},
+      asset_liability_ratio = #{assetLiabilityRatio,jdbcType=DECIMAL},
+      sales_profit_margin = #{salesProfitMargin,jdbcType=DECIMAL},
+      cost_utilization = #{costUtilization,jdbcType=DECIMAL},
+      cash_flow = #{cashFlow,jdbcType=DECIMAL},
+      manufacturing_cost = #{manufacturingCost,jdbcType=DECIMAL},
+      manage_cost = #{manageCost,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

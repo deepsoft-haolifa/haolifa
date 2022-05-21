@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface SaleReportMapper {
-    //获取目前生产总金额总数量
-    List<ExportSaleDTO> selectAll(@Param("year") String year);
+
     //根据月份获取生产总金额 总数量
     String selectByMonth(@Param("startTime") String startTime,@Param("endTime") String endTime);
 
@@ -76,9 +75,22 @@ public interface SaleReportMapper {
      * 销售报表-产值列表
      */
 
-    List<SaleOutputRespDTO> reportSaleOutputList(ReportOrderConditionDTO model);
-    /**
-     * 销售报表-产值统计
-     */
-    BigDecimal reportSaleOutputSummary(ReportOrderConditionDTO model);
+    List<SaleOutputRespDTO> reportOutputList(ReportOrderConditionDTO model);
+
+
+
+
+    // 获取 生产产值和数量
+    SaleAllRespDTO selectOutputSummary(ReportOrderConditionDTO model);
+
+      // 获取 订货金额和数量
+    SaleAllRespDTO selectSaleSummary(ReportOrderConditionDTO model);
+
+    // 获取 开票金额
+    BigDecimal selectInvoiceSummary(ReportOrderConditionDTO model);
+
+    // 获取 回款金额
+    BigDecimal selectCollectSummary(ReportOrderConditionDTO model);
+
+
 }

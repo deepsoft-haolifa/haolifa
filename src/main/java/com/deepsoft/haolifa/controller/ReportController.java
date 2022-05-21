@@ -104,10 +104,8 @@ public class ReportController {
 
     @ApiOperation("销售报表-目前生产总金额")
     @RequestMapping(value = "/sale/getSaleAll", method = RequestMethod.GET)
-    public ResultBean getSaleAll(@RequestParam(value = "year", required = false) String year) {
-
-        List<ExportSaleDTO> exportSaleDTOS = reportService.selectAll(year);
-        return ResultBean.success(exportSaleDTOS);
+    public ResultBean<SaleAllRespDTO> getSaleAll(@RequestParam(value = "year", required = false) String year) {
+        return ResultBean.success( reportService.selectAll(year));
     }
 
     @ApiOperation("销售报表-每月生产总金额")

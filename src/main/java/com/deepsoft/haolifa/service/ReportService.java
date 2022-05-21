@@ -33,7 +33,7 @@ public interface ReportService {
 
     //销售报表
     //获取目前总金额总数量
-    List<ExportSaleDTO> selectAll(String year);
+    SaleAllRespDTO selectAll(String year);
 
     //根据月份获取总金额
     String selectByMonth(String startTime, String endTime);

@@ -73,4 +73,12 @@ public interface ReportExtendService {
     PageDTO<ExportPurchaseDTO> reportPurchaseList(ReportPurchaseConditionDTO dto);
 
     ExportPurchaseDTO reportPurchaseSummary(ReportPurchaseConditionDTO dto);
+
+
+    /**
+     *  经营分析-查询销售报表相关数据
+     */
+    BusinessAnalysisSaleAmountDTO selectBusinessAnalysis(ReportOrderConditionDTO dto);
+
+
 }

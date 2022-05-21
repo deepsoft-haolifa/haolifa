@@ -12,27 +12,8 @@
         <result column="demand_name" property="demandName" jdbcType="VARCHAR" javaType="java.lang.String"></result>
         <result column="total_price" property="totalPrice" jdbcType="DOUBLE" javaType="java.lang.Double"></result>
     </resultMap>
-    <select id="selectAll" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(inspect.total_num)
-        total_num,inspect.product_no,inspect.product_model,sum(inspect.total_num*associate.price) total_price from
-        (select
-        sum(pro_inspect_record.`qualified_number`)
-        total_num,pro_inspect_record.product_no,pro_inspect_record.product_model,pro_inspect_record.order_no
-        from pro_inspect_record where product_no !=''
-        <if test="year!=null and year != ''">
-            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-        </if>
-        group by pro_inspect_record.product_no,pro_inspect_record.order_no) as inspect,
-        (select order_product_associate.`product_no`,order_product_associate.`price`,order_product_associate.`order_no`
-        from order_product_associate
-        where 1=1
-        <if test="year!=null and year != ''">
-            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-        </if>
-        group by order_product_associate.`product_no`,order_product_associate.`order_no`
-        order by order_no) as associate
-        where inspect.product_no = associate.product_no and inspect.order_no = associate.order_no
-    </select>
+
+
     <select id="selectByMonth" resultType="java.lang.String">
         select ifnull(sum((e.quantity * op.price)), 0)
         from entry_out_store_record e
@@ -159,12 +140,12 @@
     <select id="reportCollectOrderSummary" resultType="com.deepsoft.haolifa.model.dto.export.TotalAmountDTO">
         SELECT
         ifnull(sum(op.total_price),0) totalSaleAmount,
-        ifnull(sum(pm.amount),0) totalCollectAmount,
-        ifnull(sum(op.total_price),0) - ifnull(sum(pm.amount),0) totalOwedAmount
+        ifnull(sum(bbc.amount),0) totalCollectAmount,
+        ifnull(sum(op.total_price),0) - ifnull(sum(bbc.amount),0) totalOwedAmount
         FROM
         order_product op
-        LEFT JOIN biz_bill_contract pm ON pm.order_no = op.order_no
-        <include refid="saleCollectionSql"/>
+        LEFT JOIN biz_bill_contract bbc ON bbc.order_no = op.order_no
+        <include refid="collectSql"/>
     </select>
     <sql id="saleCollectionSql">
         <where>
@@ -193,17 +174,9 @@
     <select id="selectInvoiceAmountByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         select ifnull(sum(`total_amount`),0) total_price,
         invoice_company as demand_name
-        from invoice where type=1 and status in(2)
-        <if test="year!=null and year != ''">
-            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-        </if>
-        <if test="startDate!=null and startDate != ''">
-            and create_time&gt;=#{startDate}
-        </if>
-        <if test="endDate!=null and endDate != ''">
-            and create_time&lt;=#{endDate}
-        </if>
-        group by invoice_company
+        from invoice iv
+        <include refid="invoiceSql"></include>
+        group by iv.invoice_company
     </select>
 
     <select id="selectDeliveryAmountByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
@@ -246,7 +219,8 @@
         GROUP BY order_no ) iv ON iv.order_no = op.order_no
         LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no
         = op.order_no
-        LEFT JOIN ( SELECT order_no, sum( price*abs(quantity) ) price FROM entry_out_store_record WHERE type = 1 AND operation_type =
+        LEFT JOIN ( SELECT order_no, sum( price*abs(quantity) ) price FROM entry_out_store_record WHERE type = 1 AND
+        operation_type =
         1 AND price > 0 GROUP BY order_no ) e ON e.order_no = op.order_no
         <include refid="saleByDemandSql"></include>
         GROUP BY op.order_no,op.demand_name
@@ -274,7 +248,8 @@
         GROUP BY order_no ) iv ON iv.order_no = op.order_no
         LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no
         = op.order_no
-        LEFT JOIN ( SELECT order_no, sum( price *abs(quantity)) price FROM entry_out_store_record WHERE type = 1 AND operation_type =
+        LEFT JOIN ( SELECT order_no, sum( price *abs(quantity)) price FROM entry_out_store_record WHERE type = 1 AND
+        operation_type =
         1 AND price > 0 GROUP BY order_no ) e ON e.order_no = op.order_no
         <include refid="saleByDemandSql"></include>
         GROUP BY
@@ -297,40 +272,62 @@
             </if>
         </where>
     </sql>
-
-    <select id="reportSaleOutputList" resultType="com.deepsoft.haolifa.model.dto.export.SaleOutputRespDTO">
+    <select id="reportOutputList" resultType="com.deepsoft.haolifa.model.dto.export.SaleOutputRespDTO">
         SELECT
-            op.order_no,
-            op.order_status,
-            op.create_time,
-            op.demand_name,
-            opa.product_name,
-            e.price,
-            e.product_no,
-            e.product_specifications,
-            e.product_model,
-            e.quantity,
-            e.quantity * e.price totalPrice
+        op.order_no,
+        op.order_status,
+        op.create_time,
+        op.demand_name,
+        -- opa.product_name,
+        e.price,
+        e.product_no,
+        e.product_specifications,
+        e.product_model,
+        e.quantity,
+        e.quantity * e.price totalPrice
         FROM
-            entry_out_store_record e
-                LEFT JOIN order_product_associate opa ON e.order_no = opa.order_no AND e.product_no = opa.product_no
-                LEFT JOIN order_product op ON opa.order_no = op.order_no
+        entry_out_store_record e
+        -- LEFT JOIN order_product_associate opa ON e.order_no = opa.order_no AND e.product_no = opa.product_no
+        LEFT JOIN order_product op ON e.order_no = op.order_no
         <include refid="saleByOutputSql"></include>
         ORDER BY e.id DESC
     </select>
 
-    <select id="reportSaleOutputSummary" resultType="java.math.BigDecimal">
-        select ifnull(sum((e.quantity * e.price)), 0)
-        FROM
-            entry_out_store_record e
-                LEFT JOIN order_product_associate opa ON e.order_no = opa.order_no AND e.product_no = opa.product_no
-                LEFT JOIN order_product op ON opa.order_no = op.order_no
+    <select id="selectOutputSummary" resultType="com.deepsoft.haolifa.model.dto.export.SaleAllRespDTO">
+        SELECT
+        ifnull(sum((e.quantity * e.price)), 0) outPutTotalAmount,
+        sum(e.quantity) outPutTotalNum
+        FROM entry_out_store_record e
         <include refid="saleByOutputSql"></include>
     </select>
 
+    <select id="selectSaleSummary" resultType="com.deepsoft.haolifa.model.dto.export.SaleAllRespDTO">
+        SELECT
+        ifnull( sum( op.total_price ), 0 ) saleTotalAmount,
+        sum(op.total_count) saleTotalNum
+        FROM order_product op
+        <include refid="saleBySaleSql"></include>
+    </select>
+
+    <select id="selectInvoiceSummary" resultType="java.math.BigDecimal">
+        SELECT
+        ifnull(sum( total_amount ),0) total_amount
+        FROM invoice iv
+        <include refid="invoiceSql"></include>
+    </select>
+
+    <select id="selectCollectSummary" resultType="java.math.BigDecimal">
+        SELECT
+        ifnull(sum(bbc.amount),0) totalCollectAmount
+        FROM biz_bill_contract bbc
+        LEFT JOIN order_product op ON bbc.order_no = op.order_no
+        <include refid="collectSql"></include>
+    </select>
+
+
     <sql id="saleByOutputSql">
         <where>
-            e.type = 1  and e.operation_type = 2
+            e.type = 1 and e.operation_type = 2
             <if test="startDate!=null and startDate != ''">
                 and e.create_time&gt;=#{startDate}
             </if>
@@ -343,8 +340,51 @@
             <if test="demandName != null and demandName != ''">
                 and op.demand_name like CONCAT('%',#{demandName},'%')
             </if>
-            <if test="productName != null and productName != ''">
-                and opa.product_name like CONCAT('%',#{productName},'%')
+            <!--            <if test="productName != null and productName != ''">-->
+            <!--                and opa.product_name like CONCAT('%',#{productName},'%')-->
+            <!--            </if>-->
+        </where>
+    </sql>
+    <sql id="saleBySaleSql">
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and op.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and op.create_time&lt;=#{endDate}
+            </if>
+        </where>
+    </sql>
+    <sql id="invoiceSql">
+        <where>
+            iv.type=1 and iv.status in(2)
+            <if test="startDate!=null and startDate != ''">
+                and iv.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and iv.create_time&lt;=#{endDate}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and iv.order_no like CONCAT('%',#{orderNo},'%')
+            </if>
+            <if test="demandName != null and demandName != ''">
+                and iv.invoice_company like CONCAT('%',#{demandName},'%')
+            </if>
+        </where>
+    </sql>
+    <sql id="collectSql">
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and bbc.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and bbc.create_time&lt;=#{endDate}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and op.order_no like CONCAT('%',#{orderNo},'%')
+            </if>
+            <if test="demandName != null and demandName != ''">
+                and op.demand_name like CONCAT('%',#{demandName},'%')
             </if>
         </where>
     </sql>

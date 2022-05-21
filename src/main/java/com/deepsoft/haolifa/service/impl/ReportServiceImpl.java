@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import com.deepsoft.haolifa.service.ReportService;
 import com.deepsoft.haolifa.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -121,8 +122,18 @@ public class ReportServiceImpl extends BaseService implements ReportService {
     }
 
     @Override
-    public List<ExportSaleDTO> selectAll(String year) {
-        return saleReportMapper.selectAll(year);
+    public SaleAllRespDTO selectAll(String year) {
+        ReportOrderConditionDTO reportOrderConditionDTO = new ReportOrderConditionDTO();
+        reportOrderConditionDTO.setYear(year);
+        packSaleQuery(reportOrderConditionDTO);
+        // 获取产值数据
+        SaleAllRespDTO saleAllRespDTO = saleReportMapper.selectOutputSummary(reportOrderConditionDTO);
+        // 获取订货数据
+        SaleAllRespDTO saleAllRespDTO1 = saleReportMapper.selectSaleSummary(reportOrderConditionDTO);
+        saleAllRespDTO.setSaleTotalAmount(saleAllRespDTO1.getSaleTotalAmount());
+        saleAllRespDTO.setSaleTotalNum(saleAllRespDTO1.getSaleTotalNum());
+        return saleAllRespDTO;
+
     }
 
     @Override
@@ -429,4 +440,19 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         return list;
     }
 
+    private void packSaleQuery(ReportOrderConditionDTO model) {
+        //如果传入2021年，则查2020-12-26 至 2021-12-25
+        if (StrUtil.isNotBlank(model.getYear())) {
+            Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
+            model.setStartDate(MapUtil.getStr(param, "startDate"));
+            model.setEndDate(MapUtil.getStr(param, "endDate"));
+        }
+        //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
+        if (null != model.getStartDate()) {
+            model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
+        }
+        if (null != model.getEndDate()) {
+            model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+        }
+    }
 }

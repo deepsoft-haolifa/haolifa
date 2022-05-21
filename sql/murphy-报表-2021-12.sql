@@ -212,3 +212,31 @@ INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort
 INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '6', '外调精巧调节型执行器装配', 0, 0, '', NOW());
 INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '7', '外调通用调节型执行器装配', 0, 0, '', NOW());
 INSERT INTO `haolifa`.`sys_dict`(`type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ('WORK_TYPE', '自控委托工种类别', '8', '外调通用开关型执行器装配', 0, 0, '', NOW());
+
+
+drop table if exists `business_analysis_record`;
+CREATE TABLE `business_analysis_record`
+(
+    `id`                  int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `year`       varchar(32) NOT NULL COMMENT '年份',
+    `total_accounts_receivable`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '应收账款总额',
+    `due_receivable`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '到期应收',
+    `total_accounts_payable`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '应付账款总额',
+    `total_output_value`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '产值总额',
+    `current_month_output_value`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '当月产值',
+    `total_order`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '订货总额',
+    `current_month_total_order`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '当月订货额',
+    `total_profit`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '利润总额',
+    `cost`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '成本费用',
+    `total_expenses`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '费用合计',
+    `various_expenses`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '各项费用支出总额',
+    `asset_liability_ratio`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '资产负债率',
+    `sales_profit_margin`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '销售利润率',
+    `cost_utilization`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '成本费用利用率',
+    `cash_flow`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '现金流量',
+    `manufacturing_cost`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '制造成本',
+    `manage_cost`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '管理成本',
+    `create_time`         timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`         timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='经营分析数据';
