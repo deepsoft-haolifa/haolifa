@@ -7,6 +7,7 @@ import com.deepsoft.haolifa.model.dto.export.ReportSupplierConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportPurchaseConditionDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -32,4 +33,20 @@ public interface PurchaseReportMapper {
     List<ExportPurchaseDTO> reportPurchaseList(ReportPurchaseConditionDTO model);
 
     ExportPurchaseDTO reportPurchaseSummary(ReportPurchaseConditionDTO model);
+
+    /**
+     * 获取采购的回票金额
+     * @param model
+     * @return
+     */
+    BigDecimal selectInvoice(ReportPurchaseConditionDTO model);
+
+    /**
+     * 获取采购的已付金额
+     * @param model
+     * @return
+     */
+    BigDecimal selectPaid(ReportPurchaseConditionDTO model);
+
+
 }

@@ -1,17 +1,14 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderConditionDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisPurchaseAmountDTO;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisSaleAmountDTO;
 import com.deepsoft.haolifa.model.dto.export.*;
-import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportPurchaseConditionDTO;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @author murphy.he
@@ -78,7 +75,11 @@ public interface ReportExtendService {
     /**
      *  经营分析-查询销售报表相关数据
      */
-    BusinessAnalysisSaleAmountDTO selectBusinessAnalysis(ReportOrderConditionDTO dto);
+    BusinessAnalysisSaleAmountDTO selectBusinessAnalysisForSale(ReportOrderConditionDTO dto);
 
+    /**
+     *  经营分析-查询销售报表相关数据
+     */
+    BusinessAnalysisPurchaseAmountDTO selectBusinessAnalysisForPurchase(ReportPurchaseConditionDTO dto);
 
 }

@@ -240,3 +240,10 @@ CREATE TABLE `business_analysis_record`
     `update_time`         timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='经营分析数据';
+
+
+INSERT INTO `haolifa`.`sys_permission`(`id`, `perm_name`, `description`, `url`, `pid`, `is_delete`, `create_time`,
+                                       `update_time`)
+VALUES (240, 'm', '成本报表', 'cbbb', 144, 0, NOW(), NOW());
+INSERT INTO `haolifa`.`sys_permission_role`(`role_id`, `permission_id`, `create_time`, `update_time`)
+VALUES (1, 235, NOW(), NOW());

@@ -7,6 +7,9 @@ import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportCostConditionDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportCostRespDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.ReportService;
 import com.deepsoft.haolifa.util.CommonUtil;
@@ -61,7 +64,7 @@ public class ReportController {
 
     @ApiOperation("费用报表--费用整体部门汇总（2021-12-hd）")
     @PostMapping("/expense/classifyByDepartmentAll")
-    public ResultBean<List<ExpensesReport>> classifyByDepartmentAll(@RequestBody ExpensesConditionDTO reportBaseDTO){
+    public ResultBean<List<ExpensesReport>> classifyByDepartmentAll(@RequestBody ExpensesConditionDTO reportBaseDTO) {
         return expensesService.classifyByDepartmentAll(reportBaseDTO);
     }
 
@@ -105,7 +108,7 @@ public class ReportController {
     @ApiOperation("销售报表-目前生产总金额")
     @RequestMapping(value = "/sale/getSaleAll", method = RequestMethod.GET)
     public ResultBean<SaleAllRespDTO> getSaleAll(@RequestParam(value = "year", required = false) String year) {
-        return ResultBean.success( reportService.selectAll(year));
+        return ResultBean.success(reportService.selectAll(year));
     }
 
     @ApiOperation("销售报表-每月生产总金额")
@@ -211,6 +214,7 @@ public class ReportController {
     public ResultBean selectContractByDemandName(@RequestParam(value = "year") String year) {
         return ResultBean.success(reportService.selectContractByDemandName(year));
     }
+
     @ApiOperation("销售报表-月份客户订货额统计图(2021-12-hd)")
     @PostMapping(value = "/sale/selectContractByDemandNameByMonth")
     public ResultBean<List<ExportContractDTO>> selectContractByDemandNameByMonth(@RequestBody ReportBaseDTO baseDTO) {
@@ -223,6 +227,7 @@ public class ReportController {
     public ResultBean selectshouhuiContractByDemandName(@RequestParam(value = "year", required = false) String year) {
         return ResultBean.success(reportService.selectshouhuiContractByDemandName(year));
     }
+
     @ApiOperation("销售报表-月份回款额统计图(2021-12-hd)")
     @PostMapping(value = "/sale/selectshouhuiContractByDemandNameByMonth")
     public ResultBean<List<ExportContractDTO>> selectshouhuiContractByDemandNameByMonth(@RequestBody ReportBaseDTO baseDTO) {
@@ -343,6 +348,25 @@ public class ReportController {
     public ResultBean getAllQuality(@RequestParam(value = "year", required = false) String year) {
         List<TotalQualityReportDto> totalQualityReportDtos = reportService.selectAllQuality(year);
         return ResultBean.success(totalQualityReportDtos);
+    }
+
+    @ApiOperation("成本报表-质量成本")
+    @PostMapping(value = "/cost/quality")
+    public ResultBean<List<ReportCostRespDTO>> costQuality(@RequestBody ReportCostConditionDTO dto) {
+        List<ReportCostRespDTO> list = new ArrayList<>();
+        return ResultBean.success(list);
+    }
+    @ApiOperation("成本报表-材料成本")
+    @PostMapping(value = "/cost/material")
+    public ResultBean<List<ReportCostRespDTO>> costMaterial(@RequestBody ReportCostConditionDTO dto) {
+        List<ReportCostRespDTO> list = new ArrayList<>();
+        return ResultBean.success(list);
+    }
+    @ApiOperation("成本报表-财务成本")
+    @PostMapping(value = "/cost/finance")
+    public ResultBean<List<ReportCostRespDTO>> costFinance(@RequestBody ReportCostConditionDTO dto) {
+        List<ReportCostRespDTO> list = new ArrayList<>();
+        return ResultBean.success(list);
     }
 
 

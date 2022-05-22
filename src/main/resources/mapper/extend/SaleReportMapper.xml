@@ -246,12 +246,12 @@
         order_product op
         LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 1 AND STATUS IN ( 2 )
         GROUP BY order_no ) iv ON iv.order_no = op.order_no
-        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no
+        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM biz_bill_contract  GROUP BY order_no ) pm ON pm.order_no
         = op.order_no
         LEFT JOIN ( SELECT order_no, sum( price *abs(quantity)) price FROM entry_out_store_record WHERE type = 1 AND
         operation_type =
         1 AND price > 0 GROUP BY order_no ) e ON e.order_no = op.order_no
-        <include refid="saleByDemandSql"></include>
+        <include refid="saleByDemandSql"/>
         GROUP BY
         op.order_no
         ) tmp
@@ -359,10 +359,10 @@
         <where>
             iv.type=1 and iv.status in(2)
             <if test="startDate!=null and startDate != ''">
-                and iv.create_time&gt;=#{startDate}
+                and iv.invoice_date&gt;=#{startDate}
             </if>
             <if test="endDate!=null and endDate != ''">
-                and iv.create_time&lt;=#{endDate}
+                and iv.invoice_date&lt;=#{endDate}
             </if>
             <if test="orderNo != null and orderNo != ''">
                 and iv.order_no like CONCAT('%',#{orderNo},'%')

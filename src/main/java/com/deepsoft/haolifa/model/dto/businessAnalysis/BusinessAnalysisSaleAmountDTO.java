@@ -1,4 +1,4 @@
-package com.deepsoft.haolifa.model.dto.export;
+package com.deepsoft.haolifa.model.dto.businessAnalysis;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

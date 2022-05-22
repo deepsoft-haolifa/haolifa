@@ -6,14 +6,13 @@ import com.deepsoft.haolifa.dao.repository.PurchaseReportMapper;
 import com.deepsoft.haolifa.dao.repository.SaleReportMapper;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisPurchaseAmountDTO;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisSaleAmountDTO;
 import com.deepsoft.haolifa.model.dto.export.*;
-import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportPurchaseConditionDTO;
 import com.deepsoft.haolifa.service.ReportExtendService;
-import com.deepsoft.haolifa.service.ReportService;
 import com.deepsoft.haolifa.util.CommonUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -127,13 +125,22 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
     }
 
     @Override
-    public BusinessAnalysisSaleAmountDTO selectBusinessAnalysis(ReportOrderConditionDTO model) {
+    public BusinessAnalysisSaleAmountDTO selectBusinessAnalysisForSale(ReportOrderConditionDTO model) {
         BusinessAnalysisSaleAmountDTO resultModel = new BusinessAnalysisSaleAmountDTO();
         this.packSaleQuery(model);
         resultModel.setSaleAmount(saleReportMapper.selectSaleSummary(model).getSaleTotalAmount());
         resultModel.setOutPutAmount(saleReportMapper.selectOutputSummary(model).getOutPutTotalAmount());
         resultModel.setCollectAmount(saleReportMapper.selectCollectSummary(model));
         resultModel.setInvoiceAmount(saleReportMapper.selectInvoiceSummary(model));
+        return resultModel;
+    }
+
+    @Override
+    public BusinessAnalysisPurchaseAmountDTO selectBusinessAnalysisForPurchase(ReportPurchaseConditionDTO model) {
+        BusinessAnalysisPurchaseAmountDTO resultModel = new BusinessAnalysisPurchaseAmountDTO();
+        this.packPurchaseQuery(model);
+        resultModel.setReturnTicketAmount(purchaseReportMapper.selectInvoice(model));
+        resultModel.setPaidTotal(purchaseReportMapper.selectPaid(model));
         return resultModel;
     }
 
