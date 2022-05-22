@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,6 @@ public interface ExpensesExtendMapper {
     List<ExpensesReport> getAllClassifyWithDepartment(ExpensesConditionDTO expensesConditionDTO);
     List<ExpensesReport> getAllClassifyWithFirstClassify(String classify);
     List<ExpensesReport> getMonthByDepartment(String department);
-    List<ExpensesReport> expenseTotalByMonth(Map<String, String> paramMap);
+    List<ExpensesReport> expenseTotalByMonth(ExpensesConditionDTO expensesConditionDTO);
     String listSummary(ExpensesConditionDTO expensesDTO);
 }

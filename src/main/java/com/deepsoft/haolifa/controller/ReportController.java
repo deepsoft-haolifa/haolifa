@@ -352,21 +352,20 @@ public class ReportController {
 
     @ApiOperation("成本报表-质量成本")
     @PostMapping(value = "/cost/quality")
-    public ResultBean<List<ReportCostRespDTO>> costQuality(@RequestBody ReportCostConditionDTO dto) {
-        List<ReportCostRespDTO> list = new ArrayList<>();
-        return ResultBean.success(list);
+    public ResultBean<List<ExpensesReport>> costQuality(@RequestBody ReportCostConditionDTO dto) {
+        return ResultBean.success(expensesService.qualityExpenseTotalByMonth(dto.getYear()));
     }
+
     @ApiOperation("成本报表-材料成本")
     @PostMapping(value = "/cost/material")
-    public ResultBean<List<ReportCostRespDTO>> costMaterial(@RequestBody ReportCostConditionDTO dto) {
-        List<ReportCostRespDTO> list = new ArrayList<>();
-        return ResultBean.success(list);
+    public ResultBean<List<ExpensesReport>> costMaterial(@RequestBody ReportCostConditionDTO dto) {
+        return ResultBean.success(expensesService.costMaterialByMonth(dto.getYear()));
     }
+
     @ApiOperation("成本报表-财务成本")
     @PostMapping(value = "/cost/finance")
-    public ResultBean<List<ReportCostRespDTO>> costFinance(@RequestBody ReportCostConditionDTO dto) {
-        List<ReportCostRespDTO> list = new ArrayList<>();
-        return ResultBean.success(list);
+    public ResultBean<List<ExpensesReport>> costFinance(@RequestBody ReportCostConditionDTO dto) {
+        return ResultBean.success(expensesService.financeExpenseTotalByMonth(dto.getYear()));
     }
 
 

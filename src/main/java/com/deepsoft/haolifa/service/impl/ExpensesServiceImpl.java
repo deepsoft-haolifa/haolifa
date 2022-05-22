@@ -1,10 +1,13 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.dao.repository.ExpensesClassifyMapper;
 import com.deepsoft.haolifa.dao.repository.ExpensesMapper;
+import com.deepsoft.haolifa.dao.repository.extend.EntryOutRecordExtendMapper;
 import com.deepsoft.haolifa.dao.repository.extend.ExpensesExtendMapper;
 import com.deepsoft.haolifa.model.domain.Expenses;
 import com.deepsoft.haolifa.model.domain.ExpensesClassifyExample;
@@ -41,6 +44,8 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     private ExpensesExtendMapper expensesExtendMapper;
     @Autowired
     private ExpensesClassifyMapper classifyMapper;
+    @Autowired
+    private EntryOutRecordExtendMapper entryOutRecordExtendMapper;
 
 
     @Override
@@ -203,15 +208,13 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     @Override
     public ResultBean expenseTotalByMonth(String year) {
         Set<String> dataMonthSet = new HashSet<>();
-        Map<String, String> paramMap = new HashMap<>();
-        if (StrUtil.isNotBlank(year)) {
-            paramMap.put("year", year);
-        }
-        List<ExpensesReport> expensesReports = expensesExtendMapper.expenseTotalByMonth(paramMap);
-        Map<String, String> lastParamMap = new HashMap<>();
+        ExpensesConditionDTO expensesConditionDTO = new ExpensesConditionDTO();
+        expensesConditionDTO.setYear(year);
+        List<ExpensesReport> expensesReports = expensesExtendMapper.expenseTotalByMonth(expensesConditionDTO);
         String lastYear = CommonUtil.getLastYear(year);
-        lastParamMap.put("year", lastYear);
-        List<ExpensesReport> lastExpensesReports = expensesExtendMapper.expenseTotalByMonth(lastParamMap);
+        ExpensesConditionDTO lastExpensesConditionDTO = new ExpensesConditionDTO();
+        expensesConditionDTO.setYear(lastYear);
+        List<ExpensesReport> lastExpensesReports = expensesExtendMapper.expenseTotalByMonth(lastExpensesConditionDTO);
 
         // 将今年和往年的客户集合起来
         Set<String> dataSet = expensesReports.stream().map(ExpensesReport::getDataMonth).collect(Collectors.toSet());
@@ -242,4 +245,44 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         List<ExportSaleMapDTO> collect = resultList.stream().sorted(Comparator.comparing(ExportSaleMapDTO::getCompanyName)).collect(Collectors.toList());
         return ResultBean.success(collect);
     }
+
+    @Override
+    public List<ExpensesReport> qualityExpenseTotalByMonth(String year) {
+        ExpensesConditionDTO expensesConditionDTO = new ExpensesConditionDTO();
+        expensesConditionDTO.setYear(year);
+        expensesConditionDTO.setClassifyName("质量费用");
+        return expensesExtendMapper.expenseTotalByMonth(expensesConditionDTO);
+    }
+
+    @Override
+    public List<ExpensesReport> financeExpenseTotalByMonth(String year) {
+        ExpensesConditionDTO expensesConditionDTO = new ExpensesConditionDTO();
+        expensesConditionDTO.setYear(year);
+        expensesConditionDTO.setClassifyName("财务费用");
+        return expensesExtendMapper.expenseTotalByMonth(expensesConditionDTO);
+    }
+
+    @Override
+    public List<ExpensesReport> costMaterialByMonth(String year) {
+        List<ExpensesReport> list = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            ExpensesReport report = new ExpensesReport();
+            report.setDataYear(year);
+            report.setDataMonth(String.valueOf(i));
+            Map<String, Object> paramMap = new HashMap<>();
+            String month = "";
+            if (i < 10) {
+                month = "0".concat(String.valueOf(i));
+            } else {
+                month = String.valueOf(i);
+            }
+            String yearMonth = year.concat("-").concat(month);
+            paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(yearMonth));
+            paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(yearMonth));
+            report.setTotalAmount(entryOutRecordExtendMapper.costMaterial(paramMap));
+            list.add(report);
+        }
+        return list;
+    }
+
 }

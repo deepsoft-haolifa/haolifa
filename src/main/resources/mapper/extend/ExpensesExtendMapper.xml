@@ -88,10 +88,8 @@
     <select id="expenseTotalByMonth" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
         select ifnull(sum(total_amount),0) totalAmount,data_month
         from expenses
-        where is_delete=0
-        <if test="year!=null and year!=''">
-            and data_year=#{year}
-        </if>
+        <include refid="commonCondition"/>
+        <include refid="expenseCondition"></include>
         group by data_month
     </select>
     <select id="listSummary" resultType="java.lang.String">
@@ -126,7 +124,7 @@
             and commit_user like concat('%',#{commitUser},'%')
         </if>
         <if test="classifyName != null">
-            and expenses_classify like concat('%',#{classifyName},'%')
+            and expenses_classify = #{classifyName}
         </if>
         <if test="secondClassifyName != null">
             and second_classify like concat('%',#{secondClassifyName},'%')

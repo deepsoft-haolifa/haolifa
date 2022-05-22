@@ -1,9 +1,12 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.ExpensesReport;
 import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
+
+import java.util.List;
 
 public interface ExpensesService {
 
@@ -34,4 +37,11 @@ public interface ExpensesService {
 
     //获取费用统计表，每个月统计
     ResultBean expenseTotalByMonth(String year);
+
+    //成本质量费用，按月统计
+    List<ExpensesReport> qualityExpenseTotalByMonth(String year);
+    //成本财务费用，按月统计
+    List<ExpensesReport> financeExpenseTotalByMonth(String year);
+    //成本材料，按月统计
+    List<ExpensesReport> costMaterialByMonth(String year);
 }
