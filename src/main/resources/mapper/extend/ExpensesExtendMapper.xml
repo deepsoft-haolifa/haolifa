@@ -42,7 +42,7 @@
         group by second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m")
     </select>
     <select id="getAllClassify" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
-        select  ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
+        select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
         <include refid="commonCondition"></include>
         <include refid="expenseCondition"></include>
         group by expenses_classify
@@ -92,10 +92,19 @@
         <include refid="expenseCondition"></include>
         group by data_month
     </select>
-    <select id="listSummary" resultType="java.lang.String">
+    <select id="listSummary" resultType="java.math.BigDecimal">
         select ifnull(sum(total_amount),0) totalAmount from expenses
         <include refid="commonCondition"></include>
         <include refid="expenseCondition"></include>
+    </select>
+    <select id="bankBalance" resultType="java.math.BigDecimal">
+        select ifnull(balance,0) from biz_bank_bill order by id desc limit 1
+    </select>
+    <select id="cashBalance" resultType="java.math.BigDecimal">
+        select ifnull(balance,0) from biz_bill order by id desc limit 1
+    </select>
+    <select id="otherBalance" resultType="java.math.BigDecimal">
+        select ifnull(balance,0) from biz_other_bill order by id desc limit 1
     </select>
 
 
@@ -127,7 +136,19 @@
             and expenses_classify = #{classifyName}
         </if>
         <if test="secondClassifyName != null">
-            and second_classify like concat('%',#{secondClassifyName},'%')
+            and second_classify = #{secondClassifyName}
+        </if>
+        <if test="secondClassifyNameList != null">
+            and second_classify in
+            <foreach close=")" collection="secondClassifyNameList" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="excludeSecondClassifyNameList != null">
+            and second_classify not in
+            <foreach close=")" collection="excludeSecondClassifyNameList" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="voucherNo != null">
             and voucher_no like concat('%',#{voucherNo},'%')

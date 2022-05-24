@@ -12,7 +12,7 @@ import java.util.Date;
  * @author murphy.he
  **/
 @Data
-public class BusinessAnalysisDTO {
+public class BusinessAnalysisRespDTO {
     /**
      * 年份
      */
@@ -70,13 +70,13 @@ public class BusinessAnalysisDTO {
     /**
      * 成本费用
      */
-    @ApiModelProperty("成本费用")
+    @ApiModelProperty("成本费用(制造成本)")
     private BigDecimal cost;
 
     /**
      * 费用合计
      */
-    @ApiModelProperty("费用合计")
+    @ApiModelProperty("费用合计（管理成本）")
     private BigDecimal totalExpenses;
 
     /**
@@ -121,55 +121,9 @@ public class BusinessAnalysisDTO {
     @ApiModelProperty("管理成本")
     private BigDecimal manageCost;
 
-
     /**
-     * 年度销售相关金额
+     * 创建时间
      */
-    private BusinessAnalysisSaleAmountDTO yearSaleAmountDTO;
-    /**
-     * 当月销售相关金额
-     */
-    private BusinessAnalysisSaleAmountDTO currentMonthSaleAmountDTO;
-    /**
-     * 年度采购相关金额
-     */
-    private BusinessAnalysisPurchaseAmountDTO yearPurchaseAmountDTO;
-
-    /**
-     * 管理费用-费用管理
-     */
-    private BigDecimal mangeExpenseAmount;
-    /**
-     * 财务费用-费用管理
-     */
-    private BigDecimal financeExpenseAmount;
-    /**
-     * 质量费用-费用管理
-     */
-    private BigDecimal qualityExpenseAmount;
-    /**
-     * 销售费用-费用管理
-     */
-    private BigDecimal saleExpenseAmount;
-    /**
-     * 税金-费用管理
-     */
-    private BigDecimal taxesExpenseAmount;
-
-
-    /**
-     * 银行日记账最新余额
-     */
-    private BigDecimal bankBalanceAmount;
-
-    /**
-     * 现金日记账最新余额
-     */
-    private BigDecimal cashBalanceAmount;
-
-    /**
-     * 其他货币日记账最新余额
-     */
-    private BigDecimal otherBalanceAmount;
-
+    @ApiModelProperty("创建时间")
+    private Date createTime;
 }

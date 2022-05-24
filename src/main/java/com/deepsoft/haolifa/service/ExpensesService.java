@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ExpensesService {
@@ -17,7 +18,7 @@ public interface ExpensesService {
   ResultBean update(ExpensesDTO model);
 
   ResultBean getList(ExpensesConditionDTO expensesDTO);
-  String listSummary(ExpensesConditionDTO expensesDTO);
+  BigDecimal listSummary(ExpensesConditionDTO expensesDTO);
 
   ResultBean classify(Integer pId);
 

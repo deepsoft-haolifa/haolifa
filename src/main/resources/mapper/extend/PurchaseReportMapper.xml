@@ -101,7 +101,7 @@
     <select id="selectInvoice" resultType="java.math.BigDecimal">
         SELECT
         ifnull(sum(total_amount),0) total_amount
-        FROM invoice
+        FROM invoice iv
         <include refid="invoiceSql"/>
     </select>
 
@@ -162,8 +162,8 @@
             <if test="endDate!=null and endDate != ''">
                 and iv.invoice_date&lt;=#{endDate}
             </if>
-            <if test="orderNo != null and orderNo != ''">
-                and iv.order_no like CONCAT('%',#{orderNo},'%')
+            <if test="purchaseOrderNo != null and purchaseOrderNo != ''">
+                and iv.order_no like CONCAT('%',#{purchaseOrderNo},'%')
             </if>
             <if test="supplierName!=null and supplierName != ''">
                 and po.invoice_company like CONCAT('%',#{supplierName},'%')

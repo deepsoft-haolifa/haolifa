@@ -92,5 +92,7 @@ public interface SaleReportMapper {
     // 获取 回款金额
     BigDecimal selectCollectSummary(ReportOrderConditionDTO model);
 
+    // 获取 发货金额
+    BigDecimal selectDeliverySummary(ReportOrderConditionDTO model);
 
 }

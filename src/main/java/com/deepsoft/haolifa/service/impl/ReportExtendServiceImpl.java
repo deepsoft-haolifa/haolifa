@@ -132,6 +132,7 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
         resultModel.setOutPutAmount(saleReportMapper.selectOutputSummary(model).getOutPutTotalAmount());
         resultModel.setCollectAmount(saleReportMapper.selectCollectSummary(model));
         resultModel.setInvoiceAmount(saleReportMapper.selectInvoiceSummary(model));
+        resultModel.setDeliveryAmount(saleReportMapper.selectDeliverySummary(model));
         return resultModel;
     }
 

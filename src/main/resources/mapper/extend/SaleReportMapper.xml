@@ -246,7 +246,7 @@
         order_product op
         LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 1 AND STATUS IN ( 2 )
         GROUP BY order_no ) iv ON iv.order_no = op.order_no
-        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM biz_bill_contract  GROUP BY order_no ) pm ON pm.order_no
+        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM biz_bill_contract GROUP BY order_no ) pm ON pm.order_no
         = op.order_no
         LEFT JOIN ( SELECT order_no, sum( price *abs(quantity)) price FROM entry_out_store_record WHERE type = 1 AND
         operation_type =
@@ -324,6 +324,13 @@
         <include refid="collectSql"></include>
     </select>
 
+    <select id="selectDeliverySummary" resultType="java.math.BigDecimal">
+        SELECT
+        ifnull(sum((abs(e.quantity) * e.price)), 0) deliveryAmount
+        FROM entry_out_store_record e
+        <include refid="saleByDeliverySql"></include>
+    </select>
+
 
     <sql id="saleByOutputSql">
         <where>
@@ -343,6 +350,17 @@
             <!--            <if test="productName != null and productName != ''">-->
             <!--                and opa.product_name like CONCAT('%',#{productName},'%')-->
             <!--            </if>-->
+        </where>
+    </sql>
+    <sql id="saleByDeliverySql">
+        <where>
+            e.type = 1 and e.operation_type = 1
+            <if test="startDate!=null and startDate != ''">
+                and e.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and e.create_time&lt;=#{endDate}
+            </if>
         </where>
     </sql>
     <sql id="saleBySaleSql">

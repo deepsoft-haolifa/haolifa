@@ -691,7 +691,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         expensesDTO.setExpensesClassify("采购费用");
         expensesDTO.setSecondClassify("其他");
         expensesDTO.setVoucherNo(bizReimburseApplyS.getSerialNo());
-        expensesDTO.setTotalAmount(bizReimburseApplyS.getAmount().doubleValue());
+        expensesDTO.setTotalAmount(bizReimburseApplyS.getAmount());
         expensesDTO.setCommitUser(customUser.getRealName());
         expensesDTO.setDepartment(sysDepartment.getDeptName());
         expensesDTO.setSummary(bizReimburseApplyS.getRemark());

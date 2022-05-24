@@ -1,6 +1,6 @@
 package com.deepsoft.haolifa.service;
 
-import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisDTO;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisRespDTO;
 
 /**
  * @author murphy.he
@@ -21,5 +21,5 @@ public interface BusinessAnalysisService {
      * @param year
      * @return
      */
-    BusinessAnalysisDTO get(String year);
+    BusinessAnalysisRespDTO get(String year);
 }

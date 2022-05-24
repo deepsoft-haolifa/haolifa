@@ -21,5 +21,7 @@ public class BusinessAnalysisSaleAmountDTO {
     private BigDecimal saleAmount;
     @ApiModelProperty(value = "产值总额")
     private BigDecimal outPutAmount;
+    @ApiModelProperty(value = "发货总额")
+    private BigDecimal deliveryAmount;
 
 }

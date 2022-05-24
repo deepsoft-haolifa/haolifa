@@ -25,5 +25,14 @@ public interface ExpensesExtendMapper {
     List<ExpensesReport> getAllClassifyWithFirstClassify(String classify);
     List<ExpensesReport> getMonthByDepartment(String department);
     List<ExpensesReport> expenseTotalByMonth(ExpensesConditionDTO expensesConditionDTO);
-    String listSummary(ExpensesConditionDTO expensesDTO);
+    BigDecimal listSummary(ExpensesConditionDTO expensesDTO);
+
+
+    // 银行日记账的余额
+    BigDecimal bankBalance();
+    // 现金日记账的余额
+    BigDecimal cashBalance();
+    // 其它货币日记账的余额
+    BigDecimal otherBalance();
+
 }

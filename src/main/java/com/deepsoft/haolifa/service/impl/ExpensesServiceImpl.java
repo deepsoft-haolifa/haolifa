@@ -1,7 +1,5 @@
 package com.deepsoft.haolifa.service.impl;
 
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
@@ -17,9 +15,7 @@ import com.deepsoft.haolifa.model.dto.ExpensesDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
-import com.deepsoft.haolifa.model.dto.export.ExportContractDTO;
 import com.deepsoft.haolifa.model.dto.export.ExportSaleMapDTO;
-import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.util.CommonUtil;
 import com.github.pagehelper.Page;
@@ -51,7 +47,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     @Override
     public ResultBean save(ExpensesDTO model) {
         if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
-            || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+            || model.getTotalAmount() == null) {
             return ResultBean.error(ResponseEnum.PARAM_ERROR);
         }
         Expenses expenses = new Expenses();
@@ -66,7 +62,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         }
 
         expenses.setCreateUserId(getLoginUserId());
-        expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
+        expenses.setTotalAmount(model.getTotalAmount());
         expensesMapper.insertSelective(expenses);
         return ResultBean.success(expenses.getId());
     }
@@ -99,7 +95,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     @Override
     public ResultBean update(ExpensesDTO model) {
         if (StringUtils.isAnyBlank(model.getExpensesClassify(), model.getVoucherNo())
-            || model.getTotalAmount() == null || model.getTotalAmount() == 0) {
+            || model.getTotalAmount() == null) {
             return ResultBean.error(ResponseEnum.PARAM_ERROR);
         }
         Expenses expenses = new Expenses();
@@ -112,7 +108,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
             expenses.setDataMonth(dataMonth);
             expenses.setDateStr(model.getDataDate());
         }
-        expenses.setTotalAmount(new BigDecimal(model.getTotalAmount()));
+        expenses.setTotalAmount(model.getTotalAmount());
         expensesMapper.updateByPrimaryKeySelective(expenses);
         return ResultBean.success(0);
     }
@@ -159,7 +155,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public String listSummary(ExpensesConditionDTO expensesDTO) {
+    public BigDecimal listSummary(ExpensesConditionDTO expensesDTO) {
         return expensesExtendMapper.listSummary(expensesDTO);
     }
 

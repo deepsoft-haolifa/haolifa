@@ -1,7 +1,7 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisDTO;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisRespDTO;
 import com.deepsoft.haolifa.service.BusinessAnalysisService;
 import com.deepsoft.haolifa.service.HomeApiService;
 import com.deepsoft.haolifa.service.RoleService;
@@ -59,7 +59,7 @@ public class HomeController {
 
     @ApiOperation("业绩指标-获取")
     @GetMapping("/business-analysis/get")
-    public ResultBean<BusinessAnalysisDTO> businessAnalysisGet() {
+    public ResultBean<BusinessAnalysisRespDTO> businessAnalysisGet() {
         return ResultBean.success(businessAnalysisService.get(null));
     }
 

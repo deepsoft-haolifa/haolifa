@@ -36,4 +36,11 @@ public interface EntryOutRecordExtendMapper {
      */
     BigDecimal costMaterial(Map<String, Object> paramMap);
 
+    /**
+     * 获取零件出库金额，不带M&J&B
+     * @param paramMap
+     * @return
+     */
+    BigDecimal costMaterialNotMJB(Map<String, Object> paramMap);
+
 }

@@ -224,7 +224,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         expensesDTO.setExpensesClassify("采购费用");
         expensesDTO.setSecondClassify("其他");
         expensesDTO.setVoucherNo(bizPayPlan.getApplyNo());
-        expensesDTO.setTotalAmount(bizPayPlan.getApplyAmount().doubleValue());
+        expensesDTO.setTotalAmount(bizPayPlan.getApplyAmount());
         expensesDTO.setCommitUser(customUser.getRealName());
 //        expensesDTO.setDepartment();
         expensesDTO.setRemark(bizPayPlan.getRemark());

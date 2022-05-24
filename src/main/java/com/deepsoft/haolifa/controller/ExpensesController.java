@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Api(tags = {"费用管理(2021-12-hd)"})
@@ -57,7 +58,7 @@ public class ExpensesController {
 
     @ApiOperation("查询费用汇总(2021-12-hd)")
     @PostMapping("list-summary")
-    public ResultBean<String> listSummary(@RequestBody ExpensesConditionDTO expensesDTO) {
+    public ResultBean<BigDecimal> listSummary(@RequestBody ExpensesConditionDTO expensesDTO) {
         return ResultBean.success(expensesService.listSummary(expensesDTO));
     }
 

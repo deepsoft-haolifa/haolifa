@@ -66,4 +66,17 @@
             and create_time &lt;= #{endDate}
         </if>
     </select>
+    <select id="costMaterialNotMJB" resultType="java.math.BigDecimal">
+        select
+        ifnull(sum(price*abs(quantity)),0)
+        from entry_out_store_record
+        where type=2 and operation_type=1
+        and material_graph_no not like '%M' and material_graph_no not like '%J' and material_graph_no not like '%B'
+        <if test="startDate!= null">
+            and create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and create_time &lt;= #{endDate}
+        </if>
+    </select>
 </mapper>
