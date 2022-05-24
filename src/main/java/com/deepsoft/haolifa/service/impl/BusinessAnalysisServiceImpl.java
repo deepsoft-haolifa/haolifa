@@ -5,14 +5,15 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.deepsoft.haolifa.dao.repository.BusinessAnalysisRecordMapper;
 import com.deepsoft.haolifa.dao.repository.extend.EntryOutRecordExtendMapper;
 import com.deepsoft.haolifa.dao.repository.extend.ExpensesExtendMapper;
 import com.deepsoft.haolifa.model.domain.BusinessAnalysisRecord;
 import com.deepsoft.haolifa.model.domain.BusinessAnalysisRecordExample;
 import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisDTO;
-import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisRespDTO;
 import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisPurchaseAmountDTO;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisRespDTO;
 import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisSaleAmountDTO;
 import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +55,6 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
 
     @Override
     public BusinessAnalysisRespDTO get(String year) {
-
         BusinessAnalysisRespDTO businessAnalysisRespDTO = new BusinessAnalysisRespDTO();
         BusinessAnalysisRecordExample example = new BusinessAnalysisRecordExample();
         BusinessAnalysisRecordExample.Criteria criteria = example.createCriteria();
@@ -69,6 +70,12 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         }
         BusinessAnalysisRecord businessAnalysisRecord = pageList.get(0);
         BeanUtil.copyProperties(businessAnalysisRecord, businessAnalysisRespDTO);
+
+        DecimalFormat df = new DecimalFormat("0.00%");
+        businessAnalysisRespDTO.setSalesProfitMargin(df.format(businessAnalysisRecord.getSalesProfitMargin()));
+        businessAnalysisRespDTO.setCostUtilization(df.format(businessAnalysisRecord.getCostUtilization()));
+        businessAnalysisRespDTO.setAssetLiabilityRatio(df.format(businessAnalysisRecord.getAssetLiabilityRatio()));
+
         return businessAnalysisRespDTO;
     }
 
@@ -109,7 +116,7 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         //费用合计=工资费用下的除各个事业部的工资以外的其它部门的工资总额+管理费用下的所有费用+财务费用下的所有费用+质量费用下的所有费用+销售费用下的所有费用+税金下的所有费用
         record.setCost(analysisDTO.getCost());
         record.setTotalExpenses(analysisDTO.getTotalExpenses());
-        record.setTotalProfit(analysisDTO.getYearSaleAmountDTO().getSaleAmount().subtract(analysisDTO.getCost()).subtract(analysisDTO.getTotalExpenses()));
+        record.setTotalProfit(analysisDTO.getYearSaleAmountDTO().getOutPutAmount().subtract(analysisDTO.getCost()).subtract(analysisDTO.getTotalExpenses()));
 
         // 各项费用支出总额=管理费用+销售费用+质量费用+财务费用+税金，这几大费用类别下的全部费用明细总额
         record.setVariousExpenses(analysisDTO.getMangeExpenseAmount().add(analysisDTO.getSaleExpenseAmount()).add(analysisDTO.getQualityExpenseAmount()).add(analysisDTO.getFinanceExpenseAmount()).add(analysisDTO.getTaxesExpenseAmount()));
@@ -150,19 +157,22 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         saleDto.setYear(year);
         BusinessAnalysisSaleAmountDTO yearSaleAmountDTO = reportExtendService.selectBusinessAnalysisForSale(saleDto);
         analysisDTO.setYearSaleAmountDTO(yearSaleAmountDTO);
-
+        log.info("当年销售单的费用:{}", JSONUtil.toJsonStr(yearSaleAmountDTO));
         saleDto = new ReportOrderConditionDTO();
         String monthPattern = DateUtil.format(new Date(), DatePattern.NORM_DATE_PATTERN);
         saleDto.setStartDate(monthPattern);
         saleDto.setEndDate(monthPattern);
         BusinessAnalysisSaleAmountDTO currentMonthSaleAmountDTO = reportExtendService.selectBusinessAnalysisForSale(saleDto);
         analysisDTO.setCurrentMonthSaleAmountDTO(currentMonthSaleAmountDTO);
+        log.info("当月销售单的费用:{}", JSONUtil.toJsonStr(currentMonthSaleAmountDTO));
 
         // 获取采购单相关数据
         ReportPurchaseConditionDTO purchaseDto = new ReportPurchaseConditionDTO();
         purchaseDto.setYear(year);
         BusinessAnalysisPurchaseAmountDTO yearPurchaseAmountDTO = reportExtendService.selectBusinessAnalysisForPurchase(purchaseDto);
         analysisDTO.setYearPurchaseAmountDTO(yearPurchaseAmountDTO);
+        log.info("当年采购单的费用:{}", JSONUtil.toJsonStr(yearPurchaseAmountDTO));
+
 
         // 获取成本费用
         analysisDTO.setCost(getCostAmount(year));
@@ -174,6 +184,7 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         analysisDTO.setBankBalanceAmount(expensesExtendMapper.bankBalance());
         analysisDTO.setCashBalanceAmount(expensesExtendMapper.cashBalance());
         analysisDTO.setOtherBalanceAmount(expensesExtendMapper.otherBalance());
+        log.info("现金日记账:{},银行日记账：{}，其他货币日记账：{}", analysisDTO.getCashBalanceAmount(), analysisDTO.getBankBalanceAmount(), analysisDTO.getOtherBalanceAmount());
     }
 
     /**
@@ -185,25 +196,29 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         expensesDTO.setClassifyName("采购费用");
         expensesDTO.setSecondClassifyName("运输费");
         BigDecimal amount1 = expensesExtendMapper.listSummary(expensesDTO);
+        log.info("成本费用-采购费用下的运费科目：{}", amount1);
 
         expensesDTO.setClassifyName("能耗费用");
         expensesDTO.setSecondClassifyName(null);
         BigDecimal amount2 = expensesExtendMapper.listSummary(expensesDTO);
-
+        log.info("成本费用-能耗费用下的所用费用：{}", amount2);
 
         expensesDTO.setClassifyName("生产费用");
         expensesDTO.setSecondClassifyName(null);
         expensesDTO.setSecondClassifyNameList(Stream.of("委托加工费", "维修费").collect(Collectors.toList()));
         BigDecimal amount3 = expensesExtendMapper.listSummary(expensesDTO);
+        log.info("成本费用-生产费用下的委托加费和维修费：{}", amount3);
 
         expensesDTO.setClassifyName("工资");
         expensesDTO.setSecondClassifyNameList(Stream.of("橡胶事业部", "装配事业部", "覆层事业部", "控制阀事业部", "机加事业部").collect(Collectors.toList()));
         BigDecimal amount4 = expensesExtendMapper.listSummary(expensesDTO);
+        log.info("成本费用-工资费用下的各个事业部的工资总额：{}", amount4);
 
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("startDate", CommonUtil.packYearMapParam(year));
         paramMap.put("endDate", CommonUtil.packYearMapParam(year));
         BigDecimal amount5 = entryOutRecordExtendMapper.costMaterialNotMJB(paramMap);
+        log.info("成本费用-出库的所有零件的总金额：{}", amount5);
 
         return amount1.add(amount2).add(amount3).add(amount4).add(amount5);
     }
@@ -217,26 +232,32 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         expensesDTO.setClassifyName("管理费用");
         BigDecimal amount1 = expensesExtendMapper.listSummary(expensesDTO);
         analysisDTO.setMangeExpenseAmount(amount1);
+        log.info("费用合计-管理费用下的所有费用：{}", amount1);
 
         expensesDTO.setClassifyName("财务费用");
         BigDecimal amount2 = expensesExtendMapper.listSummary(expensesDTO);
         analysisDTO.setFinanceExpenseAmount(amount2);
+        log.info("费用合计-财务费用下的所有费用：{}", amount2);
 
         expensesDTO.setClassifyName("质量费用");
         BigDecimal amount3 = expensesExtendMapper.listSummary(expensesDTO);
         analysisDTO.setQualityExpenseAmount(amount3);
+        log.info("费用合计-质量费用下的所有费用：{}", amount3);
 
         expensesDTO.setClassifyName("销售费用");
         BigDecimal amount4 = expensesExtendMapper.listSummary(expensesDTO);
         analysisDTO.setSaleExpenseAmount(amount4);
+        log.info("费用合计-销售费用下的所有费用：{}", amount4);
 
         expensesDTO.setClassifyName("税金");
         BigDecimal amount5 = expensesExtendMapper.listSummary(expensesDTO);
         analysisDTO.setTaxesExpenseAmount(amount5);
+        log.info("费用合计-税金下的所有费用：{}", amount5);
 
         expensesDTO.setClassifyName("工资");
         expensesDTO.setExcludeSecondClassifyNameList(Stream.of("橡胶事业部", "装配事业部", "覆层事业部", "控制阀事业部", "机加事业部").collect(Collectors.toList()));
         BigDecimal amount6 = expensesExtendMapper.listSummary(expensesDTO);
+        log.info("费用合计-工资下的所有费用：{}", amount6);
 
         return amount1.add(amount2).add(amount3).add(amount4).add(amount5).add(amount6);
     }

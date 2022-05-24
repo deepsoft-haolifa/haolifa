@@ -89,19 +89,19 @@ public class BusinessAnalysisRespDTO {
      * 资产负债率
      */
     @ApiModelProperty("资产负债率")
-    private BigDecimal assetLiabilityRatio;
+    private String assetLiabilityRatio;
 
     /**
      * 销售利润率
      */
     @ApiModelProperty("销售利润率")
-    private BigDecimal salesProfitMargin;
+    private String salesProfitMargin;
 
     /**
      * 成本费用利用率
      */
     @ApiModelProperty("成本费用利用率")
-    private BigDecimal costUtilization;
+    private String costUtilization;
 
     /**
      * 现金流量
