@@ -7,6 +7,7 @@ import lombok.Data;
 import org.apache.tomcat.util.bcel.Const;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -99,4 +100,7 @@ public class OrderProductDTO {
 
     @ApiModelProperty(value = "订单是否核料流程；1.走核料；0 不核料")
     private Byte isCheckMaterial;
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+
 }

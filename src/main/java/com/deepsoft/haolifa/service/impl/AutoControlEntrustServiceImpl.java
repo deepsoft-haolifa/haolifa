@@ -14,6 +14,7 @@ import com.deepsoft.haolifa.model.dto.autoControl.AutoControlInspectHistoryDto;
 import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.service.AutoControlEntrustService;
 import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -121,10 +122,11 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int saveInspect(AutoControlInspectDto autoControlInspectDto) {
+        AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(autoControlInspectDto.getAutoControlId());
         PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
         payOrderUserRelationProcedure.setOrderId(autoControlInspectDto.getNo());
         List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
-        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(entrust.getCreateTime())) {
             throw new BaseException(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
         }
         if (autoControlInspectDto.getTestNumber() == 0) {
@@ -150,7 +152,6 @@ public class AutoControlEntrustServiceImpl extends BaseService implements AutoCo
         if (!CollectionUtils.isEmpty(autoControlInspectDto.getAccessoryList())) {
             history.setAccessory(JSON.toJSONString(autoControlInspectDto.getAccessoryList()));
         }
-        AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(autoControlInspectDto.getAutoControlId());
         entrust.setQualifiedNumber(entrust.getQualifiedNumber() + autoControlInspectDto.getQualifiedNumber());
         if (entrust.getQty() < entrust.getQualifiedNumber()) {
             throw new BaseException(CommonEnum.ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.lang.management.ManagementFactory;
@@ -16,6 +17,7 @@ import java.util.List;
  *
  * @author ruoyi
  */
+@Slf4j
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils
 {
     public static String YYYY = "yyyy";
@@ -269,10 +271,26 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         return year;
     }
 
-    public static void main(String[] args) {
-        LocalDate localDate = LocalDate.now();
-        int value = localDate.getMonth().plus(1).getValue();
-        System.out.println(value);
+    /**
+     * 校验时间是否大于5/25日
+     * @param date
+     * @return
+     */
+    public static boolean checkTimeMoreThan26 (Date date) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date appointTime = dateFormat.parse("2022-05-25 23:59:59");
+            return date.after(appointTime);
+        } catch (ParseException e) {
+            log.info("checkTimeMoreThan26 exception:{}", e);
+            return false;
+        }
+    }
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date appointTime = dateFormat.parse("2022-05-26 23:59:59");
+        boolean b = checkTimeMoreThan26(appointTime);
+        System.out.println(b);
 
 
     }

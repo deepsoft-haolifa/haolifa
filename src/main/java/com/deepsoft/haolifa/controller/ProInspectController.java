@@ -16,6 +16,7 @@ import com.deepsoft.haolifa.service.OrderProductService;
 import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.service.ProInspectResultService;
 import com.deepsoft.haolifa.service.ProInspectService;
+import com.deepsoft.haolifa.util.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -42,14 +43,14 @@ public class ProInspectController {
     @ApiOperation("新增")
     @PostMapping("/save")
     public ResultBean save(@RequestBody ProInspectRecordDTO model) {
+        //根据订单号查询需要的成品数量
+        OrderProductDTO orderProductDTO = orderProductService.getOrderProductInfo(model.getOrderNo());
         PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
         payOrderUserRelationProcedure.setOrderId(model.getOrderNo());
         List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
-        if (CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+        if (CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(orderProductDTO.getCreateTime())) {
             return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
         }
-        //根据订单号查询需要的成品数量
-        OrderProductDTO orderProductDTO = orderProductService.getOrderProductInfo(model.getOrderNo());
         //订单产品列表
         List<OrderProductAssociate> orderProductAssociates = orderProductDTO.getOrderProductAssociates();
         //得到需要的数量

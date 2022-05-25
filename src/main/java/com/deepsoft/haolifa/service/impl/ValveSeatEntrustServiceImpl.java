@@ -15,6 +15,7 @@ import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.valveSeat.*;
 import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.service.ValveSeatEntrustService;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -121,10 +122,11 @@ public class ValveSeatEntrustServiceImpl extends BaseService implements ValveSea
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int saveInspect(ValveSeatInspectDto valveSeatInspectDto) {
+        ValveSeatEntrust entrust = valveSeatEntrustMapper.selectByPrimaryKey(valveSeatInspectDto.getValveSeatId());
         PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
         payOrderUserRelationProcedure.setOrderId(valveSeatInspectDto.getNo());
         List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
-        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(entrust.getCreateTime())) {
             throw new BaseException(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
         }
         if (valveSeatInspectDto.getTestNumber() == 0) {
@@ -150,7 +152,6 @@ public class ValveSeatEntrustServiceImpl extends BaseService implements ValveSea
         if (!CollectionUtils.isEmpty(valveSeatInspectDto.getAccessoryList())) {
             history.setAccessory(JSON.toJSONString(valveSeatInspectDto.getAccessoryList()));
         }
-        ValveSeatEntrust entrust = valveSeatEntrustMapper.selectByPrimaryKey(valveSeatInspectDto.getValveSeatId());
         entrust.setQualifiedNumber(entrust.getQualifiedNumber() + valveSeatInspectDto.getQualifiedNumber());
         if (entrust.getQty() < entrust.getQualifiedNumber()) {
             throw new BaseException(CommonEnum.ResponseEnum.ENTRUST_QUALIFIED_NUMBER_ERROR);
