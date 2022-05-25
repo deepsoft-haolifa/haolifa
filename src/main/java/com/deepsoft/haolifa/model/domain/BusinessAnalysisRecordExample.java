@@ -416,6 +416,66 @@ public class BusinessAnalysisRecordExample {
             return (Criteria) this;
         }
 
+        public Criteria andDuePayableIsNull() {
+            addCriterion("due_payable is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableIsNotNull() {
+            addCriterion("due_payable is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableEqualTo(BigDecimal value) {
+            addCriterion("due_payable =", value, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableNotEqualTo(BigDecimal value) {
+            addCriterion("due_payable <>", value, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableGreaterThan(BigDecimal value) {
+            addCriterion("due_payable >", value, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("due_payable >=", value, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableLessThan(BigDecimal value) {
+            addCriterion("due_payable <", value, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("due_payable <=", value, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableIn(List<BigDecimal> values) {
+            addCriterion("due_payable in", values, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableNotIn(List<BigDecimal> values) {
+            addCriterion("due_payable not in", values, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("due_payable between", value1, value2, "duePayable");
+            return (Criteria) this;
+        }
+
+        public Criteria andDuePayableNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("due_payable not between", value1, value2, "duePayable");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalOutputValueIsNull() {
             addCriterion("total_output_value is null");
             return (Criteria) this;
@@ -1196,6 +1256,66 @@ public class BusinessAnalysisRecordExample {
             return (Criteria) this;
         }
 
+        public Criteria andManufacturingCostRatioIsNull() {
+            addCriterion("manufacturing_cost_ratio is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioIsNotNull() {
+            addCriterion("manufacturing_cost_ratio is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioEqualTo(BigDecimal value) {
+            addCriterion("manufacturing_cost_ratio =", value, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioNotEqualTo(BigDecimal value) {
+            addCriterion("manufacturing_cost_ratio <>", value, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioGreaterThan(BigDecimal value) {
+            addCriterion("manufacturing_cost_ratio >", value, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("manufacturing_cost_ratio >=", value, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioLessThan(BigDecimal value) {
+            addCriterion("manufacturing_cost_ratio <", value, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("manufacturing_cost_ratio <=", value, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioIn(List<BigDecimal> values) {
+            addCriterion("manufacturing_cost_ratio in", values, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioNotIn(List<BigDecimal> values) {
+            addCriterion("manufacturing_cost_ratio not in", values, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("manufacturing_cost_ratio between", value1, value2, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManufacturingCostRatioNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("manufacturing_cost_ratio not between", value1, value2, "manufacturingCostRatio");
+            return (Criteria) this;
+        }
+
         public Criteria andManageCostIsNull() {
             addCriterion("manage_cost is null");
             return (Criteria) this;
@@ -1253,6 +1373,66 @@ public class BusinessAnalysisRecordExample {
 
         public Criteria andManageCostNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("manage_cost not between", value1, value2, "manageCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioIsNull() {
+            addCriterion("manage_cost_ratio is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioIsNotNull() {
+            addCriterion("manage_cost_ratio is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioEqualTo(BigDecimal value) {
+            addCriterion("manage_cost_ratio =", value, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioNotEqualTo(BigDecimal value) {
+            addCriterion("manage_cost_ratio <>", value, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioGreaterThan(BigDecimal value) {
+            addCriterion("manage_cost_ratio >", value, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("manage_cost_ratio >=", value, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioLessThan(BigDecimal value) {
+            addCriterion("manage_cost_ratio <", value, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("manage_cost_ratio <=", value, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioIn(List<BigDecimal> values) {
+            addCriterion("manage_cost_ratio in", values, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioNotIn(List<BigDecimal> values) {
+            addCriterion("manage_cost_ratio not in", values, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("manage_cost_ratio between", value1, value2, "manageCostRatio");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageCostRatioNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("manage_cost_ratio not between", value1, value2, "manageCostRatio");
             return (Criteria) this;
         }
 

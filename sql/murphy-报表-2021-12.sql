@@ -222,6 +222,7 @@ CREATE TABLE `business_analysis_record`
     `total_accounts_receivable`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '应收账款总额',
     `due_receivable`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '到期应收',
     `total_accounts_payable`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '应付账款总额',
+    `due_payable`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '到期应付',
     `total_output_value`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '产值总额',
     `current_month_output_value`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '当月产值',
     `total_order`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '订货总额',
@@ -235,7 +236,9 @@ CREATE TABLE `business_analysis_record`
     `cost_utilization`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '成本费用利用率',
     `cash_flow`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '现金流量',
     `manufacturing_cost`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '制造成本',
+    `manufacturing_cost_ratio`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '制造成本占比',
     `manage_cost`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '管理成本',
+    `manage_cost_ratio`  decimal(12,4)  NOT NULL DEFAULT '0.0000' COMMENT '管理成本占比',
     `create_time`         timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`         timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE

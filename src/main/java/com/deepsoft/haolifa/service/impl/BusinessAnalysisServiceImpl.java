@@ -75,7 +75,8 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         businessAnalysisRespDTO.setSalesProfitMargin(df.format(businessAnalysisRecord.getSalesProfitMargin()));
         businessAnalysisRespDTO.setCostUtilization(df.format(businessAnalysisRecord.getCostUtilization()));
         businessAnalysisRespDTO.setAssetLiabilityRatio(df.format(businessAnalysisRecord.getAssetLiabilityRatio()));
-
+        businessAnalysisRespDTO.setManufacturingCostRatio(df.format(businessAnalysisRecord.getManufacturingCostRatio()));
+        businessAnalysisRespDTO.setManageCostRatio(df.format(businessAnalysisRecord.getManageCostRatio()));
         return businessAnalysisRespDTO;
     }
 
@@ -135,13 +136,16 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         // 现金流量(现金日记账+银行日记账+其它货币日记账的余额总和)
         record.setCashFlow(analysisDTO.getBankBalanceAmount().add(analysisDTO.getCashBalanceAmount()).add(analysisDTO.getOtherBalanceAmount()));
 
-        // 制造成本占比(制造成本/产值总额)
-        // 管理成本占比（管理成本/产值总额）
         if (record.getTotalOutputValue().compareTo(BigDecimal.ZERO) > 0) {
-            record.setManufacturingCost(record.getCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
-            record.setManageCost(record.getTotalExpenses().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
+            record.setManufacturingCost(record.getCost());
+            record.setManageCost(record.getTotalExpenses());
+            // 制造成本/产值总额 = 制造占比
+            record.setManufacturingCostRatio(record.getManufacturingCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
+            // 管理成本/产值总额 = 管理占比
+            record.setManageCostRatio(record.getManageCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
         }
-        businessAnalysisRecordMapper.insertSelective(record);
+
+       businessAnalysisRecordMapper.insertSelective(record);
 
     }
 

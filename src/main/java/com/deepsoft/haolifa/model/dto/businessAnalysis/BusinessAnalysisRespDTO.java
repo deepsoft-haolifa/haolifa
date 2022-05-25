@@ -36,6 +36,11 @@ public class BusinessAnalysisRespDTO {
      */
     @ApiModelProperty("应付账款总额")
     private BigDecimal totalAccountsPayable;
+    /**
+     * 到期应收
+     */
+    @ApiModelProperty("到期应付")
+    private BigDecimal duePayable;
 
     /**
      * 产值总额
@@ -116,10 +121,22 @@ public class BusinessAnalysisRespDTO {
     private BigDecimal manufacturingCost;
 
     /**
+     * 制造成本占比
+     */
+    @ApiModelProperty("制造成本占比")
+    private String manufacturingCostRatio;
+
+    /**
      * 管理成本
      */
     @ApiModelProperty("管理成本")
     private BigDecimal manageCost;
+
+    /**
+     * 管理成本
+     */
+    @ApiModelProperty("管理成本占比")
+    private String manageCostRatio;
 
     /**
      * 创建时间
