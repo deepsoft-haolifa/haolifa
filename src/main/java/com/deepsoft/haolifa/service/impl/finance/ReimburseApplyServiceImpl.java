@@ -118,6 +118,17 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
             }
             totalAmount = totalAmount.subtract(model.getOffsetAmount());
+        }else if (StringUtils.equalsIgnoreCase("1", model.getReimburseType())){
+            totalAmount =  model.getReimburseTravelDetailAddDTOList()
+                .stream()
+                .map(o->{
+                    BigDecimal projectAmount = o.getProjectAmount();
+                    BigDecimal travelSubsidyAmount = o.getTravelSubsidyAmount().multiply(BigDecimal.valueOf(o.getTravelDays()));
+                    BigDecimal vehicleAmount = o.getVehicleAmount();
+                    BigDecimal add = projectAmount.add(travelSubsidyAmount).add(vehicleAmount);
+                    return add;
+                })
+                .reduce(BigDecimal.ZERO,BigDecimal::add);
         }
 
         // 1 添加主数据
@@ -402,10 +413,11 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode());
             });
 
+
         // 借款审批列表
         if (StringUtils.equalsIgnoreCase("1", model.getMyself()) && !lookAll) {
             criteria.andCreateUserEqualTo(sysUserService.selectLoginUser().getId());
-        } else {
+        } else if (!StringUtils.equalsIgnoreCase("1", model.getMyself())){
             criteria.andApplyStatusEqualTo(ReimburseApplyStatusEnum.IN_PAYMENT.getCode());
         }
 
@@ -575,10 +587,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             //
             Integer loanId = bizReimburseApplyS.getLoanId();
             BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(loanId);
-
             BigDecimal paymentAmount = bizLoanApply.getPaymentAmount() == null ? BigDecimal.ZERO : bizLoanApply.getPaymentAmount();
             BigDecimal addAmount = bizReimburseApplyS.getOffsetAmount().add(paymentAmount);
-
             if (addAmount.compareTo(bizLoanApply.getAmount()) > 0) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
             }
@@ -591,9 +601,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             BizLoanApply bizLoanApplyUp = buildBizLoanApply(bizLoanApply, addAmount);
             bizLoanApplyMapper.updateByPrimaryKeySelective(bizLoanApplyUp);
 
-            // 增加-银行日记账
-            BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizReimburseApplyS);
-            bankBillService.save(bizBankBillAddDTO);
+
         }
 
         BizReimburseApply apply = buildBizReimburseApply(payDTO);
@@ -638,6 +646,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             // 财务管理->费用管理
             ExpensesDTO expensesDTO = buildExpensesDTO(bizReimburseApplyS, customUser);
             expensesService.save(expensesDTO);
+        } else {
+            // 增加-银行日记账
+            BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizReimburseApplyS);
+            bankBillService.save(bizBankBillAddDTO);
         }
 
         return ResultBean.success(update);
@@ -720,7 +732,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         bizBankBill.setOperateDate(new Date());
         bizBankBill.setPayWay(PayWayEnum.cash_pay.getDesc());
         bizBankBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
-        bizBankBill.setCollectionMoney(bizReimburseApplyS.getOffsetAmount());
+        // 负数的绝对值
+        bizBankBill.setCollectionMoney(bizReimburseApplyS.getAmount().abs());
         bizBankBill.setRemark("报销冲抵");
 //        bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
 //        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());

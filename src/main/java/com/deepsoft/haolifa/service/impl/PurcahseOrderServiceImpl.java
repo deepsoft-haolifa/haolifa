@@ -93,6 +93,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
     @Autowired
     private MaterialService materialService;
 
+    @Autowired
+    private InvoiceMapper invoiceMapper;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean save(PurchaseOrderDTO model, Integer orderType) {
@@ -331,9 +334,38 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         }
         Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(pageNum, pageSize, "create_time desc")
             .doSelectPage(() -> purchaseOrderMapper.selectByExample(purchaseOrderExample));
+
+        List<String> purchaseOrderNoList = purchaseOrderList.getResult().stream()
+            .map(PurchaseOrder::getPurchaseOrderNo)
+            .collect(Collectors.toList());
+        Map<String, BigDecimal> invoiceMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(purchaseOrderNoList)){
+            InvoiceExample invoiceExample = new InvoiceExample();
+            InvoiceExample.Criteria invoiceExampleCriteria = invoiceExample.createCriteria();
+
+            invoiceExampleCriteria.andOrderNoIn(purchaseOrderNoList);
+            //  `type` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '类型：1 开出（生产） 2 开入（采购）',
+            //  `status` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '状态：待开票 1 2 已开票',
+            invoiceExampleCriteria.andTypeEqualTo(Byte.valueOf("2"));
+            invoiceExampleCriteria.andStatusEqualTo(Byte.valueOf("2"));
+
+            List<Invoice> invoiceList = invoiceMapper.selectByExample(invoiceExample);
+            invoiceMap = invoiceList.stream()
+                .collect(Collectors.toMap(Invoice::getOrderNo, Invoice::getTotalAmount, (a, b) -> a));
+        }
+
+        Map<String, BigDecimal> finalInvoiceMap = invoiceMap;
+        List<PurchaseOrder> purchaseOrderList1 = purchaseOrderList.getResult().stream()
+            .map(purchaseOrder -> {
+                BigDecimal orDefault = finalInvoiceMap.getOrDefault(purchaseOrder.getPurchaseOrderNo(), BigDecimal.ZERO);
+                purchaseOrder.setInvoiceAccount(orDefault);
+                return purchaseOrder;
+            })
+            .collect(Collectors.toList());
+
         purchaseOrderPageDTO = new PageDTO<>();
         BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
-        purchaseOrderPageDTO.setList(purchaseOrderList.getResult());
+        purchaseOrderPageDTO.setList(purchaseOrderList1);
         return ResultBean.success(purchaseOrderPageDTO);
     }
 

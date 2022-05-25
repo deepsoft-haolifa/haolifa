@@ -62,6 +62,7 @@ public class BillServiceImpl implements BillService {
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
         // 设置上月结转
+        assert lastRecord != null;
         bizBill.setPreMonthMoney(lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
 
         // 收款，上次余额 + 本次收款
@@ -97,6 +98,25 @@ public class BillServiceImpl implements BillService {
             //subjectBalanceService.decreaseAmountBatch(model.getCollectionMoney());
         }
 
+        return ResultBean.success(insertId);
+    }
+
+    @Override
+    public ResultBean savePreMonthMoney() {
+
+        BizBill bizBill = new BizBill();
+        // 设置余额 start
+        // 查找最新一条记录的余额
+        BizBill lastRecord = bizBillMapper.getLastRecord();
+        BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
+            ? BigDecimal.ZERO : lastRecord.getBalance();
+        // 设置上月结转
+        bizBill.setPreMonthMoney(lastBalance);
+        bizBill.setBalance(lastBalance);
+        bizBill.setRemark(DateUtils.getDate()+"月结");
+        bizBill.setCreateTime(new Date());
+        bizBill.setUpdateTime(new Date());
+        int insertId = bizBillMapper.insertSelective(bizBill);
         return ResultBean.success(insertId);
     }
 

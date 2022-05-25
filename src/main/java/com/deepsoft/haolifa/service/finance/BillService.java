@@ -17,6 +17,9 @@ public interface BillService {
     ResultBean save(BizBillAddDTO model);
 
 
+    public ResultBean savePreMonthMoney();
+
+
     /**
      * 删除
      * @param id

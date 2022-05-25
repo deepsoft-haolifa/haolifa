@@ -2,10 +2,13 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.BizBankBillMapper;
+import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.domain.BizBankBillExample;
 import com.deepsoft.haolifa.model.domain.BizBill;
+import com.deepsoft.haolifa.model.domain.SysDict;
 import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -15,9 +18,11 @@ import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
+import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +34,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -106,6 +112,40 @@ public class BankBillServiceImpl implements BankBillService {
         }
 
         return ResultBean.success(insertId);
+    }
+
+    @Autowired
+    private SysDictService sysDictService;
+
+    @Override
+    public ResultBean savePreMonthMoney() {
+
+        BizBankBill bizBankBill = new BizBankBill();
+        // 设置公司和账户，用来统计余额
+        List<String> stringList = sysDictService.getSysDictByTypeCode(DictEnum.PAY_ACCOUNT.getCode()).stream()
+            .map(SysDict::getName)
+            .collect(Collectors.toList());
+
+        String companyQuery = Constant.company;
+        for (String accountQuery :stringList){
+            // 设置余额 start
+            // 查找最新一条记录的余额
+            BizBankBill lastRecord = bizBankBillMapper.getLastRecord(companyQuery, accountQuery);
+            BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
+                ? BigDecimal.ZERO : lastRecord.getBalance();
+
+            bizBankBill.setCompany(companyQuery);
+            bizBankBill.setAccount(accountQuery);
+            // 设置上月结转
+            bizBankBill.setPreMonthMoney(lastBalance);
+            bizBankBill.setBalance(lastBalance);
+            bizBankBill.setRemark(DateUtils.getDate()+"月结");
+            bizBankBill.setCreateTime(new Date());
+            bizBankBill.setUpdateTime(new Date());
+            int insertId = bizBankBillMapper.insertSelective(bizBankBill);
+        }
+
+        return ResultBean.success(1);
     }
 
     @Override

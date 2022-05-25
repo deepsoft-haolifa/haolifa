@@ -24,6 +24,7 @@ public interface OtherBillService {
      */
     ResultBean delete(Integer id);
 
+    public ResultBean savePreMonthMoney();
     /**
      * 更新
      *

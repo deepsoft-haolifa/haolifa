@@ -15,7 +15,7 @@ public interface BankBillService {
      */
     ResultBean save(BizBankBillAddDTO model);
 
-
+    public ResultBean savePreMonthMoney();
     /**
      * 删除
      *

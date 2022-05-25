@@ -399,4 +399,12 @@ public class PurchaseOrder {
     public void setQualifiedNumber(Integer qualifiedNumber) {
         this.qualifiedNumber = qualifiedNumber;
     }
+
+    public BigDecimal getInvoiceAccount() {
+        return invoiceAccount;
+    }
+
+    public void setInvoiceAccount(BigDecimal invoiceAccount) {
+        this.invoiceAccount = invoiceAccount;
+    }
 }
