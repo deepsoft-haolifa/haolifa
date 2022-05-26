@@ -76,7 +76,7 @@ public class BankBillServiceImpl implements BankBillService {
             ? BigDecimal.ZERO : lastRecord.getBalance();
 
         // 设置上月结转
-        bizBankBill.setPreMonthMoney(lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
+        bizBankBill.setPreMonthMoney(lastRecord == null || lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
 
         // 收款，上次余额 + 本次收款
         if (bizBankBill.getType().equals("1")) {
@@ -134,8 +134,15 @@ public class BankBillServiceImpl implements BankBillService {
             BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
                 ? BigDecimal.ZERO : lastRecord.getBalance();
 
+            // `pay_account` varchar(64) DEFAULT '' COMMENT '收付款账户',
+            //  `pay_company` varchar(64) DEFAULT '' COMMENT '付款单位',
+            //  `collect_company` varchar(64) DEFAULT '' COMMENT '收款单位',
             bizBankBill.setCompany(companyQuery);
             bizBankBill.setAccount(accountQuery);
+            bizBankBill.setPayAccount(accountQuery);
+            bizBankBill.setPayCompany(companyQuery);
+            bizBankBill.setCollectCompany(companyQuery);
+            bizBankBill.setOperateDate(new Date());
             // 设置上月结转
             bizBankBill.setPreMonthMoney(lastBalance);
             bizBankBill.setBalance(lastBalance);

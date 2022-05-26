@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Pair;
+import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -27,6 +28,7 @@ import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.*;
+import com.deepsoft.haolifa.util.BigDecimalUtils;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -109,7 +111,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (StringUtils.equalsIgnoreCase("2", model.getReimburseType())) {
             //
             BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(model.getLoanId());
-
             // 已经还款金额
             BigDecimal paymentAmount = bizLoanApply.getPaymentAmount() == null ? BigDecimal.ZERO : bizLoanApply.getPaymentAmount();
             BigDecimal addAmount = model.getOffsetAmount().add(paymentAmount);
@@ -118,17 +119,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
             }
             totalAmount = totalAmount.subtract(model.getOffsetAmount());
-        }else if (StringUtils.equalsIgnoreCase("1", model.getReimburseType())){
-            totalAmount =  model.getReimburseTravelDetailAddDTOList()
-                .stream()
-                .map(o->{
-                    BigDecimal projectAmount = o.getProjectAmount();
-                    BigDecimal travelSubsidyAmount = o.getTravelSubsidyAmount().multiply(BigDecimal.valueOf(o.getTravelDays()));
-                    BigDecimal vehicleAmount = o.getVehicleAmount();
-                    BigDecimal add = projectAmount.add(travelSubsidyAmount).add(vehicleAmount);
-                    return add;
-                })
-                .reduce(BigDecimal.ZERO,BigDecimal::add);
         }
 
         // 1 添加主数据
@@ -223,9 +213,16 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         switch (reimburseTypeEnum) {
             case travle: {
                 if (CollectionUtil.isNotEmpty(model.getReimburseTravelDetailAddDTOList())) {
-                    totalAmount = model.getReimburseTravelDetailAddDTOList().stream()
-                        .map(ReimburseTravelDetailAddDTO::getProjectAmount)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    totalAmount =  model.getReimburseTravelDetailAddDTOList()
+                        .stream()
+                        .map(o->{
+                            BigDecimal projectAmount = o.getProjectAmount();
+                            BigDecimal travelSubsidyAmount = o.getTravelSubsidyAmount().multiply(BigDecimal.valueOf(o.getTravelDays()));
+                            BigDecimal vehicleAmount = o.getVehicleAmount();
+                            BigDecimal add = projectAmount.add(travelSubsidyAmount).add(vehicleAmount);
+                            return add;
+                        })
+                        .reduce(BigDecimal.ZERO,BigDecimal::add);
                 }
                 break;
             }
@@ -238,6 +235,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 break;
             }
         }
+
+
+
+
         return totalAmount;
     }
 
@@ -608,7 +609,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         int update = bizReimburseApplyMapper.updateByPrimaryKeySelective(apply);
 
         // 扣除余额
-        if (BigDecimal.ZERO.compareTo(bizReimburseApplyS.getAmount()) > 0){
+        if (bizReimburseApplyS.getAmount().compareTo(BigDecimal.ZERO) > 0){
 
             // 扣除记账（1現金 2銀行 3 其他貨幣）
             if (StringUtils.equalsIgnoreCase("1", payDTO.getBillNature())) {
@@ -653,6 +654,15 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         }
 
         return ResultBean.success(update);
+    }
+
+    public static void main(String[] args) {
+        int s =  BigDecimal.ZERO.compareTo(BigDecimal.valueOf(300));
+
+        int i = BigDecimalUtils.compareTo(BigDecimal.ZERO, BigDecimal.valueOf(300));
+
+        System.out.println(s);
+        System.out.println(i);
     }
 
     private BizBankBillAddDTO buildBizBankBillAddDTO(ReimburseApplyPayDTO payDTO, BigDecimal applySAmount) {
@@ -703,7 +713,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         expensesDTO.setExpensesClassify("采购费用");
         expensesDTO.setSecondClassify("其他");
         expensesDTO.setVoucherNo(bizReimburseApplyS.getSerialNo());
-        expensesDTO.setTotalAmount(bizReimburseApplyS.getAmount());
+        expensesDTO.setTotalAmount(bizReimburseApplyS.getAmount().divide(BigDecimal.ONE,2));
         expensesDTO.setCommitUser(customUser.getRealName());
         expensesDTO.setDepartment(sysDepartment.getDeptName());
         expensesDTO.setSummary(bizReimburseApplyS.getRemark());

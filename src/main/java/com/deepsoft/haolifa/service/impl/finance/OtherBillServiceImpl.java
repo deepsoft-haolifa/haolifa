@@ -66,7 +66,7 @@ public class OtherBillServiceImpl implements OtherBillService {
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
         // 设置上月结转
-        billOther.setPreMonthMoney(lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
+        billOther.setPreMonthMoney(lastRecord == null || lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
 
         // 收款，上次余额 + 本次收款
         if (billOther.getType().equals("1")) {
@@ -115,6 +115,11 @@ public class OtherBillServiceImpl implements OtherBillService {
 
             billOther.setCompany(companyQuery);
             billOther.setAccount(accountQuery);
+            billOther.setAccount(accountQuery);
+            billOther.setPayAccount(accountQuery);
+            billOther.setPayCompany(companyQuery);
+            billOther.setCollectCompany(companyQuery);
+            billOther.setOperateDate(new Date());
             // 设置上月结转
             billOther.setPreMonthMoney(lastBalance);
             billOther.setBalance(lastBalance);

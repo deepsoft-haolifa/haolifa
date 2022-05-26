@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
+import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.BizBillMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.model.domain.*;
@@ -62,8 +63,7 @@ public class BillServiceImpl implements BillService {
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
         // 设置上月结转
-        assert lastRecord != null;
-        bizBill.setPreMonthMoney(lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
+        bizBill.setPreMonthMoney(lastRecord == null || lastRecord.getPreMonthMoney() == null ? BigDecimal.ZERO : lastRecord.getPreMonthMoney());
 
         // 收款，上次余额 + 本次收款
         if (StringUtils.isNotEmpty(bizBill.getCollectionType())) {
@@ -110,6 +110,10 @@ public class BillServiceImpl implements BillService {
         BizBill lastRecord = bizBillMapper.getLastRecord();
         BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
             ? BigDecimal.ZERO : lastRecord.getBalance();
+
+        bizBill.setD(new Date());
+        bizBill.setString1(Constant.company);
+        bizBill.setString1(Constant.company);
         // 设置上月结转
         bizBill.setPreMonthMoney(lastBalance);
         bizBill.setBalance(lastBalance);
