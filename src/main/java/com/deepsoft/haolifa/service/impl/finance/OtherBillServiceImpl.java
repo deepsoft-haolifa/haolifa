@@ -112,7 +112,7 @@ public class OtherBillServiceImpl implements OtherBillService {
             BizOtherBill lastRecord = bizOtherBillMapper.getLastRecord(companyQuery, accountQuery);
             BigDecimal lastBalance = lastRecord == null || lastRecord.getBalance() == null
                 ? BigDecimal.ZERO : lastRecord.getBalance();
-
+            billOther.setType("1");
             billOther.setCompany(companyQuery);
             billOther.setAccount(accountQuery);
             billOther.setAccount(accountQuery);

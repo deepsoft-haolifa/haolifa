@@ -594,15 +594,13 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
             }
 
+            // 还款操作
             // 流水
             BizPaymentHistory paymentHistory = buildBizPaymentHistory(bizReimburseApplyS, bizLoanApply);
             bizPaymentHistoryMapper.insertSelective(paymentHistory);
-
             // 借款
             BizLoanApply bizLoanApplyUp = buildBizLoanApply(bizLoanApply, addAmount);
             bizLoanApplyMapper.updateByPrimaryKeySelective(bizLoanApplyUp);
-
-
         }
 
         BizReimburseApply apply = buildBizReimburseApply(payDTO);

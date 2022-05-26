@@ -137,6 +137,7 @@ public class BankBillServiceImpl implements BankBillService {
             // `pay_account` varchar(64) DEFAULT '' COMMENT '收付款账户',
             //  `pay_company` varchar(64) DEFAULT '' COMMENT '付款单位',
             //  `collect_company` varchar(64) DEFAULT '' COMMENT '收款单位',
+            bizBankBill.setType("1");
             bizBankBill.setCompany(companyQuery);
             bizBankBill.setAccount(accountQuery);
             bizBankBill.setPayAccount(accountQuery);
