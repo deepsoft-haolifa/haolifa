@@ -21,7 +21,7 @@ public class BusinessAnalysisTask {
     /**
      * 计算期初库存数据
      */
-//    @Scheduled(cron = "0 0 0/2 * * ?")
+    @Scheduled(cron = "0 0 0/2 * * ?")
     public void task() {
         String task = distributedLocker.lock("BusinessAnalysisTask", 100);
         if (!StringUtils.isEmpty(task)) {

@@ -134,7 +134,7 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         }
 
         // 现金流量(现金日记账+银行日记账+其它货币日记账的余额总和)
-        record.setCashFlow(analysisDTO.getBankBalanceAmount().add(analysisDTO.getCashBalanceAmount()).add(analysisDTO.getOtherBalanceAmount()));
+        record.setCashFlow(null != analysisDTO.getBankBalanceAmount() ? analysisDTO.getBankBalanceAmount() : BigDecimal.ZERO.add(analysisDTO.getCashBalanceAmount()).add(analysisDTO.getOtherBalanceAmount()));
 
         if (record.getTotalOutputValue().compareTo(BigDecimal.ZERO) > 0) {
             record.setManufacturingCost(record.getCost());
@@ -145,7 +145,7 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
             record.setManageCostRatio(record.getManageCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
         }
 
-       businessAnalysisRecordMapper.insertSelective(record);
+        businessAnalysisRecordMapper.insertSelective(record);
 
     }
 
@@ -218,9 +218,7 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         BigDecimal amount4 = expensesExtendMapper.listSummary(expensesDTO);
         log.info("成本费用-工资费用下的各个事业部的工资总额：{}", amount4);
 
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("startDate", CommonUtil.packYearMapParam(year));
-        paramMap.put("endDate", CommonUtil.packYearMapParam(year));
+        Map<String, Object> paramMap = CommonUtil.packYearMapParam(year);
         BigDecimal amount5 = entryOutRecordExtendMapper.costMaterialNotMJB(paramMap);
         log.info("成本费用-出库的所有零件的总金额：{}", amount5);
 

@@ -82,36 +82,11 @@
         </where>
         group by demand_name
     </select>
-    <select id="selectContractByDemandNameMonth" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
-        select ifnull(sum(`total_price`),0) total_price,demand_name from
-        order_product
-        <where>
-            <if test="startDate!=null and startDate != ''">
-                and create_time&gt;=#{startDate}
-            </if>
-            <if test="endDate!=null and endDate != ''">
-                and create_time&lt;=#{endDate}
-            </if>
-        </where>
-        group by demand_name
-    </select>
     <select id="selectshouhuiContractByDemandName" resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
         SELECT
         ifnull(sum( pm.amount ),0) total_price,
         demand_name,
         FROM_UNIXTIME( UNIX_TIMESTAMP( pm.create_time ), "%Y" ) year
-        FROM
-        order_product op
-        LEFT JOIN biz_bill_contract pm ON pm.order_no = op.order_no
-        <include refid="saleCollectionSql"/>
-        group by op.demand_name
-    </select>
-
-    <select id="selectshouhuiContractByDemandNameMonth"
-            resultType="com.deepsoft.haolifa.model.dto.export.ExportContractDTO">
-        SELECT
-        ifnull(sum(pm.amount),0) total_price,
-        demand_name
         FROM
         order_product op
         LEFT JOIN biz_bill_contract pm ON pm.order_no = op.order_no

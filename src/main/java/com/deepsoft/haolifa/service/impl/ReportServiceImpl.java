@@ -76,8 +76,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
             Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
             model.setStartDate(MapUtil.getStr(param, "startDate"));
             model.setEndDate(MapUtil.getStr(param, "endDate"));
-        }
-        if (StrUtil.isNotBlank(model.getMonth()) && StrUtil.isNotBlank(model.getYear())) {
+        } else if (StrUtil.isNotBlank(model.getMonth()) && StrUtil.isNotBlank(model.getYear())) {
             String yearMonth = String.format("%s-%s", model.getYear(), model.getMonth());
             model.setStartDate(CommonUtil.packYearMonthMapParamStart(yearMonth));
             model.setEndDate(CommonUtil.packYearMonthMapParamEnd(yearMonth));
@@ -184,7 +183,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(baseDTO.getStartDate()));
         paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(baseDTO.getEndDate()));
-        return saleReportMapper.selectContractByDemandNameMonth(paramMap);
+        return saleReportMapper.selectContractByDemandName(paramMap);
     }
 
     @Override
@@ -230,7 +229,7 @@ public class ReportServiceImpl extends BaseService implements ReportService {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(baseDTO.getStartDate()));
         paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(baseDTO.getEndDate()));
-        return saleReportMapper.selectshouhuiContractByDemandNameMonth(paramMap);
+        return saleReportMapper.selectshouhuiContractByDemandName(paramMap);
     }
 
     @Override
@@ -446,13 +445,14 @@ public class ReportServiceImpl extends BaseService implements ReportService {
             Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
             model.setStartDate(MapUtil.getStr(param, "startDate"));
             model.setEndDate(MapUtil.getStr(param, "endDate"));
-        }
-        //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
-        if (null != model.getStartDate()) {
-            model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
-        }
-        if (null != model.getEndDate()) {
-            model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+        } else {
+            //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
+            if (null != model.getStartDate()) {
+                model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
+            }
+            if (null != model.getEndDate()) {
+                model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+            }
         }
     }
 }

@@ -151,13 +151,14 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
             Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
             model.setStartDate(MapUtil.getStr(param, "startDate"));
             model.setEndDate(MapUtil.getStr(param, "endDate"));
-        }
-        //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
-        if (null != model.getStartDate()) {
-            model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
-        }
-        if (null != model.getEndDate()) {
-            model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+        } else {
+            //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
+            if (null != model.getStartDate()) {
+                model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
+            }
+            if (null != model.getEndDate()) {
+                model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+            }
         }
     }
 
@@ -167,13 +168,14 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
             Map<String, Object> param = CommonUtil.packYearMapParam(model.getYear());
             model.setStartDate(MapUtil.getStr(param, "startDate"));
             model.setEndDate(MapUtil.getStr(param, "endDate"));
-        }
-        //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
-        if (null != model.getStartDate()) {
-            model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
-        }
-        if (null != model.getEndDate()) {
-            model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+        } else {
+            //如果传入2021-09 ，则查2021-08-26 至 2021-09-25
+            if (null != model.getStartDate()) {
+                model.setStartDate(CommonUtil.packYearMonthMapParamStart(model.getStartDate()));
+            }
+            if (null != model.getEndDate()) {
+                model.setEndDate(CommonUtil.packYearMonthMapParamEnd(model.getEndDate()));
+            }
         }
     }
 }
