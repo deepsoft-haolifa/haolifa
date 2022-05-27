@@ -265,7 +265,7 @@ public class CommonEnum {
         SUPPLIER_TYPE((byte) 5, "供应商审批"),
         PAYAPP_TYPE((byte) 10, "付款申请审批"),
         REIMBURSE_APP_TYPE((byte) 11, "报销申请审批"),
-        LOAN_APP_TYPE((byte) 11, "借款申请审批"),
+        LOAN_APP_TYPE((byte) 12, "借款申请审批"),
         ;
 
 

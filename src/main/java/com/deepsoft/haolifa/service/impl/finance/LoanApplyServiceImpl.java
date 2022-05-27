@@ -348,7 +348,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.un_pay.getCode())
                 || StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.partial_pay.getCode())
         );
-
+        // canPay = true;
         loanApplyRSDTO.setCanPay(canPay);
         return loanApplyRSDTO;
     }

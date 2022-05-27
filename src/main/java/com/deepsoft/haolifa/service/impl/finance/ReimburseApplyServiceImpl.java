@@ -515,6 +515,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                     StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.un_pay.getCode())
                         || StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.partial_pay.getCode())
                 );
+                // canPay = true;
                 reimburseApplyRSDTO.setCanPay(canPay);
                 return reimburseApplyRSDTO;
             })
