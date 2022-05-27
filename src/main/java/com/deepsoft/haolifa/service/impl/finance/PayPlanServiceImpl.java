@@ -15,6 +15,7 @@ import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
+import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
@@ -76,6 +77,8 @@ public class PayPlanServiceImpl implements PayPlanService {
     private SubjectBalanceService subjectBalanceService;
     @Autowired
     private ExpensesService expensesService;
+    @Autowired
+    private DepartmentService departmentService;
 
     @Override
     public ResultBean save(BizPayPlanAddDTO model) {
@@ -221,13 +224,15 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         //
         ExpensesDTO expensesDTO = new ExpensesDTO();
-        expensesDTO.setExpensesClassify("采购费用");
+        expensesDTO.setExpensesClassify("材料费");
         expensesDTO.setSecondClassify("其他");
         expensesDTO.setVoucherNo(bizPayPlan.getApplyNo());
         expensesDTO.setTotalAmount(bizPayPlan.getApplyAmount());
-        expensesDTO.setCommitUser(customUser.getRealName());
-//        expensesDTO.setDepartment();
-        expensesDTO.setRemark(bizPayPlan.getRemark());
+        SysUser sysUser = sysUserService.getSysUser(bizPayPlan.getCreateUser());
+        expensesDTO.setCommitUser(sysUser.getRealName());
+        DepartmentDTO departmentDTO = departmentService.selectDepartmentById(sysUser.getDepartId());
+        expensesDTO.setDepartment(departmentDTO.getDeptName());
+        expensesDTO.setRemark("收款单位："+bizPayPlan.getApplyCollectionCompany());
         expensesDTO.setDataDate(DateUtils.getDate());
         expensesService.save(expensesDTO);
 

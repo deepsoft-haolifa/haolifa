@@ -23,10 +23,7 @@ import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostD
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
-import com.deepsoft.haolifa.service.ExpensesService;
-import com.deepsoft.haolifa.service.FlowInstanceService;
-import com.deepsoft.haolifa.service.SysDictService;
-import com.deepsoft.haolifa.service.SysUserService;
+import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.service.finance.*;
 import com.deepsoft.haolifa.util.BigDecimalUtils;
 import com.deepsoft.haolifa.util.DateUtils;
@@ -58,6 +55,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private BizReimburseApplyMapper bizReimburseApplyMapper;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private DepartmentService departmentService;
 
     @Lazy
     @Autowired
@@ -713,8 +712,12 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         expensesDTO.setSecondClassify("其他");
         expensesDTO.setVoucherNo(bizReimburseApplyS.getSerialNo());
         expensesDTO.setTotalAmount(bizReimburseApplyS.getAmount().divide(BigDecimal.ONE,2));
-        expensesDTO.setCommitUser(customUser.getRealName());
-        expensesDTO.setDepartment(sysDepartment.getDeptName());
+
+        SysUser sysUser = sysUserService.getSysUser(bizReimburseApplyS.getReimburseUser());
+        expensesDTO.setCommitUser(sysUser.getRealName());
+        DepartmentDTO departmentDTO = departmentService.selectDepartmentById(sysUser.getDepartId());
+        expensesDTO.setDepartment(departmentDTO.getDeptName());
+
         expensesDTO.setSummary(bizReimburseApplyS.getRemark());
         expensesDTO.setRemark(bizReimburseApplyS.getRemark());
         expensesDTO.setDataDate(DateUtils.getDate());
