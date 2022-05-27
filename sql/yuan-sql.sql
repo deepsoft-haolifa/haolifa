@@ -449,3 +449,9 @@ VALUES (94, '2019-12-28 17:46:59', '2022-02-11 14:37:55', 1, 10, 87, '77', 32, 0
 INSERT INTO `test_haolifa_bak`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (1, '2020-06-17 20:38:09', '2022-02-11 10:29:17', 1, '上级领导审批', '上级领导审批');
 
 
+
+INSERT INTO `biz_bill_contract`
+(`bill_id`, `bill_type`, `order_id`, `order_no`, `amount`, `book_keeper`, `audit_status`, `remark`, `create_user`, `create_time`, `update_user`, `update_time`)
+
+select 1,1,null,order_no,amount,create_user_id,1,invoice_no,create_user_id,create_time,create_user_id,update_time
+from payment_management

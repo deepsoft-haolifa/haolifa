@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface LoanApplyService {
@@ -56,4 +57,7 @@ public interface LoanApplyService {
     public ResultBean approve(Integer id);
 
     ResultBean pay(LoanApplyPayDTO loanApplyPayDTO);
+
+
+    public ResultBean<Integer> repaymentAmount(Integer loanId, BigDecimal offsetAmount);
 }

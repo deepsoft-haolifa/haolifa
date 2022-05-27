@@ -4,10 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
-import com.deepsoft.haolifa.dao.repository.BizLoanApplyMapper;
-import com.deepsoft.haolifa.dao.repository.PayUserMapper;
-import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
-import com.deepsoft.haolifa.dao.repository.SysUserMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.CustomUser;
@@ -186,15 +183,15 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         //当前角色是否为出纳
         boolean lookAll = customGrantedAuthorityList.stream()
             .anyMatch(grantedAuthority -> {
-                return  StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ADMIN.getCode())||
-                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode())||
-                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode())||
-                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CWGLZXFZR.getCode())||
+                return StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ADMIN.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CWGLZXFZR.getCode()) ||
                     StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode());
             });
 
         // 借款审批列表 todo 是否只展示自己申请的记录
-        if (StringUtils.equalsIgnoreCase("1", type)&& !lookAll) {
+        if (StringUtils.equalsIgnoreCase("1", type) && !lookAll) {
             //审核状态
             if (StringUtils.isNotEmpty(model.getApplyStatus())) {
                 criteria.andApplyStatusIn(Arrays.asList(model.getApplyStatus().split(",").clone()));
@@ -309,6 +306,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
                 LoanApplyRSDTO loanApplyRSDTO = convertLoanApplyRSDTO(sysDepartmentMap, iscn, finalSysUserMap, loanApply);
                 return loanApplyRSDTO;
             })
+            .filter(dto-> dto.getOwedAmount().compareTo(BigDecimal.ZERO) > 0)
             .collect(Collectors.toList());
 
         return ResultBean.success(loanApplyRSDTOList);
@@ -332,8 +330,8 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         LoanPayWayEnum payWayEnum = LoanPayWayEnum.valueOfCode(loanApply.getAmountType());
         loanApplyRSDTO.setAmountTypeCN(payWayEnum == null ? null : payWayEnum.getDesc());
 
-       BigDecimal amount =  loanApply.getAmount() == null ?BigDecimal.ZERO:loanApply.getAmount();
-       BigDecimal paymentAmount =  loanApply.getPaymentAmount() == null ?BigDecimal.ZERO:loanApply.getPaymentAmount();
+        BigDecimal amount = loanApply.getAmount() == null ? BigDecimal.ZERO : loanApply.getAmount();
+        BigDecimal paymentAmount = loanApply.getPaymentAmount() == null ? BigDecimal.ZERO : loanApply.getPaymentAmount();
         loanApplyRSDTO.setOwedAmount(amount.subtract(paymentAmount));
         LoanBillTypeEnum billTypeEnum = LoanBillTypeEnum.valueOfCode(loanApply.getBillNature());
         loanApplyRSDTO.setBillNatureCN(billTypeEnum == null ? null : billTypeEnum.getDesc());
@@ -428,7 +426,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         bizBill.setD(new Date());
         bizBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
         bizBill.setPayment(selectByPrimaryKey.getAmount());
-        bizBill.setRemark("借款付款 "+selectByPrimaryKey.getAmount());
+        bizBill.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
         bizBill.setString1(sysUser.getRealName());
         bizBill.setString2(loanApplyPayDTO.getPayCompany());
         ResultBean save = billService.save(bizBill);
@@ -443,19 +441,6 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
         return ResultBean.success(update);
     }
-    private BizBillAddDTO buildBizBillAddDTO(BizPayPlan bizPayPlan, BizPayPlanPayDTO.PayWayDTO payWayDTO, BookingTypeEnum bookingTypeEnum) {
-        BizBillAddDTO bizBill = new BizBillAddDTO();
-        bizBill.setType(bookingTypeEnum.getCode());
-        bizBill.setCertificateNumber(bizPayPlan.getApplyNo());
-        bizBill.setD(bizPayPlan.getPayDate());
-        // todo
-        bizBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
-        bizBill.setPayment(payWayDTO.getAmount());
-        bizBill.setRemark(bizPayPlan.getRemark());
-        bizBill.setString1(bizPayPlan.getApplyCollectionCompany());
-        bizBill.setString2(bizPayPlan.getPayCompany());
-        return bizBill;
-    }
 
     private FlowInstanceDTO buildFlowInstanceDTO(BizLoanApply loanApply) {
         FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
@@ -466,4 +451,59 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         flowInstanceDTO.setFormId(loanApply.getId());
         return flowInstanceDTO;
     }
+
+
+    @Autowired
+    private BizPaymentHistoryMapper bizPaymentHistoryMapper;
+
+
+    // 报销冲抵-还款
+    @Override
+    public ResultBean<Integer> repaymentAmount(Integer loanId, BigDecimal offsetAmount) {
+        //
+        BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(loanId);
+        BigDecimal paymentAmount = bizLoanApply.getPaymentAmount() == null ? BigDecimal.ZERO : bizLoanApply.getPaymentAmount();
+        BigDecimal addAmount = offsetAmount.add(paymentAmount);
+        if (addAmount.compareTo(bizLoanApply.getAmount()) > 0) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
+        }
+
+        // 还款操作
+        // 流水
+        BizPaymentHistory paymentHistory = buildBizPaymentHistory(loanId, offsetAmount, bizLoanApply);
+        bizPaymentHistoryMapper.insertSelective(paymentHistory);
+        // 借款
+        BizLoanApply bizLoanApplyUp = buildBizLoanApply(bizLoanApply, addAmount);
+        bizLoanApplyMapper.updateByPrimaryKeySelective(bizLoanApplyUp);
+        return null;
+    }
+
+    private BizLoanApply buildBizLoanApply(BizLoanApply bizLoanApply, BigDecimal addAmount) {
+        BizLoanApply bizLoanApplyUp = new BizLoanApply();
+        bizLoanApplyUp.setId(bizLoanApply.getId());
+        bizLoanApplyUp.setPaymentAmount(addAmount);
+        if (addAmount.compareTo(bizLoanApply.getAmount()) == 0) {
+            bizLoanApplyUp.setPaymentStatus(LoanrPaymentStatusEnum.all_pay.getCode());
+        } else {
+            bizLoanApplyUp.setPaymentStatus(LoanrPaymentStatusEnum.partial_pay.getCode());
+        }
+        return bizLoanApplyUp;
+    }
+
+    private BizPaymentHistory buildBizPaymentHistory(Integer loanId, BigDecimal offsetAmount, BizLoanApply bizLoanApply) {
+        BizPaymentHistory paymentHistory = new BizPaymentHistory();
+        paymentHistory.setAmount(offsetAmount);
+        paymentHistory.setLoanId(loanId);
+        paymentHistory.setLoanSerialNo(bizLoanApply.getSerialNo());
+        paymentHistory.setLoanUser(bizLoanApply.getLoanUser());
+        paymentHistory.setLoanDate(bizLoanApply.getLoanDate());
+        paymentHistory.setAmountType(bizLoanApply.getAmountType());
+        paymentHistory.setBillNature("4");
+        paymentHistory.setRepaymentUser(sysUserService.selectLoginUser().getId());
+        paymentHistory.setRepaymentDate(new Date());
+        paymentHistory.setRemark("报销冲抵");
+        return paymentHistory;
+    }
+
+
 }
