@@ -264,7 +264,7 @@ INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `s
 INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'VEHICLE_TYPE', '交通工具', '1', '火车', 0, 1, '', '2022-03-28 15:12:35');
 INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'PAY_ACCOUNT', '付款/收款账号', '3', '中国邮政储蓄银行股份有限公司侯马市呈王路支行', 0, 0, '', '2019-05-09 15:13:01');
 INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'PAY_ACCOUNT', '付款/收款账号', '2', '中国银行侯马支行', 0, 0, '', '2019-05-09 15:13:01');
-INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'PAY_ACCOUNT', '付款/收款账号', '1', '中国建行银行股份有限公司侯马开发区支行', 0, 0, '', '2019-05-09 15:13:01');
+INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'PAY_ACCOUNT', '付款/收款账号', '1', '中国建设银行股份有限公司侯马开发区支行', 0, 0, '', '2019-05-09 15:13:01');
 INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'COLLECTION_TYPE', '收款类型', '4', '其他', 0, 0, '', '2019-05-09 15:13:01');
 INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'COLLECTION_TYPE', '收款类型', '3', '借款', 0, 0, '', '2019-05-09 15:13:01');
 INSERT INTO `sys_dict` ( `type_code`, `type_name`, `code`, `name`, `sort_no`, `status`, `dict_desc`, `create_time`) VALUES ( 'COLLECTION_TYPE', '收款类型', '2', '货款', 0, 0, '', '2019-05-09 15:13:01');
@@ -416,14 +416,14 @@ INSERT INTO `flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `
                          `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`,
                          `form_show_step_id`, `step_order`)
 VALUES (110, '2019-12-28 17:46:59', '2022-02-11 15:12:01', 1, 12, 85, '87', 42, 0, 86, 0, '', 1);
-INSERT INTO `flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`,
-                         `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`,
-                         `form_show_step_id`, `step_order`)
-VALUES (103, '2019-12-28 17:46:59', '2022-02-11 15:40:42', 1, 11, 93, '64', 2, 0, 0, 0, '', 2);
-INSERT INTO `flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`,
-                         `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`,
-                         `form_show_step_id`, `step_order`)
-VALUES (102, '2019-12-28 17:46:59', '2022-02-11 15:40:31', 1, 11, 92, '', 42, 0, 92, 0, '', 1);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`,
+                                   `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`,
+                                   `form_show_step_id`, `step_order`)
+VALUES (102, '2019-12-28 17:46:59', '2022-05-27 11:06:33', 1, 11, 92, '87', 42, 0, 93, 0, '', 1);
+INSERT INTO `haolifa`.`flow_step` (`id`, `create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`,
+                                   `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`,
+                                   `form_show_step_id`, `step_order`)
+VALUES (103, '2019-12-28 17:46:59', '2022-05-27 10:21:53', 1, 11, 93, '47', 2, 0, 0, 0, '', 2);
 INSERT INTO `flow_step` ( `id`,`create_time`, `update_time`, `create_user_id`, `flow_id`, `step_id`,
                           `user_id`, `role_id`, `prev_step_id`, `condition_true`, `condition_false`,
                           `form_show_step_id`, `step_order`)
@@ -446,12 +446,14 @@ INSERT INTO `flow_step` ( `id`,`create_time`, `update_time`, `create_user_id`, `
 VALUES (94, '2019-12-28 17:46:59', '2022-02-11 14:37:55', 1, 10, 87, '77', 32, 0, 88, 0, '87', 1);
 
 
-INSERT INTO `test_haolifa_bak`.`step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (1, '2020-06-17 20:38:09', '2022-02-11 10:29:17', 1, '上级领导审批', '上级领导审批');
+
+
+
+INSERT INTO step` (`id`, `create_time`, `update_time`, `create_user_id`, `name`, `description`) VALUES (1, '2020-06-17 20:38:09', '2022-02-11 10:29:17', 1, '上级领导审批', '上级领导审批');
 
 
 
 INSERT INTO `biz_bill_contract`
 (`bill_id`, `bill_type`, `order_id`, `order_no`, `amount`, `book_keeper`, `audit_status`, `remark`, `create_user`, `create_time`, `update_user`, `update_time`)
-
 select 1,1,null,order_no,amount,create_user_id,1,invoice_no,create_user_id,create_time,create_user_id,update_time
 from payment_management
