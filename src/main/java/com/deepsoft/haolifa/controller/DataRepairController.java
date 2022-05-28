@@ -67,48 +67,64 @@ public class DataRepairController {
         log.info("stock out material list:{}", materials.size());
         Map<String, Integer> map = materials.stream().collect(Collectors.toMap(Material::getGraphNo, Material::getLockQuantity));
 
-        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("E://1.xlsx")));
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("E://11.xlsx")));
         Sheet sheet = workbook.getSheetAt(0);
-        for (int rowNum = 0; rowNum < sheet.getLastRowNum(); rowNum++) {
+        for (int rowNum = 1; rowNum < sheet.getLastRowNum(); rowNum++) {
             Row row = sheet.getRow(rowNum);
-            String trueGraphNo = getCellValue(row.getCell(0));
-            Integer trueQuantity = Integer.valueOf(getCellValue(row.getCell(1)));
-            String batchNo = "PC20220527";
+            String trueGraphNo = getCellValue(row.getCell(1));
+            Integer trueQuantity = Integer.valueOf(getCellValue(row.getCell(2)));
+            String batchNo = "PC20220528";
             if (map.containsKey(trueGraphNo)) {
-                Integer localQty = map.getOrDefault(trueGraphNo, 0);
-                if (localQty > 0) {
-                    trueQuantity = trueQuantity - localQty;
+//                Integer localQty = map.getOrDefault(trueGraphNo, 0);
+//                if (localQty > 0) {
 //                    int caju = trueQuantity - localQty;
 //                    if (caju > 0) {
 //                        log.info("caju more than 0 graphNo:{},{},{},{}", trueGraphNo, caju, trueQuantity, localQty);
 //                        trueQuantity = caju;
 //                    } else {
 //                        log.info("caju less than 0 graphNo:{},{},{},{}", trueGraphNo, caju, trueQuantity, localQty);
-//                        localQty = trueQuantity;
+////                        localQty = trueQuantity;
 //                        trueQuantity = 0;
 //                    }
-                }
-//                this.changeStockQty(trueGraphNo, localQty, trueQuantity, "Z1", "Z1-1", batchNo);
-                excelNoList.add(trueGraphNo);
+//                }
+//                this.changeStockQty(trueGraphNo, 0, trueQuantity, "Z1", "Z1-1", batchNo);
+//                excelNoList.add(trueGraphNo);
             } else {
                 log.info("stock out material system no graph no:{}", trueGraphNo);
                 noSystemNoList.add(trueGraphNo);
+                Material material = new Material();
+                material.setGraphNo(trueGraphNo);
+                material.setCreateUser(0);
+                material.setCurrentQuantity(trueQuantity);
+                materialMapper.insertSelective(material);
+                if (trueQuantity != 0) {
+                    Stock insertStock = new Stock() {{
+                        setCreateUser(0);
+                        setMaterialGraphNo(trueGraphNo);
+                        setMaterialBatchNo(batchNo);
+                        setQuantity(trueQuantity);
+                        setType((byte) 2);
+                        setRemark("2022.5.28初始化新增");
+                        setRoomNo("Z1");
+                        setRackNo("Z1-1");
+                    }};
+                    stockMapper.insertSelective(insertStock);
+                }
             }
         }
         // 系统中有，盘点表里面没有，则将系统中的图号的库存都清零
-
-        map.keySet().forEach(e -> {
-            if (!excelNoList.contains(e)) {
-                int trueQuantity = 0;
-                Integer localQty = map.getOrDefault(e, 0);
-                if (localQty > 0) {
-                    trueQuantity = -localQty;
-                }
-                log.info("excel not null bug system exist:{}", e);
-                this.changeStockQty(e, localQty, trueQuantity, "Z1", "Z1-1", "PC20220527");
-                systemNoExcelList.add(e);
-            }
-        });
+//        map.keySet().forEach(e -> {
+//            if (!excelNoList.contains(e)) {
+//                int trueQuantity = 0;
+//                Integer localQty = map.getOrDefault(e, 0);
+//                if (localQty > 0) {
+//                    trueQuantity = -localQty;
+//                }
+//                log.info("excel not null bug system exist:{}", e);
+//                this.changeStockQty(e, localQty, trueQuantity, "Z1", "Z1-1", "PC20220527");
+////                systemNoExcelList.add(e);
+//            }
+//        });
 
         // excel中有，系统中没有的数据
         if (CollectionUtil.isNotEmpty(noSystemNoList)) {
@@ -120,14 +136,14 @@ public class DataRepairController {
             bw.close();
         }
         // 系统中有，excel中没有的数据
-        if (CollectionUtil.isNotEmpty(systemNoExcelList)) {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("E://systemExists.txt"));
-            for (String no : systemNoExcelList) {
-                bw.write(no + "\r\n");
-                bw.flush();
-            }
-            bw.close();
-        }
+//        if (CollectionUtil.isNotEmpty(systemNoExcelList)) {
+//            BufferedWriter bw = new BufferedWriter(new FileWriter("E://systemExists.txt"));
+//            for (String no : systemNoExcelList) {
+//                bw.write(no + "\r\n");
+//                bw.flush();
+//            }
+//            bw.close();
+//        }
     }
 
 
@@ -356,7 +372,7 @@ public class DataRepairController {
                 setMaterialBatchNo(batchNo);
                 setQuantity(qty);
                 setType((byte) 2);
-                setRemark("2022初始化新增");
+                setRemark("2022.5.28初始化新增");
                 setRoomNo(roomNo);
                 setRackNo(rackNo);
             }};
