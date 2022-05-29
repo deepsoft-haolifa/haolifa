@@ -123,26 +123,33 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         record.setVariousExpenses(analysisDTO.getMangeExpenseAmount().add(analysisDTO.getSaleExpenseAmount()).add(analysisDTO.getQualityExpenseAmount()).add(analysisDTO.getFinanceExpenseAmount()).add(analysisDTO.getTaxesExpenseAmount()));
 
         //销售利润率=利润总额/销售收入
-        if (analysisDTO.getYearSaleAmountDTO().getDeliveryAmount().compareTo(BigDecimal.ZERO) > 0) {
+        if (analysisDTO.getYearSaleAmountDTO().getDeliveryAmount().compareTo(BigDecimal.ZERO) > 0 && null != record.getTotalProfit()) {
             record.setSalesProfitMargin(record.getTotalProfit().divide(analysisDTO.getYearSaleAmountDTO().getDeliveryAmount(), 3, BigDecimal.ROUND_HALF_UP));
         }
 
         // 成本费用利用率=利润总额/(成本费用+费用合计）
         BigDecimal costExpense = record.getCost().add(record.getTotalExpenses());
-        if (costExpense.compareTo(BigDecimal.ZERO) > 0) {
+        if (costExpense.compareTo(BigDecimal.ZERO) > 0 && null != record.getTotalProfit()) {
             record.setCostUtilization(record.getTotalProfit().divide(costExpense, 3, BigDecimal.ROUND_HALF_UP));
         }
 
         // 现金流量(现金日记账+银行日记账+其它货币日记账的余额总和)
-        record.setCashFlow(null != analysisDTO.getBankBalanceAmount() ? analysisDTO.getBankBalanceAmount() : BigDecimal.ZERO.add(analysisDTO.getCashBalanceAmount()).add(analysisDTO.getOtherBalanceAmount()));
+        BigDecimal bankBalance = null != analysisDTO.getBankBalanceAmount() ? analysisDTO.getBankBalanceAmount() : BigDecimal.ZERO;
+        BigDecimal otherBalance = null != analysisDTO.getOtherBalanceAmount() ? analysisDTO.getOtherBalanceAmount() : BigDecimal.ZERO;
+        BigDecimal cashBalance = null != analysisDTO.getCashBalanceAmount() ? analysisDTO.getCashBalanceAmount() : BigDecimal.ZERO;
+        record.setCashFlow(bankBalance.add(cashBalance).add(otherBalance));
 
         if (record.getTotalOutputValue().compareTo(BigDecimal.ZERO) > 0) {
             record.setManufacturingCost(record.getCost());
             record.setManageCost(record.getTotalExpenses());
             // 制造成本/产值总额 = 制造占比
-            record.setManufacturingCostRatio(record.getManufacturingCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
+            if (null != record.getManufacturingCost()) {
+                record.setManufacturingCostRatio(record.getManufacturingCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
+            }
             // 管理成本/产值总额 = 管理占比
-            record.setManageCostRatio(record.getManageCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
+            if (null != record.getManageCost()) {
+                record.setManageCostRatio(record.getManageCost().divide(record.getTotalOutputValue(), 3, BigDecimal.ROUND_HALF_UP));
+            }
         }
 
         businessAnalysisRecordMapper.insertSelective(record);

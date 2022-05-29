@@ -21,13 +21,13 @@ public class BusinessAnalysisTask {
     /**
      * 计算期初库存数据
      */
-    @Scheduled(cron = "0 0 0/2 * * ?")
+    @Scheduled(cron = "0 0 0/5 * * ?")
     public void task() {
-        String task = distributedLocker.lock("BusinessAnalysisTask", 100);
-        if (!StringUtils.isEmpty(task)) {
+//        String task = distributedLocker.lock("BusinessAnalysisTask", 100);
+//        if (!StringUtils.isEmpty(task)) {
             //do task
-            businessAnalysisService.get(null);
-        }
+            businessAnalysisService.generate(null);
+//        }
     }
 
 
