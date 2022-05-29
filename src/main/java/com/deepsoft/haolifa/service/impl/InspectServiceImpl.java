@@ -32,6 +32,7 @@ import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.InspectService;
 import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -317,8 +318,16 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
             payExample.createCriteria().andOrderIdEqualTo(model.getInspectNo());
             List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
-            if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
-                return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+
+            // 机加工 质检
+            EntrustExample entrustExample = new EntrustExample();
+            entrustExample.createCriteria().andEntrustNoEqualTo(model.getInspectNo());
+            List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
+            if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
+                Entrust entrust = entrustList.get(0);
+                if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(entrust.getCreateTime())) {
+                    return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+                }
             }
         }
         if (model.getTestNumber() == 0) {

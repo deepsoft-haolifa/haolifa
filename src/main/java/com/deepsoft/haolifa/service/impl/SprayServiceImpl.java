@@ -18,6 +18,7 @@ import com.deepsoft.haolifa.model.vo.SprayVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.SprayService;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -251,12 +252,20 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean saveInspect(SprayInspectDto inspectDto) {
-        PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
-        payExample.createCriteria().andOrderIdEqualTo(inspectDto.getSprayNo());
-        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
-        if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList)) {
-            return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+
+        SprayExample example = new SprayExample();
+        example.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
+        List<Spray> sprays = sprayMapper.selectByExample(example);
+        if (sprays != null && sprays.size() > 0) {
+            Spray sss = sprays.get(0);
+            PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
+            payExample.createCriteria().andOrderIdEqualTo(inspectDto.getSprayNo());
+            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
+            if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(sss.getCreateTime())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+            }
         }
+
         if (inspectDto.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
@@ -284,9 +293,6 @@ public class SprayServiceImpl extends BaseService implements SprayService {
             history.setAccessory(JSON.toJSONString(inspectDto.getAccessoryList()));
         }
 
-        SprayExample example = new SprayExample();
-        example.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
-        List<Spray> sprays = sprayMapper.selectByExample(example);
         if (sprays != null && sprays.size() > 0) {
             Spray spray = sprays.get(0);
             spray.setQualifiedNumber(spray.getQualifiedNumber() + inspectDto.getQualifiedNumber());
