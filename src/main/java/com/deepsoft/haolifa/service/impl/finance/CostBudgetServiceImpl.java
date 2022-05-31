@@ -363,12 +363,11 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门下总比例不能大于100");
         }
 
-
         BizSubjects bizSubjects = subjectsMapper.selectByPrimaryKey(model.getSubjectsId());
-
 
         BizCostBudgetSubjects costBudget = new BizCostBudgetSubjects();
         BeanUtils.copyProperties(model, costBudget);
+        costBudget.setName(bizSubjects.getName());
         costBudget.setCreateTime(new Date());
         costBudget.setUpdateTime(new Date());
         costBudget.setSubjectsType(bizSubjects.getType());
@@ -395,9 +394,11 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         if (model.getCostRatio() > 100 || model.getCostRatio() < 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "比例介于0~100之间");
         }
+        BizSubjects bizSubjects = subjectsMapper.selectByPrimaryKey(model.getSubjectsId());
 
         BizCostBudgetSubjects costBudget = new BizCostBudgetSubjects();
         BeanUtils.copyProperties(model, costBudget);
+        costBudget.setName(bizSubjects.getName());
         costBudget.setUpdateTime(new Date());
         costBudget.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizCostBudgetSubjectsMapper.updateByPrimaryKeySelective(costBudget);
