@@ -6,7 +6,7 @@
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="type" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="parent_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="level" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="code" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -78,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, type, parent_id, level, code, remark, status, del_flag, percent, create_user, 
+    id, name, type, parent_id, level, code, remark, status, del_flag, percent, create_user,
     create_time, update_user, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.BizSubjectsExample" >
@@ -96,7 +96,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from biz_subjects
     where id = #{id,jdbcType=INTEGER}
@@ -115,14 +115,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into biz_subjects (name, type, parent_id, 
-      level, code, remark, 
-      status, del_flag, percent, create_user, 
+    insert into biz_subjects (name, type, parent_id,
+      level, code, remark,
+      status, del_flag, percent, create_user,
       create_time, update_user, update_time
       )
-    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{level,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}, #{percent,jdbcType=REAL}, #{createUser,jdbcType=INTEGER}, 
+    values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR},
+      #{level,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{status,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}, #{percent,jdbcType=REAL}, #{createUser,jdbcType=INTEGER},
       #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
