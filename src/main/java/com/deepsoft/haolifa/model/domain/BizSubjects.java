@@ -9,7 +9,7 @@ public class BizSubjects {
 
     private String type;
 
-    private String parentId;
+    private Integer parentId;
 
     private Integer level;
 
@@ -31,7 +31,7 @@ public class BizSubjects {
 
     private Date updateTime;
 
-    public BizSubjects(Integer id, String name, String type, String parentId, Integer level, String code, String remark, String status, String delFlag, Float percent, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizSubjects(Integer id, String name, String type, Integer parentId, Integer level, String code, String remark, String status, String delFlag, Float percent, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -76,12 +76,12 @@ public class BizSubjects {
         this.type = type == null ? null : type.trim();
     }
 
-    public String getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId == null ? null : parentId.trim();
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId == null ? null : parentId;
     }
 
     public Integer getLevel() {

@@ -17,7 +17,7 @@ public class BizSubjectsAddDTO {
     @ApiModelProperty(value = "科目类别")
     private String type;
     @ApiModelProperty(value = "父节点")
-    private String parentId;
+    private Integer parentId;
     @ApiModelProperty(value = "几级节点")
     private Integer level;
     @ApiModelProperty(value = "科目代码")

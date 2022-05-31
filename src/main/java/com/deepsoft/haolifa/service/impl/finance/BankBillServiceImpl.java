@@ -100,12 +100,14 @@ public class BankBillServiceImpl implements BankBillService {
         bizBankBill.setUpdateUser(sysUserService.selectLoginUser().getId());
         int insertId = bizBankBillMapper.insertSelective(bizBankBill);
 
-
-        // 存入余额 费用 借款 货款
-        // 1
-        //2
-        //3
-        if (bizBankBill.getType().equals("1") && "123".contains(model.getCollectionType())) {
+        //  收费类型
+        //3	借款
+        //2	货款
+        //1	费用
+        // 收费方式 承兑
+        if (!StringUtils.equalsIgnoreCase(bizBankBill.getPayWay(),"承兑")
+            && StringUtils.equalsIgnoreCase(bizBankBill.getType(),"1")
+            && "123".contains(model.getCollectionType())) {
             subjectBalanceService.increaseAmountBatch(model.getCollectionMoney());
         } else if (bizBankBill.getType().equals("2")) {
 //            subjectBalanceService.decreaseAmountBatch(model.getCollectionMoney());
