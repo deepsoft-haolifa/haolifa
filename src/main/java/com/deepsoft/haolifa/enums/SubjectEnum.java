@@ -6,7 +6,7 @@ package com.deepsoft.haolifa.enums;
  */
 public enum SubjectEnum {
 
-    clf_id(114, "材料费"),
+    clf_id(70, "材料费-原材料"),
 
     ;
     private Integer code;
