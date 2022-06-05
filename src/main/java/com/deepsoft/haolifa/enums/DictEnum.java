@@ -19,6 +19,9 @@ public enum DictEnum {
 
     PROJECT_TYPE("PROJECT_TYPE", "报销项目类型"),
 
+    ASSETS_ADD_TYPE("ASSETS_ADD_TYPE", "固定资产增加方式"),
+    ASSETS_TYPE("ASSETS_TYPE", "固定资产类别名称"),
+
 
     ;
     private String code;
