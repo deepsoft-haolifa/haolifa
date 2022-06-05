@@ -130,18 +130,20 @@ public class ReportExtendServiceImpl extends BaseService implements ReportExtend
         this.packSaleQuery(model);
         resultModel.setSaleAmount(saleReportMapper.selectSaleSummary(model).getSaleTotalAmount());
         resultModel.setOutPutAmount(saleReportMapper.selectOutputSummary(model).getOutPutTotalAmount());
-        resultModel.setCollectAmount(saleReportMapper.selectCollectSummary(model));
-        resultModel.setInvoiceAmount(saleReportMapper.selectInvoiceSummary(model));
         resultModel.setDeliveryAmount(saleReportMapper.selectDeliverySummary(model));
+        // 开票，回款是系统 所有的数据
+        resultModel.setCollectAmount(saleReportMapper.selectCollectSummary(null));
+        resultModel.setInvoiceAmount(saleReportMapper.selectInvoiceSummary(null));
         return resultModel;
     }
 
     @Override
     public BusinessAnalysisPurchaseAmountDTO selectBusinessAnalysisForPurchase(ReportPurchaseConditionDTO model) {
         BusinessAnalysisPurchaseAmountDTO resultModel = new BusinessAnalysisPurchaseAmountDTO();
-        this.packPurchaseQuery(model);
-        resultModel.setReturnTicketAmount(purchaseReportMapper.selectInvoice(model));
-        resultModel.setPaidTotal(purchaseReportMapper.selectPaid(model));
+//        this.packPurchaseQuery(model);
+        // 系统所有的数据，不区分年度
+        resultModel.setReturnTicketAmount(purchaseReportMapper.selectInvoice(null));
+        resultModel.setPaidTotal(purchaseReportMapper.selectPaid(null));
         return resultModel;
     }
 

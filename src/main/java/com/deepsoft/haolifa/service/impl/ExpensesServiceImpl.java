@@ -275,7 +275,9 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
             String yearMonth = year.concat("-").concat(month);
             paramMap.put("startDate", CommonUtil.packYearMonthMapParamStart(yearMonth));
             paramMap.put("endDate", CommonUtil.packYearMonthMapParamEnd(yearMonth));
-            report.setTotalAmount(entryOutRecordExtendMapper.costMaterial(paramMap));
+            BigDecimal materialDept = entryOutRecordExtendMapper.costMaterialDept(paramMap);
+            BigDecimal materialSporadic = entryOutRecordExtendMapper.costMaterialSporadic(paramMap);
+            report.setTotalAmount(materialDept.add(materialSporadic));
             list.add(report);
         }
         return list;

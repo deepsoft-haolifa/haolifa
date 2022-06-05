@@ -113,7 +113,7 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
 
         // 利润总额=毛利-费用合计
         //毛利=产值-成本费用
-        //成本费用=采购费用下的运费科目+当月出库的所有零件的总金额（不包括带M和带J图号的零件）+能耗费用下的所用费用+生产费用下的委托加费和维修费+工资费用下的各个事业部的工资总额
+        //成本费用=采购费用下的运费科目+能耗费用下的所用费用+生产费用下的委托加费和维修费+工资费用下的各个事业部的工资总额+当年出库的所有零件的总金额（出库记录中只提取领用单位为装配车间的出库数据）+零星物资管理列表当年度的出库金额+自控物资管理列表中当年的出库的金额合计
         //费用合计=工资费用下的除各个事业部的工资以外的其它部门的工资总额+管理费用下的所有费用+财务费用下的所有费用+质量费用下的所有费用+销售费用下的所有费用+税金下的所有费用
         record.setCost(analysisDTO.getCost());
         record.setTotalExpenses(analysisDTO.getTotalExpenses());
@@ -199,7 +199,7 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
     }
 
     /**
-     * 成本费用=采购费用下的运费科目+能耗费用下的所用费用+生产费用下的委托加费和维修费+工资费用下的各个事业部的工资总额+出库的所有零件的总金额（不包括带M和带J图号的零件）
+     * 成本费用=采购费用下的运费科目+能耗费用下的所用费用+生产费用下的委托加费和维修费+工资费用下的各个事业部的工资总额+当年出库的所有零件的总金额（出库记录中只提取领用单位为装配车间的出库数据）+零星物资管理列表当年度的出库金额+自控物资管理列表中当年的出库的金额合计
      */
     private BigDecimal getCostAmount(String year) {
         ExpensesConditionDTO expensesDTO = new ExpensesConditionDTO();
@@ -226,10 +226,15 @@ public class BusinessAnalysisServiceImpl implements BusinessAnalysisService {
         log.info("成本费用-工资费用下的各个事业部的工资总额：{}", amount4);
 
         Map<String, Object> paramMap = CommonUtil.packYearMapParam(year);
-        BigDecimal amount5 = entryOutRecordExtendMapper.costMaterialNotMJB(paramMap);
-        log.info("成本费用-出库的所有零件的总金额：{}", amount5);
+        BigDecimal amount5 = entryOutRecordExtendMapper.costMaterialDept(paramMap);
+        log.info("成本费用-出库记录中只提取领用单位为装配车间的出库数据：{}", amount5);
 
-        return amount1.add(amount2).add(amount3).add(amount4).add(amount5);
+        BigDecimal amount6 = entryOutRecordExtendMapper.costMaterialSporadic(paramMap);
+        log.info("成本费用-零星物资管理列表当年度的出库金额：{}", amount6);
+
+        BigDecimal amount7 = entryOutRecordExtendMapper.costMaterialAutoControl(paramMap);
+        log.info("成本费用-自控物资管理列表中当年的出库的金额合计：{}", amount7);
+        return amount1.add(amount2).add(amount3).add(amount4).add(amount5).add(amount6).add(amount7);
     }
 
     /**

@@ -37,10 +37,26 @@ public interface EntryOutRecordExtendMapper {
     BigDecimal costMaterial(Map<String, Object> paramMap);
 
     /**
-     * 获取零件出库金额，不带M&J&B
+     * 当年出库的所有零件的总金额（出库记录中只提取领用单位为装配车间的出库数据）
      * @param paramMap
      * @return
      */
-    BigDecimal costMaterialNotMJB(Map<String, Object> paramMap);
+    BigDecimal costMaterialDept(Map<String, Object> paramMap);
+
+
+    /**
+     * 零星物资管理列表当年度的出库金额
+     * @param paramMap
+     * @return
+     */
+    BigDecimal costMaterialSporadic(Map<String, Object> paramMap);
+
+    /**
+     * 自控物资管理列表中当年的出库的金额合计
+     * @param paramMap
+     * @return
+     */
+    BigDecimal costMaterialAutoControl(Map<String, Object> paramMap);
+
 
 }

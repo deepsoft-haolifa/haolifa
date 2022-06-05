@@ -66,12 +66,12 @@
             and create_time &lt;= #{endDate}
         </if>
     </select>
-    <select id="costMaterialNotMJB" resultType="java.math.BigDecimal">
+    <select id="costMaterialDept" resultType="java.math.BigDecimal">
         select
-        ifnull(sum(price*abs(quantity)),0)
+        ROUND(ifnull(sum(price*abs(quantity)),0),2)
         from entry_out_store_record
-        where type=2 and operation_type=1
-        and material_graph_no not like '%M' and material_graph_no not like '%J' and material_graph_no not like '%B'
+        where type=2 and operation_type=1 and receive_department='装配车间'
+--         and material_graph_no not like '%M' and material_graph_no not like '%J' and material_graph_no not like '%B'
         <if test="startDate!= null">
             and create_time &gt;= #{startDate}
         </if>
@@ -79,4 +79,31 @@
             and create_time &lt;= #{endDate}
         </if>
     </select>
+    <select id="costMaterialSporadic" resultType="java.math.BigDecimal">
+        select
+        ROUND(ifnull(sum(sm.price*abs(seor.quantity)),0),2)
+        from sporadic_entry_out_record seor
+        left join sporadic_material sm on sm.id=seor.sporadic_id
+        where 1=1
+        <if test="startDate!= null">
+            and seor.create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and seor.create_time &lt;= #{endDate}
+        </if>
+    </select>
+    <select id="costMaterialAutoControl" resultType="java.math.BigDecimal">
+        select
+        ROUND(ifnull(sum(acm.price*abs(aceor.quantity)),0),2)
+        from auto_control_entry_out_record aceor
+        left join auto_control_material acm on acm.id=aceor.auto_control_id
+        where 1=1
+        <if test="startDate!= null">
+            and aceor.create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and aceor.create_time &lt;= #{endDate}
+        </if>
+    </select>
+
 </mapper>
