@@ -74,4 +74,11 @@ public class ContractBillRSDTO {
 
     private Date updateTime;
 
+    @ApiModelProperty(value = "已分解金额")
+    private BigDecimal decomposeAmount;
+
+    @ApiModelProperty(value = "剩余分解金额")
+    private BigDecimal surplusAmount;
+
+
 }

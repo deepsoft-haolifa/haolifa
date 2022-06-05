@@ -7,10 +7,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAuditDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.*;
 
 import java.util.List;
 
@@ -27,4 +24,6 @@ public interface BillContractService {
     ResultBean removeContract(int id);
 
     ResultBean auditContract(BillContractAuditDTO billContract);
+
+    ResultBean<ContractBillDecomposeAmountRSDTO> billDecomposeAmount(ContractBillDecomposeAmountRQDTO rq);
 }

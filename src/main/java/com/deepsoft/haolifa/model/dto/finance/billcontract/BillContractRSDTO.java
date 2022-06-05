@@ -37,12 +37,5 @@ public class BillContractRSDTO {
     private Boolean canAudit = true;
     @ApiModelProperty(value = "备注")
     private String remark;
-    @ApiModelProperty(value = "创建者")
-    private Integer createUser;
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-    @ApiModelProperty(value = "更新者")
-    private Integer updateUser;
-    @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
+
 }

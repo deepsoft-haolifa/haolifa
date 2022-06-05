@@ -60,9 +60,14 @@ public class PurchaseOrderController {
                                                    @PathVariable("orderType") Integer orderType,
                                                    String supplierName,
                                                    String startDate,
-                                                   String endDate
-    ) {
+                                                   String endDate) {
         return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId, status, orderType, supplierName, startDate, endDate);
+    }
+
+    @ApiOperation("查询采购订单列表（采购付款专用）")
+    @PostMapping("/payPlanlist")
+    public ResultBean<PageDTO<PurchaseOrderRSDTO>> payPlanlist(@RequestBody PurchaseOrderRQParam param) {
+        return purcahseOrderService.payPlanlist(param);
     }
 
     @ApiOperation("采购完成")

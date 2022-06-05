@@ -294,7 +294,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
 
     @Override
     public ResultBean<PageDTO<PurchaseOrder>> list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType,
-                           String supplierName, String startDate, String endDate) {
+                                                   String supplierName, String startDate, String endDate) {
         List<String> supplierNoList = new ArrayList<>();
         if (StringUtils.isNotEmpty(supplierName)) {
             SupplierExample supplierExample = new SupplierExample();
@@ -339,7 +339,7 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             .map(PurchaseOrder::getPurchaseOrderNo)
             .collect(Collectors.toList());
         Map<String, BigDecimal> invoiceMap = new HashMap<>();
-        if (CollectionUtil.isNotEmpty(purchaseOrderNoList)){
+        if (CollectionUtil.isNotEmpty(purchaseOrderNoList)) {
             InvoiceExample invoiceExample = new InvoiceExample();
             InvoiceExample.Criteria invoiceExampleCriteria = invoiceExample.createCriteria();
 
@@ -366,6 +366,31 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
         purchaseOrderPageDTO = new PageDTO<>();
         BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
         purchaseOrderPageDTO.setList(purchaseOrderList1);
+        return ResultBean.success(purchaseOrderPageDTO);
+    }
+
+    @Override
+    public ResultBean<PageDTO<PurchaseOrderRSDTO>> payPlanlist(PurchaseOrderRQParam model) {
+        if (model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if (model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+
+        Page<PurchaseOrder> purchaseOrderList = PageHelper.startPage(model.getPageNum(), model.getPageSize(), "create_time desc")
+            .doSelectPage(() -> purchaseOrderMapper.selectPayPlanlistList(model));
+        List<PurchaseOrderRSDTO> purchaseOrderRSDTOList = purchaseOrderList.getResult().stream()
+            .map(purchaseOrder -> {
+                PurchaseOrderRSDTO purchaseOrderRSDTO = new PurchaseOrderRSDTO();
+                BeanUtils.copyProperties(purchaseOrder, purchaseOrderRSDTO);
+                return purchaseOrderRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        PageDTO<PurchaseOrderRSDTO> purchaseOrderPageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
+        purchaseOrderPageDTO.setList(purchaseOrderRSDTOList);
         return ResultBean.success(purchaseOrderPageDTO);
     }
 

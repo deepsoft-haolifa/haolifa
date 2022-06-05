@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.model.domain.PurchaseOrder;
 import com.deepsoft.haolifa.model.domain.PurchaseOrderExample;
 import java.util.List;
 
+import com.deepsoft.haolifa.model.dto.PurchaseOrderRQParam;
 import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRQDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,4 +33,5 @@ public interface PurchaseOrderMapper {
 
     List<PurchaseOrder> selectListBy(PurchaseOrderStandAccountRQDTO example);
 
+    List<PurchaseOrder>  selectPayPlanlistList(@Param("query") PurchaseOrderRQParam query);
 }

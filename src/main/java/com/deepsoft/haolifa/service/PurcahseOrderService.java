@@ -48,6 +48,8 @@ public interface PurcahseOrderService {
      */
     ResultBean<PageDTO<PurchaseOrder>> list(int pageNum, int pageSize, String orderNo, int createUserId, int status, Integer orderType, String supplierName, String startDate, String endDate);
 
+    ResultBean<PageDTO<PurchaseOrderRSDTO>> payPlanlist(PurchaseOrderRQParam param);
+
     /**
      * 财务挂账列表
      *
@@ -86,4 +88,5 @@ public interface PurcahseOrderService {
      * @return
      */
     PurchaseOrder details(String purchaseOrderNo);
+
 }

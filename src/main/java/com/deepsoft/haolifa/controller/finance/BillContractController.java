@@ -7,10 +7,7 @@ import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAddOrUpDT
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractAuditDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.contract.ContractListRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.contract.*;
 import com.deepsoft.haolifa.service.finance.BillContractService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +33,12 @@ public class BillContractController {
     @PostMapping("/billList")
     public ResultBean<PageDTO<ContractBillRSDTO>> billList(@RequestBody ContractBillRQDTO billDTO) {
         return billContractService.getBillContractList(billDTO);
+    }
+
+    @ApiOperation("查询合同分解已分解余额")
+    @PostMapping("/billDecomposeAmount")
+    public ResultBean<ContractBillDecomposeAmountRSDTO> billDecomposeAmount(@RequestBody ContractBillDecomposeAmountRQDTO rq) {
+        return billContractService.billDecomposeAmount(rq);
     }
 
     @ApiOperation("查询合同分解-合同列表")

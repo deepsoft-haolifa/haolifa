@@ -59,11 +59,19 @@ public class BankBillServiceImpl implements BankBillService {
 
 
         // 设置公司和账户，用来统计余额
+        // 收款
         if (bizBankBill.getType().equals("1")) {
             bizBankBill.setCompany(bizBankBill.getCollectCompany());
             bizBankBill.setAccount(bizBankBill.getPayAccount());
+            //   `pay_company` varchar(64) DEFAULT '' COMMENT '付款单位',
+            String payCompany = bizBankBill.getPayCompany();
+            if (StringUtils.isEmpty(payCompany)) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款时付款单位不能为空");
+            }
+            // 付款
         } else if (bizBankBill.getType().equals("2")) {
-            bizBankBill.setCompany(bizBankBill.getPayCompany());
+            String payCompany = bizBankBill.getPayCompany();
+            bizBankBill.setCompany(payCompany);
             bizBankBill.setAccount(bizBankBill.getPayAccount());
         }
         String companyQuery = bizBankBill.getCompany();

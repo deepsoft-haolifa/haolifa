@@ -95,6 +95,18 @@ public class BillContractServiceImpl implements BillContractService {
                 rsdto.setContractStatusCN(contractStatusCN);
                 SysDepartment sysDepartment = sysDepartmentMap.get(rsdto.getDeptId());
                 rsdto.setDeptName(sysDepartment.getDeptName());
+
+                // 2. 查询该合同已经分解的金额
+                BizBillContractExample bizBillContractExample = buildBizBillContractExample(Long.valueOf(orderProduct.getId()), new Byte(orderProduct.getBillType()),
+                    null, null, new Byte("1"));
+                List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(bizBillContractExample);
+                BigDecimal splitAmount = bizBillContractList.stream()
+                    .map(BizBillContract::getAmount)
+                    .reduce(BigDecimal::add)
+                    .orElse(BigDecimal.ZERO);
+
+                rsdto.setDecomposeAmount(splitAmount);
+                rsdto.setSurplusAmount(rsdto.getCollectionMoney().subtract(splitAmount));
                 return rsdto;
             })
             .collect(Collectors.toList());
@@ -428,4 +440,37 @@ public class BillContractServiceImpl implements BillContractService {
     }
 
 
+    @Override
+    public ResultBean<ContractBillDecomposeAmountRSDTO> billDecomposeAmount(ContractBillDecomposeAmountRQDTO rq) {
+        ContractBillRSDTO billRSDTO = bizBankBillMapper.getBillContractById(Integer.parseInt(String.valueOf(rq.getBillId())),
+            String.valueOf(rq.getBillType()));
+        BigDecimal collectionMoney = billRSDTO.getCollectionMoney();
+
+        // 2. 查询该合同已经分解的金额
+        BizBillContractExample bizBillContractExample = buildBizBillContractExample(Long.valueOf(rq.getBillId()), new Byte(rq.getBillType()),
+            null, null, new Byte("1"));
+        List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(bizBillContractExample);
+        BigDecimal splitAmount = bizBillContractList.stream()
+            .map(BizBillContract::getAmount)
+            .reduce(BigDecimal::add)
+            .orElse(BigDecimal.ZERO);
+
+
+        ContractBillDecomposeAmountRSDTO rs = new ContractBillDecomposeAmountRSDTO();
+
+        rs.setBillType(rq.getBillType());
+        rs.setBillId(rq.getBillId());
+        rs.setAmount(collectionMoney);
+        rs.setDecomposeAmount(splitAmount);
+        rs.setSurplusAmount(collectionMoney.subtract(splitAmount));
+        String contractStatusCN = "";
+        if (StringUtils.equalsIgnoreCase("0", billRSDTO.getContractStatus())) {
+            contractStatusCN = "未完成";
+        } else if (StringUtils.equalsIgnoreCase("1", billRSDTO.getContractStatus())) {
+            contractStatusCN = "完成";
+        }
+        rs.setContractStatus(billRSDTO.getContractStatus());
+        rs.setContractStatusCN(contractStatusCN);
+        return ResultBean.success(rs);
+    }
 }
