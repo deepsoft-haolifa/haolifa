@@ -94,7 +94,7 @@
         (select IFNULL( sum(po.total_price), 0 ) total from purchase_order po <include refid="purchaseSql"/> ) po,
         (select IFNULL( sum(bpp.apply_amount), 0 ) payTotal FROM biz_pay_plan bpp   <include refid="bizPayPlanSql"/> ) bpp,
         (select IFNULL( sum(iv.total_amount), 0 ) returnTicketAmount from invoice iv<include refid="invoiceSql"/> ) iv,
-        (select IFNULL( sum(po1.total_price), 0 ) registered from purchase_order po <include refid="completePurchaseSql"/> ) po1
+        (select IFNULL( sum(po.total_price), 0 ) registered from purchase_order po <include refid="completePurchaseSql"/> ) po1
         )
     </select>
 

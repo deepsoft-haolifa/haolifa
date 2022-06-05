@@ -129,28 +129,28 @@
         <if test="department!=null and department!=''">
             and department like concat('%',#{department},'%')
         </if>
-        <if test="commitUser != null">
+        <if test="commitUser != null and commitUser!=''">
             and commit_user like concat('%',#{commitUser},'%')
         </if>
-        <if test="classifyName != null">
+        <if test="classifyName != null and classifyName!=''">
             and expenses_classify = #{classifyName}
         </if>
-        <if test="secondClassifyName != null">
+        <if test="secondClassifyName != null and secondClassifyName!=''">
             and second_classify = #{secondClassifyName}
         </if>
-        <if test="secondClassifyNameList != null">
+        <if test="secondClassifyNameList != null and secondClassifyNameList.size>0">
             and second_classify in
             <foreach close=")" collection="secondClassifyNameList" item="item" open="(" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test="excludeSecondClassifyNameList != null">
+        <if test="excludeSecondClassifyNameList != null and excludeSecondClassifyNameList.size>0">
             and second_classify not in
             <foreach close=")" collection="excludeSecondClassifyNameList" item="item" open="(" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test="voucherNo != null">
+        <if test="voucherNo != null and voucherNo!=''">
             and voucher_no like concat('%',#{voucherNo},'%')
         </if>
     </sql>

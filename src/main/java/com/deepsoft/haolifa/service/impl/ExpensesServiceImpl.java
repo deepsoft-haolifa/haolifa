@@ -118,7 +118,7 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         ExpensesExample expensesExample = new ExpensesExample();
         ExpensesExample.Criteria criteria = expensesExample.createCriteria();
         if (StringUtils.isNotEmpty(expensesDTO.getClassifyName()) && !"全部".equals(expensesDTO.getClassifyName())) {
-            criteria.andSecondClassifyLike("%" + expensesDTO.getClassifyName() + "%");
+            criteria.andExpensesClassifyLike("%" + expensesDTO.getClassifyName() + "%");
         }
         if (StringUtils.isNotEmpty(expensesDTO.getSecondClassifyName()) && !"全部".equals(expensesDTO.getSecondClassifyName())) {
             criteria.andSecondClassifyLike("%" + expensesDTO.getSecondClassifyName() + "%");
