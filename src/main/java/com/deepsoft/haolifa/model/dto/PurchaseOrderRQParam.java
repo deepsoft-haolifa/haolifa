@@ -1,15 +1,11 @@
 package com.deepsoft.haolifa.model.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.Data;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class PurchaseOrderRQParam extends PageParam {
 
     @ApiModelProperty(value = "采购合同号:")
@@ -20,7 +16,6 @@ public class PurchaseOrderRQParam extends PageParam {
     private Integer orderType;
     @ApiModelProperty(value = "供方单位:")
     private String supplierName;
-
 
 
 }
