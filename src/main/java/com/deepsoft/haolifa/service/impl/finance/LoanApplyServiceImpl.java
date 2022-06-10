@@ -11,13 +11,17 @@ import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
+import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanPayDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
+import com.deepsoft.haolifa.service.finance.BankBillService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
+import com.deepsoft.haolifa.service.finance.OtherBillService;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -57,6 +61,11 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
     @Autowired
     private BillService billService;
+    @Autowired
+    private BankBillService bankBillService;
+    @Autowired
+    private OtherBillService otherBillService;
+
 
     @Override
     public ResultBean save(LoanApplyAddDTO model) {
@@ -306,7 +315,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
                 LoanApplyRSDTO loanApplyRSDTO = convertLoanApplyRSDTO(sysDepartmentMap, iscn, finalSysUserMap, loanApply);
                 return loanApplyRSDTO;
             })
-            .filter(dto-> dto.getOwedAmount().compareTo(BigDecimal.ZERO) > 0)
+            .filter(dto -> dto.getOwedAmount().compareTo(BigDecimal.ZERO) > 0)
             .collect(Collectors.toList());
 
         return ResultBean.success(loanApplyRSDTOList);
@@ -346,7 +355,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.un_pay.getCode())
                 || StringUtils.equalsIgnoreCase(loanApply.getPayStatus(), LoanrPayStatusEnum.partial_pay.getCode())
         );
-        // canPay = true;
+//        canPay = true;
         loanApplyRSDTO.setCanPay(canPay);
         return loanApplyRSDTO;
     }
@@ -420,16 +429,42 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         SysUser sysUser = sysUserService.getSysUser(selectByPrimaryKey.getLoanUser());
         // todo 扣减日记账金额
-        BizBillAddDTO bizBill = new BizBillAddDTO();
-        bizBill.setType(BookingTypeEnum.cash_bill.getCode());
-        bizBill.setCertificateNumber(loanApplyPayDTO.getPayAccount());
-        bizBill.setD(new Date());
-        bizBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
-        bizBill.setPayment(selectByPrimaryKey.getAmount());
-        bizBill.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
-        bizBill.setString1(sysUser.getRealName());
-        bizBill.setString2(loanApplyPayDTO.getPayCompany());
-        ResultBean save = billService.save(bizBill);
+
+        // 记账方式（1現金 2銀行 3 其他貨幣）
+        if (StringUtils.equalsIgnoreCase("1", loanApplyPayDTO.getBillNature())) {
+            BizBillAddDTO bizBill = buildBizBillAddDTO(loanApplyPayDTO, selectByPrimaryKey, sysUser);
+            billService.save(bizBill);
+        } else if (StringUtils.equalsIgnoreCase("2", loanApplyPayDTO.getBillNature())) {
+            BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
+            // 付款
+            bizBankBill.setType("2");
+            bizBankBill.setCompany(loanApplyPayDTO.getPayCompany());
+            bizBankBill.setCertificateNumber("");
+            bizBankBill.setOperateDate(new Date());
+            bizBankBill.setPayWay(PayWayEnum.cash_pay.getDesc());
+            bizBankBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+            bizBankBill.setPayment(selectByPrimaryKey.getAmount());
+            bizBankBill.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
+            bizBankBill.setPayCompany(loanApplyPayDTO.getPayCompany());
+            bizBankBill.setPayAccount(loanApplyPayDTO.getPayAccount());
+            bizBankBill.setCollectCompany(sysUser.getRealName());
+            bankBillService.save(bizBankBill);
+        } else if (StringUtils.equalsIgnoreCase("3", loanApplyPayDTO.getBillNature())) {
+            BizOtherBillAddDTO otherBillAddDTO = new BizOtherBillAddDTO();
+            // 付款
+            otherBillAddDTO.setType("2");
+            otherBillAddDTO.setCompany(loanApplyPayDTO.getPayCompany());
+            otherBillAddDTO.setCertificateNumber("");
+            otherBillAddDTO.setOperateDate(new Date());
+            otherBillAddDTO.setPayWay(PayWayEnum.cash_pay.getDesc());
+            otherBillAddDTO.setPaymentType(PayWayEnum.cash_pay.getDesc());
+            otherBillAddDTO.setPayment(selectByPrimaryKey.getAmount());
+            otherBillAddDTO.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
+            otherBillAddDTO.setPayCompany(loanApplyPayDTO.getPayCompany());
+            otherBillAddDTO.setPayAccount(loanApplyPayDTO.getPayAccount());
+            otherBillAddDTO.setCollectCompany(sysUser.getRealName());
+            otherBillService.save(otherBillAddDTO);
+        }
 
 
         BizLoanApply loanApply = new BizLoanApply();
@@ -440,6 +475,19 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
         return ResultBean.success(update);
+    }
+
+    private BizBillAddDTO buildBizBillAddDTO(LoanApplyPayDTO loanApplyPayDTO, BizLoanApply selectByPrimaryKey, SysUser sysUser) {
+        BizBillAddDTO bizBill = new BizBillAddDTO();
+        bizBill.setType(BookingTypeEnum.cash_bill.getCode());
+        bizBill.setCertificateNumber(loanApplyPayDTO.getPayAccount());
+        bizBill.setD(new Date());
+        bizBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+        bizBill.setPayment(selectByPrimaryKey.getAmount());
+        bizBill.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
+        bizBill.setString1(sysUser.getRealName());
+        bizBill.setString2(loanApplyPayDTO.getPayCompany());
+        return bizBill;
     }
 
     private FlowInstanceDTO buildFlowInstanceDTO(BizLoanApply loanApply) {
