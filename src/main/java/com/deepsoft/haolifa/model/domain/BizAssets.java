@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class BizAssets {
-    private Long assetsId;
+    private Long id;
 
     private String name;
 
@@ -86,8 +86,8 @@ public class BizAssets {
 
     private Date updateTime;
 
-    public BizAssets(Long assetsId, String name, String bh, String type, String specifications, String num, String deptId, String userName, String addType, String location, String equipmentState, String manufacturer, Date purchasingTime, BigDecimal price, String useYear, String depreciationMethod, Date startTime, String accruedMonth, String outputRate, String salvageValue, String accumulatedDepreciation, String monthRate, String monthDepreciation, String netWorth, String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9, String string10, String remark, String status, String delFlag, String createBy, Date createTime, String updateBy, Date updateTime) {
-        this.assetsId = assetsId;
+    public BizAssets(Long id, String name, String bh, String type, String specifications, String num, String deptId, String userName, String addType, String location, String equipmentState, String manufacturer, Date purchasingTime, BigDecimal price, String useYear, String depreciationMethod, Date startTime, String accruedMonth, String outputRate, String salvageValue, String accumulatedDepreciation, String monthRate, String monthDepreciation, String netWorth, String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9, String string10, String remark, String status, String delFlag, String createBy, Date createTime, String updateBy, Date updateTime) {
+        this.id = id;
         this.name = name;
         this.bh = bh;
         this.type = type;
@@ -134,12 +134,12 @@ public class BizAssets {
         super();
     }
 
-    public Long getAssetsId() {
-        return assetsId;
+    public Long getId() {
+        return id;
     }
 
-    public void setAssetsId(Long assetsId) {
-        this.assetsId = assetsId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

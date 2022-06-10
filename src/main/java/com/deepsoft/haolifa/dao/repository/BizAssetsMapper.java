@@ -10,7 +10,7 @@ public interface BizAssetsMapper {
 
     int deleteByExample(BizAssetsExample example);
 
-    int deleteByPrimaryKey(Long assetsId);
+    int deleteByPrimaryKey(Long id);
 
     int insert(BizAssets record);
 
@@ -18,7 +18,7 @@ public interface BizAssetsMapper {
 
     List<BizAssets> selectByExample(BizAssetsExample example);
 
-    BizAssets selectByPrimaryKey(Long assetsId);
+    BizAssets selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") BizAssets record, @Param("example") BizAssetsExample example);
 

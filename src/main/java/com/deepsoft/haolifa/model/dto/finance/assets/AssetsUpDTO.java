@@ -13,7 +13,7 @@ import java.util.Date;
 public class AssetsUpDTO {
 
     @ApiModelProperty(value = "ID")
-    private Long assetsId;
+    private Long id;
 
 
     @ApiModelProperty(value = "设备名称")

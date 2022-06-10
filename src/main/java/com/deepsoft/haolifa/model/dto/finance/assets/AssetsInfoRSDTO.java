@@ -12,7 +12,7 @@ import java.util.Date;
 public class AssetsInfoRSDTO {
 
     @ApiModelProperty(value = "ID")
-    private Long assetsId;
+    private Long id;
 
     @ApiModelProperty(value = "设备名称")
     private  String name;

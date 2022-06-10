@@ -106,63 +106,63 @@ public class BizAssetsExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andAssetsIdIsNull() {
-            addCriterion("assets_id is null");
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdIsNotNull() {
-            addCriterion("assets_id is not null");
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdEqualTo(Long value) {
-            addCriterion("assets_id =", value, "assetsId");
+        public Criteria andIdEqualTo(Long value) {
+            addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdNotEqualTo(Long value) {
-            addCriterion("assets_id <>", value, "assetsId");
+        public Criteria andIdNotEqualTo(Long value) {
+            addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdGreaterThan(Long value) {
-            addCriterion("assets_id >", value, "assetsId");
+        public Criteria andIdGreaterThan(Long value) {
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("assets_id >=", value, "assetsId");
+        public Criteria andIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdLessThan(Long value) {
-            addCriterion("assets_id <", value, "assetsId");
+        public Criteria andIdLessThan(Long value) {
+            addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdLessThanOrEqualTo(Long value) {
-            addCriterion("assets_id <=", value, "assetsId");
+        public Criteria andIdLessThanOrEqualTo(Long value) {
+            addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdIn(List<Long> values) {
-            addCriterion("assets_id in", values, "assetsId");
+        public Criteria andIdIn(List<Long> values) {
+            addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdNotIn(List<Long> values) {
-            addCriterion("assets_id not in", values, "assetsId");
+        public Criteria andIdNotIn(List<Long> values) {
+            addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdBetween(Long value1, Long value2) {
-            addCriterion("assets_id between", value1, value2, "assetsId");
+        public Criteria andIdBetween(Long value1, Long value2) {
+            addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andAssetsIdNotBetween(Long value1, Long value2) {
-            addCriterion("assets_id not between", value1, value2, "assetsId");
+        public Criteria andIdNotBetween(Long value1, Long value2) {
+            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
