@@ -314,22 +314,22 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean historySave(InspectHistoryDto model) {
-        if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
-            PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
-            payExample.createCriteria().andOrderIdEqualTo(model.getInspectNo());
-            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
-
-            // 机加工 质检
-            EntrustExample entrustExample = new EntrustExample();
-            entrustExample.createCriteria().andEntrustNoEqualTo(model.getInspectNo());
-            List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
-            if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
-                Entrust entrust = entrustList.get(0);
-                if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(entrust.getCreateTime())) {
-                    return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
-                }
-            }
-        }
+//        if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
+//            PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
+//            payExample.createCriteria().andOrderIdEqualTo(model.getInspectNo());
+//            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
+//
+//            // 机加工 质检
+//            EntrustExample entrustExample = new EntrustExample();
+//            entrustExample.createCriteria().andEntrustNoEqualTo(model.getInspectNo());
+//            List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
+//            if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
+//                Entrust entrust = entrustList.get(0);
+//                if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(entrust.getCreateTime())) {
+//                    return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+//                }
+//            }
+//        }
         if (model.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
