@@ -722,6 +722,7 @@
             </if>
             and po.purchase_order_no = i.order_no
             and i.total_amount  &gt; 0
+            and po.paid_account  <![CDATA[ <> ]]> po.total_price
         </where>
         order by po.create_time desc
     </select>
