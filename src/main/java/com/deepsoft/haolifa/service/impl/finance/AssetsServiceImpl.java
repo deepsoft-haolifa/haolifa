@@ -130,7 +130,7 @@ public class AssetsServiceImpl implements AssetsService {
         BeanUtils.copyProperties(assetsUpDTO, bizAssets);
         bizAssets.setUpdateTime(new Date());
         bizAssets.setUpdateBy(sysUserService.selectLoginUser().getId().toString());
-        int i = bizAssetsMapper.updateByPrimaryKey(bizAssets);
+        int i = bizAssetsMapper.updateByPrimaryKeySelective(bizAssets);
         return ResultBean.success(i);
     }
 

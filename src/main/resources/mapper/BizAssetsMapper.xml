@@ -105,11 +105,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, bh, type, specifications, num, dept_id, user_name, add_type, location,
-    equipment_state, manufacturer, purchasing_time, price, use_year, depreciation_method,
-    start_time, accrued_month, output_rate, salvage_value, accumulated_depreciation,
-    month_rate, month_depreciation, net_worth, string1, string2, string3, string4, string5,
-    string6, string7, string8, string9, string10, remark, status, del_flag, create_by,
+    id, name, bh, type, specifications, num, dept_id, user_name, add_type, location, 
+    equipment_state, manufacturer, purchasing_time, price, use_year, depreciation_method, 
+    start_time, accrued_month, output_rate, salvage_value, accumulated_depreciation, 
+    month_rate, month_depreciation, net_worth, string1, string2, string3, string4, string5, 
+    string6, string7, string8, string9, string10, remark, status, del_flag, create_by, 
     create_time, update_by, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizAssetsExample" resultMap="BaseResultMap">
@@ -127,14 +127,14 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
+    select 
     <include refid="Base_Column_List" />
     from biz_assets
-    where id = #{assetsId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from biz_assets
-    where id = #{assetsId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BizAssetsExample">
     delete from biz_assets
@@ -143,41 +143,44 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BizAssets">
-    insert into biz_assets (id, name, bh,
-      type, specifications, num,
-      dept_id, user_name, add_type,
-      location, equipment_state, manufacturer,
-      purchasing_time, price, use_year,
-      depreciation_method, start_time, accrued_month,
-      output_rate, salvage_value, accumulated_depreciation,
-      month_rate, month_depreciation, net_worth,
-      string1, string2, string3,
-      string4, string5, string6,
-      string7, string8, string9,
-      string10, remark, status,
-      del_flag, create_by, create_time,
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into biz_assets (name, bh, type, 
+      specifications, num, dept_id, 
+      user_name, add_type, location, 
+      equipment_state, manufacturer, purchasing_time, 
+      price, use_year, depreciation_method, 
+      start_time, accrued_month, output_rate, 
+      salvage_value, accumulated_depreciation, 
+      month_rate, month_depreciation, net_worth, 
+      string1, string2, string3, 
+      string4, string5, string6, 
+      string7, string8, string9, 
+      string10, remark, status, 
+      del_flag, create_by, create_time, 
       update_by, update_time)
-    values (#{assetsId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{bh,jdbcType=VARCHAR},
-      #{type,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR},
-      #{deptId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{addType,jdbcType=VARCHAR},
-      #{location,jdbcType=VARCHAR}, #{equipmentState,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR},
-      #{purchasingTime,jdbcType=TIMESTAMP}, #{price,jdbcType=DECIMAL}, #{useYear,jdbcType=VARCHAR},
-      #{depreciationMethod,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{accruedMonth,jdbcType=VARCHAR},
-      #{outputRate,jdbcType=VARCHAR}, #{salvageValue,jdbcType=VARCHAR}, #{accumulatedDepreciation,jdbcType=VARCHAR},
-      #{monthRate,jdbcType=VARCHAR}, #{monthDepreciation,jdbcType=VARCHAR}, #{netWorth,jdbcType=VARCHAR},
-      #{string1,jdbcType=VARCHAR}, #{string2,jdbcType=VARCHAR}, #{string3,jdbcType=VARCHAR},
-      #{string4,jdbcType=VARCHAR}, #{string5,jdbcType=VARCHAR}, #{string6,jdbcType=VARCHAR},
-      #{string7,jdbcType=VARCHAR}, #{string8,jdbcType=VARCHAR}, #{string9,jdbcType=VARCHAR},
-      #{string10,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
-      #{delFlag,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+    values (#{name,jdbcType=VARCHAR}, #{bh,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{addType,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{equipmentState,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR}, #{purchasingTime,jdbcType=TIMESTAMP}, 
+      #{price,jdbcType=DECIMAL}, #{useYear,jdbcType=VARCHAR}, #{depreciationMethod,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{accruedMonth,jdbcType=VARCHAR}, #{outputRate,jdbcType=VARCHAR}, 
+      #{salvageValue,jdbcType=VARCHAR}, #{accumulatedDepreciation,jdbcType=VARCHAR}, 
+      #{monthRate,jdbcType=VARCHAR}, #{monthDepreciation,jdbcType=VARCHAR}, #{netWorth,jdbcType=VARCHAR}, 
+      #{string1,jdbcType=VARCHAR}, #{string2,jdbcType=VARCHAR}, #{string3,jdbcType=VARCHAR}, 
+      #{string4,jdbcType=VARCHAR}, #{string5,jdbcType=VARCHAR}, #{string6,jdbcType=VARCHAR}, 
+      #{string7,jdbcType=VARCHAR}, #{string8,jdbcType=VARCHAR}, #{string9,jdbcType=VARCHAR}, 
+      #{string10,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+      #{delFlag,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizAssets">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into biz_assets
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="assetsId != null">
-        id,
-      </if>
       <if test="name != null">
         name,
       </if>
@@ -300,9 +303,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="assetsId != null">
-        #{assetsId,jdbcType=BIGINT},
-      </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
@@ -434,8 +434,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update biz_assets
     <set>
-      <if test="record.assetsId != null">
-        id = #{record.assetsId,jdbcType=BIGINT},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -564,7 +564,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update biz_assets
-    set id = #{record.assetsId,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
       bh = #{record.bh,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
@@ -733,7 +733,7 @@
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{assetsId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BizAssets">
     update biz_assets
@@ -777,6 +777,7 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where id = #{assetsId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
   </update>
+
 </mapper>
