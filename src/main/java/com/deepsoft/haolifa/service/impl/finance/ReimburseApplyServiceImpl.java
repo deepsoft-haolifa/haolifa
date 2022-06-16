@@ -29,6 +29,7 @@ import com.deepsoft.haolifa.util.BigDecimalUtils;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -427,7 +428,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         //借款部门名称
         if (StringUtils.isNotEmpty(model.getDeptName())) {
             SysDepartmentExample departmentExample = new SysDepartmentExample();
-            departmentExample.createCriteria().andDeptNameLike(model.getDeptName());
+            departmentExample.createCriteria().andDeptNameLike("%"+model.getDeptName()+"%");
             List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
             if (CollectionUtil.isNotEmpty(sysDepartments)) {
                 List<Integer> integerList = sysDepartments.stream().map(SysDepartment::getId).collect(Collectors.toList());
@@ -435,9 +436,17 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             }
         }
         //借款人名称
-//        if (StringUtils.isNotEmpty(model.getReimburseUser())) {
-//            criteria.andTypeEqualTo(model.getType());
-//        }
+        if (StringUtils.isNotEmpty(model.getReimburseUser())) {
+            SysUserExample sysUserExample = new SysUserExample();
+            sysUserExample.createCriteria().andUsernameLike(model.getReimburseUser());
+            List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+            List<Integer> userIdList = sysUsers.stream()
+                .map(SysUser::getId)
+                .collect(Collectors.toList());
+            if (CollectionUtil.isNotEmpty(userIdList)){
+                criteria.andReimburseUserIn(userIdList);
+            }
+        }
         // 编号
         if (StringUtils.isNotEmpty(model.getSerialNo())) {
             criteria.andSerialNoLike(model.getSerialNo());
@@ -511,7 +520,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                     StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.un_pay.getCode())
                         || StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.partial_pay.getCode())
                 );
-                // canPay = true;
+//                 canPay = true;
                 reimburseApplyRSDTO.setCanPay(canPay);
                 return reimburseApplyRSDTO;
             })
@@ -595,7 +604,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 如果是借款冲抵
         if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getReimburseType())) {
             ResultBean<Integer> integerResultBean = loanApplyService.repaymentAmount(bizReimburseApplyS.getLoanId(), bizReimburseApplyS.getOffsetAmount());
-            if (StringUtils.isNotEmpty(integerResultBean.getMessage())) {
+            if ( !StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,integerResultBean.getCode())) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, integerResultBean.getMessage());
             }
             totalAmount = totalAmount.add(bizReimburseApplyS.getOffsetAmount());
@@ -630,7 +639,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 subjectBalanceService.decreaseAmount(bizSubjects);
             }
         } else {
-            BizSubjectsBalance bizSubjectsBalance = costBudgetService.getCurUserSubjectsBudget(null, "差旅费");
+            //reimburse_user
+            BizSubjectsBalance bizSubjectsBalance = costBudgetService.getSubjectsBudgetByUserId(bizReimburseApplyS.getReimburseUser(),null, "差旅费");
             // 扣除差旅费科目余额
             BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
             bizSubjects.setSubjectsId(bizSubjectsBalance.getSubjectsId());
@@ -639,8 +649,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             subjectBalanceService.decreaseAmount(bizSubjects);
         }
 
+
+
         // 财务管理->费用管理
-        ExpensesDTO expensesDTO = buildExpensesDTO(bizReimburseApplyS, totalAmount);
+        ExpensesDTO expensesDTO = buildExpensesDTO(bizReimburseApplyS, totalAmount,reimburseCostDetailList);
         expensesService.save(expensesDTO);
 
         return ResultBean.success(update);
@@ -687,10 +699,31 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     }
 
 
-    private ExpensesDTO buildExpensesDTO(BizReimburseApply bizReimburseApplyS, BigDecimal totalAmount) {
+    private ExpensesDTO buildExpensesDTO(BizReimburseApply bizReimburseApplyS, BigDecimal totalAmount,List<BizReimburseCostDetail> reimburseCostDetailList) {
         ExpensesDTO expensesDTO = new ExpensesDTO();
-        expensesDTO.setExpensesClassify("采购费用");
-        expensesDTO.setSecondClassify("其他");
+
+
+        // "费用类别"
+        String expensesClassify = "";
+        // "二级费用类别"
+        String secondClassify = "";
+        Map<String, String> dictByTypeCodeMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+        // 科目
+        if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getType())) {
+            BizReimburseCostDetail bizReimburseCostDetail = reimburseCostDetailList.get(0);
+            BizSubjects subject = bizSubjectsMapper.selectByPrimaryKey(bizReimburseCostDetail.getSubject());
+            expensesClassify = dictByTypeCodeMap.getOrDefault(subject.getType(), "");
+            secondClassify = subject.getName();
+        } else {
+            BizSubjectsBalance bizSubjectsBalance = costBudgetService.getSubjectsBudgetByUserId(bizReimburseApplyS.getReimburseUser(),null, "差旅费");
+            BizSubjects subject = bizSubjectsMapper.selectByPrimaryKey(bizSubjectsBalance.getSubjectsId());
+            expensesClassify = dictByTypeCodeMap.getOrDefault(subject.getType(), "");
+            secondClassify = subject.getName();
+        }
+
+        expensesDTO.setExpensesClassify(expensesClassify);
+        expensesDTO.setSecondClassify(secondClassify);
         expensesDTO.setVoucherNo(bizReimburseApplyS.getSerialNo());
         expensesDTO.setTotalAmount(totalAmount.divide(BigDecimal.ONE, 2));
 

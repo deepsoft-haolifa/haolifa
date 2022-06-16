@@ -54,5 +54,13 @@ public interface CostBudgetService {
      */
     BizSubjectsBalance getCurUserSubjectsBudget(Integer subjectId, String subjectName);
 
+    /***
+     * 获取固定用户固定科目的预算余额
+     * @param subjectId
+     * @param subjectName
+     * @return
+     */
+    BizSubjectsBalance getSubjectsBudgetByUserId(Integer userId,Integer subjectId, String subjectName);
+
     ResultBean<CostBudgetSubjectsRSDTO> getCurUserClfSubjectsBudget();
 }

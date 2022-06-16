@@ -441,8 +441,8 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             bizBankBill.setCompany(loanApplyPayDTO.getPayCompany());
             bizBankBill.setCertificateNumber("");
             bizBankBill.setOperateDate(new Date());
-            bizBankBill.setPayWay(PayWayEnum.cash_pay.getDesc());
-            bizBankBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+            bizBankBill.setPayWay(PayWayEnum.check_pay.getDesc());
+            bizBankBill.setPaymentType(PayWayEnum.check_pay.getDesc());
             bizBankBill.setPayment(selectByPrimaryKey.getAmount());
             bizBankBill.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
             bizBankBill.setPayCompany(loanApplyPayDTO.getPayCompany());
@@ -456,8 +456,8 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             otherBillAddDTO.setCompany(loanApplyPayDTO.getPayCompany());
             otherBillAddDTO.setCertificateNumber("");
             otherBillAddDTO.setOperateDate(new Date());
-            otherBillAddDTO.setPayWay(PayWayEnum.cash_pay.getDesc());
-            otherBillAddDTO.setPaymentType(PayWayEnum.cash_pay.getDesc());
+            otherBillAddDTO.setPayWay(PayWayEnum.acceptance_pay.getDesc());
+            otherBillAddDTO.setPaymentType(PayWayEnum.acceptance_pay.getDesc());
             otherBillAddDTO.setPayment(selectByPrimaryKey.getAmount());
             otherBillAddDTO.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
             otherBillAddDTO.setPayCompany(loanApplyPayDTO.getPayCompany());
@@ -523,7 +523,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         // 借款
         BizLoanApply bizLoanApplyUp = buildBizLoanApply(bizLoanApply, addAmount);
         bizLoanApplyMapper.updateByPrimaryKeySelective(bizLoanApplyUp);
-        return null;
+        return ResultBean.success(1);
     }
 
     private BizLoanApply buildBizLoanApply(BizLoanApply bizLoanApply, BigDecimal addAmount) {

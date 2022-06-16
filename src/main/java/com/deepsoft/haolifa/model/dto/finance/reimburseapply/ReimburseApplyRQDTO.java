@@ -30,6 +30,6 @@ public class ReimburseApplyRQDTO extends PageParam {
     private String deptName;
 
     @ApiModelProperty(value = "报销人")
-    private Integer reimburseUser;
+    private String reimburseUser;
 
 }
