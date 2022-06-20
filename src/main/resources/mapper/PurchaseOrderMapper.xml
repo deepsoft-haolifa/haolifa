@@ -706,7 +706,8 @@
             resultType="com.deepsoft.haolifa.model.domain.PurchaseOrder"
             parameterType="com.deepsoft.haolifa.model.dto.PurchaseOrderRQParam"
             >
-        select po.*,i.total_amount as invoiceAccount from purchase_order po , invoice i
+        select po.*,i.total_amount as invoiceAccount from purchase_order po
+         left join invoice i on  po.purchase_order_no = i.order_no
         <where>
             <if test="query.orderNo != null and query.orderNo != '' ">
                 and po.purchase_order_no = #{query.orderNo}
@@ -720,7 +721,6 @@
             <if test="query.orderType != null and query.orderType  != '' ">
                 and po.order_type = #{query.orderType}
             </if>
-            and po.purchase_order_no = i.order_no
             and po.paid_account  <![CDATA[ <> ]]> po.total_price
         </where>
         order by po.create_time desc

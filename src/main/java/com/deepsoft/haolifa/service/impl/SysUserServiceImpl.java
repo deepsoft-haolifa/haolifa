@@ -89,7 +89,7 @@ public class SysUserServiceImpl implements SysUserService {
             return (CustomUser) customUserService.loadUserByUsername("admin");
         else
             return (CustomUser) principal;
-//        return (CustomUser) customUserService.loadUserByUsername("cjc");
+//        return (CustomUser) customUserService.loadUserByUsername("HLCG-01");
     }
 
     @Override
