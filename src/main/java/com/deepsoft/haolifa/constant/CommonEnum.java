@@ -800,6 +800,8 @@ public class CommonEnum {
         VALVE_CORE_BLANK("21", "阀芯毛坯"),
         SIEMENS_CONTROL_VALVE_ASSEMBLY("22", "西门子调节阀装配"),
         CONTROL_VALVE_ASSEMBLY("23", "调节阀装配"),
+        EXTERNAL_TRANSFER_PRODUCTS("24", "外调产品"),
+        VALVE_ACCESSORIES("25", "阀门配件"),
         ;
         public final String code;
         public final String name;
