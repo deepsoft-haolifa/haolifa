@@ -680,7 +680,9 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         costBudgetSubjectsRQDTO.setCostRatioFormula(bizCostBudgetSubjects.getCostRatio() + "%");
         costBudgetSubjectsRQDTO.setCostRatioFormulaCN(bizCostBudgetSubjects.getCostRatio() + "%");
         SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
-        costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
+        if (sysDepartment != null){
+            costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
+        }
 
         costBudgetSubjectsRQDTO.setSubjectsTypeCode(bizCostBudgetSubjects.getSubjectsType());
         costBudgetSubjectsRQDTO.setSubjectsTypeName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));

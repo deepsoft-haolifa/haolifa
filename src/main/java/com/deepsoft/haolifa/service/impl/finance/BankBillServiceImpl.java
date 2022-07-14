@@ -113,13 +113,13 @@ public class BankBillServiceImpl implements BankBillService {
         //2	货款
         //1	费用
         // 收费方式 承兑
-        if (!StringUtils.equalsIgnoreCase(bizBankBill.getPayWay(),"承兑")
-            && StringUtils.equalsIgnoreCase(bizBankBill.getType(),"1")
-            && "123".contains(model.getCollectionType())) {
-            subjectBalanceService.increaseAmountBatch(model.getCollectionMoney());
-        } else if (bizBankBill.getType().equals("2")) {
-//            subjectBalanceService.decreaseAmountBatch(model.getCollectionMoney());
-        }
+//        if (!StringUtils.equalsIgnoreCase(bizBankBill.getPayWay(),"承兑")
+//            && StringUtils.equalsIgnoreCase(bizBankBill.getType(),"1")
+//            && "123".contains(model.getCollectionType())) {
+//            subjectBalanceService.increaseAmountBatch(model.getCollectionMoney());
+//        } else if (bizBankBill.getType().equals("2")) {
+////            subjectBalanceService.decreaseAmountBatch(model.getCollectionMoney());
+//        }
 
         return ResultBean.success(insertId);
     }
