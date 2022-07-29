@@ -133,10 +133,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         switch (reimburseTypeEnum) {
             case travle: {
                 // 差旅费
-                BizSubjectsBalance bizSubjectsBalance = costBudgetService.getCurUserSubjectsBudget(null, "差旅费");
-                if (bizSubjectsBalance != null && bizSubjectsBalance.getBalanceAmount().compareTo(totalAmount) < 0) {
-                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门差旅费余额不足");
-                }
+//                BizSubjectsBalance bizSubjectsBalance = costBudgetService.getCurUserSubjectsBudget(null, "差旅费");
+//                if (bizSubjectsBalance != null && bizSubjectsBalance.getBalanceAmount().compareTo(totalAmount) < 0) {
+//                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门差旅费余额不足");
+//                }
 
                 if (CollectionUtil.isNotEmpty(model.getReimburseTravelDetailAddDTOList())) {
                     for (ReimburseTravelDetailAddDTO reimburseTravelDetailAddDTO : model.getReimburseTravelDetailAddDTOList()) {
@@ -149,12 +149,12 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             case cost: {
                 if (CollectionUtil.isNotEmpty(model.getReimburseCostDetailAddDTOList())) {
                     for (ReimburseCostDetailAddDTO reimburseCostDetailAddDTO : model.getReimburseCostDetailAddDTOList()) {
-                        BizSubjectsBalance bizSubjectsBalance = costBudgetService.getCurUserSubjectsBudget(reimburseCostDetailAddDTO.getSubject(), null);
-
-                        if (bizSubjectsBalance != null && bizSubjectsBalance.getBalanceAmount().compareTo(reimburseCostDetailAddDTO.getAmount()) < 0) {
-                            BizSubjects bizSubjects = bizSubjectsMapper.selectByPrimaryKey(reimburseCostDetailAddDTO.getSubject());
-                            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门" + bizSubjects.getName() + "余额不足");
-                        }
+//                        BizSubjectsBalance bizSubjectsBalance = costBudgetService.getCurUserSubjectsBudget(reimburseCostDetailAddDTO.getSubject(), null);
+//
+//                        if (bizSubjectsBalance != null && bizSubjectsBalance.getBalanceAmount().compareTo(reimburseCostDetailAddDTO.getAmount()) < 0) {
+//                            BizSubjects bizSubjects = bizSubjectsMapper.selectByPrimaryKey(reimburseCostDetailAddDTO.getSubject());
+//                            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当前部门" + bizSubjects.getName() + "余额不足");
+//                        }
 
                         BizReimburseCostDetail record = buildBizReimburseCostDetail(customUser, ser, reimburseApply, reimburseCostDetailAddDTO);
                         int i = bizReimburseCostDetailMapper.insertSelective(record);
@@ -635,21 +635,21 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
 
         // 扣款科目余额
-        if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getType())) {
-            for (BizReimburseCostDetail reimburseCostDetail : reimburseCostDetailList) {
-                BizSubjectsBalanceUpDTO bizSubjects = buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, reimburseCostDetail);
-                subjectBalanceService.decreaseAmount(bizSubjects);
-            }
-        } else {
-            //reimburse_user
-            BizSubjectsBalance bizSubjectsBalance = costBudgetService.getSubjectsBudgetByUserId(bizReimburseApplyS.getReimburseUser(), null, "差旅费");
-            // 扣除差旅费科目余额
-            BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
-            bizSubjects.setSubjectsId(bizSubjectsBalance.getSubjectsId());
-            bizSubjects.setDeptId(bizReimburseApplyS.getDeptId());
-            bizSubjects.setAmount(totalAmount);
-            subjectBalanceService.decreaseAmount(bizSubjects);
-        }
+//        if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getType())) {
+//            for (BizReimburseCostDetail reimburseCostDetail : reimburseCostDetailList) {
+//                BizSubjectsBalanceUpDTO bizSubjects = buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, reimburseCostDetail);
+//                subjectBalanceService.decreaseAmount(bizSubjects);
+//            }
+//        } else {
+//            //reimburse_user
+//            BizSubjectsBalance bizSubjectsBalance = costBudgetService.getSubjectsBudgetByUserId(bizReimburseApplyS.getReimburseUser(), null, "差旅费");
+//            // 扣除差旅费科目余额
+//            BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
+//            bizSubjects.setSubjectsId(bizSubjectsBalance.getSubjectsId());
+//            bizSubjects.setDeptId(bizReimburseApplyS.getDeptId());
+//            bizSubjects.setAmount(totalAmount);
+//            subjectBalanceService.decreaseAmount(bizSubjects);
+//        }
 
 
         // 财务管理->费用管理
@@ -717,10 +717,11 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             expensesClassify = dictByTypeCodeMap.getOrDefault(subject.getType(), "");
             secondClassify = subject.getName();
         } else {
-            BizSubjectsBalance bizSubjectsBalance = costBudgetService.getSubjectsBudgetByUserId(bizReimburseApplyS.getReimburseUser(), null, "差旅费");
-            BizSubjects subject = bizSubjectsMapper.selectByPrimaryKey(bizSubjectsBalance.getSubjectsId());
-            expensesClassify = dictByTypeCodeMap.getOrDefault(subject.getType(), "");
-            secondClassify = subject.getName();
+//            BizSubjectsBalance bizSubjectsBalance = costBudgetService.getSubjectsBudgetByUserId(bizReimburseApplyS.getReimburseUser(), null, "差旅费");
+//            BizSubjects subject = bizSubjectsMapper.selectByPrimaryKey(bizSubjectsBalance.getSubjectsId());
+//            expensesClassify = dictByTypeCodeMap.getOrDefault(subject.getType(), "");
+//            secondClassify = subject.getName();
+            secondClassify = "差旅费";
         }
 
         expensesDTO.setExpensesClassify(expensesClassify);

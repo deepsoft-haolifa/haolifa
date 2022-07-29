@@ -721,11 +721,26 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             for (int i = lastRowNum; i < lastRowNum + 3; i++) {
                 Row row = sheet.getRow(i);
                 if (null != row) {
-                    Cell cell7 = row.getCell(7);
-                    cell7.setCellValue("");
-                    Cell cell8 = row.getCell(8);
-                    cell8.setCellValue("");
+                    // 以上价格均为含税价格  这一行，将价格隐藏
+                    if (i == lastRowNum + 2) {
+                        Cell cell2 = row.getCell(2);
+                        cell2.setCellValue("");
+                        Cell cell3 = row.getCell(3);
+                        cell3.setCellValue("");
+                        Cell cell4 = row.getCell(4);
+                        cell4.setCellValue("");
+                        Cell cell5 = row.getCell(5);
+                        cell5.setCellValue("");
+                        Cell cell6 = row.getCell(6);
+                        cell6.setCellValue("");
+                    }else {
+                        Cell cell7 = row.getCell(7);
+                        cell7.setCellValue("");
+                        Cell cell8 = row.getCell(8);
+                        cell8.setCellValue("");
+                    }
                 }
+
             }
             // 将数据赋值
             OrderProductDTO orderProductDTO = new OrderProductDTO();
