@@ -35,6 +35,8 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
     @Resource
     private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
     @Resource
+    private PayOrderRelationMoreUserMapper payOrderRelationMoreUserMapper;
+    @Resource
     private PayWorkingProcedureMapper payWorkingProcedureMapper;
     @Resource
     private OrderProductService orderProductService;
@@ -89,7 +91,7 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             return ResultBean.error(CommonEnum.ResponseEnum.FAIL, "传的数据为空");
         }
         for (PayOrderUserRelationProcedureDTO payOrderUserRelationProcedureDTO : payOrderUserRelationProcedureList) {
-            if (Objects.isNull(payOrderUserRelationProcedureDTO.getUserId())) {
+            if (CollectionUtils.isEmpty(payOrderUserRelationProcedureDTO.getUserId())) {
                 continue;
             }
             PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(payOrderUserRelationProcedureDTO.getId());
@@ -222,25 +224,72 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             PayHourQuota payHourQuota = list.get(0);
             hourQuotaPrice = payHourQuota.getHourQuotaPrice();
         }
+
+        List<PayOrderRelationMoreUser> payOrderRelationMoreUsers = null;
         // 保存之前先删除以前的 数据
         PayOrderUserRelationProcedureExample example = new PayOrderUserRelationProcedureExample();
         example.createCriteria().andOrderIdEqualTo(payOrderUserRelationProcedureDTO.getOrderId())
             .andProcedureIdEqualTo(payOrderUserRelationProcedureDTO.getId())
             .andProductIdEqualTo(payOrderUserRelationProcedureDTO.getProductId());
         List<PayOrderUserRelationProcedure> payOrderUserRelationProcedures = payOrderUserRelationProcedureMapper.selectByExample(example);
+        for (PayOrderUserRelationProcedure payOrderUserRelationProcedure : payOrderUserRelationProcedures) {
+            payOrderUserRelationProcedureMapper.deleteByPrimaryKey(payOrderUserRelationProcedure.getId());
+            // 若果是检验的话
+            // 先删除所有管理任务绑定的多人表
+            if (CollectionUtils.isEmpty(payOrderRelationMoreUsers)) {
+                PayOrderRelationMoreUserExample userExample1 = new PayOrderRelationMoreUserExample();
+                userExample1.createCriteria().andRelationProcedureIdEqualTo(payOrderUserRelationProcedure.getId());
+                payOrderRelationMoreUsers = payOrderRelationMoreUserMapper.selectByExample(userExample1);
+            }
+        }
         if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payOrderUserRelationProcedures)) {
-            payOrderUserRelationProcedures.stream().forEach(pp -> payOrderUserRelationProcedureMapper.deleteByPrimaryKey(pp.getId()));
+            payOrderUserRelationProcedures.stream().forEach(dd -> {
+                // 先删除所有管理任务绑定的多人表
+                PayOrderRelationMoreUserExample userExample = new PayOrderRelationMoreUserExample();
+                userExample.createCriteria().andRelationProcedureIdEqualTo(dd.getId());
+                payOrderRelationMoreUserMapper.deleteByExample(userExample);
+            });
         }
         PayOrderUserRelationProcedure procedure = new PayOrderUserRelationProcedure();
         procedure.setOrderId(payOrderUserRelationProcedureDTO.getOrderId());
         procedure.setHourPrice(hourQuotaPrice);
-        procedure.setUserId(payOrderUserRelationProcedureDTO.getUserId());
+        procedure.setUserId(payOrderUserRelationProcedureDTO.getUserId().get(0));
         procedure.setProductId(payOrderUserRelationProcedureDTO.getProductId());
         procedure.setProcedureId(payOrderUserRelationProcedureDTO.getId());
         procedure.setCreateUser(getLoginUserName());
         procedure.setUpdateUser(getLoginUserName());
         procedure.setCreateTime(new Date());
         procedure.setUpdateTime(new Date());
-        payOrderUserRelationProcedureMapper.insertSelective(procedure);
+        int i = payOrderUserRelationProcedureMapper.insertSelective(procedure);
+        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payOrderRelationMoreUsers)) {
+            for (PayOrderRelationMoreUser payOrderRelationMoreUser : payOrderRelationMoreUsers) {
+                payOrderRelationMoreUser.setRelationProcedureId(procedure.getId());
+                payOrderRelationMoreUser.setCreateTime(payOrderRelationMoreUser.getCreateTime());
+                payOrderRelationMoreUser.setUpdateTime(new Date());
+                payOrderRelationMoreUser.setUpdateUser(getLoginUserName());
+                payOrderRelationMoreUserMapper.insertSelective(payOrderRelationMoreUser);
+            }
+        }
+        if (i == 1 && Objects.nonNull(payOrderUserRelationProcedureDTO.getIsCheckFlag()) && 1 == payOrderUserRelationProcedureDTO.getIsCheckFlag()) {
+            PayOrderRelationMoreUser user = new PayOrderRelationMoreUser();
+            user.setUserId(procedure.getUserId());
+            user.setRelationProcedureId(procedure.getId());
+            user.setQualifiedNumber(payOrderUserRelationProcedureDTO.getQualifiedNumber());
+            user.setCreateTime(new Date());
+            user.setCreateUser(getLoginUserName());
+            payOrderRelationMoreUserMapper.insertSelective(user);
+        } else if (i == 1 && payOrderUserRelationProcedureDTO.getUserId().size() > 1) {
+            // 新增多人任务
+            List<Integer> userIdList = payOrderUserRelationProcedureDTO.getUserId();
+            for (Integer integer : userIdList) {
+                PayOrderRelationMoreUser user = new PayOrderRelationMoreUser();
+                user.setUserId(integer);
+                user.setRelationProcedureId(procedure.getId());
+                user.setCreateTime(new Date());
+                user.setCreateUser(getLoginUserName());
+                payOrderRelationMoreUserMapper.insertSelective(user);
+            }
+        }
+
     }
 }

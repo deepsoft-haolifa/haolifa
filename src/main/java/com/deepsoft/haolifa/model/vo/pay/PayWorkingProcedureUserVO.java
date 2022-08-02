@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.model.vo.pay;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,7 +32,7 @@ public class PayWorkingProcedureUserVO {
     @ApiModelProperty(value = "岗位（工序）代码")
     private String postCode;
     @ApiModelProperty(value = "用户ID")
-    private Integer userId;
+    private List<Integer> userId;
     @ApiModelProperty(value = "总金额")
     private BigDecimal totalPrice;
     @ApiModelProperty(value = "总件数")

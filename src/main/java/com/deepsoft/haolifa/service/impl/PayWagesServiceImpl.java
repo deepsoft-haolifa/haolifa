@@ -14,6 +14,8 @@ import com.deepsoft.haolifa.util.DateUtils;
 import com.deepsoft.haolifa.util.ExcelUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Maps;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -52,7 +54,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     @Resource
     private PayUserMapper payUserMapper;
     @Resource
-    private PayWorkingProcedureMapper payWorkingProcedureMapper;
+    private PayOrderRelationMoreUserMapper payOrderRelationMoreUserMapper;
     @Resource
     private SprayService sprayService;
     @Resource
@@ -224,6 +226,10 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
         String str = DateFormatterUtils.formatterDateString(DateFormatterUtils.MAX_FORMATTERPATTERN, cal2.getTime());
         Date endTime = DateUtils.dateTime(DateFormatterUtils.ONE_FORMATTERPATTERN, str);
         List<PayWages> payWages = payWagesMapper.selectByExample(new PayWagesExample());
+
+        //分配多人表的map
+        Map<Integer, BigDecimal> userMap = Maps.newConcurrentMap();
+        Map<Integer, Integer> userCountMap = Maps.newConcurrentMap();
         for (int i = 0; i < payWages.size(); i++) {
             PayWages payWage = payWages.get(i);
             if (Objects.isNull(payWage)) {
@@ -233,6 +239,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             log.info("calculateSalary name:{}, count:{},  month:{}", payWage.getUserName(), i, payWage.getWagesMonth());
             // 通过用户ID查工序订单用户关联表
             Integer userId = payWage.getUserId();
+            if (userId != 63 && userId != 65) {
+                continue;
+            }
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
             // 处理考勤数据 年月
@@ -313,22 +322,69 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         if (CollectionUtils.isEmpty(inspectHistories)) {
                             continue;
                         }
-                        for (InspectHistory inspectHistory : inspectHistories) {
-                            // 合格数量x工序价格+基本工资
-                            Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
-                            // 去重数量
-                            productMap.put(inspectHistory.getId() + orderId, qualifiedNumber);
-                            qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
-                            totalCount = totalCount + qualifiedNumber;
-                            BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
-                            multiplyPrice = multiplyPrice.add(multiply);
-                            totalAmount = totalAmount.add(multiply);
+                        // 查询是否有多个人绑定同一任务
+                        PayOrderRelationMoreUserExample userExample = new PayOrderRelationMoreUserExample();
+                        userExample.createCriteria().andRelationProcedureIdEqualTo(procedure.getId()).andCreateTimeBetween(startTime, endTime);
+                        List<PayOrderRelationMoreUser> payOrderRelationMoreUsers = payOrderRelationMoreUserMapper.selectByExample(userExample);
+                        if (CollectionUtils.isEmpty(payOrderRelationMoreUsers)) {
+                            for (InspectHistory inspectHistory : inspectHistories) {
+                                // 合格数量x工序价格+基本工资
+                                Integer qualifiedNumber = inspectHistory.getQualifiedNumber();
+                                // 去重数量
+                                productMap.put(inspectHistory.getId() + orderId, qualifiedNumber);
+                                qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
+                                totalCount = totalCount + qualifiedNumber;
+                                BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                                multiplyPrice = multiplyPrice.add(multiply);
+                                totalAmount = totalAmount.add(multiply);
+                            }
+                        } else {
+                            for (PayOrderRelationMoreUser more : payOrderRelationMoreUsers) {
+                                if (procedure.getUserId() == more.getUserId()) {
+                                    Integer qualifiedNumber = more.getQualifiedNumber();
+                                    // 去重数量
+                                    long timeMillis = System.currentTimeMillis() + more.getId();
+                                    productMap.put(timeMillis + orderId, qualifiedNumber);
+                                    qualifiedNumberTotal = qualifiedNumberTotal + qualifiedNumber;
+                                    totalCount = totalCount + qualifiedNumber;
+                                    BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                                    multiplyPrice = multiplyPrice.add(multiply);
+                                    totalAmount = totalAmount.add(multiply);
+                                } else {
+                                    Integer qualifiedNumber = more.getQualifiedNumber();
+                                    if (Objects.isNull(qualifiedNumber)) {
+                                        continue;
+                                    }
+                                    // 分配任务多人的情况下单独计算价格
+                                    BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
+                                    BigDecimal userBigDecimal = userMap.get(userId);
+                                    if (Objects.isNull(userBigDecimal)) {
+                                        userMap.put(userId, multiply);
+                                    } else {
+                                        BigDecimal add = userBigDecimal.add(multiply);
+                                        userMap.put(userId, add);
+                                    }
+
+                                    // 分配任务多人的情况下单独计算数量
+                                    Integer userCount = userCountMap.get(userId);
+                                    if (Objects.isNull(userCount)) {
+                                        userCountMap.put(userId, qualifiedNumber);
+                                    } else {
+                                        userCount = userCount + qualifiedNumber;
+                                        userCountMap.put(userId, userCount);
+                                    }
+                                }
+                            }
                         }
+
 //                        procedure.setTotalCount(qualifiedNumberTotal);
 //                        procedure.setTotalPrice(multiplyPrice);
 //                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name.equals(workshopName)) {
                         AutoControlEntrust entrust = autoControlEntrustMapper.selectByPrimaryKey(procedure.getProductId());
+                        if (Objects.isNull(entrust)) {
+                            continue;
+                        }
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, entrust.getGraphNo(), startTime, endTime);
                         payCalculateDTO.setStorageStatus(null);
                         List<AutoControlInspectHistory> inspectHistories = autoControlEntrustService.getInspectHistoryList(payCalculateDTO);
@@ -433,6 +489,34 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             }
 
         }
+        // 多人任务计算
+//        if (userMap.size() > 0) {
+//            for (PayWages payWage : payWages) {
+//                PayUser payUser = payUserMapper.selectByPrimaryKey(payWage.getUserId());
+//                if (CommonEnum.UserType.MARRIED.type.equals(payUser.getUserType())) {
+//                    continue;
+//                }
+//                BigDecimal otherMoney = userMap.get(payWage.getUserId());
+//                if (Objects.isNull(otherMoney)) {
+//                    continue;
+//                }
+//                BigDecimal totalMoney = Objects.isNull(payWage.getTotalMoney()) ? new BigDecimal("0") : payWage.getTotalMoney();
+//                BigDecimal add = totalMoney.add(otherMoney);
+//                payWage.setTotalMoney(add);
+//                payWage.setNetSalaryMoney(add);
+//                payWage.setByPieceMoney(add);
+//
+//                Integer integer = userCountMap.get(payWage.getUserId());
+//                if (Objects.nonNull(integer)) {
+//                    int byPriceCount = Objects.isNull(payWage.getByPieceCount()) ? 0 : payWage.getByPieceCount();
+//                    byPriceCount = byPriceCount + integer;
+//                    payWage.setByPieceCount(byPriceCount);
+//                }
+//                payWagesMapper.updateByPrimaryKeySelective(payWage);
+//            }
+//        }
+
+
         log.info("calculateSalary end=====");
         return null;
     }

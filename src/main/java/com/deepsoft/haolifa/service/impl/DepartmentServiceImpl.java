@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.model.domain.SysDepartment;
@@ -114,5 +115,14 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentTrees.add(departmentTree);
         });
         return TreeUtils.getTreeList("0", departmentTrees);
+    }
+
+    @Override
+    public DepartmentDTO getParentDepartment(Integer id) {
+        SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(id);
+        SysDepartment department = departmentMapper.selectByPrimaryKey(sysDepartment.getPid());
+        DepartmentDTO departmentDTO = new DepartmentDTO();
+        BeanUtil.copyProperties(department, departmentDTO);
+        return departmentDTO;
     }
 }

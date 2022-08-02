@@ -50,6 +50,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
     @Resource
     private AutoControlEntrustMapper autoControlEntrustMapper;
+    @Resource
+    private PayOrderRelationMoreUserMapper payOrderRelationMoreUserMapper;
 
     @Override
     public ResultBean pageInfo(PayWorkingProcedureDTO model) {
@@ -287,7 +289,16 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             List<PayOrderUserRelationProcedure> payOrderUserRelationProcedures = payOrderUserRelationProcedureMapper.selectByExample(example);
             if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(payOrderUserRelationProcedures)) {
                 PayOrderUserRelationProcedure payOrderUserRelationProcedure = payOrderUserRelationProcedures.get(0);
-                payWorkingProcedureUserVO.setUserId(payOrderUserRelationProcedure.getUserId());
+                // 查询是否有多个人绑定同一任务
+                PayOrderRelationMoreUserExample userExample = new PayOrderRelationMoreUserExample();
+                userExample.createCriteria().andRelationProcedureIdEqualTo(payOrderUserRelationProcedure.getId());
+                List<PayOrderRelationMoreUser> payOrderRelationMoreUsers = payOrderRelationMoreUserMapper.selectByExample(userExample);
+                if (CollectionUtils.isEmpty(payOrderRelationMoreUsers)) {
+                    payWorkingProcedureUserVO.setUserId(Collections.singletonList(payOrderUserRelationProcedure.getUserId()));
+                } else {
+                    List<Integer> userIds = payOrderRelationMoreUsers.stream().map(user -> user.getUserId()).distinct().collect(Collectors.toList());
+                    payWorkingProcedureUserVO.setUserId(userIds);
+                }
                 payWorkingProcedureUserVO.setTotalPrice(payOrderUserRelationProcedure.getTotalPrice());
                 payWorkingProcedureUserVO.setTotalCount(payOrderUserRelationProcedure.getTotalCount());
             }

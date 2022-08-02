@@ -24,5 +24,9 @@ public class PayOrderUserRelationProcedureDTO {
     @ApiModelProperty(value = "产品ID")
     private Integer productId;
     @ApiModelProperty(value = "用户ID")
-    private Integer userId;
+    private List<Integer> userId;
+    @ApiModelProperty(value = "是否是检验修改，1：是")
+    private Integer isCheckFlag;
+    @ApiModelProperty(value = "检验合格数量")
+    private Integer qualifiedNumber;
 }

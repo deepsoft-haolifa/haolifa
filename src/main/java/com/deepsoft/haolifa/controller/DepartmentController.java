@@ -28,6 +28,12 @@ public class DepartmentController {
         return ResultBean.success(departmentService.selectDepartmentById(id));
     }
 
+    @ApiOperation("获取上级部门")
+    @GetMapping("getParentDepartment/{id}")
+    public ResultBean getParentDepartment(@PathVariable("id") Integer id){
+        return ResultBean.success(departmentService.getParentDepartment(id));
+    }
+
     @ApiOperation("部门列表")
     @GetMapping("/list")
     public ResultBean getDepartments(){
