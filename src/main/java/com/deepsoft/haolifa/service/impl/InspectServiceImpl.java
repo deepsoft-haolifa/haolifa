@@ -378,7 +378,10 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 inspectMapper.updateByExampleSelective(updateInspect, example);
                 // 更新采购零件送检子表 inspect_item 表
                 InspectItemExample inspectItemExample = new InspectItemExample();
-                inspectItemExample.or().andInspectNoEqualTo(inspectNo).andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
+                inspectItemExample.or()
+                    .andInspectNoEqualTo(inspectNo)
+                    .andMaterialGraphNoEqualTo(model.getMaterialGraphNo())
+                    .andPurchasePriceEqualTo(model.getPurchasePrice());
                 List<InspectItem> inspectItems = inspectItemMapper.selectByExample(inspectItemExample);
                 if (!CollectionUtils.isEmpty(inspectItems)) {
                     InspectItem inspectItem = inspectItems.get(0);
@@ -427,6 +430,10 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 }
                 if (ObjectUtil.isNotNull(model.getUnqualifiedNumber()) && model.getUnqualifiedNumber() > 0) {
                     entrustUpdate.setUnqualifiedNumber(model.getUnqualifiedNumber() + entrustRecord.getUnqualifiedNumber());
+                }
+                // 当合格数+不合格数=总数，将状态置为加工完成
+                if(entrustUpdate.getQualifiedNumber()+ entrustUpdate.getUnqualifiedNumber()>=entrustRecord.getNumber()){
+                    entrustUpdate.setStatus(CommonEnum.EntrustStatus.HANDLED_4.code);
                 }
                 entrustMapper.updateByExampleSelective(entrustUpdate, entrustExample);
             }

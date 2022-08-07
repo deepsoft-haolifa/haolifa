@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
@@ -63,6 +64,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     private CheckMaterialLockService checkMaterialLockService;
     @Resource
     private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean save(SprayDto sprayDto) {
@@ -272,9 +274,8 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         // 不合格原因
         SprayInspectHistory history = new SprayInspectHistory();
         BeanUtils.copyProperties(inspectDto, history);
-        boolean isEmpty = CollectionUtils.isEmpty(inspectDto.getReasonList());
-        if (!isEmpty) {
-            int unqualifiedNum = inspectDto.getReasonList().stream().map(InspectReason::getNumber).reduce(0, (a, b) -> a + b);
+        if (CollectionUtil.isNotEmpty(inspectDto.getReasonList())) {
+            int unqualifiedNum = inspectDto.getReasonList().stream().map(InspectReason::getNumber).reduce(0, Integer::sum);
             inspectDto.setUnqualifiedNumber(unqualifiedNum);
             history.setUnqualifiedNumber(unqualifiedNum);
             history.setReasons(JSON.toJSONString(inspectDto.getReasonList()));
@@ -292,16 +293,24 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         if (!CollectionUtils.isEmpty(inspectDto.getAccessoryList())) {
             history.setAccessory(JSON.toJSONString(inspectDto.getAccessoryList()));
         }
-
+        inspectHistoryMapper.insertSelective(history);
         if (sprays != null && sprays.size() > 0) {
             Spray spray = sprays.get(0);
             spray.setQualifiedNumber(spray.getQualifiedNumber() + inspectDto.getQualifiedNumber());
             if (spray.getTotalNumber() < spray.getQualifiedNumber()) {
                 throw new BaseException(ResponseEnum.SPRAY_QUALIFIED_NUMBER_ERROR);
             }
+            // 如果喷涂质检合格数量+不合格数量等于总数，则加工完成
+            SprayInspectHistoryExample historyExample = new SprayInspectHistoryExample();
+            historyExample.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
+            List<SprayInspectHistory> sprayInspectHistorys = inspectHistoryMapper.selectByExample(historyExample);
+            int qualifiedSum = sprayInspectHistorys.stream().mapToInt(SprayInspectHistory::getQualifiedNumber).sum();
+            int unQualifiedSum = sprayInspectHistorys.stream().mapToInt(SprayInspectHistory::getUnqualifiedNumber).sum();
+            if (qualifiedSum + unQualifiedSum >= spray.getTotalNumber()) {
+                spray.setInspectStatus(CommonEnum.Inspect2Status.handled.code);
+            }
             sprayMapper.updateByExampleSelective(spray, example);
         }
-        inspectHistoryMapper.insertSelective(history);
         return ResultBean.success(history.getId());
     }
 
