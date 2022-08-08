@@ -855,6 +855,66 @@ public class PayOrderUserRelationProcedureExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andMoreUserFlagIsNull() {
+            addCriterion("more_user_flag is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagIsNotNull() {
+            addCriterion("more_user_flag is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagEqualTo(Byte value) {
+            addCriterion("more_user_flag =", value, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagNotEqualTo(Byte value) {
+            addCriterion("more_user_flag <>", value, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagGreaterThan(Byte value) {
+            addCriterion("more_user_flag >", value, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagGreaterThanOrEqualTo(Byte value) {
+            addCriterion("more_user_flag >=", value, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagLessThan(Byte value) {
+            addCriterion("more_user_flag <", value, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagLessThanOrEqualTo(Byte value) {
+            addCriterion("more_user_flag <=", value, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagIn(List<Byte> values) {
+            addCriterion("more_user_flag in", values, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagNotIn(List<Byte> values) {
+            addCriterion("more_user_flag not in", values, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagBetween(Byte value1, Byte value2) {
+            addCriterion("more_user_flag between", value1, value2, "moreUserFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoreUserFlagNotBetween(Byte value1, Byte value2) {
+            addCriterion("more_user_flag not between", value1, value2, "moreUserFlag");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

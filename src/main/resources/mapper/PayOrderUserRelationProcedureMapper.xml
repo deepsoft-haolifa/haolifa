@@ -15,6 +15,7 @@
       <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="more_user_flag" jdbcType="TINYINT" javaType="java.lang.Byte" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -77,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, user_id, order_id, procedure_id, product_id, hour_price, total_price, total_count, 
-    create_user, update_user, create_time, update_time
+    create_user, update_user, create_time, update_time, more_user_flag
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayOrderUserRelationProcedureExample" >
     select
@@ -116,11 +117,13 @@
     insert into pay_order_user_relation_procedure (user_id, order_id, procedure_id, 
       product_id, hour_price, total_price, 
       total_count, create_user, update_user, 
-      create_time, update_time)
+      create_time, update_time, more_user_flag
+      )
     values (#{userId,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{procedureId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{hourPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, 
       #{totalCount,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{moreUserFlag,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayOrderUserRelationProcedure" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -161,6 +164,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="moreUserFlag != null" >
+        more_user_flag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -195,6 +201,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moreUserFlag != null" >
+        #{moreUserFlag,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -243,6 +252,9 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.moreUserFlag != null" >
+        more_user_flag = #{record.moreUserFlag,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -261,7 +273,8 @@
       create_user = #{record.createUser,jdbcType=VARCHAR},
       update_user = #{record.updateUser,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      more_user_flag = #{record.moreUserFlag,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -302,6 +315,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="moreUserFlag != null" >
+        more_user_flag = #{moreUserFlag,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -317,7 +333,8 @@
       create_user = #{createUser,jdbcType=VARCHAR},
       update_user = #{updateUser,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      more_user_flag = #{moreUserFlag,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

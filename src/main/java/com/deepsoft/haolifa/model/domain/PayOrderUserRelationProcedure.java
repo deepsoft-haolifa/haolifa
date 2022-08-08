@@ -28,7 +28,9 @@ public class PayOrderUserRelationProcedure {
 
     private Date updateTime;
 
-    public PayOrderUserRelationProcedure(Integer id, Integer userId, String orderId, Integer procedureId, Integer productId, BigDecimal hourPrice, BigDecimal totalPrice, Integer totalCount, String createUser, String updateUser, Date createTime, Date updateTime) {
+    private Byte moreUserFlag;
+
+    public PayOrderUserRelationProcedure(Integer id, Integer userId, String orderId, Integer procedureId, Integer productId, BigDecimal hourPrice, BigDecimal totalPrice, Integer totalCount, String createUser, String updateUser, Date createTime, Date updateTime, Byte moreUserFlag) {
         this.id = id;
         this.userId = userId;
         this.orderId = orderId;
@@ -41,6 +43,7 @@ public class PayOrderUserRelationProcedure {
         this.updateUser = updateUser;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.moreUserFlag = moreUserFlag;
     }
 
     public PayOrderUserRelationProcedure() {
@@ -141,5 +144,13 @@ public class PayOrderUserRelationProcedure {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Byte getMoreUserFlag() {
+        return moreUserFlag;
+    }
+
+    public void setMoreUserFlag(Byte moreUserFlag) {
+        this.moreUserFlag = moreUserFlag;
     }
 }
