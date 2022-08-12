@@ -2,7 +2,6 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.pay.PayWorkingProcedureDTO;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.List;
 
