@@ -91,7 +91,19 @@ public class PayWorkingProcedureController {
     })
     public ResultBean assignTask(@RequestParam(value = "orderNo") String orderNo,
                                  @RequestParam(value = "type") String type) {
-        return payWorkingProcedureService.assignTask(orderNo, type);
+        return payWorkingProcedureService.assignTask(orderNo, type, false);
+    }
+
+    @ApiOperation("检验时分配任务弹框")
+    @GetMapping(value = "assignTaskInspect")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "orderNo", value = "订单号", required = true),
+        @ApiImplicitParam(name = "type", value = "订单类型， 1：生产装配订单；2：喷涂订单；3：机加工订单;4:自控车间；5：橡胶车间", required = true)
+
+    })
+    public ResultBean assignTaskInspect(@RequestParam(value = "orderNo") String orderNo,
+                                 @RequestParam(value = "type") String type) {
+        return payWorkingProcedureService.assignTask(orderNo, type, true);
     }
 
     @ApiOperation("分配任务保存按钮")

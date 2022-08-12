@@ -163,7 +163,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
     }
 
     @Override
-    public ResultBean assignTask(String orderNo, String type) {
+    public ResultBean assignTask(String orderNo, String type, Boolean boo) {
         // 工序对应人的列表
         List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS = new ArrayList<>();
         if (CommonEnum.WorkShopTypeEnum.PRODUCT.code.equals(type)) {
@@ -181,7 +181,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                     continue;
                 }
                 String model = orderProductAssociate.getProductModel().substring(0, 4);
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.PRODUCT.name, orderProductAssociate.getId(), orderNo, null);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.PRODUCT.name, orderProductAssociate.getId(), orderNo, null, boo);
             }
         } else if (CommonEnum.WorkShopTypeEnum.SPRAY.code.equals(type)) {
             // 喷涂订单
@@ -189,7 +189,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             for (SprayItem sprayItem : sprayItems) {
                 String model = sprayItem.getModel();
                 String materialName = sprayItem.getMaterialName();
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo, materialName);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.SPRAY.name, sprayItem.getId(), orderNo, materialName, boo);
             }
         } else if (CommonEnum.WorkShopTypeEnum.MACHINING.code.equals(type)) {
             // 机加工订单
@@ -201,7 +201,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             for (Entrust entrust : entrusts) {
                 String model = entrust.getModel();
                 String materialClassifyName = entrust.getMaterialGraphName();
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.MACHINING.name, entrust.getId(), orderNo, materialClassifyName);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.MACHINING.name, entrust.getId(), orderNo, materialClassifyName, boo);
             }
         } else if (CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.code.equals(type)) {
             // 自控订单
@@ -213,7 +213,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             for (AutoControlEntrust entrust : entrusts) {
                 String model = entrust.getModel();
                 String materialClassifyName = entrust.getWorkType();
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name, entrust.getId(), orderNo, materialClassifyName);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.AUTO_CONTROL.name, entrust.getId(), orderNo, materialClassifyName, boo);
             }
         } else if (CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.code.equals(type)) {
             // 橡胶订单
@@ -224,7 +224,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
             // 待质检的 单子直接分配任务
             for (ValveSeatEntrust entrust : entrusts) {
                 String model = entrust.getModel();
-                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name, entrust.getId(), orderNo, null);
+                buildProductAndUser(payWorkingProcedureUserVOS, model, CommonEnum.WorkShopTypeEnum.VALVE_SEAT_ENTRUST.name, entrust.getId(), orderNo, null, boo);
             }
         }
         if (CollectionUtils.isEmpty(payWorkingProcedureUserVOS)) {
@@ -266,7 +266,7 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         }
     }
 
-    private void buildProductAndUser(List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS, String model, String workShopName, Integer productId, String orderNo, String workType) {
+    private void buildProductAndUser(List<PayWorkingProcedureUserVO> payWorkingProcedureUserVOS, String model, String workShopName, Integer productId, String orderNo, String workType, Boolean boo) {
         PayWorkingProcedureDTO payWorkingProcedure = new PayWorkingProcedureDTO();
         payWorkingProcedure.setProductModel(model);
         payWorkingProcedure.setWorkshopName(workShopName);
@@ -302,14 +302,33 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
                 payWorkingProcedureUserVO.setTotalPrice(payOrderUserRelationProcedure.getTotalPrice());
                 payWorkingProcedureUserVO.setTotalCount(payOrderUserRelationProcedure.getTotalCount());
             }
-            // 找人员
-            List<ProcedureUserVO> procedureUserVOS = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
-            if (CollectionUtils.isEmpty(procedureUserVOS) && procedureUserVOS.size() == 0) {
-                log.info("通过工序找人员为空");
-                continue;
+            if (boo) {
+                List<Integer> userIds = payWorkingProcedureUserVO.getUserId();
+                if (CollectionUtils.isEmpty(userIds)) {
+                    payWorkingProcedureUserVO.setUserList(null);
+                    continue;
+                }
+                List<ProcedureUserVO> userVOList = userIds.stream().map(userId -> {
+                    PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
+                    ProcedureUserVO vo = new ProcedureUserVO();
+                    if (Objects.nonNull(payUser)) {
+                        vo.setUserId(userId);
+                        vo.setUserName(payUser.getUserName());
+                        return vo;
+                    }
+                    return vo;
+                }).collect(Collectors.toList());
+                payWorkingProcedureUserVO.setUserList(userVOList);
+            } else {
+                // 找人员
+                List<ProcedureUserVO> procedureUserVOS = payProductionCapacityService.getListByCapacityCode(workingProcedure.getPostCode());
+                if (CollectionUtils.isEmpty(procedureUserVOS) && procedureUserVOS.size() == 0) {
+                    log.info("通过工序找人员为空");
+                    continue;
+                }
+                // 用户名称匹配
+                payWorkingProcedureUserVO.setUserList(procedureUserVOS);
             }
-            // 用户名称匹配
-            payWorkingProcedureUserVO.setUserList(procedureUserVOS);
         }
     }
 }
