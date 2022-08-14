@@ -194,7 +194,7 @@ public class importExcelController {
             return ResultBean.success(null);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultBean.error(null);
+            return ResultBean.error("");
         }
     }
 

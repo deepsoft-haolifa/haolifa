@@ -56,6 +56,11 @@ public class ResultBean<T> implements Serializable {
         return new ResultBean<T>(code, message, null);
     }
 
+    public static <T> ResultBean<T> error(String message) {
+        String code = CommonEnum.ResponseEnum.FAIL.code;
+        return new ResultBean<T>(code, message, null);
+    }
+
     public static <T> ResultBean<T> error(CommonEnum.ResponseEnum responseEnum, String message) {
         String code = responseEnum.code;
         return new ResultBean<T>(code, message, null);
