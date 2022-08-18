@@ -13,6 +13,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.InspectHistoryStatus;
@@ -334,9 +335,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
         // 计算不合格数
-        boolean isEmpty = CollectionUtils.isEmpty(model.getReasonList());
-        if (!isEmpty) {
-            int unqualifiedNum = model.getReasonList().stream().map(InspectReason::getNumber).reduce(0, (a, b) -> a + b);
+        if (CollectionUtil.isNotEmpty(model.getReasonList())) {
+            int unqualifiedNum = model.getReasonList().stream().filter(e -> Objects.nonNull(e.getNumber())).mapToInt(InspectReason::getNumber).sum();
             model.setUnqualifiedNumber(unqualifiedNum);
             model.setReasons(JSON.toJSONString(model.getReasonList()));
         } else {
@@ -380,21 +380,52 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 InspectItemExample inspectItemExample = new InspectItemExample();
                 inspectItemExample.or()
                     .andInspectNoEqualTo(inspectNo)
-                    .andMaterialGraphNoEqualTo(model.getMaterialGraphNo())
-                    .andPurchasePriceEqualTo(model.getPurchasePrice());
+                    .andMaterialGraphNoEqualTo(model.getMaterialGraphNo());
                 List<InspectItem> inspectItems = inspectItemMapper.selectByExample(inspectItemExample);
                 if (!CollectionUtils.isEmpty(inspectItems)) {
-                    InspectItem inspectItem = inspectItems.get(0);
+                    int totalDeliveryCount = inspectItems.stream().mapToInt(InspectItem::getDeliveryNumber).sum();
+                    int totalQuaCount = inspectItems.stream().mapToInt(InspectItem::getQualifiedNumber).sum();
+                    int totalUnQuaCount = inspectItems.stream().mapToInt(InspectItem::getUnqualifiedNumber).sum();
                     // 判断这个图号的检验数量是否大于所有历史合格+历史不合格
-                    Integer itemDeliveryNumber = inspectItem.getDeliveryNumber();
                     int count = historyQuantityNum + historyUnQuantityNum + model.getUnqualifiedNumber() + model.getQualifiedNumber();
-                    if (count > itemDeliveryNumber) {
+                    if (count > totalDeliveryCount) {
                         throw new BaseException(ResponseEnum.DELIVERY_COUNT_THAN_PURCHASE_COUNT_HISTORY);
                     }
-                    InspectItem updateInspectItem = new InspectItem();
-                    updateInspectItem.setQualifiedNumber(inspectItem.getQualifiedNumber() + model.getQualifiedNumber());
-                    updateInspectItem.setUnqualifiedNumber(inspectItem.getUnqualifiedNumber() + model.getUnqualifiedNumber());
-                    inspectItemMapper.updateByExampleSelective(updateInspectItem, inspectItemExample);
+                    Integer tmpQualifiedNum = model.getQualifiedNumber();
+                    Integer tmpUnQualifiedNum = model.getUnqualifiedNumber();
+
+
+                    for (InspectItem inspectItem : inspectItems) {
+                        // 需要处理的合格数和不合格数大于0才继续处理
+                        if (tmpQualifiedNum <= 0 && tmpUnQualifiedNum <= 0) {
+                            break;
+                        }
+                        Integer qualifiedNumber = inspectItem.getQualifiedNumber();
+                        Integer unqualifiedNumber = inspectItem.getUnqualifiedNumber();
+                        Integer deliveryNumber = inspectItem.getDeliveryNumber();
+                        // 如果这个记录的合格+不合格等于发货数，不处理这一条
+                        if (qualifiedNumber + unqualifiedNumber >= deliveryNumber) {
+                            continue;
+                        }
+                        // 处理合格数
+                        int quaQty = tmpQualifiedNum - qualifiedNumber;
+                        if (quaQty < 0) {
+                            throw new BaseException("质检合格数量不正确");
+                        }
+                        tmpQualifiedNum = tmpQualifiedNum - quaQty;
+                        // 处理不合格数
+                        int unQuaQty = tmpUnQualifiedNum - unqualifiedNumber;
+                        if (unQuaQty < 0) {
+                            throw new BaseException("质检不合格数量不正确");
+                        }
+                        tmpUnQualifiedNum = tmpUnQualifiedNum - unQuaQty;
+
+                        InspectItem updateInspectItem = new InspectItem();
+                        updateInspectItem.setId(inspectItem.getId());
+                        updateInspectItem.setQualifiedNumber(inspectItem.getQualifiedNumber() + quaQty);
+                        updateInspectItem.setUnqualifiedNumber(inspectItem.getUnqualifiedNumber() + unQuaQty);
+                        inspectItemMapper.updateByPrimaryKeySelective(updateInspectItem);
+                    }
                 }
 
                 // 更新采购合同表
@@ -432,7 +463,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                     entrustUpdate.setUnqualifiedNumber(model.getUnqualifiedNumber() + entrustRecord.getUnqualifiedNumber());
                 }
                 // 当合格数+不合格数=总数，将状态置为加工完成
-                if(entrustUpdate.getQualifiedNumber()+ entrustUpdate.getUnqualifiedNumber()>=entrustRecord.getNumber()){
+                if (entrustUpdate.getQualifiedNumber() + entrustUpdate.getUnqualifiedNumber() >= entrustRecord.getNumber()) {
                     entrustUpdate.setStatus(CommonEnum.EntrustStatus.HANDLED_4.code);
                 }
                 entrustMapper.updateByExampleSelective(entrustUpdate, entrustExample);
