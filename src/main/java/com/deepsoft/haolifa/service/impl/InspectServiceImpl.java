@@ -315,22 +315,6 @@ public class InspectServiceImpl extends BaseService implements InspectService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean historySave(InspectHistoryDto model) {
-//        if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
-//            PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
-//            payExample.createCriteria().andOrderIdEqualTo(model.getInspectNo());
-//            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
-//
-//            // 机加工 质检
-//            EntrustExample entrustExample = new EntrustExample();
-//            entrustExample.createCriteria().andEntrustNoEqualTo(model.getInspectNo());
-//            List<Entrust> entrustList = entrustMapper.selectByExample(entrustExample);
-//            if (!CollectionUtils.isEmpty(entrustList) && entrustList.size() > 0) {
-//                Entrust entrust = entrustList.get(0);
-//                if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(entrust.getCreateTime())) {
-//                    return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
-//                }
-//            }
-//        }
         if (model.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
@@ -396,8 +380,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
 
 
                     for (InspectItem inspectItem : inspectItems) {
-                        // 需要处理的合格数和不合格数大于0才继续处理
-                        if (tmpQualifiedNum <= 0 && tmpUnQualifiedNum <= 0) {
+                        // 需要处理的合格数大于0才继续处理
+                        if (tmpQualifiedNum <= 0 || tmpUnQualifiedNum <= 0) {
                             break;
                         }
                         Integer qualifiedNumber = inspectItem.getQualifiedNumber();
@@ -408,46 +392,65 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                             continue;
                         }
                         // 处理合格数
-                        int quaQty = tmpQualifiedNum - qualifiedNumber;
-                        if (quaQty < 0) {
-                            throw new BaseException("质检合格数量不正确");
+                        int quaQty = 0;
+                        if (tmpQualifiedNum > 0) {
+                            int canHandleQualifiedNum = deliveryNumber - qualifiedNumber - unqualifiedNumber;
+                            if (tmpQualifiedNum > canHandleQualifiedNum) {
+                                quaQty = canHandleQualifiedNum;
+                                tmpQualifiedNum = tmpQualifiedNum - canHandleQualifiedNum;
+                            } else {
+                                quaQty = tmpQualifiedNum;
+                                tmpQualifiedNum = 0;
+                            }
+                            if (quaQty < 0) {
+                                throw new BaseException("质检合格数量不正确");
+                            }
                         }
-                        tmpQualifiedNum = tmpQualifiedNum - quaQty;
-                        // 处理不合格数
-                        int unQuaQty = tmpUnQualifiedNum - unqualifiedNumber;
-                        if (unQuaQty < 0) {
-                            throw new BaseException("质检不合格数量不正确");
-                        }
-                        tmpUnQualifiedNum = tmpUnQualifiedNum - unQuaQty;
 
+                        // 处理不合格数
+                        int unQuaQty = 0;
+                        if (tmpUnQualifiedNum > 0) {
+                            // 这里计算可处理的不合格数，需要将上面处理的合格数加进来
+                            int canHandleUnQualifiedNum = deliveryNumber - qualifiedNumber - unqualifiedNumber - quaQty;
+                            if (tmpUnQualifiedNum > canHandleUnQualifiedNum) {
+                                unQuaQty = canHandleUnQualifiedNum;
+                                tmpUnQualifiedNum = tmpUnQualifiedNum - canHandleUnQualifiedNum;
+                            } else {
+                                unQuaQty = tmpUnQualifiedNum;
+                                tmpUnQualifiedNum = 0;
+                            }
+                            if (unQuaQty < 0) {
+                                throw new BaseException("质检不合格数量不正确");
+                            }
+                            tmpUnQualifiedNum = tmpUnQualifiedNum - unQuaQty;
+                        }
                         InspectItem updateInspectItem = new InspectItem();
                         updateInspectItem.setId(inspectItem.getId());
                         updateInspectItem.setQualifiedNumber(inspectItem.getQualifiedNumber() + quaQty);
                         updateInspectItem.setUnqualifiedNumber(inspectItem.getUnqualifiedNumber() + unQuaQty);
                         inspectItemMapper.updateByPrimaryKeySelective(updateInspectItem);
                     }
-                }
 
-                // 更新采购合同表
-                PurchaseOrderExample orderExample = new PurchaseOrderExample();
-                orderExample.createCriteria().andPurchaseOrderNoEqualTo(inspectRecord.getPurchaseNo());
-                List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(orderExample);
-                if (!CollectionUtils.isEmpty(purchaseOrders)) {
-                    PurchaseOrder purchaseOrder = purchaseOrders.get(0);
-                    PurchaseOrder order = new PurchaseOrder();
-                    order.setQualifiedNumber(purchaseOrder.getQualifiedNumber() + model.getQualifiedNumber());
-                    if (purchaseOrder.getTotalCount() < order.getQualifiedNumber()) {
-                        throw new BaseException(PURCHASE_PRO_INSPECT_NUM_ERROR);
+                    // 更新采购合同表
+                    PurchaseOrderExample orderExample = new PurchaseOrderExample();
+                    orderExample.createCriteria().andPurchaseOrderNoEqualTo(inspectRecord.getPurchaseNo());
+                    List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(orderExample);
+                    if (!CollectionUtils.isEmpty(purchaseOrders)) {
+                        PurchaseOrder purchaseOrder = purchaseOrders.get(0);
+                        PurchaseOrder order = new PurchaseOrder();
+                        order.setQualifiedNumber(purchaseOrder.getQualifiedNumber() + model.getQualifiedNumber());
+                        if (purchaseOrder.getTotalCount() < order.getQualifiedNumber()) {
+                            throw new BaseException(PURCHASE_PRO_INSPECT_NUM_ERROR);
+                        }
+                        // 当合同检验合格数等于合同数自动更新采购合同为“完成”状态
+                        if (purchaseOrder.getTotalCount().equals(order.getQualifiedNumber())) {
+                            order.setStatus((byte) 5);
+                        }
+                        purchaseOrderMapper.updateByExampleSelective(order, orderExample);
                     }
-                    // 当合同检验合格数等于合同数自动更新采购合同为“完成”状态
-                    if (purchaseOrder.getTotalCount().equals(order.getQualifiedNumber())) {
-                        order.setStatus((byte) 5);
-                    }
-                    purchaseOrderMapper.updateByExampleSelective(order, orderExample);
                 }
             }
-        }
-        if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
+        } else if (model.getType() == ENTRUST_MATERIAL_TYPE_2.getCode()) {
             // 机加工 质检
             EntrustExample entrustExample = new EntrustExample();
             entrustExample.createCriteria().andEntrustNoEqualTo(inspectNo);
