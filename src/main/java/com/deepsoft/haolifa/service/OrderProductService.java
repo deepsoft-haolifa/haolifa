@@ -1,12 +1,14 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -194,6 +196,24 @@ public interface OrderProductService {
     void updateOrderTaskStatus(String orderNo, int status);
 
 
+    /**
+     * 获取订单的技术清单（核料规则获取）
+     * @param dto
+     */
+    List<OrderTechnicalDetailedRel> getTechnicalDetailed(OrderSimpleDTO dto);
+
+    /**
+     * 添加订单的技术清单
+     * @param dto
+     */
+    int addTechnicalDetailed(List<OrderTechnicalDetailedRel> dto);
+
+    /**
+     * 删除订单的技术清单
+     * @param id
+     */
+    int delTechnicalDetailed(int id);
 
 
-    }
+
+}

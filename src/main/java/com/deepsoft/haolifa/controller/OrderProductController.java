@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
+import com.deepsoft.haolifa.dao.repository.OrderTechnicalDetailedRelMapper;
+import com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel;
 import com.deepsoft.haolifa.model.dto.Accessory;
 import com.deepsoft.haolifa.model.dto.FileUploadDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
@@ -28,6 +30,7 @@ public class OrderProductController {
 
     @Autowired
     private OrderProductService orderProductService;
+
 
     @ApiOperation("生成订单")
     @PostMapping("/generateOrder")
@@ -206,6 +209,7 @@ public class OrderProductController {
         }
         return ResultBean.success(list);
     }
+
     @ApiOperation("更新订单发货状态")
     @PutMapping("/deliver/status")
     public ResultBean updateDeliverStatus(@RequestParam String orderNo, @RequestParam Integer status) {
@@ -235,5 +239,34 @@ public class OrderProductController {
     @PostMapping("/cover-order-excel")
     public ResultBean coverOrderExcel(@RequestBody OrderContractUpdateDTO dto) {
         return ResultBean.success(orderProductService.updateContractUrl(dto));
+    }
+
+    @ApiOperation("审核--获取技术清单")
+    @PostMapping("/get-technical-detailed")
+    public ResultBean<List<OrderTechnicalDetailedRel>> getTechnicalDetailed(@RequestBody OrderSimpleDTO dto) {
+        return ResultBean.success(orderProductService.getTechnicalDetailed(dto));
+    }
+
+    @ApiOperation("审核--添加技术清单")
+    @PostMapping("/add-technical-detailed")
+    public ResultBean addTechnicalDetailed(@RequestBody List<OrderTechnicalDetailedRel> dto) {
+        int i = orderProductService.addTechnicalDetailed(dto);
+        if (i > 0) {
+            return ResultBean.success("添加成功");
+        } else {
+            return ResultBean.error("添加失败");
+        }
+    }
+
+    @ApiOperation("审核--删除技术清单")
+    @DeleteMapping("/del-technical-detailed/{id}")
+    @ApiImplicitParam(name = "id", value = "关联id", dataType = "int", paramType = "path", required = true)
+    public ResultBean delTechnicalDetailed(@PathVariable int id) {
+        int i = orderProductService.delTechnicalDetailed(id);
+        if (i > 0) {
+            return ResultBean.success("删除成功");
+        } else {
+            return ResultBean.error("删除失败");
+        }
     }
 }

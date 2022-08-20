@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.OrderTechnicalDetailedRelMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="order_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="product_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="product_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="upper_flange_standard" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="connecting_hole" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="angle" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="center_distance" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="output_shaft_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="output_shaft_length" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="axis_drawing_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="connecting_sleeve" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="transition_plate" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="static_torque" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="actuator_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, order_id, order_no, product_name, product_num, product_model, specifications, 
+    upper_flange_standard, connecting_hole, angle, center_distance, output_shaft_type, 
+    output_shaft_length, axis_drawing_no, connecting_sleeve, transition_plate, static_torque, 
+    actuator_model, remark, create_user, update_user, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRelExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_technical_detailed_rel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_technical_detailed_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from order_technical_detailed_rel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRelExample" >
+    delete from order_technical_detailed_rel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_technical_detailed_rel (order_id, order_no, product_name, 
+      product_num, product_model, specifications, 
+      upper_flange_standard, connecting_hole, angle, 
+      center_distance, output_shaft_type, output_shaft_length, 
+      axis_drawing_no, connecting_sleeve, transition_plate, 
+      static_torque, actuator_model, remark, 
+      create_user, update_user, create_time, 
+      update_time)
+    values (#{orderId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{productNum,jdbcType=INTEGER}, #{productModel,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
+      #{upperFlangeStandard,jdbcType=VARCHAR}, #{connectingHole,jdbcType=VARCHAR}, #{angle,jdbcType=VARCHAR}, 
+      #{centerDistance,jdbcType=VARCHAR}, #{outputShaftType,jdbcType=VARCHAR}, #{outputShaftLength,jdbcType=VARCHAR}, 
+      #{axisDrawingNo,jdbcType=VARCHAR}, #{connectingSleeve,jdbcType=VARCHAR}, #{transitionPlate,jdbcType=VARCHAR}, 
+      #{staticTorque,jdbcType=VARCHAR}, #{actuatorModel,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_technical_detailed_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="productNum != null" >
+        product_num,
+      </if>
+      <if test="productModel != null" >
+        product_model,
+      </if>
+      <if test="specifications != null" >
+        specifications,
+      </if>
+      <if test="upperFlangeStandard != null" >
+        upper_flange_standard,
+      </if>
+      <if test="connectingHole != null" >
+        connecting_hole,
+      </if>
+      <if test="angle != null" >
+        angle,
+      </if>
+      <if test="centerDistance != null" >
+        center_distance,
+      </if>
+      <if test="outputShaftType != null" >
+        output_shaft_type,
+      </if>
+      <if test="outputShaftLength != null" >
+        output_shaft_length,
+      </if>
+      <if test="axisDrawingNo != null" >
+        axis_drawing_no,
+      </if>
+      <if test="connectingSleeve != null" >
+        connecting_sleeve,
+      </if>
+      <if test="transitionPlate != null" >
+        transition_plate,
+      </if>
+      <if test="staticTorque != null" >
+        static_torque,
+      </if>
+      <if test="actuatorModel != null" >
+        actuator_model,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNum != null" >
+        #{productNum,jdbcType=INTEGER},
+      </if>
+      <if test="productModel != null" >
+        #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="upperFlangeStandard != null" >
+        #{upperFlangeStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="connectingHole != null" >
+        #{connectingHole,jdbcType=VARCHAR},
+      </if>
+      <if test="angle != null" >
+        #{angle,jdbcType=VARCHAR},
+      </if>
+      <if test="centerDistance != null" >
+        #{centerDistance,jdbcType=VARCHAR},
+      </if>
+      <if test="outputShaftType != null" >
+        #{outputShaftType,jdbcType=VARCHAR},
+      </if>
+      <if test="outputShaftLength != null" >
+        #{outputShaftLength,jdbcType=VARCHAR},
+      </if>
+      <if test="axisDrawingNo != null" >
+        #{axisDrawingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="connectingSleeve != null" >
+        #{connectingSleeve,jdbcType=VARCHAR},
+      </if>
+      <if test="transitionPlate != null" >
+        #{transitionPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="staticTorque != null" >
+        #{staticTorque,jdbcType=VARCHAR},
+      </if>
+      <if test="actuatorModel != null" >
+        #{actuatorModel,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRelExample" resultType="java.lang.Integer" >
+    select count(*) from order_technical_detailed_rel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update order_technical_detailed_rel
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null" >
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productNum != null" >
+        product_num = #{record.productNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.productModel != null" >
+        product_model = #{record.productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upperFlangeStandard != null" >
+        upper_flange_standard = #{record.upperFlangeStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectingHole != null" >
+        connecting_hole = #{record.connectingHole,jdbcType=VARCHAR},
+      </if>
+      <if test="record.angle != null" >
+        angle = #{record.angle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.centerDistance != null" >
+        center_distance = #{record.centerDistance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outputShaftType != null" >
+        output_shaft_type = #{record.outputShaftType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outputShaftLength != null" >
+        output_shaft_length = #{record.outputShaftLength,jdbcType=VARCHAR},
+      </if>
+      <if test="record.axisDrawingNo != null" >
+        axis_drawing_no = #{record.axisDrawingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectingSleeve != null" >
+        connecting_sleeve = #{record.connectingSleeve,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transitionPlate != null" >
+        transition_plate = #{record.transitionPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staticTorque != null" >
+        static_torque = #{record.staticTorque,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actuatorModel != null" >
+        actuator_model = #{record.actuatorModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateUser != null" >
+        update_user = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update order_technical_detailed_rel
+    set id = #{record.id,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=INTEGER},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      product_num = #{record.productNum,jdbcType=INTEGER},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      upper_flange_standard = #{record.upperFlangeStandard,jdbcType=VARCHAR},
+      connecting_hole = #{record.connectingHole,jdbcType=VARCHAR},
+      angle = #{record.angle,jdbcType=VARCHAR},
+      center_distance = #{record.centerDistance,jdbcType=VARCHAR},
+      output_shaft_type = #{record.outputShaftType,jdbcType=VARCHAR},
+      output_shaft_length = #{record.outputShaftLength,jdbcType=VARCHAR},
+      axis_drawing_no = #{record.axisDrawingNo,jdbcType=VARCHAR},
+      connecting_sleeve = #{record.connectingSleeve,jdbcType=VARCHAR},
+      transition_plate = #{record.transitionPlate,jdbcType=VARCHAR},
+      static_torque = #{record.staticTorque,jdbcType=VARCHAR},
+      actuator_model = #{record.actuatorModel,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel" >
+    update order_technical_detailed_rel
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNum != null" >
+        product_num = #{productNum,jdbcType=INTEGER},
+      </if>
+      <if test="productModel != null" >
+        product_model = #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="upperFlangeStandard != null" >
+        upper_flange_standard = #{upperFlangeStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="connectingHole != null" >
+        connecting_hole = #{connectingHole,jdbcType=VARCHAR},
+      </if>
+      <if test="angle != null" >
+        angle = #{angle,jdbcType=VARCHAR},
+      </if>
+      <if test="centerDistance != null" >
+        center_distance = #{centerDistance,jdbcType=VARCHAR},
+      </if>
+      <if test="outputShaftType != null" >
+        output_shaft_type = #{outputShaftType,jdbcType=VARCHAR},
+      </if>
+      <if test="outputShaftLength != null" >
+        output_shaft_length = #{outputShaftLength,jdbcType=VARCHAR},
+      </if>
+      <if test="axisDrawingNo != null" >
+        axis_drawing_no = #{axisDrawingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="connectingSleeve != null" >
+        connecting_sleeve = #{connectingSleeve,jdbcType=VARCHAR},
+      </if>
+      <if test="transitionPlate != null" >
+        transition_plate = #{transitionPlate,jdbcType=VARCHAR},
+      </if>
+      <if test="staticTorque != null" >
+        static_torque = #{staticTorque,jdbcType=VARCHAR},
+      </if>
+      <if test="actuatorModel != null" >
+        actuator_model = #{actuatorModel,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel" >
+    update order_technical_detailed_rel
+    set order_id = #{orderId,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      product_num = #{productNum,jdbcType=INTEGER},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      upper_flange_standard = #{upperFlangeStandard,jdbcType=VARCHAR},
+      connecting_hole = #{connectingHole,jdbcType=VARCHAR},
+      angle = #{angle,jdbcType=VARCHAR},
+      center_distance = #{centerDistance,jdbcType=VARCHAR},
+      output_shaft_type = #{outputShaftType,jdbcType=VARCHAR},
+      output_shaft_length = #{outputShaftLength,jdbcType=VARCHAR},
+      axis_drawing_no = #{axisDrawingNo,jdbcType=VARCHAR},
+      connecting_sleeve = #{connectingSleeve,jdbcType=VARCHAR},
+      transition_plate = #{transitionPlate,jdbcType=VARCHAR},
+      static_torque = #{staticTorque,jdbcType=VARCHAR},
+      actuator_model = #{actuatorModel,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

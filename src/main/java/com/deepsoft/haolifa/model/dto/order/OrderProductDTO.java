@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.model.dto.order;
 
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel;
+import com.deepsoft.haolifa.model.domain.TechnicalDetailed;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.tomcat.util.bcel.Const;
@@ -88,6 +90,9 @@ public class OrderProductDTO {
 
     @ApiModelProperty(value = "技术清单")
     private String technicalRequire;
+
+    @ApiModelProperty(value = "技术清单(新)")
+    private List<OrderTechnicalDetailedRel> orderTechnicalDetaileds;
 
     @ApiModelProperty(value = "装配车间")
     private String assemblyShop;

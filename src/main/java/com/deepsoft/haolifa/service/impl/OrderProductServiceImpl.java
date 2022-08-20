@@ -16,10 +16,7 @@ import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.constant.Constant;
-import com.deepsoft.haolifa.dao.repository.OrderFileMapper;
-import com.deepsoft.haolifa.dao.repository.OrderMaterialMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
@@ -80,6 +77,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private OrderProductAssociateMapper orderProductAssociateMapper;
     @Autowired
+    private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
+    @Autowired
     private OrderExtendMapper orderExtendMapper;
     @Autowired
     private ProductModelConfigService productModelConfigService;
@@ -93,6 +92,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private EntrustRelationService entrustRelationService;
     @Autowired
     private EntryOutStoreRecordService entryOutStoreRecordService;
+    @Autowired
+    private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
     @Lazy
     @Autowired
     FlowInstanceService flowInstanceService;
@@ -733,7 +734,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         cell5.setCellValue("");
                         Cell cell6 = row.getCell(6);
                         cell6.setCellValue("");
-                    }else {
+                    } else {
                         Cell cell7 = row.getCell(7);
                         cell7.setCellValue("");
                         Cell cell8 = row.getCell(8);
@@ -971,6 +972,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         e.setTotalPrice(BigDecimal.ZERO);
                     });
                     orderProductDTO.setOrderProductAssociates(orderProductAssociates);
+
+                    // 获取订单关联技术清单列表
+                    List<OrderTechnicalDetailedRel> orderTechnicalDetailedRels = orderTechnicalDetailedRelMapper.selectByExample(new OrderTechnicalDetailedRelExample() {{
+                        or().andOrderNoEqualTo(orderNo);
+                    }});
+                    orderProductDTO.setOrderTechnicalDetaileds(orderTechnicalDetailedRels);
                 }
                 return orderProductDTO;
             }
@@ -2390,5 +2397,35 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         OrderProductExample example = new OrderProductExample();
         example.createCriteria().andOrderNoEqualTo(orderNo);
         orderProductMapper.updateByExampleSelective(orderProduct, example);
+    }
+
+    @Override
+    public List<OrderTechnicalDetailedRel> getTechnicalDetailed(OrderSimpleDTO dto) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public int addTechnicalDetailed(List<OrderTechnicalDetailedRel> dto) {
+        int i = 0;
+        OrderTechnicalDetailedRel orderTechnicalDetailedRel1 = dto.get(0);
+        for (OrderTechnicalDetailedRel orderTechnicalDetailedRel : dto) {
+            i = orderTechnicalDetailedRelMapper.insertSelective(orderTechnicalDetailedRel);
+        }
+        if (i > 0) {
+            //删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderTechnicalDetailedRel1.getOrderNo()).key);
+        }
+        return i;
+    }
+
+    @Override
+    public int delTechnicalDetailed(int id) {
+        OrderTechnicalDetailedRel orderTechnicalDetailedRel = orderTechnicalDetailedRelMapper.selectByPrimaryKey(id);
+        int i = orderTechnicalDetailedRelMapper.deleteByPrimaryKey(id);
+        if (i > 0) {
+            //删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderTechnicalDetailedRel.getOrderNo()).key);
+        }
+        return i;
     }
 }

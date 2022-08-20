@@ -5,7 +5,7 @@ import com.deepsoft.haolifa.model.domain.TechnicalDetailedExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface TechnicalDetailedMapper {
+public interface    TechnicalDetailedMapper {
     int countByExample(TechnicalDetailedExample example);
 
     int deleteByExample(TechnicalDetailedExample example);

@@ -8,23 +8,36 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@ApiModel("技术清单")
-public class TechnicalDetailed
-    implements Serializable {
+@ApiModel("订单-技术清单-关联")
+public class OrderTechnicalDetailedRel implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
     @ApiModelProperty("id")
     private Integer id;
+
+    /**
+     * 订单id
+     */
+    @ApiModelProperty("订单id")
+    private Integer orderId;
+
+    /**
+     * 订单编号
+     */
+    @ApiModelProperty("订单编号")
+    private String orderNo;
 
     /**
      * 产品名称
      */
     @ApiModelProperty("产品名称")
     private String productName;
+
+    /**
+     * 数量
+     */
+    @ApiModelProperty("数量")
+    private Integer productNum;
 
     /**
      * 型号
@@ -134,9 +147,12 @@ public class TechnicalDetailed
     @ApiModelProperty("更新日期")
     private Date updateTime;
 
-    public TechnicalDetailed(Integer id, String productName, String productModel, String specifications, String upperFlangeStandard, String connectingHole, String angle, String centerDistance, String outputShaftType, String outputShaftLength, String axisDrawingNo, String connectingSleeve, String transitionPlate, String staticTorque, String actuatorModel, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public OrderTechnicalDetailedRel(Integer id, Integer orderId, String orderNo, String productName, Integer productNum, String productModel, String specifications, String upperFlangeStandard, String connectingHole, String angle, String centerDistance, String outputShaftType, String outputShaftLength, String axisDrawingNo, String connectingSleeve, String transitionPlate, String staticTorque, String actuatorModel, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
+        this.orderId = orderId;
+        this.orderNo = orderNo;
         this.productName = productName;
+        this.productNum = productNum;
         this.productModel = productModel;
         this.specifications = specifications;
         this.upperFlangeStandard = upperFlangeStandard;
@@ -157,7 +173,7 @@ public class TechnicalDetailed
         this.updateTime = updateTime;
     }
 
-    public TechnicalDetailed() {
+    public OrderTechnicalDetailedRel() {
         super();
     }
 }
