@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderSimpleDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayItemDto;
 import com.deepsoft.haolifa.service.*;
@@ -1661,7 +1662,7 @@ public class ExportExcelController {
         }
         for (int i = 0; i < 9; i++) {
             sheet.autoSizeColumn(i);
-            sheet.setColumnWidth(i,sheet.getColumnWidth(i));
+            sheet.setColumnWidth(i, sheet.getColumnWidth(i));
         }
         OutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
@@ -2144,5 +2145,159 @@ public class ExportExcelController {
         workbook.write(outputStream);
         outputStream.flush();
         outputStream.close();
+    }
+
+    @Autowired
+    private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
+
+    @ApiOperation("导出订单-技术清单")
+    @PostMapping("/order-technical-detailed")
+    public void entrustOrder(HttpServletResponse response, @RequestBody OrderSimpleDTO dto) throws IOException {
+        OrderTechnicalDetailedRelExample example = new OrderTechnicalDetailedRelExample();
+        example.or().andOrderNoEqualTo(dto.getOrderNo());
+        List<OrderTechnicalDetailedRel> orderTechnicalDetailedRels = orderTechnicalDetailedRelMapper.selectByExample(example);
+        response.setHeader("Content-Disposition", "attachment;filename=" + dto.getOrderNo() + "技术清单.xls");
+        response.setContentType("application/octet-stream;");
+        Workbook workbook = new HSSFWorkbook();
+        Sheet sheet = workbook.createSheet("技术清单");
+
+        // 单元格样式
+        CellStyle center = workbook.createCellStyle();
+        center.setAlignment(HorizontalAlignment.CENTER);
+
+        CellStyle right = workbook.createCellStyle();
+        right.setAlignment(HorizontalAlignment.RIGHT);
+
+        CellStyle border = workbook.createCellStyle();
+        border.setBorderBottom(BorderStyle.THIN);
+        border.setBorderLeft(BorderStyle.THIN);
+        border.setBorderRight(BorderStyle.THIN);
+        border.setBorderTop(BorderStyle.THIN);
+
+//    sheet.setDefaultRowHeightInPoints(40);
+        sheet.setDefaultColumnStyle(0, border);
+        sheet.setDefaultColumnStyle(1, border);
+        sheet.setDefaultColumnStyle(2, border);
+        sheet.setDefaultColumnStyle(3, border);
+        sheet.setDefaultColumnStyle(4, border);
+        sheet.setDefaultColumnStyle(5, border);
+        sheet.setDefaultColumnStyle(6, border);
+        sheet.setDefaultColumnStyle(7, border);
+        sheet.setDefaultColumnStyle(8, border);
+        sheet.setDefaultColumnStyle(9, border);
+        sheet.setDefaultColumnStyle(10, border);
+        sheet.setDefaultColumnStyle(11, border);
+        sheet.setDefaultColumnStyle(12, border);
+        sheet.setDefaultColumnStyle(13, border);
+        sheet.setDefaultColumnStyle(14, border);
+        sheet.setDefaultColumnStyle(15, border);
+        sheet.setDefaultColumnStyle(16, border);
+        sheet.setDefaultColumnStyle(17, border);
+
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setWrapText(true);
+
+        int rowIdx = 0;
+
+        for (int i = 0; i < orderTechnicalDetailedRels.size() + 1; i++) {
+            if (i == 0) {
+                Row row = sheet.createRow(++rowIdx);
+                Cell cell1 = row.createCell(0);
+                cell1.setCellValue("序号");
+                Cell cell2 = row.createCell(1);
+                cell2.setCellValue("产品名称");
+                Cell cell3 = row.createCell(2);
+                cell3.setCellValue("型号");
+                Cell cell4 = row.createCell(3);
+                cell4.setCellValue("规格");
+                Cell cell5 = row.createCell(4);
+                cell5.setCellValue("数量");
+                Cell cell6 = row.createCell(5);
+                cell6.setCellValue("上法兰标准");
+                Cell cell7 = row.createCell(6);
+                cell7.setCellValue("连接孔");
+                Cell cell8 = row.createCell(7);
+                cell8.setCellValue("角度");
+                Cell cell9 = row.createCell(8);
+                cell9.setCellValue("中心距");
+                Cell cell10 = row.createCell(9);
+                cell10.setCellValue("出轴形式");
+                Cell cell011 = row.createCell(10);
+                cell011.setCellValue("出轴长度");
+                Cell cell012 = row.createCell(11);
+                cell012.setCellValue("轴图号");
+                Cell cell013 = row.createCell(12);
+                cell013.setCellValue("连接套");
+                Cell cell014 = row.createCell(13);
+                cell014.setCellValue("过渡盘");
+                Cell cell015 = row.createCell(14);
+                cell015.setCellValue("静扭距");
+                Cell cell016 = row.createCell(15);
+                cell016.setCellValue("执行器型号");
+                Cell cell017 = row.createCell(16);
+                cell017.setCellValue("备注");
+            } else {
+                OrderTechnicalDetailedRel rel = orderTechnicalDetailedRels.get(i - 1);
+                Row row = sheet.createRow(++rowIdx);
+                Cell cell1 = row.createCell(0);
+                cell1.setCellValue(i);
+                Cell cell2 = row.createCell(1);
+                cell2.setCellValue(rel.getProductName());
+                Cell cell3 = row.createCell(2);
+                cell3.setCellValue(rel.getProductModel());
+                Cell cell4 = row.createCell(3);
+                cell4.setCellValue(rel.getSpecifications());
+                Cell cell5 = row.createCell(4);
+                cell5.setCellValue(rel.getProductNum());
+                Cell cell6 = row.createCell(5);
+                cell6.setCellValue(rel.getUpperFlangeStandard());
+                Cell cell7 = row.createCell(6);
+                cell7.setCellValue(rel.getConnectingHole());
+                Cell cell8 = row.createCell(7);
+                cell8.setCellValue(rel.getAngle());
+                Cell cell9 = row.createCell(8);
+                cell9.setCellValue(rel.getCenterDistance());
+                Cell cell10 = row.createCell(9);
+                cell10.setCellValue(rel.getOutputShaftType());
+                Cell cell011 = row.createCell(10);
+                cell011.setCellValue(rel.getOutputShaftLength());
+                Cell cell012 = row.createCell(11);
+                cell012.setCellValue(rel.getAxisDrawingNo());
+                Cell cell013 = row.createCell(12);
+                cell013.setCellValue(rel.getConnectingSleeve());
+                Cell cell014 = row.createCell(13);
+                cell014.setCellValue(rel.getTransitionPlate());
+                Cell cell015 = row.createCell(14);
+                cell015.setCellValue(rel.getStaticTorque());
+                Cell cell016 = row.createCell(15);
+                cell016.setCellValue(rel.getActuatorModel());
+                Cell cell017 = row.createCell(16);
+                cell017.setCellValue(rel.getRemark());
+            }
+        }
+        sheet.autoSizeColumn(0, true);
+        sheet.autoSizeColumn(1, true);
+        sheet.autoSizeColumn(2, true);
+        sheet.autoSizeColumn(3, true);
+        sheet.autoSizeColumn(4, true);
+        sheet.autoSizeColumn(5, true);
+        sheet.autoSizeColumn(6, true);
+        sheet.autoSizeColumn(7, true);
+        sheet.autoSizeColumn(8, true);
+        sheet.autoSizeColumn(9, true);
+        sheet.autoSizeColumn(10, true);
+        sheet.autoSizeColumn(11, true);
+        sheet.autoSizeColumn(12, true);
+        sheet.autoSizeColumn(13, true);
+        sheet.autoSizeColumn(14, true);
+        sheet.autoSizeColumn(15, true);
+        sheet.autoSizeColumn(16, true);
+        sheet.autoSizeColumn(17, true);
+
+        OutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
+
     }
 }

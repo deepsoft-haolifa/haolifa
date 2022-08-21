@@ -58,6 +58,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -77,8 +78,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private OrderProductAssociateMapper orderProductAssociateMapper;
     @Autowired
-    private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
-    @Autowired
     private OrderExtendMapper orderExtendMapper;
     @Autowired
     private ProductModelConfigService productModelConfigService;
@@ -92,8 +91,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private EntrustRelationService entrustRelationService;
     @Autowired
     private EntryOutStoreRecordService entryOutStoreRecordService;
-    @Autowired
-    private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
+
     @Lazy
     @Autowired
     FlowInstanceService flowInstanceService;
@@ -101,6 +99,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     private CheckMaterialLockService checkMaterialLockService;
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
+    @Autowired
+    private TechnicalDetailedMapper technicalDetailedMapper;
 
     @Override
     public ResultBean generateOrder(GenerateOrderDTO generateOrderDTO) {
@@ -2401,7 +2403,47 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
     @Override
     public List<OrderTechnicalDetailedRel> getTechnicalDetailed(OrderSimpleDTO dto) {
-        return new ArrayList<>();
+        String orderNo = dto.getOrderNo();
+        List<OrderProductAssociate> orderItems = getOrderProductList(orderNo);
+        List<OrderTechnicalDetailedRel> resultList = new ArrayList<>();
+        StringBuilder errorMsg = new StringBuilder();
+        for (OrderProductAssociate orderItem : orderItems) {
+            String productNo = orderItem.getProductNo();
+            // 只对前两位是D0、D6、D9的提取数据
+            List<String> startList = Stream.of("D0", "D6", "D9").collect(Collectors.toList());
+            if (!startList.contains(productNo.substring(0, 2))) {
+                continue;
+            }
+            String remark = orderItem.getProductRemark();
+            // 将执行器从备注中找出来
+            String actuatorModel = "SKD-05";
+            // 根据型号+规格+执行器型号获取技术清单
+            TechnicalDetailedExample example = new TechnicalDetailedExample();
+            example.or().andProductModelEqualTo(orderItem.getProductModel())
+                .andSpecificationsEqualTo(orderItem.getSpecifications())
+                .andActuatorModelEqualTo(actuatorModel);
+            List<TechnicalDetailed> technicalDetaileds = technicalDetailedMapper.selectByExample(example);
+            if (CollectionUtil.isNotEmpty(technicalDetaileds)) {
+                if (technicalDetaileds.size() > 1) {
+                    errorMsg.append(orderItem.getProductModel()).append(":")
+                        .append(orderItem.getSpecifications()).append(":")
+                        .append(actuatorModel).append(":")
+                        .append("技术清单维护数据重复");
+                }
+                OrderTechnicalDetailedRel orderTechnicalDetailedRel = new OrderTechnicalDetailedRel();
+                BeanUtil.copyProperties(technicalDetaileds.get(0), orderTechnicalDetailedRel);
+                orderTechnicalDetailedRel.setProductName(orderItem.getProductName());
+                orderTechnicalDetailedRel.setProductNum(orderItem.getProductNumber());
+                resultList.add(orderTechnicalDetailedRel);
+            }
+        }
+        if (CollectionUtil.isEmpty(resultList)) {
+            throw new BaseException("技术清单中无数据");
+        }
+        if (StrUtil.isNotEmpty(errorMsg)) {
+            throw new BaseException(errorMsg.toString());
+        }
+        return resultList;
     }
 
     @Override
