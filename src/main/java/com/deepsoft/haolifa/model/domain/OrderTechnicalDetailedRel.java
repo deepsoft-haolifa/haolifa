@@ -16,12 +16,6 @@ public class OrderTechnicalDetailedRel implements Serializable {
     private Integer id;
 
     /**
-     * 订单id
-     */
-    @ApiModelProperty("订单id")
-    private Integer orderId;
-
-    /**
      * 订单编号
      */
     @ApiModelProperty("订单编号")
@@ -147,9 +141,8 @@ public class OrderTechnicalDetailedRel implements Serializable {
     @ApiModelProperty("更新日期")
     private Date updateTime;
 
-    public OrderTechnicalDetailedRel(Integer id, Integer orderId, String orderNo, String productName, Integer productNum, String productModel, String specifications, String upperFlangeStandard, String connectingHole, String angle, String centerDistance, String outputShaftType, String outputShaftLength, String axisDrawingNo, String connectingSleeve, String transitionPlate, String staticTorque, String actuatorModel, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public OrderTechnicalDetailedRel(Integer id, String orderNo, String productName, Integer productNum, String productModel, String specifications, String upperFlangeStandard, String connectingHole, String angle, String centerDistance, String outputShaftType, String outputShaftLength, String axisDrawingNo, String connectingSleeve, String transitionPlate, String staticTorque, String actuatorModel, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
-        this.orderId = orderId;
         this.orderNo = orderNo;
         this.productName = productName;
         this.productNum = productNum;

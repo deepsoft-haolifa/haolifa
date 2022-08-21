@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.EntryOutRecordExtendMapper;
@@ -2151,12 +2152,15 @@ public class ExportExcelController {
     private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
 
     @ApiOperation("导出订单-技术清单")
-    @PostMapping("/order-technical-detailed")
-    public void entrustOrder(HttpServletResponse response, @RequestBody OrderSimpleDTO dto) throws IOException {
+    @GetMapping("/order-technical-detailed")
+    public void entrustOrder(HttpServletResponse response, @RequestParam String orderNo) throws IOException {
         OrderTechnicalDetailedRelExample example = new OrderTechnicalDetailedRelExample();
-        example.or().andOrderNoEqualTo(dto.getOrderNo());
+        example.or().andOrderNoEqualTo(orderNo);
         List<OrderTechnicalDetailedRel> orderTechnicalDetailedRels = orderTechnicalDetailedRelMapper.selectByExample(example);
-        response.setHeader("Content-Disposition", "attachment;filename=" + dto.getOrderNo() + "技术清单.xls");
+        if (CollectionUtil.isEmpty(orderTechnicalDetailedRels)) {
+            throw new BaseException("导出的详情清单为空");
+        }
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(orderNo + "技术清单", "utf-8") + ".xls");
         response.setContentType("application/octet-stream;");
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet("技术清单");
@@ -2174,28 +2178,18 @@ public class ExportExcelController {
         border.setBorderRight(BorderStyle.THIN);
         border.setBorderTop(BorderStyle.THIN);
 
-//    sheet.setDefaultRowHeightInPoints(40);
-        sheet.setDefaultColumnStyle(0, border);
-        sheet.setDefaultColumnStyle(1, border);
-        sheet.setDefaultColumnStyle(2, border);
-        sheet.setDefaultColumnStyle(3, border);
-        sheet.setDefaultColumnStyle(4, border);
-        sheet.setDefaultColumnStyle(5, border);
-        sheet.setDefaultColumnStyle(6, border);
-        sheet.setDefaultColumnStyle(7, border);
-        sheet.setDefaultColumnStyle(8, border);
-        sheet.setDefaultColumnStyle(9, border);
-        sheet.setDefaultColumnStyle(10, border);
-        sheet.setDefaultColumnStyle(11, border);
-        sheet.setDefaultColumnStyle(12, border);
-        sheet.setDefaultColumnStyle(13, border);
-        sheet.setDefaultColumnStyle(14, border);
-        sheet.setDefaultColumnStyle(15, border);
-        sheet.setDefaultColumnStyle(16, border);
-        sheet.setDefaultColumnStyle(17, border);
-
+        for (int i = 0; i < orderTechnicalDetailedRels.size() + 2; i++) {
+            sheet.setDefaultColumnStyle(i, border);
+        }
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.setWrapText(true);
+
+        Row title_1 = sheet.createRow(0);
+        CellRangeAddress cra1 = new CellRangeAddress(0, 0, 0, 17);
+        sheet.addMergedRegion(cra1);
+        Cell cell_title_1 = title_1.createCell(0);
+        cell_title_1.setCellValue("技 术 清 单：" + orderNo);
+        cell_title_1.setCellStyle(center);
 
         int rowIdx = 0;
 
@@ -2275,25 +2269,10 @@ public class ExportExcelController {
                 cell017.setCellValue(rel.getRemark());
             }
         }
-        sheet.autoSizeColumn(0, true);
-        sheet.autoSizeColumn(1, true);
-        sheet.autoSizeColumn(2, true);
-        sheet.autoSizeColumn(3, true);
-        sheet.autoSizeColumn(4, true);
-        sheet.autoSizeColumn(5, true);
-        sheet.autoSizeColumn(6, true);
-        sheet.autoSizeColumn(7, true);
-        sheet.autoSizeColumn(8, true);
-        sheet.autoSizeColumn(9, true);
-        sheet.autoSizeColumn(10, true);
-        sheet.autoSizeColumn(11, true);
-        sheet.autoSizeColumn(12, true);
-        sheet.autoSizeColumn(13, true);
-        sheet.autoSizeColumn(14, true);
-        sheet.autoSizeColumn(15, true);
-        sheet.autoSizeColumn(16, true);
-        sheet.autoSizeColumn(17, true);
 
+        for (int i = 0; i < orderTechnicalDetailedRels.size() + 2; i++) {
+            sheet.autoSizeColumn(i, true);
+        }
         OutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         outputStream.flush();

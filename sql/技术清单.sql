@@ -25,7 +25,6 @@ CREATE TABLE `technical_detailed` (
 
 CREATE TABLE `order_technical_detailed_rel` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `order_id` int(64) NOT NULL COMMENT '订单id',
   `order_no` varchar(64) NOT NULL COMMENT '订单编号',
   `product_name` varchar(64) NOT NULL DEFAULT '' COMMENT '产品名称',
   `product_num` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
