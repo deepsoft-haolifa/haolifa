@@ -464,6 +464,8 @@ public class InspectServiceImpl extends BaseService implements InspectService {
                 }
                 if (ObjectUtil.isNotNull(model.getUnqualifiedNumber()) && model.getUnqualifiedNumber() > 0) {
                     entrustUpdate.setUnqualifiedNumber(model.getUnqualifiedNumber() + entrustRecord.getUnqualifiedNumber());
+                } else {
+                    entrustUpdate.setUnqualifiedNumber(entrustRecord.getUnqualifiedNumber());
                 }
                 // 当合格数+不合格数=总数，将状态置为加工完成
                 if (entrustUpdate.getQualifiedNumber() + entrustUpdate.getUnqualifiedNumber() >= entrustRecord.getNumber()) {
