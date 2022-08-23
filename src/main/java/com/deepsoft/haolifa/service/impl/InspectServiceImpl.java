@@ -104,6 +104,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (items != null && items.size() > 0) {
             for (int i = 0; i < items.size(); i++) {
                 InspectItemDTO inspectItemDTO = items.get(i);
+                inspectItemDTO.setPurchaseNo(model.getPurchaseNo());
                 //判断送检数不能大于合同数
                 judgeDeliveryCount(inspectItemDTO);
 
@@ -175,8 +176,10 @@ public class InspectServiceImpl extends BaseService implements InspectService {
         if (items != null && items.size() > 0) {
             for (int i = 0; i < items.size(); i++) {
                 InspectItemDTO inspectItemDTO = items.get(i);
+                inspectItemDTO.setPurchaseNo(model.getPurchaseNo());
                 // 判断送检数不能大于合同数
                 judgeDeliveryCount(inspectItemDTO);
+
                 Integer deliveryNumber = inspectItemDTO.getDeliveryNumber();
 
                 InspectItem inspectItem = new InspectItem();
@@ -381,7 +384,7 @@ public class InspectServiceImpl extends BaseService implements InspectService {
 
                     for (InspectItem inspectItem : inspectItems) {
                         // 需要处理的合格数大于0才继续处理
-                        if (tmpQualifiedNum <= 0 || tmpUnQualifiedNum <= 0) {
+                        if (tmpQualifiedNum <= 0 && tmpUnQualifiedNum <= 0) {
                             break;
                         }
                         Integer qualifiedNumber = inspectItem.getQualifiedNumber();
