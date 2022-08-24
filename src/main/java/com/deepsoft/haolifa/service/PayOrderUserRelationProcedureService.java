@@ -11,4 +11,6 @@ public interface PayOrderUserRelationProcedureService {
 
     ResultBean insertSelective(PayOrderUserRelationProcedureVO procedure);
 
+    ResultBean insertEntrustSelective(PayOrderUserRelationProcedureVO procedure);
+
 }

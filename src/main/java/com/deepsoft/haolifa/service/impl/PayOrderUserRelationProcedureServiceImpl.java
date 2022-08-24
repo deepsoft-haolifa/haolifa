@@ -4,12 +4,14 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayHourQuotaDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayOrderUserRelationProcedureDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayOrderUserRelationProcedureVO;
+import com.deepsoft.haolifa.model.vo.pay.PayWorkingProcedureUserVO;
 import com.deepsoft.haolifa.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -68,6 +71,8 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
     private ValveSeatEntrustService valveSeatEntrustService;
     @Resource
     private RoleService roleService;
+    @Resource
+    private PayWorkingProcedureService payWorkingProcedureService;
 
 
     @Override
@@ -164,6 +169,29 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
         }
         return ResultBean.success(1);
 
+    }
+
+    @Override
+    public ResultBean insertEntrustSelective(PayOrderUserRelationProcedureVO procedure) {
+        List<PayOrderUserRelationProcedureDTO> payOrderUserRelationProcedureList = procedure.getPayOrderUserRelationProcedureList();
+        PayOrderUserRelationProcedureDTO payOrderUserRelationProcedureDTO = payOrderUserRelationProcedureList.get(0);
+        String orderId = payOrderUserRelationProcedureDTO.getOrderId();
+        ResultBean resultBean = payWorkingProcedureService.assignTask(orderId, "3", true);
+
+        Map<Integer, PayOrderUserRelationProcedureDTO> map = payOrderUserRelationProcedureList.stream().collect(Collectors.toMap(PayOrderUserRelationProcedureDTO::getId, Function.identity(), (a, b) -> a));
+
+        List<PayWorkingProcedureUserVO> resultList = (List<PayWorkingProcedureUserVO>) resultBean.getResult();
+        for (PayWorkingProcedureUserVO result : resultList) {
+            if (CollectionUtils.isEmpty(result.getUserList())) {
+                continue;
+            }
+            PayOrderUserRelationProcedureDTO payOrderUserRelationProcedureDTO1 = map.get(result.getId());
+            if (CollectionUtils.isEmpty(payOrderUserRelationProcedureDTO1.getUserId()) || payOrderUserRelationProcedureDTO1.getUserId().size() > 1) {
+                throw new BaseException("人员不能为空且只能选一个");
+            }
+        }
+
+        return insertSelective(procedure);
     }
 
     private boolean checkHaveInspectHistory(String workshopName, String orderId) {
