@@ -239,9 +239,6 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             log.info("calculateSalary name:{}, count:{},  month:{}", payWage.getUserName(), i, payWage.getWagesMonth());
             // 通过用户ID查工序订单用户关联表
             Integer userId = payWage.getUserId();
-            if (userId != 63 && userId != 65) {
-                continue;
-            }
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
             // 处理考勤数据 年月
