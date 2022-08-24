@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.billcontract.BillContractRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BillContractService {
@@ -23,7 +24,7 @@ public interface BillContractService {
 
     ResultBean removeContract(int id);
 
-    ResultBean auditContract(BillContractAuditDTO billContract);
+    ResultBean auditContract(BillContractAuditDTO billContract, BigDecimal old);
 
     ResultBean<ContractBillDecomposeAmountRSDTO> billDecomposeAmount(ContractBillDecomposeAmountRQDTO rq);
 }

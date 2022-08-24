@@ -278,11 +278,16 @@ public class BillContractServiceImpl implements BillContractService {
         bizBillContract.setRemark(billContract.getRemark());
         bizBillContract.setOrderId(billContract.getOrderId());
         bizBillContract.setOrderNo(billContract.getOrderNo());
+
+        BigDecimal old = BigDecimal.ZERO;
         if (billContract.getId() == null) {
             bizBillContract.setCreateTime(new Date());
             bizBillContract.setCreateUser(customUser.getId());
             bizBillContractMapper.insertSelective(bizBillContract);
         } else {
+            BizBillContract selectByPrimaryKey = bizBillContractMapper.selectByPrimaryKey(bizBillContract.getId());
+            old = selectByPrimaryKey.getAmount();
+
             bizBillContract.setUpdateTime(new Date());
             bizBillContract.setUpdateUser(customUser.getId());
             bizBillContractMapper.updateByPrimaryKeySelective(bizBillContract);
@@ -293,7 +298,7 @@ public class BillContractServiceImpl implements BillContractService {
         BillContractAuditDTO billContractAuditDTO = new BillContractAuditDTO();
         billContractAuditDTO.setId(bizBillContract.getId());
         billContractAuditDTO.setAuditStatus(Byte.valueOf("1"));
-        auditContract(billContractAuditDTO);
+        auditContract(billContractAuditDTO,old);
 
         return ResultBean.success(1);
     }
@@ -338,7 +343,7 @@ public class BillContractServiceImpl implements BillContractService {
     }
 
     @Override
-    public ResultBean auditContract(BillContractAuditDTO billContract) {
+    public ResultBean auditContract(BillContractAuditDTO billContract,BigDecimal old) {
         CustomUser customUser = sysUserService.selectLoginUser();
 
         BizBillContract bizBillContract = bizBillContractMapper.selectByPrimaryKey(billContract.getId());
@@ -383,7 +388,7 @@ public class BillContractServiceImpl implements BillContractService {
             OrderProduct orderProductUp = new OrderProduct();
             orderProductUp.setId(Integer.parseInt(String.valueOf(bizBillContract.getOrderId())));
             BigDecimal receivedAccount = orderProduct.getReceivedAccount() == null ? BigDecimal.ZERO : orderProduct.getReceivedAccount();
-            BigDecimal add = receivedAccount.add(bizBillContract.getAmount());
+            BigDecimal add = receivedAccount.subtract(old).add(bizBillContract.getAmount());
             orderProductUp.setReceivedAccount(add);
             orderProductMapper.updateByPrimaryKeySelective(orderProductUp);
         }

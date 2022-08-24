@@ -14,10 +14,10 @@ public class AssetsRSDTO {
     @ApiModelProperty(value = "ID")
     private Long id;
 
-    @ApiModelProperty(value = "设备名称")
+    @ApiModelProperty(value = "资产名称")
     private  String name;
 
-    @ApiModelProperty(value = "设备编号")
+    @ApiModelProperty(value = "资产编号")
     private  String bh;
 
     @ApiModelProperty(value = "类别名称 数据字典 ASSETS_TYPE")
@@ -29,11 +29,16 @@ public class AssetsRSDTO {
     @ApiModelProperty(value = "规格型号")
     private  String specifications;
 
-    @ApiModelProperty(value = "设备数量")
-    private  String num;
+    @ApiModelProperty(value = "资产数量")
+    private  Integer num;
+    /**
+     *  资产单位 个 条 把 台
+     */
+    @ApiModelProperty(value = "资产单位 个 条 把 台")
+    private String unit;
 
     @ApiModelProperty(value = "部门")
-    private  String deptId;
+    private  Integer deptId;
 
     @ApiModelProperty(value = "部门名称")
     private  String deptName;
@@ -50,10 +55,10 @@ public class AssetsRSDTO {
     @ApiModelProperty(value = "存放地点")
     private  String location;
 
-    @ApiModelProperty(value = "设备状态 数据字典 ？？")
+    @ApiModelProperty(value = "资产状态 数据字典 ？？")
     private  String equipmentState;
 
-    @ApiModelProperty(value = "设备状态中文 数据字典 ？？")
+    @ApiModelProperty(value = "资产状态中文 数据字典 ？？")
     private  String equipmentStateCN;
 
     @ApiModelProperty(value = "生产厂家")
@@ -62,38 +67,46 @@ public class AssetsRSDTO {
     @ApiModelProperty(value = "采购时间")
     private  Date purchasingTime;
 
-    @ApiModelProperty(value = "采购金额")
+    @ApiModelProperty(value = "采购金额 （单价）")
     private  BigDecimal price;
+    /**
+     *  采购总金额
+     */
+    @ApiModelProperty(value = "采购总金额")
+    private BigDecimal totalPrice;
 
     @ApiModelProperty(value = "使用年限")
-    private  String useYear;
+    private  Integer useYear;
 
-    @ApiModelProperty(value = "折旧方法")
+    @ApiModelProperty(value = "折旧方法 数据字典 DEPRECIATION_METHOD")
     private  String depreciationMethod;
+
+    @ApiModelProperty(value = "折旧方法 数据字典 DEPRECIATION_METHOD")
+    private  String depreciationMethodCN;
 
     @ApiModelProperty(value = "开始使用日期")
     private  Date startTime;
 
     @ApiModelProperty(value = "已计提月份")
-    private  String accruedMonth;
+    private  Integer accruedMonth;
 
     @ApiModelProperty(value = "净产值率")
-    private  String outputRate;
+    private  BigDecimal outputRate;
 
     @ApiModelProperty(value = "净残值")
-    private  String salvageValue;
+    private  BigDecimal salvageValue;
 
     @ApiModelProperty(value = "累计折旧")
-    private  String accumulatedDepreciation;
+    private  BigDecimal accumulatedDepreciation;
 
     @ApiModelProperty(value = "月折旧率")
-    private  String monthRate;
+    private  BigDecimal monthRate;
 
     @ApiModelProperty(value = "月折旧额")
-    private  String monthDepreciation;
+    private  BigDecimal monthDepreciation;
 
     @ApiModelProperty(value = "净值")
-    private  String netWorth;
+    private  BigDecimal netWorth;
 
 
     @ApiModelProperty(value = "备注")

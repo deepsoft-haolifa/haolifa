@@ -4,95 +4,187 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class BizAssets {
+    /**
+     *  ID
+     */
     private Long id;
-
+    /**
+     *  资产名称
+     */
     private String name;
-
+    /**
+     *  资产编号
+     */
     private String bh;
-
+    /**
+     *  类别名称 数据字典ASSETS_TYPE
+     */
     private String type;
-
+    /**
+     *  规格型号
+     */
     private String specifications;
-
-    private String num;
-
-    private String deptId;
-
+    /**
+     *  资产数量
+     */
+    private Integer num;
+    /**
+     *  资产单位 个 条 把 台
+     */
+    private String unit;
+    /**
+     *  部门
+     */
+    private Integer deptId;
+    /**
+     *  领用人
+     */
     private String userName;
-
+    /**
+     *  增加方式 数据字典ASSETS_ADD_TYPE
+     */
     private String addType;
-
+    /**
+     *  存放地点
+     */
     private String location;
-
+    /**
+     *  资产状态 数据字典
+     */
     private String equipmentState;
-
+    /**
+     *  生产厂家
+     */
     private String manufacturer;
-
+    /**
+     *  采购时间
+     */
     private Date purchasingTime;
-
+    /**
+     *  采购金额
+     */
     private BigDecimal price;
-
-    private String useYear;
-
+    /**
+     *  采购总金额
+     */
+    private BigDecimal totalPrice;
+    /**
+     *  使用年限/年
+     */
+    private Integer useYear;
+    /**
+     *  折旧方法 数据字典DEPRECIATION_METHOD
+     */
     private String depreciationMethod;
-
+    /**
+     *  开始使用日期
+     */
     private Date startTime;
-
-    private String accruedMonth;
-
-    private String outputRate;
-
-    private String salvageValue;
-
-    private String accumulatedDepreciation;
-
-    private String monthRate;
-
-    private String monthDepreciation;
-
-    private String netWorth;
-
+    /**
+     *  已计提月份
+     */
+    private Integer accruedMonth;
+    /**
+     *  净产值率
+     */
+    private BigDecimal outputRate;
+    /**
+     *  净残值
+     */
+    private BigDecimal salvageValue;
+    /**
+     *  累计折旧
+     */
+    private BigDecimal accumulatedDepreciation;
+    /**
+     *  月折旧率
+     */
+    private BigDecimal monthRate;
+    /**
+     *  月折旧额
+     */
+    private BigDecimal monthDepreciation;
+    /**
+     *  净值
+     */
+    private BigDecimal netWorth;
+    /**
+     *  备用1
+     */
     private String string1;
-
+    /**
+     *  备用2
+     */
     private String string2;
-
+    /**
+     *  备用3
+     */
     private String string3;
-
+    /**
+     *  备用4
+     */
     private String string4;
-
+    /**
+     *  备用5
+     */
     private String string5;
-
+    /**
+     *  备用6
+     */
     private String string6;
-
+    /**
+     *  备用7
+     */
     private String string7;
-
+    /**
+     *  备用8
+     */
     private String string8;
-
+    /**
+     *  备用9
+     */
     private String string9;
-
+    /**
+     *  备用10
+     */
     private String string10;
-
+    /**
+     *  备注
+     */
     private String remark;
-
+    /**
+     *  状态（0正常 1停用）
+     */
     private String status;
-
+    /**
+     *  删除标志（0代表存在 2代表删除）
+     */
     private String delFlag;
-
+    /**
+     *  创建者
+     */
     private String createBy;
-
+    /**
+     *  创建时间
+     */
     private Date createTime;
-
+    /**
+     *  更新者
+     */
     private String updateBy;
-
+    /**
+     *  更新时间
+     */
     private Date updateTime;
 
-    public BizAssets(Long id, String name, String bh, String type, String specifications, String num, String deptId, String userName, String addType, String location, String equipmentState, String manufacturer, Date purchasingTime, BigDecimal price, String useYear, String depreciationMethod, Date startTime, String accruedMonth, String outputRate, String salvageValue, String accumulatedDepreciation, String monthRate, String monthDepreciation, String netWorth, String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9, String string10, String remark, String status, String delFlag, String createBy, Date createTime, String updateBy, Date updateTime) {
+    public BizAssets(Long id, String name, String bh, String type, String specifications, Integer num, String unit, Integer deptId, String userName, String addType, String location, String equipmentState, String manufacturer, Date purchasingTime, BigDecimal price, BigDecimal totalPrice, Integer useYear, String depreciationMethod, Date startTime, Integer accruedMonth, BigDecimal outputRate, BigDecimal salvageValue, BigDecimal accumulatedDepreciation, BigDecimal monthRate, BigDecimal monthDepreciation, BigDecimal netWorth, String string1, String string2, String string3, String string4, String string5, String string6, String string7, String string8, String string9, String string10, String remark, String status, String delFlag, String createBy, Date createTime, String updateBy, Date updateTime) {
         this.id = id;
         this.name = name;
         this.bh = bh;
         this.type = type;
         this.specifications = specifications;
         this.num = num;
+        this.unit = unit;
         this.deptId = deptId;
         this.userName = userName;
         this.addType = addType;
@@ -101,6 +193,7 @@ public class BizAssets {
         this.manufacturer = manufacturer;
         this.purchasingTime = purchasingTime;
         this.price = price;
+        this.totalPrice = totalPrice;
         this.useYear = useYear;
         this.depreciationMethod = depreciationMethod;
         this.startTime = startTime;
@@ -174,20 +267,28 @@ public class BizAssets {
         this.specifications = specifications == null ? null : specifications.trim();
     }
 
-    public String getNum() {
+    public Integer getNum() {
         return num;
     }
 
-    public void setNum(String num) {
-        this.num = num == null ? null : num.trim();
+    public void setNum(Integer num) {
+        this.num = num;
     }
 
-    public String getDeptId() {
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit == null ? null : unit.trim();
+    }
+
+    public Integer getDeptId() {
         return deptId;
     }
 
-    public void setDeptId(String deptId) {
-        this.deptId = deptId == null ? null : deptId.trim();
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 
     public String getUserName() {
@@ -246,12 +347,20 @@ public class BizAssets {
         this.price = price;
     }
 
-    public String getUseYear() {
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Integer getUseYear() {
         return useYear;
     }
 
-    public void setUseYear(String useYear) {
-        this.useYear = useYear == null ? null : useYear.trim();
+    public void setUseYear(Integer useYear) {
+        this.useYear = useYear;
     }
 
     public String getDepreciationMethod() {
@@ -270,60 +379,60 @@ public class BizAssets {
         this.startTime = startTime;
     }
 
-    public String getAccruedMonth() {
+    public Integer getAccruedMonth() {
         return accruedMonth;
     }
 
-    public void setAccruedMonth(String accruedMonth) {
-        this.accruedMonth = accruedMonth == null ? null : accruedMonth.trim();
+    public void setAccruedMonth(Integer accruedMonth) {
+        this.accruedMonth = accruedMonth;
     }
 
-    public String getOutputRate() {
+    public BigDecimal getOutputRate() {
         return outputRate;
     }
 
-    public void setOutputRate(String outputRate) {
-        this.outputRate = outputRate == null ? null : outputRate.trim();
+    public void setOutputRate(BigDecimal outputRate) {
+        this.outputRate = outputRate;
     }
 
-    public String getSalvageValue() {
+    public BigDecimal getSalvageValue() {
         return salvageValue;
     }
 
-    public void setSalvageValue(String salvageValue) {
-        this.salvageValue = salvageValue == null ? null : salvageValue.trim();
+    public void setSalvageValue(BigDecimal salvageValue) {
+        this.salvageValue = salvageValue;
     }
 
-    public String getAccumulatedDepreciation() {
+    public BigDecimal getAccumulatedDepreciation() {
         return accumulatedDepreciation;
     }
 
-    public void setAccumulatedDepreciation(String accumulatedDepreciation) {
-        this.accumulatedDepreciation = accumulatedDepreciation == null ? null : accumulatedDepreciation.trim();
+    public void setAccumulatedDepreciation(BigDecimal accumulatedDepreciation) {
+        this.accumulatedDepreciation = accumulatedDepreciation;
     }
 
-    public String getMonthRate() {
+    public BigDecimal getMonthRate() {
         return monthRate;
     }
 
-    public void setMonthRate(String monthRate) {
-        this.monthRate = monthRate == null ? null : monthRate.trim();
+    public void setMonthRate(BigDecimal monthRate) {
+        this.monthRate = monthRate;
     }
 
-    public String getMonthDepreciation() {
+    public BigDecimal getMonthDepreciation() {
         return monthDepreciation;
     }
 
-    public void setMonthDepreciation(String monthDepreciation) {
-        this.monthDepreciation = monthDepreciation == null ? null : monthDepreciation.trim();
+    public void setMonthDepreciation(BigDecimal monthDepreciation) {
+        this.monthDepreciation = monthDepreciation;
     }
 
-    public String getNetWorth() {
+    public BigDecimal getNetWorth() {
         return netWorth;
     }
 
-    public void setNetWorth(String netWorth) {
-        this.netWorth = netWorth == null ? null : netWorth.trim();
+    public void setNetWorth(BigDecimal netWorth) {
+        this.netWorth = netWorth;
     }
 
     public String getString1() {

@@ -668,7 +668,8 @@ public class CostBudgetServiceImpl implements CostBudgetService {
             })
             .collect(Collectors.toList());
 
-        CostBudgetSubjectsRSDTO costBudgetSubjectsRSDTO = CollectionUtil.isNotEmpty(costBudgetSubjectsRSDTOList)?costBudgetSubjectsRSDTOList.get(0):null;
+        CostBudgetSubjectsRSDTO costBudgetSubjectsRSDTO =
+            CollectionUtil.isNotEmpty(costBudgetSubjectsRSDTOList) ? costBudgetSubjectsRSDTOList.get(0) : new CostBudgetSubjectsRSDTO();
 
         return ResultBean.success(costBudgetSubjectsRSDTO);
     }

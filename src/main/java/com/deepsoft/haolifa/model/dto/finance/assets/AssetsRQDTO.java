@@ -22,7 +22,7 @@ public class AssetsRQDTO extends PageParam {
     private  String type;
 
     @ApiModelProperty(value = "部门")
-    private  String deptId;
+    private  Integer deptId;
 
     @ApiModelProperty(value = "领用人")
     private  String userName;

@@ -1,12 +1,10 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizAssetsMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.enums.DictEnum;
-import com.deepsoft.haolifa.enums.PayApplyPayStatusEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -14,8 +12,6 @@ import com.deepsoft.haolifa.model.dto.finance.assets.AssetsAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.assets.AssetsRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.assets.AssetsRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.assets.AssetsUpDTO;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRSDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
@@ -28,8 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -70,26 +67,26 @@ public class AssetsServiceImpl implements AssetsService {
 
     private ResultBean<Object> validate(AssetsAddDTO model) {
         if (StringUtils.isEmpty(model.getName())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"设备名称不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "设备名称不能为空");
         }
         if (StringUtils.isEmpty(model.getBh())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"设备编号不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "设备编号不能为空");
         }
 
         if (StringUtils.isEmpty(model.getType())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"类别名称不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "类别名称不能为空");
         }
 
-        if (StringUtils.isEmpty(model.getNum())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"设备数量不能为空");
+        if (model.getNum() == null) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "设备数量不能为空");
         }
 
-        if (StringUtils.isEmpty(model.getDeptId())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"部门不能为空");
+        if (model.getDeptId() == null) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "部门不能为空");
         }
 
         if (StringUtils.isEmpty(model.getAddType())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"增加方式不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "增加方式不能为空");
         }
         return null;
     }
@@ -104,26 +101,27 @@ public class AssetsServiceImpl implements AssetsService {
     public ResultBean update(AssetsUpDTO assetsUpDTO) {
 
         if (StringUtils.isEmpty(assetsUpDTO.getName())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"设备名称不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "设备名称不能为空");
         }
         if (StringUtils.isEmpty(assetsUpDTO.getBh())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"设备编号不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "设备编号不能为空");
         }
 
         if (StringUtils.isEmpty(assetsUpDTO.getType())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"类别名称不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "类别名称不能为空");
         }
 
-        if (StringUtils.isEmpty(assetsUpDTO.getNum())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"设备数量不能为空");
+        if (assetsUpDTO.getNum() == null) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "设备数量不能为空");
         }
 
-        if (StringUtils.isEmpty(assetsUpDTO.getDeptId())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"部门不能为空");
+        if (assetsUpDTO.getDeptId() == null) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "部门不能为空");
         }
+
 
         if (StringUtils.isEmpty(assetsUpDTO.getAddType())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"增加方式不能为空");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "增加方式不能为空");
         }
 
         BizAssets bizAssets = new BizAssets();
@@ -156,7 +154,7 @@ public class AssetsServiceImpl implements AssetsService {
         if (StringUtils.isNotEmpty(model.getType())) {
             criteria.andTypeEqualTo(model.getType());
         }
-        if (StringUtils.isNotEmpty(model.getDeptId())) {
+        if (model.getDeptId() != null) {
             criteria.andDeptIdEqualTo(model.getDeptId());
         }
         if (StringUtils.isNotEmpty(model.getUserName())) {
@@ -186,21 +184,26 @@ public class AssetsServiceImpl implements AssetsService {
             .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
         Map<String, String> assets_add_type_map = sysDictService.getSysDictByTypeCode(DictEnum.ASSETS_ADD_TYPE.getCode()).stream()
             .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+        Map<String, String> depreciation_method_map = sysDictService.getSysDictByTypeCode(DictEnum.DEPRECIATION_METHOD.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
 
         List<AssetsRSDTO> assetsRSDTOList = pageData.getResult().stream()
             .map(assets -> {
                 AssetsRSDTO assetsRSDTO = new AssetsRSDTO();
                 BeanUtils.copyProperties(assets, assetsRSDTO);
                 SysDepartment department = sysDepartmentMap.getOrDefault(Integer.valueOf(assetsRSDTO.getDeptId()), null);
-                if (ObjectUtil.isNotNull(department)){
+                if (ObjectUtil.isNotNull(department)) {
                     assetsRSDTO.setDeptName(department.getDeptName());
                 }
                 String typeName = assets_type_map.getOrDefault(assetsRSDTO.getType(), "");
                 assetsRSDTO.setTypeCN(typeName);
                 String addTypeCN = assets_add_type_map.getOrDefault(assetsRSDTO.getAddType(), "");
                 assetsRSDTO.setAddTypeCN(addTypeCN);
-               String statusCN =  StringUtils.equalsIgnoreCase("0",assets.getStatus())? "正常":"停用";
+                String statusCN = StringUtils.equalsIgnoreCase("0", assets.getStatus()) ? "正常" : "停用";
                 assetsRSDTO.setStatusCN(statusCN);
+
+                String depreciationMethod = depreciation_method_map.getOrDefault(assetsRSDTO.getDepreciationMethod(), "");
+                assetsRSDTO.setDepreciationMethodCN(depreciationMethod);
                 return assetsRSDTO;
             })
             .collect(Collectors.toList());

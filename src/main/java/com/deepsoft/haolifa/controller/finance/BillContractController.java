@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 /**
  * 分解审核->>查银行日记账&其他货币日记账
  * 申请借款 报销的 报销 出纳
@@ -65,7 +67,7 @@ public class BillContractController {
     @PostMapping("/auditContract")
     @ResponseBody
     public ResultBean auditContract(@RequestBody BillContractAuditDTO billContract) {
-        return billContractService.auditContract(billContract);
+        return billContractService.auditContract(billContract, BigDecimal.ZERO);
     }
 
     @PostMapping("/removeContract/{id}")

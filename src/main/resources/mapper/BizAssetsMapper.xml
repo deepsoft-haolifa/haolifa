@@ -8,8 +8,9 @@
       <arg column="bh" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="specifications" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="num" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="dept_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="unit" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="dept_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="add_type" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="location" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -17,16 +18,17 @@
       <arg column="manufacturer" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="purchasing_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
-      <arg column="use_year" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="use_year" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="depreciation_method" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="start_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
-      <arg column="accrued_month" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="output_rate" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="salvage_value" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="accumulated_depreciation" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="month_rate" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="month_depreciation" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="net_worth" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="accrued_month" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="output_rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="salvage_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="accumulated_depreciation" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="month_rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="month_depreciation" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="net_worth" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="string1" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="string2" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="string3" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -105,11 +107,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, bh, type, specifications, num, dept_id, user_name, add_type, location, 
-    equipment_state, manufacturer, purchasing_time, price, use_year, depreciation_method, 
-    start_time, accrued_month, output_rate, salvage_value, accumulated_depreciation, 
-    month_rate, month_depreciation, net_worth, string1, string2, string3, string4, string5, 
-    string6, string7, string8, string9, string10, remark, status, del_flag, create_by, 
+    id, name, bh, type, specifications, num, unit, dept_id, user_name, add_type, location,
+    equipment_state, manufacturer, purchasing_time, price, total_price, use_year, depreciation_method,
+    start_time, accrued_month, output_rate, salvage_value, accumulated_depreciation,
+    month_rate, month_depreciation, net_worth, string1, string2, string3, string4, string5,
+    string6, string7, string8, string9, string10, remark, status, del_flag, create_by,
     create_time, update_by, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizAssetsExample" resultMap="BaseResultMap">
@@ -127,7 +129,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from biz_assets
     where id = #{id,jdbcType=BIGINT}
@@ -146,34 +148,36 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into biz_assets (name, bh, type, 
-      specifications, num, dept_id, 
-      user_name, add_type, location, 
-      equipment_state, manufacturer, purchasing_time, 
-      price, use_year, depreciation_method, 
-      start_time, accrued_month, output_rate, 
-      salvage_value, accumulated_depreciation, 
-      month_rate, month_depreciation, net_worth, 
-      string1, string2, string3, 
-      string4, string5, string6, 
-      string7, string8, string9, 
-      string10, remark, status, 
-      del_flag, create_by, create_time, 
-      update_by, update_time)
-    values (#{name,jdbcType=VARCHAR}, #{bh,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{specifications,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR}, #{deptId,jdbcType=VARCHAR}, 
-      #{userName,jdbcType=VARCHAR}, #{addType,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
-      #{equipmentState,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR}, #{purchasingTime,jdbcType=TIMESTAMP}, 
-      #{price,jdbcType=DECIMAL}, #{useYear,jdbcType=VARCHAR}, #{depreciationMethod,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{accruedMonth,jdbcType=VARCHAR}, #{outputRate,jdbcType=VARCHAR}, 
-      #{salvageValue,jdbcType=VARCHAR}, #{accumulatedDepreciation,jdbcType=VARCHAR}, 
-      #{monthRate,jdbcType=VARCHAR}, #{monthDepreciation,jdbcType=VARCHAR}, #{netWorth,jdbcType=VARCHAR}, 
-      #{string1,jdbcType=VARCHAR}, #{string2,jdbcType=VARCHAR}, #{string3,jdbcType=VARCHAR}, 
-      #{string4,jdbcType=VARCHAR}, #{string5,jdbcType=VARCHAR}, #{string6,jdbcType=VARCHAR}, 
-      #{string7,jdbcType=VARCHAR}, #{string8,jdbcType=VARCHAR}, #{string9,jdbcType=VARCHAR}, 
-      #{string10,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
-      #{delFlag,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into biz_assets (name, bh, type,
+      specifications, num, unit,
+      dept_id, user_name, add_type,
+      location, equipment_state, manufacturer,
+      purchasing_time, price, total_price,
+      use_year, depreciation_method, start_time,
+      accrued_month, output_rate, salvage_value,
+      accumulated_depreciation, month_rate, month_depreciation,
+      net_worth, string1, string2,
+      string3, string4, string5,
+      string6, string7, string8,
+      string9, string10, remark,
+      status, del_flag, create_by,
+      create_time, update_by, update_time
+      )
+    values (#{name,jdbcType=VARCHAR}, #{bh,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+      #{specifications,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR},
+      #{deptId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{addType,jdbcType=VARCHAR},
+      #{location,jdbcType=VARCHAR}, #{equipmentState,jdbcType=VARCHAR}, #{manufacturer,jdbcType=VARCHAR},
+      #{purchasingTime,jdbcType=TIMESTAMP}, #{price,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL},
+      #{useYear,jdbcType=INTEGER}, #{depreciationMethod,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+      #{accruedMonth,jdbcType=INTEGER}, #{outputRate,jdbcType=DECIMAL}, #{salvageValue,jdbcType=DECIMAL},
+      #{accumulatedDepreciation,jdbcType=DECIMAL}, #{monthRate,jdbcType=DECIMAL}, #{monthDepreciation,jdbcType=DECIMAL},
+      #{netWorth,jdbcType=DECIMAL}, #{string1,jdbcType=VARCHAR}, #{string2,jdbcType=VARCHAR},
+      #{string3,jdbcType=VARCHAR}, #{string4,jdbcType=VARCHAR}, #{string5,jdbcType=VARCHAR},
+      #{string6,jdbcType=VARCHAR}, #{string7,jdbcType=VARCHAR}, #{string8,jdbcType=VARCHAR},
+      #{string9,jdbcType=VARCHAR}, #{string10,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{status,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizAssets">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -195,6 +199,9 @@
       </if>
       <if test="num != null">
         num,
+      </if>
+      <if test="unit != null">
+        unit,
       </if>
       <if test="deptId != null">
         dept_id,
@@ -219,6 +226,9 @@
       </if>
       <if test="price != null">
         price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
       </if>
       <if test="useYear != null">
         use_year,
@@ -316,10 +326,13 @@
         #{specifications,jdbcType=VARCHAR},
       </if>
       <if test="num != null">
-        #{num,jdbcType=VARCHAR},
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
       </if>
       <if test="deptId != null">
-        #{deptId,jdbcType=VARCHAR},
+        #{deptId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
@@ -342,8 +355,11 @@
       <if test="price != null">
         #{price,jdbcType=DECIMAL},
       </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
       <if test="useYear != null">
-        #{useYear,jdbcType=VARCHAR},
+        #{useYear,jdbcType=INTEGER},
       </if>
       <if test="depreciationMethod != null">
         #{depreciationMethod,jdbcType=VARCHAR},
@@ -352,25 +368,25 @@
         #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="accruedMonth != null">
-        #{accruedMonth,jdbcType=VARCHAR},
+        #{accruedMonth,jdbcType=INTEGER},
       </if>
       <if test="outputRate != null">
-        #{outputRate,jdbcType=VARCHAR},
+        #{outputRate,jdbcType=DECIMAL},
       </if>
       <if test="salvageValue != null">
-        #{salvageValue,jdbcType=VARCHAR},
+        #{salvageValue,jdbcType=DECIMAL},
       </if>
       <if test="accumulatedDepreciation != null">
-        #{accumulatedDepreciation,jdbcType=VARCHAR},
+        #{accumulatedDepreciation,jdbcType=DECIMAL},
       </if>
       <if test="monthRate != null">
-        #{monthRate,jdbcType=VARCHAR},
+        #{monthRate,jdbcType=DECIMAL},
       </if>
       <if test="monthDepreciation != null">
-        #{monthDepreciation,jdbcType=VARCHAR},
+        #{monthDepreciation,jdbcType=DECIMAL},
       </if>
       <if test="netWorth != null">
-        #{netWorth,jdbcType=VARCHAR},
+        #{netWorth,jdbcType=DECIMAL},
       </if>
       <if test="string1 != null">
         #{string1,jdbcType=VARCHAR},
@@ -450,10 +466,13 @@
         specifications = #{record.specifications,jdbcType=VARCHAR},
       </if>
       <if test="record.num != null">
-        num = #{record.num,jdbcType=VARCHAR},
+        num = #{record.num,jdbcType=INTEGER},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
       </if>
       <if test="record.deptId != null">
-        dept_id = #{record.deptId,jdbcType=VARCHAR},
+        dept_id = #{record.deptId,jdbcType=INTEGER},
       </if>
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
@@ -476,8 +495,11 @@
       <if test="record.price != null">
         price = #{record.price,jdbcType=DECIMAL},
       </if>
+      <if test="record.totalPrice != null">
+        total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      </if>
       <if test="record.useYear != null">
-        use_year = #{record.useYear,jdbcType=VARCHAR},
+        use_year = #{record.useYear,jdbcType=INTEGER},
       </if>
       <if test="record.depreciationMethod != null">
         depreciation_method = #{record.depreciationMethod,jdbcType=VARCHAR},
@@ -486,25 +508,25 @@
         start_time = #{record.startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.accruedMonth != null">
-        accrued_month = #{record.accruedMonth,jdbcType=VARCHAR},
+        accrued_month = #{record.accruedMonth,jdbcType=INTEGER},
       </if>
       <if test="record.outputRate != null">
-        output_rate = #{record.outputRate,jdbcType=VARCHAR},
+        output_rate = #{record.outputRate,jdbcType=DECIMAL},
       </if>
       <if test="record.salvageValue != null">
-        salvage_value = #{record.salvageValue,jdbcType=VARCHAR},
+        salvage_value = #{record.salvageValue,jdbcType=DECIMAL},
       </if>
       <if test="record.accumulatedDepreciation != null">
-        accumulated_depreciation = #{record.accumulatedDepreciation,jdbcType=VARCHAR},
+        accumulated_depreciation = #{record.accumulatedDepreciation,jdbcType=DECIMAL},
       </if>
       <if test="record.monthRate != null">
-        month_rate = #{record.monthRate,jdbcType=VARCHAR},
+        month_rate = #{record.monthRate,jdbcType=DECIMAL},
       </if>
       <if test="record.monthDepreciation != null">
-        month_depreciation = #{record.monthDepreciation,jdbcType=VARCHAR},
+        month_depreciation = #{record.monthDepreciation,jdbcType=DECIMAL},
       </if>
       <if test="record.netWorth != null">
-        net_worth = #{record.netWorth,jdbcType=VARCHAR},
+        net_worth = #{record.netWorth,jdbcType=DECIMAL},
       </if>
       <if test="record.string1 != null">
         string1 = #{record.string1,jdbcType=VARCHAR},
@@ -569,8 +591,9 @@
       bh = #{record.bh,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
       specifications = #{record.specifications,jdbcType=VARCHAR},
-      num = #{record.num,jdbcType=VARCHAR},
-      dept_id = #{record.deptId,jdbcType=VARCHAR},
+      num = #{record.num,jdbcType=INTEGER},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      dept_id = #{record.deptId,jdbcType=INTEGER},
       user_name = #{record.userName,jdbcType=VARCHAR},
       add_type = #{record.addType,jdbcType=VARCHAR},
       location = #{record.location,jdbcType=VARCHAR},
@@ -578,16 +601,17 @@
       manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
       purchasing_time = #{record.purchasingTime,jdbcType=TIMESTAMP},
       price = #{record.price,jdbcType=DECIMAL},
-      use_year = #{record.useYear,jdbcType=VARCHAR},
+      total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      use_year = #{record.useYear,jdbcType=INTEGER},
       depreciation_method = #{record.depreciationMethod,jdbcType=VARCHAR},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      accrued_month = #{record.accruedMonth,jdbcType=VARCHAR},
-      output_rate = #{record.outputRate,jdbcType=VARCHAR},
-      salvage_value = #{record.salvageValue,jdbcType=VARCHAR},
-      accumulated_depreciation = #{record.accumulatedDepreciation,jdbcType=VARCHAR},
-      month_rate = #{record.monthRate,jdbcType=VARCHAR},
-      month_depreciation = #{record.monthDepreciation,jdbcType=VARCHAR},
-      net_worth = #{record.netWorth,jdbcType=VARCHAR},
+      accrued_month = #{record.accruedMonth,jdbcType=INTEGER},
+      output_rate = #{record.outputRate,jdbcType=DECIMAL},
+      salvage_value = #{record.salvageValue,jdbcType=DECIMAL},
+      accumulated_depreciation = #{record.accumulatedDepreciation,jdbcType=DECIMAL},
+      month_rate = #{record.monthRate,jdbcType=DECIMAL},
+      month_depreciation = #{record.monthDepreciation,jdbcType=DECIMAL},
+      net_worth = #{record.netWorth,jdbcType=DECIMAL},
       string1 = #{record.string1,jdbcType=VARCHAR},
       string2 = #{record.string2,jdbcType=VARCHAR},
       string3 = #{record.string3,jdbcType=VARCHAR},
@@ -625,10 +649,13 @@
         specifications = #{specifications,jdbcType=VARCHAR},
       </if>
       <if test="num != null">
-        num = #{num,jdbcType=VARCHAR},
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
       </if>
       <if test="deptId != null">
-        dept_id = #{deptId,jdbcType=VARCHAR},
+        dept_id = #{deptId,jdbcType=INTEGER},
       </if>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
@@ -651,8 +678,11 @@
       <if test="price != null">
         price = #{price,jdbcType=DECIMAL},
       </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
       <if test="useYear != null">
-        use_year = #{useYear,jdbcType=VARCHAR},
+        use_year = #{useYear,jdbcType=INTEGER},
       </if>
       <if test="depreciationMethod != null">
         depreciation_method = #{depreciationMethod,jdbcType=VARCHAR},
@@ -661,25 +691,25 @@
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="accruedMonth != null">
-        accrued_month = #{accruedMonth,jdbcType=VARCHAR},
+        accrued_month = #{accruedMonth,jdbcType=INTEGER},
       </if>
       <if test="outputRate != null">
-        output_rate = #{outputRate,jdbcType=VARCHAR},
+        output_rate = #{outputRate,jdbcType=DECIMAL},
       </if>
       <if test="salvageValue != null">
-        salvage_value = #{salvageValue,jdbcType=VARCHAR},
+        salvage_value = #{salvageValue,jdbcType=DECIMAL},
       </if>
       <if test="accumulatedDepreciation != null">
-        accumulated_depreciation = #{accumulatedDepreciation,jdbcType=VARCHAR},
+        accumulated_depreciation = #{accumulatedDepreciation,jdbcType=DECIMAL},
       </if>
       <if test="monthRate != null">
-        month_rate = #{monthRate,jdbcType=VARCHAR},
+        month_rate = #{monthRate,jdbcType=DECIMAL},
       </if>
       <if test="monthDepreciation != null">
-        month_depreciation = #{monthDepreciation,jdbcType=VARCHAR},
+        month_depreciation = #{monthDepreciation,jdbcType=DECIMAL},
       </if>
       <if test="netWorth != null">
-        net_worth = #{netWorth,jdbcType=VARCHAR},
+        net_worth = #{netWorth,jdbcType=DECIMAL},
       </if>
       <if test="string1 != null">
         string1 = #{string1,jdbcType=VARCHAR},
@@ -741,8 +771,9 @@
       bh = #{bh,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       specifications = #{specifications,jdbcType=VARCHAR},
-      num = #{num,jdbcType=VARCHAR},
-      dept_id = #{deptId,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      unit = #{unit,jdbcType=VARCHAR},
+      dept_id = #{deptId,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},
       add_type = #{addType,jdbcType=VARCHAR},
       location = #{location,jdbcType=VARCHAR},
@@ -750,16 +781,17 @@
       manufacturer = #{manufacturer,jdbcType=VARCHAR},
       purchasing_time = #{purchasingTime,jdbcType=TIMESTAMP},
       price = #{price,jdbcType=DECIMAL},
-      use_year = #{useYear,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      use_year = #{useYear,jdbcType=INTEGER},
       depreciation_method = #{depreciationMethod,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
-      accrued_month = #{accruedMonth,jdbcType=VARCHAR},
-      output_rate = #{outputRate,jdbcType=VARCHAR},
-      salvage_value = #{salvageValue,jdbcType=VARCHAR},
-      accumulated_depreciation = #{accumulatedDepreciation,jdbcType=VARCHAR},
-      month_rate = #{monthRate,jdbcType=VARCHAR},
-      month_depreciation = #{monthDepreciation,jdbcType=VARCHAR},
-      net_worth = #{netWorth,jdbcType=VARCHAR},
+      accrued_month = #{accruedMonth,jdbcType=INTEGER},
+      output_rate = #{outputRate,jdbcType=DECIMAL},
+      salvage_value = #{salvageValue,jdbcType=DECIMAL},
+      accumulated_depreciation = #{accumulatedDepreciation,jdbcType=DECIMAL},
+      month_rate = #{monthRate,jdbcType=DECIMAL},
+      month_depreciation = #{monthDepreciation,jdbcType=DECIMAL},
+      net_worth = #{netWorth,jdbcType=DECIMAL},
       string1 = #{string1,jdbcType=VARCHAR},
       string2 = #{string2,jdbcType=VARCHAR},
       string3 = #{string3,jdbcType=VARCHAR},
