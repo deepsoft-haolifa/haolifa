@@ -486,6 +486,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         if (StringUtils.isNotEmpty(model.getDataStatus())) {
             criteria.andDataStatusEqualTo(model.getDataStatus());
         }
+        criteria.andApplyStatusIn(Arrays.asList("3","5"));
 
         bizPayPlanExample.setOrderByClause("id desc");
         return bizPayPlanExample;

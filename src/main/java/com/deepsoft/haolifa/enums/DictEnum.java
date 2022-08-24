@@ -21,6 +21,7 @@ public enum DictEnum {
 
     ASSETS_ADD_TYPE("ASSETS_ADD_TYPE", "固定资产增加方式"),
     ASSETS_TYPE("ASSETS_TYPE", "固定资产类别名称"),
+    DEPRECIATION_METHOD("DEPRECIATION_METHOD", "折旧方法"),
 
 
     ;

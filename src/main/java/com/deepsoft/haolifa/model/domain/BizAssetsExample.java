@@ -456,63 +456,123 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andNumEqualTo(String value) {
+        public Criteria andNumEqualTo(Integer value) {
             addCriterion("num =", value, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumNotEqualTo(String value) {
+        public Criteria andNumNotEqualTo(Integer value) {
             addCriterion("num <>", value, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumGreaterThan(String value) {
+        public Criteria andNumGreaterThan(Integer value) {
             addCriterion("num >", value, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumGreaterThanOrEqualTo(String value) {
+        public Criteria andNumGreaterThanOrEqualTo(Integer value) {
             addCriterion("num >=", value, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumLessThan(String value) {
+        public Criteria andNumLessThan(Integer value) {
             addCriterion("num <", value, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumLessThanOrEqualTo(String value) {
+        public Criteria andNumLessThanOrEqualTo(Integer value) {
             addCriterion("num <=", value, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumLike(String value) {
-            addCriterion("num like", value, "num");
-            return (Criteria) this;
-        }
-
-        public Criteria andNumNotLike(String value) {
-            addCriterion("num not like", value, "num");
-            return (Criteria) this;
-        }
-
-        public Criteria andNumIn(List<String> values) {
+        public Criteria andNumIn(List<Integer> values) {
             addCriterion("num in", values, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumNotIn(List<String> values) {
+        public Criteria andNumNotIn(List<Integer> values) {
             addCriterion("num not in", values, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumBetween(String value1, String value2) {
+        public Criteria andNumBetween(Integer value1, Integer value2) {
             addCriterion("num between", value1, value2, "num");
             return (Criteria) this;
         }
 
-        public Criteria andNumNotBetween(String value1, String value2) {
+        public Criteria andNumNotBetween(Integer value1, Integer value2) {
             addCriterion("num not between", value1, value2, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitIsNull() {
+            addCriterion("unit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitIsNotNull() {
+            addCriterion("unit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitEqualTo(String value) {
+            addCriterion("unit =", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitNotEqualTo(String value) {
+            addCriterion("unit <>", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitGreaterThan(String value) {
+            addCriterion("unit >", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitGreaterThanOrEqualTo(String value) {
+            addCriterion("unit >=", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitLessThan(String value) {
+            addCriterion("unit <", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitLessThanOrEqualTo(String value) {
+            addCriterion("unit <=", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitLike(String value) {
+            addCriterion("unit like", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitNotLike(String value) {
+            addCriterion("unit not like", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitIn(List<String> values) {
+            addCriterion("unit in", values, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitNotIn(List<String> values) {
+            addCriterion("unit not in", values, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitBetween(String value1, String value2) {
+            addCriterion("unit between", value1, value2, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitNotBetween(String value1, String value2) {
+            addCriterion("unit not between", value1, value2, "unit");
             return (Criteria) this;
         }
 
@@ -526,62 +586,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdEqualTo(String value) {
+        public Criteria andDeptIdEqualTo(Integer value) {
             addCriterion("dept_id =", value, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdNotEqualTo(String value) {
+        public Criteria andDeptIdNotEqualTo(Integer value) {
             addCriterion("dept_id <>", value, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdGreaterThan(String value) {
+        public Criteria andDeptIdGreaterThan(Integer value) {
             addCriterion("dept_id >", value, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdGreaterThanOrEqualTo(String value) {
+        public Criteria andDeptIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("dept_id >=", value, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdLessThan(String value) {
+        public Criteria andDeptIdLessThan(Integer value) {
             addCriterion("dept_id <", value, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdLessThanOrEqualTo(String value) {
+        public Criteria andDeptIdLessThanOrEqualTo(Integer value) {
             addCriterion("dept_id <=", value, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdLike(String value) {
-            addCriterion("dept_id like", value, "deptId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDeptIdNotLike(String value) {
-            addCriterion("dept_id not like", value, "deptId");
-            return (Criteria) this;
-        }
-
-        public Criteria andDeptIdIn(List<String> values) {
+        public Criteria andDeptIdIn(List<Integer> values) {
             addCriterion("dept_id in", values, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdNotIn(List<String> values) {
+        public Criteria andDeptIdNotIn(List<Integer> values) {
             addCriterion("dept_id not in", values, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdBetween(String value1, String value2) {
+        public Criteria andDeptIdBetween(Integer value1, Integer value2) {
             addCriterion("dept_id between", value1, value2, "deptId");
             return (Criteria) this;
         }
 
-        public Criteria andDeptIdNotBetween(String value1, String value2) {
+        public Criteria andDeptIdNotBetween(Integer value1, Integer value2) {
             addCriterion("dept_id not between", value1, value2, "deptId");
             return (Criteria) this;
         }
@@ -1056,6 +1106,66 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
+        public Criteria andTotalPriceIsNull() {
+            addCriterion("total_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIsNotNull() {
+            addCriterion("total_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceEqualTo(BigDecimal value) {
+            addCriterion("total_price =", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotEqualTo(BigDecimal value) {
+            addCriterion("total_price <>", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThan(BigDecimal value) {
+            addCriterion("total_price >", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price >=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThan(BigDecimal value) {
+            addCriterion("total_price <", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_price <=", value, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceIn(List<BigDecimal> values) {
+            addCriterion("total_price in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotIn(List<BigDecimal> values) {
+            addCriterion("total_price not in", values, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_price not between", value1, value2, "totalPrice");
+            return (Criteria) this;
+        }
+
         public Criteria andUseYearIsNull() {
             addCriterion("use_year is null");
             return (Criteria) this;
@@ -1066,62 +1176,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andUseYearEqualTo(String value) {
+        public Criteria andUseYearEqualTo(Integer value) {
             addCriterion("use_year =", value, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearNotEqualTo(String value) {
+        public Criteria andUseYearNotEqualTo(Integer value) {
             addCriterion("use_year <>", value, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearGreaterThan(String value) {
+        public Criteria andUseYearGreaterThan(Integer value) {
             addCriterion("use_year >", value, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearGreaterThanOrEqualTo(String value) {
+        public Criteria andUseYearGreaterThanOrEqualTo(Integer value) {
             addCriterion("use_year >=", value, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearLessThan(String value) {
+        public Criteria andUseYearLessThan(Integer value) {
             addCriterion("use_year <", value, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearLessThanOrEqualTo(String value) {
+        public Criteria andUseYearLessThanOrEqualTo(Integer value) {
             addCriterion("use_year <=", value, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearLike(String value) {
-            addCriterion("use_year like", value, "useYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andUseYearNotLike(String value) {
-            addCriterion("use_year not like", value, "useYear");
-            return (Criteria) this;
-        }
-
-        public Criteria andUseYearIn(List<String> values) {
+        public Criteria andUseYearIn(List<Integer> values) {
             addCriterion("use_year in", values, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearNotIn(List<String> values) {
+        public Criteria andUseYearNotIn(List<Integer> values) {
             addCriterion("use_year not in", values, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearBetween(String value1, String value2) {
+        public Criteria andUseYearBetween(Integer value1, Integer value2) {
             addCriterion("use_year between", value1, value2, "useYear");
             return (Criteria) this;
         }
 
-        public Criteria andUseYearNotBetween(String value1, String value2) {
+        public Criteria andUseYearNotBetween(Integer value1, Integer value2) {
             addCriterion("use_year not between", value1, value2, "useYear");
             return (Criteria) this;
         }
@@ -1266,62 +1366,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthEqualTo(String value) {
+        public Criteria andAccruedMonthEqualTo(Integer value) {
             addCriterion("accrued_month =", value, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthNotEqualTo(String value) {
+        public Criteria andAccruedMonthNotEqualTo(Integer value) {
             addCriterion("accrued_month <>", value, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthGreaterThan(String value) {
+        public Criteria andAccruedMonthGreaterThan(Integer value) {
             addCriterion("accrued_month >", value, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthGreaterThanOrEqualTo(String value) {
+        public Criteria andAccruedMonthGreaterThanOrEqualTo(Integer value) {
             addCriterion("accrued_month >=", value, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthLessThan(String value) {
+        public Criteria andAccruedMonthLessThan(Integer value) {
             addCriterion("accrued_month <", value, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthLessThanOrEqualTo(String value) {
+        public Criteria andAccruedMonthLessThanOrEqualTo(Integer value) {
             addCriterion("accrued_month <=", value, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthLike(String value) {
-            addCriterion("accrued_month like", value, "accruedMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccruedMonthNotLike(String value) {
-            addCriterion("accrued_month not like", value, "accruedMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccruedMonthIn(List<String> values) {
+        public Criteria andAccruedMonthIn(List<Integer> values) {
             addCriterion("accrued_month in", values, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthNotIn(List<String> values) {
+        public Criteria andAccruedMonthNotIn(List<Integer> values) {
             addCriterion("accrued_month not in", values, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthBetween(String value1, String value2) {
+        public Criteria andAccruedMonthBetween(Integer value1, Integer value2) {
             addCriterion("accrued_month between", value1, value2, "accruedMonth");
             return (Criteria) this;
         }
 
-        public Criteria andAccruedMonthNotBetween(String value1, String value2) {
+        public Criteria andAccruedMonthNotBetween(Integer value1, Integer value2) {
             addCriterion("accrued_month not between", value1, value2, "accruedMonth");
             return (Criteria) this;
         }
@@ -1336,62 +1426,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateEqualTo(String value) {
+        public Criteria andOutputRateEqualTo(BigDecimal value) {
             addCriterion("output_rate =", value, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateNotEqualTo(String value) {
+        public Criteria andOutputRateNotEqualTo(BigDecimal value) {
             addCriterion("output_rate <>", value, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateGreaterThan(String value) {
+        public Criteria andOutputRateGreaterThan(BigDecimal value) {
             addCriterion("output_rate >", value, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateGreaterThanOrEqualTo(String value) {
+        public Criteria andOutputRateGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("output_rate >=", value, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateLessThan(String value) {
+        public Criteria andOutputRateLessThan(BigDecimal value) {
             addCriterion("output_rate <", value, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateLessThanOrEqualTo(String value) {
+        public Criteria andOutputRateLessThanOrEqualTo(BigDecimal value) {
             addCriterion("output_rate <=", value, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateLike(String value) {
-            addCriterion("output_rate like", value, "outputRate");
-            return (Criteria) this;
-        }
-
-        public Criteria andOutputRateNotLike(String value) {
-            addCriterion("output_rate not like", value, "outputRate");
-            return (Criteria) this;
-        }
-
-        public Criteria andOutputRateIn(List<String> values) {
+        public Criteria andOutputRateIn(List<BigDecimal> values) {
             addCriterion("output_rate in", values, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateNotIn(List<String> values) {
+        public Criteria andOutputRateNotIn(List<BigDecimal> values) {
             addCriterion("output_rate not in", values, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateBetween(String value1, String value2) {
+        public Criteria andOutputRateBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("output_rate between", value1, value2, "outputRate");
             return (Criteria) this;
         }
 
-        public Criteria andOutputRateNotBetween(String value1, String value2) {
+        public Criteria andOutputRateNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("output_rate not between", value1, value2, "outputRate");
             return (Criteria) this;
         }
@@ -1406,62 +1486,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueEqualTo(String value) {
+        public Criteria andSalvageValueEqualTo(BigDecimal value) {
             addCriterion("salvage_value =", value, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueNotEqualTo(String value) {
+        public Criteria andSalvageValueNotEqualTo(BigDecimal value) {
             addCriterion("salvage_value <>", value, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueGreaterThan(String value) {
+        public Criteria andSalvageValueGreaterThan(BigDecimal value) {
             addCriterion("salvage_value >", value, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueGreaterThanOrEqualTo(String value) {
+        public Criteria andSalvageValueGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("salvage_value >=", value, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueLessThan(String value) {
+        public Criteria andSalvageValueLessThan(BigDecimal value) {
             addCriterion("salvage_value <", value, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueLessThanOrEqualTo(String value) {
+        public Criteria andSalvageValueLessThanOrEqualTo(BigDecimal value) {
             addCriterion("salvage_value <=", value, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueLike(String value) {
-            addCriterion("salvage_value like", value, "salvageValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalvageValueNotLike(String value) {
-            addCriterion("salvage_value not like", value, "salvageValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andSalvageValueIn(List<String> values) {
+        public Criteria andSalvageValueIn(List<BigDecimal> values) {
             addCriterion("salvage_value in", values, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueNotIn(List<String> values) {
+        public Criteria andSalvageValueNotIn(List<BigDecimal> values) {
             addCriterion("salvage_value not in", values, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueBetween(String value1, String value2) {
+        public Criteria andSalvageValueBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("salvage_value between", value1, value2, "salvageValue");
             return (Criteria) this;
         }
 
-        public Criteria andSalvageValueNotBetween(String value1, String value2) {
+        public Criteria andSalvageValueNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("salvage_value not between", value1, value2, "salvageValue");
             return (Criteria) this;
         }
@@ -1476,62 +1546,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationEqualTo(String value) {
+        public Criteria andAccumulatedDepreciationEqualTo(BigDecimal value) {
             addCriterion("accumulated_depreciation =", value, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationNotEqualTo(String value) {
+        public Criteria andAccumulatedDepreciationNotEqualTo(BigDecimal value) {
             addCriterion("accumulated_depreciation <>", value, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationGreaterThan(String value) {
+        public Criteria andAccumulatedDepreciationGreaterThan(BigDecimal value) {
             addCriterion("accumulated_depreciation >", value, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationGreaterThanOrEqualTo(String value) {
+        public Criteria andAccumulatedDepreciationGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("accumulated_depreciation >=", value, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationLessThan(String value) {
+        public Criteria andAccumulatedDepreciationLessThan(BigDecimal value) {
             addCriterion("accumulated_depreciation <", value, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationLessThanOrEqualTo(String value) {
+        public Criteria andAccumulatedDepreciationLessThanOrEqualTo(BigDecimal value) {
             addCriterion("accumulated_depreciation <=", value, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationLike(String value) {
-            addCriterion("accumulated_depreciation like", value, "accumulatedDepreciation");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccumulatedDepreciationNotLike(String value) {
-            addCriterion("accumulated_depreciation not like", value, "accumulatedDepreciation");
-            return (Criteria) this;
-        }
-
-        public Criteria andAccumulatedDepreciationIn(List<String> values) {
+        public Criteria andAccumulatedDepreciationIn(List<BigDecimal> values) {
             addCriterion("accumulated_depreciation in", values, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationNotIn(List<String> values) {
+        public Criteria andAccumulatedDepreciationNotIn(List<BigDecimal> values) {
             addCriterion("accumulated_depreciation not in", values, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationBetween(String value1, String value2) {
+        public Criteria andAccumulatedDepreciationBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("accumulated_depreciation between", value1, value2, "accumulatedDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andAccumulatedDepreciationNotBetween(String value1, String value2) {
+        public Criteria andAccumulatedDepreciationNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("accumulated_depreciation not between", value1, value2, "accumulatedDepreciation");
             return (Criteria) this;
         }
@@ -1546,62 +1606,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateEqualTo(String value) {
+        public Criteria andMonthRateEqualTo(BigDecimal value) {
             addCriterion("month_rate =", value, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateNotEqualTo(String value) {
+        public Criteria andMonthRateNotEqualTo(BigDecimal value) {
             addCriterion("month_rate <>", value, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateGreaterThan(String value) {
+        public Criteria andMonthRateGreaterThan(BigDecimal value) {
             addCriterion("month_rate >", value, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateGreaterThanOrEqualTo(String value) {
+        public Criteria andMonthRateGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("month_rate >=", value, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateLessThan(String value) {
+        public Criteria andMonthRateLessThan(BigDecimal value) {
             addCriterion("month_rate <", value, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateLessThanOrEqualTo(String value) {
+        public Criteria andMonthRateLessThanOrEqualTo(BigDecimal value) {
             addCriterion("month_rate <=", value, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateLike(String value) {
-            addCriterion("month_rate like", value, "monthRate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonthRateNotLike(String value) {
-            addCriterion("month_rate not like", value, "monthRate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonthRateIn(List<String> values) {
+        public Criteria andMonthRateIn(List<BigDecimal> values) {
             addCriterion("month_rate in", values, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateNotIn(List<String> values) {
+        public Criteria andMonthRateNotIn(List<BigDecimal> values) {
             addCriterion("month_rate not in", values, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateBetween(String value1, String value2) {
+        public Criteria andMonthRateBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("month_rate between", value1, value2, "monthRate");
             return (Criteria) this;
         }
 
-        public Criteria andMonthRateNotBetween(String value1, String value2) {
+        public Criteria andMonthRateNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("month_rate not between", value1, value2, "monthRate");
             return (Criteria) this;
         }
@@ -1616,62 +1666,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationEqualTo(String value) {
+        public Criteria andMonthDepreciationEqualTo(BigDecimal value) {
             addCriterion("month_depreciation =", value, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationNotEqualTo(String value) {
+        public Criteria andMonthDepreciationNotEqualTo(BigDecimal value) {
             addCriterion("month_depreciation <>", value, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationGreaterThan(String value) {
+        public Criteria andMonthDepreciationGreaterThan(BigDecimal value) {
             addCriterion("month_depreciation >", value, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationGreaterThanOrEqualTo(String value) {
+        public Criteria andMonthDepreciationGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("month_depreciation >=", value, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationLessThan(String value) {
+        public Criteria andMonthDepreciationLessThan(BigDecimal value) {
             addCriterion("month_depreciation <", value, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationLessThanOrEqualTo(String value) {
+        public Criteria andMonthDepreciationLessThanOrEqualTo(BigDecimal value) {
             addCriterion("month_depreciation <=", value, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationLike(String value) {
-            addCriterion("month_depreciation like", value, "monthDepreciation");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonthDepreciationNotLike(String value) {
-            addCriterion("month_depreciation not like", value, "monthDepreciation");
-            return (Criteria) this;
-        }
-
-        public Criteria andMonthDepreciationIn(List<String> values) {
+        public Criteria andMonthDepreciationIn(List<BigDecimal> values) {
             addCriterion("month_depreciation in", values, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationNotIn(List<String> values) {
+        public Criteria andMonthDepreciationNotIn(List<BigDecimal> values) {
             addCriterion("month_depreciation not in", values, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationBetween(String value1, String value2) {
+        public Criteria andMonthDepreciationBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("month_depreciation between", value1, value2, "monthDepreciation");
             return (Criteria) this;
         }
 
-        public Criteria andMonthDepreciationNotBetween(String value1, String value2) {
+        public Criteria andMonthDepreciationNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("month_depreciation not between", value1, value2, "monthDepreciation");
             return (Criteria) this;
         }
@@ -1686,62 +1726,52 @@ public class BizAssetsExample {
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthEqualTo(String value) {
+        public Criteria andNetWorthEqualTo(BigDecimal value) {
             addCriterion("net_worth =", value, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthNotEqualTo(String value) {
+        public Criteria andNetWorthNotEqualTo(BigDecimal value) {
             addCriterion("net_worth <>", value, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthGreaterThan(String value) {
+        public Criteria andNetWorthGreaterThan(BigDecimal value) {
             addCriterion("net_worth >", value, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthGreaterThanOrEqualTo(String value) {
+        public Criteria andNetWorthGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("net_worth >=", value, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthLessThan(String value) {
+        public Criteria andNetWorthLessThan(BigDecimal value) {
             addCriterion("net_worth <", value, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthLessThanOrEqualTo(String value) {
+        public Criteria andNetWorthLessThanOrEqualTo(BigDecimal value) {
             addCriterion("net_worth <=", value, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthLike(String value) {
-            addCriterion("net_worth like", value, "netWorth");
-            return (Criteria) this;
-        }
-
-        public Criteria andNetWorthNotLike(String value) {
-            addCriterion("net_worth not like", value, "netWorth");
-            return (Criteria) this;
-        }
-
-        public Criteria andNetWorthIn(List<String> values) {
+        public Criteria andNetWorthIn(List<BigDecimal> values) {
             addCriterion("net_worth in", values, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthNotIn(List<String> values) {
+        public Criteria andNetWorthNotIn(List<BigDecimal> values) {
             addCriterion("net_worth not in", values, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthBetween(String value1, String value2) {
+        public Criteria andNetWorthBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("net_worth between", value1, value2, "netWorth");
             return (Criteria) this;
         }
 
-        public Criteria andNetWorthNotBetween(String value1, String value2) {
+        public Criteria andNetWorthNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("net_worth not between", value1, value2, "netWorth");
             return (Criteria) this;
         }

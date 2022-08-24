@@ -44,16 +44,28 @@ public class OtherBillServiceImpl implements OtherBillService {
     @Override
     public ResultBean save(BizOtherBillAddDTO model) {
         log.info("OtherBillService saveInfo start|{}", JSONObject.toJSON(model));
-        if (StringUtils.isAnyBlank()) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        if (model.getDeptId() == null) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"部门必填");
         }
         BizOtherBill billOther = new BizOtherBill();
         BeanUtils.copyProperties(model, billOther);
-        // 设置公司和账户，用来统计余额
+        // 设置公司和账户，用来统计余额 类型 1.收款；2.付款
         if (billOther.getType().equals("1")) {
+            if (StringUtils.isEmpty(model.getCollectionType())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款类别必填");
+            }
+            if (null == model.getCollectionMoney()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款必填");
+            }
             billOther.setCompany(billOther.getCollectCompany());
             billOther.setAccount(billOther.getPayAccount());
         } else if (billOther.getType().equals("2")) {
+            if (StringUtils.isEmpty(model.getPaymentType())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款类别必填");
+            }
+            if (null == model.getPayment()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款必填");
+            }
             billOther.setCompany(billOther.getPayCompany());
             billOther.setAccount(billOther.getPayAccount());
         }

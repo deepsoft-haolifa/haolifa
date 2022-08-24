@@ -50,10 +50,9 @@ public class BankBillServiceImpl implements BankBillService {
     @Override
     public ResultBean save(BizBankBillAddDTO model) {
         log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
-        if (StringUtils.isAnyBlank()) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        if (model.getDeptId() == null) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"部门必填");
         }
-
         BizBankBill bizBankBill = new BizBankBill();
         BeanUtils.copyProperties(model, bizBankBill);
 
@@ -68,8 +67,20 @@ public class BankBillServiceImpl implements BankBillService {
             if (StringUtils.isEmpty(payCompany)) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款时付款单位不能为空");
             }
+            if (StringUtils.isEmpty(model.getCollectionType())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款类别必填");
+            }
+            if (null == model.getCollectionMoney()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款必填");
+            }
             // 付款
         } else if (bizBankBill.getType().equals("2")) {
+            if (StringUtils.isEmpty(model.getPaymentType())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款类别必填");
+            }
+            if (null == model.getPayment()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款必填");
+            }
             String payCompany = bizBankBill.getPayCompany();
             bizBankBill.setCompany(payCompany);
             bizBankBill.setAccount(bizBankBill.getPayAccount());

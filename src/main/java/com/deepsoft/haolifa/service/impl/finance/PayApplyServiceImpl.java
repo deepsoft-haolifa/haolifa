@@ -378,14 +378,22 @@ public class PayApplyServiceImpl implements PayApplyService {
 
         bizPayPlanList.stream()
             .forEach(bizPayPlan -> {
+
                 BizPayPlan bizPay = new BizPayPlan();
                 bizPay.setId(bizPayPlan.getId());
+
                 // `applyStatus`  DEFAULT '1' COMMENT '审核状态：1 待审批 2 审批中 3 付款中 4 审批不通过 5 付款完成',
                 bizPay.setApplyStatus(auditResult);
-                //   ZJJL_CONFIRM("0", "待资金经理确认"),
-                //    ZGKJ_CONFIRM("0", "待主管会计确认"),
-                //    CN_CONFIRM("1", "出纳付款");
-                bizPay.setDataStatus(PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode());
+                if (StringUtils.equalsIgnoreCase(auditResult, "4")){
+                    bizPay.setDataStatus(PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode());
+                    bizPay.setDelFlag(CommonEnum.DelFlagEnum.NO.code);
+                }
+                else {
+                    //   ZJJL_CONFIRM("0", "待资金经理确认"),
+                    //    ZGKJ_CONFIRM("0", "待主管会计确认"),
+                    //    CN_CONFIRM("1", "出纳付款");
+                    bizPay.setDataStatus(PayPlanConfirmStatusEnum.ZGKJ_CONFIRM.getCode());
+                }
                 bizPayPlanMapper.updateByPrimaryKeySelective(bizPay);
             });
         return 1;
