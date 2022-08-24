@@ -239,6 +239,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             log.info("calculateSalary name:{}, count:{},  month:{}", payWage.getUserName(), i, payWage.getWagesMonth());
             // 通过用户ID查工序订单用户关联表
             Integer userId = payWage.getUserId();
+            if (userId < 57) {
+                continue;
+            }
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
             // 处理考勤数据 年月
@@ -292,6 +295,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
 //                        payOrderUserRelationProcedureMapper.updateByPrimaryKeySelective(procedure);
                     } else if (CommonEnum.WorkShopTypeEnum.SPRAY.name.equals(workshopName)) {
                         SprayItem sprayItem = sprayItemMapper.selectByPrimaryKey(procedure.getProductId());
+                        if (Objects.isNull(sprayItem)) {
+                            continue;
+                        }
                         PayCalculateDTO payCalculateDTO = buildPayCalculateDTO(orderId, sprayItem.getSprayedGraphNo(), startTime, endTime);
                         List<SprayInspectHistory> sprayInspectHistoryList = sprayService.getSprayInspectHistoryList(payCalculateDTO);
                         if (CollectionUtils.isEmpty(sprayInspectHistoryList)) {
@@ -321,7 +327,7 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                         }
                         // 查询是否有多个人绑定同一任务
                         PayOrderRelationMoreUserExample userExample = new PayOrderRelationMoreUserExample();
-                        userExample.createCriteria().andRelationProcedureIdEqualTo(procedure.getId()).andCreateTimeBetween(startTime, endTime);
+                        userExample.createCriteria().andRelationProcedureIdEqualTo(procedure.getId()).andCreateTimeBetween(startTime, endTime).andQualifiedNumberIsNotNull();
                         List<PayOrderRelationMoreUser> payOrderRelationMoreUsers = payOrderRelationMoreUserMapper.selectByExample(userExample);
                         if (CollectionUtils.isEmpty(payOrderRelationMoreUsers)) {
                             for (InspectHistory inspectHistory : inspectHistories) {
@@ -339,6 +345,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                             for (PayOrderRelationMoreUser more : payOrderRelationMoreUsers) {
                                 if (procedure.getUserId() == more.getUserId()) {
                                     Integer qualifiedNumber = more.getQualifiedNumber();
+                                    if (Objects.isNull(qualifiedNumber)) {
+                                        continue;
+                                    }
                                     // 去重数量
                                     long timeMillis = System.currentTimeMillis() + more.getId();
                                     productMap.put(timeMillis + orderId, qualifiedNumber);
