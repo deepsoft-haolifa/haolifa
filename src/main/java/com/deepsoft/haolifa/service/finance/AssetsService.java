@@ -2,10 +2,7 @@ package com.deepsoft.haolifa.service.finance;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.assets.*;
 
 public interface AssetsService {
     ResultBean save(AssetsAddDTO model);
@@ -15,4 +12,8 @@ public interface AssetsService {
     ResultBean update(AssetsUpDTO assetsUpDTO);
 
     ResultBean<PageDTO<AssetsRSDTO>> getList(AssetsRQDTO assetsRQDTO);
+
+    ResultBean<AssetsSumDTO> getAssetsSum(AssetsRQDTO assetsRQDTO);
+
+    void job();
 }

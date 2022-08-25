@@ -18,8 +18,8 @@ public class AssetsRQDTO extends PageParam {
     @ApiModelProperty(value = "设备编号")
     private  String bh;
 
-    @ApiModelProperty(value = "类别名称 数据字典 ??")
-    private  String type;
+    @ApiModelProperty(value = "资产类别 数据字典 ASSETS_TYPE")
+    private String type;
 
     @ApiModelProperty(value = "部门")
     private  Integer deptId;
@@ -27,11 +27,8 @@ public class AssetsRQDTO extends PageParam {
     @ApiModelProperty(value = "领用人")
     private  String userName;
 
-    @ApiModelProperty(value = "增加方式 数据字典 ？？")
-    private  String addType;
-
-    @ApiModelProperty(value = "设备状态 数据字典 ？？")
-    private  String equipmentState;
+    @ApiModelProperty(value = "增加方式 数据字典 ASSETS_ADD_TYPE")
+    private String addType;
 
     @ApiModelProperty(value = "状态（0正常 1停用）")
     private  String status;

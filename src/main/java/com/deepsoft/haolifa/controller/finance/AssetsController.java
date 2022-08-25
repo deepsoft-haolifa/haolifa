@@ -3,11 +3,7 @@ package com.deepsoft.haolifa.controller.finance;
 
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.assets.AssetsUpDTO;
-import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.assets.*;
 import com.deepsoft.haolifa.service.finance.AssetsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,8 +41,14 @@ public class AssetsController {
 
     @ApiOperation("获取固定资产列表")
     @PostMapping("/getAssetsList")
-    public ResultBean<PageDTO<AssetsRSDTO>>  getAssetsList(@RequestBody AssetsRQDTO assetsRQDTO) {
+    public ResultBean<PageDTO<AssetsRSDTO>> getAssetsList(@RequestBody AssetsRQDTO assetsRQDTO) {
         return assetsService.getList(assetsRQDTO);
+    }
+
+    @ApiOperation("获取资产金额合计")
+    @PostMapping("/getAssetsSum")
+    public ResultBean<AssetsSumDTO> getAssetsSum(@RequestBody AssetsRQDTO assetsRQDTO) {
+        return assetsService.getAssetsSum(assetsRQDTO);
     }
 
 
