@@ -249,8 +249,8 @@ public class OrderProductController {
 
     @ApiOperation("审核--添加技术清单")
     @PostMapping("/add-technical-detailed")
-    public ResultBean addTechnicalDetailed(@RequestBody List<OrderTechnicalDetailedRel> dto) {
-        int i = orderProductService.addTechnicalDetailed(dto);
+    public ResultBean addTechnicalDetailed(@RequestBody TechnicalDetailedListDTO dto) {
+        int i = orderProductService.addTechnicalDetailed(dto.getTechnicalDetailedRels());
         if (i > 0) {
             return ResultBean.success("添加成功");
         } else {
@@ -259,7 +259,7 @@ public class OrderProductController {
     }
 
     @ApiOperation("审核--删除技术清单")
-    @DeleteMapping("/del-technical-detailed/{id}")
+    @PostMapping("/del-technical-detailed/{id}")
     @ApiImplicitParam(name = "id", value = "关联id", dataType = "int", paramType = "path", required = true)
     public ResultBean delTechnicalDetailed(@PathVariable int id) {
         int i = orderProductService.delTechnicalDetailed(id);
