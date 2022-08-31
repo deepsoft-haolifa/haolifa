@@ -57,6 +57,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -2401,6 +2403,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         orderProductMapper.updateByExampleSelective(orderProduct, example);
     }
 
+
     @Override
     public List<OrderTechnicalDetailedRel> getTechnicalDetailed(OrderSimpleDTO dto) {
         String orderNo = dto.getOrderNo();
@@ -2417,9 +2420,20 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             String remark = orderItem.getProductRemark();
             // 将执行器从备注中找出来
             String actuatorModel = "SKD-05";
+            Pattern pattern = Pattern.compile("适配:(.*?)执行器");
+            Matcher matcher = pattern.matcher(remark);
+            while (matcher.find()) {
+                actuatorModel = matcher.group(1);
+            }
+
+            String productModel = orderItem.getProductModel();
+            if (productModel.length() >= 4) {
+                productModel = productModel.substring(0, 4);
+            }
+
             // 根据型号+规格+执行器型号获取技术清单
             TechnicalDetailedExample example = new TechnicalDetailedExample();
-            example.or().andProductModelEqualTo(orderItem.getProductModel())
+            example.or().andProductModelEqualTo(productModel)
                 .andSpecificationsEqualTo(orderItem.getSpecifications())
                 .andActuatorModelEqualTo(actuatorModel);
             List<TechnicalDetailed> technicalDetaileds = technicalDetailedMapper.selectByExample(example);
