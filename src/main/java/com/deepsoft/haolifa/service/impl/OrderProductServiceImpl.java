@@ -2446,6 +2446,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 }
                 OrderTechnicalDetailedRel orderTechnicalDetailedRel = new OrderTechnicalDetailedRel();
                 BeanUtil.copyProperties(technicalDetaileds.get(0), orderTechnicalDetailedRel);
+                orderTechnicalDetailedRel.setOrderNo(orderNo);
                 orderTechnicalDetailedRel.setProductName(orderItem.getProductName());
                 orderTechnicalDetailedRel.setProductNum(orderItem.getProductNumber());
                 resultList.add(orderTechnicalDetailedRel);
