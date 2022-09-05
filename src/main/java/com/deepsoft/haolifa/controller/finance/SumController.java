@@ -12,10 +12,7 @@ import com.deepsoft.haolifa.service.finance.SumService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/finance/sum")
@@ -36,7 +33,7 @@ public class SumController {
     @ApiOperation("采购合同的汇总统计")
     @PostMapping("/procurement/summary/list")
     @ResponseBody
-    public ResultBean<PageDTO<ProcurementSummaryRSDTO>>  procurementSummaryList(SummaryRQDTO reqVo) {
+    public ResultBean<PageDTO<ProcurementSummaryRSDTO>>  procurementSummaryList(@RequestBody SummaryRQDTO reqVo) {
         ResultBean<PageDTO<ProcurementSummaryRSDTO>> pageDTOResultBean = sumService.selectProcurementSummary(reqVo);
         return pageDTOResultBean;
     }
@@ -48,7 +45,7 @@ public class SumController {
     @ApiOperation("销售合同的汇总统计")
     @PostMapping("/saleContract/summary/list")
     @ResponseBody
-    public ResultBean<PageDTO<SaleSummaryRSDTO>>  saleContractSummaryList(SaleSummaryRQDTO reqVo) {
+    public ResultBean<PageDTO<SaleSummaryRSDTO>>  saleContractSummaryList(@RequestBody SaleSummaryRQDTO reqVo) {
         ResultBean<PageDTO<SaleSummaryRSDTO>> pageDTOResultBean = sumService.selectSaleContractSummary(reqVo);
         return pageDTOResultBean;
     }
