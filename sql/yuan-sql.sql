@@ -63,7 +63,7 @@ CREATE TABLE `biz_company`
     `account_name` varchar(64) DEFAULT '' COMMENT '户名',
     `card_number` varchar(64) DEFAULT '' COMMENT '单位账号',
     `bank_of_deposit` varchar(64) DEFAULT '' COMMENT '开户行',
-    `status`                   char(1)        DEFAULT '0' COMMENT '状态（0正常 1停用）',
+    `status`                   char(1)        DEFAULT '0' COMMENT '状态（1正常 2停用）',
     `remark`                   varchar(30)    DEFAULT '' COMMENT '备注',
     `del_flag`                 char(1)        DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
     `create_by`                varchar(64)    DEFAULT '' COMMENT '创建者',
