@@ -5,6 +5,8 @@ import com.deepsoft.haolifa.model.domain.PurchaseOrderExample;
 import com.deepsoft.haolifa.model.dto.PurchaseOrderRQParam;
 import com.deepsoft.haolifa.model.dto.finance.standaccount.PurchaseOrderStandAccountRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.sum.ProcurementSummaryRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.sum.SummaryRQDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,4 +41,7 @@ public interface PurchaseOrderMapper {
 
 
     List<ProcurementSummaryRSDTO>  selectProcurementSummary(@Param("query") SummaryRQDTO query);
+
+    List<SaleSummaryRSDTO> selectSaleContractSummary(@Param("query") SaleSummaryRQDTO query);
+
 }

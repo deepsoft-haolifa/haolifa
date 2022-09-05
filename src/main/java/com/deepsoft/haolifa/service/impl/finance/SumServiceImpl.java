@@ -4,6 +4,7 @@ import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.sum.ProcurementSummaryRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.sum.SummaryRQDTO;
 import com.deepsoft.haolifa.service.finance.SumService;
@@ -50,7 +51,27 @@ public class SumServiceImpl implements SumService {
     }
 
     @Override
-    public ResultBean<PageDTO<SaleSummaryRSDTO>> selectSaleContractSummary(SummaryRQDTO reqVo) {
-        return null;
+    public ResultBean<PageDTO<SaleSummaryRSDTO>> selectSaleContractSummary(SaleSummaryRQDTO model) {
+        if (model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if (model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+
+        Page<SaleSummaryRSDTO> purchaseOrderList = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> purchaseOrderMapper.selectSaleContractSummary(model));
+        List<SaleSummaryRSDTO> purchaseOrderRSDTOList = purchaseOrderList.getResult().stream()
+            .map(purchaseOrder -> {
+                SaleSummaryRSDTO purchaseOrderRSDTO = new SaleSummaryRSDTO();
+                BeanUtils.copyProperties(purchaseOrder, purchaseOrderRSDTO);
+                return purchaseOrderRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        PageDTO<SaleSummaryRSDTO> purchaseOrderPageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(purchaseOrderList, purchaseOrderPageDTO);
+        purchaseOrderPageDTO.setList(purchaseOrderRSDTOList);
+        return ResultBean.success(purchaseOrderPageDTO);
     }
 }
