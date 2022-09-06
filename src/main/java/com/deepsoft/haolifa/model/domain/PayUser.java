@@ -68,6 +68,10 @@ public class PayUser {
 
     private String superiorName;
 
+    private String cardNumber;
+
+    private String bankOfDeposit;
+
     private Integer superiorId;
 
     private String createUser;
@@ -78,7 +82,7 @@ public class PayUser {
 
     private Date updateTime;
 
-    public PayUser(Integer id, String userName, String userNo, Integer parentId, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, Integer departId, String departName, String userType, String superiorName, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public PayUser(Integer id, String userName, String userNo, Integer parentId, String onceUserName, Byte sex, Date birthday, String nation, String nativePlace, String politicalOutlook, String bloodType, String health, Byte marryStatus, String idCard, String registered, String universityFrom, String major, Byte education, Date graduationTime, Date workingTime, String address, BigDecimal insuranceBase, String phone, String mail, Integer teamId, BigDecimal basePay, BigDecimal meritPay, Integer postId, Integer departId, String departName, String userType, String superiorName, String cardNumber, String bankOfDeposit, Integer superiorId, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.userName = userName;
         this.userNo = userNo;
@@ -111,6 +115,8 @@ public class PayUser {
         this.departName = departName;
         this.userType = userType;
         this.superiorName = superiorName;
+        this.cardNumber = cardNumber;
+        this.bankOfDeposit = bankOfDeposit;
         this.superiorId = superiorId;
         this.createUser = createUser;
         this.updateUser = updateUser;
@@ -376,6 +382,22 @@ public class PayUser {
 
     public void setSuperiorName(String superiorName) {
         this.superiorName = superiorName == null ? null : superiorName.trim();
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber == null ? null : cardNumber.trim();
+    }
+
+    public String getBankOfDeposit() {
+        return bankOfDeposit;
+    }
+
+    public void setBankOfDeposit(String bankOfDeposit) {
+        this.bankOfDeposit = bankOfDeposit == null ? null : bankOfDeposit.trim();
     }
 
     public Integer getSuperiorId() {
