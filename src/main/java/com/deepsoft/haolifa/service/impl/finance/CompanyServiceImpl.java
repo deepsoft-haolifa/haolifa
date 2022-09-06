@@ -106,7 +106,7 @@ public class CompanyServiceImpl implements CompanyService {
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
         if (StringUtils.isNotEmpty(model.getName())) {
-            criteria.andNameEqualTo("%" + model.getName() + "%");
+            criteria.andNameLike("%" + model.getName() + "%");
         }
         if (StringUtils.isNotEmpty(model.getCode())) {
             criteria.andCodeLike("%" + model.getCode() + "%");
