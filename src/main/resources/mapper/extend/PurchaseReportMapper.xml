@@ -165,9 +165,6 @@
             <if test="purchaseOrderNo != null and purchaseOrderNo != ''">
                 and iv.order_no like CONCAT('%',#{purchaseOrderNo},'%')
             </if>
-            <if test="supplierName!=null and supplierName != ''">
-                and po.invoice_company like CONCAT('%',#{supplierName},'%')
-            </if>
         </where>
     </sql>
 
