@@ -3,14 +3,13 @@ package com.deepsoft.haolifa.service.impl.finance;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
+import com.deepsoft.haolifa.dao.repository.SysUserMapper;
 import com.deepsoft.haolifa.model.domain.BizProjectBudget;
 import com.deepsoft.haolifa.model.domain.BizProjectBudgetExample;
+import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.*;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
@@ -45,6 +44,10 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
     @Autowired
     private SysDictService sysDictService;
+
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
 
     @Override
@@ -131,6 +134,73 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         return ResultBean.success(pageDTO);
     }
 
+
+    @Override
+    public ResultBean<PageDTO<ProjectBudgetRSDTO>> getCurUserProjectBudgetList(ProjectBudgetRQDTO model) {
+        if (model.getPageNum() == null || model.getPageNum() == 0) {
+            model.setPageNum(1);
+        }
+        if (model.getPageSize() == null || model.getPageSize() == 0) {
+            model.setPageSize(10);
+        }
+
+
+        BizProjectBudgetExample bizProjectBudgetExample = new BizProjectBudgetExample();
+        BizProjectBudgetExample.Criteria criteria = bizProjectBudgetExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+
+        // todo 只能查询自己部门的
+//        Integer sysUserId = sysUserService.selectLoginUser().getId();
+//        SysUser sysUser = sysUserMapper.selectByPrimaryKey(sysUserId);
+//        Integer departId = sysUser.getDepartId();
+//        criteria.andDeptIdEqualTo(departId);
+
+        if (StringUtils.isNotEmpty(model.getName())) {
+            criteria.andNameLike("%" + model.getName() + "%");
+        }
+        if (StringUtils.isNotEmpty(model.getCode())) {
+            criteria.andCodeLike("%" + model.getCode() + "%");
+        }
+
+        Page<BizProjectBudget> pageData = PageHelper
+            .startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> {
+                bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample);
+            });
+
+
+        List<ProjectBudgetRSDTO> assetsRSDTOList = pageData.getResult().stream()
+            .map(assets -> {
+                ProjectBudgetRSDTO assetsRSDTO = new ProjectBudgetRSDTO();
+                BeanUtils.copyProperties(assets, assetsRSDTO);
+                return assetsRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        PageDTO<ProjectBudgetRSDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(pageData, pageDTO);
+        pageDTO.setList(assetsRSDTOList);
+        return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public BizProjectBudget queryCurMonthBudget(ProjectBudgetQueryBO model) {
+        BizProjectBudgetExample bizProjectBudgetExample = new BizProjectBudgetExample();
+        BizProjectBudgetExample.Criteria criteria = bizProjectBudgetExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+
+        criteria.andCodeEqualTo(model.getCode());
+        criteria.andDeptIdEqualTo(model.getDeptId());
+        criteria.andYearEqualTo(model.getYear());
+        criteria.andMonthEqualTo(model.getMonth());
+
+        bizProjectBudgetExample.setOrderByClause("create_time desc limit 1");
+        List<BizProjectBudget> projectBudgetList = bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample);
+        BizProjectBudget bizProjectBudget = projectBudgetList.stream()
+            .findFirst()
+            .orElse(null);
+        return bizProjectBudget;
+    }
 
     private ResultBean<Object> validate(ProjectBudgetAddDTO model) {
         if (StringUtils.isEmpty(model.getName())) {

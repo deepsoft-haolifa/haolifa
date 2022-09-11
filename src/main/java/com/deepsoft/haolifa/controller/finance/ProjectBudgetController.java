@@ -1,6 +1,9 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.deepsoft.haolifa.config.CustomGrantedAuthority;
+import com.deepsoft.haolifa.model.domain.SysUser;
+import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetAddDTO;
@@ -13,6 +16,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 项目管理
@@ -47,6 +53,13 @@ public class ProjectBudgetController {
     @PostMapping("/getProjectBudgetList")
     public ResultBean<PageDTO<ProjectBudgetRSDTO>> getProjectBudgetList(@RequestBody ProjectBudgetRQDTO assetsRQDTO) {
         return projectBudgetService.getList(assetsRQDTO);
+    }
+
+
+    @ApiOperation("获取项目管理列表（报销借款列表用-只能查询当前用户的部门）")
+    @PostMapping("/getCurUserProjectBudgetList")
+    public ResultBean<PageDTO<ProjectBudgetRSDTO>> getCurUserProjectBudgetList(@RequestBody ProjectBudgetRQDTO assetsRQDTO) {
+        return projectBudgetService.getCurUserProjectBudgetList(assetsRQDTO);
     }
 
 

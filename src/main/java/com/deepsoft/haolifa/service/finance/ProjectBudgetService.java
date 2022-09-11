@@ -1,11 +1,9 @@
 package com.deepsoft.haolifa.service.finance;
 
+import com.deepsoft.haolifa.model.domain.BizProjectBudget;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.*;
 
 public interface ProjectBudgetService {
     ResultBean save(ProjectBudgetAddDTO model);
@@ -16,4 +14,8 @@ public interface ProjectBudgetService {
 
     ResultBean<PageDTO<ProjectBudgetRSDTO>> getList(ProjectBudgetRQDTO assetsRQDTO);
 
+    ResultBean<PageDTO<ProjectBudgetRSDTO>> getCurUserProjectBudgetList(ProjectBudgetRQDTO assetsRQDTO);
+
+
+    BizProjectBudget queryCurMonthBudget(ProjectBudgetQueryBO queryBO);
 }

@@ -39,7 +39,7 @@ public class ReimburseCostDetailRSDTO {
     @ApiModelProperty(value = "报销科目(费用预算表中的科目ID)")
     private Integer subject;
 
-    @ApiModelProperty(value = "科目余额（余额是动态的）")
+    @ApiModelProperty(value = "科目余额（余额是动态的）",hidden = true)
     private  BigDecimal balanceAmount;
 
     @ApiModelProperty(value = "报销科目")

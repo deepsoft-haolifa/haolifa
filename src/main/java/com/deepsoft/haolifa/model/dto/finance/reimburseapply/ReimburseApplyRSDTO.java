@@ -14,6 +14,15 @@ public class ReimburseApplyRSDTO {
     @ApiModelProperty(value = "ID")
     private Integer id;
 
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payType;
+
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payTypeCN;
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
+
     @ApiModelProperty(value = "编号")
     private String serialNo;
 
