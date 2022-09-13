@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.util.TreeUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sun.javafx.geom.transform.Identity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,6 +108,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<DepartmentTree> departmentTree() {
         SysDepartmentExample example = new SysDepartmentExample();
         List<SysDepartment> sysDepartments = departmentMapper.selectByExample(example);
+        Map<Integer, SysDepartment> departMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, a -> a));
+
         List<DepartmentTree> departmentTrees = new ArrayList<>();
         sysDepartments.stream().forEach(e -> {
             DepartmentTree departmentTree = new DepartmentTree();
@@ -112,6 +118,10 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentTree.setParentId(String.valueOf(e.getPid()));
             departmentTree.setNo(e.getDeptNo());
             departmentTree.setDescription(e.getDescription());
+            SysDepartment department = departMap.get(e.getPid());
+            if (Objects.nonNull(department)) {
+                departmentTree.setParentName(department.getDeptName());
+            }
             departmentTrees.add(departmentTree);
         });
         return TreeUtils.getTreeList("0", departmentTrees);
