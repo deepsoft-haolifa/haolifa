@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import com.deepsoft.haolifa.enums.ReimburseTypeEnum;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyInfoRSDTO;
@@ -10,13 +11,18 @@ import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
 import com.deepsoft.haolifa.service.finance.ReimburseApplyService;
+import com.deepsoft.haolifa.service.impl.finance.helper.RemiburseBXPrint;
+import com.deepsoft.haolifa.service.impl.finance.helper.RemiburseCLPrint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -72,6 +78,21 @@ public class ReimburseApplyController {
     @GetMapping("/info/{id}")
     public ResultBean<ReimburseApplyDetailDTO> info(@PathVariable("id") int id) {
         return reimburseApplyService.getInfo(id);
+    }
+
+
+    @ApiOperation("打印")
+    @GetMapping("/printPDF/{id}")
+    public void printPDF(@PathVariable("id") int id, HttpServletResponse response) throws Exception {
+        // todo 校验
+
+        ResultBean<ReimburseApplyDetailDTO> info = reimburseApplyService.getInfo(id);
+        ReimburseApplyDetailDTO reimburseApplyDetailDTO =info.getResult();
+        if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getType(), ReimburseTypeEnum.travle.getCode())){
+            RemiburseCLPrint.print(reimburseApplyDetailDTO,response);
+        }else {
+            RemiburseBXPrint.print(reimburseApplyDetailDTO,response);
+        }
     }
 
 

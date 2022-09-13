@@ -20,6 +20,15 @@ public class ReimburseApplyDetailDTO {
     @ApiModelProperty(value = "编号")
     private String serialNo;
 
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payType;
+
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payTypeCN;
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
+
     @ApiModelProperty(value = "报销部门id")
     private Integer deptId;
 
@@ -57,6 +66,8 @@ public class ReimburseApplyDetailDTO {
     private Date reimburseDate;
     @ApiModelProperty(value = "报销人")
     private Integer reimburseUser;
+    @ApiModelProperty(value = "报销人No")
+    private String reimburseUserNo;
 
     @ApiModelProperty(value = "报销人名称")
     private String reimburseUserName;

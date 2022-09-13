@@ -24,6 +24,8 @@ public class BizReimburseApply {
 
     private BigDecimal amount;
 
+    private String payType;
+
     private String payCompany;
 
     private String payCompanyId;
@@ -36,11 +38,15 @@ public class BizReimburseApply {
 
     private Integer reimburseUser;
 
+    private String reimburseUserNo;
+
     private BigDecimal offsetAmount;
 
     private Integer loanId;
 
     private String applyStatus;
+
+    private String projectCode;
 
     private String remark;
 
@@ -54,7 +60,7 @@ public class BizReimburseApply {
 
     private Date updateTime;
 
-    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, BigDecimal offsetAmount, Integer loanId, String applyStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payType, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String reimburseUserNo, BigDecimal offsetAmount, Integer loanId, String applyStatus, String projectCode, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.type = type;
@@ -65,15 +71,18 @@ public class BizReimburseApply {
         this.bankOfDeposit = bankOfDeposit;
         this.deptId = deptId;
         this.amount = amount;
+        this.payType = payType;
         this.payCompany = payCompany;
         this.payCompanyId = payCompanyId;
         this.payAccount = payAccount;
         this.payTime = payTime;
         this.payStatus = payStatus;
         this.reimburseUser = reimburseUser;
+        this.reimburseUserNo = reimburseUserNo;
         this.offsetAmount = offsetAmount;
         this.loanId = loanId;
         this.applyStatus = applyStatus;
+        this.projectCode = projectCode;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
@@ -166,6 +175,14 @@ public class BizReimburseApply {
         this.amount = amount;
     }
 
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType == null ? null : payType.trim();
+    }
+
     public String getPayCompany() {
         return payCompany;
     }
@@ -214,6 +231,14 @@ public class BizReimburseApply {
         this.reimburseUser = reimburseUser;
     }
 
+    public String getReimburseUserNo() {
+        return reimburseUserNo;
+    }
+
+    public void setReimburseUserNo(String reimburseUserNo) {
+        this.reimburseUserNo = reimburseUserNo == null ? null : reimburseUserNo.trim();
+    }
+
     public BigDecimal getOffsetAmount() {
         return offsetAmount;
     }
@@ -236,6 +261,14 @@ public class BizReimburseApply {
 
     public void setApplyStatus(String applyStatus) {
         this.applyStatus = applyStatus == null ? null : applyStatus.trim();
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode == null ? null : projectCode.trim();
     }
 
     public String getRemark() {

@@ -766,6 +766,76 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayTypeIsNull() {
+            addCriterion("pay_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIsNotNull() {
+            addCriterion("pay_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeEqualTo(String value) {
+            addCriterion("pay_type =", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotEqualTo(String value) {
+            addCriterion("pay_type <>", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThan(String value) {
+            addCriterion("pay_type >", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("pay_type >=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThan(String value) {
+            addCriterion("pay_type <", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThanOrEqualTo(String value) {
+            addCriterion("pay_type <=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLike(String value) {
+            addCriterion("pay_type like", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotLike(String value) {
+            addCriterion("pay_type not like", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIn(List<String> values) {
+            addCriterion("pay_type in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotIn(List<String> values) {
+            addCriterion("pay_type not in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeBetween(String value1, String value2) {
+            addCriterion("pay_type between", value1, value2, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotBetween(String value1, String value2) {
+            addCriterion("pay_type not between", value1, value2, "payType");
+            return (Criteria) this;
+        }
+
         public Criteria andPayCompanyIsNull() {
             addCriterion("pay_company is null");
             return (Criteria) this;
@@ -1166,6 +1236,76 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andReimburseUserNoIsNull() {
+            addCriterion("reimburse_user_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoIsNotNull() {
+            addCriterion("reimburse_user_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoEqualTo(String value) {
+            addCriterion("reimburse_user_no =", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoNotEqualTo(String value) {
+            addCriterion("reimburse_user_no <>", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoGreaterThan(String value) {
+            addCriterion("reimburse_user_no >", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoGreaterThanOrEqualTo(String value) {
+            addCriterion("reimburse_user_no >=", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoLessThan(String value) {
+            addCriterion("reimburse_user_no <", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoLessThanOrEqualTo(String value) {
+            addCriterion("reimburse_user_no <=", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoLike(String value) {
+            addCriterion("reimburse_user_no like", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoNotLike(String value) {
+            addCriterion("reimburse_user_no not like", value, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoIn(List<String> values) {
+            addCriterion("reimburse_user_no in", values, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoNotIn(List<String> values) {
+            addCriterion("reimburse_user_no not in", values, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoBetween(String value1, String value2) {
+            addCriterion("reimburse_user_no between", value1, value2, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andReimburseUserNoNotBetween(String value1, String value2) {
+            addCriterion("reimburse_user_no not between", value1, value2, "reimburseUserNo");
+            return (Criteria) this;
+        }
+
         public Criteria andOffsetAmountIsNull() {
             addCriterion("offset_amount is null");
             return (Criteria) this;
@@ -1353,6 +1493,76 @@ public class BizReimburseApplyExample {
 
         public Criteria andApplyStatusNotBetween(String value1, String value2) {
             addCriterion("apply_status not between", value1, value2, "applyStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeIsNull() {
+            addCriterion("project_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeIsNotNull() {
+            addCriterion("project_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeEqualTo(String value) {
+            addCriterion("project_code =", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotEqualTo(String value) {
+            addCriterion("project_code <>", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeGreaterThan(String value) {
+            addCriterion("project_code >", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("project_code >=", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeLessThan(String value) {
+            addCriterion("project_code <", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeLessThanOrEqualTo(String value) {
+            addCriterion("project_code <=", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeLike(String value) {
+            addCriterion("project_code like", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotLike(String value) {
+            addCriterion("project_code not like", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeIn(List<String> values) {
+            addCriterion("project_code in", values, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotIn(List<String> values) {
+            addCriterion("project_code not in", values, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeBetween(String value1, String value2) {
+            addCriterion("project_code between", value1, value2, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotBetween(String value1, String value2) {
+            addCriterion("project_code not between", value1, value2, "projectCode");
             return (Criteria) this;
         }
 

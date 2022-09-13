@@ -15,8 +15,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 public class ReimburseApplyAddDTO {
 
-    @ApiModelProperty(value = "报销部门id")
-    private Integer deptId;
+
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payType;
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
 
     @ApiModelProperty(value = "报销金额")
     private BigDecimal amount;

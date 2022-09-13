@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.MyPermissionMapper;
+import com.deepsoft.haolifa.enums.ReimburseTypeEnum;
 import com.deepsoft.haolifa.enums.RoleEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.CustomUser;
@@ -12,9 +13,13 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.UserPipLineDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyDetailDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
 import com.deepsoft.haolifa.service.impl.CustomUserServiceImpl;
+import com.deepsoft.haolifa.service.impl.finance.helper.LoanPrint;
+import com.deepsoft.haolifa.service.impl.finance.helper.RemiburseBXPrint;
+import com.deepsoft.haolifa.service.impl.finance.helper.RemiburseCLPrint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -101,6 +107,18 @@ public class LoanApplyController {
     public ResultBean approve(@ApiParam("借款申请ID") @PathVariable("id") Integer id) {
         return loanApplyService.approve(id);
     }
+
+
+    @ApiOperation("打印")
+    @GetMapping("/printPDF/{id}")
+    public void printPDF(@PathVariable("id") int id, HttpServletResponse response) throws Exception {
+        // todo 校验
+
+        ResultBean<LoanApplyInfoRSDTO> info = loanApplyService.getInfo(id);
+        LoanApplyInfoRSDTO loanApplyInfoRSDTO =info.getResult();
+        LoanPrint.print(loanApplyInfoRSDTO,response);
+    }
+
 
 //    @ApiOperation("查询审批记录(借款申請列表&出纳付款列表共用)")
 //    @GetMapping("/selectFlowInfo/{id}")

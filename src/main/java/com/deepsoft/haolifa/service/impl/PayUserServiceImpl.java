@@ -102,6 +102,9 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         if (StringUtils.isNotBlank(model.getDepartName())) {
             criteria.andDepartNameEqualTo(model.getDepartName());
         }
+        if (StringUtils.isNotBlank(model.getUserNo())) {
+            criteria.andUserNoLike("%" + model.getUserNo() + "%");
+        }
         if (StringUtils.isNotBlank(model.getUserName())) {
             criteria.andUserNameLike("%" + model.getUserName() + "%");
         }
