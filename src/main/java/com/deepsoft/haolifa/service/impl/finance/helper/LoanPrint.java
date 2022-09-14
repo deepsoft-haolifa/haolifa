@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl.finance.helper;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.resource.ClassPathResource;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyInfoRSDTO;
 import com.deepsoft.haolifa.util.BigDecimalUtils;
 import com.itextpdf.text.*;
@@ -32,7 +33,8 @@ public class LoanPrint {
 
             document.open();
 
-            BaseFont typeface = BaseFont.createFont("/Users/yuan/Desktop/workgit/itext/src/main/resources/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            ClassPathResource classPathResource = new ClassPathResource("static/msyh.ttf");
+            BaseFont typeface = BaseFont.createFont("/home/haolifa/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font font = new Font(typeface);
 
             font.setSize(10);
