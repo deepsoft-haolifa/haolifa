@@ -17,6 +17,12 @@ public class ReimburseApplyUpDTO {
     @ApiModelProperty(value = "ID")
     private Integer id;
 
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payType;
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
+
     @ApiModelProperty(value = "报销部门id")
     private Integer deptId;
 

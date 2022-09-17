@@ -112,6 +112,12 @@ public class PayWorkingProcedureController {
         return payOrderUserRelationProcedureService.insertSelective(procedure);
     }
 
+    @ApiOperation("机加工质检分配任务保存")
+    @PostMapping(value = "/saveEntrustTask")
+    public ResultBean saveEntrustTask (@RequestBody PayOrderUserRelationProcedureVO procedure) {
+        return payOrderUserRelationProcedureService.insertEntrustSelective(procedure);
+    }
+
     @ApiOperation("导入工序")
     @PostMapping(value = "/import")
     public ResultBean uploadMaterial() {

@@ -93,6 +93,11 @@ public class PayUserDTO extends BaseCondition {
     private Integer superiorId;
     @ApiModelProperty(value = "上级名称")
     private String superiorName;
+    @ApiModelProperty(value = "工资卡号")
+    private String cardNumber;
+    @ApiModelProperty(value = "开户行")
+    private String bankOfDeposit;
+
     @ApiModelProperty(value = "创建人")
     private String createUser;
     @ApiModelProperty(value = "更新人")

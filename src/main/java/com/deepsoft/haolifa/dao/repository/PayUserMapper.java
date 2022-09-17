@@ -30,4 +30,5 @@ public interface PayUserMapper {
 
     PayUser selectByPhoneOrIdCard(@Param("phone") String phone,@Param("idCard")  String idCard);
 
+
 }

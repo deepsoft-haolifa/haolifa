@@ -46,6 +46,20 @@ public class BizLoanApply {
 
     private String paymentStatus;
 
+    private String projectCode;
+
+    private String payType;
+
+    private String travelFlag;
+
+    private String travelArrAddress;
+
+    private Integer travelDays;
+
+    private Integer travelPeoNum;
+
+    private String loanUserNo;
+
     private String remark;
 
     private String delFlag;
@@ -58,7 +72,7 @@ public class BizLoanApply {
 
     private Date updateTime;
 
-    public BizLoanApply(Integer id, String serialNo, Integer deptId, Date loanDate, Date expectRepaymentDate, BigDecimal amount, String purpose, Integer loanUser, String amountType, String billNature, String accountName, String cardNumber, String bankOfDeposit, String applyStatus, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, BigDecimal paymentAmount, String paymentStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizLoanApply(Integer id, String serialNo, Integer deptId, Date loanDate, Date expectRepaymentDate, BigDecimal amount, String purpose, Integer loanUser, String amountType, String billNature, String accountName, String cardNumber, String bankOfDeposit, String applyStatus, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, BigDecimal paymentAmount, String paymentStatus, String projectCode, String payType, String travelFlag, String travelArrAddress, Integer travelDays, Integer travelPeoNum, String loanUserNo, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.deptId = deptId;
@@ -80,6 +94,13 @@ public class BizLoanApply {
         this.payStatus = payStatus;
         this.paymentAmount = paymentAmount;
         this.paymentStatus = paymentStatus;
+        this.projectCode = projectCode;
+        this.payType = payType;
+        this.travelFlag = travelFlag;
+        this.travelArrAddress = travelArrAddress;
+        this.travelDays = travelDays;
+        this.travelPeoNum = travelPeoNum;
+        this.loanUserNo = loanUserNo;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
@@ -258,6 +279,62 @@ public class BizLoanApply {
 
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus == null ? null : paymentStatus.trim();
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode == null ? null : projectCode.trim();
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType == null ? null : payType.trim();
+    }
+
+    public String getTravelFlag() {
+        return travelFlag;
+    }
+
+    public void setTravelFlag(String travelFlag) {
+        this.travelFlag = travelFlag == null ? null : travelFlag.trim();
+    }
+
+    public String getTravelArrAddress() {
+        return travelArrAddress;
+    }
+
+    public void setTravelArrAddress(String travelArrAddress) {
+        this.travelArrAddress = travelArrAddress == null ? null : travelArrAddress.trim();
+    }
+
+    public Integer getTravelDays() {
+        return travelDays;
+    }
+
+    public void setTravelDays(Integer travelDays) {
+        this.travelDays = travelDays;
+    }
+
+    public Integer getTravelPeoNum() {
+        return travelPeoNum;
+    }
+
+    public void setTravelPeoNum(Integer travelPeoNum) {
+        this.travelPeoNum = travelPeoNum;
+    }
+
+    public String getLoanUserNo() {
+        return loanUserNo;
+    }
+
+    public void setLoanUserNo(String loanUserNo) {
+        this.loanUserNo = loanUserNo == null ? null : loanUserNo.trim();
     }
 
     public String getRemark() {

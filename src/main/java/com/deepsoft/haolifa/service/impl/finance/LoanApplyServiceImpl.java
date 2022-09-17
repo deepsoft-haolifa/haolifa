@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -16,12 +18,12 @@ import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanPayDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAddDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
-import com.deepsoft.haolifa.service.finance.BankBillService;
-import com.deepsoft.haolifa.service.finance.BillService;
-import com.deepsoft.haolifa.service.finance.LoanApplyService;
-import com.deepsoft.haolifa.service.finance.OtherBillService;
+import com.deepsoft.haolifa.service.finance.*;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -66,14 +68,38 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     @Autowired
     private OtherBillService otherBillService;
 
+    @Autowired
+    private PayUserMapper payUserMapper;
+
+    @Autowired
+    private ProjectBudgetService projectBudgetService;
 
     @Override
     public ResultBean save(LoanApplyAddDTO model) {
 //        log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
-        if (StringUtils.isAnyBlank()) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        ResultBean<Object> PARAM_ERROR = validate(model);
+        if (PARAM_ERROR != null) {
+            return PARAM_ERROR;
         }
-        // todo 校验金额是否满足
+        CustomUser customUser = sysUserService.selectLoginUser();
+        SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+        PayUser payUser = payUserMapper.selectByPhoneOrIdCard(sysUser.getPhone(),sysUser.getIdCard());
+
+        ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+        queryBO.setCode(model.getProjectCode());
+        queryBO.setDeptId(sysUser.getDepartId());
+        queryBO.setYear(DateUtils.getSysYear());
+        queryBO.setMonth(DateUtil.format(new Date(),"MM"));
+        // 校验当月项目预算
+        BizProjectBudget bizProjectBudget =   projectBudgetService.queryCurMonthBudget(queryBO);
+        //  当月未维护
+        if (ObjectUtil.isNull(bizProjectBudget) ){
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
+        }
+        // 金额不足
+        if (bizProjectBudget.getBalanceQuota().compareTo(model.getAmount())<0){
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
+        }
 
 
         BizLoanApply loanApply = new BizLoanApply();
@@ -84,6 +110,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setPaymentStatus(LoanrPaymentStatusEnum.partial_pay.getCode());
         loanApply.setPaymentAmount(BigDecimal.ZERO);
         loanApply.setLoanUser(sysUserService.selectLoginUser().getId());
+        loanApply.setLoanUserNo(payUser.getUserNo());
         loanApply.setCreateTime(new Date());
         loanApply.setUpdateTime(new Date());
         loanApply.setCreateUser(sysUserService.selectLoginUser().getId());
@@ -92,6 +119,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         int insertId = bizLoanApplyMapper.insertSelective(loanApply);
         return ResultBean.success(insertId);
     }
+
 
     @Override
     public ResultBean delete(Integer id) {
@@ -109,6 +137,25 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 //        billBank.setUpdateTime(new Date());
 //        billBank.setUpdateUser(sysUserService.selectLoginUser().getId());
 //        int update = bizLoanApplyMapper.updateByPrimaryKeySelective(billBank);
+
+
+
+        if (StringUtils.isNotEmpty(selectByPrimaryKey.getProjectCode())){
+            ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+            queryBO.setCode(selectByPrimaryKey.getProjectCode());
+            queryBO.setDeptId(selectByPrimaryKey.getDeptId());
+            queryBO.setYear(DateUtil.format(selectByPrimaryKey.getCreateTime(),"yyyy"));
+            queryBO.setMonth(DateUtil.format(selectByPrimaryKey.getCreateTime(),"MM"));
+            // 校验当月项目预算
+            BizProjectBudget bizProjectBudget =   projectBudgetService.queryCurMonthBudget(queryBO);
+
+            // 回退
+            ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+            budgetUpDTO.setId(bizProjectBudget.getId());
+            budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().add(selectByPrimaryKey.getAmount()));
+            projectBudgetService.update(budgetUpDTO);
+        }
+
         return ResultBean.success(delete);
     }
 
@@ -153,6 +200,25 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         if (sysUser != null) {
             loanApplyRSDTO.setLoanUserName(sysUser.getRealName());
         }
+
+        // 支付类型 1 对公 2 对私
+        String payTypeCN = "未知";
+        if (StringUtils.equalsIgnoreCase(loanApply.getPayType(), "1")) {
+            payTypeCN = "对公";
+        } else if (StringUtils.equalsIgnoreCase(loanApply.getPayType(), "2")) {
+            payTypeCN = "对私";
+        }
+        loanApplyRSDTO.setPayTypeCN(payTypeCN);
+
+        // 是否差旅借款 1 是 2 否
+        String travelFlagCN = "未知";
+        if (StringUtils.equalsIgnoreCase(loanApply.getPayType(), "1")) {
+            travelFlagCN = "是";
+        } else if (StringUtils.equalsIgnoreCase(loanApply.getPayType(), "2")) {
+            travelFlagCN = "否";
+        }
+        loanApplyRSDTO.setTravelFlagCN(travelFlagCN);
+
         LoanApplyStatusEnum applyStatusEnum = LoanApplyStatusEnum.valueOfCode(loanApply.getApplyStatus());
 
         loanApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
@@ -394,12 +460,35 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setUpdateTime(new Date());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
+
+        // 审核拒绝 回退金额
+        if (ReimburseApplyStatusEnum.APPROVAL_FAILED.getCode().equalsIgnoreCase(auditResult.getCode())){
+            if (StringUtils.isNotEmpty(loanApplyS.getProjectCode())){
+                ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+                queryBO.setCode(loanApplyS.getProjectCode());
+                queryBO.setDeptId(loanApplyS.getDeptId());
+                queryBO.setYear(DateUtil.format(loanApplyS.getCreateTime(),"yyyy"));
+                queryBO.setMonth(DateUtil.format(loanApplyS.getCreateTime(),"MM"));
+                // 校验当月项目预算
+                BizProjectBudget bizProjectBudget =   projectBudgetService.queryCurMonthBudget(queryBO);
+
+                // 回退
+                ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+                budgetUpDTO.setId(bizProjectBudget.getId());
+                budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().add(loanApplyS.getAmount()));
+                projectBudgetService.update(budgetUpDTO);
+            }
+        }
+
         return update;
     }
 
 
     @Override
     public ResultBean approve(Integer id) {
+
+        BizLoanApply selectByPrimaryKey = bizLoanApplyMapper.selectByPrimaryKey(id);
+
         BizLoanApply loanApply = new BizLoanApply();
         loanApply.setId(id);
         loanApply.setApplyStatus(LoanApplyStatusEnum.UNDER_APPROVAL.getCode());
@@ -407,6 +496,25 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setUpdateTime(new Date());
 
         bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
+
+
+        ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+        queryBO.setCode(selectByPrimaryKey.getProjectCode());
+        queryBO.setDeptId(selectByPrimaryKey.getDeptId());
+        queryBO.setYear(DateUtil.format(selectByPrimaryKey.getCreateTime(),"yyyy"));
+        queryBO.setMonth(DateUtil.format(selectByPrimaryKey.getCreateTime(),"MM"));
+        // 校验当月项目预算
+        BizProjectBudget bizProjectBudget =   projectBudgetService.queryCurMonthBudget(queryBO);
+        // 金额不足
+        if (bizProjectBudget.getBalanceQuota().compareTo(selectByPrimaryKey.getAmount())<0){
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
+        }
+        // 扣减预算 todo 扣减日志
+        ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+        budgetUpDTO.setId(bizProjectBudget.getId());
+        budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(selectByPrimaryKey.getAmount()));
+        projectBudgetService.update(budgetUpDTO);
+
 
 
         BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(id);
@@ -551,6 +659,58 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         paymentHistory.setRepaymentDate(new Date());
         paymentHistory.setRemark("报销冲抵");
         return paymentHistory;
+    }
+
+    private ResultBean<Object> validate(LoanApplyAddDTO model) {
+        if (StringUtils.isAnyBlank()) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+        }
+
+        if (StringUtils.isEmpty(model.getProjectCode())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "项目编号必传");
+        }
+        if (StringUtils.isEmpty(model.getPayType())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "支付类型必传");
+        }
+        if (StringUtils.isEmpty(model.getTravelFlag())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "是否差旅借款必传");
+        }
+
+        if (StringUtils.equalsIgnoreCase("1", model.getTravelFlag())) {
+            if (model.getTravelDays() == null) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "出差天数必传");
+            }
+            if (model.getTravelPeoNum() == null) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "出差人数必传");
+            }
+            if (StringUtils.isEmpty(model.getTravelArrAddress())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "出差地点必传");
+            }
+        }
+
+        if (ObjectUtil.isEmpty(model.getLoanDate())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "借款日期必传");
+        }
+        if (ObjectUtil.isEmpty(model.getExpectRepaymentDate())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "预计还款日期必传");
+        }
+        if (ObjectUtil.isEmpty(model.getAmount())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "借款金额必传");
+        }
+        if (StringUtils.isEmpty(model.getPurpose())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "用途必传");
+        }
+        if (StringUtils.isEmpty(model.getAccountName())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "户名必传");
+        }
+        if (StringUtils.isEmpty(model.getCardNumber())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "卡号必传");
+        }
+        if (StringUtils.isEmpty(model.getBankOfDeposit())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "开户行必传");
+        }
+
+        return null;
     }
 
 

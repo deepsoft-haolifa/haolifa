@@ -16,6 +16,12 @@ public class ReimburseApplyRQDTO extends PageParam {
     @ApiModelProperty(value = "类型 1 差旅报销 2 费用报销")
     private String type;
 
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payType;
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
+
 
     private String myself;
 

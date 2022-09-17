@@ -39,6 +39,9 @@ public class LoanApplyInfoRSDTO {
     @ApiModelProperty(value = "借款人名称")
     private String loanUserName;
 
+    @ApiModelProperty(value = "借款人编号")
+    private String loanUserNo;
+
     @ApiModelProperty(value = "资金性质（1現金 2支票）")
     private String amountType;
 
@@ -86,6 +89,31 @@ public class LoanApplyInfoRSDTO {
 
     @ApiModelProperty(value = "备注摘要")
     private String remark;
+
+
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payType;
+
+    @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
+    private String payTypeCN;
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
+
+    @ApiModelProperty(value = "是否差旅借款 1 是 2 否 三期新增字段")
+    private String travelFlag;
+
+    @ApiModelProperty(value = "是否差旅借款 1 是 2 否 三期新增字段")
+    private String travelFlagCN;
+
+    @ApiModelProperty(value = "出差地点 三期新增字段")
+    private String travelArrAddress;
+
+    @ApiModelProperty(value = "出差天数 三期新增字段")
+    private Integer travelDays;
+
+    @ApiModelProperty(value = "出差人数 三期新增字段")
+    private Integer travelPeoNum;
 
 
 }
