@@ -296,6 +296,76 @@ public class OrderProductAssociateExample {
             return (Criteria) this;
         }
 
+        public Criteria andSeqNoIsNull() {
+            addCriterion("seq_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoIsNotNull() {
+            addCriterion("seq_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoEqualTo(String value) {
+            addCriterion("seq_no =", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoNotEqualTo(String value) {
+            addCriterion("seq_no <>", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoGreaterThan(String value) {
+            addCriterion("seq_no >", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoGreaterThanOrEqualTo(String value) {
+            addCriterion("seq_no >=", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoLessThan(String value) {
+            addCriterion("seq_no <", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoLessThanOrEqualTo(String value) {
+            addCriterion("seq_no <=", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoLike(String value) {
+            addCriterion("seq_no like", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoNotLike(String value) {
+            addCriterion("seq_no not like", value, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoIn(List<String> values) {
+            addCriterion("seq_no in", values, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoNotIn(List<String> values) {
+            addCriterion("seq_no not in", values, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoBetween(String value1, String value2) {
+            addCriterion("seq_no between", value1, value2, "seqNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSeqNoNotBetween(String value1, String value2) {
+            addCriterion("seq_no not between", value1, value2, "seqNo");
+            return (Criteria) this;
+        }
+
         public Criteria andProductNoIsNull() {
             addCriterion("product_no is null");
             return (Criteria) this;

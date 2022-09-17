@@ -1,3 +1,4 @@
+ALTER TABLE `order_product_associate`  add COLUMN seq_no varchar(32) DEFAULT NULL COMMENT '序号' after order_no;
 CREATE TABLE `technical_detailed` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `product_name` varchar(64) NOT NULL DEFAULT '' COMMENT '产品名称',
@@ -26,6 +27,7 @@ CREATE TABLE `technical_detailed` (
 CREATE TABLE `order_technical_detailed_rel` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `order_no` varchar(64) NOT NULL COMMENT '订单编号',
+  `seq_no` varchar(64) NOT NULL DEFAULT '' COMMENT '序号',
   `product_name` varchar(64) NOT NULL DEFAULT '' COMMENT '产品名称',
   `product_num` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
   `product_model` varchar(64) DEFAULT '' COMMENT '型号',

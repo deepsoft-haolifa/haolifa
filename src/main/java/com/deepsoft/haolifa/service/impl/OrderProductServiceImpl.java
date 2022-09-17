@@ -626,6 +626,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 OrderProductAssociate orderProductAssociate = new OrderProductAssociate();
                 Row row = sheet.getRow(i);
                 if (null != row) {
+                    Cell cell0 = row.getCell(0);
+                    orderProductAssociate.setSeqNo(getCellValue(cell0));
                     // 第一列，产品Id[DSb7A1X3N-10Q-DN50]
                     Cell cell1 = row.getCell(1);
                     orderProductAssociate.setProductNo(getCellValue(cell1));
@@ -2447,9 +2449,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 OrderTechnicalDetailedRel orderTechnicalDetailedRel = new OrderTechnicalDetailedRel();
                 BeanUtil.copyProperties(technicalDetaileds.get(0), orderTechnicalDetailedRel);
                 orderTechnicalDetailedRel.setOrderNo(orderNo);
+                orderTechnicalDetailedRel.setSeqNo(orderItem.getSeqNo());
                 orderTechnicalDetailedRel.setProductName(orderItem.getProductName());
                 orderTechnicalDetailedRel.setProductNum(orderItem.getProductNumber());
                 resultList.add(orderTechnicalDetailedRel);
+            } else {
+                throw new BaseException("订单第" + orderItem.getSeqNo() + "项没有可用数据");
             }
         }
         if (CollectionUtil.isEmpty(resultList)) {

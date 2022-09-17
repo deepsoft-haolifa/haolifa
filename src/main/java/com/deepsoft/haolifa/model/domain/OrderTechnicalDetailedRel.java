@@ -1,149 +1,58 @@
 package com.deepsoft.haolifa.model.domain;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
-import java.io.Serializable;
 import java.util.Date;
 
-@Data
-@ApiModel("订单-技术清单-关联")
-public class OrderTechnicalDetailedRel implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    @ApiModelProperty("id")
+public class OrderTechnicalDetailedRel {
     private Integer id;
 
-    /**
-     * 订单编号
-     */
-    @ApiModelProperty("订单编号")
     private String orderNo;
 
-    /**
-     * 产品名称
-     */
-    @ApiModelProperty("产品名称")
+    private String seqNo;
+
     private String productName;
 
-    /**
-     * 数量
-     */
-    @ApiModelProperty("数量")
     private Integer productNum;
 
-    /**
-     * 型号
-     */
-    @ApiModelProperty("型号")
     private String productModel;
 
-    /**
-     * 规格
-     */
-    @ApiModelProperty("规格")
     private String specifications;
 
-    /**
-     * 上法兰标准
-     */
-    @ApiModelProperty("上法兰标准")
     private String upperFlangeStandard;
 
-    /**
-     * 连接孔
-     */
-    @ApiModelProperty("连接孔")
     private String connectingHole;
 
-    /**
-     * 角度
-     */
-    @ApiModelProperty("角度")
     private String angle;
 
-    /**
-     * 中心距
-     */
-    @ApiModelProperty("中心距")
     private String centerDistance;
 
-    /**
-     * 出轴型式
-     */
-    @ApiModelProperty("出轴型式")
     private String outputShaftType;
 
-    /**
-     * 出轴长度
-     */
-    @ApiModelProperty("出轴长度")
     private String outputShaftLength;
 
-    /**
-     * 轴图号
-     */
-    @ApiModelProperty("轴图号")
     private String axisDrawingNo;
 
-    /**
-     * 连接套
-     */
-    @ApiModelProperty("连接套")
     private String connectingSleeve;
 
-    /**
-     * 过渡盘
-     */
-    @ApiModelProperty("过渡盘")
     private String transitionPlate;
 
-    /**
-     * 静扭矩
-     */
-    @ApiModelProperty("静扭矩")
     private String staticTorque;
 
-    /**
-     * 执行器型号
-     */
-    @ApiModelProperty("执行器型号")
     private String actuatorModel;
 
-    /**
-     * 备注
-     */
-    @ApiModelProperty("备注")
     private String remark;
 
-    /**
-     * 创建人
-     */
-    @ApiModelProperty("创建人")
     private String createUser;
 
-    /**
-     * 更新人
-     */
-    @ApiModelProperty("更新人")
     private String updateUser;
 
-    /**
-     * 创建时间
-     */
-    @ApiModelProperty("创建时间")
     private Date createTime;
 
-    /**
-     * 更新日期
-     */
-    @ApiModelProperty("更新日期")
     private Date updateTime;
 
-    public OrderTechnicalDetailedRel(Integer id, String orderNo, String productName, Integer productNum, String productModel, String specifications, String upperFlangeStandard, String connectingHole, String angle, String centerDistance, String outputShaftType, String outputShaftLength, String axisDrawingNo, String connectingSleeve, String transitionPlate, String staticTorque, String actuatorModel, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
+    public OrderTechnicalDetailedRel(Integer id, String orderNo, String seqNo, String productName, Integer productNum, String productModel, String specifications, String upperFlangeStandard, String connectingHole, String angle, String centerDistance, String outputShaftType, String outputShaftLength, String axisDrawingNo, String connectingSleeve, String transitionPlate, String staticTorque, String actuatorModel, String remark, String createUser, String updateUser, Date createTime, Date updateTime) {
         this.id = id;
         this.orderNo = orderNo;
+        this.seqNo = seqNo;
         this.productName = productName;
         this.productNum = productNum;
         this.productModel = productModel;
@@ -168,5 +77,189 @@ public class OrderTechnicalDetailedRel implements Serializable {
 
     public OrderTechnicalDetailedRel() {
         super();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public String getSeqNo() {
+        return seqNo;
+    }
+
+    public void setSeqNo(String seqNo) {
+        this.seqNo = seqNo == null ? null : seqNo.trim();
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName == null ? null : productName.trim();
+    }
+
+    public Integer getProductNum() {
+        return productNum;
+    }
+
+    public void setProductNum(Integer productNum) {
+        this.productNum = productNum;
+    }
+
+    public String getProductModel() {
+        return productModel;
+    }
+
+    public void setProductModel(String productModel) {
+        this.productModel = productModel == null ? null : productModel.trim();
+    }
+
+    public String getSpecifications() {
+        return specifications;
+    }
+
+    public void setSpecifications(String specifications) {
+        this.specifications = specifications == null ? null : specifications.trim();
+    }
+
+    public String getUpperFlangeStandard() {
+        return upperFlangeStandard;
+    }
+
+    public void setUpperFlangeStandard(String upperFlangeStandard) {
+        this.upperFlangeStandard = upperFlangeStandard == null ? null : upperFlangeStandard.trim();
+    }
+
+    public String getConnectingHole() {
+        return connectingHole;
+    }
+
+    public void setConnectingHole(String connectingHole) {
+        this.connectingHole = connectingHole == null ? null : connectingHole.trim();
+    }
+
+    public String getAngle() {
+        return angle;
+    }
+
+    public void setAngle(String angle) {
+        this.angle = angle == null ? null : angle.trim();
+    }
+
+    public String getCenterDistance() {
+        return centerDistance;
+    }
+
+    public void setCenterDistance(String centerDistance) {
+        this.centerDistance = centerDistance == null ? null : centerDistance.trim();
+    }
+
+    public String getOutputShaftType() {
+        return outputShaftType;
+    }
+
+    public void setOutputShaftType(String outputShaftType) {
+        this.outputShaftType = outputShaftType == null ? null : outputShaftType.trim();
+    }
+
+    public String getOutputShaftLength() {
+        return outputShaftLength;
+    }
+
+    public void setOutputShaftLength(String outputShaftLength) {
+        this.outputShaftLength = outputShaftLength == null ? null : outputShaftLength.trim();
+    }
+
+    public String getAxisDrawingNo() {
+        return axisDrawingNo;
+    }
+
+    public void setAxisDrawingNo(String axisDrawingNo) {
+        this.axisDrawingNo = axisDrawingNo == null ? null : axisDrawingNo.trim();
+    }
+
+    public String getConnectingSleeve() {
+        return connectingSleeve;
+    }
+
+    public void setConnectingSleeve(String connectingSleeve) {
+        this.connectingSleeve = connectingSleeve == null ? null : connectingSleeve.trim();
+    }
+
+    public String getTransitionPlate() {
+        return transitionPlate;
+    }
+
+    public void setTransitionPlate(String transitionPlate) {
+        this.transitionPlate = transitionPlate == null ? null : transitionPlate.trim();
+    }
+
+    public String getStaticTorque() {
+        return staticTorque;
+    }
+
+    public void setStaticTorque(String staticTorque) {
+        this.staticTorque = staticTorque == null ? null : staticTorque.trim();
+    }
+
+    public String getActuatorModel() {
+        return actuatorModel;
+    }
+
+    public void setActuatorModel(String actuatorModel) {
+        this.actuatorModel = actuatorModel == null ? null : actuatorModel.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser == null ? null : createUser.trim();
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser == null ? null : updateUser.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }
