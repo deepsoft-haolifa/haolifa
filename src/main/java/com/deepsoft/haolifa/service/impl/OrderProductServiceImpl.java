@@ -2470,12 +2470,18 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     public int addTechnicalDetailed(List<OrderTechnicalDetailedRel> dto) {
         int i = 0;
         OrderTechnicalDetailedRel orderTechnicalDetailedRel1 = dto.get(0);
+        // 保存前先删除这个订单的数据
+        String orderNo = orderTechnicalDetailedRel1.getOrderNo();
+        OrderTechnicalDetailedRelExample example=new OrderTechnicalDetailedRelExample();
+        example.or().andOrderNoEqualTo(orderNo);
+        int delete = orderTechnicalDetailedRelMapper.deleteByExample(example);
+
         for (OrderTechnicalDetailedRel orderTechnicalDetailedRel : dto) {
             i = orderTechnicalDetailedRelMapper.insertSelective(orderTechnicalDetailedRel);
         }
         if (i > 0) {
             //删除redis值
-            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderTechnicalDetailedRel1.getOrderNo()).key);
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderNo).key);
         }
         return i;
     }
