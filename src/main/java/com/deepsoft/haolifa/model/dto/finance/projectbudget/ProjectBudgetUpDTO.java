@@ -31,7 +31,7 @@ public class ProjectBudgetUpDTO {
     @ApiModelProperty(value = "预算经费总额度")
     private BigDecimal totalQuota;
 
-    @ApiModelProperty(value = "剩余额度")
+//    @ApiModelProperty(value = "剩余额度")
     private BigDecimal balanceQuota;
 
     @ApiModelProperty(value = "状态（1正常 2停用）")

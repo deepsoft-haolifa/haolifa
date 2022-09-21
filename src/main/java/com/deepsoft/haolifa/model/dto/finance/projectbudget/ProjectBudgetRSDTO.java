@@ -22,6 +22,9 @@ public class ProjectBudgetRSDTO {
     @ApiModelProperty(value = "所属部门")
     private Integer deptId;
 
+    @ApiModelProperty(value = "所属部门")
+    private String deptName;
+
     @ApiModelProperty(value = "预算年度")
     private String year;
 

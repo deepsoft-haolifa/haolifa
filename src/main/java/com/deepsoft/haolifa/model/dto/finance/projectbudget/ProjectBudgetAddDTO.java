@@ -24,6 +24,9 @@ public class ProjectBudgetAddDTO {
     @ApiModelProperty(value = "所属部门")
     private Integer deptId;
 
+    @ApiModelProperty(value = "所属部门")
+    private String deptName;
+
     @ApiModelProperty(value = "预算年度")
     private String year;
 
@@ -32,9 +35,9 @@ public class ProjectBudgetAddDTO {
 
     @ApiModelProperty(value = "预算经费总额度")
     private BigDecimal totalQuota;
-
-    @ApiModelProperty(value = "剩余额度")
-    private BigDecimal balanceQuota;
+//
+//    @ApiModelProperty(value = "剩余额度")
+//    private BigDecimal balanceQuota;
 
     @ApiModelProperty(value = "状态（1正常 2停用）")
     private String status;

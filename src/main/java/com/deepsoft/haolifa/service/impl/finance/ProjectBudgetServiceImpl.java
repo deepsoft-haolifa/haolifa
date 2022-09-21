@@ -4,9 +4,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.dao.repository.SysUserMapper;
-import com.deepsoft.haolifa.model.domain.BizProjectBudget;
-import com.deepsoft.haolifa.model.domain.BizProjectBudgetExample;
-import com.deepsoft.haolifa.model.domain.SysUser;
+import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.*;
@@ -24,6 +22,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -120,10 +120,16 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
             });
 
 
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream()
+            .collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
         List<ProjectBudgetRSDTO> assetsRSDTOList = pageData.getResult().stream()
             .map(assets -> {
                 ProjectBudgetRSDTO assetsRSDTO = new ProjectBudgetRSDTO();
                 BeanUtils.copyProperties(assets, assetsRSDTO);
+                SysDepartment sysDepartment = sysDepartmentMap.get(assets.getDeptId());
+                assetsRSDTO.setDeptName(sysDepartment.getDeptName());
                 return assetsRSDTO;
             })
             .collect(Collectors.toList());
@@ -150,10 +156,10 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
         // todo 只能查询自己部门的
-//        Integer sysUserId = sysUserService.selectLoginUser().getId();
-//        SysUser sysUser = sysUserMapper.selectByPrimaryKey(sysUserId);
-//        Integer departId = sysUser.getDepartId();
-//        criteria.andDeptIdEqualTo(departId);
+        Integer sysUserId = sysUserService.selectLoginUser().getId();
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(sysUserId);
+        Integer departId = sysUser.getDepartId();
+        criteria.andDeptIdEqualTo(departId);
 
         if (StringUtils.isNotEmpty(model.getName())) {
             criteria.andNameLike("%" + model.getName() + "%");
