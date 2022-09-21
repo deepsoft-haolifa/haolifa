@@ -38,6 +38,9 @@ public class TechnicalDetailedService {
         if (StringUtils.isNotEmpty(pageDto.getActuatorModel())) {
             criteria.andActuatorModelLike("%" + pageDto.getActuatorModel() + "%");
         }
+        if (StringUtils.isNotEmpty(pageDto.getSpecifications())) {
+            criteria.andSpecificationsLike("%" + pageDto.getSpecifications() + "%");
+        }
         if (StringUtils.isNotEmpty(pageDto.getProductModel())) {
             criteria.andProductModelLike("%" + pageDto.getProductModel() + "%");
         }

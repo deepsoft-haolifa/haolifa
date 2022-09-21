@@ -261,9 +261,9 @@ public class PurcahseOrderServiceImpl extends BaseService implements PurcahseOrd
             orderTotalNumber += item.getNumber();
             exDTOS.add(itemExDTO);
         }
-        purchaseOrderExDTO.setTotalPrice(orderTotalAmount);
+        purchaseOrderExDTO.setTotalPrice(new BigDecimal(orderTotalAmount).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
         purchaseOrderExDTO.setTotalPriceCN(UpperMoney.upper(String.valueOf(orderTotalAmount)));
-        purchaseOrderExDTO.setTotalWeight(orderTotalWeight);
+        purchaseOrderExDTO.setTotalWeight(new BigDecimal(orderTotalWeight).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
         purchaseOrderExDTO.setOrderNumber(orderTotalNumber);
         Map<String, Object> result = new HashMap<>(2);
         result.put("order", purchaseOrderExDTO);
