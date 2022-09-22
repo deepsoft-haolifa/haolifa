@@ -110,7 +110,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setPaymentStatus(LoanrPaymentStatusEnum.partial_pay.getCode());
         loanApply.setPaymentAmount(BigDecimal.ZERO);
         loanApply.setLoanUser(sysUserService.selectLoginUser().getId());
-        loanApply.setLoanUserNo(payUser.getUserNo());
+//        loanApply.setLoanUserNo(payUser.getUserNo());
         loanApply.setCreateTime(new Date());
         loanApply.setUpdateTime(new Date());
         loanApply.setCreateUser(sysUserService.selectLoginUser().getId());

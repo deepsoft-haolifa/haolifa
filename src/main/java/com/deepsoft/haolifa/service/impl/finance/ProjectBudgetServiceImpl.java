@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
@@ -59,7 +60,7 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
         BizProjectBudget bizProjectBudget = new BizProjectBudget();
         BeanUtils.copyProperties(model, bizProjectBudget);
-
+        bizProjectBudget.setBalanceQuota(model.getTotalQuota());
 
         bizProjectBudget.setStatus("1");
         bizProjectBudget.setCreateTime(new Date());
@@ -111,6 +112,26 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         }
         if (StringUtils.isNotEmpty(model.getCode())) {
             criteria.andCodeLike("%" + model.getCode() + "%");
+        }
+
+        if (StringUtils.isNotEmpty(model.getYear())) {
+            criteria.andYearEqualTo(model.getYear());
+        }
+
+        if (StringUtils.isNotEmpty(model.getMonth())) {
+            criteria.andMonthEqualTo(model.getMonth());
+        }
+
+        if (StringUtils.isNotEmpty(model.getDeptName())) {
+            SysDepartmentExample departmentExample = new SysDepartmentExample();
+            departmentExample.createCriteria().andDeptNameLike("%" + model.getDeptName() + "%");
+            List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
+            if (CollectionUtil.isNotEmpty(sysDepartments)) {
+                List<Integer> integerList = sysDepartments.stream().map(SysDepartment::getId).collect(Collectors.toList());
+                criteria.andDeptIdIn(integerList);
+            } else {
+                criteria.andDeptIdEqualTo(-1);
+            }
         }
 
         Page<BizProjectBudget> pageData = PageHelper

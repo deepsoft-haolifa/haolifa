@@ -246,7 +246,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         BizReimburseApply reimburseApply = new BizReimburseApply();
         BeanUtils.copyProperties(model, reimburseApply);
-        reimburseApply.setReimburseUserNo(payUser.getUserNo());
+//        reimburseApply.setReimburseUserNo(payUser.getUserNo());
 
         reimburseApply.setSerialNo(ser);
         reimburseApply.setAmount(totalAmount);
