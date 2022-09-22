@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
@@ -120,6 +121,10 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
         if (StringUtils.isNotEmpty(model.getMonth())) {
             criteria.andMonthEqualTo(model.getMonth());
+        }
+
+        if (ObjectUtil.isNotEmpty(model.getDeptId())) {
+            criteria.andDeptIdEqualTo(model.getDeptId());
         }
 
         if (StringUtils.isNotEmpty(model.getDeptName())) {
