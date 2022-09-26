@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,6 +95,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private ExpensesService expensesService;
     @Autowired
     private ProjectBudgetService projectBudgetService;
+
+    @Resource
+    private BizProjectBudgetMapper bizProjectBudgetMapper;
 
     //
     @Override
@@ -467,6 +471,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             reimburseApplyRSDTO.setReimburseCostDetailRSDTOList(reimburseCostDetailRSDTOList);
         }
 
+        if(StringUtils.isNotEmpty(reimburseApplyRSDTO.getProjectCode())){
+            BizProjectBudget projectBudget =  bizProjectBudgetMapper.getProjectBudgetByCode(reimburseApplyRSDTO.getProjectCode());
+            reimburseApplyRSDTO.setProjectCodeName(projectBudget.getName());
+        }
         return ResultBean.success(reimburseApplyRSDTO);
     }
 

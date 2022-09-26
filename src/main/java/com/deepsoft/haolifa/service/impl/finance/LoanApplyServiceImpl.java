@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
@@ -73,6 +74,11 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
     @Autowired
     private ProjectBudgetService projectBudgetService;
+
+
+
+    @Resource
+    private BizProjectBudgetMapper bizProjectBudgetMapper;
 
     @Override
     public ResultBean save(LoanApplyAddDTO model) {
@@ -231,6 +237,11 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         LoanrPayStatusEnum payStatusEnum = LoanrPayStatusEnum.valueOfCode(loanApply.getPayStatus());
         loanApplyRSDTO.setPayStatusCN(payStatusEnum == null ? LoanrPayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+
+        if(StringUtils.isNotEmpty(loanApplyRSDTO.getProjectCode())){
+            BizProjectBudget projectBudget =  bizProjectBudgetMapper.getProjectBudgetByCode(loanApplyRSDTO.getProjectCode());
+            loanApplyRSDTO.setProjectCodeName(projectBudget.getName());
+        }
 
         return ResultBean.success(loanApplyRSDTO);
     }
@@ -423,6 +434,9 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         );
 //        canPay = true;
         loanApplyRSDTO.setCanPay(canPay);
+
+
+//        loanApplyRSDTO.setProjectCode();
         return loanApplyRSDTO;
     }
 

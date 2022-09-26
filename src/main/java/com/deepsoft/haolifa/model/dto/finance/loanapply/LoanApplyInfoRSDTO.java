@@ -100,6 +100,9 @@ public class LoanApplyInfoRSDTO {
     @ApiModelProperty(value = "项目编号 三期新增字段")
     private String projectCode;
 
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCodeName;
+
     @ApiModelProperty(value = "是否差旅借款 1 是 2 否 三期新增字段")
     private String travelFlag;
 

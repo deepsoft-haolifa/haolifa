@@ -89,7 +89,7 @@ public class ItextpdfUtil {
         Paragraph elements1 = new Paragraph("总经理:", font);
         PdfPCell pdfPCell1 = new PdfPCell(elements1);
         pdfPCell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        pdfPCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        pdfPCell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
 //        pdfPCell1.setColspan(3);
 //        pdfPCell1.setBorderWidthLeft(0);
         pdfPCell1.setMinimumHeight(30);
@@ -99,7 +99,7 @@ public class ItextpdfUtil {
         Paragraph elements2 = new Paragraph("部门（项目）负责人:", font);
         PdfPCell pdfPCell2 = new PdfPCell(elements2);
         pdfPCell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        pdfPCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        pdfPCell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
 //        pdfPCell2.setColspan(3);
         pdfPCell2.setMinimumHeight(40);
         pdfPCell2.setBorderWidthLeft(0);
@@ -110,7 +110,7 @@ public class ItextpdfUtil {
         Paragraph elements3 = new Paragraph("报销人:", font);
         PdfPCell pdfPCell3 = new PdfPCell(elements3);
         pdfPCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        pdfPCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+        pdfPCell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
         pdfPCell3.setColspan(3);
         pdfPCell3.setMinimumHeight(30);
         pdfPCell3.setBorderWidthLeft(0);

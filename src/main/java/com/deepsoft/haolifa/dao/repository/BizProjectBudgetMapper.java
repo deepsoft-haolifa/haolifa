@@ -27,4 +27,6 @@ public interface BizProjectBudgetMapper {
     int updateByPrimaryKeySelective(BizProjectBudget record);
 
     int updateByPrimaryKey(BizProjectBudget record);
+
+    BizProjectBudget getProjectBudgetByCode(@Param("code")String code);
 }

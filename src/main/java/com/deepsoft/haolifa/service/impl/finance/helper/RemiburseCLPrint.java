@@ -40,14 +40,14 @@ public class RemiburseCLPrint {
             BaseFont typeface = BaseFont.createFont("/home/haolifa/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font font = new Font(typeface);
 
-            document.add(ItextpdfUtil.getElements(font, 10, 44, "山西好利阀机械制造有限公司"));
+            document.add(ItextpdfUtil.getElements(font, 8, 44, "山西好利阀机械制造有限公司"));
 
             Paragraph start2 = new Paragraph("经费报销单", font);
             start2.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(start2);
 
 
-            font.setSize(8);
+            font.setSize(6);
             font.setColor(44, 44, 44);
 
             PdfPTable table1 = getPdfPTable1(font);
@@ -59,7 +59,7 @@ public class RemiburseCLPrint {
             PdfPTable table2 = getPdfPTable2(font);
             document.add(table2);
 
-            document.add(ItextpdfUtil.getElements(font, 5, 164, "温馨提示：此报销金额以财务核定金额为准"));
+            document.add(ItextpdfUtil.getElements(font, 4, 164, "温馨提示：此报销金额以财务核定金额为准"));
 
             document.close();
             pdfWriter.close();
@@ -142,7 +142,7 @@ public class RemiburseCLPrint {
 //
 //
 //        // 第六行
-        ItextpdfUtil.h6(font, table);
+        h6(font, table);
         return table;
     }
 
@@ -169,7 +169,7 @@ public class RemiburseCLPrint {
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
 
         table.addCell(ItextpdfUtil.getPdfPCell("部门:  "+ reimburseApplyDetailDTO.getDeptName(), font, 0, 11));
-        table.addCell(ItextpdfUtil.getPdfPCell("项目经费号:  【todo未找到合适字段】", font, 0, 11));
+        table.addCell(ItextpdfUtil.getPdfPCell("项目经费号: "+reimburseApplyDetailDTO.getProjectCode()+""+reimburseApplyDetailDTO.getProjectCodeName(), font, 0, 11));
         table.addCell(ItextpdfUtil.getPdfPCell(DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(),"yyyy年MM月dd日"), font, 0, 10));
     }
 
@@ -220,14 +220,14 @@ public class RemiburseCLPrint {
 
                 table.addCell(ItextpdfUtil.getCell(de.getVehicleCN(), font, 4));
                 table.addCell(ItextpdfUtil.getCell(de.getVehicleDocNum()+"", font, 3));
-                table.addCell(ItextpdfUtil.getCell(de.getVehicleAmount()+"", font, 3));
+                table.addCell(ItextpdfUtil.getCell(de.getVehicleAmount().doubleValue()+"", font, 3));
 
                 table.addCell(ItextpdfUtil.getCell(de.getTravelDays()+"", font, 3));
-                table.addCell(ItextpdfUtil.getCell(de.getTravelSubsidyAmount().toString(), font, 2));
+                table.addCell(ItextpdfUtil.getCell(de.getTravelSubsidyAmount().doubleValue()+"", font, 2));
 
 
                 table.addCell(ItextpdfUtil.getCell(de.getProjectTypeCN(), font, 3));
-                table.addCell(ItextpdfUtil.getCell(de.getProjectAmount().toString(), font, 2));
+                table.addCell(ItextpdfUtil.getCell(de.getProjectAmount().doubleValue()+"", font, 2));
 
 
             });
@@ -270,7 +270,7 @@ public class RemiburseCLPrint {
         table.addCell(pdfPCellD);
 
 
-        Paragraph elements = new Paragraph("¥" + reimburseApplyDetailDTO.getAmount(), font);
+        Paragraph elements = new Paragraph("¥" + reimburseApplyDetailDTO.getAmount().doubleValue(), font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -297,6 +297,39 @@ public class RemiburseCLPrint {
         table.addCell(pdfPCell);
     }
 
+
+    public static void h6(Font font, PdfPTable table) {
+        Paragraph elements1 = new Paragraph("总经理:", font);
+        PdfPCell pdfPCell1 = new PdfPCell(elements1);
+        pdfPCell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        pdfPCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+//        pdfPCell1.setColspan(3);
+//        pdfPCell1.setBorderWidthLeft(0);
+        pdfPCell1.setMinimumHeight(30);
+        pdfPCell1.setBorderWidthRight(0);
+        table.addCell(pdfPCell1);
+
+        Paragraph elements2 = new Paragraph("部门（项目）负责人:", font);
+        PdfPCell pdfPCell2 = new PdfPCell(elements2);
+        pdfPCell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        pdfPCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+//        pdfPCell2.setColspan(3);
+        pdfPCell2.setMinimumHeight(40);
+        pdfPCell2.setBorderWidthLeft(0);
+        pdfPCell2.setBorderWidthRight(0);
+        table.addCell(pdfPCell2);
+
+
+        Paragraph elements3 = new Paragraph("报销人:", font);
+        PdfPCell pdfPCell3 = new PdfPCell(elements3);
+        pdfPCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        pdfPCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+        pdfPCell3.setColspan(3);
+        pdfPCell3.setMinimumHeight(30);
+        pdfPCell3.setBorderWidthLeft(0);
+//        pdfPCell6.setBorderWidthRight(0);
+        table.addCell(pdfPCell3);
+    }
 
     private static void h7(PdfPTable table, Font font) {
         Paragraph elements1 = new Paragraph("财务主管:", font);
@@ -333,27 +366,21 @@ public class RemiburseCLPrint {
 //        pdfPCell1.setBorderWidthRight(0);
         table.addCell(pdfPCell1);
 
-        String f = "收款方名称： " + reimburseApplyDetailDTO.getAccountName() +
+        String f =
+            "收款方名称： " + reimburseApplyDetailDTO.getAccountName() +
             "\r\t" +
             "\r\t" +
-            "开户行账号：" + reimburseApplyDetailDTO.getBankOfDeposit() +
+            "开 户 行：" + reimburseApplyDetailDTO.getBankOfDeposit() +
             "\r\t" +
             "\r\t" +
-            "账     号：" + reimburseApplyDetailDTO.getCardNumber();
-
-        if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getPayType(), "2")) {
-            f += "\r\t" +
-                "\r\t" +
-                "" + reimburseApplyDetailDTO.getAccountName() + " " + reimburseApplyDetailDTO.getReimburseUserNo();
-        }
-
+            "账    号：" + reimburseApplyDetailDTO.getCardNumber();
 
         Paragraph elements3 = new Paragraph(f, font);
         PdfPCell pdfPCell3 = new PdfPCell(elements3);
         pdfPCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
         pdfPCell3.setColspan(3);
-        pdfPCell3.setMinimumHeight(80);
+        pdfPCell3.setMinimumHeight(50);
 //        pdfPCell3.setBorderWidthLeft(0);
 //        pdfPCell6.setBorderWidthRight(0);
         table.addCell(pdfPCell3);

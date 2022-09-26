@@ -29,6 +29,9 @@ public class ReimburseApplyDetailDTO {
     @ApiModelProperty(value = "项目编号 三期新增字段")
     private String projectCode;
 
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCodeName;
+
     @ApiModelProperty(value = "报销部门id")
     private Integer deptId;
 
