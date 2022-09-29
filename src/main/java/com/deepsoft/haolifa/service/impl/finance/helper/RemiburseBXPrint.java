@@ -185,6 +185,15 @@ public class RemiburseBXPrint {
         pdfPCell.setLeading(2, 1);
         pdfPCell.setColspan(4);
         table.addCell(pdfPCell);
+
+        // 普通报销 + 借款冲抵100元 摘要
+
+        if (reimburseApplyDetailDTO.getLoanId()!=null){
+            String s = "普通报销借款冲抵"+reimburseApplyDetailDTO.getOffsetAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()
+                +"元"+reimburseApplyDetailDTO.getRemark();
+            table.addCell(ItextpdfUtil.getPdfPCell("" + s, font, 0, 5));
+        }
+
     }
 
     private static void h2(PdfPTable table, Font font) {
@@ -203,8 +212,8 @@ public class RemiburseBXPrint {
                 table.addCell(ItextpdfUtil.getCell(de.getSubjectsType() + de.getSubjectsTypeName(), font));
                 table.addCell(ItextpdfUtil.getCell(de.getRemark(), font));
                 table.addCell(ItextpdfUtil.getCell(de.getDocNum() + "", font));
-                table.addCell(ItextpdfUtil.getCell(de.getAmount() + "", font));
-                table.addCell(ItextpdfUtil.getCell("", font));
+                table.addCell(ItextpdfUtil.getCell(de.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "", font));
+                table.addCell(ItextpdfUtil.getCell(de.getRemark(), font));
             });
 
         if (reimburseApplyDetailDTO.getReimburseCostDetailRSDTOList().size() <= 4) {

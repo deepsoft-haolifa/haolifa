@@ -186,12 +186,21 @@ public class RemiburseCLPrint {
         pdfPCell.setLeading(2, 1);
         pdfPCell.setColspan(8);
         table.addCell(pdfPCell);
+
+        // 普通报销 + 借款冲抵100元 摘要
+        if (reimburseApplyDetailDTO.getLoanId()!=null){
+            String s = "差旅报销借款冲抵"+reimburseApplyDetailDTO.getOffsetAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()
+                +"元"+reimburseApplyDetailDTO.getRemark();
+            table.addCell(ItextpdfUtil.getPdfPCell("" + s, font, 0, 32));
+        }
+
+
     }
 
     private static void h2(PdfPTable table, Font font) {
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
         table.addCell(ItextpdfUtil.getCell("出差人", font, 4));
-//        table.addCell(ItextpdfUtil.getCell(reimburseApplyDetailDTO.(), font, 12));
+        table.addCell(ItextpdfUtil.getCell(reimburseApplyDetailDTO.getTravelUserName(), font, 12));
         table.addCell(ItextpdfUtil.getCell("事由", font, 4));
         table.addCell(ItextpdfUtil.getCell(reimburseApplyDetailDTO.getRemark(), font, 12));
     }

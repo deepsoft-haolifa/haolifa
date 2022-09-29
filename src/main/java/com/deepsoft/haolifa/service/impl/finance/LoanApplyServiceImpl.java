@@ -544,9 +544,9 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         // 有些状态不能付款
         LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(selectByPrimaryKey.getPayStatus());
-        if (LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
-        }
+//        if (LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
+//        }
 
 
         SysUser sysUser = sysUserService.getSysUser(selectByPrimaryKey.getLoanUser());
@@ -555,7 +555,11 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         // 记账方式（1現金 2銀行 3 其他貨幣）
         if (StringUtils.equalsIgnoreCase("1", loanApplyPayDTO.getBillNature())) {
             BizBillAddDTO bizBill = buildBizBillAddDTO(loanApplyPayDTO, selectByPrimaryKey, sysUser);
-            billService.save(bizBill);
+            ResultBean save = billService.save(bizBill);
+            if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+            }
+
         } else if (StringUtils.equalsIgnoreCase("2", loanApplyPayDTO.getBillNature())) {
             BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
             // 付款
@@ -563,6 +567,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             bizBankBill.setCompany(loanApplyPayDTO.getPayCompany());
             bizBankBill.setCertificateNumber("");
             bizBankBill.setOperateDate(new Date());
+            bizBankBill.setDeptId(selectByPrimaryKey.getDeptId());
             bizBankBill.setPayWay(PayWayEnum.check_pay.getDesc());
             bizBankBill.setPaymentType(PayWayEnum.check_pay.getDesc());
             bizBankBill.setPayment(selectByPrimaryKey.getAmount());
@@ -570,11 +575,15 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             bizBankBill.setPayCompany(loanApplyPayDTO.getPayCompany());
             bizBankBill.setPayAccount(loanApplyPayDTO.getPayAccount());
             bizBankBill.setCollectCompany(sysUser.getRealName());
-            bankBillService.save(bizBankBill);
+            ResultBean save = bankBillService.save(bizBankBill);
+            if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+            }
         } else if (StringUtils.equalsIgnoreCase("3", loanApplyPayDTO.getBillNature())) {
             BizOtherBillAddDTO otherBillAddDTO = new BizOtherBillAddDTO();
             // 付款
             otherBillAddDTO.setType("2");
+            otherBillAddDTO.setDeptId(selectByPrimaryKey.getDeptId());
             otherBillAddDTO.setCompany(loanApplyPayDTO.getPayCompany());
             otherBillAddDTO.setCertificateNumber("");
             otherBillAddDTO.setOperateDate(new Date());
@@ -585,7 +594,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             otherBillAddDTO.setPayCompany(loanApplyPayDTO.getPayCompany());
             otherBillAddDTO.setPayAccount(loanApplyPayDTO.getPayAccount());
             otherBillAddDTO.setCollectCompany(sysUser.getRealName());
-            otherBillService.save(otherBillAddDTO);
+            ResultBean save = otherBillService.save(otherBillAddDTO);
+            if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+            }
         }
 
 
@@ -604,6 +616,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         bizBill.setType(BookingTypeEnum.cash_bill.getCode());
         bizBill.setCertificateNumber(loanApplyPayDTO.getPayAccount());
         bizBill.setD(new Date());
+        bizBill.setDeptId(selectByPrimaryKey.getDeptId()+"");
         bizBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
         bizBill.setPayment(selectByPrimaryKey.getAmount());
         bizBill.setRemark("借款付款 " + selectByPrimaryKey.getAmount());
