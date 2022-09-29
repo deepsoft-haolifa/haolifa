@@ -189,6 +189,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (StringUtils.isEmpty(model.getType())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销类型必传");
         }
+        if (StringUtils.equalsIgnoreCase(model.getType(),"1") && StringUtils.isEmpty(model.getTravelUserName())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "差旅报销出差人必传");
+        }
         if (StringUtils.isEmpty(model.getReimburseType())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销方式必传");
         }

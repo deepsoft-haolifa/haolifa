@@ -17,6 +17,12 @@ import static com.itextpdf.text.PageSize.A5;
 import static com.itextpdf.text.Rectangle.RIGHT;
 
 public class ItextpdfUtil {
+
+    public static final  int titleSize = 14;
+    public static final  int bodySize = 10;
+
+
+
     public static PdfPCell getCell(String text, Font font) {
         Paragraph elements = new Paragraph(text, font);
         PdfPCell pdfPCell = new PdfPCell(elements);

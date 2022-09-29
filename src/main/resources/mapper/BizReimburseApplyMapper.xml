@@ -21,6 +21,7 @@
       <arg column="pay_status" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="reimburse_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="reimburse_user_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="travel_user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="offset_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
       <arg column="loan_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="apply_status" javaType="java.lang.String" jdbcType="CHAR" />
@@ -94,8 +95,8 @@
   <sql id="Base_Column_List">
     id, serial_no, type, reimburse_type, reimburse_date, account_name, card_number, bank_of_deposit,
     dept_id, amount, pay_type, pay_company, pay_company_id, pay_account, pay_time, pay_status,
-    reimburse_user, reimburse_user_no, offset_amount, loan_id, apply_status, project_code,
-    remark, del_flag, create_user, create_time, update_user, update_time
+    reimburse_user, reimburse_user_no, travel_user_name, offset_amount, loan_id, apply_status,
+    project_code, remark, del_flag, create_user, create_time, update_user, update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseApplyExample" resultMap="BaseResultMap">
     select
@@ -136,21 +137,21 @@
       bank_of_deposit, dept_id, amount,
       pay_type, pay_company, pay_company_id,
       pay_account, pay_time, pay_status,
-      reimburse_user, reimburse_user_no, offset_amount,
-      loan_id, apply_status, project_code,
-      remark, del_flag, create_user,
-      create_time, update_user, update_time
-      )
+      reimburse_user, reimburse_user_no, travel_user_name,
+      offset_amount, loan_id, apply_status,
+      project_code, remark, del_flag,
+      create_user, create_time, update_user,
+      update_time)
     values (#{serialNo,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{reimburseType,jdbcType=CHAR},
       #{reimburseDate,jdbcType=TIMESTAMP}, #{accountName,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR},
       #{bankOfDeposit,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL},
       #{payType,jdbcType=CHAR}, #{payCompany,jdbcType=VARCHAR}, #{payCompanyId,jdbcType=VARCHAR},
       #{payAccount,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=CHAR},
-      #{reimburseUser,jdbcType=INTEGER}, #{reimburseUserNo,jdbcType=VARCHAR}, #{offsetAmount,jdbcType=DECIMAL},
-      #{loanId,jdbcType=INTEGER}, #{applyStatus,jdbcType=CHAR}, #{projectCode,jdbcType=VARCHAR},
-      #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{reimburseUser,jdbcType=INTEGER}, #{reimburseUserNo,jdbcType=VARCHAR}, #{travelUserName,jdbcType=VARCHAR},
+      #{offsetAmount,jdbcType=DECIMAL}, #{loanId,jdbcType=INTEGER}, #{applyStatus,jdbcType=CHAR},
+      #{projectCode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR},
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseApply">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -208,6 +209,9 @@
       </if>
       <if test="reimburseUserNo != null">
         reimburse_user_no,
+      </if>
+      <if test="travelUserName != null">
+        travel_user_name,
       </if>
       <if test="offsetAmount != null">
         offset_amount,
@@ -291,6 +295,9 @@
       </if>
       <if test="reimburseUserNo != null">
         #{reimburseUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="travelUserName != null">
+        #{travelUserName,jdbcType=VARCHAR},
       </if>
       <if test="offsetAmount != null">
         #{offsetAmount,jdbcType=DECIMAL},
@@ -387,6 +394,9 @@
       <if test="record.reimburseUserNo != null">
         reimburse_user_no = #{record.reimburseUserNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.travelUserName != null">
+        travel_user_name = #{record.travelUserName,jdbcType=VARCHAR},
+      </if>
       <if test="record.offsetAmount != null">
         offset_amount = #{record.offsetAmount,jdbcType=DECIMAL},
       </if>
@@ -442,6 +452,7 @@
       pay_status = #{record.payStatus,jdbcType=CHAR},
       reimburse_user = #{record.reimburseUser,jdbcType=INTEGER},
       reimburse_user_no = #{record.reimburseUserNo,jdbcType=VARCHAR},
+      travel_user_name = #{record.travelUserName,jdbcType=VARCHAR},
       offset_amount = #{record.offsetAmount,jdbcType=DECIMAL},
       loan_id = #{record.loanId,jdbcType=INTEGER},
       apply_status = #{record.applyStatus,jdbcType=CHAR},
@@ -510,6 +521,9 @@
       <if test="reimburseUserNo != null">
         reimburse_user_no = #{reimburseUserNo,jdbcType=VARCHAR},
       </if>
+      <if test="travelUserName != null">
+        travel_user_name = #{travelUserName,jdbcType=VARCHAR},
+      </if>
       <if test="offsetAmount != null">
         offset_amount = #{offsetAmount,jdbcType=DECIMAL},
       </if>
@@ -562,6 +576,7 @@
       pay_status = #{payStatus,jdbcType=CHAR},
       reimburse_user = #{reimburseUser,jdbcType=INTEGER},
       reimburse_user_no = #{reimburseUserNo,jdbcType=VARCHAR},
+      travel_user_name = #{travelUserName,jdbcType=VARCHAR},
       offset_amount = #{offsetAmount,jdbcType=DECIMAL},
       loan_id = #{loanId,jdbcType=INTEGER},
       apply_status = #{applyStatus,jdbcType=CHAR},

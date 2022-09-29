@@ -37,6 +37,9 @@ public class ReimburseApplyAddDTO {
     @ApiModelProperty(value = "2借款冲抵 必传 冲抵金额/不得大于借款金额")
     private BigDecimal offsetAmount;
 
+    @ApiModelProperty(value = "出差人名称")
+    private String travelUserName;
+
     @ApiModelProperty(value = "报销日期")
     private Date reimburseDate;
 

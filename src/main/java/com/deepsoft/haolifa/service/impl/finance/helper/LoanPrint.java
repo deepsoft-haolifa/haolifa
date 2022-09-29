@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 
+import java.math.BigDecimal;
+
 import static com.itextpdf.text.PageSize.A5;
 
 public class LoanPrint {
@@ -33,13 +35,14 @@ public class LoanPrint {
 
             document.open();
 
-            ClassPathResource classPathResource = new ClassPathResource("static/msyh.ttf");
+//            ClassPathResource classPathResource = new ClassPathResource("static/msyh.ttf");
             BaseFont typeface = BaseFont.createFont("/home/haolifa/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+//            BaseFont typeface = BaseFont.createFont("/Users/yuan/Desktop/work/haolifa/src/main/resources/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font font = new Font(typeface);
 
-            font.setSize(8);
+            font.setSize(ItextpdfUtil.titleSize);
             font.setColor(44, 44, 44);
-            document.add(ItextpdfUtil.getElements(font, 8, 44, "山西好利阀机械制造有限公司"));
+            document.add(ItextpdfUtil.getElements(font, ItextpdfUtil.titleSize, 44, "山西好利阀机械制造有限公司"));
 
 
             Paragraph start2 = new Paragraph("借款单", font);
@@ -47,7 +50,7 @@ public class LoanPrint {
             document.add(start2);
 
 
-            font.setSize(6);
+            font.setSize(ItextpdfUtil.bodySize);
             font.setColor(44, 44, 44);
 
             PdfPTable table1 = getPdfPTable1(font);
@@ -59,7 +62,7 @@ public class LoanPrint {
             PdfPTable table2 = getPdfPTable2(font);
             document.add(table2);
 
-            document.add(ItextpdfUtil.getElements(font, 4, 164, "温馨提示：此报销金额以财务核定金额为准"));
+            document.add(ItextpdfUtil.getElements(font, 8, 164, "温馨提示：此报销金额以财务核定金额为准"));
 
             document.close();
             pdfWriter.close();
@@ -121,11 +124,11 @@ public class LoanPrint {
         LoanApplyInfoRSDTO loanApplyInfoRSDTO = threadLocal.get();
         table.addCell(ItextpdfUtil.getPdfPCell("部门:  " + loanApplyInfoRSDTO.getDeptName(), font, 0, 8));
 //        table.addCell(ItextpdfUtil.getPdfPCell("", font, 0, 24));
-        String format = DateUtil.format(loanApplyInfoRSDTO.getLoanDate(), "yyyy-MM-dd hh:mm:ss");
+        String format = DateUtil.format(loanApplyInfoRSDTO.getLoanDate(), "yyyy年MM月dd日");
         Paragraph elements3 = new Paragraph(format, font);
         PdfPCell pdfPCell = new PdfPCell(elements3);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        pdfPCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         pdfPCell.setBorder(0);
         pdfPCell.setMinimumHeight(20);
         pdfPCell.setLeading(2, 1);
@@ -175,7 +178,7 @@ public class LoanPrint {
 
         table.addCell(ItextpdfUtil.getCell("借款金额（大写）", font, 9));
 
-        Paragraph elementsD = new Paragraph(" " + BigDecimalUtils.upperCase(loanApplyInfoRSDTO.getAmount().doubleValue()), font);
+        Paragraph elementsD = new Paragraph(" " + BigDecimalUtils.number2CNMontrayUnit(loanApplyInfoRSDTO.getAmount()), font);
         PdfPCell pdfPCellD = new PdfPCell(elementsD);
         pdfPCellD.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCellD.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -183,12 +186,21 @@ public class LoanPrint {
         table.addCell(pdfPCellD);
 
 
-        Paragraph elements = new Paragraph("¥ " + loanApplyInfoRSDTO.getAmount().doubleValue(), font);
+        Paragraph elements = new Paragraph("¥ " + loanApplyInfoRSDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString(), font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         pdfPCell.setColspan(5);
         table.addCell(pdfPCell);
+    }
+
+    public static void main(String[] args) {
+        BigDecimal b = new BigDecimal(100.00000);
+
+        BigDecimal bigDecimal = b.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        System.out.println(bigDecimal.toString());
+
     }
 
 
@@ -260,7 +272,7 @@ public class LoanPrint {
 //        pdfPCell1.setBorderWidthRight(0);
         table.addCell(pdfPCell1);
 
-        String f = "收款方名称： " + loanApplyInfoRSDTO.getLoanUserName() +
+        String f = "收款方名称： " + loanApplyInfoRSDTO.getAccountName() +
             "\r\t" +
             "\r\t" +
             "开  户  行：" + loanApplyInfoRSDTO.getBankOfDeposit() +

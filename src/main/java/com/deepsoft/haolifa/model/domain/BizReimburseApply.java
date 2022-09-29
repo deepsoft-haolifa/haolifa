@@ -40,6 +40,8 @@ public class BizReimburseApply {
 
     private String reimburseUserNo;
 
+    private String travelUserName;
+
     private BigDecimal offsetAmount;
 
     private Integer loanId;
@@ -60,7 +62,7 @@ public class BizReimburseApply {
 
     private Date updateTime;
 
-    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payType, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String reimburseUserNo, BigDecimal offsetAmount, Integer loanId, String applyStatus, String projectCode, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payType, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String reimburseUserNo, String travelUserName, BigDecimal offsetAmount, Integer loanId, String applyStatus, String projectCode, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.type = type;
@@ -79,6 +81,7 @@ public class BizReimburseApply {
         this.payStatus = payStatus;
         this.reimburseUser = reimburseUser;
         this.reimburseUserNo = reimburseUserNo;
+        this.travelUserName = travelUserName;
         this.offsetAmount = offsetAmount;
         this.loanId = loanId;
         this.applyStatus = applyStatus;
@@ -237,6 +240,14 @@ public class BizReimburseApply {
 
     public void setReimburseUserNo(String reimburseUserNo) {
         this.reimburseUserNo = reimburseUserNo == null ? null : reimburseUserNo.trim();
+    }
+
+    public String getTravelUserName() {
+        return travelUserName;
+    }
+
+    public void setTravelUserName(String travelUserName) {
+        this.travelUserName = travelUserName == null ? null : travelUserName.trim();
     }
 
     public BigDecimal getOffsetAmount() {

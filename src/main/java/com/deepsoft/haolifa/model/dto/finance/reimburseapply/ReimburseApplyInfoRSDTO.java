@@ -65,6 +65,9 @@ public class ReimburseApplyInfoRSDTO {
     @ApiModelProperty(value = "报销人名称")
     private String reimburseUserName;
 
+    @ApiModelProperty(value = "出差人名称")
+    private String travelUserName;
+
     @ApiModelProperty(value = "户名")
     private String accountName;
 

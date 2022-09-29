@@ -1306,6 +1306,76 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andTravelUserNameIsNull() {
+            addCriterion("travel_user_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameIsNotNull() {
+            addCriterion("travel_user_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameEqualTo(String value) {
+            addCriterion("travel_user_name =", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameNotEqualTo(String value) {
+            addCriterion("travel_user_name <>", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameGreaterThan(String value) {
+            addCriterion("travel_user_name >", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameGreaterThanOrEqualTo(String value) {
+            addCriterion("travel_user_name >=", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameLessThan(String value) {
+            addCriterion("travel_user_name <", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameLessThanOrEqualTo(String value) {
+            addCriterion("travel_user_name <=", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameLike(String value) {
+            addCriterion("travel_user_name like", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameNotLike(String value) {
+            addCriterion("travel_user_name not like", value, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameIn(List<String> values) {
+            addCriterion("travel_user_name in", values, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameNotIn(List<String> values) {
+            addCriterion("travel_user_name not in", values, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameBetween(String value1, String value2) {
+            addCriterion("travel_user_name between", value1, value2, "travelUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTravelUserNameNotBetween(String value1, String value2) {
+            addCriterion("travel_user_name not between", value1, value2, "travelUserName");
+            return (Criteria) this;
+        }
+
         public Criteria andOffsetAmountIsNull() {
             addCriterion("offset_amount is null");
             return (Criteria) this;

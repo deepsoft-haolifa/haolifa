@@ -124,10 +124,14 @@ public class FlowInstanceServiceImpl extends BaseService implements FlowInstance
             .get();
 
         // 获取第一个节点
-        FlowStep currentStep = flowSteps.stream()
-            .filter(f -> f.getStepId() == initStep.getConditionTrue())
-            .findFirst()
-            .get();
+        FlowStep currentStep = initStep;
+        if (flowSteps.size() > 1){
+             currentStep = flowSteps.stream()
+                .filter(f -> f.getStepId() == initStep.getConditionTrue())
+                .findFirst()
+                .get();
+        }
+
 
         // 获取当前用户
         List<UserPipLineDTO> userPipLineDTOList = sysUserService.currentUserPipLine();

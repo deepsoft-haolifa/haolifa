@@ -38,6 +38,9 @@ public class ReimburseApplyUpDTO {
     @ApiModelProperty(value = "报销日期")
     private Date reimburseDate;
 
+    @ApiModelProperty(value = "出差人名称")
+    private String travelUserName;
+
     @ApiModelProperty(value = "户名")
     private String accountName;
 

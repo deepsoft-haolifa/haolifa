@@ -15,6 +15,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import static com.itextpdf.text.PageSize.A5;
 
@@ -39,16 +40,16 @@ public class RemiburseBXPrint {
             BaseFont typeface = BaseFont.createFont("/home/haolifa/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             Font font = new Font(typeface);
 
-            font.setSize(8);
+            font.setSize(ItextpdfUtil.titleSize);
             font.setColor(44, 44, 44);
-            document.add(ItextpdfUtil.getElements(font, 8, 44, "山西好利阀机械制造有限公司"));
+            document.add(ItextpdfUtil.getElements(font, ItextpdfUtil.titleSize, 44, "山西好利阀机械制造有限公司"));
 
             Paragraph start2 = new Paragraph("经费报销单", font);
             start2.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(start2);
 
 
-            font.setSize(6);
+            font.setSize(ItextpdfUtil.bodySize);
             font.setColor(44, 44, 44);
 
             PdfPTable table1 = getPdfPTable1(font);
@@ -60,7 +61,7 @@ public class RemiburseBXPrint {
             PdfPTable table2 = getPdfPTable2(font);
             document.add(table2);
 
-            document.add(ItextpdfUtil.getElements(font, 4, 164, "温馨提示：此报销金额以财务核定金额为准"));
+            document.add(ItextpdfUtil.getElements(font, 6, 164, "温馨提示：此报销金额以财务核定金额为准"));
 
 
             document.close();
@@ -174,11 +175,11 @@ public class RemiburseBXPrint {
         table.addCell(ItextpdfUtil.getPdfPCell("部门:  " + reimburseApplyDetailDTO.getDeptName(), font, 0, 1));
 //        table.addCell(ItextpdfUtil.getPdfPCell("", font, 0, 4));
 
-        String format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy-MM-dd hh:mm:ss");
+        String format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
         Paragraph elements3 = new Paragraph(format, font);
         PdfPCell pdfPCell = new PdfPCell(elements3);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        pdfPCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         pdfPCell.setBorder(0);
         pdfPCell.setMinimumHeight(20);
         pdfPCell.setLeading(2, 1);
@@ -221,8 +222,8 @@ public class RemiburseBXPrint {
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
 
         table.addCell(ItextpdfUtil.getCell("预约报销总金额（大写）", font));
-        table.addCell(ItextpdfUtil.getCell(" "+BigDecimalUtils.upperCase(reimburseApplyDetailDTO.getAmount().doubleValue()), font));
-        Paragraph elements = new Paragraph("¥" + reimburseApplyDetailDTO.getAmount().doubleValue(), font);
+        table.addCell(ItextpdfUtil.getCell(" "+BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount()), font));
+        Paragraph elements = new Paragraph("¥" + reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString(), font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -248,7 +249,7 @@ public class RemiburseBXPrint {
         pdfPCell1.setHorizontalAlignment(Element.ALIGN_LEFT);
 //        pdfPCell1.setColspan(3);
 //        pdfPCell1.setBorderWidthLeft(0);
-        pdfPCell1.setMinimumHeight(30);
+        pdfPCell1.setMinimumHeight(25);
         pdfPCell1.setBorderWidthRight(0);
         table.addCell(pdfPCell1);
 
@@ -257,7 +258,7 @@ public class RemiburseBXPrint {
         pdfPCell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
 //        pdfPCell2.setColspan(3);
-        pdfPCell2.setMinimumHeight(40);
+        pdfPCell2.setMinimumHeight(25);
         pdfPCell2.setBorderWidthLeft(0);
         pdfPCell2.setBorderWidthRight(0);
         table.addCell(pdfPCell2);
@@ -268,7 +269,7 @@ public class RemiburseBXPrint {
         pdfPCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
         pdfPCell3.setColspan(3);
-        pdfPCell3.setMinimumHeight(30);
+        pdfPCell3.setMinimumHeight(25);
         pdfPCell3.setBorderWidthLeft(0);
 //        pdfPCell6.setBorderWidthRight(0);
         table.addCell(pdfPCell3);
@@ -290,7 +291,7 @@ public class RemiburseBXPrint {
         pdfPCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell3.setHorizontalAlignment(Element.ALIGN_LEFT);
         pdfPCell3.setColspan(2);
-        pdfPCell3.setMinimumHeight(40);
+        pdfPCell3.setMinimumHeight(30);
 //        pdfPCell3.setBorderWidthLeft(0);
 //        pdfPCell6.setBorderWidthRight(0);
         table.addCell(pdfPCell3);
@@ -309,13 +310,14 @@ public class RemiburseBXPrint {
 //        pdfPCell1.setBorderWidthRight(0);
         table.addCell(pdfPCell1);
 
-        String f = "收款方名称： " + reimburseApplyDetailDTO.getAccountName() +
-            "\r\t" +
-            "\r\t" +
-            "开 户 行：" + reimburseApplyDetailDTO.getBankOfDeposit() +
-            "\r\t" +
-            "\r\t" +
-            "账    号：" + reimburseApplyDetailDTO.getCardNumber();
+
+        String f =
+            "收款方名称：" + reimburseApplyDetailDTO.getAccountName() +
+                ";\t         " +
+                "开户行\t：" + reimburseApplyDetailDTO.getBankOfDeposit() +
+                "\r\t" +
+                "\r\t" +
+                "账\t\t号：" + reimburseApplyDetailDTO.getCardNumber();
 
         Paragraph elements3 = new Paragraph(f, font);
         PdfPCell pdfPCell3 = new PdfPCell(elements3);
