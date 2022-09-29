@@ -544,9 +544,9 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         // 有些状态不能付款
         LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(selectByPrimaryKey.getPayStatus());
-//        if (LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
-//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
-//        }
+        if (LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
+        }
 
 
         SysUser sysUser = sysUserService.getSysUser(selectByPrimaryKey.getLoanUser());

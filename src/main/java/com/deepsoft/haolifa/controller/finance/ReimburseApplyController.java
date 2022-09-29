@@ -69,6 +69,7 @@ public class ReimburseApplyController {
 
     @ApiOperation("报销支付-获取节点列表")
     @PostMapping("/getReimburseApplyPayBillList")
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean<PageDTO<ReimburseApplyRSDTO>> getReimburseApplyPayBillList(@RequestBody ReimburseApplyRQDTO model) {
         return reimburseApplyService.getList(model);
     }
