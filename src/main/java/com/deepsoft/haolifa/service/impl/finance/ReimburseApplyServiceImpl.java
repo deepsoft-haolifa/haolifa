@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
@@ -85,6 +86,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
     @Autowired
     private PayUserMapper payUserMapper;
+    @Autowired
+    private OtherBillService otherBillService;
 
     @Autowired
     private BillService billService;
@@ -896,13 +899,33 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 // todo 扣减日记账金额
                 BizBillAddDTO bizBill = buildBizBillAddDTO(payDTO, applySAmount, sysUser,bizReimburseApplyS);
                 ResultBean save = billService.save(bizBill);
-                if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
                     return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
                 }
-            } else {
+            } else if (StringUtils.equalsIgnoreCase("2", payDTO.getBillNature())) {
                 BizBankBillAddDTO bizBankBill = buildBizBankBillAddDTO(payDTO, applySAmount,bizReimburseApplyS);
                 ResultBean save = bankBillService.save(bizBankBill);
-                if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
+                }
+            } else if (StringUtils.equalsIgnoreCase("3", payDTO.getBillNature())) {
+                BizOtherBillAddDTO otherBillAddDTO = new BizOtherBillAddDTO();
+                // 付款
+                otherBillAddDTO.setType("2");
+                otherBillAddDTO.setDeptId(bizReimburseApplyS.getDeptId());
+                otherBillAddDTO.setCompany(payDTO.getPayCompany());
+                otherBillAddDTO.setCertificateNumber("");
+                otherBillAddDTO.setOperateDate(new Date());
+                otherBillAddDTO.setPayWay(PayWayEnum.money_order_pay.getDesc());
+                otherBillAddDTO.setPaymentType(PayWayEnum.money_order_pay.getDesc());
+                otherBillAddDTO.setPayment(bizReimburseApplyS.getAmount());
+                otherBillAddDTO.setRemark("报销付款 " + bizReimburseApplyS.getAmount());
+                otherBillAddDTO.setPayCompany(payDTO.getPayCompany());
+                otherBillAddDTO.setPayAccount(payDTO.getPayAccount());
+
+                otherBillAddDTO.setCollectCompany(bizReimburseApplyS.getAccountName());
+                ResultBean save = otherBillService.save(otherBillAddDTO);
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
                     return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
                 }
             }
@@ -910,7 +933,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             // 增加-银行日记账
             BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizReimburseApplyS);
             ResultBean save = bankBillService.save(bizBankBillAddDTO);
-            if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
             }
         }
@@ -937,7 +960,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 财务管理->费用管理
         ExpensesDTO expensesDTO = buildExpensesDTO(bizReimburseApplyS, totalAmount, reimburseCostDetailList);
         ResultBean save = expensesService.save(expensesDTO);
-        if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
 
@@ -953,13 +976,15 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         bizBankBill.setCertificateNumber("");
         bizBankBill.setOperateDate(new Date());
         bizBankBill.setDeptId(bizReimburseApplyS.getDeptId());
-        bizBankBill.setPayWay(PayWayEnum.cash_pay.getDesc());
-        bizBankBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+        bizBankBill.setPayWay(PayWayEnum.check_pay.getDesc());
+        bizBankBill.setPaymentType(PayWayEnum.check_pay.getDesc());
         bizBankBill.setPayment(applySAmount);
         bizBankBill.setRemark("报销付款 " + applySAmount);
         bizBankBill.setPayCompany(payDTO.getPayCompany());
         bizBankBill.setPayAccount(payDTO.getPayAccount());
-        bizBankBill.setCollectCompany("");
+        bizBankBill.setCollectCompany(bizReimburseApplyS.getAccountName());
+
+
         return bizBankBill;
     }
 
@@ -974,6 +999,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         bizBill.setRemark("报销付款 " + applySAmount);
         bizBill.setString1(sysUser.getRealName());
         bizBill.setString2(payDTO.getPayCompany());
+
         return bizBill;
     }
 
@@ -999,6 +1025,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 //            BizSubjects subject = bizSubjectsMapper.selectByPrimaryKey(bizSubjectsBalance.getSubjectsId());
 //            expensesClassify = dictByTypeCodeMap.getOrDefault(subject.getType(), "");
 //            secondClassify = subject.getName();
+            expensesClassify = "差旅费";
             secondClassify = "差旅费";
         }
 

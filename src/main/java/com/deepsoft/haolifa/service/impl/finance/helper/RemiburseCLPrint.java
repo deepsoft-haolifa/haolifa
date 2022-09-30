@@ -43,14 +43,14 @@ public class RemiburseCLPrint {
 
             Font font = new Font(typeface);
 
-            document.add(ItextpdfUtil.getElements(font, ItextpdfUtil.titleSize, 44, "山西好利阀机械制造有限公司"));
+            document.add(ItextpdfUtil.getElements(font, 13, 44, "山西好利阀机械制造有限公司"));
 
             Paragraph start2 = new Paragraph("差旅费报销单", font);
             start2.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(start2);
 
 
-            font.setSize(ItextpdfUtil.bodySize);
+            font.setSize(9);
             font.setColor(44, 44, 44);
 
             PdfPTable table1 = getPdfPTable1(font);
@@ -171,20 +171,21 @@ public class RemiburseCLPrint {
     private static void h1(PdfPTable table, Font font) {
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
 
-        table.addCell(ItextpdfUtil.getPdfPCell("部门:  "+ reimburseApplyDetailDTO.getDeptName(), font, 0, 8));
-        table.addCell(ItextpdfUtil.getPdfPCell("项目经费号: "+reimburseApplyDetailDTO.getProjectCode()+""+reimburseApplyDetailDTO.getProjectCodeName(), font, 0, 8));
+        table.addCell(ItextpdfUtil.getPdfPCell("部门:  "+ reimburseApplyDetailDTO.getDeptName(), font, 0, 11));
+        table.addCell(ItextpdfUtil.getPdfPCell("项目经费号: "+reimburseApplyDetailDTO.getProjectCode()+""+reimburseApplyDetailDTO.getProjectCodeName(), font, 0, 11));
         String format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
-        table.addCell(ItextpdfUtil.getPdfPCell("报销时间: "+format, font, 0, 8));
+//        table.addCell(ItextpdfUtil.getPdfPCell(" "+format, font, 0, 8));
 
 
-        Paragraph elements3 = new Paragraph("报销人: "+reimburseApplyDetailDTO.getReimburseUserName(), font);
+//        Paragraph elements3 = new Paragraph("报销人: "+reimburseApplyDetailDTO.getReimburseUserName(), font);
+        Paragraph elements3 = new Paragraph(format, font);
         PdfPCell pdfPCell = new PdfPCell(elements3);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         pdfPCell.setBorder(0);
         pdfPCell.setMinimumHeight(20);
         pdfPCell.setLeading(2, 1);
-        pdfPCell.setColspan(8);
+        pdfPCell.setColspan(10);
         table.addCell(pdfPCell);
 
         // 普通报销 + 借款冲抵100元 摘要
@@ -213,68 +214,68 @@ public class RemiburseCLPrint {
     }
 
     private static void hn(PdfPTable table, Font font) {
-        table.addCell(ItextpdfUtil.getCell("月", font));
-        table.addCell(ItextpdfUtil.getCell("日", font));
-        table.addCell(ItextpdfUtil.getCell("起点", font, 4));
-        table.addCell(ItextpdfUtil.getCell("月", font));
-        table.addCell(ItextpdfUtil.getCell("日", font));
-        table.addCell(ItextpdfUtil.getCell("终点", font, 4));
+        table.addCell(ItextpdfUtil.getCell("月", font,2));
+        table.addCell(ItextpdfUtil.getCell("日", font,2));
+        table.addCell(ItextpdfUtil.getCell("起点", font, 3));
+        table.addCell(ItextpdfUtil.getCell("月", font,2));
+        table.addCell(ItextpdfUtil.getCell("日", font,2));
+        table.addCell(ItextpdfUtil.getCell("终点", font, 3));
 
-        table.addCell(ItextpdfUtil.getCell("交通工具", font, 4));
-        table.addCell(ItextpdfUtil.getCell("单据张数", font, 3));
+        table.addCell(ItextpdfUtil.getCell("交通工具", font, 2));
+        table.addCell(ItextpdfUtil.getCell("单据张数", font, 2));
         table.addCell(ItextpdfUtil.getCell("金额", font, 3));
 
-        table.addCell(ItextpdfUtil.getCell("天数", font, 3));
-        table.addCell(ItextpdfUtil.getCell("金额", font, 2));
+        table.addCell(ItextpdfUtil.getCell("天数", font, 2));
+        table.addCell(ItextpdfUtil.getCell("金额", font, 3));
 
 
-        table.addCell(ItextpdfUtil.getCell("项目名称", font, 3));
-        table.addCell(ItextpdfUtil.getCell("金额", font, 2));
+        table.addCell(ItextpdfUtil.getCell("项目名称", font, 2));
+        table.addCell(ItextpdfUtil.getCell("金额", font, 4));
 
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
 
         reimburseApplyDetailDTO.getReimburseTravelDetailRSDTOList()
             .forEach(de -> {
-                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getDepTime(),"MM"), font));
-                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getDepTime(),"dd"), font));
-                table.addCell(ItextpdfUtil.getCell(de.getDepAddress(), font, 4));
-                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getArrTime(),"MM"), font));
-                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getArrTime(),"dd"), font));
-                table.addCell(ItextpdfUtil.getCell(de.getArrAddress(), font, 4));
+                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getDepTime(),"MM"), font,2));
+                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getDepTime(),"dd"), font,2));
+                table.addCell(ItextpdfUtil.getCell(de.getDepAddress(), font, 3));
+                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getArrTime(),"MM"), font,2));
+                table.addCell(ItextpdfUtil.getCell(DateUtil.format(de.getArrTime(),"dd"), font,2));
+                table.addCell(ItextpdfUtil.getCell(de.getArrAddress(), font, 3));
 
-                table.addCell(ItextpdfUtil.getCell(de.getVehicleCN(), font, 4));
-                table.addCell(ItextpdfUtil.getCell(de.getVehicleDocNum()+"", font, 3));
+                table.addCell(ItextpdfUtil.getCell(de.getVehicleCN(), font, 2));
+                table.addCell(ItextpdfUtil.getCell(de.getVehicleDocNum()+"", font, 2));
                 table.addCell(ItextpdfUtil.getCell(de.getVehicleAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()+"", font, 3));
 
-                table.addCell(ItextpdfUtil.getCell(de.getTravelDays()+"", font, 3));
-                table.addCell(ItextpdfUtil.getCell(de.getTravelSubsidyAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()+"", font, 2));
+                table.addCell(ItextpdfUtil.getCell(de.getTravelDays()+"", font, 2));
+                table.addCell(ItextpdfUtil.getCell(de.getTravelSubsidyAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()+"", font, 3));
 
 
-                table.addCell(ItextpdfUtil.getCell(de.getProjectTypeCN(), font, 3));
-                table.addCell(ItextpdfUtil.getCell(de.getProjectAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()+"", font, 2));
+                table.addCell(ItextpdfUtil.getCell(de.getProjectTypeCN(), font, 2));
+                table.addCell(ItextpdfUtil.getCell(de.getProjectAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()+"", font, 4));
 
 
             });
 
         if (reimburseApplyDetailDTO.getReimburseTravelDetailRSDTOList().size() <= 4){
             for (int i = 0; i <  4 - reimburseApplyDetailDTO.getReimburseTravelDetailRSDTOList().size(); i++) {
-                table.addCell(ItextpdfUtil.getCell("", font));
-                table.addCell(ItextpdfUtil.getCell("", font));
-                table.addCell(ItextpdfUtil.getCell("", font, 4));
-                table.addCell(ItextpdfUtil.getCell("", font));
-                table.addCell(ItextpdfUtil.getCell("", font));
-                table.addCell(ItextpdfUtil.getCell("", font, 4));
-
-                table.addCell(ItextpdfUtil.getCell("", font, 4));
+                table.addCell(ItextpdfUtil.getCell("", font,2));
+                table.addCell(ItextpdfUtil.getCell("", font,2));
                 table.addCell(ItextpdfUtil.getCell("", font, 3));
+                table.addCell(ItextpdfUtil.getCell("", font,2));
+                table.addCell(ItextpdfUtil.getCell("", font,2));
                 table.addCell(ItextpdfUtil.getCell("", font, 3));
 
-                table.addCell(ItextpdfUtil.getCell("", font, 3));
                 table.addCell(ItextpdfUtil.getCell("", font, 2));
-
-
-                table.addCell(ItextpdfUtil.getCell("", font, 3));
                 table.addCell(ItextpdfUtil.getCell("", font, 2));
+                table.addCell(ItextpdfUtil.getCell("", font, 3));
+
+                table.addCell(ItextpdfUtil.getCell("", font, 2));
+                table.addCell(ItextpdfUtil.getCell("", font, 3));
+
+
+                table.addCell(ItextpdfUtil.getCell("", font, 2));
+                table.addCell(ItextpdfUtil.getCell("", font, 4));
             }
         }
 

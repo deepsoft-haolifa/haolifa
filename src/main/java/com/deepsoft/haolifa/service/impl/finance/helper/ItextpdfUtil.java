@@ -79,7 +79,7 @@ public class ItextpdfUtil {
         CustomDashedLineSeparator separator = new CustomDashedLineSeparator();
         separator.setDash(5);
         separator.setGap(5);
-        separator.setOffset(-10);
+        separator.setOffset(5);
         separator.setPercentage(80);
         separator.setLineWidth((float) 1);
         Chunk linebreak = new Chunk(separator);
@@ -87,6 +87,7 @@ public class ItextpdfUtil {
 
         Paragraph end0 = new Paragraph("虚线以下由财务人员填写", font);
         end0.setAlignment(Paragraph.ALIGN_CENTER);
+        end0.setSpacingBefore(-15);
         document.add(end0);
     }
 

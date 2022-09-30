@@ -556,7 +556,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         if (StringUtils.equalsIgnoreCase("1", loanApplyPayDTO.getBillNature())) {
             BizBillAddDTO bizBill = buildBizBillAddDTO(loanApplyPayDTO, selectByPrimaryKey, sysUser);
             ResultBean save = billService.save(bizBill);
-            if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
             }
 
@@ -576,7 +576,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             bizBankBill.setPayAccount(loanApplyPayDTO.getPayAccount());
             bizBankBill.setCollectCompany(sysUser.getRealName());
             ResultBean save = bankBillService.save(bizBankBill);
-            if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
             }
         } else if (StringUtils.equalsIgnoreCase("3", loanApplyPayDTO.getBillNature())) {
@@ -595,7 +595,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             otherBillAddDTO.setPayAccount(loanApplyPayDTO.getPayAccount());
             otherBillAddDTO.setCollectCompany(sysUser.getRealName());
             ResultBean save = otherBillService.save(otherBillAddDTO);
-            if (StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,save.getCode())){
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
             }
         }

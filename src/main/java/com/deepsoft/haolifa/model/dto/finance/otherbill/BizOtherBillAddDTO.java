@@ -32,6 +32,7 @@ public class BizOtherBillAddDTO {
     private String payCompany;
     @ApiModelProperty(value = "付款单位Id")
     private String payCompanyId;
+
     @ApiModelProperty(value = "收款单位")
     private String collectCompany;
     @ApiModelProperty(value = "收款")
