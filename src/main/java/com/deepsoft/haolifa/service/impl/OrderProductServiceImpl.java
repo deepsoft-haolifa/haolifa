@@ -1398,66 +1398,26 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 listDTOS.stream().forEach(a -> {
                     // 通用料
                     String type = a.getType();
-                    if (type.equals(CommonEnum.ProductModelType.TONG_YONG.code)) {
-                        List<MaterialResultDTO> list = a.getList();
-                        list.stream().forEach(b -> {
-                            int materialCount = productNumber * b.getSupportQuantity();
-                            String graphNo = b.getGraphNo();
-                            if (tongyongMaterialsMap.containsKey(graphNo)) {
-                                MaterialQuantityDTO materialQuantityDTO = tongyongMaterialsMap.get(graphNo);
-                                Integer quantity = materialQuantityDTO.getQuantity();
-                                materialQuantityDTO.setQuantity(quantity + materialCount);
-                                tongyongMaterialsMap.put(graphNo, materialQuantityDTO);
-                            } else {
-                                MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
-                                materialQuantityDTO.setQuantity(materialCount);
-                                materialQuantityDTO.setGraphNo(graphNo);
-                                materialQuantityDTO.setType(type);
-                                materialQuantityDTO.setMaterialName(b.getMaterialName());
-                                tongyongMaterialsMap.put(graphNo, materialQuantityDTO);
-                            }
-                        });
-                    } else {
-                        List<MaterialResultDTO> list = a.getList();
-                        list.stream().forEach(b -> {
-                            String graphNo = b.getGraphNo();
-                            int materialCount = productNumber * b.getSupportQuantity();
-                            if (materialsMap.containsKey(graphNo)) {
-                                MaterialQuantityDTO materialQuantityDTO = materialsMap.get(graphNo);
-                                Integer quantity = materialQuantityDTO.getQuantity();
-                                materialQuantityDTO.setQuantity(quantity + materialCount);
-                                materialsMap.put(graphNo, materialQuantityDTO);
-                            } else {
-                                MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
-                                materialQuantityDTO.setQuantity(materialCount);
-                                materialQuantityDTO.setGraphNo(graphNo);
-                                materialQuantityDTO.setMaterialName(b.getMaterialName());
-                                materialQuantityDTO.setType(type);
-                                materialsMap.put(graphNo, materialQuantityDTO);
-                            }
-                        });
-                    }
+                    List<MaterialResultDTO> list = a.getList();
+                    list.stream().forEach(b -> {
+                        String graphNo = b.getGraphNo();
+                        int materialCount = productNumber * b.getSupportQuantity();
+                        if (materialsMap.containsKey(graphNo)) {
+                            MaterialQuantityDTO materialQuantityDTO = materialsMap.get(graphNo);
+                            Integer quantity = materialQuantityDTO.getQuantity();
+                            materialQuantityDTO.setQuantity(quantity + materialCount);
+                            materialsMap.put(graphNo, materialQuantityDTO);
+                        } else {
+                            MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
+                            materialQuantityDTO.setQuantity(materialCount);
+                            materialQuantityDTO.setGraphNo(graphNo);
+                            materialQuantityDTO.setMaterialName(b.getMaterialName());
+                            materialQuantityDTO.setType(type);
+                            materialsMap.put(graphNo, materialQuantityDTO);
+                        }
+                    });
                 });
             });
-
-            log.info("checkMaterial tongyong orderNo:{}, material count:{},common material count:{}", orderNo,
-                tongyongMaterialsMap.size(), materialsMap.size());
-            // 循环通用零件，直接成功
-            Iterator<Map.Entry<String, MaterialQuantityDTO>> tongyongIterator = tongyongMaterialsMap.entrySet().iterator();
-            while (tongyongIterator.hasNext()) {
-                OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
-                Map.Entry<String, MaterialQuantityDTO> next = tongyongIterator.next();
-                String materialGraphNo = next.getKey();
-                MaterialQuantityDTO materialQuantityDTO = next.getValue();
-                orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-                orderCheckMaterialDTO.setCheckResultMsg("核料成功");
-                orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
-                orderCheckMaterialDTO.setMaterialName(materialQuantityDTO.getMaterialName());
-                orderCheckMaterialDTO.setMaterialClassifyId(CommonEnum.ProductModelType.TONG_YONG.classifyId);
-                orderCheckMaterialDTO.setMaterialCount(materialQuantityDTO.getQuantity());
-                orderCheckMaterialDTO.setOrderNo(orderNo);
-                orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
-            }
 
             // 核料过程中，正在机加工和喷涂的数量
             List<CheckMaterialLockDTO> materialLockDTOList = new ArrayList<>();
@@ -2472,7 +2432,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         OrderTechnicalDetailedRel orderTechnicalDetailedRel1 = dto.get(0);
         // 保存前先删除这个订单的数据
         String orderNo = orderTechnicalDetailedRel1.getOrderNo();
-        OrderTechnicalDetailedRelExample example=new OrderTechnicalDetailedRelExample();
+        OrderTechnicalDetailedRelExample example = new OrderTechnicalDetailedRelExample();
         example.or().andOrderNoEqualTo(orderNo);
         int delete = orderTechnicalDetailedRelMapper.deleteByExample(example);
 
