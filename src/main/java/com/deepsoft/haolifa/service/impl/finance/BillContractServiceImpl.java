@@ -290,6 +290,7 @@ public class BillContractServiceImpl implements BillContractService {
 
             bizBillContract.setUpdateTime(new Date());
             bizBillContract.setUpdateUser(customUser.getId());
+            bizBillContract.setId(bizBillContract.getId());
             bizBillContractMapper.updateByPrimaryKeySelective(bizBillContract);
         }
 

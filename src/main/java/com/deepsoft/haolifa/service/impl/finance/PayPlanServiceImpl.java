@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
@@ -13,6 +14,8 @@ import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
@@ -79,6 +82,9 @@ public class PayPlanServiceImpl implements PayPlanService {
     private ExpensesService expensesService;
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private ProjectBudgetService projectBudgetService;
 
     @Override
     public ResultBean save(BizPayPlanAddDTO model) {
@@ -215,11 +221,33 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         // 余额扣款
         {
-            BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
-            bizSubjects.setSubjectsId(SubjectEnum.clf_id.getCode());
-            bizSubjects.setDeptId(bizPayPlan.getDeptId());
-            bizSubjects.setAmount(bigDecimal);
-            subjectBalanceService.decreaseAmount(bizSubjects);
+//            BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
+//            bizSubjects.setSubjectsId(SubjectEnum.clf_id.getCode());
+//            bizSubjects.setDeptId(bizPayPlan.getDeptId());
+//            bizSubjects.setAmount(bigDecimal);
+//            subjectBalanceService.decreaseAmount(bizSubjects);
+
+            ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+            queryBO.setName("原材料");
+            queryBO.setDeptId(bizPayPlan.getDeptId());
+            queryBO.setDate(new Date());
+            // 校验当月项目预算
+            BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
+            //  当月未维护
+            if (ObjectUtil.isNull(bizProjectBudget)) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
+            }
+            // 金额不足
+            if (bizProjectBudget.getBalanceQuota().compareTo(bigDecimal) < 0) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
+            }
+
+            // 扣减预算
+            ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+            budgetUpDTO.setId(bizProjectBudget.getId());
+            budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(bigDecimal));
+            projectBudgetService.update(budgetUpDTO);
+
         }
 
         //

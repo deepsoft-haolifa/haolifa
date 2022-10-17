@@ -1636,6 +1636,76 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andFileUrlIsNull() {
+            addCriterion("file_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIsNotNull() {
+            addCriterion("file_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlEqualTo(String value) {
+            addCriterion("file_url =", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotEqualTo(String value) {
+            addCriterion("file_url <>", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlGreaterThan(String value) {
+            addCriterion("file_url >", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("file_url >=", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLessThan(String value) {
+            addCriterion("file_url <", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLessThanOrEqualTo(String value) {
+            addCriterion("file_url <=", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlLike(String value) {
+            addCriterion("file_url like", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotLike(String value) {
+            addCriterion("file_url not like", value, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlIn(List<String> values) {
+            addCriterion("file_url in", values, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotIn(List<String> values) {
+            addCriterion("file_url not in", values, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlBetween(String value1, String value2) {
+            addCriterion("file_url between", value1, value2, "fileUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileUrlNotBetween(String value1, String value2) {
+            addCriterion("file_url not between", value1, value2, "fileUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

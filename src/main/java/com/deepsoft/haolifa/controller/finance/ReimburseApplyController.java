@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.enums.ReimburseTypeEnum;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -89,6 +91,12 @@ public class ReimburseApplyController {
 
         ResultBean<ReimburseApplyDetailDTO> info = reimburseApplyService.getInfo(id);
         ReimburseApplyDetailDTO reimburseApplyDetailDTO =info.getResult();
+        if (CollectionUtil.isEmpty(reimburseApplyDetailDTO.getFileUrlList())){
+            ResultBean<Object> error = ResultBean.error("请先上传附件");
+            response.getOutputStream().write(JSON.toJSONBytes(error));
+        }
+
+
         if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getType(), ReimburseTypeEnum.travle.getCode())){
             RemiburseCLPrint.print(reimburseApplyDetailDTO,response);
         }else {

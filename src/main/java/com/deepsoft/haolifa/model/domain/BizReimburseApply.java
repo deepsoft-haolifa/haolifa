@@ -50,6 +50,8 @@ public class BizReimburseApply {
 
     private String projectCode;
 
+    private String fileUrl;
+
     private String remark;
 
     private String delFlag;
@@ -62,7 +64,7 @@ public class BizReimburseApply {
 
     private Date updateTime;
 
-    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payType, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String reimburseUserNo, String travelUserName, BigDecimal offsetAmount, Integer loanId, String applyStatus, String projectCode, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payType, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String reimburseUserNo, String travelUserName, BigDecimal offsetAmount, Integer loanId, String applyStatus, String projectCode, String fileUrl, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.type = type;
@@ -86,6 +88,7 @@ public class BizReimburseApply {
         this.loanId = loanId;
         this.applyStatus = applyStatus;
         this.projectCode = projectCode;
+        this.fileUrl = fileUrl;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
@@ -280,6 +283,14 @@ public class BizReimburseApply {
 
     public void setProjectCode(String projectCode) {
         this.projectCode = projectCode == null ? null : projectCode.trim();
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
     }
 
     public String getRemark() {

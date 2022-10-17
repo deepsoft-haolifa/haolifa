@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
@@ -138,6 +139,7 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
                 criteria.andDeptIdEqualTo(-1);
             }
         }
+        bizProjectBudgetExample.setOrderByClause("create_time desc");
 
         Page<BizProjectBudget> pageData = PageHelper
             .startPage(model.getPageNum(), model.getPageSize())
@@ -169,13 +171,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
     @Override
     public ResultBean<PageDTO<ProjectBudgetRSDTO>> getCurUserProjectBudgetList(ProjectBudgetRQDTO model) {
-        if (model.getPageNum() == null || model.getPageNum() == 0) {
-            model.setPageNum(1);
-        }
-        if (model.getPageSize() == null || model.getPageSize() == 0) {
-            model.setPageSize(10);
-        }
-
+        model.setPageNum(1);
+        model.setPageSize(Integer.MAX_VALUE);
 
         BizProjectBudgetExample bizProjectBudgetExample = new BizProjectBudgetExample();
         BizProjectBudgetExample.Criteria criteria = bizProjectBudgetExample.createCriteria();
@@ -187,11 +184,16 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         Integer departId = sysUser.getDepartId();
         criteria.andDeptIdEqualTo(departId);
 
-        if (StringUtils.isNotEmpty(model.getName())) {
-            criteria.andNameLike("%" + model.getName() + "%");
-        }
-        if (StringUtils.isNotEmpty(model.getCode())) {
-            criteria.andCodeLike("%" + model.getCode() + "%");
+        // 当前年
+        Date currentDate = new Date();
+        String year = DateUtil.year(currentDate) + "";
+        criteria.andYearEqualTo(year);
+        // 当前月
+        Integer dd = Integer.parseInt(DateUtil.format(currentDate, "dd"));
+        if (dd < 26) {
+            criteria.andMonthEqualTo((DateUtil.month(currentDate) + 1) + "");
+        } else {
+            criteria.andMonthEqualTo((DateUtil.month(currentDate) + 2) + "");
         }
 
         Page<BizProjectBudget> pageData = PageHelper
@@ -199,7 +201,6 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
             .doSelectPage(() -> {
                 bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample);
             });
-
 
         List<ProjectBudgetRSDTO> assetsRSDTOList = pageData.getResult().stream()
             .map(assets -> {
@@ -223,8 +224,15 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
         criteria.andCodeEqualTo(model.getCode());
         criteria.andDeptIdEqualTo(model.getDeptId());
-        criteria.andYearEqualTo(model.getYear());
-        criteria.andMonthEqualTo(model.getMonth());
+
+        String year = DateUtil.year(model.getDate()) + "";
+        criteria.andYearEqualTo(year);
+        Integer dd = Integer.parseInt(DateUtil.format(model.getDate(), "dd"));
+        if (dd < 26) {
+            criteria.andMonthEqualTo((DateUtil.month(model.getDate()) + 1) + "");
+        } else {
+            criteria.andMonthEqualTo((DateUtil.month(model.getDate()) + 2) + "");
+        }
 
         bizProjectBudgetExample.setOrderByClause("create_time desc limit 1");
         List<BizProjectBudget> projectBudgetList = bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample);

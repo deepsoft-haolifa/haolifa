@@ -60,6 +60,8 @@ public class BizLoanApply {
 
     private String loanUserNo;
 
+    private String fileUrl;
+
     private String remark;
 
     private String delFlag;
@@ -72,7 +74,7 @@ public class BizLoanApply {
 
     private Date updateTime;
 
-    public BizLoanApply(Integer id, String serialNo, Integer deptId, Date loanDate, Date expectRepaymentDate, BigDecimal amount, String purpose, Integer loanUser, String amountType, String billNature, String accountName, String cardNumber, String bankOfDeposit, String applyStatus, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, BigDecimal paymentAmount, String paymentStatus, String projectCode, String payType, String travelFlag, String travelArrAddress, Integer travelDays, Integer travelPeoNum, String loanUserNo, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizLoanApply(Integer id, String serialNo, Integer deptId, Date loanDate, Date expectRepaymentDate, BigDecimal amount, String purpose, Integer loanUser, String amountType, String billNature, String accountName, String cardNumber, String bankOfDeposit, String applyStatus, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, BigDecimal paymentAmount, String paymentStatus, String projectCode, String payType, String travelFlag, String travelArrAddress, Integer travelDays, Integer travelPeoNum, String loanUserNo, String fileUrl, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.deptId = deptId;
@@ -101,6 +103,7 @@ public class BizLoanApply {
         this.travelDays = travelDays;
         this.travelPeoNum = travelPeoNum;
         this.loanUserNo = loanUserNo;
+        this.fileUrl = fileUrl;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
@@ -335,6 +338,14 @@ public class BizLoanApply {
 
     public void setLoanUserNo(String loanUserNo) {
         this.loanUserNo = loanUserNo == null ? null : loanUserNo.trim();
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
     }
 
     public String getRemark() {

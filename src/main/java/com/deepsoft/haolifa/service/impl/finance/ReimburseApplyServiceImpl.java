@@ -11,6 +11,7 @@ import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.finance.FileDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
@@ -26,6 +27,7 @@ import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTra
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.service.finance.*;
 import com.deepsoft.haolifa.util.DateUtils;
+import com.deepsoft.haolifa.util.QiniuUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +40,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -122,8 +121,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
         queryBO.setCode(model.getProjectCode());
         queryBO.setDeptId(sysUser.getDepartId());
-        queryBO.setYear(DateUtils.getSysYear());
-        queryBO.setMonth(DateUtil.format(new Date(), "MM"));
+        queryBO.setDate(new Date());
         // 校验当月项目预算
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
         //  当月未维护
@@ -153,6 +151,19 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 1 添加主数据
         String ser = "FP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3);
         BizReimburseApply reimburseApply = buildBizReimburseApply(model, customUser, sysUser, totalAmount, ser);
+
+        //上传到7牛文件服务器
+        String fileUrl = "";
+        if (CollectionUtil.isNotEmpty(model.getFileDTOList())){
+            List<String> fileUrlList = new ArrayList<>();
+            for (FileDTO fileDTO:model.getFileDTOList()){
+                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
+            }
+            fileUrl =  fileUrlList.stream().collect(Collectors.joining(","));
+        }
+        reimburseApply.setFileUrl(fileUrl);
+
+
         int insertId = bizReimburseApplyMapper.insertSelective(reimburseApply);
 
 
@@ -433,8 +444,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
         queryBO.setCode(model.getProjectCode());
         queryBO.setDeptId(sysUser.getDepartId());
-        queryBO.setYear(DateUtils.getSysYear());
-        queryBO.setMonth(DateUtil.format(new Date(), "MM"));
+        queryBO.setDate(new Date());
         // 校验当月项目预算
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
         //  当月未维护
@@ -489,6 +499,17 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             }
         }
 
+        //上传到7牛文件服务器
+        if (CollectionUtil.isNotEmpty(model.getFileDTOList())){
+            String fileUrl = "";
+            List<String> fileUrlList = new ArrayList<>();
+            for (FileDTO fileDTO:model.getFileDTOList()){
+                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
+            }
+            fileUrl =  fileUrlList.stream().collect(Collectors.joining(","));
+            reimburseApply.setFileUrl(fileUrl);
+        }
+
         int update = bizReimburseApplyMapper.updateByPrimaryKeySelective(reimburseApply);
         return ResultBean.success(update);
     }
@@ -497,8 +518,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
         queryBO.setCode(selectByPrimaryKey.getProjectCode());
         queryBO.setDeptId(selectByPrimaryKey.getDeptId());
-        queryBO.setYear(DateUtil.format(selectByPrimaryKey.getCreateTime(), "yyyy"));
-        queryBO.setMonth(DateUtil.format(selectByPrimaryKey.getCreateTime(), "MM"));
+        queryBO.setDate(selectByPrimaryKey.getCreateTime());
         // 校验当月项目预算
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
 
@@ -634,6 +654,13 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             BizProjectBudget projectBudget = bizProjectBudgetMapper.getProjectBudgetByCode(reimburseApplyRSDTO.getProjectCode());
             reimburseApplyRSDTO.setProjectCodeName(projectBudget.getName());
         }
+
+        if (StringUtils.isNotEmpty(reimburseApply.getFileUrl())){
+            reimburseApplyRSDTO.setFileUrlList(Arrays.asList(reimburseApply.getFileUrl().split(",").clone()));
+        }else {
+            reimburseApplyRSDTO.setFileUrlList(new ArrayList<>());
+        }
+
         return ResultBean.success(reimburseApplyRSDTO);
     }
 
@@ -692,7 +719,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         //借款人名称
         if (StringUtils.isNotEmpty(model.getReimburseUser())) {
             SysUserExample sysUserExample = new SysUserExample();
-            sysUserExample.createCriteria().andUsernameLike(model.getReimburseUser());
+            sysUserExample.createCriteria().andUsernameLike("%" +model.getReimburseUser()+"%" );
             List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
             List<Integer> userIdList = sysUsers.stream()
                 .map(SysUser::getId)
@@ -776,6 +803,13 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 );
 //                 canPay = true;
                 reimburseApplyRSDTO.setCanPay(canPay);
+
+                if (StringUtils.isNotEmpty(reimburseApply.getFileUrl())){
+                    reimburseApplyRSDTO.setFileUrlList(Arrays.asList(reimburseApply.getFileUrl().split(",").clone()));
+                }else {
+                    reimburseApplyRSDTO.setFileUrlList(new ArrayList<>());
+                }
+
                 return reimburseApplyRSDTO;
             })
             .collect(Collectors.toList());
@@ -828,8 +862,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
         queryBO.setCode(reimburseApply.getProjectCode());
         queryBO.setDeptId(reimburseApply.getDeptId());
-        queryBO.setYear(DateUtil.format(reimburseApply.getCreateTime(), "yyyy"));
-        queryBO.setMonth(DateUtil.format(reimburseApply.getCreateTime(), "MM"));
+        queryBO.setDate(reimburseApply.getCreateTime());
         // 校验当月项目预算
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
         // 金额不足

@@ -211,10 +211,10 @@ public class RemiburseBXPrint {
         reimburseApplyDetailDTO.getReimburseCostDetailRSDTOList()
             .forEach(de -> {
                 table.addCell(ItextpdfUtil.getCell(de.getSubjectsType() + de.getSubjectsTypeName(), font));
-                table.addCell(ItextpdfUtil.getCell(de.getRemark(), font));
+                table.addCell(ItextpdfUtil.getCell(reimburseApplyDetailDTO.getRemark(), font));
                 table.addCell(ItextpdfUtil.getCell(de.getDocNum() + "", font));
                 table.addCell(ItextpdfUtil.getCell(de.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "", font));
-                table.addCell(ItextpdfUtil.getCell(reimburseApplyDetailDTO.getRemark(), font));
+                table.addCell(ItextpdfUtil.getCell(de.getRemark(), font));
             });
 
         if (reimburseApplyDetailDTO.getReimburseCostDetailRSDTOList().size() <= 4) {

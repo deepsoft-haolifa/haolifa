@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -111,4 +112,6 @@ public class ReimburseApplyRSDTO {
     private Boolean canPay = false;
 
 
+    @ApiModelProperty(value = "文件 三期新增字段")
+    private List<String> fileUrlList;
 }

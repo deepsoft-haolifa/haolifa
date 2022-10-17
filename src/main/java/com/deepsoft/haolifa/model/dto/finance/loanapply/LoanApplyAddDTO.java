@@ -1,15 +1,19 @@
 package com.deepsoft.haolifa.model.dto.finance.loanapply;
 
+import com.deepsoft.haolifa.model.dto.finance.FileDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class LoanApplyAddDTO {
+
+
     @ApiModelProperty(value = "借款部门id")
     private Integer deptId;
 
@@ -31,6 +35,9 @@ public class LoanApplyAddDTO {
     @ApiModelProperty(value = "出差人数 三期新增字段")
     private Integer travelPeoNum;
 
+
+    @ApiModelProperty(value = "文件 三期新增字段")
+    private List<FileDTO> fileDTOList;
 
 
     @ApiModelProperty(value = "借款日期")

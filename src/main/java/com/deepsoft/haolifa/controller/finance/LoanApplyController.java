@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
@@ -116,6 +118,11 @@ public class LoanApplyController {
 
         ResultBean<LoanApplyInfoRSDTO> info = loanApplyService.getInfo(id);
         LoanApplyInfoRSDTO loanApplyInfoRSDTO =info.getResult();
+        if (CollectionUtil.isEmpty(loanApplyInfoRSDTO.getFileUrlList())){
+            ResultBean<Object> error = ResultBean.error("请先上传附件");
+            response.getOutputStream().write(JSON.toJSONBytes(error));
+        }
+
         LoanPrint.print(loanApplyInfoRSDTO,response);
     }
 

@@ -31,6 +31,7 @@
       <arg column="travel_days" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="travel_peo_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="loan_user_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="file_url" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -102,7 +103,8 @@
     amount_type, bill_nature, account_name, card_number, bank_of_deposit, apply_status,
     pay_company, pay_company_id, pay_account, pay_time, pay_status, payment_amount, payment_status,
     project_code, pay_type, travel_flag, travel_arr_address, travel_days, travel_peo_num,
-    loan_user_no, remark, del_flag, create_user, create_time, update_user, update_time
+    loan_user_no, file_url, remark, del_flag, create_user, create_time, update_user,
+    update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizLoanApplyExample" resultMap="BaseResultMap">
     select
@@ -147,9 +149,9 @@
       payment_amount, payment_status, project_code,
       pay_type, travel_flag, travel_arr_address,
       travel_days, travel_peo_num, loan_user_no,
-      remark, del_flag, create_user,
-      create_time, update_user, update_time
-      )
+      file_url, remark, del_flag,
+      create_user, create_time, update_user,
+      update_time)
     values (#{serialNo,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER}, #{loanDate,jdbcType=TIMESTAMP},
       #{expectRepaymentDate,jdbcType=TIMESTAMP}, #{amount,jdbcType=DECIMAL}, #{purpose,jdbcType=VARCHAR},
       #{loanUser,jdbcType=INTEGER}, #{amountType,jdbcType=CHAR}, #{billNature,jdbcType=CHAR},
@@ -159,9 +161,9 @@
       #{paymentAmount,jdbcType=DECIMAL}, #{paymentStatus,jdbcType=CHAR}, #{projectCode,jdbcType=VARCHAR},
       #{payType,jdbcType=CHAR}, #{travelFlag,jdbcType=CHAR}, #{travelArrAddress,jdbcType=VARCHAR},
       #{travelDays,jdbcType=INTEGER}, #{travelPeoNum,jdbcType=INTEGER}, #{loanUserNo,jdbcType=VARCHAR},
-      #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{fileUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR},
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizLoanApply">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -249,6 +251,9 @@
       </if>
       <if test="loanUserNo != null">
         loan_user_no,
+      </if>
+      <if test="fileUrl != null">
+        file_url,
       </if>
       <if test="remark != null">
         remark,
@@ -350,6 +355,9 @@
       </if>
       <if test="loanUserNo != null">
         #{loanUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null">
+        #{fileUrl,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -464,6 +472,9 @@
       <if test="record.loanUserNo != null">
         loan_user_no = #{record.loanUserNo,jdbcType=VARCHAR},
       </if>
+      <if test="record.fileUrl != null">
+        file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -517,6 +528,7 @@
       travel_days = #{record.travelDays,jdbcType=INTEGER},
       travel_peo_num = #{record.travelPeoNum,jdbcType=INTEGER},
       loan_user_no = #{record.loanUserNo,jdbcType=VARCHAR},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       del_flag = #{record.delFlag,jdbcType=CHAR},
       create_user = #{record.createUser,jdbcType=INTEGER},
@@ -611,6 +623,9 @@
       <if test="loanUserNo != null">
         loan_user_no = #{loanUserNo,jdbcType=VARCHAR},
       </if>
+      <if test="fileUrl != null">
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -661,6 +676,7 @@
       travel_days = #{travelDays,jdbcType=INTEGER},
       travel_peo_num = #{travelPeoNum,jdbcType=INTEGER},
       loan_user_no = #{loanUserNo,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       del_flag = #{delFlag,jdbcType=CHAR},
       create_user = #{createUser,jdbcType=INTEGER},

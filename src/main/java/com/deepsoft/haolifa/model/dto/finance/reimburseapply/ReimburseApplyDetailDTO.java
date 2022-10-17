@@ -121,4 +121,7 @@ public class ReimburseApplyDetailDTO {
     @ApiModelProperty(value = "差旅报销")
     List<ReimburseTravelDetailRSDTO> reimburseTravelDetailRSDTOList;
 
+
+    @ApiModelProperty(value = "文件 三期新增字段")
+    private List<String> fileUrlList;
 }
