@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.finance.loanapply;
 
+import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -121,5 +122,5 @@ public class LoanApplyInfoRSDTO {
 
 
     @ApiModelProperty(value = "文件 三期新增字段")
-    private List<String> fileUrlList;
+    private List<FileUrlDTO> fileUrlList;
 }

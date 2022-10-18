@@ -32,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -116,6 +117,7 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultBean update(BizPayPlanPayDTO planPayDTO) {
 
 
@@ -142,7 +144,8 @@ public class PayPlanServiceImpl implements PayPlanService {
         BizPayPlan record = buildBizPayPlan(planPayDTO, customUser);
         int update = bizPayPlanMapper.updateByPrimaryKeySelective(record);
         if (update < 1) {
-            return ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_EXCEPTION);
+            throw new BaseException("修改状态异常");
+//            return ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_EXCEPTION);
         }
 
 
@@ -228,18 +231,20 @@ public class PayPlanServiceImpl implements PayPlanService {
 //            subjectBalanceService.decreaseAmount(bizSubjects);
 
             ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
-            queryBO.setName("原材料");
+            queryBO.setName("材料费");
             queryBO.setDeptId(bizPayPlan.getDeptId());
             queryBO.setDate(new Date());
             // 校验当月项目预算
             BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
             //  当月未维护
             if (ObjectUtil.isNull(bizProjectBudget)) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
+                throw new BaseException("当月项目预算未维护");
+//                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
             }
             // 金额不足
             if (bizProjectBudget.getBalanceQuota().compareTo(bigDecimal) < 0) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
+                throw new BaseException("当月项目预算金额不足");
+//                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
             }
 
             // 扣减预算

@@ -222,7 +222,11 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         BizProjectBudgetExample.Criteria criteria = bizProjectBudgetExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
-        criteria.andCodeEqualTo(model.getCode());
+        if (StringUtils.isNotEmpty(model.getCode())){
+            criteria.andCodeEqualTo(model.getCode());
+        }else {
+            criteria.andNameEqualTo(model.getName());
+        }
         criteria.andDeptIdEqualTo(model.getDeptId());
 
         String year = DateUtil.year(model.getDate()) + "";

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.finance.reimburseapply;
 
+import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -107,5 +108,5 @@ public class ReimburseApplyInfoRSDTO {
 
 
     @ApiModelProperty(value = "文件 三期新增字段")
-    private List<String> fileUrlList;
+    private List<FileUrlDTO> fileUrlList;
 }

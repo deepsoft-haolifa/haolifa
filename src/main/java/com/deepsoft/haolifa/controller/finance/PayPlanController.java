@@ -46,7 +46,6 @@ public class PayPlanController {
 
     @ApiOperation("更新节点")
     @PostMapping("/updatePayPlan")
-    @Transactional(rollbackFor = Exception.class)
     public ResultBean updatePayPlan(@RequestBody BizPayPlanPayDTO payPlan) {
         return payPlanService.update(payPlan);
     }

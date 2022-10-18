@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.model.dto.finance.reimburseapply;
 
 import com.deepsoft.haolifa.model.dto.finance.FileDTO;
+import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostDetailAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.travel.ReimburseTravelDetailUpDTO;
@@ -23,9 +24,13 @@ public class ReimburseApplyAddDTO {
     @ApiModelProperty(value = "项目编号 三期新增字段")
     private String projectCode;
 
+//
+//    @ApiModelProperty(value = "文件 三期新增字段")
+//    private List<FileDTO> fileDTOList;
+
 
     @ApiModelProperty(value = "文件 三期新增字段")
-    private List<FileDTO> fileDTOList;
+    private List<FileUrlDTO> fileUrlList;
 
     @ApiModelProperty(value = "报销金额")
     private BigDecimal amount;

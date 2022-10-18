@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.*;
@@ -12,6 +13,7 @@ import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.FileDTO;
+import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
@@ -124,12 +126,13 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         //上传到7牛文件服务器
         String fileUrl = "";
-        if (CollectionUtil.isNotEmpty(model.getFileDTOList())) {
-            List<String> fileUrlList = new ArrayList<>();
-            for (FileDTO fileDTO : model.getFileDTOList()) {
-                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
-            }
-            fileUrl = fileUrlList.stream().collect(Collectors.joining(","));
+        String fileName = "";
+        if (CollectionUtil.isNotEmpty(model.getFileUrlList())) {
+//            List<String> fileUrlList = new ArrayList<>();
+//            for (FileDTO fileDTO : model.getFileDTOList()) {
+//                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
+//            }
+            fileUrl = JSON.toJSONString(model.getFileUrlList());
         }
         loanApply.setFileUrl(fileUrl);
         int insertId = bizLoanApplyMapper.insertSelective(loanApply);
@@ -189,13 +192,14 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
 
         //上传到7牛文件服务器
-        if (CollectionUtil.isNotEmpty(loanApplyUpDTO.getFileDTOList())) {
+        if (CollectionUtil.isNotEmpty(loanApplyUpDTO.getFileUrlList())) {
             String fileUrl = "";
-            List<String> fileUrlList = new ArrayList<>();
-            for (FileDTO fileDTO : loanApplyUpDTO.getFileDTOList()) {
-                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
-            }
-            fileUrl = fileUrlList.stream().collect(Collectors.joining(","));
+//            List<String> fileUrlList = new ArrayList<>();
+//            for (FileDTO fileDTO : loanApplyUpDTO.getFileDTOList()) {
+//                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
+//            }
+            fileUrl = JSON.toJSONString(loanApplyUpDTO.getFileUrlList());
+
             loanApply.setFileUrl(fileUrl);
         }
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
@@ -263,7 +267,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         }
 
         if (StringUtils.isNotEmpty(loanApply.getFileUrl())) {
-            loanApplyRSDTO.setFileUrlList(Arrays.asList(loanApply.getFileUrl().split(",").clone()));
+            loanApplyRSDTO.setFileUrlList(JSON.parseArray(loanApply.getFileUrl(),FileUrlDTO.class));
         } else {
             loanApplyRSDTO.setFileUrlList(new ArrayList<>());
         }
@@ -386,7 +390,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             .map(loanApply -> {
                 LoanApplyRSDTO loanApplyRSDTO = convertLoanApplyRSDTO(sysDepartmentMap, iscn, finalSysUserMap, loanApply);
                 if (StringUtils.isNotEmpty(loanApply.getFileUrl())) {
-                    loanApplyRSDTO.setFileUrlList(Arrays.asList(loanApply.getFileUrl().split(",").clone()));
+                    loanApplyRSDTO.setFileUrlList(JSON.parseArray(loanApply.getFileUrl(),FileUrlDTO.class));
                 } else {
                     loanApplyRSDTO.setFileUrlList(new ArrayList<>());
                 }

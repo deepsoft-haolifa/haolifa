@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl.finance;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.config.CustomGrantedAuthority;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -12,6 +13,7 @@ import com.deepsoft.haolifa.enums.*;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.FileDTO;
+import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
@@ -34,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -51,52 +52,52 @@ import static com.deepsoft.haolifa.constant.CommonEnum.FormType.REIMBURSE_APP_TY
 @Slf4j
 public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
-    @Autowired
+    @Resource
     private LoanApplyService loanApplyService;
-    @Autowired
+    @Resource
     private BizLoanApplyMapper bizLoanApplyMapper;
-    @Autowired
+    @Resource
     private BizReimburseApplyMapper bizReimburseApplyMapper;
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private DepartmentService departmentService;
 
     @Lazy
-    @Autowired
+    @Resource
     private FlowInstanceService flowInstanceService;
-    @Autowired
+    @Resource
     private BizReimburseTravelDetailMapper bizReimburseTravelDetailMapper;
-    @Autowired
+    @Resource
     private BizReimburseCostDetailMapper bizReimburseCostDetailMapper;
-    @Autowired
+    @Resource
     private SysDepartmentMapper departmentMapper;
-    @Autowired
+    @Resource
     private BizSubjectsMapper bizSubjectsMapper;
 
-    @Autowired
+    @Resource
     private BizCostBudgetSubjectsMapper bizCostBudgetSubjectsMapper;
 
-    @Autowired
+    @Resource
     private SysDictService sysDictService;
 
-    @Autowired
+    @Resource
     private SysUserMapper sysUserMapper;
 
-    @Autowired
+    @Resource
     private PayUserMapper payUserMapper;
-    @Autowired
+    @Resource
     private OtherBillService otherBillService;
 
-    @Autowired
+    @Resource
     private BillService billService;
-    @Autowired
+    @Resource
     private BankBillService bankBillService;
-    @Autowired
+    @Resource
     private SubjectBalanceService subjectBalanceService;
-    @Autowired
+    @Resource
     private ExpensesService expensesService;
-    @Autowired
+    @Resource
     private ProjectBudgetService projectBudgetService;
 
     @Resource
@@ -154,12 +155,12 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         //上传到7牛文件服务器
         String fileUrl = "";
-        if (CollectionUtil.isNotEmpty(model.getFileDTOList())){
-            List<String> fileUrlList = new ArrayList<>();
-            for (FileDTO fileDTO:model.getFileDTOList()){
-                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
-            }
-            fileUrl =  fileUrlList.stream().collect(Collectors.joining(","));
+        if (CollectionUtil.isNotEmpty(model.getFileUrlList())){
+//            List<String> fileUrlList = new ArrayList<>();
+//            for (FileDTO fileDTO:model.getFileDTOList()){
+//                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
+//            }
+            fileUrl =  JSON.toJSONString(model.getFileUrlList());
         }
         reimburseApply.setFileUrl(fileUrl);
 
@@ -233,6 +234,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (CollectionUtil.isEmpty(model.getReimburseCostDetailAddDTOList()) && CollectionUtil.isEmpty(model.getReimburseTravelDetailAddDTOList())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销明细必传");
         }
+        if (CollectionUtil.isEmpty(model.getFileUrlList())){
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销附件必传");
+        }
+
         return null;
     }
 
@@ -500,13 +505,13 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         }
 
         //上传到7牛文件服务器
-        if (CollectionUtil.isNotEmpty(model.getFileDTOList())){
+        if (CollectionUtil.isNotEmpty(model.getFileUrlList())){
             String fileUrl = "";
-            List<String> fileUrlList = new ArrayList<>();
-            for (FileDTO fileDTO:model.getFileDTOList()){
-                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
-            }
-            fileUrl =  fileUrlList.stream().collect(Collectors.joining(","));
+//            List<String> fileUrlList = new ArrayList<>();
+//            for (FileDTO fileDTO:model.getFileDTOList()){
+//                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
+//            }
+            fileUrl =  JSON.toJSONString(model.getFileUrlList());
             reimburseApply.setFileUrl(fileUrl);
         }
 
@@ -656,7 +661,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         }
 
         if (StringUtils.isNotEmpty(reimburseApply.getFileUrl())){
-            reimburseApplyRSDTO.setFileUrlList(Arrays.asList(reimburseApply.getFileUrl().split(",").clone()));
+            reimburseApplyRSDTO.setFileUrlList(JSON.parseArray(reimburseApply.getFileUrl(), FileUrlDTO.class));
         }else {
             reimburseApplyRSDTO.setFileUrlList(new ArrayList<>());
         }
@@ -805,7 +810,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 reimburseApplyRSDTO.setCanPay(canPay);
 
                 if (StringUtils.isNotEmpty(reimburseApply.getFileUrl())){
-                    reimburseApplyRSDTO.setFileUrlList(Arrays.asList(reimburseApply.getFileUrl().split(",").clone()));
+                    reimburseApplyRSDTO.setFileUrlList(JSON.parseArray(reimburseApply.getFileUrl(), FileUrlDTO.class));
                 }else {
                     reimburseApplyRSDTO.setFileUrlList(new ArrayList<>());
                 }

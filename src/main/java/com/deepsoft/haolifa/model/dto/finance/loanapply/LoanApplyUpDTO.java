@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.model.dto.finance.loanapply;
 
 
 import com.deepsoft.haolifa.model.dto.finance.FileDTO;
+import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,9 +35,12 @@ public class LoanApplyUpDTO {
 
     @ApiModelProperty(value = "出差人数 三期新增字段")
     private Integer travelPeoNum;
+//
+//    @ApiModelProperty(value = "文件 三期新增字段")
+//    private List<FileDTO> fileDTOList;
 
     @ApiModelProperty(value = "文件 三期新增字段")
-    private List<FileDTO> fileDTOList;
+    private List<FileUrlDTO> fileUrlList;
 
 
     @ApiModelProperty(value = "借款日期")
