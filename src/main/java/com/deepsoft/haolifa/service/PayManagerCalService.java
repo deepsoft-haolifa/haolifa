@@ -26,4 +26,6 @@ public interface PayManagerCalService {
 
     ExcelWriter export(PayManagerCalDTO payManagerCalDTO);
 
+    void syncData();
+
 }

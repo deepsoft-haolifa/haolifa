@@ -57,6 +57,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
     private SysUserMapper userMapper;
     @Resource
     private RoleService roleService;
+    @Resource
+    private SysDepartmentMapper sysDepartmentMapper;
     @Override
     public ResultBean pageInfo(PayUserDTO model) {
         PayUserExample example = new PayUserExample();
@@ -100,7 +102,14 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             }
         }
         if (StringUtils.isNotBlank(model.getDepartName())) {
-            criteria.andDepartNameEqualTo(model.getDepartName());
+            SysDepartmentExample sysDepartmentExample = new SysDepartmentExample();
+            SysDepartmentExample.Criteria crit = sysDepartmentExample.createCriteria();
+            crit.andDeptNameLike("%" + model.getDepartName() + "%");
+            List<SysDepartment> sysDepartments = sysDepartmentMapper.selectByExample(sysDepartmentExample);
+            if (CollectionUtils.isNotEmpty(sysDepartments)) {
+                List<Integer> collect = sysDepartments.stream().map(ss -> ss.getId()).collect(Collectors.toList());
+                criteria.andDepartIdIn(collect);
+            }
         }
         if (StringUtils.isNotBlank(model.getUserNo())) {
             criteria.andUserNoLike("%" + model.getUserNo() + "%");
@@ -186,6 +195,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setSuperiorName(Objects.isNull(workshop) ? "" : workshop.getPostName());
             PayUser parentUser = payUserMapper.selectByPrimaryKey(payUser.getParentId());
             payUserDTO.setParentUserName(Objects.isNull(parentUser) ? "" : parentUser.getUserName());
+            SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(payUser.getDepartId());
+            payUserDTO.setDepartName(Objects.isNull(sysDepartment) ? "" : sysDepartment.getDeptName());
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
@@ -365,6 +376,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setTeamName(Objects.isNull(payTeam) ? "" : payTeam.getTeamName());
             PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payUser.getPostId());
             payUserDTO.setPostName(Objects.isNull(payProductionWorkshop) ? "" : payProductionWorkshop.getPostName());
+            SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(payUser.getDepartId());
+            payUserDTO.setDepartName(Objects.isNull(sysDepartment) ? "" : sysDepartment.getDeptName());
             list.add(payUserDTO);
         });
         return ResultBean.success(list);

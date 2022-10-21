@@ -75,6 +75,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private PayAssessmentScoreMapper payAssessmentScoreMapper;
     @Resource
     private PayWorkAttendanceMapper payWorkAttendanceMapper;
+    @Resource
+    private SysDepartmentMapper sysDepartmentMapper;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -239,6 +241,9 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             Integer userId = payWage.getUserId();
             PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
             String userType = payUser.getUserType();
+            Integer departId = payUser.getDepartId();
+            SysDepartment sysDepartment = sysDepartmentMapper.selectByPrimaryKey(departId);
+            payWage.setDepartment(sysDepartment.getDeptName());
             // 处理考勤数据 年月
             buildPayWorkAttendanceInfo(userId, payWagesVO, payWage);
             int totalCount = 0;
@@ -265,8 +270,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     }
                     // 订单号
                     String orderId = procedure.getOrderId();
-                    // 车间名称
-                    String workshopName = payUser.getDepartName();
+                    // 车间名称  部门名称
+                    String workshopName = sysDepartment.getDeptName();
                     if (CommonEnum.WorkShopTypeEnum.PRODUCT.name.equals(workshopName)) {
                         OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO proInspectRecord = buildPayCalculateDTO(orderId, orderProductAssociate.getProductNo(), startTime, endTime);
@@ -481,7 +486,10 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
             if (CollectionUtils.isEmpty(wagesList)) {
                 continue;
             }
+            SysDepartment sysDepartment = sysDepartmentMapper.selectByPrimaryKey(payUser.getDepartId());
+
             PayWages wages = wagesList.get(0);
+            wages.setDepartment(sysDepartment.getDeptName());
             // 计算
             BigDecimal multiply = hourPrice.multiply(new BigDecimal(qualifiedNumber));
 

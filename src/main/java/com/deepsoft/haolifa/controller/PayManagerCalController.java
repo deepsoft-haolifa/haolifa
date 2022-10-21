@@ -109,4 +109,11 @@ public class PayManagerCalController {
         List<PayManagerCal> list = payManagerCalService.getList(new PayManagerCalDTO());
         return ResultBean.success(list);
     }
+
+    @ApiOperation(value = "同步计提部门关联数据")
+    @GetMapping(value = "syncData")
+    public ResultBean syncData() {
+        payManagerCalService.syncData();
+        return ResultBean.success(null);
+    }
 }

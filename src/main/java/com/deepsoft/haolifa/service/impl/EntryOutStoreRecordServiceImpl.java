@@ -175,7 +175,9 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 return;
             }
             for (PayManagerCal payManagerCal : list) {
-                String postName = payManagerCal.getPostName();
+                PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payManagerCal.getPostId());
+                String postName = payProductionWorkshop.getPostName();
+
                 // 计提价格
                 BigDecimal price = payManagerCal.getPrice();
                 PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();

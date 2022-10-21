@@ -15,9 +15,13 @@ public class PayManagerCalDTO {
     @ExcelHandle(name = "用户名称")
     @ApiModelProperty(value = "用户名称")
     private String userName;
+    @ApiModelProperty(value = "部门id")
+    private Integer departId;
     @ExcelHandle(name = "部门名称")
     @ApiModelProperty(value = "部门名称")
     private String dept;
+    @ApiModelProperty(value = "岗位id")
+    private Integer postId;
     @ExcelHandle(name = "岗位名称")
     @ApiModelProperty(value = "岗位名称")
     private String postName;

@@ -236,6 +236,66 @@ public class PayManagerCalExample {
             return (Criteria) this;
         }
 
+        public Criteria andDepartIdIsNull() {
+            addCriterion("depart_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdIsNotNull() {
+            addCriterion("depart_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdEqualTo(Integer value) {
+            addCriterion("depart_id =", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdNotEqualTo(Integer value) {
+            addCriterion("depart_id <>", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdGreaterThan(Integer value) {
+            addCriterion("depart_id >", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("depart_id >=", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdLessThan(Integer value) {
+            addCriterion("depart_id <", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdLessThanOrEqualTo(Integer value) {
+            addCriterion("depart_id <=", value, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdIn(List<Integer> values) {
+            addCriterion("depart_id in", values, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdNotIn(List<Integer> values) {
+            addCriterion("depart_id not in", values, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdBetween(Integer value1, Integer value2) {
+            addCriterion("depart_id between", value1, value2, "departId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("depart_id not between", value1, value2, "departId");
+            return (Criteria) this;
+        }
+
         public Criteria andDeptIsNull() {
             addCriterion("dept is null");
             return (Criteria) this;
@@ -303,6 +363,66 @@ public class PayManagerCalExample {
 
         public Criteria andDeptNotBetween(String value1, String value2) {
             addCriterion("dept not between", value1, value2, "dept");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdIsNull() {
+            addCriterion("post_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdIsNotNull() {
+            addCriterion("post_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdEqualTo(Integer value) {
+            addCriterion("post_id =", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdNotEqualTo(Integer value) {
+            addCriterion("post_id <>", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdGreaterThan(Integer value) {
+            addCriterion("post_id >", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("post_id >=", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdLessThan(Integer value) {
+            addCriterion("post_id <", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdLessThanOrEqualTo(Integer value) {
+            addCriterion("post_id <=", value, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdIn(List<Integer> values) {
+            addCriterion("post_id in", values, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdNotIn(List<Integer> values) {
+            addCriterion("post_id not in", values, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdBetween(Integer value1, Integer value2) {
+            addCriterion("post_id between", value1, value2, "postId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("post_id not between", value1, value2, "postId");
             return (Criteria) this;
         }
 
@@ -446,76 +566,6 @@ public class PayManagerCalExample {
             return (Criteria) this;
         }
 
-        public Criteria andWorkTypeIsNull() {
-            addCriterion("work_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeIsNotNull() {
-            addCriterion("work_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeEqualTo(String value) {
-            addCriterion("work_type =", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeNotEqualTo(String value) {
-            addCriterion("work_type <>", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeGreaterThan(String value) {
-            addCriterion("work_type >", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("work_type >=", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeLessThan(String value) {
-            addCriterion("work_type <", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeLessThanOrEqualTo(String value) {
-            addCriterion("work_type <=", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeLike(String value) {
-            addCriterion("work_type like", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeNotLike(String value) {
-            addCriterion("work_type not like", value, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeIn(List<String> values) {
-            addCriterion("work_type in", values, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeNotIn(List<String> values) {
-            addCriterion("work_type not in", values, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeBetween(String value1, String value2) {
-            addCriterion("work_type between", value1, value2, "workType");
-            return (Criteria) this;
-        }
-
-        public Criteria andWorkTypeNotBetween(String value1, String value2) {
-            addCriterion("work_type not between", value1, value2, "workType");
-            return (Criteria) this;
-        }
-
         public Criteria andIdCategoryIsNull() {
             addCriterion("id_category is null");
             return (Criteria) this;
@@ -583,6 +633,76 @@ public class PayManagerCalExample {
 
         public Criteria andIdCategoryNotBetween(String value1, String value2) {
             addCriterion("id_category not between", value1, value2, "idCategory");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelIsNull() {
+            addCriterion("app_model is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelIsNotNull() {
+            addCriterion("app_model is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelEqualTo(String value) {
+            addCriterion("app_model =", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelNotEqualTo(String value) {
+            addCriterion("app_model <>", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelGreaterThan(String value) {
+            addCriterion("app_model >", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelGreaterThanOrEqualTo(String value) {
+            addCriterion("app_model >=", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelLessThan(String value) {
+            addCriterion("app_model <", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelLessThanOrEqualTo(String value) {
+            addCriterion("app_model <=", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelLike(String value) {
+            addCriterion("app_model like", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelNotLike(String value) {
+            addCriterion("app_model not like", value, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelIn(List<String> values) {
+            addCriterion("app_model in", values, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelNotIn(List<String> values) {
+            addCriterion("app_model not in", values, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelBetween(String value1, String value2) {
+            addCriterion("app_model between", value1, value2, "appModel");
+            return (Criteria) this;
+        }
+
+        public Criteria andAppModelNotBetween(String value1, String value2) {
+            addCriterion("app_model not between", value1, value2, "appModel");
             return (Criteria) this;
         }
 
@@ -656,73 +776,73 @@ public class PayManagerCalExample {
             return (Criteria) this;
         }
 
-        public Criteria andAppModelIsNull() {
-            addCriterion("app_model is null");
+        public Criteria andWorkTypeIsNull() {
+            addCriterion("work_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelIsNotNull() {
-            addCriterion("app_model is not null");
+        public Criteria andWorkTypeIsNotNull() {
+            addCriterion("work_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelEqualTo(String value) {
-            addCriterion("app_model =", value, "appModel");
+        public Criteria andWorkTypeEqualTo(String value) {
+            addCriterion("work_type =", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelNotEqualTo(String value) {
-            addCriterion("app_model <>", value, "appModel");
+        public Criteria andWorkTypeNotEqualTo(String value) {
+            addCriterion("work_type <>", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelGreaterThan(String value) {
-            addCriterion("app_model >", value, "appModel");
+        public Criteria andWorkTypeGreaterThan(String value) {
+            addCriterion("work_type >", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelGreaterThanOrEqualTo(String value) {
-            addCriterion("app_model >=", value, "appModel");
+        public Criteria andWorkTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("work_type >=", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelLessThan(String value) {
-            addCriterion("app_model <", value, "appModel");
+        public Criteria andWorkTypeLessThan(String value) {
+            addCriterion("work_type <", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelLessThanOrEqualTo(String value) {
-            addCriterion("app_model <=", value, "appModel");
+        public Criteria andWorkTypeLessThanOrEqualTo(String value) {
+            addCriterion("work_type <=", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelLike(String value) {
-            addCriterion("app_model like", value, "appModel");
+        public Criteria andWorkTypeLike(String value) {
+            addCriterion("work_type like", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelNotLike(String value) {
-            addCriterion("app_model not like", value, "appModel");
+        public Criteria andWorkTypeNotLike(String value) {
+            addCriterion("work_type not like", value, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelIn(List<String> values) {
-            addCriterion("app_model in", values, "appModel");
+        public Criteria andWorkTypeIn(List<String> values) {
+            addCriterion("work_type in", values, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelNotIn(List<String> values) {
-            addCriterion("app_model not in", values, "appModel");
+        public Criteria andWorkTypeNotIn(List<String> values) {
+            addCriterion("work_type not in", values, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelBetween(String value1, String value2) {
-            addCriterion("app_model between", value1, value2, "appModel");
+        public Criteria andWorkTypeBetween(String value1, String value2) {
+            addCriterion("work_type between", value1, value2, "workType");
             return (Criteria) this;
         }
 
-        public Criteria andAppModelNotBetween(String value1, String value2) {
-            addCriterion("app_model not between", value1, value2, "appModel");
+        public Criteria andWorkTypeNotBetween(String value1, String value2) {
+            addCriterion("work_type not between", value1, value2, "workType");
             return (Criteria) this;
         }
 
