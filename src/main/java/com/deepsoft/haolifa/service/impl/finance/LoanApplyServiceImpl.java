@@ -575,19 +575,22 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             BizBillAddDTO bizBill = loanApplyHelper.buildBizBillAddDTO(loanApplyPayDTO, selectByPrimaryKey, sysUser);
             ResultBean save = billService.save(bizBill);
             if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
-                throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
+                log.error("借款支付：",save.getMessage());
+                throw new BaseException(save.getMessage());
             }
         } else if (StringUtils.equalsIgnoreCase("2", loanApplyPayDTO.getBillNature())) {
             BizBankBillAddDTO bizBankBill = loanApplyHelper.buildBizBankBillAddDTO(loanApplyPayDTO, selectByPrimaryKey, sysUser);
             ResultBean save = bankBillService.save(bizBankBill);
             if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
-                throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
+                log.error("借款支付：",save.getMessage());
+                throw new BaseException(save.getMessage());
             }
         } else if (StringUtils.equalsIgnoreCase("3", loanApplyPayDTO.getBillNature())) {
             BizOtherBillAddDTO otherBillAddDTO = loanApplyHelper.buildBizOtherBillAddDTO(loanApplyPayDTO, selectByPrimaryKey, sysUser);
             ResultBean save = otherBillService.save(otherBillAddDTO);
             if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
-                throw new BaseException(CommonEnum.ResponseEnum.PARAM_ERROR);
+                log.error("借款支付：",save.getMessage());
+                throw new BaseException(save.getMessage());
             }
         }
 

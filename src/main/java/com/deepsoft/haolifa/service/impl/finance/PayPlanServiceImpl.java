@@ -125,7 +125,6 @@ public class PayPlanServiceImpl implements PayPlanService {
         log.info("出纳付款 rq={}", JSON.toJSONString(planPayDTO));
 
         BizPayPlan bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(planPayDTO.getId());
-
         if (StringUtils.equalsIgnoreCase(PayPlanPayStatusEnum.paid.getCode(), bizPayPlan.getStatus())) {
             throw new BaseException("当前付款计划以付款");
         }
@@ -152,7 +151,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
 
-        // 1 支付方式
+        // 1 支付日志
         {
             for (BizPayPlanPayDTO.PayWayDTO payWayDTO : planPayDTO.getPayWayList()) {
                 BizPayPlanPayLog payPlanPayLog = buildBizPayPlanPayLog(customUser, bizPayPlan, purchaseOrder, payWayDTO);
@@ -166,15 +165,24 @@ public class PayPlanServiceImpl implements PayPlanService {
                 switch (bookingTypeEnum) {
                     case cash_bill:
                         BizBillAddDTO bizBill = buildBizBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                        billService.save(bizBill);
+                        ResultBean billSave = billService.save(bizBill);
+                        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, billSave.getCode())) {
+                            throw new BaseException(billSave.getMessage());
+                        }
                         break;
                     case bank_bill:
                         BizBankBillAddDTO bizBankBillAddDTO = buildBizBankBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                        bankBillService.save(bizBankBillAddDTO);
+                        ResultBean bankSave = bankBillService.save(bizBankBillAddDTO);
+                        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, bankSave.getCode())) {
+                            throw new BaseException(bankSave.getMessage());
+                        }
                         break;
                     case other_bill:
                         BizOtherBillAddDTO bizBillAddDTO = buildBizOtherBillAddDTO(bizPayPlan, payWayDTO, bookingTypeEnum);
-                        otherBillService.save(bizBillAddDTO);
+                        ResultBean otherSave = otherBillService.save(bizBillAddDTO);
+                        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, otherSave.getCode())) {
+                            throw new BaseException(otherSave.getMessage());
+                        }
                         break;
                 }
             }
@@ -197,7 +205,6 @@ public class PayPlanServiceImpl implements PayPlanService {
             purchaseOrderU.setPayStatus(payStatus);
             purchaseOrderU.setPaidAccount(currentPaid);
             int selective = purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrderU);
-
         }
 
         // 4 付款申请支付状态改变
@@ -237,23 +244,24 @@ public class PayPlanServiceImpl implements PayPlanService {
             //  当月未维护
             if (ObjectUtil.isNull(bizProjectBudget)) {
                 throw new BaseException("当月项目预算未维护");
-//                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
             }
             // 金额不足
             if (bizProjectBudget.getBalanceQuota().compareTo(bigDecimal) < 0) {
                 throw new BaseException("当月项目预算金额不足");
-//                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
             }
 
             // 扣减预算
             ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
             budgetUpDTO.setId(bizProjectBudget.getId());
+            budgetUpDTO.setDeptId(bizPayPlan.getDeptId());
             budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(bigDecimal));
-            projectBudgetService.update(budgetUpDTO);
-
+            ResultBean resultBean = projectBudgetService.update(budgetUpDTO);
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+                throw new BaseException(resultBean.getMessage());
+            }
         }
 
-        //
+        // 费用管理
         ExpensesDTO expensesDTO = new ExpensesDTO();
         expensesDTO.setExpensesClassify(FinanceConstant.cai_liao_f_cn);
         expensesDTO.setSecondClassify("其他");
@@ -265,8 +273,10 @@ public class PayPlanServiceImpl implements PayPlanService {
         expensesDTO.setDepartment(departmentDTO.getDeptName());
         expensesDTO.setRemark("收款单位：" + bizPayPlan.getApplyCollectionCompany());
         expensesDTO.setDataDate(DateUtils.getDate());
-        expensesService.save(expensesDTO);
-
+        ResultBean resultBean = expensesService.save(expensesDTO);
+        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+            throw new BaseException(resultBean.getMessage());
+        }
         return ResultBean.success(update);
     }
 
@@ -281,7 +291,8 @@ public class PayPlanServiceImpl implements PayPlanService {
         otherBillAddDTO.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
         otherBillAddDTO.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
         otherBillAddDTO.setPayment(payWayDTO.getAmount());
-        otherBillAddDTO.setRemark(bizPayPlan.getRemark());
+        otherBillAddDTO.setDeptId(bizPayPlan.getDeptId());
+        otherBillAddDTO.setRemark("付款计划："+bizPayPlan.getRemark()+"  付款："+payWayDTO.getAmount());
         otherBillAddDTO.setPayCompany(bizPayPlan.getPayCompany());
         otherBillAddDTO.setPayAccount(bizPayPlan.getPayAccount());
         otherBillAddDTO.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
@@ -299,7 +310,8 @@ public class PayPlanServiceImpl implements PayPlanService {
         bizBankBill.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
         bizBankBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
         bizBankBill.setPayment(payWayDTO.getAmount());
-        bizBankBill.setRemark(bizPayPlan.getRemark());
+        bizBankBill.setDeptId(bizPayPlan.getDeptId());
+        bizBankBill.setRemark("付款计划："+bizPayPlan.getRemark()+"  付款："+payWayDTO.getAmount());
         bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
         bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
         bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
@@ -314,7 +326,8 @@ public class PayPlanServiceImpl implements PayPlanService {
         // todo
         bizBill.setPaymentType(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
         bizBill.setPayment(payWayDTO.getAmount());
-        bizBill.setRemark(bizPayPlan.getRemark());
+        bizBill.setDeptId(bizPayPlan.getDeptId()+"");
+        bizBill.setRemark("付款计划："+bizPayPlan.getRemark()+"  付款："+payWayDTO.getAmount());
         bizBill.setString1(bizPayPlan.getApplyCollectionCompany());
         bizBill.setString2(bizPayPlan.getPayCompany());
         return bizBill;

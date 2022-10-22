@@ -18,7 +18,7 @@ public enum PayWayEnum {
     check_pay("check_pay", "支票",BookingTypeEnum.bank_bill),
     remittance_pay("remittance_pay", "汇款",BookingTypeEnum.bank_bill),
     acceptance_pay("acceptance_pay", "承兑",BookingTypeEnum.other_bill),
-    money_order_pay("money_order_pay", "汇票",BookingTypeEnum.other_bill);
+    money_order_pay("money_oder_pay", "汇票",BookingTypeEnum.other_bill);
 
     private String code;
     private String desc;

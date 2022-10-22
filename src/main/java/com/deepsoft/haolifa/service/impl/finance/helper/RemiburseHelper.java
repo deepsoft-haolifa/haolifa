@@ -366,12 +366,12 @@ public class RemiburseHelper {
         return apply;
     }
 
-    public BizBankBillAddDTO buildBizBankBillAddDTO(BizReimburseApply bizReimburseApplyS) {
+    public BizBankBillAddDTO buildBizBankBillAddDTO(BizReimburseApply bizReimburseApplyS,SysUser sysUser,ReimburseApplyPayDTO payDTO) {
         BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
         // 收款
         bizBankBill.setType("1");
         bizBankBill.setCompany(Constant.company);
-        bizBankBill.setAccount(Constant.JS_CCB);
+        bizBankBill.setAccount(payDTO.getPayAccount());
         bizBankBill.setDeptId(bizReimburseApplyS.getDeptId());
         bizBankBill.setCertificateNumber(bizReimburseApplyS.getSerialNo());
         bizBankBill.setOperateDate(new Date());
@@ -380,8 +380,8 @@ public class RemiburseHelper {
         // 负数的绝对值
         bizBankBill.setCollectionMoney(bizReimburseApplyS.getAmount().abs());
         bizBankBill.setRemark("报销冲抵");
-//        bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
-//        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
+        bizBankBill.setPayCompany(sysUser.getRealName());
+        bizBankBill.setPayAccount(payDTO.getPayAccount());
         bizBankBill.setCollectCompany(Constant.company);
         // 1	费用
         //2	货款
