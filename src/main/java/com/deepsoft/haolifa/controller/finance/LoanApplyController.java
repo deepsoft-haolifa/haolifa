@@ -114,14 +114,28 @@ public class LoanApplyController {
     @ApiOperation("打印")
     @GetMapping("/printPDF/{id}")
     public void printPDF(@PathVariable("id") int id, HttpServletResponse response) throws Exception {
-        // todo 校验
-
         ResultBean<LoanApplyInfoRSDTO> info = loanApplyService.getInfo(id);
         LoanApplyInfoRSDTO loanApplyInfoRSDTO =info.getResult();
         if (CollectionUtil.isEmpty(loanApplyInfoRSDTO.getFileUrlList())){
             ResultBean<Object> error = ResultBean.error("请先上传附件");
             response.getOutputStream().write(JSON.toJSONBytes(error));
         }
+        LoanPrint.print(loanApplyInfoRSDTO,response);
+    }
+
+
+
+    @ApiOperation("打印")
+    @GetMapping("/printEmptyJK")
+    public void printEmptyJK( HttpServletResponse response) throws Exception {
+        LoanApplyInfoRSDTO loanApplyInfoRSDTO = new LoanApplyInfoRSDTO();
+        loanApplyInfoRSDTO.setDeptName("");
+        loanApplyInfoRSDTO.setProjectCode("");
+        loanApplyInfoRSDTO.setProjectCodeName("");
+        loanApplyInfoRSDTO.setAccountName("");
+        loanApplyInfoRSDTO.setBankOfDeposit("");
+        loanApplyInfoRSDTO.setCardNumber("");
+        loanApplyInfoRSDTO.setPayTypeCN("");
 
         LoanPrint.print(loanApplyInfoRSDTO,response);
     }

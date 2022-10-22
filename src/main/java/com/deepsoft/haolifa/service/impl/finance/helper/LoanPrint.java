@@ -122,9 +122,12 @@ public class LoanPrint {
 
     private static void h1(PdfPTable table, Font font) {
         LoanApplyInfoRSDTO loanApplyInfoRSDTO = threadLocal.get();
-        table.addCell(ItextpdfUtil.getPdfPCell("部门:  " + loanApplyInfoRSDTO.getDeptName(), font, 0, 8));
+        table.addCell(ItextpdfUtil.getPdfPCell("部门:  " + (loanApplyInfoRSDTO.getDeptName()==null?"":loanApplyInfoRSDTO.getDeptName()), font, 0, 8));
 //        table.addCell(ItextpdfUtil.getPdfPCell("", font, 0, 24));
-        String format = DateUtil.format(loanApplyInfoRSDTO.getLoanDate(), "yyyy年MM月dd日");
+        String format ="    年  月  日";
+        if (loanApplyInfoRSDTO.getLoanDate()!=null){
+             format = DateUtil.format(loanApplyInfoRSDTO.getLoanDate(), "yyyy年MM月dd日");
+        }
         Paragraph elements3 = new Paragraph(format, font);
         PdfPCell pdfPCell = new PdfPCell(elements3);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -169,7 +172,13 @@ public class LoanPrint {
 
         table.addCell(ItextpdfUtil.getCell("", font, 0.5f, 0, 0, 0, 8));
         table.addCell(ItextpdfUtil.getCell("", font, 0.5f, 0, 0, 0, 12));
-        table.addCell(ItextpdfUtil.getCell(DateUtil.format(loanApplyInfoRSDTO.getExpectRepaymentDate(), "yyyy年MM月dd日"), font, 16));
+
+        String format = "    年  月  日";
+        if(loanApplyInfoRSDTO.getExpectRepaymentDate()!=null){
+            format=DateUtil.format(loanApplyInfoRSDTO.getExpectRepaymentDate(), "yyyy年MM月dd日");
+        }
+
+        table.addCell(ItextpdfUtil.getCell(format, font, 16));
     }
 
 
@@ -178,7 +187,14 @@ public class LoanPrint {
 
         table.addCell(ItextpdfUtil.getCell("借款金额（大写）", font, 9));
 
-        Paragraph elementsD = new Paragraph(" " + BigDecimalUtils.number2CNMontrayUnit(loanApplyInfoRSDTO.getAmount()), font);
+        String montrayUnit ="";
+        String string ="";
+        if (loanApplyInfoRSDTO.getAmount()!=null){
+             montrayUnit = BigDecimalUtils.number2CNMontrayUnit(loanApplyInfoRSDTO.getAmount());
+             string = loanApplyInfoRSDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        }
+
+        Paragraph elementsD = new Paragraph(" " + montrayUnit, font);
         PdfPCell pdfPCellD = new PdfPCell(elementsD);
         pdfPCellD.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCellD.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -186,7 +202,7 @@ public class LoanPrint {
         table.addCell(pdfPCellD);
 
 
-        Paragraph elements = new Paragraph("¥ " + loanApplyInfoRSDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString(), font);
+        Paragraph elements = new Paragraph("¥ " + string, font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);

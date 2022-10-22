@@ -23,6 +23,7 @@ import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.*;
+import com.deepsoft.haolifa.service.impl.finance.helper.FinanceConstant;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -145,12 +146,9 @@ public class PayPlanServiceImpl implements PayPlanService {
         int update = bizPayPlanMapper.updateByPrimaryKeySelective(record);
         if (update < 1) {
             throw new BaseException("修改状态异常");
-//            return ResultBean.error(CommonEnum.ResponseEnum.SYSTEM_EXCEPTION);
         }
 
-
         bizPayPlan = bizPayPlanMapper.selectByPrimaryKey(planPayDTO.getId());
-
 
         PurchaseOrder purchaseOrder = purchaseOrderMapper.selectByPrimaryKey(Integer.parseInt(bizPayPlan.getContractId()));
 
@@ -231,7 +229,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 //            subjectBalanceService.decreaseAmount(bizSubjects);
 
             ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
-            queryBO.setName("材料费");
+            queryBO.setName(FinanceConstant.cai_liao_f_cn);
             queryBO.setDeptId(bizPayPlan.getDeptId());
             queryBO.setDate(new Date());
             // 校验当月项目预算
@@ -257,7 +255,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         //
         ExpensesDTO expensesDTO = new ExpensesDTO();
-        expensesDTO.setExpensesClassify("材料费");
+        expensesDTO.setExpensesClassify(FinanceConstant.cai_liao_f_cn);
         expensesDTO.setSecondClassify("其他");
         expensesDTO.setVoucherNo(bizPayPlan.getApplyNo());
         expensesDTO.setTotalAmount(bizPayPlan.getApplyAmount());
@@ -265,7 +263,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         expensesDTO.setCommitUser(sysUser.getRealName());
         DepartmentDTO departmentDTO = departmentService.selectDepartmentById(sysUser.getDepartId());
         expensesDTO.setDepartment(departmentDTO.getDeptName());
-        expensesDTO.setRemark("收款单位："+bizPayPlan.getApplyCollectionCompany());
+        expensesDTO.setRemark("收款单位：" + bizPayPlan.getApplyCollectionCompany());
         expensesDTO.setDataDate(DateUtils.getDate());
         expensesService.save(expensesDTO);
 
@@ -519,7 +517,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         if (StringUtils.isNotEmpty(model.getDataStatus())) {
             criteria.andDataStatusEqualTo(model.getDataStatus());
         }
-        criteria.andApplyStatusIn(Arrays.asList("3","5"));
+        criteria.andApplyStatusIn(Arrays.asList("3", "5"));
 
         bizPayPlanExample.setOrderByClause("id desc");
         return bizPayPlanExample;

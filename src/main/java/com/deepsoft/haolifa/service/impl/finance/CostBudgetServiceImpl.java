@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Pair;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
@@ -11,6 +12,7 @@ import com.deepsoft.haolifa.enums.CostBudgetTypeEnum;
 import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.enums.SubjectEnum;
 import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.BaseException;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -21,11 +23,14 @@ import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptRQDT
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptTree;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.dept.CostBudgetDeptUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.*;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.model.dto.finance.subjects.BizSubjectsRSDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.CostBudgetService;
+import com.deepsoft.haolifa.service.finance.ProjectBudgetService;
+import com.deepsoft.haolifa.service.impl.finance.helper.FinanceConstant;
 import com.deepsoft.haolifa.util.TreeUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -76,6 +81,9 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
     @Autowired
     private BizSubjectsBalanceMapper subjectsBalanceMapper;
+
+    @Autowired
+    private ProjectBudgetService projectBudgetService;
 
     @Override
     public ResultBean saveOrUpDeptBudget(CostBudgetDeptAddUpDTO model) {
@@ -518,7 +526,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
                 costBudgetSubjectsRQDTO.setSubjectsTypeName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
                 return costBudgetSubjectsRQDTO;
             })
-            .collect(Collectors.toMap(CostBudgetSubjectsTypeRSDTO::getSubjectsTypeCode,Function.identity(),(a,b)->a))
+            .collect(Collectors.toMap(CostBudgetSubjectsTypeRSDTO::getSubjectsTypeCode, Function.identity(), (a, b) -> a))
             .values().stream()
             .collect(Collectors.toList());
 
@@ -574,15 +582,15 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
         BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
         criteria.andDeptIdEqualTo(sysUser.getDepartId());
-        if (subjectId !=null){
+        if (subjectId != null) {
             criteria.andSubjectsIdEqualTo(subjectId);
         }
-        if (subjectName != null){
+        if (subjectName != null) {
             criteria.andNameEqualTo(subjectName);
         }
         bizCostBudgetExample.setOrderByClause("id desc limit 1");
         List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
-        if (CollectionUtil.isEmpty(costBudgetSubjectsList)){
+        if (CollectionUtil.isEmpty(costBudgetSubjectsList)) {
             return null;
         }
         BizCostBudgetSubjects bizCostBudgetSubjects = costBudgetSubjectsList.get(0);
@@ -593,29 +601,29 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         balanceExampleCriteria.andDeptIdEqualTo(sysUser.getDepartId());
         List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
 
-        if (CollectionUtil.isEmpty(bizSubjectsBalanceList)){
+        if (CollectionUtil.isEmpty(bizSubjectsBalanceList)) {
             return null;
         }
         return bizSubjectsBalanceList.get(0);
     }
 
     @Override
-    public BizSubjectsBalance getSubjectsBudgetByUserId(Integer userId,Integer subjectId, String subjectName) {
+    public BizSubjectsBalance getSubjectsBudgetByUserId(Integer userId, Integer subjectId, String subjectName) {
         SysUser sysUser = sysUserService.getSysUser(userId);
 
         // 查询科目预算
         BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
         BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
         criteria.andDeptIdEqualTo(sysUser.getDepartId());
-        if (subjectId !=null){
+        if (subjectId != null) {
             criteria.andSubjectsIdEqualTo(subjectId);
         }
-        if (subjectName != null){
+        if (subjectName != null) {
             criteria.andNameEqualTo(subjectName);
         }
         bizCostBudgetExample.setOrderByClause("id desc limit 1");
         List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
-        if (CollectionUtil.isEmpty(costBudgetSubjectsList)){
+        if (CollectionUtil.isEmpty(costBudgetSubjectsList)) {
             return null;
         }
         BizCostBudgetSubjects bizCostBudgetSubjects = costBudgetSubjectsList.get(0);
@@ -626,7 +634,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         balanceExampleCriteria.andDeptIdEqualTo(sysUser.getDepartId());
         List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
 
-        if (CollectionUtil.isEmpty(bizSubjectsBalanceList)){
+        if (CollectionUtil.isEmpty(bizSubjectsBalanceList)) {
             return null;
         }
         return bizSubjectsBalanceList.get(0);
@@ -637,40 +645,53 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         CustomUser customUser = sysUserService.selectLoginUser();
         SysUser sysUser = sysUserService.getSysUser(customUser.getId());
 
-        // 查询部门预算
-        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
-        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
-        criteria.andDeptIdEqualTo(sysUser.getDepartId());
-        criteria.andSubjectsIdEqualTo(SubjectEnum.clf_id.getCode());
-        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+//        // 查询部门预算
+//        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+//        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+//        criteria.andDeptIdEqualTo(sysUser.getDepartId());
+//        criteria.andSubjectsIdEqualTo(SubjectEnum.clf_id.getCode());
+//        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+//
+//        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+//        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+//
+//
+//        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+//            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+//
+//
+//        BizSubjectsBalanceExample bizSubjectsBalanceExample = new BizSubjectsBalanceExample();
+//        List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
+//
+//        Map<String, BigDecimal> bigDecimalMap = bizSubjectsBalanceList.stream()
+//            .map(bizSubjectsBalance -> {
+//                String k = bizSubjectsBalance.getDeptId() + "_" + bizSubjectsBalance.getSubjectsId();
+//                return new Pair<>(k, bizSubjectsBalance.getBalanceAmount());
+//            })
+//            .collect(Collectors.toMap(Pair::getKey, Pair::getValue, (a, b) -> a));
+//
+//        List<CostBudgetSubjectsRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
+//            .map(bizCostBudgetSubjects -> {
+//                return buildCostBudgetSubjectsRSDTO(sysDepartmentMap, dictMap, bigDecimalMap, bizCostBudgetSubjects);
+//            })
+//            .collect(Collectors.toList());
 
-        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
-        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+//        CostBudgetSubjectsRSDTO costBudgetSubjectsRSDTO =
+//            CollectionUtil.isNotEmpty(costBudgetSubjectsRSDTOList) ? costBudgetSubjectsRSDTOList.get(0) : new CostBudgetSubjectsRSDTO();
 
+        ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+        queryBO.setName(FinanceConstant.cai_liao_f_cn);
+        queryBO.setDeptId(sysUser.getDepartId());
+        queryBO.setDate(new Date());
+        // 校验当月项目预算
+        BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
+        //  当月未维护
+        if (ObjectUtil.isNull(bizProjectBudget)) {
+            throw new BaseException("当月项目" + FinanceConstant.cai_liao_f_cn + "预算未维护");
+        }
 
-        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
-            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
-
-
-        BizSubjectsBalanceExample bizSubjectsBalanceExample = new BizSubjectsBalanceExample();
-        List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
-
-        Map<String, BigDecimal> bigDecimalMap = bizSubjectsBalanceList.stream()
-            .map(bizSubjectsBalance -> {
-                String k = bizSubjectsBalance.getDeptId() + "_" + bizSubjectsBalance.getSubjectsId();
-                return new Pair<>(k, bizSubjectsBalance.getBalanceAmount());
-            })
-            .collect(Collectors.toMap(Pair::getKey, Pair::getValue, (a, b) -> a));
-
-        List<CostBudgetSubjectsRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
-            .map(bizCostBudgetSubjects -> {
-                return buildCostBudgetSubjectsRSDTO(sysDepartmentMap, dictMap, bigDecimalMap, bizCostBudgetSubjects);
-            })
-            .collect(Collectors.toList());
-
-        CostBudgetSubjectsRSDTO costBudgetSubjectsRSDTO =
-            CollectionUtil.isNotEmpty(costBudgetSubjectsRSDTOList) ? costBudgetSubjectsRSDTOList.get(0) : new CostBudgetSubjectsRSDTO();
-
+        CostBudgetSubjectsRSDTO costBudgetSubjectsRSDTO = new CostBudgetSubjectsRSDTO();
+        costBudgetSubjectsRSDTO.setBalanceAmount(bizProjectBudget.getBalanceQuota());
         return ResultBean.success(costBudgetSubjectsRSDTO);
     }
 
@@ -681,7 +702,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         costBudgetSubjectsRQDTO.setCostRatioFormula(bizCostBudgetSubjects.getCostRatio() + "%");
         costBudgetSubjectsRQDTO.setCostRatioFormulaCN(bizCostBudgetSubjects.getCostRatio() + "%");
         SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
-        if (sysDepartment != null){
+        if (sysDepartment != null) {
             costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
         }
 

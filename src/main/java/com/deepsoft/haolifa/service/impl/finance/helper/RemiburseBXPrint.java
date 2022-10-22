@@ -38,6 +38,8 @@ public class RemiburseBXPrint {
             document.open();
 
             BaseFont typeface = BaseFont.createFont("/home/haolifa/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+//            BaseFont typeface = BaseFont.createFont("/Users/yuan/Desktop/work/haolifa/src/main/resources/static/msyh.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
             Font font = new Font(typeface);
 
             font.setSize(ItextpdfUtil.titleSize);
@@ -175,7 +177,10 @@ public class RemiburseBXPrint {
         table.addCell(ItextpdfUtil.getPdfPCell("部门:  " + reimburseApplyDetailDTO.getDeptName(), font, 0, 1));
 //        table.addCell(ItextpdfUtil.getPdfPCell("", font, 0, 4));
 
-        String format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
+        String format = "    年  月  日";
+        if(reimburseApplyDetailDTO.getReimburseDate()!=null){
+             format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
+        }
         Paragraph elements3 = new Paragraph(format, font);
         PdfPCell pdfPCell = new PdfPCell(elements3);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -231,9 +236,16 @@ public class RemiburseBXPrint {
     private static void h4(PdfPTable table, Font font) {
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
 
+        String montrayUnit ="";
+        String string = "";
+        if(reimburseApplyDetailDTO.getAmount()!=null){
+             montrayUnit = BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount());
+            string=reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        }
+
         table.addCell(ItextpdfUtil.getCell("预约报销总金额（大写）", font));
-        table.addCell(ItextpdfUtil.getCell(" "+BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount()), font));
-        Paragraph elements = new Paragraph("¥" + reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString(), font);
+        table.addCell(ItextpdfUtil.getCell(" "+ montrayUnit, font));
+        Paragraph elements = new Paragraph("¥" + string, font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);

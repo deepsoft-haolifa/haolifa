@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,6 +103,43 @@ public class ReimburseApplyController {
         }else {
             RemiburseBXPrint.print(reimburseApplyDetailDTO,response);
         }
+    }
+
+
+    @ApiOperation("打印")
+    @GetMapping("/printEmptyCL")
+    public void printEmptyCL( HttpServletResponse response) throws Exception {
+        ReimburseApplyDetailDTO reimburseApplyDetailDTO = new ReimburseApplyDetailDTO();
+        reimburseApplyDetailDTO.setReimburseTravelDetailRSDTOList(new ArrayList<>());
+        reimburseApplyDetailDTO.setType(ReimburseTypeEnum.travle.getCode());
+        reimburseApplyDetailDTO.setDeptName("");
+        reimburseApplyDetailDTO.setProjectCode("");
+        reimburseApplyDetailDTO.setProjectCodeName("");
+        reimburseApplyDetailDTO.setAccountName("");
+        reimburseApplyDetailDTO.setBankOfDeposit("");
+        reimburseApplyDetailDTO.setCardNumber("");
+        reimburseApplyDetailDTO.setPayTypeCN("");
+
+        RemiburseCLPrint.print(reimburseApplyDetailDTO,response);
+    }
+
+
+    @ApiOperation("打印")
+    @GetMapping("/printEmptyBX")
+    public void printEmptyBX( HttpServletResponse response) throws Exception {
+        ReimburseApplyDetailDTO reimburseApplyDetailDTO = new ReimburseApplyDetailDTO();
+        reimburseApplyDetailDTO.setReimburseCostDetailRSDTOList(new ArrayList<>());
+        reimburseApplyDetailDTO.setType(ReimburseTypeEnum.cost.getCode());
+        reimburseApplyDetailDTO.setDeptName("");
+        reimburseApplyDetailDTO.setProjectCode("");
+        reimburseApplyDetailDTO.setProjectCodeName("");
+        reimburseApplyDetailDTO.setAccountName("");
+        reimburseApplyDetailDTO.setBankOfDeposit("");
+        reimburseApplyDetailDTO.setCardNumber("");
+        reimburseApplyDetailDTO.setPayTypeCN("");
+
+
+        RemiburseBXPrint.print(reimburseApplyDetailDTO,response);
     }
 
 

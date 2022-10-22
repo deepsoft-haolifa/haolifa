@@ -56,6 +56,6 @@ public interface ReimburseApplyService {
 
     public ResultBean approve(Integer id);
 
-    ResultBean pay(ReimburseApplyPayDTO payDTO);
+    ResultBean<Integer>  pay(ReimburseApplyPayDTO payDTO);
 
 }

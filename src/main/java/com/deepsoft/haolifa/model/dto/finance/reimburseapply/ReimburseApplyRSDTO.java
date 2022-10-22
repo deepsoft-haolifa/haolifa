@@ -24,6 +24,7 @@ public class ReimburseApplyRSDTO {
 
     @ApiModelProperty(value = "项目编号 三期新增字段")
     private String projectCode;
+    private String projectCodeName;
 
     @ApiModelProperty(value = "编号")
     private String serialNo;

@@ -171,11 +171,13 @@ public class RemiburseCLPrint {
     private static void h1(PdfPTable table, Font font) {
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
 
-        table.addCell(ItextpdfUtil.getPdfPCell("部门:  "+ reimburseApplyDetailDTO.getDeptName(), font, 0, 11));
+        table.addCell(ItextpdfUtil.getPdfPCell("部门:  "+ (reimburseApplyDetailDTO.getDeptName() ==null?"":reimburseApplyDetailDTO.getDeptName()), font, 0, 11));
         table.addCell(ItextpdfUtil.getPdfPCell("项目经费号: "+reimburseApplyDetailDTO.getProjectCode()+""+reimburseApplyDetailDTO.getProjectCodeName(), font, 0, 11));
-        String format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
-//        table.addCell(ItextpdfUtil.getPdfPCell(" "+format, font, 0, 8));
 
+        String format = "    年  月  日";
+        if (reimburseApplyDetailDTO.getReimburseDate()!=null){
+             format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
+        }
 
 //        Paragraph elements3 = new Paragraph("报销人: "+reimburseApplyDetailDTO.getReimburseUserName(), font);
         Paragraph elements3 = new Paragraph(format, font);
@@ -287,15 +289,25 @@ public class RemiburseCLPrint {
 
         table.addCell(ItextpdfUtil.getCell("预约报销总金额（大写）", font, 9));
 
-        Paragraph elementsD = new Paragraph(" "+ BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount()), font);
+        String montrayUnit = "";
+        if (reimburseApplyDetailDTO.getAmount()!=null){
+             montrayUnit = BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount());
+        }
+
+
+        Paragraph elementsD = new Paragraph(" "+ montrayUnit, font);
         PdfPCell pdfPCellD = new PdfPCell(elementsD);
         pdfPCellD.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCellD.setHorizontalAlignment(Element.ALIGN_LEFT);
         pdfPCellD.setColspan(18);
         table.addCell(pdfPCellD);
 
+        String montrayUnit2 = "";
+        if (reimburseApplyDetailDTO.getAmount()!=null){
+            montrayUnit2 = reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        }
 
-        Paragraph elements = new Paragraph("¥" + reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString(), font);
+        Paragraph elements = new Paragraph("¥" + montrayUnit2, font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
