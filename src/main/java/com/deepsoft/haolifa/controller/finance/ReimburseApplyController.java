@@ -6,10 +6,6 @@ import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.enums.ReimburseTypeEnum;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyInfoRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyPayDTO;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
 import com.deepsoft.haolifa.service.finance.ReimburseApplyService;
@@ -19,14 +15,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 报销申请
@@ -91,55 +89,92 @@ public class ReimburseApplyController {
         // todo 校验
 
         ResultBean<ReimburseApplyDetailDTO> info = reimburseApplyService.getInfo(id);
-        ReimburseApplyDetailDTO reimburseApplyDetailDTO =info.getResult();
-        if (CollectionUtil.isEmpty(reimburseApplyDetailDTO.getFileUrlList())){
+        ReimburseApplyDetailDTO reimburseApplyDetailDTO = info.getResult();
+        if (CollectionUtil.isEmpty(reimburseApplyDetailDTO.getFileUrlList())) {
             ResultBean<Object> error = ResultBean.error("请先上传附件");
             response.getOutputStream().write(JSON.toJSONBytes(error));
         }
 
 
-        if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getType(), ReimburseTypeEnum.travle.getCode())){
-            RemiburseCLPrint.print(reimburseApplyDetailDTO,response);
-        }else {
-            RemiburseBXPrint.print(reimburseApplyDetailDTO,response);
+        if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getType(), ReimburseTypeEnum.travle.getCode())) {
+            RemiburseCLPrint.print(reimburseApplyDetailDTO, response);
+        } else {
+            RemiburseBXPrint.print(reimburseApplyDetailDTO, response);
         }
     }
 
 
     @ApiOperation("打印")
     @GetMapping("/printEmptyCL")
-    public void printEmptyCL( HttpServletResponse response) throws Exception {
-        ReimburseApplyDetailDTO reimburseApplyDetailDTO = new ReimburseApplyDetailDTO();
-        reimburseApplyDetailDTO.setReimburseTravelDetailRSDTOList(new ArrayList<>());
-        reimburseApplyDetailDTO.setType(ReimburseTypeEnum.travle.getCode());
-        reimburseApplyDetailDTO.setDeptName("");
-        reimburseApplyDetailDTO.setProjectCode("");
-        reimburseApplyDetailDTO.setProjectCodeName("");
-        reimburseApplyDetailDTO.setAccountName("");
-        reimburseApplyDetailDTO.setBankOfDeposit("");
-        reimburseApplyDetailDTO.setCardNumber("");
-        reimburseApplyDetailDTO.setPayTypeCN("");
+    public void printEmptyCL(HttpServletResponse response)  {
 
-        RemiburseCLPrint.print(reimburseApplyDetailDTO,response);
+        FileInputStream fis = null;
+        try {
+            XWPFDocument document;
+            String outPath  = "/home/haolifa/static/cl_template.docx";
+            File file = new File(outPath);
+            String filename = file.getName();
+            fis = new FileInputStream(file);
+            //设置文件名及后缀
+            response.setHeader("Content-Disposition", "attachment; filename=cl_template.docx");
+            response.setHeader("content-Type", "docx");
+            String fileType = "docx";
+            if ("docx".equals(fileType) || "doc".equals(fileType)) {//Office的doc与docx输出流，使用poi-ooxml 3.17可用
+                document = new XWPFDocument(OPCPackage.open(fis));
+                document.write(response.getOutputStream());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+
     }
 
 
     @ApiOperation("打印")
     @GetMapping("/printEmptyBX")
-    public void printEmptyBX( HttpServletResponse response) throws Exception {
-        ReimburseApplyDetailDTO reimburseApplyDetailDTO = new ReimburseApplyDetailDTO();
-        reimburseApplyDetailDTO.setReimburseCostDetailRSDTOList(new ArrayList<>());
-        reimburseApplyDetailDTO.setType(ReimburseTypeEnum.cost.getCode());
-        reimburseApplyDetailDTO.setDeptName("");
-        reimburseApplyDetailDTO.setProjectCode("");
-        reimburseApplyDetailDTO.setProjectCodeName("");
-        reimburseApplyDetailDTO.setAccountName("");
-        reimburseApplyDetailDTO.setBankOfDeposit("");
-        reimburseApplyDetailDTO.setCardNumber("");
-        reimburseApplyDetailDTO.setPayTypeCN("");
+    public void printEmptyBX(HttpServletResponse response) {
+        FileInputStream fis = null;
+        try {
+            XWPFDocument document;
+            String outPath  = "/home/haolifa/static/bx_template.docx";
+            File file = new File(outPath);
+            String filename = file.getName();
+            fis = new FileInputStream(file);
+            //设置文件名及后缀
+            response.setHeader("Content-Disposition", "attachment; filename=bx_template.docx" );
+            response.setHeader("content-Type", "docx");
+            String fileType = "docx";
+            if ("docx".equals(fileType) || "doc".equals(fileType)) {//Office的doc与docx输出流，使用poi-ooxml 3.17可用
+                document = new XWPFDocument(OPCPackage.open(fis));
+                document.write(response.getOutputStream());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
 
-        RemiburseBXPrint.print(reimburseApplyDetailDTO,response);
+
+
     }
 
 
@@ -156,7 +191,6 @@ public class ReimburseApplyController {
     public ResultBean pay(@RequestBody ReimburseApplyPayDTO payDTO) {
         return reimburseApplyService.pay(payDTO);
     }
-
 
 
 }

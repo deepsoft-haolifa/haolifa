@@ -229,11 +229,11 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         // 余额扣款
         {
-//            BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
-//            bizSubjects.setSubjectsId(SubjectEnum.clf_id.getCode());
-//            bizSubjects.setDeptId(bizPayPlan.getDeptId());
-//            bizSubjects.setAmount(bigDecimal);
-//            subjectBalanceService.decreaseAmount(bizSubjects);
+            BizSubjectsBalanceUpDTO bizSubjects = new BizSubjectsBalanceUpDTO();
+            bizSubjects.setSubjectsId(SubjectEnum.clf_id.getCode());
+            bizSubjects.setDeptId(bizPayPlan.getDeptId());
+            bizSubjects.setAmount(bigDecimal);
+            subjectBalanceService.decreaseAmount(bizSubjects);
 
             ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
             queryBO.setName(FinanceConstant.cai_liao_f_cn);
