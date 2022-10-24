@@ -88,6 +88,16 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
         PageDTO<PayManagerCalVO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(payManagerCals, pageDTO);
         List<PayManagerCalVO> payManagerCalVOList = BeanCopyUtils.copyPropertiesForNewList(payManagerCals, () -> new PayManagerCalVO());
+        payManagerCalVOList.stream().forEach(cc -> {
+            SysDepartment sysDepartment = sysDepartmentMapper.selectByPrimaryKey(cc.getDepartId());
+            if (Objects.nonNull(sysDepartment)) {
+                cc.setDept(sysDepartment.getDeptName());
+            }
+            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(cc.getPostId());
+            if (Objects.nonNull(payProductionWorkshop)) {
+                cc.setPostName(payProductionWorkshop.getPostName());
+            }
+        });
         pageDTO.setList(payManagerCalVOList);
         return ResultBean.success(pageDTO);
     }

@@ -18,7 +18,7 @@ public class PayManagerCalVO {
     @ApiModelProperty(value = "部门名称")
     private String dept;
     @ApiModelProperty(value = "岗位ID")
-    private String postId;
+    private Integer postId;
     @ApiModelProperty(value = "岗位名称")
     private String postName;
     @ApiModelProperty(value = "项目名称")
