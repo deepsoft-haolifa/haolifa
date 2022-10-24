@@ -13,8 +13,12 @@ public class PayManagerCalVO {
     private Integer id;
     @ApiModelProperty(value = "用户名称")
     private String userName;
+    @ApiModelProperty(value = "部门ID")
+    private Integer departId;
     @ApiModelProperty(value = "部门名称")
     private String dept;
+    @ApiModelProperty(value = "岗位ID")
+    private String postId;
     @ApiModelProperty(value = "岗位名称")
     private String postName;
     @ApiModelProperty(value = "项目名称")
