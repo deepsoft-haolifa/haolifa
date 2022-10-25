@@ -1204,8 +1204,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<MaterialResultDTO> fabanCollectEmpty = new ArrayList<>();
         // 获取符合阀杆的列表
         List<MaterialResultDTO> faganCollect = new ArrayList<>();
-        // 获取通用零件列表的列表
-        List<MaterialResultDTO> tongyongCollect = new ArrayList<>();
 
         // 根据型号和规格，获取图号列表
         // 阀体图号列表
@@ -1329,20 +1327,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             });
         }
 
-        // 根据型号和规格，获取通用图号列表(一个通用图号对应多个型号和规格)
-        List<Material> tongyongList = materialService
-            .getListByMultiModelAndSpec(CommonEnum.ProductModelType.TONG_YONG.classifyId, smallModel, specifications);
-        if (tongyongList != null && tongyongList.size() > 0) {
-            tongyongList.forEach(e -> {
-                MaterialResultDTO materialResultDTO = new MaterialResultDTO();
-                materialResultDTO.setCurrentQuantity(e.getCurrentQuantity());
-                materialResultDTO.setMaterialName(e.getName());
-                materialResultDTO.setGraphNo(e.getGraphNo());
-                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
-                tongyongCollect.add(materialResultDTO);
-            });
-        }
-
         List<MaterialTypeListDTO> listDTOS = new ArrayList<>();
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.FATI.code);
@@ -1359,11 +1343,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.FAGAN.code);
             setList(faganCollect);
-        }});
-
-        listDTOS.add(new MaterialTypeListDTO() {{
-            setType(CommonEnum.ProductModelType.TONG_YONG.code);
-            setList(tongyongCollect);
         }});
         return listDTOS;
     }
