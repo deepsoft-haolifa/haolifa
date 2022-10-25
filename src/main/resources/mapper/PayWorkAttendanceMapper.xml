@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PayWorkAttendanceMapper" >
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.PayWorkAttendance" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="serial" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="department" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="attendance_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="late_times" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="leave_early_times" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="absenteeism_times" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="middle_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="night_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="business_travel_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="compassionate_leave_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="sick_leave_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="work_overtime_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="late_and_leave_times" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="attend_year" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="attend_month" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, serial, department, user_id, user_name, attendance_days, late_times, leave_early_times, 
+    absenteeism_times, middle_days, night_days, business_travel_days, compassionate_leave_days, 
+    sick_leave_days, work_overtime_days, late_and_leave_times, remark, create_user, update_user, 
+    create_time, update_time, attend_year, attend_month
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendanceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pay_work_attendance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pay_work_attendance
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pay_work_attendance
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendanceExample" >
+    delete from pay_work_attendance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendance" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pay_work_attendance (serial, department, user_id, 
+      user_name, attendance_days, late_times, 
+      leave_early_times, absenteeism_times, middle_days, 
+      night_days, business_travel_days, compassionate_leave_days, 
+      sick_leave_days, work_overtime_days, late_and_leave_times, 
+      remark, create_user, update_user, 
+      create_time, update_time, attend_year, 
+      attend_month)
+    values (#{serial,jdbcType=INTEGER}, #{department,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{attendanceDays,jdbcType=INTEGER}, #{lateTimes,jdbcType=INTEGER}, 
+      #{leaveEarlyTimes,jdbcType=INTEGER}, #{absenteeismTimes,jdbcType=INTEGER}, #{middleDays,jdbcType=INTEGER}, 
+      #{nightDays,jdbcType=INTEGER}, #{businessTravelDays,jdbcType=INTEGER}, #{compassionateLeaveDays,jdbcType=INTEGER}, 
+      #{sickLeaveDays,jdbcType=INTEGER}, #{workOvertimeDays,jdbcType=INTEGER}, #{lateAndLeaveTimes,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{attendYear,jdbcType=VARCHAR}, 
+      #{attendMonth,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendance" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pay_work_attendance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serial != null" >
+        serial,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="attendanceDays != null" >
+        attendance_days,
+      </if>
+      <if test="lateTimes != null" >
+        late_times,
+      </if>
+      <if test="leaveEarlyTimes != null" >
+        leave_early_times,
+      </if>
+      <if test="absenteeismTimes != null" >
+        absenteeism_times,
+      </if>
+      <if test="middleDays != null" >
+        middle_days,
+      </if>
+      <if test="nightDays != null" >
+        night_days,
+      </if>
+      <if test="businessTravelDays != null" >
+        business_travel_days,
+      </if>
+      <if test="compassionateLeaveDays != null" >
+        compassionate_leave_days,
+      </if>
+      <if test="sickLeaveDays != null" >
+        sick_leave_days,
+      </if>
+      <if test="workOvertimeDays != null" >
+        work_overtime_days,
+      </if>
+      <if test="lateAndLeaveTimes != null" >
+        late_and_leave_times,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="attendYear != null" >
+        attend_year,
+      </if>
+      <if test="attendMonth != null" >
+        attend_month,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serial != null" >
+        #{serial,jdbcType=INTEGER},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="attendanceDays != null" >
+        #{attendanceDays,jdbcType=INTEGER},
+      </if>
+      <if test="lateTimes != null" >
+        #{lateTimes,jdbcType=INTEGER},
+      </if>
+      <if test="leaveEarlyTimes != null" >
+        #{leaveEarlyTimes,jdbcType=INTEGER},
+      </if>
+      <if test="absenteeismTimes != null" >
+        #{absenteeismTimes,jdbcType=INTEGER},
+      </if>
+      <if test="middleDays != null" >
+        #{middleDays,jdbcType=INTEGER},
+      </if>
+      <if test="nightDays != null" >
+        #{nightDays,jdbcType=INTEGER},
+      </if>
+      <if test="businessTravelDays != null" >
+        #{businessTravelDays,jdbcType=INTEGER},
+      </if>
+      <if test="compassionateLeaveDays != null" >
+        #{compassionateLeaveDays,jdbcType=INTEGER},
+      </if>
+      <if test="sickLeaveDays != null" >
+        #{sickLeaveDays,jdbcType=INTEGER},
+      </if>
+      <if test="workOvertimeDays != null" >
+        #{workOvertimeDays,jdbcType=INTEGER},
+      </if>
+      <if test="lateAndLeaveTimes != null" >
+        #{lateAndLeaveTimes,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attendYear != null" >
+        #{attendYear,jdbcType=VARCHAR},
+      </if>
+      <if test="attendMonth != null" >
+        #{attendMonth,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendanceExample" resultType="java.lang.Integer" >
+    select count(*) from pay_work_attendance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pay_work_attendance
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.serial != null" >
+        serial = #{record.serial,jdbcType=INTEGER},
+      </if>
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null" >
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attendanceDays != null" >
+        attendance_days = #{record.attendanceDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.lateTimes != null" >
+        late_times = #{record.lateTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.leaveEarlyTimes != null" >
+        leave_early_times = #{record.leaveEarlyTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.absenteeismTimes != null" >
+        absenteeism_times = #{record.absenteeismTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.middleDays != null" >
+        middle_days = #{record.middleDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.nightDays != null" >
+        night_days = #{record.nightDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.businessTravelDays != null" >
+        business_travel_days = #{record.businessTravelDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.compassionateLeaveDays != null" >
+        compassionate_leave_days = #{record.compassionateLeaveDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.sickLeaveDays != null" >
+        sick_leave_days = #{record.sickLeaveDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.workOvertimeDays != null" >
+        work_overtime_days = #{record.workOvertimeDays,jdbcType=INTEGER},
+      </if>
+      <if test="record.lateAndLeaveTimes != null" >
+        late_and_leave_times = #{record.lateAndLeaveTimes,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateUser != null" >
+        update_user = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.attendYear != null" >
+        attend_year = #{record.attendYear,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attendMonth != null" >
+        attend_month = #{record.attendMonth,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pay_work_attendance
+    set id = #{record.id,jdbcType=INTEGER},
+      serial = #{record.serial,jdbcType=INTEGER},
+      department = #{record.department,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      attendance_days = #{record.attendanceDays,jdbcType=INTEGER},
+      late_times = #{record.lateTimes,jdbcType=INTEGER},
+      leave_early_times = #{record.leaveEarlyTimes,jdbcType=INTEGER},
+      absenteeism_times = #{record.absenteeismTimes,jdbcType=INTEGER},
+      middle_days = #{record.middleDays,jdbcType=INTEGER},
+      night_days = #{record.nightDays,jdbcType=INTEGER},
+      business_travel_days = #{record.businessTravelDays,jdbcType=INTEGER},
+      compassionate_leave_days = #{record.compassionateLeaveDays,jdbcType=INTEGER},
+      sick_leave_days = #{record.sickLeaveDays,jdbcType=INTEGER},
+      work_overtime_days = #{record.workOvertimeDays,jdbcType=INTEGER},
+      late_and_leave_times = #{record.lateAndLeaveTimes,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      attend_year = #{record.attendYear,jdbcType=VARCHAR},
+      attend_month = #{record.attendMonth,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendance" >
+    update pay_work_attendance
+    <set >
+      <if test="serial != null" >
+        serial = #{serial,jdbcType=INTEGER},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="attendanceDays != null" >
+        attendance_days = #{attendanceDays,jdbcType=INTEGER},
+      </if>
+      <if test="lateTimes != null" >
+        late_times = #{lateTimes,jdbcType=INTEGER},
+      </if>
+      <if test="leaveEarlyTimes != null" >
+        leave_early_times = #{leaveEarlyTimes,jdbcType=INTEGER},
+      </if>
+      <if test="absenteeismTimes != null" >
+        absenteeism_times = #{absenteeismTimes,jdbcType=INTEGER},
+      </if>
+      <if test="middleDays != null" >
+        middle_days = #{middleDays,jdbcType=INTEGER},
+      </if>
+      <if test="nightDays != null" >
+        night_days = #{nightDays,jdbcType=INTEGER},
+      </if>
+      <if test="businessTravelDays != null" >
+        business_travel_days = #{businessTravelDays,jdbcType=INTEGER},
+      </if>
+      <if test="compassionateLeaveDays != null" >
+        compassionate_leave_days = #{compassionateLeaveDays,jdbcType=INTEGER},
+      </if>
+      <if test="sickLeaveDays != null" >
+        sick_leave_days = #{sickLeaveDays,jdbcType=INTEGER},
+      </if>
+      <if test="workOvertimeDays != null" >
+        work_overtime_days = #{workOvertimeDays,jdbcType=INTEGER},
+      </if>
+      <if test="lateAndLeaveTimes != null" >
+        late_and_leave_times = #{lateAndLeaveTimes,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attendYear != null" >
+        attend_year = #{attendYear,jdbcType=VARCHAR},
+      </if>
+      <if test="attendMonth != null" >
+        attend_month = #{attendMonth,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.PayWorkAttendance" >
+    update pay_work_attendance
+    set serial = #{serial,jdbcType=INTEGER},
+      department = #{department,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      attendance_days = #{attendanceDays,jdbcType=INTEGER},
+      late_times = #{lateTimes,jdbcType=INTEGER},
+      leave_early_times = #{leaveEarlyTimes,jdbcType=INTEGER},
+      absenteeism_times = #{absenteeismTimes,jdbcType=INTEGER},
+      middle_days = #{middleDays,jdbcType=INTEGER},
+      night_days = #{nightDays,jdbcType=INTEGER},
+      business_travel_days = #{businessTravelDays,jdbcType=INTEGER},
+      compassionate_leave_days = #{compassionateLeaveDays,jdbcType=INTEGER},
+      sick_leave_days = #{sickLeaveDays,jdbcType=INTEGER},
+      work_overtime_days = #{workOvertimeDays,jdbcType=INTEGER},
+      late_and_leave_times = #{lateAndLeaveTimes,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      attend_year = #{attendYear,jdbcType=VARCHAR},
+      attend_month = #{attendMonth,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

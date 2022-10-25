@@ -5,6 +5,10 @@ package com.deepsoft.haolifa.constant;
  * @description: 常量类
  **/
 public class Constant {
+    public static final String company = "山西好利阀机械制造有限公司";
+    public static final String JS_CCB = "中国建设银行股份有限公司侯马开发区支行";
+    public static final String ZG_BOC = "中国银行侯马支行";
+    public static final String YZ_PSBC = "中国邮政储蓄银行股份有限公司侯马市呈王路支行";
     public static final String METHOD_POST = "POST";
     public static final String METHOD_GET = "GET";
 
@@ -15,6 +19,8 @@ public class Constant {
         String ENTRUST_NO_PREFIX_JJ = "JJ";
         String DELIVERY_NO_PREFIX_FHTZD = "FHTZD";
         String REJECT_MATERIAL_NO_PREFIX_BHG = "BHG";
+        String AC_NO_PREFIX_AC = "AC";
+        String VS_NO_PREFIX_AC = "VS";
     }
 
     public interface PurchaseOrderType {

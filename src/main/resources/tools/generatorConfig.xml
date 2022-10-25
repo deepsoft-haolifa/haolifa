@@ -24,7 +24,7 @@
             driverClass="com.mysql.jdbc.Driver"
             connectionURL="jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true"
             userId="haolifa"
-            password="haolifa3306">
+            password="lZqDoJPuUb3Vp">
         </jdbcConnection>
 
         <!-- java类型处理器
@@ -86,18 +86,20 @@
             <property name="enableSubPackages" value="true"/>
 
         </javaClientGenerator>
-        <!--<javaServiceGenerator targetPackage="com.deepsoft.haolifa.service" targetProject="src/main/java"-->
-                              <!--implementationPackage="com.deepsoft.haolifa.service">-->
-        <!--</javaServiceGenerator>-->
+<!--        <javaServiceGenerator targetPackage="com.deepsoft.haolifa.service" targetProject="src/main/java" implementationPackage="com.deepsoft.haolifa.service">-->
+<!--        </javaServiceGenerator>-->
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-        <table tableName="material" domainObjectName="Material">
+        <table tableName="biz_loan_apply" domainObjectName="BizLoanApply">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="stock" domainObjectName="Stock">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+<!--        <table tableName="auto_control_entrust" domainObjectName="AutoControlEntrust">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="stock" domainObjectName="Stock">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
 <!--        <table tableName="product_stock_log" domainObjectName="ProductStockLog">-->
 <!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
 <!--        </table>-->

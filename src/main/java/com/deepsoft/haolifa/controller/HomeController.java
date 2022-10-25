@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.businessAnalysis.BusinessAnalysisRespDTO;
+import com.deepsoft.haolifa.service.BusinessAnalysisService;
 import com.deepsoft.haolifa.service.HomeApiService;
 import com.deepsoft.haolifa.service.RoleService;
 import io.swagger.annotations.Api;
@@ -19,6 +21,9 @@ public class HomeController {
     private HomeApiService homeApiService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private BusinessAnalysisService businessAnalysisService;
+
 
     @ApiOperation("获取发起流程的快捷入口")
     @GetMapping("/quick-start")
@@ -49,6 +54,20 @@ public class HomeController {
         @ApiParam(required = false, value = "订单号") @RequestParam(value = "formNo", required = false) String formNo
     ) {
         return homeApiService.getDoneItems(pageNum, pageSize, formNo);
+    }
+
+
+    @ApiOperation("业绩指标-获取")
+    @GetMapping("/business-analysis/get")
+    public ResultBean<BusinessAnalysisRespDTO> businessAnalysisGet() {
+        return ResultBean.success(businessAnalysisService.get(null));
+    }
+
+    @ApiOperation("业绩指标-手动执行")
+    @GetMapping("/business-analysis/generate")
+    public ResultBean businessAnalysisGenerate() {
+        businessAnalysisService.generate(null);
+        return ResultBean.success(null);
     }
 
 }

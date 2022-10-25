@@ -13,7 +13,7 @@
 
         SELECT 2 type,id busId,entrust_no busNo,material_graph_no graphNo,material_graph_name materialName,number
         outQuantity,batch_number batchNumber,'' deptName,out_room_status outRoomStatus,create_time createTime from
-        entrust b
+        entrust b where b.workShop_type > 0
 
         union all
 

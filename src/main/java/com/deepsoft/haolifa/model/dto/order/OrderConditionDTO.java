@@ -32,6 +32,10 @@ public class OrderConditionDTO {
 
     @ApiModelProperty(value = "结束时间")
     private Date endDate;
+
+
+    @ApiModelProperty(value = "年")
+    private String year;
 }
 
 

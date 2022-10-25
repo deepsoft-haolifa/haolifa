@@ -794,6 +794,66 @@ public class SprayExample {
             addCriterion("bus_type not between", value1, value2, "busType");
             return (Criteria) this;
         }
+
+        public Criteria andTaskStatusIsNull() {
+            addCriterion("task_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusIsNotNull() {
+            addCriterion("task_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusEqualTo(Byte value) {
+            addCriterion("task_status =", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusNotEqualTo(Byte value) {
+            addCriterion("task_status <>", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusGreaterThan(Byte value) {
+            addCriterion("task_status >", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("task_status >=", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusLessThan(Byte value) {
+            addCriterion("task_status <", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("task_status <=", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusIn(List<Byte> values) {
+            addCriterion("task_status in", values, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusNotIn(List<Byte> values) {
+            addCriterion("task_status not in", values, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusBetween(Byte value1, Byte value2) {
+            addCriterion("task_status between", value1, value2, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("task_status not between", value1, value2, "taskStatus");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.dao.repository;
 import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderProductMapper {
@@ -27,4 +29,7 @@ public interface OrderProductMapper {
     int updateByPrimaryKeySelective(OrderProduct record);
 
     int updateByPrimaryKey(OrderProduct record);
+
+
+    List<OrderProduct> selectByMap(@Param("query") Map<String,Object> query);
 }

@@ -4,22 +4,25 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.export.*;
 import com.deepsoft.haolifa.model.dto.export.DemandAmountDto;
+import com.deepsoft.haolifa.model.dto.report.ReportBaseDTO;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ReportService {
 
     //获取采购合同报表
-    ResultBean selectBySupplierName(String purchase, String year);
+    ResultBean selectBySupplierName(ReportSupplierConditionDTO dto);
 
     /**
      * 采购报表--采购统计
      *
      * @return
      */
-    ResultBean selectPurchase(String year,String month);
+    ResultBean selectPurchase(ReportSupplierConditionDTO baseDTO);
 
     /**
      * 采购报表--好利公司按月采购统计
@@ -30,14 +33,36 @@ public interface ReportService {
 
     //销售报表
     //获取目前总金额总数量
-    List<ExportSaleDTO> selectAll(String year);
+    SaleAllRespDTO selectAll(String year);
 
     //根据月份获取总金额
     String selectByMonth(String startTime, String endTime);
 
-    List<ExportContractDTO> selectContractByDemandName(String year,String month);
+    /**
+     * 销售报表--年度订货
+     * @param year
+     * @return
+     */
+    List<ExportSaleMapDTO> selectContractByDemandName(String year);
+    /**
+     * 销售报表--月度订货
+     * @param baseDTO
+     * @return
+     */
+    List<ExportContractDTO> selectContractByDemandNameByMonth(ReportBaseDTO baseDTO);
+    /**
+     * 销售报表--年度回款
+     * @param year
+     * @return
+     */
+    List<ExportSaleMapDTO>   selectshouhuiContractByDemandName(String year);
+    /**
+     * 销售报表--月度回款
+     * @param baseDTO
+     * @return
+     */
+    List<ExportContractDTO> selectshouhuiContractByDemandNameByMonth(ReportBaseDTO baseDTO);
 
-    List<ExportContractDTO> selectshouhuiContractByDemandName(String year,String month);
 
     /**
      * 按需方统计的开票总金额
@@ -58,7 +83,7 @@ public interface ReportService {
     /**
      * 按需方统计的发货总金额,开票总金额，生产总金额，回款总金额
      */
-    List<DemandAmountDto> selectAllAmountByDemandName(@Param("year") String year);
+    List<DemandAmountDto> selectAllAmountByDemandName(ReportBaseDTO baseDTO);
 
 
     //根据产品型号获取金额数量

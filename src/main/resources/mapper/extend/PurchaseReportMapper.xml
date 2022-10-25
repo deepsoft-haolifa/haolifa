@@ -1,38 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.deepsoft.haolifa.dao.repository.PurchaseReportMapper" >
+<mapper namespace="com.deepsoft.haolifa.dao.repository.PurchaseReportMapper">
 
-  <select id="selectBySupplierName" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
-         select supplier_name supplierName,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
-         where 1=1
-      <if test="status!=null and status>0">
-          and status=#{status}
-      </if>
-         and purchase_order.supplier_name = #{supplierName}
-      <if test="year != null and year != ''">
-          and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-      </if>
-         group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+    <select id="selectBySupplierName" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
+        SELECT
+        FROM_UNIXTIME(UNIX_TIMESTAMP(po.create_time),"%Y-%m") createTime,
+        IFNULL( po.total_price, 0 ) total,
+        IFNULL( po.paid_account, 0 ) payTotal,
+        IFNULL( po1.total_price, 0 ) registered,
+        IFNULL( po1.total_price, 0 ) - IFNULL( po.paid_account, 0 ) unpay,
+        IFNULL( iv.total_amount, 0 ) returnTicketAmount,
+        IFNULL( po1.total_price, 0 ) - IFNULL( iv.total_amount, 0 ) unTicketAmount
+        FROM
+        purchase_order po
+        LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 2 AND STATUS IN ( 2 )
+        GROUP BY order_no ) iv ON iv.order_no = po.purchase_order_no
+        LEFT JOIN purchase_order po1 ON po1.purchase_order_no = po.purchase_order_no AND po1.STATUS = 5
+        <include refid="purchaseSql"></include>
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(po.create_time),"%Y-%m")
     </select>
     <select id="selectPurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
-        select supplier_name supplierName ,sum(total_price) total,sum(paid_account) payTotal,(sum(total_price) - sum(paid_account)) unpay, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime from purchase_order
-        where 1=1
-        <if test="status!=null and status>0">
-        and status=#{status}
-        </if>
-        <if test="year != null and year != ''">
-            and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
-        </if>
-        <if test="startTime!=null and startTime != ''">
-            and create_time&gt;=#{startTime}
-        </if>
-        <if test="endTime!=null and endTime != ''">
-            and create_time&lt;=#{endTime}
-        </if>
-        group by supplier_name
+        SELECT
+        po.supplier_name,
+        sum(IFNULL( po.total_price, 0 )) total,
+        sum(IFNULL( po.paid_account, 0 )) payTotal,
+        sum(IFNULL( po1.total_price, 0 )) registered,
+        sum(IFNULL( po1.total_price, 0 )) - sum(IFNULL( po.paid_account, 0 )) unpay,
+        sum(IFNULL( iv.total_amount, 0 )) returnTicketAmount,
+        sum(IFNULL( po1.total_price, 0 )) - sum(IFNULL( iv.total_amount, 0 )) unTicketAmount
+        FROM
+        purchase_order po
+        LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 2 AND STATUS IN ( 2 )
+        GROUP BY order_no ) iv ON iv.order_no = po.purchase_order_no
+        LEFT JOIN purchase_order po1 ON po1.purchase_order_no = po.purchase_order_no AND po1.STATUS = 5
+        <include refid="purchaseSql"></include>
+        group by po.supplier_name
     </select>
+
+
     <select id="selectAllPurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
-        select sum(total_price) total,sum(paid_account) payTotal, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
+        select sum(total_price) total,sum(paid_account) payTotal, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+        createTime
         from purchase_order
         where 1=1
         <if test="status!=null and status>0">
@@ -47,11 +55,133 @@
     <select id="selectInvoicePurchase" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
         select sum(total_amount) collected, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") createTime
         from invoice
-        where  type=2 and status=2
-
+        where type=2 and status=2
         <if test="year != null and year != ''">
             and FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y") = #{year}
         </if>
         group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
     </select>
+    <select id="reportPurchaseList" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
+        SELECT
+        po.purchase_order_no,
+        po.STATUS,
+        po.supplier_name,
+        po.create_time,
+        po.total_count,
+        IFNULL( po.total_price, 0 ) total,
+        IFNULL( po.paid_account, 0 ) payTotal,
+        IFNULL( po1.total_price, 0 ) registered,
+        IFNULL( po1.total_price, 0 ) - IFNULL( po.paid_account, 0 ) unpay,
+        IFNULL( iv.total_amount, 0 ) returnTicketAmount,
+        IFNULL( po1.total_price, 0 ) - IFNULL( iv.total_amount, 0 ) unTicketAmount
+        FROM
+        purchase_order po
+        LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 2 AND STATUS IN ( 2 )
+        GROUP BY order_no ) iv ON iv.order_no = po.purchase_order_no
+        LEFT JOIN purchase_order po1 ON po1.purchase_order_no = po.purchase_order_no AND po1.STATUS = 5
+        <include refid="conditionSql"/>
+        order by po.id desc
+    </select>
+    <select id="reportPurchaseSummary" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
+        select
+        po.total,
+        po1.registered,
+        bpp.payTotal ,
+        iv.returnTicketAmount,
+        po1.registered - bpp.payTotal unpay,
+        po1.registered - iv.returnTicketAmount unTicketAmount
+        from (
+        (select ROUND(IFNULL( sum(po.total_price), 0 ),2) total from purchase_order po <include refid="purchaseSql"/> ) po,
+        (select ROUND(IFNULL( sum(bpp.apply_amount), 0 ),2) payTotal FROM biz_pay_plan bpp   <include refid="bizPayPlanSql"/> ) bpp,
+        (select ROUND(IFNULL( sum(iv.total_amount), 0 ),2) returnTicketAmount from invoice iv<include refid="invoiceSql"/> ) iv,
+        (select ROUND(IFNULL( sum(po.total_price), 0 ),2) registered from purchase_order po <include refid="completePurchaseSql"/> ) po1
+        )
+    </select>
+
+    <select id="selectInvoice" resultType="java.math.BigDecimal">
+        SELECT
+        ifnull(sum(total_amount),0) total_amount
+        FROM invoice iv
+        <include refid="invoiceSql"/>
+    </select>
+
+    <select id="selectPaid" resultType="java.math.BigDecimal">
+        SELECT
+        ifnull(sum(apply_amount),0) total_amount
+        FROM biz_pay_plan bpp
+        <include refid="bizPayPlanSql"/>
+    </select>
+
+
+    <sql id="purchaseSql">
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and po.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and po.create_time&lt;=#{endDate}
+            </if>
+            <if test="supplierName!=null and supplierName != ''">
+                and po.supplier_name =#{supplierName}
+            </if>
+        </where>
+    </sql>
+    <sql id="completePurchaseSql">
+        <where>
+            po.status = 5
+            <if test="startDate!=null and startDate != ''">
+                and po.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and po.create_time&lt;=#{endDate}
+            </if>
+            <if test="supplierName!=null and supplierName != ''">
+                and po.supplier_name =#{supplierName}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="bizPayPlanSql">
+        <where>
+            bpp.status=2
+            <if test="startDate!=null and startDate != ''">
+                and bpp.pay_date&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and bpp.pay_date&lt;=#{endDate}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="invoiceSql">
+        <where>
+            iv.type=2 and iv.status in(2)
+            <if test="startDate!=null and startDate != ''">
+                and iv.invoice_date&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and iv.invoice_date&lt;=#{endDate}
+            </if>
+            <if test="purchaseOrderNo != null and purchaseOrderNo != ''">
+                and iv.order_no like CONCAT('%',#{purchaseOrderNo},'%')
+            </if>
+        </where>
+    </sql>
+
+    <sql id="conditionSql">
+        <where>
+            <if test="startDate!=null and startDate != ''">
+                and po.create_time&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and po.create_time&lt;=#{endDate}
+            </if>
+            <if test="supplierName!=null and supplierName != ''">
+                and po.supplier_name like CONCAT('%',#{supplierName},'%')
+            </if>
+            <if test="purchaseOrderNo!=null and purchaseOrderNo != ''">
+                and po.purchase_order_no like CONCAT('%',#{purchaseOrderNo},'%')
+            </if>
+        </where>
+    </sql>
 </mapper>

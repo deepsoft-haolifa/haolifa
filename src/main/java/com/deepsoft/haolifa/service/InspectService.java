@@ -6,6 +6,7 @@ import com.deepsoft.haolifa.model.dto.InspectDTO;
 import com.deepsoft.haolifa.model.dto.InspectItemUpdateDTO;
 import com.deepsoft.haolifa.model.dto.InspectResDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.vo.InspectItemQtyVo;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface InspectService {
     /**
      * 查询列表
      */
-    ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo,String supplierName,String batchNumber,Byte status);
+    ResultBean getList(int type, int pageNum, int pageSize, String inspectNo, String purchaseOrderNo, String supplierName, String batchNumber, Byte status);
 
     /**
      * 更新状态
@@ -99,10 +100,19 @@ public interface InspectService {
      * @return
      */
     InspectHistory getHistoryInfo(Integer historyId);
+
     /**
      * 根据采购订单号获取质检的相关数量
      *
      * @return
      */
     List<InspectItemQtyVo> getPurchaseAllQty(String purchaseNo);
+
+    /**
+     * 根据采购订单号,开始时间，结束时间获取质检的相关数量
+     *
+     * @return
+     */
+    List<InspectHistory> getInspectHistoryList(PayCalculateDTO payCalculateDTO);
+
 }

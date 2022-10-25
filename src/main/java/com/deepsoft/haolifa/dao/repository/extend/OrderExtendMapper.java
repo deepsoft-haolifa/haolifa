@@ -2,10 +2,14 @@ package com.deepsoft.haolifa.dao.repository.extend;
 
 import com.deepsoft.haolifa.model.domain.CheckMaterialLog;
 import com.deepsoft.haolifa.model.dto.order.OrderCheckMaterialDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderConditionDTO;
+import com.deepsoft.haolifa.model.dto.order.OrderListRespDTO;
 import com.deepsoft.haolifa.model.dto.order.OrderMaterialDTO;
+import com.deepsoft.haolifa.model.dto.report.ReportOrderConditionDTO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -61,4 +65,9 @@ public interface OrderExtendMapper {
      *
      */
     int countDelivery(Map<String, Object> paramMap);
+
+
+    List<OrderListRespDTO> reportOrderList(ReportOrderConditionDTO model);
+
+    BigDecimal reportOrderSummary(ReportOrderConditionDTO model);
 }

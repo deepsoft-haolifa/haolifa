@@ -25,6 +25,6 @@ public class DeliveryNoticeAuditDTO {
     @ApiModelProperty(value = "审核备注")
     private String auditInfo;
 
-    @ApiModelProperty(value = "审核结果（1审核不通过；2.审核通过）")
+    @ApiModelProperty(value = "审核结果（1审核通过；2.审核不通过）")
     private Byte auditResult;
 }

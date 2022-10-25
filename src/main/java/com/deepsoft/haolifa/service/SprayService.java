@@ -2,10 +2,13 @@ package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.SprayInspectHistory;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.spray.SprayDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayInspectListDto;
 import com.deepsoft.haolifa.model.dto.spray.SprayListDto;
+
+import java.util.List;
 
 public interface SprayService {
 
@@ -43,4 +46,10 @@ public interface SprayService {
     int obtainNumber(String materialGraphNo);
 
     SprayInspectHistory getHistoryInfo(Integer historyId);
-}
+
+    List<SprayInspectHistory> getSprayInspectHistoryList(PayCalculateDTO payCalculateDTO);
+
+    void updateTaskStatus(String sprayNo, int status);
+
+
+    }

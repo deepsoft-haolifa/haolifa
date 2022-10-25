@@ -3,6 +3,9 @@ package com.deepsoft.haolifa.service;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.storage.*;
 
+import java.util.List;
+import java.util.Map;
+
 public interface EntryOutStoreRecordService {
 
     /**
@@ -24,6 +27,12 @@ public interface EntryOutStoreRecordService {
      * @return
      */
     int getOutProductCount(ProductStorageDto model);
+
+    /**
+     * 成品已出库数量
+     * @return
+     */
+    Map<String,Integer> mapOutProductCount(List<String> orderNo);
     /**
      * 零件入库
      *

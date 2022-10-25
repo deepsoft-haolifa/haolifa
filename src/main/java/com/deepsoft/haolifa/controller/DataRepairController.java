@@ -55,6 +55,98 @@ public class DataRepairController {
     @Resource
     private MaterialMapper materialMapper;
 
+    @PostMapping("init")
+    @ApiOperation("初始化库存数据-2022")
+    public void initMaterialData() throws IOException {
+        List<String> noSystemNoList = new ArrayList<>();
+        List<String> excelNoList = new ArrayList<>();
+        List<String> systemNoExcelList = new ArrayList<>();
+        // 1. 先获取系统中所有的图号（阀体，阀座，阀板，阀杆）
+        MaterialExample example = new MaterialExample();
+        List<Material> materials = materialMapper.selectByExample(example);
+        log.info("stock out material list:{}", materials.size());
+        Map<String, Integer> map = materials.stream().collect(Collectors.toMap(Material::getGraphNo, Material::getLockQuantity));
+
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(new File("E://11.xlsx")));
+        Sheet sheet = workbook.getSheetAt(0);
+        for (int rowNum = 1; rowNum < sheet.getLastRowNum(); rowNum++) {
+            Row row = sheet.getRow(rowNum);
+            String trueGraphNo = getCellValue(row.getCell(1));
+            Integer trueQuantity = Integer.valueOf(getCellValue(row.getCell(2)));
+            String batchNo = "PC20220528";
+            if (map.containsKey(trueGraphNo)) {
+//                Integer localQty = map.getOrDefault(trueGraphNo, 0);
+//                if (localQty > 0) {
+//                    int caju = trueQuantity - localQty;
+//                    if (caju > 0) {
+//                        log.info("caju more than 0 graphNo:{},{},{},{}", trueGraphNo, caju, trueQuantity, localQty);
+//                        trueQuantity = caju;
+//                    } else {
+//                        log.info("caju less than 0 graphNo:{},{},{},{}", trueGraphNo, caju, trueQuantity, localQty);
+////                        localQty = trueQuantity;
+//                        trueQuantity = 0;
+//                    }
+//                }
+//                this.changeStockQty(trueGraphNo, 0, trueQuantity, "Z1", "Z1-1", batchNo);
+//                excelNoList.add(trueGraphNo);
+            } else {
+                log.info("stock out material system no graph no:{}", trueGraphNo);
+                noSystemNoList.add(trueGraphNo);
+                Material material = new Material();
+                material.setGraphNo(trueGraphNo);
+                material.setCreateUser(0);
+                material.setCurrentQuantity(trueQuantity);
+                materialMapper.insertSelective(material);
+                if (trueQuantity != 0) {
+                    Stock insertStock = new Stock() {{
+                        setCreateUser(0);
+                        setMaterialGraphNo(trueGraphNo);
+                        setMaterialBatchNo(batchNo);
+                        setQuantity(trueQuantity);
+                        setType((byte) 2);
+                        setRemark("2022.5.28初始化新增");
+                        setRoomNo("Z1");
+                        setRackNo("Z1-1");
+                    }};
+                    stockMapper.insertSelective(insertStock);
+                }
+            }
+        }
+        // 系统中有，盘点表里面没有，则将系统中的图号的库存都清零
+//        map.keySet().forEach(e -> {
+//            if (!excelNoList.contains(e)) {
+//                int trueQuantity = 0;
+//                Integer localQty = map.getOrDefault(e, 0);
+//                if (localQty > 0) {
+//                    trueQuantity = -localQty;
+//                }
+//                log.info("excel not null bug system exist:{}", e);
+//                this.changeStockQty(e, localQty, trueQuantity, "Z1", "Z1-1", "PC20220527");
+////                systemNoExcelList.add(e);
+//            }
+//        });
+
+        // excel中有，系统中没有的数据
+        if (CollectionUtil.isNotEmpty(noSystemNoList)) {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("E://excelExists.txt"));
+            for (String no : noSystemNoList) {
+                bw.write(no + "\r\n");
+                bw.flush();
+            }
+            bw.close();
+        }
+        // 系统中有，excel中没有的数据
+//        if (CollectionUtil.isNotEmpty(systemNoExcelList)) {
+//            BufferedWriter bw = new BufferedWriter(new FileWriter("E://systemExists.txt"));
+//            for (String no : systemNoExcelList) {
+//                bw.write(no + "\r\n");
+//                bw.flush();
+//            }
+//            bw.close();
+//        }
+    }
+
+
     @PostMapping("repairStock")
     @ApiOperation("修复批次号库存和主库存不一致的数据")
     public ResultBean repairStock() {
@@ -228,7 +320,7 @@ public class DataRepairController {
         }
         // 系统中有，excel中没有的数据
         if (CollectionUtil.isNotEmpty(systemNoExcelList)) {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("d://systemExists.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("E://systemExists.txt"));
             for (String no : systemNoExcelList) {
                 bw.write(no + "\r\n");
                 bw.flush();
@@ -239,14 +331,14 @@ public class DataRepairController {
 
 
     private void changeStockQty(String graphNo, Integer lockQty, Integer qty, String roomNo, String rackNo, String batchNo) {
-        if (lockQty + qty > 0) {
-            if (StrUtil.isBlank(batchNo)
-                || StrUtil.isBlank(roomNo)
-                || StrUtil.isBlank(rackNo)) {
-                log.info("params is need :{},{},{},{}", graphNo, batchNo, roomNo, rackNo);
-                return;
-            }
-        }
+//        if (lockQty + qty > 0) {
+//            if (StrUtil.isBlank(batchNo)
+//                || StrUtil.isBlank(roomNo)
+//                || StrUtil.isBlank(rackNo)) {
+//                log.info("params is need :{},{},{},{}", graphNo, batchNo, roomNo, rackNo);
+//                return;
+//            }
+//        }
         // 1.更新零件信息库的库存； 可用库存更新为表格的数据； 锁定库存更新为0；
         MaterialExample example = new MaterialExample();
         example.or().andGraphNoEqualTo(graphNo);
@@ -257,33 +349,35 @@ public class DataRepairController {
         materialMapper.updateByExampleSelective(update, example);
 
         // 2.更新原来的库存表数据为0
-        StockExample stockExample = new StockExample();
-        stockExample.or().andMaterialGraphNoEqualTo(graphNo);
-        Stock stockUpdate = new Stock() {{
-            setQuantity(0);
-            setRemark("2021盘点更新库存为0");
-        }};
-        stockMapper.updateByExampleSelective(stockUpdate, stockExample);
+//        StockExample stockExample = new StockExample();
+//        stockExample.or().andMaterialGraphNoEqualTo(graphNo);
+//        Stock stockUpdate = new Stock() {{
+//            setQuantity(0);
+//            setRemark("2021盘点更新库存为0");
+//        }};
+//        stockMapper.updateByExampleSelective(stockUpdate, stockExample);
 
         // 3. 插入新的库存数据
-        if (qty + lockQty > 0) {
-            if (StrUtil.isBlank(batchNo)
-                || StrUtil.isBlank(roomNo)
-                || StrUtil.isBlank(rackNo)) {
-                log.info("params is need :{},{},{},{}", graphNo, batchNo, roomNo, rackNo);
-                return;
-            }
+//        if (qty + lockQty > 0) {
+//            if (StrUtil.isBlank(batchNo)
+//                || StrUtil.isBlank(roomNo)
+//                || StrUtil.isBlank(rackNo)) {
+//                log.info("params is need :{},{},{},{}", graphNo, batchNo, roomNo, rackNo);
+//                return;
+//            }
+        if (qty != 0) {
             Stock insertStock = new Stock() {{
                 setCreateUser(0);
                 setMaterialGraphNo(graphNo);
                 setMaterialBatchNo(batchNo);
-                setQuantity(qty + lockQty);
+                setQuantity(qty);
                 setType((byte) 2);
-                setRemark("2021盘点新增");
+                setRemark("2022.5.28初始化新增");
                 setRoomNo(roomNo);
                 setRackNo(rackNo);
             }};
             stockMapper.insertSelective(insertStock);
         }
     }
+//    }
 }

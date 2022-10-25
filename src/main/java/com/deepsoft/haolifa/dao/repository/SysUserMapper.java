@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface SysUserMapper {
-    long countByExample(SysUserExample example);
+    int countByExample(SysUserExample example);
 
     int deleteByExample(SysUserExample example);
 
@@ -27,4 +27,6 @@ public interface SysUserMapper {
     int updateByPrimaryKeySelective(SysUser record);
 
     int updateByPrimaryKey(SysUser record);
+
+    SysUser selectByPhoneOrIdCard(@Param("phone") String phone,@Param("idCard")  String idCard);
 }

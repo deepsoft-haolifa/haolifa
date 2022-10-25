@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.controller;
 
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.Product;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.product.OutProductDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductConditionDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
@@ -24,7 +25,7 @@ public class ProductController {
 
     @ApiOperation("获取成品分页列表")
     @PostMapping("/pageInfo")
-    public ResultBean<Product> pageInfoProduct(@RequestBody ProductConditionDTO model) {
+    public ResultBean<PageDTO<Product>> pageInfoProduct(@RequestBody ProductConditionDTO model) {
         return productService.pageInfo(model);
     }
 

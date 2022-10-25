@@ -25,13 +25,17 @@ public class SysUser {
 
     private Byte isDelete;
 
+    private Integer departId;
+
+    private Integer postId;
+
     private Date entryTime;
 
     private Date createTime;
 
     private Date updateTime;
 
-    public SysUser(Integer id, String username, String password, String realName, String userNo, Byte sex, String nativePlace, String phone, String idCard, String photoUrl, Byte isDelete, Date entryTime, Date createTime, Date updateTime) {
+    public SysUser(Integer id, String username, String password, String realName, String userNo, Byte sex, String nativePlace, String phone, String idCard, String photoUrl, Byte isDelete, Integer departId, Integer postId, Date entryTime, Date createTime, Date updateTime) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -43,6 +47,8 @@ public class SysUser {
         this.idCard = idCard;
         this.photoUrl = photoUrl;
         this.isDelete = isDelete;
+        this.departId = departId;
+        this.postId = postId;
         this.entryTime = entryTime;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -138,6 +144,22 @@ public class SysUser {
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Integer getDepartId() {
+        return departId;
+    }
+
+    public void setDepartId(Integer departId) {
+        this.departId = departId;
+    }
+
+    public Integer getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
     }
 
     public Date getEntryTime() {

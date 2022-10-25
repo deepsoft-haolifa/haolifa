@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.BizBillMapper">
+    <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.BizBill">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="xh" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="d" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="certificate_number" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="settlement_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="clearing_banks" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="pre_month_money" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+            <arg column="collection_money" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+            <arg column="collection_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="payment" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+            <arg column="payment_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="balance" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+            <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="dept_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string1" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string2" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string3" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string4" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string5" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string6" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string7" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string8" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string9" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="string10" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="status" javaType="java.lang.String" jdbcType="CHAR"/>
+            <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR"/>
+            <arg column="contract_user" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id
+        , xh, d, certificate_number, settlement_type, clearing_banks, pre_month_money,
+    collection_money, collection_type, payment, payment_type, balance, type, dept_id,
+    string1, string2, string3, string4, string5, string6, string7, string8, string9,
+    string10, remark, status, del_flag, contract_user, create_user, create_time, update_user,
+    update_time
+    </sql>
+
+    <!--  参考老系统sql  -->
+    <sql id="Base_Column_List_m">
+        select b.id,
+               b.xh,
+               b.d,
+               b.certificate_number,
+               b.settlement_type,
+               b.clearing_banks,
+               b.pre_month_money,
+               collection_money,
+               b.collection_type,
+               b.payment,
+               b.payment_type,
+               b.balance,
+               b.type,
+               b.dept_id,
+               string1,
+               b.string2,
+               b.string3,
+               b.string4,
+               b.string5,
+               b.string6,
+               b.string7,
+               b.string8,
+               b.string9,
+               string10,
+               b.remark,
+               b.status,
+               b.del_flag,
+               b.contract_user,
+               b.create_user,
+               b.create_time,
+               b.update_user,
+               b.update_time,
+               d.pid,
+               d.dept_name,
+               u.username as createByName
+        from biz_bill b
+                 left join sys_department d on d.id = b.dept_id
+                 left join sys_user u on u.id = b.create_user
+
+    </sql>
+
+
+    <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizBillExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from biz_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_bill
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from biz_bill
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BizBillExample">
+        delete from biz_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BizBill">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into biz_bill (xh, d, certificate_number,
+        settlement_type, clearing_banks, pre_month_money,
+        collection_money, collection_type, payment,
+        payment_type, balance, type,
+        dept_id, string1, string2,
+        string3, string4, string5,
+        string6, string7, string8,
+        string9, string10, remark,
+        status, del_flag, contract_user,
+        create_user, create_time, update_user,
+        update_time)
+        values (#{xh,jdbcType=VARCHAR}, #{d,jdbcType=TIMESTAMP}, #{certificateNumber,jdbcType=VARCHAR},
+        #{settlementType,jdbcType=VARCHAR}, #{clearingBanks,jdbcType=VARCHAR}, #{preMonthMoney,jdbcType=DECIMAL},
+        #{collectionMoney,jdbcType=DECIMAL}, #{collectionType,jdbcType=VARCHAR}, #{payment,jdbcType=DECIMAL},
+        #{paymentType,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR},
+        #{deptId,jdbcType=VARCHAR}, #{string1,jdbcType=VARCHAR}, #{string2,jdbcType=VARCHAR},
+        #{string3,jdbcType=VARCHAR}, #{string4,jdbcType=VARCHAR}, #{string5,jdbcType=VARCHAR},
+        #{string6,jdbcType=VARCHAR}, #{string7,jdbcType=VARCHAR}, #{string8,jdbcType=VARCHAR},
+        #{string9,jdbcType=VARCHAR}, #{string10,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+        #{status,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}, #{contractUser,jdbcType=INTEGER},
+        #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizBill">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into biz_bill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="xh != null">
+                xh,
+            </if>
+            <if test="d != null">
+                d,
+            </if>
+            <if test="certificateNumber != null">
+                certificate_number,
+            </if>
+            <if test="settlementType != null">
+                settlement_type,
+            </if>
+            <if test="clearingBanks != null">
+                clearing_banks,
+            </if>
+            <if test="preMonthMoney != null">
+                pre_month_money,
+            </if>
+            <if test="collectionMoney != null">
+                collection_money,
+            </if>
+            <if test="collectionType != null">
+                collection_type,
+            </if>
+            <if test="payment != null">
+                payment,
+            </if>
+            <if test="paymentType != null">
+                payment_type,
+            </if>
+            <if test="balance != null">
+                balance,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="string1 != null">
+                string1,
+            </if>
+            <if test="string2 != null">
+                string2,
+            </if>
+            <if test="string3 != null">
+                string3,
+            </if>
+            <if test="string4 != null">
+                string4,
+            </if>
+            <if test="string5 != null">
+                string5,
+            </if>
+            <if test="string6 != null">
+                string6,
+            </if>
+            <if test="string7 != null">
+                string7,
+            </if>
+            <if test="string8 != null">
+                string8,
+            </if>
+            <if test="string9 != null">
+                string9,
+            </if>
+            <if test="string10 != null">
+                string10,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="contractUser != null">
+                contract_user,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="xh != null">
+                #{xh,jdbcType=VARCHAR},
+            </if>
+            <if test="d != null">
+                #{d,jdbcType=TIMESTAMP},
+            </if>
+            <if test="certificateNumber != null">
+                #{certificateNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementType != null">
+                #{settlementType,jdbcType=VARCHAR},
+            </if>
+            <if test="clearingBanks != null">
+                #{clearingBanks,jdbcType=VARCHAR},
+            </if>
+            <if test="preMonthMoney != null">
+                #{preMonthMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="collectionMoney != null">
+                #{collectionMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="collectionType != null">
+                #{collectionType,jdbcType=VARCHAR},
+            </if>
+            <if test="payment != null">
+                #{payment,jdbcType=DECIMAL},
+            </if>
+            <if test="paymentType != null">
+                #{paymentType,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="deptId != null">
+                #{deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="string1 != null">
+                #{string1,jdbcType=VARCHAR},
+            </if>
+            <if test="string2 != null">
+                #{string2,jdbcType=VARCHAR},
+            </if>
+            <if test="string3 != null">
+                #{string3,jdbcType=VARCHAR},
+            </if>
+            <if test="string4 != null">
+                #{string4,jdbcType=VARCHAR},
+            </if>
+            <if test="string5 != null">
+                #{string5,jdbcType=VARCHAR},
+            </if>
+            <if test="string6 != null">
+                #{string6,jdbcType=VARCHAR},
+            </if>
+            <if test="string7 != null">
+                #{string7,jdbcType=VARCHAR},
+            </if>
+            <if test="string8 != null">
+                #{string8,jdbcType=VARCHAR},
+            </if>
+            <if test="string9 != null">
+                #{string9,jdbcType=VARCHAR},
+            </if>
+            <if test="string10 != null">
+                #{string10,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="contractUser != null">
+                #{contractUser,jdbcType=INTEGER},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.BizBillExample"
+            resultType="java.lang.Integer">
+        select count(*) from biz_bill
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update biz_bill
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.xh != null">
+                xh = #{record.xh,jdbcType=VARCHAR},
+            </if>
+            <if test="record.d != null">
+                d = #{record.d,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.certificateNumber != null">
+                certificate_number = #{record.certificateNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="record.settlementType != null">
+                settlement_type = #{record.settlementType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.clearingBanks != null">
+                clearing_banks = #{record.clearingBanks,jdbcType=VARCHAR},
+            </if>
+            <if test="record.preMonthMoney != null">
+                pre_month_money = #{record.preMonthMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="record.collectionMoney != null">
+                collection_money = #{record.collectionMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="record.collectionType != null">
+                collection_type = #{record.collectionType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.payment != null">
+                payment = #{record.payment,jdbcType=DECIMAL},
+            </if>
+            <if test="record.paymentType != null">
+                payment_type = #{record.paymentType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.balance != null">
+                balance = #{record.balance,jdbcType=DECIMAL},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deptId != null">
+                dept_id = #{record.deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string1 != null">
+                string1 = #{record.string1,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string2 != null">
+                string2 = #{record.string2,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string3 != null">
+                string3 = #{record.string3,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string4 != null">
+                string4 = #{record.string4,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string5 != null">
+                string5 = #{record.string5,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string6 != null">
+                string6 = #{record.string6,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string7 != null">
+                string7 = #{record.string7,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string8 != null">
+                string8 = #{record.string8,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string9 != null">
+                string9 = #{record.string9,jdbcType=VARCHAR},
+            </if>
+            <if test="record.string10 != null">
+                string10 = #{record.string10,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=CHAR},
+            </if>
+            <if test="record.delFlag != null">
+                del_flag = #{record.delFlag,jdbcType=CHAR},
+            </if>
+            <if test="record.contractUser != null">
+                contract_user = #{record.contractUser,jdbcType=INTEGER},
+            </if>
+            <if test="record.createUser != null">
+                create_user = #{record.createUser,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateUser != null">
+                update_user = #{record.updateUser,jdbcType=INTEGER},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update biz_bill
+        set id = #{record.id,jdbcType=INTEGER},
+        xh = #{record.xh,jdbcType=VARCHAR},
+        d = #{record.d,jdbcType=TIMESTAMP},
+        certificate_number = #{record.certificateNumber,jdbcType=VARCHAR},
+        settlement_type = #{record.settlementType,jdbcType=VARCHAR},
+        clearing_banks = #{record.clearingBanks,jdbcType=VARCHAR},
+        pre_month_money = #{record.preMonthMoney,jdbcType=DECIMAL},
+        collection_money = #{record.collectionMoney,jdbcType=DECIMAL},
+        collection_type = #{record.collectionType,jdbcType=VARCHAR},
+        payment = #{record.payment,jdbcType=DECIMAL},
+        payment_type = #{record.paymentType,jdbcType=VARCHAR},
+        balance = #{record.balance,jdbcType=DECIMAL},
+        type = #{record.type,jdbcType=VARCHAR},
+        dept_id = #{record.deptId,jdbcType=VARCHAR},
+        string1 = #{record.string1,jdbcType=VARCHAR},
+        string2 = #{record.string2,jdbcType=VARCHAR},
+        string3 = #{record.string3,jdbcType=VARCHAR},
+        string4 = #{record.string4,jdbcType=VARCHAR},
+        string5 = #{record.string5,jdbcType=VARCHAR},
+        string6 = #{record.string6,jdbcType=VARCHAR},
+        string7 = #{record.string7,jdbcType=VARCHAR},
+        string8 = #{record.string8,jdbcType=VARCHAR},
+        string9 = #{record.string9,jdbcType=VARCHAR},
+        string10 = #{record.string10,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=CHAR},
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+        contract_user = #{record.contractUser,jdbcType=INTEGER},
+        create_user = #{record.createUser,jdbcType=INTEGER},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_user = #{record.updateUser,jdbcType=INTEGER},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.BizBill">
+        update biz_bill
+        <set>
+            <if test="xh != null">
+                xh = #{xh,jdbcType=VARCHAR},
+            </if>
+            <if test="d != null">
+                d = #{d,jdbcType=TIMESTAMP},
+            </if>
+            <if test="certificateNumber != null">
+                certificate_number = #{certificateNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="settlementType != null">
+                settlement_type = #{settlementType,jdbcType=VARCHAR},
+            </if>
+            <if test="clearingBanks != null">
+                clearing_banks = #{clearingBanks,jdbcType=VARCHAR},
+            </if>
+            <if test="preMonthMoney != null">
+                pre_month_money = #{preMonthMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="collectionMoney != null">
+                collection_money = #{collectionMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="collectionType != null">
+                collection_type = #{collectionType,jdbcType=VARCHAR},
+            </if>
+            <if test="payment != null">
+                payment = #{payment,jdbcType=DECIMAL},
+            </if>
+            <if test="paymentType != null">
+                payment_type = #{paymentType,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                balance = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId,jdbcType=VARCHAR},
+            </if>
+            <if test="string1 != null">
+                string1 = #{string1,jdbcType=VARCHAR},
+            </if>
+            <if test="string2 != null">
+                string2 = #{string2,jdbcType=VARCHAR},
+            </if>
+            <if test="string3 != null">
+                string3 = #{string3,jdbcType=VARCHAR},
+            </if>
+            <if test="string4 != null">
+                string4 = #{string4,jdbcType=VARCHAR},
+            </if>
+            <if test="string5 != null">
+                string5 = #{string5,jdbcType=VARCHAR},
+            </if>
+            <if test="string6 != null">
+                string6 = #{string6,jdbcType=VARCHAR},
+            </if>
+            <if test="string7 != null">
+                string7 = #{string7,jdbcType=VARCHAR},
+            </if>
+            <if test="string8 != null">
+                string8 = #{string8,jdbcType=VARCHAR},
+            </if>
+            <if test="string9 != null">
+                string9 = #{string9,jdbcType=VARCHAR},
+            </if>
+            <if test="string10 != null">
+                string10 = #{string10,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=CHAR},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="contractUser != null">
+                contract_user = #{contractUser,jdbcType=INTEGER},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BizBill">
+        update biz_bill
+        set xh                 = #{xh,jdbcType=VARCHAR},
+            d                  = #{d,jdbcType=TIMESTAMP},
+            certificate_number = #{certificateNumber,jdbcType=VARCHAR},
+            settlement_type    = #{settlementType,jdbcType=VARCHAR},
+            clearing_banks     = #{clearingBanks,jdbcType=VARCHAR},
+            pre_month_money    = #{preMonthMoney,jdbcType=DECIMAL},
+            collection_money   = #{collectionMoney,jdbcType=DECIMAL},
+            collection_type    = #{collectionType,jdbcType=VARCHAR},
+            payment            = #{payment,jdbcType=DECIMAL},
+            payment_type       = #{paymentType,jdbcType=VARCHAR},
+            balance            = #{balance,jdbcType=DECIMAL},
+            type               = #{type,jdbcType=VARCHAR},
+            dept_id            = #{deptId,jdbcType=VARCHAR},
+            string1            = #{string1,jdbcType=VARCHAR},
+            string2            = #{string2,jdbcType=VARCHAR},
+            string3            = #{string3,jdbcType=VARCHAR},
+            string4            = #{string4,jdbcType=VARCHAR},
+            string5            = #{string5,jdbcType=VARCHAR},
+            string6            = #{string6,jdbcType=VARCHAR},
+            string7            = #{string7,jdbcType=VARCHAR},
+            string8            = #{string8,jdbcType=VARCHAR},
+            string9            = #{string9,jdbcType=VARCHAR},
+            string10           = #{string10,jdbcType=VARCHAR},
+            remark             = #{remark,jdbcType=VARCHAR},
+            status             = #{status,jdbcType=CHAR},
+            del_flag           = #{delFlag,jdbcType=CHAR},
+            contract_user      = #{contractUser,jdbcType=INTEGER},
+            create_user        = #{createUser,jdbcType=INTEGER},
+            create_time        = #{createTime,jdbcType=TIMESTAMP},
+            update_user        = #{updateUser,jdbcType=INTEGER},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getLastRecord" resultType="com.deepsoft.haolifa.model.domain.BizBill">
+        select * from biz_bill where 1=1  and del_flag = 0 order by id desc limit 1
+    </select>
+</mapper>

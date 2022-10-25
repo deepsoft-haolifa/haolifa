@@ -97,7 +97,15 @@ public class CommonEnum {
 
         MATERIAL_GRAPH_NO_NOT_EXIST_1("5001", "【{0}】 不存在零件库中，请确认"),
         MATERIAL_REQUISITION_EXIST("5002", "这个订单的领料单已经保存过，请确认"),
-        PRODUCT_COUNT_ERROR("5003", "数量不够扣减");
+        PRODUCT_COUNT_ERROR("5003", "数量不够扣减"),
+        FILE_IS_NULL("5004", "文件为空请重新选择"),
+        ID_CARD_INVALID("5005", "身份证校验失败"),
+        ID_CARD_OR_PHONE_REPEAT("5006", "身份证号或手机号和其他人重复"),
+        ORDER_NOT_ASSIGN_TASK("5007", "请先给订单分配任务后再进行操作"),
+        ASSIGN_TASK_SAVE_CHECK("5008", "订单正在质检，如若修改请联系管理员"),
+        ASSIGN_TASK_CHECK("5009", "订单没有找到工序，请检查订单规格型号"),
+
+        ;
 
         public final String code;
 
@@ -178,10 +186,6 @@ public class CommonEnum {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(SysDictTypeEnum.FILE_TYPE.code);
-    }
-
     /**
      * 出入库操作类型
      */
@@ -236,7 +240,11 @@ public class CommonEnum {
         PURCHASE_FLOW(2, "采购流程"),
         SUPPLIER_FLOW(3, "供应商合格审批"),
         REPLACE_FLOW(4, "替换料审批"),
-        ENTRUST_FLOW(5, "外部委托审批流程");
+        ENTRUST_FLOW(5, "外部委托审批流程"),
+        APYAPP_FLOW(10, "付款申请审批流程"),
+        REIMBURSE_APP_FLOW(11, "报销申请审批流程"),
+        LOAN_APP_FLOW(12, "借款申请审批流程"),
+        ;
 
         public int id;
         public String desc;
@@ -254,7 +262,11 @@ public class CommonEnum {
         ENTRUST_TYPE((byte) 2, "委托加工合同"),
         PURCHASE_TYPE((byte) 3, "采购合同"),
         REPLACE_TYPE((byte) 4, "替换料"),
-        SUPPLIER_TYPE((byte) 5, "供应商审批");
+        SUPPLIER_TYPE((byte) 5, "供应商审批"),
+        PAYAPP_TYPE((byte) 10, "付款申请审批"),
+        REIMBURSE_APP_TYPE((byte) 11, "报销申请审批"),
+        LOAN_APP_TYPE((byte) 12, "借款申请审批"),
+        ;
 
 
         public final int code;
@@ -389,9 +401,13 @@ public class CommonEnum {
 
     }
 
+    /**
+     * 质检历史状态
+     */
     public enum InspectHistoryStatus {
-
+        // 待入库
         WAITING_STORE_1((byte) 1),
+        // 已入库
         BEEN_STORE_2((byte) 2);
         public final byte code;
 
@@ -480,6 +496,7 @@ public class CommonEnum {
      */
     public enum SysDictTypeEnum {
         FILE_TYPE("FILE_TYPE", "文件类型"),
+        PAYMENT_TYPE("PAYMENT_TYPE", "付款类型"),
         ;
 
         public String code;
@@ -645,6 +662,151 @@ public class CommonEnum {
 
         materialOutType(byte type, String name) {
             this.type = type;
+            this.name = name;
+        }
+    }
+
+    /**
+     * material_requisition
+     * 学历type 1:小学、2:初中、3:中专、4:高中、5:大专、6:本科、7:硕士、8:博士
+     */
+    public enum EducationType {
+        PRIMARY_SCHOOL((byte) 1, "小学"),
+        JUNIOR_HIGH_SCHOOL((byte) 1, "初中"),
+        SECONDARY_SPECIALIZED_SCHOOL((byte) 1, "中专"),
+        HIGH_SCHOOL((byte) 1, "高中"),
+        JUNIOR_COLLEGE((byte) 1, "大专"),
+        UNDERGRADUATE((byte) 1, "本科"),
+        MASTER((byte) 1, "硕士"),
+        DOCTOR((byte) 1, "博士"),
+        ;
+        public final byte type;
+        public final String name;
+        EducationType(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
+
+    /**
+     * marry_status
+     * 婚姻状态 1:未婚 2:已婚 3:离异 4:丧偶
+     */
+    public enum MarryStatusType {
+        UNMARRIED((byte) 1, "未婚"),
+        MARRIED((byte) 1, "已婚"),
+        DIVORCE((byte) 1, "离异"),
+        WIDOWED((byte) 1, "丧偶"),
+
+        ;
+        public final byte type;
+        public final String name;
+        MarryStatusType(byte type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
+
+    /**
+     * UserType
+     * 人员类型 0：生产，1:管理
+     */
+    public enum UserType {
+        UNMARRIED("0", "生产"),
+        MARRIED("1", "管理"),
+
+        ;
+        public final String type;
+        public final String name;
+        UserType(String type, String name) {
+            this.type = type;
+            this.name = name;
+        }
+    }
+
+
+    /*** 财务管理模块 start**/
+
+    /***
+     *
+     */
+    public enum DelFlagEnum {
+        YES("0", "存在"),
+        NO("2", "删除");
+        public final String code;
+        public final String name;
+        DelFlagEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+    }
+
+
+    /*** 财务管理模块 end**/
+
+    /***
+     *
+     */
+    public enum WorkShopTypeEnum {
+        PRODUCT("1", "装配车间"),
+        SPRAY("2", "喷涂车间"),
+        MACHINING("3", "机加车间"),
+        AUTO_CONTROL("4", "自控车间"),
+        VALVE_SEAT_ENTRUST("5", "橡胶车间"),
+
+        ;
+        public final String code;
+        public final String name;
+        WorkShopTypeEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+        public static WorkShopTypeEnum getWorkShopTypeByName(String workTypeName) {
+            for (CommonEnum.WorkShopTypeEnum value : CommonEnum.WorkShopTypeEnum.values()) {
+                if (value.name.endsWith(workTypeName)) {
+                    return value;
+                }
+            }
+            return null;
+        }
+    }
+
+    /*** 财务管理模块 end**/
+
+    /***
+     *
+     */
+    public enum TypeOfWorkEnum {
+        VALVE_ASSEMBLY("1", "蝶阀装配"),
+        VALVE_BODY("2", "阀体毛坯"),
+        VALVE_PLATE("3", "阀板毛坯"),
+        SEMI_FINISHED_VALVE_BODY("4", "阀体半成品"),
+        SEMI_FINISHED_VALVE_PLATE("5", "阀板半成品"),
+        VALVE_SEAT_MACHINING("6", "阀座加工"),
+        ACTUATOR_ASSEMBLY("7", "普通开关型电动执行器装配"),
+        ACTUATOR_ADJUSTABLE("8", "调节型电动执行器装配"),
+        PREPARATION_OF_COMMON("9", "公共件准备工作"),
+        PNEUMATIC_ASSEMBLY("10", "气动阀装配"),
+        EXTERNAL_ADJUSTMENT_ORDINARY("11", "外调普通精巧型执行器装配"),
+        EXTERNAL_ADJUSTMENT("12", "外调精巧调节型执行器装配"),
+        EXTERNAL_ADJUSTMENT_SWITCH("13", "外调通用开关型执行器装配"),
+        EXTERNAL_ADJUSTMENT_COMMON("14", "外调通用调节型执行器装配"),
+        CHECK_VALUE_ASSEMBLY("15", "止回阀装配"),
+        PLATE_BLANK("16", "盲板毛坯"),
+        SEAT_PIPE_MATERIAL("17", "螺纹阀座管料"),
+        PIPE_MATERIAL_OF_UPPER_VALVE_SEAT("18", "上阀座管料"),
+        PIPE_MATERIAL_OF_LOWER_VALVE_SEAT("19", "下阀座管料"),
+        SEALING_CASING_MATERIAL("20", "密封套管料"),
+        VALVE_CORE_BLANK("21", "阀芯毛坯"),
+        SIEMENS_CONTROL_VALVE_ASSEMBLY("22", "西门子调节阀装配"),
+        CONTROL_VALVE_ASSEMBLY("23", "调节阀装配"),
+        EXTERNAL_TRANSFER_PRODUCTS("24", "外调产品"),
+        VALVE_ACCESSORIES("25", "阀门配件"),
+        ;
+        public final String code;
+        public final String name;
+        TypeOfWorkEnum(String code, String name) {
+            this.code = code;
             this.name = name;
         }
     }

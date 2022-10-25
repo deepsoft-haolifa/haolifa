@@ -38,6 +38,12 @@ public class UserBaseDTO {
     @ApiModelProperty(required = true,value = "身份证")
     private String idCard;
 
+    @ApiModelProperty(required = true,value = "部门ID")
+    private Integer departId;
+
+    @ApiModelProperty(required = true,value = "岗位ID")
+    private Integer postId;
+
 //    @ApiModelProperty(required = false,value = "照片")
 //    private String photo;
 

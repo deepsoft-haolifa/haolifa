@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service;
 
 import com.deepsoft.haolifa.model.domain.Product;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.product.OutProductDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductConditionDTO;
 import com.deepsoft.haolifa.model.dto.product.ProductRequestDTO;
@@ -63,7 +64,7 @@ public interface ProductService {
      *
      * @return
      */
-    ResultBean<Product> pageInfo(ProductConditionDTO model);
+    ResultBean<PageDTO<Product>> pageInfo(ProductConditionDTO model);
 
     /**
      * 成品出库，添加/更新成品库存

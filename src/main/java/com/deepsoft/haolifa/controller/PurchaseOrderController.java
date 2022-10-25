@@ -2,16 +2,10 @@ package com.deepsoft.haolifa.controller;
 
 
 import com.deepsoft.haolifa.model.domain.PurchaseOrder;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderCompleteDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderDTO;
-import com.deepsoft.haolifa.model.dto.PurchaseOrderListDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.service.ApplyBuyService;
 import com.deepsoft.haolifa.service.PurcahseOrderService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,15 +54,20 @@ public class PurchaseOrderController {
 
     @ApiOperation("查询采购订单列表")
     @GetMapping("list/{orderType}")
-    public ResultBean list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
-                           @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,
-                           String orderNo, int createUserId, int status,
-                           @PathVariable("orderType") Integer orderType,
-                           String supplierName,
-                           String startDate,
-                           String endDate
-    ) {
+    public ResultBean<PageDTO<PurchaseOrder>> list(@ApiParam("页码") @RequestParam(defaultValue = "1") int pageNum,
+                                                   @ApiParam("展示条数") @RequestParam(defaultValue = "10") int pageSize,
+                                                   String orderNo, int createUserId, int status,
+                                                   @PathVariable("orderType") Integer orderType,
+                                                   String supplierName,
+                                                   String startDate,
+                                                   String endDate) {
         return purcahseOrderService.list(pageNum, pageSize, orderNo, createUserId, status, orderType, supplierName, startDate, endDate);
+    }
+
+    @ApiOperation("查询采购订单列表（采购付款专用）")
+    @PostMapping("/payPlanlist")
+    public ResultBean<PageDTO<PurchaseOrderRSDTO>> payPlanlist(@RequestBody PurchaseOrderRQParam param) {
+        return purcahseOrderService.payPlanlist(param);
     }
 
     @ApiOperation("采购完成")
@@ -99,5 +98,12 @@ public class PurchaseOrderController {
             applyBuyService.updateStatus(itemId);
         }
         return purcahseOrderService.save(model, orderType);
+    }
+
+    @ApiOperation("获取采购订单详情")
+    @GetMapping("/details")
+    @ApiImplicitParam(name = "purchaseOrderNo", value = "订单号", dataType = "String", paramType = "query", required = true)
+    public ResultBean details(String purchaseOrderNo) {
+        return ResultBean.success(purcahseOrderService.details(purchaseOrderNo));
     }
 }

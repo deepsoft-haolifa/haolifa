@@ -193,7 +193,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResultBean<Product> pageInfo(ProductConditionDTO model) {
+    public ResultBean<PageDTO<Product>> pageInfo(ProductConditionDTO model) {
         ProductExample example = new ProductExample();
         ProductExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(model.getName())) {

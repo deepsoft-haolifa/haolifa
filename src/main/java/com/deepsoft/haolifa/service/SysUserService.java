@@ -4,8 +4,11 @@ import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.UserBaseDTO;
+import com.deepsoft.haolifa.model.dto.UserPipLineDTO;
 import com.deepsoft.haolifa.model.vo.UserInfoVO;
 import com.deepsoft.haolifa.model.vo.UserPageVO;
+
+import java.util.List;
 
 public interface SysUserService {
 
@@ -17,6 +20,12 @@ public interface SysUserService {
      */
     CustomUser selectLoginUser();
 
+
+    /**
+     * 获取当前用户的父级管理list
+     * @return
+     */
+    public List<UserPipLineDTO> currentUserPipLine();
     /**
      * 获取当前用户信息
      * @return
@@ -86,4 +95,5 @@ public interface SysUserService {
      */
     String changePwd(String newPassword);
 
+    List<SysUser> getSysUserList(List<Integer> reimburseUserIdList);
 }

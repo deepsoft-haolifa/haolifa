@@ -4,7 +4,7 @@
     <select id="listProductRecord" resultType="com.deepsoft.haolifa.model.dto.export.ExportEntryOutRecordDto">
         SELECT
         a.order_no orderNo,
-        a.product_no  productNo,
+        a.product_no productNo,
         a.product_model productModel,
         a.product_specifications productSpecifications,
         a.quantity quantity,
@@ -13,7 +13,7 @@
         a.product_department productDepartment
         FROM
         `entry_out_store_record` a
---         LEFT JOIN order_product_associate opa ON a.order_no = opa.order_no and a.product_no=opa.product_no
+        -- LEFT JOIN order_product_associate opa ON a.order_no = opa.order_no and a.product_no=opa.product_no
         where 1=1 and a.type=1 and a.operation_type=2
         <if test="orderNo!=null and orderNo!=''">
             and a.order_no = #{orderNo}
@@ -30,7 +30,7 @@
             resultType="com.deepsoft.haolifa.model.dto.export.ExportEntryOutRecordDto">
         SELECT
         a.order_no orderNo,
-        a.product_no  productNo,
+        a.product_no productNo,
         a.product_model productModel,
         a.product_specifications productSpecifications,
         a.quantity quantity,
@@ -54,4 +54,56 @@
         </if>
         order by a.id desc
     </select>
+    <select id="costMaterial" resultType="java.math.BigDecimal">
+        select
+        ifnull(sum(price*abs(quantity)),0)
+        from entry_out_store_record
+        where type=2 and operation_type=1
+        <if test="startDate!= null">
+            and create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and create_time &lt;= #{endDate}
+        </if>
+    </select>
+    <select id="costMaterialDept" resultType="java.math.BigDecimal">
+        select
+        ROUND(ifnull(sum(price*abs(quantity)),0),2)
+        from entry_out_store_record
+        where type=2 and operation_type=1 and receive_department='装配车间'
+--         and material_graph_no not like '%M' and material_graph_no not like '%J' and material_graph_no not like '%B'
+        <if test="startDate!= null">
+            and create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and create_time &lt;= #{endDate}
+        </if>
+    </select>
+    <select id="costMaterialSporadic" resultType="java.math.BigDecimal">
+        select
+        ROUND(ifnull(sum(sm.price*abs(seor.quantity)),0),2)
+        from sporadic_entry_out_record seor
+        left join sporadic_material sm on sm.id=seor.sporadic_id
+        where 1=1
+        <if test="startDate!= null">
+            and seor.create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and seor.create_time &lt;= #{endDate}
+        </if>
+    </select>
+    <select id="costMaterialAutoControl" resultType="java.math.BigDecimal">
+        select
+        ROUND(ifnull(sum(acm.price*abs(aceor.quantity)),0),2)
+        from auto_control_entry_out_record aceor
+        left join auto_control_material acm on acm.id=aceor.auto_control_id
+        where 1=1
+        <if test="startDate!= null">
+            and aceor.create_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and aceor.create_time &lt;= #{endDate}
+        </if>
+    </select>
+
 </mapper>

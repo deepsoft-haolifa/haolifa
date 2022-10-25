@@ -1,8 +1,12 @@
 package com.deepsoft.haolifa.service;
 
+import com.deepsoft.haolifa.model.domain.ProInspectRecord;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectConditionDTO;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectRecordDTO;
+
+import java.util.List;
 
 public interface ProInspectService {
 
@@ -38,4 +42,12 @@ public interface ProInspectService {
      * @return
      */
     int updateStorageStatus(int id, Byte storageStatus);
-}
+
+    /**
+     * getProInspectList
+     * @param proInspectRecord
+     * @return
+     */
+    List<ProInspectRecord> getProInspectList (PayCalculateDTO proInspectRecord);
+
+    }

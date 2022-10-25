@@ -1,14 +1,15 @@
 package com.deepsoft.haolifa.model.dto;
 
 
-
 import com.deepsoft.haolifa.constant.CommonEnum;
+import lombok.Data;
 
 import java.io.Serializable;
 
 /**
  * 自定义响应结构
  */
+@Data
 public class ResultBean<T> implements Serializable {
 
     /**
@@ -44,50 +45,30 @@ public class ResultBean<T> implements Serializable {
         this.message = CommonEnum.ResponseEnum.SUCCESS.msg;
     }
 
-
-    public static ResultBean error(CommonEnum.ResponseEnum responseEnum) {
-        String code = responseEnum.code;
-        String message = responseEnum.msg;
-        return new ResultBean(code, message, null);
-    }
-
-    public static ResultBean error(CommonEnum.ResponseEnum responseEnum, String message) {
-        String code = responseEnum.code;
-        return new ResultBean(code, message, null);
-    }
-
-    public static ResultBean success(Object result) {
-        return new ResultBean(result);
-    }
-
     public ResultBean(CommonEnum.ResponseEnum responseEnum) {
         this.code = responseEnum.code;
         this.message = responseEnum.msg;
-
     }
 
-    public String getCode() {
-        return code;
+    public static <T> ResultBean<T> error(CommonEnum.ResponseEnum responseEnum) {
+        String code = responseEnum.code;
+        String message = responseEnum.msg;
+        return new ResultBean<T>(code, message, null);
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public static <T> ResultBean<T> error(String message) {
+        String code = CommonEnum.ResponseEnum.FAIL.code;
+        return new ResultBean<T>(code, message, null);
     }
 
-    public String getMessage() {
-        return message;
+    public static <T> ResultBean<T> error(CommonEnum.ResponseEnum responseEnum, String message) {
+        String code = responseEnum.code;
+        return new ResultBean<T>(code, message, null);
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public static <T> ResultBean<T> success(T result) {
+        return new ResultBean<T>(result);
     }
 
-    public Object getResult() {
-        return result;
-    }
-
-    public void setResult(T result) {
-        this.result = result;
-    }
 
 }

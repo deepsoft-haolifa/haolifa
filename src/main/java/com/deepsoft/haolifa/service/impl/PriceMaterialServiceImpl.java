@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.PriceMaterialMapper;
 import com.deepsoft.haolifa.dao.repository.PriceProductMapper;
@@ -128,11 +129,15 @@ public class PriceMaterialServiceImpl implements PriceMaterialService {
         String graphNo = model.getGraphNo();
         PriceMaterialExample example = new PriceMaterialExample();
         example.or().andGraphNoEqualTo(graphNo);
-
+        List<PriceMaterial> priceMaterials = priceMaterialMapper.selectByExample(example);
         PriceMaterial priceMaterial = new PriceMaterial();
         BeanUtils.copyProperties(model, priceMaterial);
-        priceMaterial.setId(null);
-        priceMaterialMapper.updateByExampleSelective(priceMaterial, example);
+        if (CollectionUtil.isEmpty(priceMaterials)) {
+            priceMaterialMapper.insertSelective(priceMaterial);
+        } else {
+            priceMaterial.setId(null);
+            priceMaterialMapper.updateByExampleSelective(priceMaterial, example);
+        }
     }
 
 

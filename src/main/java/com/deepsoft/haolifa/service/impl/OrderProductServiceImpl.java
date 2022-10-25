@@ -2,7 +2,9 @@ package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -14,18 +16,20 @@ import com.deepsoft.haolifa.cache.redis.RedisDao;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
 import com.deepsoft.haolifa.constant.Constant;
-import com.deepsoft.haolifa.dao.repository.OrderFileMapper;
-import com.deepsoft.haolifa.dao.repository.OrderMaterialMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductAssociateMapper;
-import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
+import com.deepsoft.haolifa.dao.repository.*;
 import com.deepsoft.haolifa.dao.repository.extend.OrderExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
+import com.deepsoft.haolifa.model.dto.finance.payapp.PayApplyRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.model.dto.material.MaterialQuantityDTO;
 import com.deepsoft.haolifa.model.dto.material.MaterialResultDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
+import com.deepsoft.haolifa.model.dto.storage.ProductStorageDto;
 import com.deepsoft.haolifa.service.*;
 import com.deepsoft.haolifa.util.Base64;
+import com.deepsoft.haolifa.util.CommonUtil;
 import com.deepsoft.haolifa.util.DateFormatterUtils;
 import com.deepsoft.haolifa.util.QiniuUtil;
 import com.github.pagehelper.Page;
@@ -42,6 +46,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +57,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -84,12 +92,19 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     @Autowired
     private EntrustRelationService entrustRelationService;
     @Autowired
-    private PriceProductService priceProductService;
+    private EntryOutStoreRecordService entryOutStoreRecordService;
+
     @Lazy
     @Autowired
     FlowInstanceService flowInstanceService;
     @Autowired
     private CheckMaterialLockService checkMaterialLockService;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private OrderTechnicalDetailedRelMapper orderTechnicalDetailedRelMapper;
+    @Autowired
+    private TechnicalDetailedMapper technicalDetailedMapper;
 
     @Override
     public ResultBean generateOrder(GenerateOrderDTO generateOrderDTO) {
@@ -611,6 +626,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 OrderProductAssociate orderProductAssociate = new OrderProductAssociate();
                 Row row = sheet.getRow(i);
                 if (null != row) {
+                    Cell cell0 = row.getCell(0);
+                    orderProductAssociate.setSeqNo(getCellValue(cell0));
                     // 第一列，产品Id[DSb7A1X3N-10Q-DN50]
                     Cell cell1 = row.getCell(1);
                     orderProductAssociate.setProductNo(getCellValue(cell1));
@@ -711,11 +728,26 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             for (int i = lastRowNum; i < lastRowNum + 3; i++) {
                 Row row = sheet.getRow(i);
                 if (null != row) {
-                    Cell cell7 = row.getCell(7);
-                    cell7.setCellValue("");
-                    Cell cell8 = row.getCell(8);
-                    cell8.setCellValue("");
+                    // 以上价格均为含税价格  这一行，将价格隐藏
+                    if (i == lastRowNum + 2) {
+                        Cell cell2 = row.getCell(2);
+                        cell2.setCellValue("");
+                        Cell cell3 = row.getCell(3);
+                        cell3.setCellValue("");
+                        Cell cell4 = row.getCell(4);
+                        cell4.setCellValue("");
+                        Cell cell5 = row.getCell(5);
+                        cell5.setCellValue("");
+                        Cell cell6 = row.getCell(6);
+                        cell6.setCellValue("");
+                    } else {
+                        Cell cell7 = row.getCell(7);
+                        cell7.setCellValue("");
+                        Cell cell8 = row.getCell(8);
+                        cell8.setCellValue("");
+                    }
                 }
+
             }
             // 将数据赋值
             OrderProductDTO orderProductDTO = new OrderProductDTO();
@@ -946,6 +978,12 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                         e.setTotalPrice(BigDecimal.ZERO);
                     });
                     orderProductDTO.setOrderProductAssociates(orderProductAssociates);
+
+                    // 获取订单关联技术清单列表
+                    List<OrderTechnicalDetailedRel> orderTechnicalDetailedRels = orderTechnicalDetailedRelMapper.selectByExample(new OrderTechnicalDetailedRelExample() {{
+                        or().andOrderNoEqualTo(orderNo);
+                    }});
+                    orderProductDTO.setOrderTechnicalDetaileds(orderTechnicalDetailedRels);
                 }
                 return orderProductDTO;
             }
@@ -955,9 +993,9 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
     @Override
     public List<OrderProductAssociate> getOrderProductList(String orderNo) {
-        return orderProductAssociateMapper.selectByExample(new OrderProductAssociateExample() {{
-            or().andOrderNoEqualTo(orderNo);
-        }});
+        OrderProductAssociateExample example = new OrderProductAssociateExample();
+        example.createCriteria().andOrderNoEqualTo(orderNo);
+        return orderProductAssociateMapper.selectByExample(example);
     }
 
 
@@ -989,10 +1027,70 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         example.setOrderByClause("id desc");
         Page<OrderProduct> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
             .doSelectPage(() -> orderProductMapper.selectByExample(example));
+        List<OrderProduct> result = materials.getResult();
+        /**
+         * 发货状态的变更
+         */
+        if (CollectionUtil.isNotEmpty(result)) {
+            List<String> orderNoList = result.stream().map(OrderProduct::getOrderNo).collect(Collectors.toList());
+            Map<String, Integer> mapOutProductCount = entryOutStoreRecordService.mapOutProductCount(orderNoList);
+            for (OrderProduct orderProduct : result) {
+                Integer totalCount = orderProduct.getTotalCount();
+                Integer outCount = mapOutProductCount.getOrDefault(orderProduct.getOrderNo(), 0);
+                int abs = Math.abs(outCount);
+                if (abs == 0) {
+                    orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_NO_BEGIN_0.getCode());
+                } else if (totalCount > abs) {
+                    orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_PART_1.getCode());
+                } else {
+                    orderProduct.setDeliverStatus(CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode());
+                }
+            }
+        }
 
         PageDTO<OrderProduct> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materials, pageDTO);
         pageDTO.setList(materials);
+        return ResultBean.success(pageDTO);
+    }
+
+    @Override
+    public ResultBean<PageDTO<ReceivableOrderRSDTO>> receivableOrderList(ReceivableOrderRQDTO model) {
+        OrderProductExample example = new OrderProductExample();
+        OrderProductExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(model.getOrderNo())) {
+            criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
+        }
+        if (model.getOrderStatus() != null && model.getOrderStatus() > -1) {
+            criteria.andOrderStatusEqualTo(model.getOrderStatus());
+        }
+        if (StringUtils.isNotBlank(model.getDemandName())) {
+            criteria.andDemandNameLike("%" + model.getDemandName() + "%");
+        }
+        if (model.getContractSignDate() != null) {
+            Date contractSignDate = model.getContractSignDate();
+            String dateString = DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, contractSignDate);
+            criteria.andContractSignDateEqualTo(dateString);
+        }
+        if (model.getSupplyAgentName() != null) {
+            criteria.andSupplyAgentNameEqualTo(model.getSupplyAgentName());
+        }
+
+        example.setOrderByClause("id desc");
+        Page<OrderProduct> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> orderProductMapper.selectByExample(example));
+
+        PageDTO<ReceivableOrderRSDTO> pageDTO = new PageDTO<>();
+        BeanUtils.copyProperties(materials, pageDTO);
+        List<ReceivableOrderRSDTO> rsDTOList = materials.getResult().stream()
+            .map(orderProduct -> {
+                ReceivableOrderRSDTO rsdto = new ReceivableOrderRSDTO();
+                BeanUtils.copyProperties(orderProduct, rsdto);
+                return rsdto;
+            })
+            .collect(Collectors.toList());
+
+        pageDTO.setList(rsDTOList);
         return ResultBean.success(pageDTO);
     }
 
@@ -1106,8 +1204,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         List<MaterialResultDTO> fabanCollectEmpty = new ArrayList<>();
         // 获取符合阀杆的列表
         List<MaterialResultDTO> faganCollect = new ArrayList<>();
-        // 获取通用零件列表的列表
-        List<MaterialResultDTO> tongyongCollect = new ArrayList<>();
 
         // 根据型号和规格，获取图号列表
         // 阀体图号列表
@@ -1231,20 +1327,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
             });
         }
 
-        // 根据型号和规格，获取通用图号列表(一个通用图号对应多个型号和规格)
-        List<Material> tongyongList = materialService
-            .getListByMultiModelAndSpec(CommonEnum.ProductModelType.TONG_YONG.classifyId, smallModel, specifications);
-        if (tongyongList != null && tongyongList.size() > 0) {
-            tongyongList.forEach(e -> {
-                MaterialResultDTO materialResultDTO = new MaterialResultDTO();
-                materialResultDTO.setCurrentQuantity(e.getCurrentQuantity());
-                materialResultDTO.setMaterialName(e.getName());
-                materialResultDTO.setGraphNo(e.getGraphNo());
-                materialResultDTO.setSupportQuantity(e.getSupportQuantity());
-                tongyongCollect.add(materialResultDTO);
-            });
-        }
-
         List<MaterialTypeListDTO> listDTOS = new ArrayList<>();
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.FATI.code);
@@ -1261,11 +1343,6 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         listDTOS.add(new MaterialTypeListDTO() {{
             setType(CommonEnum.ProductModelType.FAGAN.code);
             setList(faganCollect);
-        }});
-
-        listDTOS.add(new MaterialTypeListDTO() {{
-            setType(CommonEnum.ProductModelType.TONG_YONG.code);
-            setList(tongyongCollect);
         }});
         return listDTOS;
     }
@@ -1300,66 +1377,26 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 listDTOS.stream().forEach(a -> {
                     // 通用料
                     String type = a.getType();
-                    if (type.equals(CommonEnum.ProductModelType.TONG_YONG.code)) {
-                        List<MaterialResultDTO> list = a.getList();
-                        list.stream().forEach(b -> {
-                            int materialCount = productNumber * b.getSupportQuantity();
-                            String graphNo = b.getGraphNo();
-                            if (tongyongMaterialsMap.containsKey(graphNo)) {
-                                MaterialQuantityDTO materialQuantityDTO = tongyongMaterialsMap.get(graphNo);
-                                Integer quantity = materialQuantityDTO.getQuantity();
-                                materialQuantityDTO.setQuantity(quantity + materialCount);
-                                tongyongMaterialsMap.put(graphNo, materialQuantityDTO);
-                            } else {
-                                MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
-                                materialQuantityDTO.setQuantity(materialCount);
-                                materialQuantityDTO.setGraphNo(graphNo);
-                                materialQuantityDTO.setType(type);
-                                materialQuantityDTO.setMaterialName(b.getMaterialName());
-                                tongyongMaterialsMap.put(graphNo, materialQuantityDTO);
-                            }
-                        });
-                    } else {
-                        List<MaterialResultDTO> list = a.getList();
-                        list.stream().forEach(b -> {
-                            String graphNo = b.getGraphNo();
-                            int materialCount = productNumber * b.getSupportQuantity();
-                            if (materialsMap.containsKey(graphNo)) {
-                                MaterialQuantityDTO materialQuantityDTO = materialsMap.get(graphNo);
-                                Integer quantity = materialQuantityDTO.getQuantity();
-                                materialQuantityDTO.setQuantity(quantity + materialCount);
-                                materialsMap.put(graphNo, materialQuantityDTO);
-                            } else {
-                                MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
-                                materialQuantityDTO.setQuantity(materialCount);
-                                materialQuantityDTO.setGraphNo(graphNo);
-                                materialQuantityDTO.setMaterialName(b.getMaterialName());
-                                materialQuantityDTO.setType(type);
-                                materialsMap.put(graphNo, materialQuantityDTO);
-                            }
-                        });
-                    }
+                    List<MaterialResultDTO> list = a.getList();
+                    list.stream().forEach(b -> {
+                        String graphNo = b.getGraphNo();
+                        int materialCount = productNumber * b.getSupportQuantity();
+                        if (materialsMap.containsKey(graphNo)) {
+                            MaterialQuantityDTO materialQuantityDTO = materialsMap.get(graphNo);
+                            Integer quantity = materialQuantityDTO.getQuantity();
+                            materialQuantityDTO.setQuantity(quantity + materialCount);
+                            materialsMap.put(graphNo, materialQuantityDTO);
+                        } else {
+                            MaterialQuantityDTO materialQuantityDTO = new MaterialQuantityDTO();
+                            materialQuantityDTO.setQuantity(materialCount);
+                            materialQuantityDTO.setGraphNo(graphNo);
+                            materialQuantityDTO.setMaterialName(b.getMaterialName());
+                            materialQuantityDTO.setType(type);
+                            materialsMap.put(graphNo, materialQuantityDTO);
+                        }
+                    });
                 });
             });
-
-            log.info("checkMaterial tongyong orderNo:{}, material count:{},common material count:{}", orderNo,
-                tongyongMaterialsMap.size(), materialsMap.size());
-            // 循环通用零件，直接成功
-            Iterator<Map.Entry<String, MaterialQuantityDTO>> tongyongIterator = tongyongMaterialsMap.entrySet().iterator();
-            while (tongyongIterator.hasNext()) {
-                OrderCheckMaterialDTO orderCheckMaterialDTO = new OrderCheckMaterialDTO();
-                Map.Entry<String, MaterialQuantityDTO> next = tongyongIterator.next();
-                String materialGraphNo = next.getKey();
-                MaterialQuantityDTO materialQuantityDTO = next.getValue();
-                orderCheckMaterialDTO.setCheckStatus(CommonEnum.CheckMaterialStatus.SUCCESS.code);
-                orderCheckMaterialDTO.setCheckResultMsg("核料成功");
-                orderCheckMaterialDTO.setMaterialGraphNo(materialGraphNo);
-                orderCheckMaterialDTO.setMaterialName(materialQuantityDTO.getMaterialName());
-                orderCheckMaterialDTO.setMaterialClassifyId(CommonEnum.ProductModelType.TONG_YONG.classifyId);
-                orderCheckMaterialDTO.setMaterialCount(materialQuantityDTO.getQuantity());
-                orderCheckMaterialDTO.setOrderNo(orderNo);
-                orderCheckMaterialDTOS.add(orderCheckMaterialDTO);
-            }
 
             // 核料过程中，正在机加工和喷涂的数量
             List<CheckMaterialLockDTO> materialLockDTOList = new ArrayList<>();
@@ -2143,6 +2180,34 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
     }
 
     @Override
+    public void finishedGoodsDelivery(String orderNo) {
+        // 获取出库数量
+        ProductStorageDto productStorageDto = new ProductStorageDto();
+        productStorageDto.setOrderNo(orderNo);
+        int outProductCount = entryOutStoreRecordService.getOutProductCount(productStorageDto);
+
+        // 更新 订单发货状态
+        OrderProductAssociateExample associateExample = new OrderProductAssociateExample();
+        associateExample.createCriteria().andOrderNoEqualTo(orderNo);
+        List<OrderProductAssociate> orderProducts = orderProductAssociateMapper.selectByExample(associateExample);
+        int productCount = orderProducts.stream().map(OrderProductAssociate::getProductNumber).reduce(0, Integer::sum);
+        if (!CollectionUtils.isEmpty(orderProducts)) {
+            if (outProductCount > 0 && outProductCount < productCount) {
+                // 部分发货
+                updateOrderDeliverStatus(orderNo, CommonEnum.DeliverStatus.DELIVER_PART_1.getCode(), outProductCount);
+            } else if (outProductCount >= productCount) {
+                // 全部发货
+                updateOrderDeliverStatus(orderNo, CommonEnum.DeliverStatus.DELIVER_COMPLETE_2.getCode(), productCount);
+                // 发货完成的话，将达标的订单同步到 经管下面的代开发票列表
+                InvoiceCreateDTO invoiceCreateDTO = new InvoiceCreateDTO();
+                invoiceCreateDTO.setOrderNo(orderNo);
+                applicationEventPublisher.publishEvent(invoiceCreateDTO);
+            }
+        }
+    }
+
+
+    @Override
     public ResultBean uploadAccessory(String orderNo, List<Accessory> accessories) {
         if (StringUtils.isEmpty(orderNo) || CollectionUtils.isEmpty(accessories)) {
             return ResultBean.error(ResponseEnum.PARAM_ERROR);
@@ -2265,6 +2330,108 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         if (i > 0) {
             //删除redis值
             redisDao.del(CacheKeyManager.cacheKeyOrderInfo(dto.getOrderNo()).key);
+        }
+        return i;
+    }
+
+
+    @Override
+    public void updateOrderTaskStatus(String orderNo, int status) {
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setTaskStatus((byte) status);
+        OrderProductExample example = new OrderProductExample();
+        example.createCriteria().andOrderNoEqualTo(orderNo);
+        orderProductMapper.updateByExampleSelective(orderProduct, example);
+    }
+
+
+    @Override
+    public List<OrderTechnicalDetailedRel> getTechnicalDetailed(OrderSimpleDTO dto) {
+        String orderNo = dto.getOrderNo();
+        List<OrderProductAssociate> orderItems = getOrderProductList(orderNo);
+        List<OrderTechnicalDetailedRel> resultList = new ArrayList<>();
+        StringBuilder errorMsg = new StringBuilder();
+        for (OrderProductAssociate orderItem : orderItems) {
+            String productNo = orderItem.getProductNo();
+            // 只对前两位是D0、D6、D9的提取数据
+            List<String> startList = Stream.of("D0", "D6", "D9").collect(Collectors.toList());
+            if (!startList.contains(productNo.substring(0, 2))) {
+                continue;
+            }
+            String remark = orderItem.getProductRemark();
+            // 将执行器从备注中找出来
+            String actuatorModel = "SKD-05";
+            Pattern pattern = Pattern.compile("适配:(.*?)执行器");
+            Matcher matcher = pattern.matcher(remark);
+            while (matcher.find()) {
+                actuatorModel = matcher.group(1);
+            }
+
+            String productModel = orderItem.getProductModel();
+            if (productModel.length() >= 4) {
+                productModel = productModel.substring(0, 4);
+            }
+
+            // 根据型号+规格+执行器型号获取技术清单
+            TechnicalDetailedExample example = new TechnicalDetailedExample();
+            example.or().andProductModelEqualTo(productModel)
+                .andSpecificationsEqualTo(orderItem.getSpecifications())
+                .andActuatorModelEqualTo(actuatorModel);
+            List<TechnicalDetailed> technicalDetaileds = technicalDetailedMapper.selectByExample(example);
+            if (CollectionUtil.isNotEmpty(technicalDetaileds)) {
+                if (technicalDetaileds.size() > 1) {
+                    errorMsg.append(orderItem.getProductModel()).append(":")
+                        .append(orderItem.getSpecifications()).append(":")
+                        .append(actuatorModel).append(":")
+                        .append("技术清单维护数据重复");
+                }
+                OrderTechnicalDetailedRel orderTechnicalDetailedRel = new OrderTechnicalDetailedRel();
+                BeanUtil.copyProperties(technicalDetaileds.get(0), orderTechnicalDetailedRel);
+                orderTechnicalDetailedRel.setOrderNo(orderNo);
+                orderTechnicalDetailedRel.setSeqNo(orderItem.getSeqNo());
+                orderTechnicalDetailedRel.setProductName(orderItem.getProductName());
+                orderTechnicalDetailedRel.setProductNum(orderItem.getProductNumber());
+                resultList.add(orderTechnicalDetailedRel);
+            } else {
+                throw new BaseException("订单第" + orderItem.getSeqNo() + "项没有可用数据");
+            }
+        }
+        if (CollectionUtil.isEmpty(resultList)) {
+            throw new BaseException("技术清单中无数据");
+        }
+        if (StrUtil.isNotEmpty(errorMsg)) {
+            throw new BaseException(errorMsg.toString());
+        }
+        return resultList;
+    }
+
+    @Override
+    public int addTechnicalDetailed(List<OrderTechnicalDetailedRel> dto) {
+        int i = 0;
+        OrderTechnicalDetailedRel orderTechnicalDetailedRel1 = dto.get(0);
+        // 保存前先删除这个订单的数据
+        String orderNo = orderTechnicalDetailedRel1.getOrderNo();
+        OrderTechnicalDetailedRelExample example = new OrderTechnicalDetailedRelExample();
+        example.or().andOrderNoEqualTo(orderNo);
+        int delete = orderTechnicalDetailedRelMapper.deleteByExample(example);
+
+        for (OrderTechnicalDetailedRel orderTechnicalDetailedRel : dto) {
+            i = orderTechnicalDetailedRelMapper.insertSelective(orderTechnicalDetailedRel);
+        }
+        if (i > 0) {
+            //删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderNo).key);
+        }
+        return i;
+    }
+
+    @Override
+    public int delTechnicalDetailed(int id) {
+        OrderTechnicalDetailedRel orderTechnicalDetailedRel = orderTechnicalDetailedRelMapper.selectByPrimaryKey(id);
+        int i = orderTechnicalDetailedRelMapper.deleteByPrimaryKey(id);
+        if (i > 0) {
+            //删除redis值
+            redisDao.del(CacheKeyManager.cacheKeyOrderInfo(orderTechnicalDetailedRel.getOrderNo()).key);
         }
         return i;
     }

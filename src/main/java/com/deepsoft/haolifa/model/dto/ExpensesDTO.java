@@ -3,6 +3,8 @@ package com.deepsoft.haolifa.model.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ExpensesDTO {
 
@@ -18,7 +20,7 @@ public class ExpensesDTO {
     private String voucherNo;
 
     @ApiModelProperty(required = true, value = "总费用")
-    private Double totalAmount;
+    private BigDecimal totalAmount;
 
     @ApiModelProperty(required = true, value = "提交人")
     private String commitUser;

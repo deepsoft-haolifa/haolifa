@@ -166,73 +166,73 @@ public class EntrustExample {
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameIsNull() {
-            addCriterion("material_graph_name is null");
+        public Criteria andMaterialClassifyNameIsNull() {
+            addCriterion("material_classify_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameIsNotNull() {
-            addCriterion("material_graph_name is not null");
+        public Criteria andMaterialClassifyNameIsNotNull() {
+            addCriterion("material_classify_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameEqualTo(String value) {
-            addCriterion("material_graph_name =", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameEqualTo(String value) {
+            addCriterion("material_classify_name =", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameNotEqualTo(String value) {
-            addCriterion("material_graph_name <>", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameNotEqualTo(String value) {
+            addCriterion("material_classify_name <>", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameGreaterThan(String value) {
-            addCriterion("material_graph_name >", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameGreaterThan(String value) {
+            addCriterion("material_classify_name >", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameGreaterThanOrEqualTo(String value) {
-            addCriterion("material_graph_name >=", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameGreaterThanOrEqualTo(String value) {
+            addCriterion("material_classify_name >=", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameLessThan(String value) {
-            addCriterion("material_graph_name <", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameLessThan(String value) {
+            addCriterion("material_classify_name <", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameLessThanOrEqualTo(String value) {
-            addCriterion("material_graph_name <=", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameLessThanOrEqualTo(String value) {
+            addCriterion("material_classify_name <=", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameLike(String value) {
-            addCriterion("material_graph_name like", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameLike(String value) {
+            addCriterion("material_classify_name like", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameNotLike(String value) {
-            addCriterion("material_graph_name not like", value, "materialGraphName");
+        public Criteria andMaterialClassifyNameNotLike(String value) {
+            addCriterion("material_classify_name not like", value, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameIn(List<String> values) {
-            addCriterion("material_graph_name in", values, "materialGraphName");
+        public Criteria andMaterialClassifyNameIn(List<String> values) {
+            addCriterion("material_classify_name in", values, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameNotIn(List<String> values) {
-            addCriterion("material_graph_name not in", values, "materialGraphName");
+        public Criteria andMaterialClassifyNameNotIn(List<String> values) {
+            addCriterion("material_classify_name not in", values, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameBetween(String value1, String value2) {
-            addCriterion("material_graph_name between", value1, value2, "materialGraphName");
+        public Criteria andMaterialClassifyNameBetween(String value1, String value2) {
+            addCriterion("material_classify_name between", value1, value2, "materialClassifyName");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialGraphNameNotBetween(String value1, String value2) {
-            addCriterion("material_graph_name not between", value1, value2, "materialGraphName");
+        public Criteria andMaterialClassifyNameNotBetween(String value1, String value2) {
+            addCriterion("material_classify_name not between", value1, value2, "materialClassifyName");
             return (Criteria) this;
         }
 
@@ -443,6 +443,216 @@ public class EntrustExample {
 
         public Criteria andMaterialGraphNoNotBetween(String value1, String value2) {
             addCriterion("material_graph_no not between", value1, value2, "materialGraphNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameIsNull() {
+            addCriterion("material_graph_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameIsNotNull() {
+            addCriterion("material_graph_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameEqualTo(String value) {
+            addCriterion("material_graph_name =", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameNotEqualTo(String value) {
+            addCriterion("material_graph_name <>", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameGreaterThan(String value) {
+            addCriterion("material_graph_name >", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameGreaterThanOrEqualTo(String value) {
+            addCriterion("material_graph_name >=", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameLessThan(String value) {
+            addCriterion("material_graph_name <", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameLessThanOrEqualTo(String value) {
+            addCriterion("material_graph_name <=", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameLike(String value) {
+            addCriterion("material_graph_name like", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameNotLike(String value) {
+            addCriterion("material_graph_name not like", value, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameIn(List<String> values) {
+            addCriterion("material_graph_name in", values, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameNotIn(List<String> values) {
+            addCriterion("material_graph_name not in", values, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameBetween(String value1, String value2) {
+            addCriterion("material_graph_name between", value1, value2, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaterialGraphNameNotBetween(String value1, String value2) {
+            addCriterion("material_graph_name not between", value1, value2, "materialGraphName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsIsNull() {
+            addCriterion("specifications is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsIsNotNull() {
+            addCriterion("specifications is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsEqualTo(String value) {
+            addCriterion("specifications =", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsNotEqualTo(String value) {
+            addCriterion("specifications <>", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsGreaterThan(String value) {
+            addCriterion("specifications >", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsGreaterThanOrEqualTo(String value) {
+            addCriterion("specifications >=", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsLessThan(String value) {
+            addCriterion("specifications <", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsLessThanOrEqualTo(String value) {
+            addCriterion("specifications <=", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsLike(String value) {
+            addCriterion("specifications like", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsNotLike(String value) {
+            addCriterion("specifications not like", value, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsIn(List<String> values) {
+            addCriterion("specifications in", values, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsNotIn(List<String> values) {
+            addCriterion("specifications not in", values, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsBetween(String value1, String value2) {
+            addCriterion("specifications between", value1, value2, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpecificationsNotBetween(String value1, String value2) {
+            addCriterion("specifications not between", value1, value2, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIsNull() {
+            addCriterion("model is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIsNotNull() {
+            addCriterion("model is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelEqualTo(String value) {
+            addCriterion("model =", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelNotEqualTo(String value) {
+            addCriterion("model <>", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelGreaterThan(String value) {
+            addCriterion("model >", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelGreaterThanOrEqualTo(String value) {
+            addCriterion("model >=", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelLessThan(String value) {
+            addCriterion("model <", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelLessThanOrEqualTo(String value) {
+            addCriterion("model <=", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelLike(String value) {
+            addCriterion("model like", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelNotLike(String value) {
+            addCriterion("model not like", value, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIn(List<String> values) {
+            addCriterion("model in", values, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelNotIn(List<String> values) {
+            addCriterion("model not in", values, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelBetween(String value1, String value2) {
+            addCriterion("model between", value1, value2, "model");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelNotBetween(String value1, String value2) {
+            addCriterion("model not between", value1, value2, "model");
             return (Criteria) this;
         }
 
@@ -1573,6 +1783,66 @@ public class EntrustExample {
 
         public Criteria andOutRoomStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("out_room_status not between", value1, value2, "outRoomStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusIsNull() {
+            addCriterion("task_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusIsNotNull() {
+            addCriterion("task_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusEqualTo(Byte value) {
+            addCriterion("task_status =", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusNotEqualTo(Byte value) {
+            addCriterion("task_status <>", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusGreaterThan(Byte value) {
+            addCriterion("task_status >", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("task_status >=", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusLessThan(Byte value) {
+            addCriterion("task_status <", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("task_status <=", value, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusIn(List<Byte> values) {
+            addCriterion("task_status in", values, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusNotIn(List<Byte> values) {
+            addCriterion("task_status not in", values, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusBetween(Byte value1, Byte value2) {
+            addCriterion("task_status between", value1, value2, "taskStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("task_status not between", value1, value2, "taskStatus");
             return (Criteria) this;
         }
     }

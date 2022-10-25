@@ -18,6 +18,7 @@
       <arg column="voucher_no" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="data_year" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="data_month" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="date_str" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -79,9 +80,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, total_amount, expenses_classify, create_user_id, commit_user, is_delete, create_time,
-    update_time, second_classify, department, summary, remark, voucher_no, data_year,
-    data_month
+    id, total_amount, expenses_classify, create_user_id, commit_user, is_delete, create_time, 
+    update_time, second_classify, department, summary, remark, voucher_no, data_year, 
+    data_month, date_str
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.ExpensesExample" >
     select
@@ -98,7 +99,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from expenses
     where id = #{id,jdbcType=INTEGER}
@@ -117,16 +118,18 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into expenses (total_amount, expenses_classify, create_user_id,
-      commit_user, is_delete, create_time,
-      update_time, second_classify, department,
-      summary, remark, voucher_no,
-      data_year, data_month)
-    values (#{totalAmount,jdbcType=DECIMAL}, #{expensesClassify,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER},
-      #{commitUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
-      #{updateTime,jdbcType=TIMESTAMP}, #{secondClassify,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR},
-      #{summary,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{voucherNo,jdbcType=VARCHAR},
-      #{dataYear,jdbcType=VARCHAR}, #{dataMonth,jdbcType=VARCHAR})
+    insert into expenses (total_amount, expenses_classify, create_user_id, 
+      commit_user, is_delete, create_time, 
+      update_time, second_classify, department, 
+      summary, remark, voucher_no, 
+      data_year, data_month, date_str
+      )
+    values (#{totalAmount,jdbcType=DECIMAL}, #{expensesClassify,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
+      #{commitUser,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{secondClassify,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{summary,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{voucherNo,jdbcType=VARCHAR}, 
+      #{dataYear,jdbcType=VARCHAR}, #{dataMonth,jdbcType=VARCHAR}, #{dateStr,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.Expenses" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -176,6 +179,9 @@
       <if test="dataMonth != null" >
         data_month,
       </if>
+      <if test="dateStr != null" >
+        date_str,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="totalAmount != null" >
@@ -219,6 +225,9 @@
       </if>
       <if test="dataMonth != null" >
         #{dataMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="dateStr != null" >
+        #{dateStr,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -276,6 +285,9 @@
       <if test="record.dataMonth != null" >
         data_month = #{record.dataMonth,jdbcType=VARCHAR},
       </if>
+      <if test="record.dateStr != null" >
+        date_str = #{record.dateStr,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -297,7 +309,8 @@
       remark = #{record.remark,jdbcType=VARCHAR},
       voucher_no = #{record.voucherNo,jdbcType=VARCHAR},
       data_year = #{record.dataYear,jdbcType=VARCHAR},
-      data_month = #{record.dataMonth,jdbcType=VARCHAR}
+      data_month = #{record.dataMonth,jdbcType=VARCHAR},
+      date_str = #{record.dateStr,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -347,6 +360,9 @@
       <if test="dataMonth != null" >
         data_month = #{dataMonth,jdbcType=VARCHAR},
       </if>
+      <if test="dateStr != null" >
+        date_str = #{dateStr,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -365,7 +381,8 @@
       remark = #{remark,jdbcType=VARCHAR},
       voucher_no = #{voucherNo,jdbcType=VARCHAR},
       data_year = #{dataYear,jdbcType=VARCHAR},
-      data_month = #{dataMonth,jdbcType=VARCHAR}
+      data_month = #{dataMonth,jdbcType=VARCHAR},
+      date_str = #{dateStr,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

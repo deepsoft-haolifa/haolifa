@@ -31,4 +31,6 @@ public interface DepartmentService {
     List<DepartmentTree> departmentTree();
 
 
+    DepartmentDTO getParentDepartment(Integer id);
+
 }

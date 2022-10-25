@@ -43,7 +43,7 @@ public class InvoiceController {
 
     @ApiOperation("查询发票记录列表")
     @PostMapping("list/{origin}")
-    public ResultBean<Invoice> getList(@ApiParam("来源 0 经管 1 财务") @PathVariable("origin") int origin, @RequestBody InvoiceListDTO modelList) {
+    public ResultBean<PageDTO<Invoice>> getList(@ApiParam("来源 0 经管 1 财务") @PathVariable("origin") int origin, @RequestBody InvoiceListDTO modelList) {
         return ResultBean.success(invoiceService.getList(origin, modelList));
     }
 

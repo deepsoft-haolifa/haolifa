@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.controller;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.domain.PayOrderUserRelationProcedure;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.order.OrderProductDTO;
@@ -12,15 +13,19 @@ import com.deepsoft.haolifa.model.dto.proInspect.ProInspectListDTO;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectRecordDTO;
 import com.deepsoft.haolifa.model.dto.proInspect.ProInspectResDTO;
 import com.deepsoft.haolifa.service.OrderProductService;
+import com.deepsoft.haolifa.service.PayOrderUserRelationProcedureService;
 import com.deepsoft.haolifa.service.ProInspectResultService;
 import com.deepsoft.haolifa.service.ProInspectService;
+import com.deepsoft.haolifa.util.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Api(tags = {"成品质检"})
@@ -32,12 +37,20 @@ public class ProInspectController {
     private ProInspectService proInspectService;
     @Autowired
     private OrderProductService orderProductService;
+    @Resource
+    private PayOrderUserRelationProcedureService payOrderUserRelationProcedureService;
 
     @ApiOperation("新增")
     @PostMapping("/save")
     public ResultBean save(@RequestBody ProInspectRecordDTO model) {
         //根据订单号查询需要的成品数量
         OrderProductDTO orderProductDTO = orderProductService.getOrderProductInfo(model.getOrderNo());
+        PayOrderUserRelationProcedure payOrderUserRelationProcedure = new PayOrderUserRelationProcedure();
+        payOrderUserRelationProcedure.setOrderId(model.getOrderNo());
+        List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureService.getPayOrderUserRelationProcedureList(payOrderUserRelationProcedure);
+        if (CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(orderProductDTO.getCreateTime())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+        }
         //订单产品列表
         List<OrderProductAssociate> orderProductAssociates = orderProductDTO.getOrderProductAssociates();
         //得到需要的数量

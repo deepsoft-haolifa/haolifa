@@ -26,4 +26,10 @@ public class UserPageVO {
     @ApiModelProperty(value = "是否停用：1-是； 0-否")
     private Byte isDelete;
 
+    @ApiModelProperty(value = "部门名称")
+    private String departName;
+
+    @ApiModelProperty(value = "岗位名称")
+    private String postName;
+
 }

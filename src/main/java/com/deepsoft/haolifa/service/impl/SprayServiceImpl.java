@@ -1,8 +1,10 @@
 package com.deepsoft.haolifa.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.CommonEnum.ResponseEnum;
+import com.deepsoft.haolifa.dao.repository.PayOrderUserRelationProcedureMapper;
 import com.deepsoft.haolifa.dao.repository.SprayInspectHistoryMapper;
 import com.deepsoft.haolifa.dao.repository.SprayItemMapper;
 import com.deepsoft.haolifa.dao.repository.SprayMapper;
@@ -10,11 +12,14 @@ import com.deepsoft.haolifa.dao.repository.extend.SparyExtendMapper;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.order.CheckMaterialLockDTO;
+import com.deepsoft.haolifa.model.dto.pay.PayCalculateDTO;
 import com.deepsoft.haolifa.model.dto.spray.*;
 import com.deepsoft.haolifa.model.vo.SprayInspectHistoryVo;
 import com.deepsoft.haolifa.model.vo.SprayVo;
 import com.deepsoft.haolifa.service.CheckMaterialLockService;
 import com.deepsoft.haolifa.service.SprayService;
+import com.deepsoft.haolifa.util.DateFormatterUtils;
+import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +62,8 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     private ValidateService validateService;
     @Autowired
     private CheckMaterialLockService checkMaterialLockService;
+    @Resource
+    private PayOrderUserRelationProcedureMapper payOrderUserRelationProcedureMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -73,18 +81,16 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         spray.setPlanner(sprayDto.getPlanner());
         spray.setTotalNumber(0);
         spray.setBusType(sprayDto.getBusType());
+        int sum = sprayDto.getItems().stream().mapToInt(SprayItemDto::getNumber).sum();
+        spray.setTotalNumber(sum);
         sprayMapper.insertSelective(spray);
         sprayDto.getItems().forEach(sprayItemDto -> {
             SprayItem sprayItem = new SprayItem();
             BeanUtils.copyProperties(sprayItemDto, sprayItem);
             sprayItem.setSprayNo(sprayNo);
             sprayItem.setOutRoomStatus(CommonEnum.OutRoomStatus.NOT_OUT.type);
-            spray.setTotalNumber(spray.getTotalNumber() + sprayItemDto.getNumber());
             sprayItemMapper.insertSelective(sprayItem);
         });
-        SprayExample sprayExample = new SprayExample();
-        sprayExample.createCriteria().andSprayNoEqualTo(sprayNo);
-        sprayMapper.updateByExampleSelective(spray, sprayExample);
         return ResultBean.success(sprayNo);
     }
 
@@ -248,15 +254,28 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultBean saveInspect(SprayInspectDto inspectDto) {
+
+        SprayExample example = new SprayExample();
+        example.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
+        List<Spray> sprays = sprayMapper.selectByExample(example);
+        if (sprays != null && sprays.size() > 0) {
+            Spray sss = sprays.get(0);
+            PayOrderUserRelationProcedureExample payExample = new PayOrderUserRelationProcedureExample();
+            payExample.createCriteria().andOrderIdEqualTo(inspectDto.getSprayNo());
+            List<PayOrderUserRelationProcedure> payOrderUserRelationProcedureList = payOrderUserRelationProcedureMapper.selectByExample(payExample);
+            if (org.apache.commons.collections4.CollectionUtils.isEmpty(payOrderUserRelationProcedureList) && DateUtils.checkTimeMoreThan26(sss.getCreateTime())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.ORDER_NOT_ASSIGN_TASK);
+            }
+        }
+
         if (inspectDto.getTestNumber() == 0) {
             return ResultBean.error(ResponseEnum.INSPECT_TESTNUMBER_IS_ZERO);
         }
         // 不合格原因
         SprayInspectHistory history = new SprayInspectHistory();
         BeanUtils.copyProperties(inspectDto, history);
-        boolean isEmpty = CollectionUtils.isEmpty(inspectDto.getReasonList());
-        if (!isEmpty) {
-            int unqualifiedNum = inspectDto.getReasonList().stream().map(InspectReason::getNumber).reduce(0, (a, b) -> a + b);
+        if (CollectionUtil.isNotEmpty(inspectDto.getReasonList())) {
+            int unqualifiedNum = inspectDto.getReasonList().stream().map(InspectReason::getNumber).reduce(0, Integer::sum);
             inspectDto.setUnqualifiedNumber(unqualifiedNum);
             history.setUnqualifiedNumber(unqualifiedNum);
             history.setReasons(JSON.toJSONString(inspectDto.getReasonList()));
@@ -274,19 +293,24 @@ public class SprayServiceImpl extends BaseService implements SprayService {
         if (!CollectionUtils.isEmpty(inspectDto.getAccessoryList())) {
             history.setAccessory(JSON.toJSONString(inspectDto.getAccessoryList()));
         }
-
-        SprayExample example = new SprayExample();
-        example.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
-        List<Spray> sprays = sprayMapper.selectByExample(example);
+        inspectHistoryMapper.insertSelective(history);
         if (sprays != null && sprays.size() > 0) {
             Spray spray = sprays.get(0);
             spray.setQualifiedNumber(spray.getQualifiedNumber() + inspectDto.getQualifiedNumber());
             if (spray.getTotalNumber() < spray.getQualifiedNumber()) {
                 throw new BaseException(ResponseEnum.SPRAY_QUALIFIED_NUMBER_ERROR);
             }
+            // 如果喷涂质检合格数量+不合格数量等于总数，则加工完成
+            SprayInspectHistoryExample historyExample = new SprayInspectHistoryExample();
+            historyExample.createCriteria().andSprayNoEqualTo(inspectDto.getSprayNo());
+            List<SprayInspectHistory> sprayInspectHistorys = inspectHistoryMapper.selectByExample(historyExample);
+            int qualifiedSum = sprayInspectHistorys.stream().mapToInt(SprayInspectHistory::getQualifiedNumber).sum();
+            int unQualifiedSum = sprayInspectHistorys.stream().mapToInt(SprayInspectHistory::getUnqualifiedNumber).sum();
+            if (qualifiedSum + unQualifiedSum >= spray.getTotalNumber()) {
+                spray.setInspectStatus(CommonEnum.Inspect2Status.handled.code);
+            }
             sprayMapper.updateByExampleSelective(spray, example);
         }
-        inspectHistoryMapper.insertSelective(history);
         return ResultBean.success(history.getId());
     }
 
@@ -435,5 +459,38 @@ public class SprayServiceImpl extends BaseService implements SprayService {
     @Override
     public SprayInspectHistory getHistoryInfo(Integer historyId) {
         return inspectHistoryMapper.selectByPrimaryKey(historyId);
+    }
+
+    @Override
+    public List<SprayInspectHistory> getSprayInspectHistoryList(PayCalculateDTO payCalculateDTO) {
+        SprayInspectHistoryExample inspectHistoryExample = new SprayInspectHistoryExample();
+        SprayInspectHistoryExample.Criteria criteria = inspectHistoryExample.createCriteria();
+        if (StringUtils.isNotBlank(payCalculateDTO.getOrderNo())) {
+            criteria.andSprayNoEqualTo(payCalculateDTO.getOrderNo());
+        }
+        if (StringUtils.isNotBlank(payCalculateDTO.getProductNo())) {
+            criteria.andMaterialGraphNoEqualTo(payCalculateDTO.getProductNo());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStorageStatus())) {
+            criteria.andStatusEqualTo(payCalculateDTO.getStorageStatus());
+        }
+        if (Objects.nonNull(payCalculateDTO.getStartTime())) {
+            criteria.andUpdateTimeGreaterThanOrEqualTo(payCalculateDTO.getStartTime());
+        }
+        if (Objects.nonNull(payCalculateDTO.getEndTime())) {
+            criteria.andUpdateTimeLessThanOrEqualTo(payCalculateDTO.getEndTime());
+        }
+        List<SprayInspectHistory> inspectHistories = inspectHistoryMapper.selectByExample(inspectHistoryExample);
+        return inspectHistories;
+    }
+
+    @Override
+    public void updateTaskStatus(String sprayNo, int taskStatus) {
+        SprayExample example = new SprayExample();
+        SprayExample.Criteria criteria = example.createCriteria();
+        criteria.andSprayNoEqualTo(sprayNo);
+        Spray spray = new Spray();
+        spray.setTaskStatus(Integer.valueOf(taskStatus).byteValue());
+        sprayMapper.updateByExampleSelective(spray, example);
     }
 }

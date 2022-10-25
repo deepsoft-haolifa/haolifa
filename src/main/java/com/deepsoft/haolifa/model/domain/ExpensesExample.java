@@ -1095,6 +1095,76 @@ public class ExpensesExample {
             addCriterion("data_month not between", value1, value2, "dataMonth");
             return (Criteria) this;
         }
+
+        public Criteria andDateStrIsNull() {
+            addCriterion("date_str is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrIsNotNull() {
+            addCriterion("date_str is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrEqualTo(String value) {
+            addCriterion("date_str =", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrNotEqualTo(String value) {
+            addCriterion("date_str <>", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrGreaterThan(String value) {
+            addCriterion("date_str >", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrGreaterThanOrEqualTo(String value) {
+            addCriterion("date_str >=", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrLessThan(String value) {
+            addCriterion("date_str <", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrLessThanOrEqualTo(String value) {
+            addCriterion("date_str <=", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrLike(String value) {
+            addCriterion("date_str like", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrNotLike(String value) {
+            addCriterion("date_str not like", value, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrIn(List<String> values) {
+            addCriterion("date_str in", values, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrNotIn(List<String> values) {
+            addCriterion("date_str not in", values, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrBetween(String value1, String value2) {
+            addCriterion("date_str between", value1, value2, "dateStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andDateStrNotBetween(String value1, String value2) {
+            addCriterion("date_str not between", value1, value2, "dateStr");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -26,6 +26,9 @@
       <arg column="process_route" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="suppiler_preparer" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="responsible_person" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="open_bank" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bank_account" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="payment_method" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="evaluation" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="is_qualified" jdbcType="TINYINT" javaType="java.lang.Byte" />
       <arg column="create_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -97,8 +100,8 @@
     id, suppiler_no, suppiler_name, website, nature, phone, address, postcode, fax, legal_person, 
     legal_person_phone, supplier_product, total_factory_area, total_archit_area, work_type, 
     staff_info, credentials_info, financial_info, main_organ, quality_assurance_info, 
-    process_route, suppiler_preparer, responsible_person, evaluation, is_qualified, create_user_id, 
-    update_time, create_time, is_delete, accessory
+    process_route, suppiler_preparer, responsible_person, open_bank, bank_account, payment_method, 
+    evaluation, is_qualified, create_user_id, update_time, create_time, is_delete, accessory
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.SupplierExample" >
     select
@@ -141,7 +144,8 @@
       total_archit_area, work_type, staff_info, 
       credentials_info, financial_info, main_organ, 
       quality_assurance_info, process_route, suppiler_preparer, 
-      responsible_person, evaluation, is_qualified, 
+      responsible_person, open_bank, bank_account, 
+      payment_method, evaluation, is_qualified, 
       create_user_id, update_time, create_time, 
       is_delete, accessory)
     values (#{suppilerNo,jdbcType=VARCHAR}, #{suppilerName,jdbcType=VARCHAR}, #{website,jdbcType=VARCHAR}, 
@@ -151,7 +155,8 @@
       #{totalArchitArea,jdbcType=INTEGER}, #{workType,jdbcType=TINYINT}, #{staffInfo,jdbcType=VARCHAR}, 
       #{credentialsInfo,jdbcType=VARCHAR}, #{financialInfo,jdbcType=VARCHAR}, #{mainOrgan,jdbcType=VARCHAR}, 
       #{qualityAssuranceInfo,jdbcType=VARCHAR}, #{processRoute,jdbcType=VARCHAR}, #{suppilerPreparer,jdbcType=VARCHAR}, 
-      #{responsiblePerson,jdbcType=VARCHAR}, #{evaluation,jdbcType=VARCHAR}, #{isQualified,jdbcType=TINYINT}, 
+      #{responsiblePerson,jdbcType=VARCHAR}, #{openBank,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, 
+      #{paymentMethod,jdbcType=VARCHAR}, #{evaluation,jdbcType=VARCHAR}, #{isQualified,jdbcType=TINYINT}, 
       #{createUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
       #{isDelete,jdbcType=TINYINT}, #{accessory,jdbcType=VARCHAR})
   </insert>
@@ -226,6 +231,15 @@
       </if>
       <if test="responsiblePerson != null" >
         responsible_person,
+      </if>
+      <if test="openBank != null" >
+        open_bank,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="paymentMethod != null" >
+        payment_method,
       </if>
       <if test="evaluation != null" >
         evaluation,
@@ -315,6 +329,15 @@
       </if>
       <if test="responsiblePerson != null" >
         #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMethod != null" >
+        #{paymentMethod,jdbcType=VARCHAR},
       </if>
       <if test="evaluation != null" >
         #{evaluation,jdbcType=VARCHAR},
@@ -417,6 +440,15 @@
       <if test="record.responsiblePerson != null" >
         responsible_person = #{record.responsiblePerson,jdbcType=VARCHAR},
       </if>
+      <if test="record.openBank != null" >
+        open_bank = #{record.openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAccount != null" >
+        bank_account = #{record.bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentMethod != null" >
+        payment_method = #{record.paymentMethod,jdbcType=VARCHAR},
+      </if>
       <if test="record.evaluation != null" >
         evaluation = #{record.evaluation,jdbcType=VARCHAR},
       </if>
@@ -468,6 +500,9 @@
       process_route = #{record.processRoute,jdbcType=VARCHAR},
       suppiler_preparer = #{record.suppilerPreparer,jdbcType=VARCHAR},
       responsible_person = #{record.responsiblePerson,jdbcType=VARCHAR},
+      open_bank = #{record.openBank,jdbcType=VARCHAR},
+      bank_account = #{record.bankAccount,jdbcType=VARCHAR},
+      payment_method = #{record.paymentMethod,jdbcType=VARCHAR},
       evaluation = #{record.evaluation,jdbcType=VARCHAR},
       is_qualified = #{record.isQualified,jdbcType=TINYINT},
       create_user_id = #{record.createUserId,jdbcType=INTEGER},
@@ -548,6 +583,15 @@
       <if test="responsiblePerson != null" >
         responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
       </if>
+      <if test="openBank != null" >
+        open_bank = #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMethod != null" >
+        payment_method = #{paymentMethod,jdbcType=VARCHAR},
+      </if>
       <if test="evaluation != null" >
         evaluation = #{evaluation,jdbcType=VARCHAR},
       </if>
@@ -596,6 +640,9 @@
       process_route = #{processRoute,jdbcType=VARCHAR},
       suppiler_preparer = #{suppilerPreparer,jdbcType=VARCHAR},
       responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
+      open_bank = #{openBank,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      payment_method = #{paymentMethod,jdbcType=VARCHAR},
       evaluation = #{evaluation,jdbcType=VARCHAR},
       is_qualified = #{isQualified,jdbcType=TINYINT},
       create_user_id = #{createUserId,jdbcType=INTEGER},

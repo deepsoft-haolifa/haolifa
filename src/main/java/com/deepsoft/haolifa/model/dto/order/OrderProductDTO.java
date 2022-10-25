@@ -2,11 +2,14 @@ package com.deepsoft.haolifa.model.dto.order;
 
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel;
+import com.deepsoft.haolifa.model.domain.TechnicalDetailed;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.tomcat.util.bcel.Const;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -88,6 +91,9 @@ public class OrderProductDTO {
     @ApiModelProperty(value = "技术清单")
     private String technicalRequire;
 
+    @ApiModelProperty(value = "技术清单(新)")
+    private List<OrderTechnicalDetailedRel> orderTechnicalDetaileds;
+
     @ApiModelProperty(value = "装配车间")
     private String assemblyShop;
 
@@ -99,4 +105,7 @@ public class OrderProductDTO {
 
     @ApiModelProperty(value = "订单是否核料流程；1.走核料；0 不核料")
     private Byte isCheckMaterial;
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+
 }

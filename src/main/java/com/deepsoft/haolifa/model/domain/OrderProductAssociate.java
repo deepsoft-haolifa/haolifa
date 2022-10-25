@@ -10,6 +10,8 @@ public class OrderProductAssociate {
 
     private String orderNo;
 
+    private String seqNo;
+
     private String productNo;
 
     private String productName;
@@ -32,10 +34,11 @@ public class OrderProductAssociate {
 
     private String productRemark;
 
-    public OrderProductAssociate(Integer id, Date createTime, String orderNo, String productNo, String productName, String specifications, String productModel, String lable, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, String materialDescription, String productRemark) {
+    public OrderProductAssociate(Integer id, Date createTime, String orderNo, String seqNo, String productNo, String productName, String specifications, String productModel, String lable, String productColor, Integer productNumber, BigDecimal price, BigDecimal totalPrice, String materialDescription, String productRemark) {
         this.id = id;
         this.createTime = createTime;
         this.orderNo = orderNo;
+        this.seqNo = seqNo;
         this.productNo = productNo;
         this.productName = productName;
         this.specifications = specifications;
@@ -75,6 +78,14 @@ public class OrderProductAssociate {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    public String getSeqNo() {
+        return seqNo;
+    }
+
+    public void setSeqNo(String seqNo) {
+        this.seqNo = seqNo == null ? null : seqNo.trim();
     }
 
     public String getProductNo() {

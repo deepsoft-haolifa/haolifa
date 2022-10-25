@@ -1,11 +1,12 @@
 package com.deepsoft.haolifa.service;
 
-import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
-import com.deepsoft.haolifa.model.domain.OrderMaterial;
 import com.deepsoft.haolifa.model.domain.OrderProductAssociate;
+import com.deepsoft.haolifa.model.domain.OrderTechnicalDetailedRel;
 import com.deepsoft.haolifa.model.dto.Accessory;
-import com.deepsoft.haolifa.model.dto.FileUploadDTO;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -98,6 +99,11 @@ public interface OrderProductService {
     List<ProductCheckMaterialListDTO> getCheckOrderProductList(String orderNo);
 
     /**
+     * 获取 订单列表
+     */
+    public ResultBean<PageDTO<ReceivableOrderRSDTO>> receivableOrderList(ReceivableOrderRQDTO model);
+
+    /**
      * 核料（将前端提交过来的零件，进行核料）
      */
     List<OrderCheckMaterialDTO> checkMaterial(String orderNo,
@@ -149,6 +155,11 @@ public interface OrderProductService {
 
     ResultBean updateOrderDeliverStatus(String orderNo, int status, Integer number);
 
+    /**
+     * 成品出库，更新订单状态和数量
+     */
+    void finishedGoodsDelivery(String orderNo);
+
     ResultBean uploadAccessory(String orderNo, List<Accessory> orderUploadDTOs);
 
     ResultBean getAccessory(String orderNo);
@@ -176,4 +187,33 @@ public interface OrderProductService {
      * @param dto
      */
     int updateContractUrl(OrderContractUpdateDTO dto);
+
+    /**
+     * 更新生产订单的任务状态
+     * @param status
+     * @param orderNo
+     */
+    void updateOrderTaskStatus(String orderNo, int status);
+
+
+    /**
+     * 获取订单的技术清单（核料规则获取）
+     * @param dto
+     */
+    List<OrderTechnicalDetailedRel> getTechnicalDetailed(OrderSimpleDTO dto);
+
+    /**
+     * 添加订单的技术清单
+     * @param dto
+     */
+    int addTechnicalDetailed(List<OrderTechnicalDetailedRel> dto);
+
+    /**
+     * 删除订单的技术清单
+     * @param id
+     */
+    int delTechnicalDetailed(int id);
+
+
+
 }

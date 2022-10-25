@@ -13,60 +13,146 @@
         <result column="department" property="department" jdbcType="VARCHAR" javaType="java.lang.String"></result>
     </resultMap>
     <select id="getClassify" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where is_delete=0 and expenses_classify =  #{expensesClassify,jdbcType=VARCHAR}  group by expenses_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+        select sum(total_amount)                                      total_amount,
+               second_classify,
+               FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m") as create_time,
+               expenses_classify,
+               department
+        from expenses
+        where is_delete = 0
+          and expenses_classify = #{expensesClassify,jdbcType=VARCHAR}
+        group by expenses_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m")
     </select>
     <select id="classifyByDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses is_delete=0 group by expenses_classify,department
+        select sum(total_amount)                                      total_amount,
+               second_classify,
+               FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m") as create_time,
+               expenses_classify,
+               department
+        from expenses is_delete=0
+        group by expenses_classify, department
     </select>
     <select id="classifyBySecondDepartment" resultMap="reportMap" parameterType="java.lang.Integer">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses is_delete=0 group by second_classify,FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+        select sum(total_amount)                                      total_amount,
+               second_classify,
+               FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m") as create_time,
+               expenses_classify,
+               department
+        from expenses is_delete=0
+        group by second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m")
     </select>
-    <select id="getAllClassify" resultMap="reportMap" parameterType="java.lang.Integer">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses
-        where 1=1 and is_delete=0
-        <if test="year!=null and year!=''">
-            and data_year=#{year}
-        </if>
-        <if test="month!=null and month!=''">
-            and data_month=#{month}
-        </if>
+    <select id="getAllClassify" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
+        select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
+        <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by expenses_classify
     </select>
-    <select id="classifyByDepartmentAll" resultMap="reportMap" parameterType="java.lang.Integer">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses
-        where 1=1 and is_delete=0
-        <if test="year!=null and year!=''">
-            and data_year=#{year}
-        </if>
-        <if test="month!=null and month!=''">
-            and data_month=#{month}
-        </if>
+    <select id="classifyByDepartmentAll" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport"
+            parameterType="com.deepsoft.haolifa.model.dto.report.ReportBaseDTO">
+        select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
+        <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by department
     </select>
-    <select id="getAllClassifyWithDepartment" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses
-         where department = #{department,jdbcType=VARCHAR} and is_delete=0
-        <if test="year!=null and year!=''">
-            and data_year=#{year}
-        </if>
-        <if test="month!=null and month!=''">
-            and data_month=#{month}
-        </if>
+    <select id="getAllClassifyWithDepartment" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
+        select ifnull(sum(total_amount),0) total_amount,second_classify,expenses_classify,department from expenses
+        <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
         group by expenses_classify
     </select>
+
+
     <select id="getAllClassifyWithFirstClassify" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where is_delete=0 and expenses_classify =  #{classify,jdbcType=VARCHAR} group by second_classify
+        select sum(total_amount)                                      total_amount,
+               second_classify,
+               FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m") as create_time,
+               expenses_classify,
+               department
+        from expenses
+        where is_delete = 0
+          and expenses_classify = #{classify,jdbcType=VARCHAR}
+        group by second_classify
     </select>
 
     <select id="getMonthByDepartment" resultMap="reportMap" parameterType="java.lang.String">
-        select sum(total_amount) total_amount,second_classify, FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m") as create_time,expenses_classify,department from expenses where  is_delete=0 and department=  #{department,jdbcType=VARCHAR}  group by  FROM_UNIXTIME(UNIX_TIMESTAMP(create_time),"%Y-%m")
+        select sum(total_amount)                                      total_amount,
+               second_classify,
+               FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m") as create_time,
+               expenses_classify,
+               department
+        from expenses
+        where is_delete = 0
+          and department = #{department,jdbcType=VARCHAR}
+        group by FROM_UNIXTIME(UNIX_TIMESTAMP(create_time), "%Y-%m")
     </select>
     <select id="expenseTotalByMonth" resultType="com.deepsoft.haolifa.model.domain.ExpensesReport">
-        select sum(total_amount) totalAmount,data_month dataMonth from expenses  where  is_delete=0
-        <if test="year!=null and year!=''">
-            and data_year=#{year}
-        </if>
+        select ifnull(sum(total_amount),0) totalAmount,data_month
+        from expenses
+        <include refid="commonCondition"/>
+        <include refid="expenseCondition"></include>
         group by data_month
     </select>
+    <select id="listSummary" resultType="java.math.BigDecimal">
+        select ifnull(sum(total_amount),0) totalAmount from expenses
+        <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
+    </select>
+    <select id="bankBalance" resultType="java.math.BigDecimal">
+        select ifnull(balance,0) from biz_bank_bill order by id desc limit 1
+    </select>
+    <select id="cashBalance" resultType="java.math.BigDecimal">
+        select ifnull(balance,0) from biz_bill order by id desc limit 1
+    </select>
+    <select id="otherBalance" resultType="java.math.BigDecimal">
+        select ifnull(balance,0) from biz_other_bill order by id desc limit 1
+    </select>
+
+
+    <sql id="commonCondition">
+        <where>
+            is_delete=0
+            <if test="startDate!=null and startDate!=''">
+                and date_str>=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and date_str&lt;=#{endDate}
+            </if>
+            <if test="year!=null and year!=''">
+                and data_year=#{year}
+            </if>
+            <if test="month!=null and month!=''">
+                and data_month=#{month}
+            </if>
+        </where>
+    </sql>
+    <sql id="expenseCondition">
+        <if test="department!=null and department!=''">
+            and department like concat('%',#{department},'%')
+        </if>
+        <if test="commitUser != null and commitUser!=''">
+            and commit_user like concat('%',#{commitUser},'%')
+        </if>
+        <if test="classifyName != null and classifyName!=''">
+            and expenses_classify = #{classifyName}
+        </if>
+        <if test="secondClassifyName != null and secondClassifyName!=''">
+            and second_classify = #{secondClassifyName}
+        </if>
+        <if test="secondClassifyNameList != null and secondClassifyNameList.size>0">
+            and second_classify in
+            <foreach close=")" collection="secondClassifyNameList" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="excludeSecondClassifyNameList != null and excludeSecondClassifyNameList.size>0">
+            and second_classify not in
+            <foreach close=")" collection="excludeSecondClassifyNameList" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="voucherNo != null and voucherNo!=''">
+            and voucher_no like concat('%',#{voucherNo},'%')
+        </if>
+    </sql>
 
 </mapper>
