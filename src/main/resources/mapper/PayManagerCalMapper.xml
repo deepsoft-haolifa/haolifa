@@ -10,10 +10,10 @@
             <arg column="post_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
             <arg column="post_name" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="project" jdbcType="VARCHAR" javaType="java.lang.String" />
-            <arg column="work_type" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="id_category" jdbcType="VARCHAR" javaType="java.lang.String" />
-            <arg column="app_specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="app_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="app_specifications" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="work_type" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
             <arg column="create_user" jdbcType="VARCHAR" javaType="java.lang.String" />
             <arg column="update_user" jdbcType="VARCHAR" javaType="java.lang.String" />
