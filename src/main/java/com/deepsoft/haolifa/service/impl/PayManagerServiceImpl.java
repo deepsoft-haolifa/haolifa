@@ -186,8 +186,9 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
 
     @Override
     @Async
-    @Transactional
+//    @Transactional
     public ResultBean save(List<PayManagerCalDTO> list) {
+
         for (PayManagerCalDTO payManagerCalDTO : list) {
             PayManagerCal payManagerCal = new PayManagerCal();
             BeanUtils.copyProperties(payManagerCalDTO, payManagerCal);
@@ -221,7 +222,7 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
             } else {
                 payManagerCalMapper.insert(payManagerCal);
             }
-
+            log.info("save manageCal import ");
         }
         return ResultBean.success(1);
     }
