@@ -74,9 +74,12 @@ public class PayManagerCalController {
 
     @ApiOperation("导入管理人员计提")
     @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
-    public ResultBean uploadMaterial(@ApiParam(value = "管理人员计提Excel表格", required = true) MultipartFile file) {
+    public ResultBean uploadMaterial(@ApiParam(value = "导入管理人员计提", required = true) MultipartFile file) {
         try {
             log.info("导入管理人员计提开始~~~~");
+//            File file = new File("/Users/liuyaofei/haolifa/管理人员计提新20221027（系统上传）(1).xlsx");
+//            FileInputStream fileInputStream = new FileInputStream(file);
+
             List<PayManagerCalDTO> objects = (List<PayManagerCalDTO>) ExcelUtils.importExcelReadColumn(file.getInputStream(), PayManagerCalDTO.class);
             payManagerCalService.save(objects);
             log.info("导入管理人员计提结束~~~~");
