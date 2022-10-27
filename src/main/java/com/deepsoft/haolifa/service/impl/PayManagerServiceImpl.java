@@ -185,6 +185,7 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
     }
 
     @Override
+    @Async
     @Transactional
     public ResultBean save(List<PayManagerCalDTO> list) {
         for (PayManagerCalDTO payManagerCalDTO : list) {
@@ -195,13 +196,20 @@ public class PayManagerServiceImpl extends BaseService implements PayManagerCalS
             payManagerCal.setCreateTime(new Date());
             payManagerCal.setUpdateTime(new Date());
 
-            SysDepartment sysDepartment = sysDepartmentMapper.selectByPrimaryKey(payManagerCal.getDepartId());
-            if (Objects.nonNull(sysDepartment)) {
-                payManagerCal.setDept(sysDepartment.getDeptName());
+            SysDepartmentExample sysDepartmentExample = new SysDepartmentExample();
+            SysDepartmentExample.Criteria criteria = sysDepartmentExample.createCriteria();
+            criteria.andDeptNameEqualTo(payManagerCal.getDept());
+            List<SysDepartment> sysDepartmentList = sysDepartmentMapper.selectByExample(sysDepartmentExample);
+            if (CollectionUtils.isNotEmpty(sysDepartmentList)) {
+                payManagerCal.setDepartId(sysDepartmentList.get(0).getId());
             }
-            PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payManagerCal.getPostId());
-            if (Objects.nonNull(payProductionWorkshop)) {
-                payManagerCal.setPostName(payProductionWorkshop.getPostName());
+            PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
+            PayProductionWorkshopExample.Criteria postCriteria = payProductionWorkshopExample.createCriteria();
+            postCriteria.andPostNameEqualTo(payManagerCal.getPostName());
+
+            List<PayProductionWorkshop> payProductionWorkshopList = payProductionWorkshopMapper.selectByExample(payProductionWorkshopExample);
+            if (CollectionUtils.isNotEmpty(payProductionWorkshopList)) {
+                payManagerCal.setPostId(payProductionWorkshopList.get(0).getId());
             }
             if (Objects.nonNull(payManagerCal.getId())) {
                 PayManagerCal managerCal = payManagerCalMapper.selectByPrimaryKey(payManagerCal.getId());
