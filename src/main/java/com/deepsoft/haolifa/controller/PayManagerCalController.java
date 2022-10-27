@@ -14,6 +14,7 @@ import com.deepsoft.haolifa.util.ExcelUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,7 @@ import java.util.Objects;
  * @date ：Created in 2022/3/4 3:07 下午
  * @description：绩效管理-管理人员计提方式
  */
+@Slf4j
 @Api(tags = "绩效管理-管理人员计提方式")
 @RestController
 @RequestMapping("/pay-manager_cal")
@@ -74,8 +76,10 @@ public class PayManagerCalController {
     @PostMapping(value = "/import", headers = "content-type=multipart/form-data")
     public ResultBean uploadMaterial(@ApiParam(value = "管理人员计提Excel表格", required = true) MultipartFile file) {
         try {
+            log.info("导入管理人员计提开始~~~~");
             List<PayManagerCalDTO> objects = (List<PayManagerCalDTO>) ExcelUtils.importExcelReadColumn(file.getInputStream(), PayManagerCalDTO.class);
             payManagerCalService.save(objects);
+            log.info("导入管理人员计提结束~~~~");
             return ResultBean.success(1);
         } catch (Exception e) {
             e.printStackTrace();
