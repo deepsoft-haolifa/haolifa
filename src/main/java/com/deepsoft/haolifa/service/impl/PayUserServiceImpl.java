@@ -9,6 +9,7 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.RoleDTO;
 import com.deepsoft.haolifa.model.dto.pay.PayUserDTO;
 import com.deepsoft.haolifa.model.vo.pay.PayUserVO;
+import com.deepsoft.haolifa.model.vo.pay.UserDetailVo;
 import com.deepsoft.haolifa.service.PayUserService;
 import com.deepsoft.haolifa.service.PayWagesRelationUserService;
 import com.deepsoft.haolifa.service.RoleService;
@@ -169,9 +170,6 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         if (Objects.nonNull(model.getTeamId())) {
             criteria.andTeamIdEqualTo(model.getTeamId());
         }
-        if (Objects.nonNull(model.getPostId())) {
-            criteria.andPostIdEqualTo(model.getPostId());
-        }
         if (StringUtils.isNotEmpty(model.getStartCreateTime())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartCreateTime());
             criteria.andCreateTimeGreaterThan(startDate);
@@ -197,6 +195,10 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setParentUserName(Objects.isNull(parentUser) ? "" : parentUser.getUserName());
             SysDepartment sysDepartment = departmentMapper.selectByPrimaryKey(payUser.getDepartId());
             payUserDTO.setDepartName(Objects.isNull(sysDepartment) ? "" : sysDepartment.getDeptName());
+
+            payUserDTO.setParentId(Objects.isNull(payUser.getParentId()) ? "" : String.valueOf(payUser.getParentId()));
+            payUserDTO.setPostId(Objects.isNull(payUser.getPostId()) ? "" : String.valueOf(payUser.getPostId()));
+            payUserDTO.setSuperiorId(Objects.isNull(payUser.getSuperiorId()) ? "" : String.valueOf(payUser.getSuperiorId()));
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
@@ -264,7 +266,13 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
 
     @Override
     public ResultBean getInfo(Integer userId) {
-        return ResultBean.success(payUserMapper.selectByPrimaryKey(userId));
+        PayUser payUser = payUserMapper.selectByPrimaryKey(userId);
+        UserDetailVo userDetailVo = new UserDetailVo();
+        BeanUtils.copyProperties(payUser, userDetailVo);
+        userDetailVo.setParentId(Objects.isNull(payUser.getParentId()) ? "" : String.valueOf(payUser.getParentId()));
+        userDetailVo.setPostId(Objects.isNull(payUser.getPostId()) ? "" : String.valueOf(payUser.getPostId()));
+        userDetailVo.setSuperiorId(Objects.isNull(payUser.getSuperiorId()) ? "" : String.valueOf(payUser.getSuperiorId()));
+        return ResultBean.success(userDetailVo);
     }
 
     @Override
@@ -484,7 +492,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             criteria.andTeamIdEqualTo(model.getTeamId());
         }
         if (Objects.nonNull(model.getPostId())) {
-            criteria.andPostIdEqualTo(model.getPostId());
+            criteria.andPostIdEqualTo(Integer.valueOf(model.getPostId()));
         }
         if (StringUtils.isNotEmpty(model.getStartCreateTime())) {
             Date startDate = DateFormatterUtils.parseDateString(DateFormatterUtils.THREE_FORMATTERPATTERN, model.getStartCreateTime());

@@ -357,7 +357,7 @@ public class RemiburseCLPrint {
         table.addCell(pdfPCell2);
 
 
-        Paragraph elements3 = new Paragraph("报销人:", font);
+        Paragraph elements3 = new Paragraph("借款人:", font);
         PdfPCell pdfPCell3 = new PdfPCell(elements3);
         pdfPCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell3.setHorizontalAlignment(Element.ALIGN_LEFT);

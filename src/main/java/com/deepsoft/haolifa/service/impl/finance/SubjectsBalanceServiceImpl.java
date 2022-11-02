@@ -207,9 +207,9 @@ public class SubjectsBalanceServiceImpl implements SubjectBalanceService {
         // 更新余额表
         BizSubjectsBalance bizSubjectsBalance = bizSubjectsBalanceList.get(0);
         BigDecimal subtract = bizSubjectsBalance.getBalanceAmount().subtract(bizSubjectsUp.getAmount());
-        if (subtract.compareTo(BigDecimal.ZERO) < 0) {
-            throw new BaseException("当前科目余额不足");
-        }
+//        if (subtract.compareTo(BigDecimal.ZERO) < 0) {
+//            throw new BaseException("当前科目余额不足");
+//        }
 
         BizSubjectsBalance subjectsBalanceUp = new BizSubjectsBalance();
         subjectsBalanceUp.setId(bizSubjectsBalance.getId());

@@ -129,7 +129,7 @@ public class PayHourQuotaServiceImpl extends BaseService implements PayHourQuota
             criteria.andPostCodeEqualTo(model.getPostCode());
         }
         if (StringUtils.isNotBlank(model.getIdCategory())) {
-            criteria.andIdCategoryEqualTo(model.getIdCategory());
+            criteria.andIdCategoryLike('%' + model.getIdCategory() + '%');
         }
         List<PayHourQuota> list = payHourQuotaMapper.selectByExample(example);
         return list;
