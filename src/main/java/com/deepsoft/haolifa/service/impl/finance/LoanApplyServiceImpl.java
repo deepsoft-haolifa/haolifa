@@ -80,14 +80,13 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
     @Override
     public ResultBean save(LoanApplyAddDTO model) {
-//        log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
+        log.info("LoanApplyService save start|{}", JSON.toJSONString(model));
         ResultBean<Object> PARAM_ERROR = loanApplyHelper.validate(model);
         if (PARAM_ERROR != null) {
             return PARAM_ERROR;
         }
         CustomUser customUser = sysUserService.selectLoginUser();
         SysUser sysUser = sysUserService.getSysUser(customUser.getId());
-        PayUser payUser = payUserMapper.selectByPhoneOrIdCard(sysUser.getPhone(), sysUser.getIdCard());
 
         ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
         queryBO.setCode(model.getProjectCode());
@@ -118,11 +117,11 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setUpdateTime(new Date());
         loanApply.setCreateUser(sysUserService.selectLoginUser().getId());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        loanApply.setDeptId(sysUser.getDepartId());
 
 
         //上传到7牛文件服务器
         String fileUrl = "";
-        String fileName = "";
         if (CollectionUtil.isNotEmpty(model.getFileUrlList())) {
 //            List<String> fileUrlList = new ArrayList<>();
 //            for (FileDTO fileDTO : model.getFileDTOList()) {

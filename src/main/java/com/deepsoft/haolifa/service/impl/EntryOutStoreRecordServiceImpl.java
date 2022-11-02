@@ -176,24 +176,15 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
             }
             for (PayManagerCal payManagerCal : list) {
                 PayProductionWorkshop payProductionWorkshop = payProductionWorkshopMapper.selectByPrimaryKey(payManagerCal.getPostId());
-                String postName = payProductionWorkshop.getPostName();
-
                 // 计提价格
                 BigDecimal price = payManagerCal.getPrice();
-                PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
-                payProductionWorkshopExample.createCriteria().andPostNameEqualTo(postName);
-                List<PayProductionWorkshop> payProductionWorkshops = payProductionWorkshopMapper.selectByExample(payProductionWorkshopExample);
-                if (CollectionUtils.isEmpty(payProductionWorkshops)) {
-                    continue;
-                }
                 // 如果不是管理岗位就直接舍弃
-                PayProductionWorkshop workshop = payProductionWorkshops.get(0);
-                if (!CommonEnum.UserType.MARRIED.name.equals(workshop.getWorkType())) {
+                if (!CommonEnum.UserType.MARRIED.name.equals(payProductionWorkshop.getWorkType())) {
                     continue;
                 }
                 // 通过岗位找人
                 PayUserExample payUserExample = new PayUserExample();
-                payUserExample.createCriteria().andPostIdEqualTo(workshop.getId());
+                payUserExample.createCriteria().andPostIdEqualTo(payProductionWorkshop.getId());
                 List<PayUser> payUsers = payUserMapper.selectByExample(payUserExample);
                 if (CollectionUtils.isEmpty(payUsers)) {
                     continue;
@@ -246,7 +237,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                 }
             }
         } catch (Exception e) {
-            e.getStackTrace();
+            throw(e);
         }
 
     }
