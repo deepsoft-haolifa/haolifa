@@ -26,3 +26,5 @@ gradlew.bat
 /dist/
 /nbdist/
 /.nb-gradle/
+/.gradle/
+/.idea/
