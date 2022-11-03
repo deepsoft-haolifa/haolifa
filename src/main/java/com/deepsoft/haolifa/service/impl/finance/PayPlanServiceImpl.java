@@ -14,6 +14,7 @@ import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceRSDTO;
@@ -251,11 +252,11 @@ public class PayPlanServiceImpl implements PayPlanService {
             }
 
             // 扣减预算
-            ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+            ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
             budgetUpDTO.setId(bizProjectBudget.getId());
-            budgetUpDTO.setDeptId(bizPayPlan.getDeptId());
+            //budgetUpDTO.setDeptId(bizPayPlan.getDeptId());
             budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(bigDecimal));
-            ResultBean resultBean = projectBudgetService.update(budgetUpDTO);
+            ResultBean resultBean = projectBudgetService.decrement(budgetUpDTO);
             if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
                 throw new BaseException(resultBean.getMessage());
             }
