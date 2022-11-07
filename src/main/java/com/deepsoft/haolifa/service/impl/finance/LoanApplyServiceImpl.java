@@ -14,8 +14,9 @@ import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.*;
@@ -80,14 +81,13 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
     @Override
     public ResultBean save(LoanApplyAddDTO model) {
-//        log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
+        log.info("LoanApplyService save start|{}", JSON.toJSONString(model));
         ResultBean<Object> PARAM_ERROR = loanApplyHelper.validate(model);
         if (PARAM_ERROR != null) {
             return PARAM_ERROR;
         }
         CustomUser customUser = sysUserService.selectLoginUser();
         SysUser sysUser = sysUserService.getSysUser(customUser.getId());
-        PayUser payUser = payUserMapper.selectByPhoneOrIdCard(sysUser.getPhone(), sysUser.getIdCard());
 
         ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
         queryBO.setCode(model.getProjectCode());
@@ -118,11 +118,11 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         loanApply.setUpdateTime(new Date());
         loanApply.setCreateUser(sysUserService.selectLoginUser().getId());
         loanApply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        loanApply.setDeptId(sysUser.getDepartId());
 
 
         //上传到7牛文件服务器
         String fileUrl = "";
-        String fileName = "";
         if (CollectionUtil.isNotEmpty(model.getFileUrlList())) {
 //            List<String> fileUrlList = new ArrayList<>();
 //            for (FileDTO fileDTO : model.getFileDTOList()) {
@@ -163,10 +163,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
 
             // 回退
-            ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+            ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
             budgetUpDTO.setId(bizProjectBudget.getId());
             budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().add(selectByPrimaryKey.getAmount()));
-            projectBudgetService.update(budgetUpDTO);
+            projectBudgetService.decrement(budgetUpDTO);
         }
 
         return ResultBean.success(delete);
@@ -509,10 +509,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
                 BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
 
                 // 回退
-                ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+                ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
                 budgetUpDTO.setId(bizProjectBudget.getId());
                 budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().add(loanApplyS.getAmount()));
-                projectBudgetService.update(budgetUpDTO);
+                projectBudgetService.decrement(budgetUpDTO);
             }
         }
 
@@ -545,10 +545,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
         }
         // 扣减预算 todo 扣减日志
-        ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+        ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
         budgetUpDTO.setId(bizProjectBudget.getId());
         budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(selectByPrimaryKey.getAmount()));
-        projectBudgetService.update(budgetUpDTO);
+        projectBudgetService.decrement(budgetUpDTO);
 
 
         BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(id);

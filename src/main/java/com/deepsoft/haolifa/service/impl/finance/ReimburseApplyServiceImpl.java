@@ -17,6 +17,7 @@ import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
@@ -112,7 +113,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     //
     @Override
     public ResultBean save(ReimburseApplyAddDTO model) {
-        log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
+        log.info("ReimburseApplyService save start|{}", JSONObject.toJSON(model));
         ResultBean<Object> PARAM_ERROR = remiburseHelper.validate(model);
         if (PARAM_ERROR != null) {
             return PARAM_ERROR;
@@ -628,7 +629,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                     StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.un_pay.getCode())
                         || StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.partial_pay.getCode())
                 );
-                 canPay = true;
+                // canPay = true;
                 reimburseApplyRSDTO.setCanPay(canPay);
 
                 if (StringUtils.isNotEmpty(reimburseApply.getFileUrl())) {
@@ -697,10 +698,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
         }
         // 扣减预算 todo 扣减日志
-        ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+        ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
         budgetUpDTO.setId(bizProjectBudget.getId());
         budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(reimburseApply.getAmount()));
-        projectBudgetService.update(budgetUpDTO);
+        projectBudgetService.decrement(budgetUpDTO);
 
         // 添加申请流程
         FlowInstanceDTO flowInstanceDTO = remiburseHelper.buildFlowInstanceDTO(reimburseApply);

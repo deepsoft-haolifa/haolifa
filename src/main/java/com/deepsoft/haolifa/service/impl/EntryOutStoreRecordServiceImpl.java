@@ -589,6 +589,7 @@ public class EntryOutStoreRecordServiceImpl extends BaseService implements Entry
                         requisitionExample.or().andOrderNoEqualTo(busNo).andIdEqualTo(busId);
                         MaterialRequisition materialRequisition = new MaterialRequisition();
                         materialRequisition.setOutRoomStatus(CommonEnum.OutRoomStatus.OUT.type);
+                        materialRequisition.setDeptName(model.getReceiveDepartment());
                         materialRequisitionMapper.updateByExampleSelective(materialRequisition, requisitionExample);
                     } else if (model.getType().equals(CommonEnum.materialOutType.ENTRUST.type)) {
                         EntrustExample entrustExample = new EntrustExample();

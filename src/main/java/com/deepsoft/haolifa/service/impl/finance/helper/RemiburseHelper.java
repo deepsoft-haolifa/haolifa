@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAddDTO;
@@ -263,10 +264,10 @@ public class RemiburseHelper {
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
 
         // 回退
-        ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+        ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
         budgetUpDTO.setId(bizProjectBudget.getId());
         budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().add(selectByPrimaryKey.getAmount()));
-        projectBudgetService.update(budgetUpDTO);
+        projectBudgetService.decrement(budgetUpDTO);
     }
 
 

@@ -15,8 +15,8 @@ import java.util.List;
 public class LoanApplyAddDTO {
 
 
-    @ApiModelProperty(value = "借款部门id")
-    private Integer deptId;
+//    @ApiModelProperty(value = "借款部门id")
+//    private Integer deptId;
 
     @ApiModelProperty(value = "支付类型 1 对公 2 对私 三期新增字段")
     private String payType;

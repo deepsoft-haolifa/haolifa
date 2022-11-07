@@ -17,19 +17,23 @@ import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.ProjectBudgetService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
 
@@ -81,6 +85,36 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
     @Override
     public ResultBean update(ProjectBudgetUpDTO assetsUpDTO) {
+
+//        if (StringUtils.isEmpty(assetsUpDTO.getName())) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "code");
+//        }
+//        if (StringUtils.isEmpty(assetsUpDTO.getCode())) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "name");
+//        }
+
+        BizProjectBudget projectBudget = bizProjectBudgetMapper.selectByPrimaryKey(assetsUpDTO.getId());
+
+        BigDecimal updateAmount = assetsUpDTO.getTotalQuota().subtract(projectBudget.getTotalQuota());
+
+        BigDecimal balance = updateAmount.add(projectBudget.getBalanceQuota());
+        if (balance.compareTo(BigDecimal.ZERO)<0){
+            return ResultBean.error("修改后余额不能小于0");
+        }
+
+        log.info("ProjectBudgetService update 修改金额 = "+updateAmount);
+
+        BizProjectBudget bizProjectBudget = new BizProjectBudget();
+        BeanUtils.copyProperties(assetsUpDTO, bizProjectBudget);
+        bizProjectBudget.setBalanceQuota(balance);
+        bizProjectBudget.setUpdateTime(new Date());
+        bizProjectBudget.setUpdateBy(sysUserService.selectLoginUser().getId().toString());
+        int i = bizProjectBudgetMapper.updateByPrimaryKeySelective(bizProjectBudget);
+        return ResultBean.success(i);
+    }
+
+    @Override
+    public ResultBean decrement(ProjectBudgetDecDTO assetsUpDTO) {
 
 //        if (StringUtils.isEmpty(assetsUpDTO.getName())) {
 //            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "code");

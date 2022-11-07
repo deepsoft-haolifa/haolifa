@@ -48,7 +48,7 @@ public class TechnicalDetailedController {
     }
 
     @ApiOperation("删除")
-    @DeleteMapping("/del/{id}")
+    @PostMapping("/del/{id}")
     public ResultBean del(@PathVariable("id") int id) {
         int i = technicalDetailedMapper.deleteByPrimaryKey(id);
         if (i > 0) {
