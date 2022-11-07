@@ -189,13 +189,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         //上传到7牛文件服务器
         if (CollectionUtil.isNotEmpty(loanApplyUpDTO.getFileUrlList())) {
-            String fileUrl = "";
-//            List<String> fileUrlList = new ArrayList<>();
-//            for (FileDTO fileDTO : loanApplyUpDTO.getFileDTOList()) {
-//                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
-//            }
-            fileUrl = JSON.toJSONString(loanApplyUpDTO.getFileUrlList());
-
+            String  fileUrl = JSON.toJSONString(loanApplyUpDTO.getFileUrlList());
             loanApply.setFileUrl(fileUrl);
         }
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
