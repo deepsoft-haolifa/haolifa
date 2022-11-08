@@ -723,7 +723,7 @@
             </if>
             and po.paid_account  <![CDATA[ <> ]]> po.total_price
 --             and i.total_amount  <![CDATA[ <> ]]> 0
-            and i.total_amount  <![CDATA[ <> ]]> po.paid_account
+--             and i.total_amount  <![CDATA[ <> ]]> po.paid_account
         </where>
         order by po.create_time desc
     </select>
