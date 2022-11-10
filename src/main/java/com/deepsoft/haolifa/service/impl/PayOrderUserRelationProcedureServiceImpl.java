@@ -104,7 +104,7 @@ public class PayOrderUserRelationProcedureServiceImpl extends BaseService implem
             boolean administrators = false;
             List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(getLoginUserId());
             for (RoleDTO role : rolesByUserId) {
-                if ("ROLE_ADMIN".equals(role.getRoleName())) {
+                if ("ROLE_ADMIN".equals(role.getRoleName()) || "机加检验员".equals(role.getRoleName())) {
                     administrators = true;
                     break;
                 }
