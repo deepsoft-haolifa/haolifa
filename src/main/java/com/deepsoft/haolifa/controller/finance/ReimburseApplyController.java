@@ -86,16 +86,8 @@ public class ReimburseApplyController {
     @ApiOperation("打印")
     @GetMapping("/printPDF/{id}")
     public void printPDF(@PathVariable("id") int id, HttpServletResponse response) throws Exception {
-        // todo 校验
-
         ResultBean<ReimburseApplyDetailDTO> info = reimburseApplyService.getInfo(id);
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = info.getResult();
-//        if (CollectionUtil.isEmpty(reimburseApplyDetailDTO.getFileUrlList())) {
-//            ResultBean<Object> error = ResultBean.error("请先上传附件");
-//            response.getOutputStream().write(JSON.toJSONBytes(error));
-//        }
-
-
         if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getType(), ReimburseTypeEnum.travle.getCode())) {
             RemiburseCLPrint.print(reimburseApplyDetailDTO, response);
         } else {
