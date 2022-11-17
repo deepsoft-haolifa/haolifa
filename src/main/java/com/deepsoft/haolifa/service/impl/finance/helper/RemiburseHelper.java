@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.service.impl.finance.helper;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson.JSON;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
@@ -185,6 +186,13 @@ public class RemiburseHelper {
         reimburseApply.setReimburseUser(customUser.getId());
         reimburseApply.setCreateUser(customUser.getId());
         reimburseApply.setUpdateUser(customUser.getId());
+
+        //上传到7牛文件服务器
+        String fileUrl = "";
+        if (CollectionUtil.isNotEmpty(model.getFileUrlList())) {
+            fileUrl = JSON.toJSONString(model.getFileUrlList());
+        }
+        reimburseApply.setFileUrl(fileUrl);
         return reimburseApply;
     }
 
