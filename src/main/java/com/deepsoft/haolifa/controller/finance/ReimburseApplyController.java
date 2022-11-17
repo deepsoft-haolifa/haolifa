@@ -90,10 +90,10 @@ public class ReimburseApplyController {
 
         ResultBean<ReimburseApplyDetailDTO> info = reimburseApplyService.getInfo(id);
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = info.getResult();
-        if (CollectionUtil.isEmpty(reimburseApplyDetailDTO.getFileUrlList())) {
-            ResultBean<Object> error = ResultBean.error("请先上传附件");
-            response.getOutputStream().write(JSON.toJSONBytes(error));
-        }
+//        if (CollectionUtil.isEmpty(reimburseApplyDetailDTO.getFileUrlList())) {
+//            ResultBean<Object> error = ResultBean.error("请先上传附件");
+//            response.getOutputStream().write(JSON.toJSONBytes(error));
+//        }
 
 
         if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getType(), ReimburseTypeEnum.travle.getCode())) {
