@@ -635,7 +635,17 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
 
         if (CollectionUtil.isEmpty(bizSubjectsBalanceList)) {
-            return null;
+            // 账户不存在 先创建账户
+            BizSubjectsBalance bizSubjectsBalance = new BizSubjectsBalance();
+            bizSubjectsBalance.setDeptId(sysUser.getDepartId());
+            bizSubjectsBalance.setSubjectsId(bizCostBudgetSubjects.getSubjectsId());
+            bizSubjectsBalance.setBalanceAmount(BigDecimal.ZERO);
+            bizSubjectsBalance.setCreateTime(new Date());
+            bizSubjectsBalance.setUpdateTime(new Date());
+            bizSubjectsBalance.setCreateUser(sysUserService.selectLoginUser().getId());
+            bizSubjectsBalance.setUpdateUser(sysUserService.selectLoginUser().getId());
+            int insertId = subjectsBalanceMapper.insertSelective(bizSubjectsBalance);
+            bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
         }
         return bizSubjectsBalanceList.get(0);
     }

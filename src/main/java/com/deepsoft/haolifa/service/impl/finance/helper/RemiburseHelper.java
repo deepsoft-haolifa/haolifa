@@ -110,6 +110,23 @@ public class RemiburseHelper {
         if (CollectionUtil.isEmpty(model.getReimburseCostDetailAddDTOList()) && CollectionUtil.isEmpty(model.getReimburseTravelDetailAddDTOList())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销明细必传");
         }
+        // 费用报销
+        if (StringUtils.equalsIgnoreCase(model.getType(), "2") ) {
+            for(ReimburseCostDetailAddDTO reimburseCostDetailAddDTO:model.getReimburseCostDetailAddDTOList()){
+                if (reimburseCostDetailAddDTO.getAmount() ==null){
+                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "明细金额必传");
+                }
+                if (reimburseCostDetailAddDTO.getDocNum() ==null){
+                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "明细单据张数必传");
+                }
+                if (reimburseCostDetailAddDTO.getTime() ==null){
+                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "明细日期必传");
+                }
+                if (reimburseCostDetailAddDTO.getSubject() ==null){
+                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "明细报销科目必传");
+                }
+            }
+        }
         if (CollectionUtil.isEmpty(model.getFileUrlList())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销附件必传");
         }
