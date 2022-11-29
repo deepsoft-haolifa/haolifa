@@ -201,7 +201,16 @@ public class SubjectsBalanceServiceImpl implements SubjectBalanceService {
         bizSubjectsBalanceExample.setOrderByClause("id desc limit 1");
         List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
         if (CollectionUtils.isEmpty(bizSubjectsBalanceList)){
-            throw new BaseException("当前科目未配置预算");
+            // 账户不存在 先创建账户
+            BizSubjectsBalance bizSubjectsBalance = new BizSubjectsBalance();
+            BeanUtils.copyProperties(bizSubjectsUp, bizSubjectsBalance);
+            bizSubjectsBalance.setBalanceAmount(BigDecimal.ZERO);
+            bizSubjectsBalance.setCreateTime(new Date());
+            bizSubjectsBalance.setUpdateTime(new Date());
+            bizSubjectsBalance.setCreateUser(sysUserService.selectLoginUser().getId());
+            bizSubjectsBalance.setUpdateUser(sysUserService.selectLoginUser().getId());
+            int insertId = subjectsBalanceMapper.insertSelective(bizSubjectsBalance);
+            bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
         }
 
         // 更新余额表

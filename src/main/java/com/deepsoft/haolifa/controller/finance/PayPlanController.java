@@ -47,7 +47,7 @@ public class PayPlanController {
     @ApiOperation("更新节点")
     @PostMapping("/updatePayPlan")
     public ResultBean updatePayPlan(@RequestBody BizPayPlanPayDTO payPlan) {
-        return payPlanService.update(payPlan);
+        return payPlanService.pay(payPlan);
     }
 
     @ApiOperation("获取节点列表")
@@ -55,12 +55,6 @@ public class PayPlanController {
     public ResultBean<BizPayPlanRSDTO> getPayPlanList(@RequestBody BizPayPlanRQDTO payPlanDTO) {
         return payPlanService.getList(payPlanDTO);
     }
-
-//    @ApiOperation("获取应付汇总节点列表")
-//    @PostMapping("/summary/getPayPlanList")
-//    public ResultBean<BizPayPlanSummaryRSDTO> getPayPlanSummaryList(@RequestBody BizPayPlanSummaryRQDTO payPlanDTO) {
-//        return payPlanService.getPayPlanSummaryList(payPlanDTO);
-//    }
 
 
     //

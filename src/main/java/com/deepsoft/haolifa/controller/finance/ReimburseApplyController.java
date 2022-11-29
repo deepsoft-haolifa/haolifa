@@ -21,10 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * 报销申请
@@ -86,16 +86,8 @@ public class ReimburseApplyController {
     @ApiOperation("打印")
     @GetMapping("/printPDF/{id}")
     public void printPDF(@PathVariable("id") int id, HttpServletResponse response) throws Exception {
-        // todo 校验
-
         ResultBean<ReimburseApplyDetailDTO> info = reimburseApplyService.getInfo(id);
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = info.getResult();
-        if (CollectionUtil.isEmpty(reimburseApplyDetailDTO.getFileUrlList())) {
-            ResultBean<Object> error = ResultBean.error("请先上传附件");
-            response.getOutputStream().write(JSON.toJSONBytes(error));
-        }
-
-
         if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getType(), ReimburseTypeEnum.travle.getCode())) {
             RemiburseCLPrint.print(reimburseApplyDetailDTO, response);
         } else {
@@ -106,12 +98,12 @@ public class ReimburseApplyController {
 
     @ApiOperation("打印")
     @GetMapping("/printEmptyCL")
-    public void printEmptyCL(HttpServletResponse response)  {
+    public void printEmptyCL(HttpServletResponse response) {
 
         FileInputStream fis = null;
         try {
             XWPFDocument document;
-            String outPath  = "/home/haolifa/static/cl_template.docx";
+            String outPath = "/home/haolifa/static/cl_template.docx";
             File file = new File(outPath);
             String filename = file.getName();
             fis = new FileInputStream(file);
@@ -135,9 +127,6 @@ public class ReimburseApplyController {
                 }
             }
         }
-
-
-
     }
 
 
@@ -147,12 +136,12 @@ public class ReimburseApplyController {
         FileInputStream fis = null;
         try {
             XWPFDocument document;
-            String outPath  = "/home/haolifa/static/bx_template.docx";
+            String outPath = "/home/haolifa/static/bx_template.docx";
             File file = new File(outPath);
             String filename = file.getName();
             fis = new FileInputStream(file);
             //设置文件名及后缀
-            response.setHeader("Content-Disposition", "attachment; filename=bx_template.docx" );
+            response.setHeader("Content-Disposition", "attachment; filename=bx_template.docx");
             response.setHeader("content-Type", "docx");
             String fileType = "docx";
             if ("docx".equals(fileType) || "doc".equals(fileType)) {//Office的doc与docx输出流，使用poi-ooxml 3.17可用
@@ -173,8 +162,6 @@ public class ReimburseApplyController {
         }
 
 
-
-
     }
 
 
@@ -184,6 +171,7 @@ public class ReimburseApplyController {
     public ResultBean approve(@ApiParam("报销申请ID") @PathVariable("id") Integer id) {
         return reimburseApplyService.approve(id);
     }
+
 
     @ApiOperation("付款(出纳付款列表使用)")
     @PostMapping("/pay")

@@ -116,10 +116,6 @@ public class LoanApplyController {
     public void printPDF(@PathVariable("id") int id, HttpServletResponse response) throws Exception {
         ResultBean<LoanApplyInfoRSDTO> info = loanApplyService.getInfo(id);
         LoanApplyInfoRSDTO loanApplyInfoRSDTO =info.getResult();
-//        if (CollectionUtil.isEmpty(loanApplyInfoRSDTO.getFileUrlList())){
-//            ResultBean<Object> error = ResultBean.error("请先上传附件");
-//            response.getOutputStream().write(JSON.toJSONBytes(error));
-//        }
         LoanPrint.print(loanApplyInfoRSDTO,response);
     }
 

@@ -33,7 +33,7 @@ public interface PayPlanService {
      * @param model
      * @return
      */
-    ResultBean update(BizPayPlanPayDTO model);
+    ResultBean pay(BizPayPlanPayDTO model);
 
     /**
      * 获取详情

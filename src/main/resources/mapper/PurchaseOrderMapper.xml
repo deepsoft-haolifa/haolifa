@@ -743,18 +743,20 @@
         -- 入账欠票（入账额-已开票）
         round(c.entryAmount - c.invoicedAmount, 2) entryOweInvoiceAmount
         from (
-            select po.supplier_name as supplierName,
-            po.supplier_no as supplierId,
-            -- 合同额
-            ifnull(sum(po.total_price), 0) as contractAmount,
-            -- 入账额
-            ifnull(sum(0), 0) as entryAmount,
-            -- 已付货款
-            ifnull(sum(po.paid_account), 0) as paidAmount,
-            -- 已开发票
-            ifnull(sum(i.total_amount), 0) as invoicedAmount
-            FROM purchase_order po
-            LEFT JOIN invoice i ON po.purchase_order_no = i.order_no
+        select po.supplier_name as supplierName,
+        po.supplier_no as supplierId,
+        -- 合同额
+        ifnull(sum(po.total_price), 0) as contractAmount,
+        -- 入账额
+        ifnull(sum(oi.unit_price * ih.qualified_number), 0) as entryAmount,
+        -- 已付货款
+        ifnull(sum(po.paid_account), 0) as paidAmount,
+        -- 已开发票
+        ifnull(sum(i.total_amount), 0) as invoicedAmount
+        FROM purchase_order po
+        LEFT JOIN invoice i ON po.purchase_order_no = i.order_no
+        LEFT JOIN purchase_order_item oi ON po.purchase_order_no = oi.purchase_order_no
+        LEFT JOIN inspect_history ih ON po.purchase_order_no = ih.purchase_no and oi.material_graph_no = ih.material_graph_no and ih.status = 2
             <where>
                 <if test="query.supplierName != null and query.supplierName != ''">
                     AND po.supplier_name like concat('%',#{query.supplierName},'%')

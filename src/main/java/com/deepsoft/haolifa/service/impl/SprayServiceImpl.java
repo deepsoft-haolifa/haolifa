@@ -307,7 +307,7 @@ public class SprayServiceImpl extends BaseService implements SprayService {
             int qualifiedSum = sprayInspectHistorys.stream().mapToInt(SprayInspectHistory::getQualifiedNumber).sum();
             int unQualifiedSum = sprayInspectHistorys.stream().mapToInt(SprayInspectHistory::getUnqualifiedNumber).sum();
             if (qualifiedSum + unQualifiedSum >= spray.getTotalNumber()) {
-                spray.setInspectStatus(CommonEnum.Inspect2Status.handled.code);
+                spray.setStatus(CommonEnum.SprayStatus.SPRAY_COMPLETE_MACHINE.code);
             }
             sprayMapper.updateByExampleSelective(spray, example);
         }

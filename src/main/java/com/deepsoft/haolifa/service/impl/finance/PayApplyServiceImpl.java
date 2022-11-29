@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizPayApplyDetailMapper;
@@ -9,15 +10,16 @@ import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
 import com.deepsoft.haolifa.enums.PayApplyPayStatusEnum;
 import com.deepsoft.haolifa.enums.PayPlanConfirmStatusEnum;
 import com.deepsoft.haolifa.model.domain.*;
-import com.deepsoft.haolifa.model.dto.CustomUser;
-import com.deepsoft.haolifa.model.dto.FlowInstanceDTO;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.payapp.*;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.UploadPurchaseExcelService;
 import com.deepsoft.haolifa.service.finance.PayApplyService;
+import com.deepsoft.haolifa.service.finance.ProjectBudgetService;
+import com.deepsoft.haolifa.service.impl.finance.helper.FinanceConstant;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -62,6 +64,9 @@ public class PayApplyServiceImpl implements PayApplyService {
 
     @Autowired
     private UploadPurchaseExcelService uploadPurchaseExcelService;
+
+    @Autowired
+    private ProjectBudgetService projectBudgetService;
 
     @Override
     // @Transient
@@ -438,6 +443,32 @@ public class PayApplyServiceImpl implements PayApplyService {
             .forEach(purchaseOrder -> {
                 BizPayPlan payPlan = buildBizPayPlan(payApply, bizPayApplyDetailMap, purchaseOrder);
                 bizPayPlanMapper.insertSelective(payPlan);
+
+                ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+                queryBO.setName(FinanceConstant.cai_liao_f_cn);
+                queryBO.setDeptId(payPlan.getDeptId());
+                queryBO.setDate(new Date());
+                // 校验当月项目预算
+                BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
+                //  当月未维护
+                if (ObjectUtil.isNull(bizProjectBudget)) {
+                    throw new BaseException("当月项目预算未维护");
+                }
+                // 金额不足
+                if (bizProjectBudget.getBalanceQuota().compareTo(payPlan.getApplyAmount()) < 0) {
+                    throw new BaseException("当月项目预算金额不足");
+                }
+
+                // 扣减预算
+                ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
+                budgetUpDTO.setId(bizProjectBudget.getId());
+                //budgetUpDTO.setDeptId(bizPayPlan.getDeptId());
+                budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(payPlan.getApplyAmount()));
+                ResultBean resultBean = projectBudgetService.decrement(budgetUpDTO);
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+                    throw new BaseException(resultBean.getMessage());
+                }
+
             });
 
         // 添加申请流程

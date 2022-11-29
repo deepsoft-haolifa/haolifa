@@ -120,7 +120,7 @@ public class PayPlanServiceImpl implements PayPlanService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultBean update(BizPayPlanPayDTO planPayDTO) {
+    public ResultBean pay(BizPayPlanPayDTO planPayDTO) {
 
 
         log.info("出纳付款 rq={}", JSON.toJSONString(planPayDTO));
@@ -235,31 +235,31 @@ public class PayPlanServiceImpl implements PayPlanService {
             bizSubjects.setDeptId(bizPayPlan.getDeptId());
             bizSubjects.setAmount(bigDecimal);
             subjectBalanceService.decreaseAmount(bizSubjects);
-
-            ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
-            queryBO.setName(FinanceConstant.cai_liao_f_cn);
-            queryBO.setDeptId(bizPayPlan.getDeptId());
-            queryBO.setDate(new Date());
-            // 校验当月项目预算
-            BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
-            //  当月未维护
-            if (ObjectUtil.isNull(bizProjectBudget)) {
-                throw new BaseException("当月项目预算未维护");
-            }
-            // 金额不足
-            if (bizProjectBudget.getBalanceQuota().compareTo(bigDecimal) < 0) {
-                throw new BaseException("当月项目预算金额不足");
-            }
-
-            // 扣减预算
-            ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
-            budgetUpDTO.setId(bizProjectBudget.getId());
-            //budgetUpDTO.setDeptId(bizPayPlan.getDeptId());
-            budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(bigDecimal));
-            ResultBean resultBean = projectBudgetService.decrement(budgetUpDTO);
-            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
-                throw new BaseException(resultBean.getMessage());
-            }
+//
+//            ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+//            queryBO.setName(FinanceConstant.cai_liao_f_cn);
+//            queryBO.setDeptId(bizPayPlan.getDeptId());
+//            queryBO.setDate(new Date());
+//            // 校验当月项目预算
+//            BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
+//            //  当月未维护
+//            if (ObjectUtil.isNull(bizProjectBudget)) {
+//                throw new BaseException("当月项目预算未维护");
+//            }
+//            // 金额不足
+//            if (bizProjectBudget.getBalanceQuota().compareTo(bigDecimal) < 0) {
+//                throw new BaseException("当月项目预算金额不足");
+//            }
+//
+//            // 扣减预算
+//            ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
+//            budgetUpDTO.setId(bizProjectBudget.getId());
+//            //budgetUpDTO.setDeptId(bizPayPlan.getDeptId());
+//            budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(bigDecimal));
+//            ResultBean resultBean = projectBudgetService.decrement(budgetUpDTO);
+//            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+//                throw new BaseException(resultBean.getMessage());
+//            }
         }
 
         // 费用管理
