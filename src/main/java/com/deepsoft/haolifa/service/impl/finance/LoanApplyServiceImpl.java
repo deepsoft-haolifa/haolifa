@@ -14,8 +14,9 @@ import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.service.FlowInstanceService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.*;
@@ -162,10 +163,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
 
             // 回退
-            ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+            ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
             budgetUpDTO.setId(bizProjectBudget.getId());
             budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().add(selectByPrimaryKey.getAmount()));
-            projectBudgetService.update(budgetUpDTO);
+            projectBudgetService.decrement(budgetUpDTO);
         }
 
         return ResultBean.success(delete);
@@ -188,13 +189,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         //上传到7牛文件服务器
         if (CollectionUtil.isNotEmpty(loanApplyUpDTO.getFileUrlList())) {
-            String fileUrl = "";
-//            List<String> fileUrlList = new ArrayList<>();
-//            for (FileDTO fileDTO : loanApplyUpDTO.getFileDTOList()) {
-//                fileUrlList.add(QiniuUtil.uploadFile(fileDTO.getBase64Source(), fileDTO.getFileName()));
-//            }
-            fileUrl = JSON.toJSONString(loanApplyUpDTO.getFileUrlList());
-
+            String  fileUrl = JSON.toJSONString(loanApplyUpDTO.getFileUrlList());
             loanApply.setFileUrl(fileUrl);
         }
         int update = bizLoanApplyMapper.updateByPrimaryKeySelective(loanApply);
@@ -508,10 +503,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
                 BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
 
                 // 回退
-                ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+                ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
                 budgetUpDTO.setId(bizProjectBudget.getId());
                 budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().add(loanApplyS.getAmount()));
-                projectBudgetService.update(budgetUpDTO);
+                projectBudgetService.decrement(budgetUpDTO);
             }
         }
 
@@ -544,10 +539,10 @@ public class LoanApplyServiceImpl implements LoanApplyService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
         }
         // 扣减预算 todo 扣减日志
-        ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+        ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
         budgetUpDTO.setId(bizProjectBudget.getId());
         budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(selectByPrimaryKey.getAmount()));
-        projectBudgetService.update(budgetUpDTO);
+        projectBudgetService.decrement(budgetUpDTO);
 
 
         BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(id);

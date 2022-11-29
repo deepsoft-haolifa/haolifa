@@ -17,6 +17,7 @@ import com.deepsoft.haolifa.model.dto.finance.FileUrlDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
@@ -697,10 +698,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
         }
         // 扣减预算 todo 扣减日志
-        ProjectBudgetUpDTO budgetUpDTO = new ProjectBudgetUpDTO();
+        ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
         budgetUpDTO.setId(bizProjectBudget.getId());
         budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(reimburseApply.getAmount()));
-        projectBudgetService.update(budgetUpDTO);
+        projectBudgetService.decrement(budgetUpDTO);
 
         // 添加申请流程
         FlowInstanceDTO flowInstanceDTO = remiburseHelper.buildFlowInstanceDTO(reimburseApply);

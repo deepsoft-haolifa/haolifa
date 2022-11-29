@@ -13,6 +13,9 @@ public interface ProjectBudgetService {
 
     ResultBean update(ProjectBudgetUpDTO assetsUpDTO);
 
+
+    ResultBean decrement(ProjectBudgetDecDTO decDTO);
+
     ResultBean<PageDTO<ProjectBudgetRSDTO>> getList(ProjectBudgetRQDTO assetsRQDTO);
 
     ResultBean<PageDTO<ProjectBudgetRSDTO>> getCurUserProjectBudgetList(ProjectBudgetRQDTO assetsRQDTO);

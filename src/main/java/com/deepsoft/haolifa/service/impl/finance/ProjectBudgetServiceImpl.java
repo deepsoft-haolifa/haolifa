@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -106,6 +107,24 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         BizProjectBudget bizProjectBudget = new BizProjectBudget();
         BeanUtils.copyProperties(assetsUpDTO, bizProjectBudget);
         bizProjectBudget.setBalanceQuota(balance);
+        bizProjectBudget.setUpdateTime(new Date());
+        bizProjectBudget.setUpdateBy(sysUserService.selectLoginUser().getId().toString());
+        int i = bizProjectBudgetMapper.updateByPrimaryKeySelective(bizProjectBudget);
+        return ResultBean.success(i);
+    }
+
+    @Override
+    public ResultBean decrement(ProjectBudgetDecDTO assetsUpDTO) {
+
+//        if (StringUtils.isEmpty(assetsUpDTO.getName())) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "code");
+//        }
+//        if (StringUtils.isEmpty(assetsUpDTO.getCode())) {
+//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "name");
+//        }
+
+        BizProjectBudget bizProjectBudget = new BizProjectBudget();
+        BeanUtils.copyProperties(assetsUpDTO, bizProjectBudget);
         bizProjectBudget.setUpdateTime(new Date());
         bizProjectBudget.setUpdateBy(sysUserService.selectLoginUser().getId().toString());
         int i = bizProjectBudgetMapper.updateByPrimaryKeySelective(bizProjectBudget);
