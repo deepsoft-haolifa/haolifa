@@ -209,10 +209,10 @@ public class RemiburseCLPrint {
     }
 
     private static void h3(PdfPTable table, Font font) {
-        table.addCell(ItextpdfUtil.getCell("起止时间及地点", font, 12));
-        table.addCell(ItextpdfUtil.getCell("交通费", font, 10));
+        table.addCell(ItextpdfUtil.getCell("起止时间及地点", font, 14));
+        table.addCell(ItextpdfUtil.getCell("交通费", font, 7));
         table.addCell(ItextpdfUtil.getCell("出差补贴", font, 5));
-        table.addCell(ItextpdfUtil.getCell("其他项目", font, 5));
+        table.addCell(ItextpdfUtil.getCell("其他项目", font, 6));
     }
 
     private static void hn(PdfPTable table, Font font) {
