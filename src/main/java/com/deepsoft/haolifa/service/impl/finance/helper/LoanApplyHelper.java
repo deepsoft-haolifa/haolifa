@@ -111,22 +111,24 @@ public class LoanApplyHelper {
         return loanApplyExample;
     }
 
-    public BizLoanApply buildBizLoanApply(BizLoanApply bizLoanApply, BigDecimal addAmount) {
+    public BizLoanApply buildBizLoanApply(BizLoanApply bizLoanApply, BigDecimal payAmount) {
         BizLoanApply bizLoanApplyUp = new BizLoanApply();
         bizLoanApplyUp.setId(bizLoanApply.getId());
-        bizLoanApplyUp.setPaymentAmount(addAmount);
-        if (addAmount.compareTo(bizLoanApply.getAmount()) == 0) {
+        bizLoanApplyUp.setPaymentAmount(payAmount);
+        if (payAmount.compareTo(bizLoanApply.getAmount()) == 0) {
             bizLoanApplyUp.setPaymentStatus(LoanrPaymentStatusEnum.all_pay.getCode());
-        } else {
+        } else if (payAmount.compareTo(BigDecimal.ZERO) == 0){
+            bizLoanApplyUp.setPaymentStatus(LoanrPaymentStatusEnum.un_pay.getCode());
+        }else {
             bizLoanApplyUp.setPaymentStatus(LoanrPaymentStatusEnum.partial_pay.getCode());
         }
         return bizLoanApplyUp;
     }
 
-    public BizPaymentHistory buildBizPaymentHistory(Integer loanId, BigDecimal offsetAmount, BizLoanApply bizLoanApply) {
+    public BizPaymentHistory buildBizPaymentHistory(BigDecimal offsetAmount, BizLoanApply bizLoanApply) {
         BizPaymentHistory paymentHistory = new BizPaymentHistory();
         paymentHistory.setAmount(offsetAmount);
-        paymentHistory.setLoanId(loanId);
+        paymentHistory.setLoanId(bizLoanApply.getId());
         paymentHistory.setLoanSerialNo(bizLoanApply.getSerialNo());
         paymentHistory.setLoanUser(bizLoanApply.getLoanUser());
         paymentHistory.setLoanDate(bizLoanApply.getLoanDate());
@@ -135,6 +137,21 @@ public class LoanApplyHelper {
         paymentHistory.setRepaymentUser(sysUserService.selectLoginUser().getId());
         paymentHistory.setRepaymentDate(new Date());
         paymentHistory.setRemark("报销冲抵");
+        return paymentHistory;
+    }
+
+    public BizPaymentHistory buildFallbackBizPaymentHistory(BigDecimal offsetAmount, BizLoanApply bizLoanApply) {
+        BizPaymentHistory paymentHistory = new BizPaymentHistory();
+        paymentHistory.setAmount(offsetAmount.negate());
+        paymentHistory.setLoanId(bizLoanApply.getId());
+        paymentHistory.setLoanSerialNo(bizLoanApply.getSerialNo());
+        paymentHistory.setLoanUser(bizLoanApply.getLoanUser());
+        paymentHistory.setLoanDate(bizLoanApply.getLoanDate());
+        paymentHistory.setAmountType(bizLoanApply.getAmountType());
+        paymentHistory.setBillNature("4");
+        paymentHistory.setRepaymentUser(sysUserService.selectLoginUser().getId());
+        paymentHistory.setRepaymentDate(new Date());
+        paymentHistory.setRemark("报销冲抵 回退");
         return paymentHistory;
     }
 
