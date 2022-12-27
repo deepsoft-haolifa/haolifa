@@ -37,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -726,7 +727,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 log.error("报销支付：", integerResultBean.getMessage());
                 throw new BaseException(integerResultBean.getMessage());
             }
-            totalAmount = totalAmount.add(bizReimburseApplyS.getOffsetAmount());
         }
 
         // 记账
@@ -797,6 +797,191 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         Integer update = bizReimburseApplyMapper.updateByPrimaryKeySelective(remiburseHelper.buildBizReimburseApply(payDTO));
 
         return ResultBean.success(update);
+    }
+
+
+    @Autowired
+    private BizBillMapper bizBillMapper;
+
+
+    @Autowired
+    private BizBankBillMapper bizBankBillMapper;
+
+
+    @Autowired
+    private BizOtherBillMapper bizOtherBillMapper;
+
+
+    @Override
+    public ResultBean<Integer> fallbackPayStatus(Integer id) {
+        BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(id);
+        // 幂等校验
+        LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(bizReimburseApplyS.getPayStatus());
+        if (LoanrPayStatusEnum.un_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态未付款");
+        }
+
+        SysUser sysUser = sysUserService.getSysUser(bizReimburseApplyS.getReimburseUser());
+
+        // 费用报销详情
+        BizReimburseCostDetailExample bizReimburseCostDetailExample = new BizReimburseCostDetailExample();
+        bizReimburseCostDetailExample.createCriteria().andReimburseIdEqualTo(id);
+        List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(bizReimburseCostDetailExample);
+
+
+        // 如果是借款冲抵
+        if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getReimburseType())) {
+            ResultBean<Integer> integerResultBean = loanApplyService.fallbackRepaymentAmount(bizReimburseApplyS.getLoanId(), bizReimburseApplyS.getOffsetAmount());
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, integerResultBean.getCode())) {
+                log.error("回退 报销支付：", integerResultBean.getMessage());
+                throw new BaseException(integerResultBean.getMessage());
+            }
+        }
+
+        // 记账
+        if (bizReimburseApplyS.getAmount().compareTo(BigDecimal.ZERO) > 0) {
+
+            // 1現金
+            BizBillExample bizBillExample = buildBizBillExample(bizReimburseApplyS, sysUser);
+            List<BizBill> bizBillList = bizBillMapper.selectByExample(bizBillExample);
+
+            // 2銀行
+            BizBankBillExample bizBankBillExample = buildBizBankBillExample(bizReimburseApplyS);
+            List<BizBankBill> bankBillList = bizBankBillMapper.selectByExample(bizBankBillExample);
+
+            // 其他貨幣
+            BizOtherBillExample bizOtherBillExample = buildBizOtherBillExample(bizReimburseApplyS);
+            List<BizOtherBill> otherBillList = bizOtherBillMapper.selectByExample(bizOtherBillExample);
+
+            if (bizBillList.size() + bankBillList.size() + otherBillList.size() != 1) {
+                throw new BaseException("");
+            }
+
+            if (bizBillList.size() == 1) {
+                //  回退  扣减日记账金额
+                BizBillAddDTO bizBill = remiburseHelper.buildFallbackBizBillAddDTO(  sysUser, bizReimburseApplyS);
+                ResultBean save = billService.save(bizBill);
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                    log.error("回退报销支付：", save.getMessage());
+                    throw new BaseException(save.getMessage());
+                }
+            } else if (bankBillList.size() == 1) {
+                BizBankBillAddDTO bizBankBill = remiburseHelper.buildFallbackBizBankBillAddDTO( bizReimburseApplyS);
+                ResultBean save = bankBillService.save(bizBankBill);
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                    log.error("回退报销支付：", save.getMessage());
+                    throw new BaseException(save.getMessage());
+                }
+            } else if (otherBillList.size() == 1) {
+                BizOtherBillAddDTO otherBillAddDTO = remiburseHelper.buildFallbackBizOtherBillAddDTO(bizReimburseApplyS);
+                ResultBean save = otherBillService.save(otherBillAddDTO);
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                    log.error("回退报销支付：", save.getMessage());
+                    throw new BaseException(save.getMessage());
+                }
+            }
+
+        } else {
+            // 增加-银行日记账
+            BizBankBillAddDTO bizBankBillAddDTO = remiburseHelper.buildFallbackBizBankBillAddDTO(bizReimburseApplyS, sysUser);
+            ResultBean save = bankBillService.save(bizBankBillAddDTO);
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                log.error("回退报销支付：", save.getMessage());
+                throw new BaseException(save.getMessage());
+            }
+        }
+
+        // 扣款科目余额
+        if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getType())) {
+            reimburseCostDetailList.forEach(reimburseCostDetail -> {
+                BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, reimburseCostDetail);
+                ResultBean resultBean = subjectBalanceService.increaseAmount(bizSubjects);
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+                    log.error("回退报销支付：", resultBean.getMessage());
+                    throw new BaseException(resultBean.getMessage());
+                }
+            });
+        } else {
+            //reimburse_user
+            BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, bizReimburseApplyS.getAmount());
+            ResultBean resultBean = subjectBalanceService.increaseAmount(bizSubjects);
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+                log.error("回退报销支付：", resultBean.getMessage());
+                throw new BaseException(resultBean.getMessage());
+            }
+        }
+
+        // 财务管理->费用管理
+        ExpensesDTO expensesDTO = remiburseHelper.buildExpensesDTO(bizReimburseApplyS, bizReimburseApplyS.getAmount().negate(), reimburseCostDetailList);
+        ResultBean save = expensesService.save(expensesDTO);
+        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+            log.error("回退报销支付：", save.getMessage());
+            throw new BaseException(save.getMessage());
+        }
+
+        // 回退项目预算
+        if (StringUtils.isNotEmpty(bizReimburseApplyS.getProjectCode())) {
+            remiburseHelper.backProjectAmount(bizReimburseApplyS);
+        }
+        // update pay_status
+        Integer update = bizReimburseApplyMapper.updateByPrimaryKeySelective(remiburseHelper.buildFallbackBizReimburseApply(bizReimburseApplyS));
+
+        return ResultBean.success(update);
+    }
+
+
+
+
+    private BizOtherBillExample buildBizOtherBillExample(BizReimburseApply bizReimburseApplyS) {
+        BizOtherBillExample bizOtherBillExample = new BizOtherBillExample();
+        BizOtherBillExample.Criteria criteria = bizOtherBillExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andTypeEqualTo("2");
+        criteria.andCompanyEqualTo(bizReimburseApplyS.getPayCompany());
+        criteria.andCertificateNumberEqualTo("");
+        criteria.andDeptIdEqualTo(bizReimburseApplyS.getDeptId());
+        criteria.andPayWayEqualTo(PayWayEnum.money_order_pay.getDesc());
+        criteria.andPaymentTypeEqualTo(PayWayEnum.money_order_pay.getDesc());
+        criteria.andPaymentEqualTo(bizReimburseApplyS.getAmount());
+        criteria.andRemarkEqualTo("报销付款 " + bizReimburseApplyS.getAmount());
+        criteria.andPayCompanyEqualTo(bizReimburseApplyS.getPayCompany());
+        criteria.andPayAccountEqualTo(bizReimburseApplyS.getPayAccount());
+        criteria.andCollectCompanyEqualTo(bizReimburseApplyS.getAccountName());
+        return bizOtherBillExample;
+    }
+
+    private BizBankBillExample buildBizBankBillExample(BizReimburseApply bizReimburseApplyS) {
+        BizBankBillExample bizBankBillExample = new BizBankBillExample();
+        BizBankBillExample.Criteria criteria = bizBankBillExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andTypeEqualTo("2");
+        criteria.andCompanyEqualTo(bizReimburseApplyS.getPayCompany());
+        criteria.andCertificateNumberEqualTo("");
+        criteria.andDeptIdEqualTo(bizReimburseApplyS.getDeptId());
+        criteria.andPayWayEqualTo(PayWayEnum.check_pay.getDesc());
+        criteria.andPaymentTypeEqualTo(PayWayEnum.check_pay.getDesc());
+        criteria.andPaymentEqualTo(bizReimburseApplyS.getAmount());
+        criteria.andRemarkEqualTo("报销付款 " + bizReimburseApplyS.getAmount());
+        criteria.andPayCompanyEqualTo(bizReimburseApplyS.getPayCompany());
+        criteria.andPayAccountEqualTo(bizReimburseApplyS.getPayAccount());
+        criteria.andCollectCompanyEqualTo(bizReimburseApplyS.getAccountName());
+        return bizBankBillExample;
+    }
+
+    private BizBillExample buildBizBillExample(BizReimburseApply bizReimburseApplyS, SysUser sysUser) {
+        BizBillExample bizBillExample = new BizBillExample();
+        BizBillExample.Criteria criteria = bizBillExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        //criteria.andDEqualTo()
+        criteria.andTypeEqualTo(BookingTypeEnum.cash_bill.getCode());
+        criteria.andCertificateNumberEqualTo(bizReimburseApplyS.getPayAccount());
+        criteria.andDeptIdEqualTo(bizReimburseApplyS.getDeptId() + "");
+        criteria.andPaymentTypeEqualTo(PayWayEnum.cash_pay.getDesc());
+        criteria.andPaymentEqualTo(bizReimburseApplyS.getAmount());
+        criteria.andRemarkEqualTo("报销付款 " + bizReimburseApplyS.getAmount());
+        criteria.andString1EqualTo(sysUser.getRealName());
+        criteria.andString2EqualTo(bizReimburseApplyS.getPayCompany());
+        return bizBillExample;
     }
 
 

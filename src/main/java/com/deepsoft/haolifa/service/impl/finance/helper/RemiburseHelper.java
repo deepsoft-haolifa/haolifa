@@ -31,6 +31,7 @@ import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.CostBudgetService;
 import com.deepsoft.haolifa.service.finance.ProjectBudgetService;
 import com.deepsoft.haolifa.util.DateUtils;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -325,6 +326,27 @@ public class RemiburseHelper {
         return bizBankBill;
     }
 
+
+    public BizBankBillAddDTO buildFallbackBizBankBillAddDTO( BizReimburseApply bizReimburseApplyS) {
+        BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
+        // 付款
+        bizBankBill.setType("1");
+        bizBankBill.setCompany(bizReimburseApplyS.getPayCompany());
+        bizBankBill.setCertificateNumber("");
+        bizBankBill.setOperateDate(new Date());
+        bizBankBill.setDeptId(bizReimburseApplyS.getDeptId());
+        bizBankBill.setPayWay(PayWayEnum.check_pay.getDesc());
+        bizBankBill.setCollectionType(PayWayEnum.check_pay.getDesc());
+        bizBankBill.setCollectionMoney(bizReimburseApplyS.getAmount());
+        bizBankBill.setRemark("回退 报销付款 " + bizReimburseApplyS.getAmount());
+        bizBankBill.setPayCompany(bizReimburseApplyS.getAccountName());
+        bizBankBill.setPayAccount(bizReimburseApplyS.getPayAccount());
+        bizBankBill.setCollectCompany(bizReimburseApplyS.getPayCompany());
+
+
+        return bizBankBill;
+    }
+
     public BizBillAddDTO buildBizBillAddDTO(ReimburseApplyPayDTO payDTO, BigDecimal applySAmount, SysUser sysUser, BizReimburseApply bizReimburseApplyS) {
         BizBillAddDTO bizBill = new BizBillAddDTO();
         bizBill.setType(BookingTypeEnum.cash_bill.getCode());
@@ -336,6 +358,21 @@ public class RemiburseHelper {
         bizBill.setRemark("报销付款 " + applySAmount);
         bizBill.setString1(sysUser.getRealName());
         bizBill.setString2(payDTO.getPayCompany());
+
+        return bizBill;
+    }
+
+    public BizBillAddDTO buildFallbackBizBillAddDTO( SysUser sysUser, BizReimburseApply bizReimburseApplyS) {
+        BizBillAddDTO bizBill = new BizBillAddDTO();
+        bizBill.setType(BookingTypeEnum.cash_bill.getCode());
+        bizBill.setCertificateNumber(bizReimburseApplyS.getPayAccount());
+        bizBill.setD(new Date());
+        bizBill.setDeptId(bizReimburseApplyS.getDeptId() + "");
+        bizBill.setCollectionType(PayWayEnum.cash_pay.getDesc());
+        bizBill.setPayment(bizReimburseApplyS.getAmount());
+        bizBill.setRemark("回退 报销付款 " + bizReimburseApplyS.getAmount());
+        bizBill.setString1(sysUser.getRealName());
+        bizBill.setString2(bizReimburseApplyS.getPayCompany());
 
         return bizBill;
     }
@@ -369,7 +406,7 @@ public class RemiburseHelper {
         expensesDTO.setExpensesClassify(expensesClassify);
         expensesDTO.setSecondClassify(secondClassify);
         expensesDTO.setVoucherNo(bizReimburseApplyS.getSerialNo());
-        expensesDTO.setTotalAmount(totalAmount.divide(BigDecimal.ONE, 2));
+        expensesDTO.setTotalAmount(totalAmount.setScale(2, 4));
 
         SysUser sysUser = sysUserService.getSysUser(bizReimburseApplyS.getReimburseUser());
         expensesDTO.setCommitUser(sysUser.getRealName());
@@ -389,6 +426,20 @@ public class RemiburseHelper {
         apply.setPayTime(new Date());
         apply.setUpdateTime(new Date());
         apply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        return apply;
+    }
+
+    public BizReimburseApply buildFallbackBizReimburseApply(BizReimburseApply bizReimburseApplyS) {
+        BizReimburseApply apply = new BizReimburseApply();
+        apply.setId(bizReimburseApplyS.getId());
+        apply.setPayCompany("");
+        apply.setPayAccount("");
+        apply.setApplyStatus(ReimburseApplyStatusEnum.APPROVAL_FAILED.getCode());
+        apply.setPayStatus(LoanrPayStatusEnum.un_pay.getCode());
+        apply.setPayTime(new Date());
+        apply.setUpdateTime(new Date());
+        apply.setUpdateUser(sysUserService.selectLoginUser().getId());
+        apply.setRemark(bizReimburseApplyS.getRemark()+" 回退");
         return apply;
     }
 
@@ -421,6 +472,27 @@ public class RemiburseHelper {
         return bizBankBill;
     }
 
+    public BizBankBillAddDTO buildFallbackBizBankBillAddDTO(BizReimburseApply bizReimburseApplyS,SysUser sysUser) {
+        BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
+        // 付款
+        bizBankBill.setType("2");
+        bizBankBill.setCompany(Constant.company);
+        bizBankBill.setAccount(bizReimburseApplyS.getPayAccount());
+        bizBankBill.setDeptId(bizReimburseApplyS.getDeptId());
+        bizBankBill.setCertificateNumber(bizReimburseApplyS.getSerialNo());
+        bizBankBill.setOperateDate(new Date());
+        bizBankBill.setPayWay(PayWayEnum.cash_pay.getDesc());
+        bizBankBill.setPaymentType(PayWayEnum.cash_pay.getDesc());
+        // 负数的绝对值
+        bizBankBill.setPayment(bizReimburseApplyS.getAmount().abs());
+        bizBankBill.setRemark("回退 报销冲抵"+bizReimburseApplyS.getAmount());
+        bizBankBill.setPayCompany(sysUser.getRealName());
+        bizBankBill.setPayAccount(bizReimburseApplyS.getPayAccount());
+        bizBankBill.setCollectCompany(Constant.company);
+
+        return bizBankBill;
+    }
+
     public FlowInstanceDTO buildFlowInstanceDTO(BizReimburseApply reimburseApply) {
         FlowInstanceDTO flowInstanceDTO = new FlowInstanceDTO();
         flowInstanceDTO.setFlowId(REIMBURSE_APP_FLOW.id);
@@ -446,6 +518,24 @@ public class RemiburseHelper {
         otherBillAddDTO.setPayCompany(payDTO.getPayCompany());
         otherBillAddDTO.setPayAccount(payDTO.getPayAccount());
         otherBillAddDTO.setCollectCompany(bizReimburseApplyS.getAccountName());
+        return otherBillAddDTO;
+    }
+
+    public BizOtherBillAddDTO buildFallbackBizOtherBillAddDTO(BizReimburseApply bizReimburseApplyS) {
+        BizOtherBillAddDTO otherBillAddDTO = new BizOtherBillAddDTO();
+        // 付款
+        otherBillAddDTO.setType("1");
+        otherBillAddDTO.setDeptId(bizReimburseApplyS.getDeptId());
+        otherBillAddDTO.setCompany(bizReimburseApplyS.getPayCompany());
+        otherBillAddDTO.setCertificateNumber("");
+        otherBillAddDTO.setOperateDate(new Date());
+        otherBillAddDTO.setPayWay(PayWayEnum.money_order_pay.getDesc());
+        otherBillAddDTO.setCollectionType(PayWayEnum.money_order_pay.getDesc());
+        otherBillAddDTO.setCollectionMoney(bizReimburseApplyS.getAmount());
+        otherBillAddDTO.setRemark("报销付款 " + bizReimburseApplyS.getAmount());
+        otherBillAddDTO.setPayCompany(bizReimburseApplyS.getAccountName());
+        otherBillAddDTO.setPayAccount(bizReimburseApplyS.getPayAccount());
+        otherBillAddDTO.setCollectCompany(bizReimburseApplyS.getPayCompany());
         return otherBillAddDTO;
     }
 

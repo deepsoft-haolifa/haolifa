@@ -115,14 +115,6 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
     @Override
     public ResultBean decrement(ProjectBudgetDecDTO assetsUpDTO) {
-
-//        if (StringUtils.isEmpty(assetsUpDTO.getName())) {
-//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "code");
-//        }
-//        if (StringUtils.isEmpty(assetsUpDTO.getCode())) {
-//            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "name");
-//        }
-
         BizProjectBudget bizProjectBudget = new BizProjectBudget();
         BeanUtils.copyProperties(assetsUpDTO, bizProjectBudget);
         bizProjectBudget.setUpdateTime(new Date());
@@ -130,6 +122,7 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         int i = bizProjectBudgetMapper.updateByPrimaryKeySelective(bizProjectBudget);
         return ResultBean.success(i);
     }
+
 
     @Override
     public ResultBean<PageDTO<ProjectBudgetRSDTO>> getList(ProjectBudgetRQDTO model) {
