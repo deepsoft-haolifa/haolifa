@@ -58,4 +58,6 @@ public interface ReimburseApplyService {
 
     ResultBean<Integer>  pay(ReimburseApplyPayDTO payDTO);
 
+    ResultBean<Integer>  fallbackPayStatus(Integer id);
+
 }

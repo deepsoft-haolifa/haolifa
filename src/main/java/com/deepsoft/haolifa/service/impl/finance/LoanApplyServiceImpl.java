@@ -607,10 +607,28 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         // 还款操作
         // 流水
-        BizPaymentHistory paymentHistory = loanApplyHelper.buildBizPaymentHistory(loanId, offsetAmount, bizLoanApply);
+        BizPaymentHistory paymentHistory = loanApplyHelper.buildBizPaymentHistory(offsetAmount, bizLoanApply);
         bizPaymentHistoryMapper.insertSelective(paymentHistory);
         // 借款
         BizLoanApply bizLoanApplyUp = loanApplyHelper.buildBizLoanApply(bizLoanApply, addAmount);
+        bizLoanApplyMapper.updateByPrimaryKeySelective(bizLoanApplyUp);
+        return ResultBean.success(1);
+    }
+
+    // 回退 报销冲抵-还款
+    @Override
+    public ResultBean<Integer> fallbackRepaymentAmount(Integer loanId, BigDecimal offsetAmount) {
+        //
+        BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(loanId);
+        BigDecimal paymentAmount = bizLoanApply.getPaymentAmount() == null ? BigDecimal.ZERO : bizLoanApply.getPaymentAmount();
+        BigDecimal payAmount = paymentAmount.subtract(offsetAmount);
+
+        // 还款操作
+        // 流水
+        BizPaymentHistory paymentHistory = loanApplyHelper.buildFallbackBizPaymentHistory(offsetAmount, bizLoanApply);
+        bizPaymentHistoryMapper.insertSelective(paymentHistory);
+        // 借款
+        BizLoanApply bizLoanApplyUp = loanApplyHelper.buildBizLoanApply(bizLoanApply, payAmount);
         bizLoanApplyMapper.updateByPrimaryKeySelective(bizLoanApplyUp);
         return ResultBean.success(1);
     }

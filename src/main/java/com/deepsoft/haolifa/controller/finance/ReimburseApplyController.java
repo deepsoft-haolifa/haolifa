@@ -180,5 +180,12 @@ public class ReimburseApplyController {
         return reimburseApplyService.pay(payDTO);
     }
 
+    @ApiOperation("回退付款(出纳付款列表使用)")
+    @GetMapping("/fallbackPayStatus/{id}")
+    @Transactional(rollbackFor = Exception.class)
+    public ResultBean fallbackPayStatus(@ApiParam("报销申请ID") @PathVariable("id") Integer id) {
+        return reimburseApplyService.fallbackPayStatus(id);
+    }
+
 
 }

@@ -60,4 +60,6 @@ public interface LoanApplyService {
 
 
     public ResultBean<Integer> repaymentAmount(Integer loanId, BigDecimal offsetAmount);
+
+    public ResultBean<Integer> fallbackRepaymentAmount(Integer loanId, BigDecimal offsetAmount);
 }
