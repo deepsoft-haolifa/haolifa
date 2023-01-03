@@ -218,9 +218,19 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         // 当前月
         Integer dd = Integer.parseInt(DateUtil.format(currentDate, "dd"));
         if (dd < 26) {
-            criteria.andMonthEqualTo((DateUtil.month(currentDate) + 1) + "");
+            int month = DateUtil.month(currentDate) + 1;
+            if (month<9){
+                criteria.andMonthEqualTo("0"+month + "");
+            }else {
+                criteria.andMonthEqualTo(month + "");
+            }
         } else {
-            criteria.andMonthEqualTo((DateUtil.month(currentDate) + 2) + "");
+            int month = DateUtil.month(currentDate) + 2;
+            if (month<9){
+                criteria.andMonthEqualTo("0"+month + "");
+            }else {
+                criteria.andMonthEqualTo(month + "");
+            }
         }
 
         Page<BizProjectBudget> pageData = PageHelper
