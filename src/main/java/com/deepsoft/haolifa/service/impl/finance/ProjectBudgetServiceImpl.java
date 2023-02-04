@@ -290,6 +290,9 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         if (StringUtils.isEmpty(model.getCode())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "name");
         }
+        if (ObjectUtil.isNull(model.getDeptId())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "部门必选");
+        }
         return null;
     }
 }
