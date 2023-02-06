@@ -28,7 +28,8 @@
         </if>
     </select>
     <select id="sumPurchaseTotal" resultType="com.deepsoft.haolifa.model.vo.PurchaseAmountStatisticVo">
-        SELECT ROUND(ifnull(sum(total_price),0),2) as totalPrice,ROUND(ifnull(sum(paid_account),0),2) as paidAccount FROM `purchase_order` op
+        SELECT ROUND(ifnull(sum(total_price),0),2) as totalPrice,ROUND(ifnull(sum(paid_account),0),2) as paidAccount
+        FROM `purchase_order` op
         where 1=1
         <if test="orderNo != null and orderNo !=''">
             and op.purchase_order_no like CONCAT('%',#{orderNo},'%')
@@ -46,4 +47,40 @@
             and op.create_time &lt;= #{endDate}
         </if>
     </select>
+    <select id="sumInvoiceTotal" resultType="java.math.BigDecimal">
+        SELECT
+        ifnull(sum( total_amount ),0) total_amount
+        FROM invoice iv
+        <include refid="invoiceSql"></include>
+    </select>
+
+    <sql id="invoiceSql">
+        <where>
+            <if test="type!=null">
+                and iv.type=#{type}
+            </if>
+            <if test="status!=null and status>0">
+                and iv.status=#{status}
+            </if>
+            <if test="statusList!=null and statusList.size>0">
+                and iv.status in
+                <foreach collection="statusList" item="listItem" open="(" close=")" separator=",">
+                    #{listItem}
+                </foreach>
+            </if>
+            <if test="startDate!=null and startDate != ''">
+                and iv.invoice_date&gt;=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate != ''">
+                and iv.invoice_date&lt;=#{endDate}
+            </if>
+            <if test="orderNo != null and orderNo != ''">
+                and iv.order_no like CONCAT('%',#{orderNo},'%')
+            </if>
+            <if test="demandName != null and demandName != ''">
+                and iv.invoice_company like CONCAT('%',#{demandName},'%')
+            </if>
+        </where>
+    </sql>
+
 </mapper>
