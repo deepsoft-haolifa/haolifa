@@ -269,10 +269,23 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         String year = DateUtil.year(model.getDate()) + "";
         criteria.andYearEqualTo(year);
         Integer dd = Integer.parseInt(DateUtil.format(model.getDate(), "dd"));
+
+        Date currentDate = model.getDate();
+
         if (dd < 26) {
-            criteria.andMonthEqualTo((DateUtil.month(model.getDate()) + 1) + "");
+            int month = DateUtil.month(currentDate) + 1;
+            if (month<9){
+                criteria.andMonthEqualTo("0"+month + "");
+            }else {
+                criteria.andMonthEqualTo(month + "");
+            }
         } else {
-            criteria.andMonthEqualTo((DateUtil.month(model.getDate()) + 2) + "");
+            int month = DateUtil.month(currentDate) + 2;
+            if (month<9){
+                criteria.andMonthEqualTo("0"+month + "");
+            }else {
+                criteria.andMonthEqualTo(month + "");
+            }
         }
 
         bizProjectBudgetExample.setOrderByClause("create_time desc limit 1");
