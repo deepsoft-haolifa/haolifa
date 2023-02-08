@@ -88,11 +88,11 @@
         po2.registered,
         po1.payTotal ,
         iv.returnTicketAmount,
-        po2.registered - bpp.payTotal unpay,
+        po2.registered - po1.payTotal unpay,
         po2.registered - iv.returnTicketAmount unTicketAmount
         from (
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) total from purchase_order po <include refid="purchaseSql"/> ) po,
-        (select ROUND(IFNULL( sum(po.received_account), 0 ),2) payTotal FROM purchase_order po   <include refid="purchaseSql"/> ) po1,
+        (select ROUND(IFNULL( sum(po.paid_account), 0 ),2) payTotal FROM purchase_order po   <include refid="purchaseSql"/> ) po1,
         (select ROUND(IFNULL( sum(iv.total_amount), 0 ),2) returnTicketAmount from invoice iv<include refid="invoiceSql"/> ) iv,
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) registered from purchase_order po <include refid="completePurchaseSql"/> ) po2
         )
@@ -107,7 +107,7 @@
 
     <select id="selectPaid" resultType="java.math.BigDecimal">
         SELECT
-        ROUND(IFNULL( sum(po.received_account), 0 ),2) total_amount
+        ROUND(IFNULL( sum(po.paid_account), 0 ),2) total_amount
         FROM purchase_order po
         <include refid="purchaseSql"/>
     </select>
