@@ -101,7 +101,7 @@
         op.create_time,
         op.demand_name,
         op.delivery_date,
-        ifnull(op.total_price,0),
+        ifnull(op.total_price,0) totalPrice,
         op.deliver_status,
         ifnull(pm.amount,0) collectionAmount,
         pm.create_time collectionDate,
@@ -192,7 +192,7 @@
         order_product op
         LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 1 AND STATUS IN ( 2 )
         GROUP BY order_no ) iv ON iv.order_no = op.order_no
-        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM payment_management GROUP BY order_no ) pm ON pm.order_no
+        LEFT JOIN ( SELECT order_no, sum( amount ) amount FROM biz_bill_contract GROUP BY order_no ) bbc ON bbc.order_no
         = op.order_no
         LEFT JOIN ( SELECT order_no, sum( price*abs(quantity) ) price FROM entry_out_store_record WHERE type = 1 AND
         operation_type =
