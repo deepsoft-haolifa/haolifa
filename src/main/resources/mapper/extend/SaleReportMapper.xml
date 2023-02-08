@@ -183,11 +183,11 @@
         op.order_no,
         op.demand_name,
         ifnull( sum( op.total_price ), 0 ) saleAmount,
-        ifnull( sum( pm.amount ), 0 ) collectAmount,
+        ifnull( sum( bbc.amount ), 0 ) collectAmount,
         ifnull( sum( iv.total_amount ), 0 ) invoiceAmount,
         ifnull( sum( e.price ), 0 ) deliveryAmount,
         ifnull( sum( e.price ), 0 ) - ifnull( sum( iv.total_amount ), 0 ) oweTicketAmount,
-        ifnull( sum( e.price ), 0 ) - ifnull( sum( pm.amount ), 0 ) oweMoneyAmount
+        ifnull( sum( e.price ), 0 ) - ifnull( sum( bbc.amount ), 0 ) oweMoneyAmount
         FROM
         order_product op
         LEFT JOIN ( SELECT order_no, sum( total_amount ) total_amount FROM invoice WHERE type = 1 AND STATUS IN ( 2 )
