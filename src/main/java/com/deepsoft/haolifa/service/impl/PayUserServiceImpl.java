@@ -247,6 +247,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             model.setDepartName(sysDepartments.getDeptName());
         }
         BeanUtils.copyProperties(model, payUser);
+        payUser.setSuperiorId(Integer.valueOf(model.getSuperiorId()));
+        payUser.setPostId(Integer.valueOf(model.getPostId()));
         payUser.setCreateTime(new Date());
         payUser.setUpdateTime(new Date());
         payUser.setCreateUser(getLoginUserName());
@@ -303,6 +305,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
+        payUser.setSuperiorId(Integer.valueOf(model.getSuperiorId()));
+        payUser.setPostId(Integer.valueOf(model.getPostId()));
         payUser.setUpdateTime(new Date());
         payUser.setUpdateUser(getLoginUserName());
         payUserMapper.updateByPrimaryKeySelective(payUser);
