@@ -197,8 +197,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setDepartName(Objects.isNull(sysDepartment) ? "" : sysDepartment.getDeptName());
 
             payUserDTO.setParentId(Objects.isNull(payUser.getParentId()) ? "" : String.valueOf(payUser.getParentId()));
-            payUserDTO.setPostId(payUser.getPostId());
-            payUserDTO.setSuperiorId(payUser.getSuperiorId());
+            payUserDTO.setPostId(Objects.isNull(payUser.getPostId()) ? "" : String.valueOf(payUser.getPostId()));
+            payUserDTO.setSuperiorId(Objects.isNull(payUser.getSuperiorId()) ? "" : String.valueOf(payUser.getSuperiorId()));
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();
@@ -247,6 +247,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             model.setDepartName(sysDepartments.getDeptName());
         }
         BeanUtils.copyProperties(model, payUser);
+        payUser.setSuperiorId(Integer.valueOf(model.getSuperiorId()));
+        payUser.setPostId(Integer.valueOf(model.getPostId()));
         payUser.setCreateTime(new Date());
         payUser.setUpdateTime(new Date());
         payUser.setCreateUser(getLoginUserName());
@@ -303,6 +305,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         }
         PayUser payUser = new PayUser();
         BeanUtils.copyProperties(model, payUser);
+        payUser.setSuperiorId(Integer.valueOf(model.getSuperiorId()));
+        payUser.setPostId(Integer.valueOf(model.getPostId()));
         payUser.setUpdateTime(new Date());
         payUser.setUpdateUser(getLoginUserName());
         payUserMapper.updateByPrimaryKeySelective(payUser);
