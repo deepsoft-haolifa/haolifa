@@ -534,6 +534,40 @@ public class CostBudgetServiceImpl implements CostBudgetService {
     }
 
     @Override
+    public ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurDeptIdSubjectsTypeList(CostBudgetSubjectsRQBillDTO costBudgetSubjectsRQBillDTO) {
+
+        // 查询部门预算
+        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+        criteria.andDeptIdEqualTo(costBudgetSubjectsRQBillDTO.getDeptId());
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+        List<CostBudgetSubjectsTypeRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
+            .map(bizCostBudgetSubjects -> {
+                CostBudgetSubjectsTypeRSDTO costBudgetSubjectsRQDTO = new CostBudgetSubjectsTypeRSDTO();
+                BeanUtils.copyProperties(bizCostBudgetSubjects, costBudgetSubjectsRQDTO);
+                // todo 公式待补充
+                SysDepartment sysDepartment = sysDepartmentMap.get(bizCostBudgetSubjects.getDeptId());
+                costBudgetSubjectsRQDTO.setDeptName(sysDepartment.getDeptName());
+
+                costBudgetSubjectsRQDTO.setSubjectsTypeCode(bizCostBudgetSubjects.getSubjectsType());
+                costBudgetSubjectsRQDTO.setSubjectsTypeName(dictMap.get(bizCostBudgetSubjects.getSubjectsType()));
+                return costBudgetSubjectsRQDTO;
+            })
+            .collect(Collectors.toMap(CostBudgetSubjectsTypeRSDTO::getSubjectsTypeCode, Function.identity(), (a, b) -> a))
+            .values().stream()
+            .collect(Collectors.toList());
+
+        return ResultBean.success(costBudgetSubjectsRSDTOList);
+    }
+
+    @Override
     public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList(String subjectType) {
         CustomUser customUser = sysUserService.selectLoginUser();
         SysUser sysUser = sysUserService.getSysUser(customUser.getId());
@@ -572,6 +606,8 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
         return ResultBean.success(costBudgetSubjectsRSDTOList);
     }
+
+
 
     @Override
     public BizSubjectsBalance getCurUserSubjectsBudget(Integer subjectId, String subjectName) {
@@ -649,6 +685,7 @@ public class CostBudgetServiceImpl implements CostBudgetService {
         }
         return bizSubjectsBalanceList.get(0);
     }
+
 
     @Override
     public ResultBean<CostBudgetSubjectsRSDTO> getCurUserClfSubjectsBudget() {

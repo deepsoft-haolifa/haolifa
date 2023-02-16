@@ -1,27 +1,32 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.BizBankBillMapper;
+import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
+import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.enums.DictEnum;
-import com.deepsoft.haolifa.model.domain.BizBankBill;
-import com.deepsoft.haolifa.model.domain.BizBankBillExample;
-import com.deepsoft.haolifa.model.domain.BizBill;
-import com.deepsoft.haolifa.model.domain.SysDict;
-import com.deepsoft.haolifa.model.dto.BaseException;
-import com.deepsoft.haolifa.model.dto.CustomUser;
-import com.deepsoft.haolifa.model.dto.PageDTO;
-import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.domain.*;
+import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
+import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
+import com.deepsoft.haolifa.service.DepartmentService;
+import com.deepsoft.haolifa.service.ExpensesService;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BankBillService;
+import com.deepsoft.haolifa.service.finance.ProjectBudgetService;
 import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
+import com.deepsoft.haolifa.service.impl.finance.helper.BillHelper;
+import com.deepsoft.haolifa.service.impl.finance.helper.FinanceConstant;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -31,21 +36,36 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class BankBillServiceImpl implements BankBillService {
 
-    @Autowired
+    @Resource
     private BizBankBillMapper bizBankBillMapper;
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private SubjectBalanceService subjectBalanceService;
+    @Resource
+    private ProjectBudgetService projectBudgetService;
+    @Resource
+    private ExpensesService expensesService;
+    @Resource
+    private SysDictService sysDictService;
+
+    @Resource
+    private SysDepartmentMapper departmentMapper;
+    @Resource
+    private DepartmentService departmentService;
+    @Resource
+    private BillHelper billHelper;
 
     @Override
     public ResultBean save(BizBankBillAddDTO model) {
@@ -84,6 +104,16 @@ public class BankBillServiceImpl implements BankBillService {
             String payCompany = bizBankBill.getPayCompany();
             bizBankBill.setCompany(payCompany);
             bizBankBill.setAccount(bizBankBill.getPayAccount());
+
+            //
+            if (ObjectUtil.isNotNull(model.getProjectCode()) && ObjectUtil.isNotNull(model.getSubject())){
+                ResultBean<Object> PARAM_ERROR = billHelper.decreact(model.getProjectCode(),model.getDeptId(),model.getSubject(),
+                    model.getRemark(),model.getSerialNo(), bizBankBill.getPayment());
+                if (PARAM_ERROR != null) {
+                    return PARAM_ERROR;
+                }
+            }
+
         }
         String companyQuery = bizBankBill.getCompany();
         String accountQuery = bizBankBill.getAccount();
@@ -135,8 +165,6 @@ public class BankBillServiceImpl implements BankBillService {
         return ResultBean.success(insertId);
     }
 
-    @Autowired
-    private SysDictService sysDictService;
 
     @Override
     public ResultBean savePreMonthMoney() {

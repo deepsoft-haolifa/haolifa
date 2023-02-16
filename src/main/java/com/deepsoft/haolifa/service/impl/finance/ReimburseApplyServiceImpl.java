@@ -508,7 +508,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         //借款人名称
         if (StringUtils.isNotEmpty(model.getReimburseUser())) {
             SysUserExample sysUserExample = new SysUserExample();
-            sysUserExample.createCriteria().andUsernameLike("%" + model.getReimburseUser() + "%");
+            sysUserExample.createCriteria().andRealNameLike("%" + model.getReimburseUser() + "%");
             List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
             List<Integer> userIdList = sysUsers.stream()
                 .map(SysUser::getId)

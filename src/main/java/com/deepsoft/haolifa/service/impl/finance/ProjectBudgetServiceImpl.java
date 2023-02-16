@@ -254,6 +254,50 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     }
 
     @Override
+    public ResultBean<List<ProjectBudgetRSDTO>> getCurProjectBudgetList(ProjectBudgetRQBillDTO model) {
+
+        BizProjectBudgetExample bizProjectBudgetExample = new BizProjectBudgetExample();
+        BizProjectBudgetExample.Criteria criteria = bizProjectBudgetExample.createCriteria();
+        criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+        criteria.andDeptIdEqualTo(model.getDeptId());
+
+        // 当前年
+        Date currentDate = new Date();
+        String year = DateUtil.year(currentDate) + "";
+        criteria.andYearEqualTo(year);
+        // 当前月
+        Integer dd = Integer.parseInt(DateUtil.format(currentDate, "dd"));
+        if (dd < 26) {
+            int month = DateUtil.month(currentDate) + 1;
+            if (month<9){
+                criteria.andMonthEqualTo("0"+month + "");
+            }else {
+                criteria.andMonthEqualTo(month + "");
+            }
+        } else {
+            int month = DateUtil.month(currentDate) + 2;
+            if (month<9){
+                criteria.andMonthEqualTo("0"+month + "");
+            }else {
+                criteria.andMonthEqualTo(month + "");
+            }
+        }
+
+
+        List<BizProjectBudget> projectBudgetList = bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample);
+
+        List<ProjectBudgetRSDTO> assetsRSDTOList = projectBudgetList.stream()
+            .map(assets -> {
+                ProjectBudgetRSDTO assetsRSDTO = new ProjectBudgetRSDTO();
+                BeanUtils.copyProperties(assets, assetsRSDTO);
+                return assetsRSDTO;
+            })
+            .collect(Collectors.toList());
+
+        return ResultBean.success(assetsRSDTOList);
+    }
+
+    @Override
     public BizProjectBudget queryCurMonthBudget(ProjectBudgetQueryBO model) {
         BizProjectBudgetExample bizProjectBudgetExample = new BizProjectBudgetExample();
         BizProjectBudgetExample.Criteria criteria = bizProjectBudgetExample.createCriteria();

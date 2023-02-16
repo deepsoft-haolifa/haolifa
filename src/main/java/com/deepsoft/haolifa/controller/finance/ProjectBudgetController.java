@@ -6,10 +6,7 @@ import com.deepsoft.haolifa.model.domain.SysUser;
 import com.deepsoft.haolifa.model.dto.CustomUser;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetRQDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.projectbudget.*;
 import com.deepsoft.haolifa.service.finance.ProjectBudgetService;
 import com.deepsoft.haolifa.service.finance.ProjectBudgetService;
 import io.swagger.annotations.Api;
@@ -60,6 +57,13 @@ public class ProjectBudgetController {
     @PostMapping("/getCurUserProjectBudgetList")
     public ResultBean<PageDTO<ProjectBudgetRSDTO>> getCurUserProjectBudgetList(@RequestBody ProjectBudgetRQDTO assetsRQDTO) {
         return projectBudgetService.getCurUserProjectBudgetList(assetsRQDTO);
+    }
+
+
+    @ApiOperation("获取项目管理列表（日记账付款专用-必须传选择的部门）")
+    @PostMapping("/getCurProjectBudgetList")
+    public ResultBean<List<ProjectBudgetRSDTO>> getCurProjectBudgetList(@RequestBody ProjectBudgetRQBillDTO assetsRQDTO) {
+        return projectBudgetService.getCurProjectBudgetList(assetsRQDTO);
     }
 
 

@@ -54,4 +54,11 @@ public class BizOtherBillAddDTO {
     @ApiModelProperty(value = "创建者")
     private Integer contractUser;
 
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
+
+    @ApiModelProperty(value = "科目(费用预算表中的科目ID)")
+    private Integer subject;
+
 }

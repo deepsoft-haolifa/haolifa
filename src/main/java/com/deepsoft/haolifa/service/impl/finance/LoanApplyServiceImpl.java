@@ -329,7 +329,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         //借款人名称
         if (StringUtils.isNotEmpty(model.getLoanUserName())) {
             SysUserExample sysUserExample = new SysUserExample();
-            sysUserExample.createCriteria().andUsernameLike("%" + model.getLoanUserName() + "%");
+            sysUserExample.createCriteria().andRealNameLike("%" + model.getLoanUserName() + "%");
             List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
             List<Integer> idList = sysUsers.stream()
                 .map(SysUser::getId)
