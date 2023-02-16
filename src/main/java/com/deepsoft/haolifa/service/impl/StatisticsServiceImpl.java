@@ -90,49 +90,49 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public InvoiceStatisticVo totalInvoice(Byte type, InvoiceListDTO dto) {
         InvoiceStatisticVo invoiceStatisticVo = new InvoiceStatisticVo();
-        InvoiceExample invoiceExample = new InvoiceExample();
-        InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
-        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-        // 经管 查 生产订单， 财务查所有
-        if (type != null && type == 1) {
-            criteria.andTypeEqualTo(type);
-        }
+//        InvoiceExample invoiceExample = new InvoiceExample();
+//        InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
+//        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
+//        if (dto.getType() != null && dto.getType() > 0) {
+//            criteria.andTypeEqualTo(dto.getType().byteValue());
+//        }
+//
+//        if (StringUtils.isNotEmpty(dto.getOrderNo())) {
+//            criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
+//        }
+//        if (dto.getStatus() != null && dto.getStatus() > -1) {
+//            criteria.andStatusEqualTo(dto.getStatus());
+//        }
+//        if (CollectionUtil.isNotEmpty(dto.getStatusList())) {
+//            criteria.andStatusIn(dto.getStatusList());
+//        }
+//        if (StringUtils.isNotEmpty(dto.getConstractParty())) {
+//            criteria.andConstractPartyLike("%" + dto.getConstractParty() + "%");
+//        }
+//        // 开票日期
+//        if (ObjectUtil.isNotNull(dto.getStartInvoiceDate())) {
+//            criteria.andInvoiceDateGreaterThanOrEqualTo(dto.getStartInvoiceDate());
+//        }
+//        if (ObjectUtil.isNotNull(dto.getEndInvoiceDate())) {
+//            criteria.andInvoiceDateLessThanOrEqualTo(dto.getEndInvoiceDate());
+//        }
+//        List<Invoice> invoices = statisticsExtendMapper.sumInvoice(invoiceExample);
+//        BigDecimal totalAmount = BigDecimal.ZERO, notInvoicedAmount = BigDecimal.ZERO, invoicedAmount = BigDecimal.ZERO;
+//        for (Invoice invoice : invoices) {
+//            BigDecimal itotalAmount = invoice.getTotalAmount();
+//            if (itotalAmount != null) {
+//                totalAmount = totalAmount.add(itotalAmount);
+//                if (invoice.getStatus().equals((byte) 1)) {
+//                    notInvoicedAmount = notInvoicedAmount.add(itotalAmount);
+//                } else if (invoice.getStatus().equals((byte) 2)) {
+//                    invoicedAmount = invoicedAmount.add(itotalAmount);
+//                }
+//            }
+//        }
 
-        if (StringUtils.isNotEmpty(dto.getOrderNo())) {
-            criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
-        }
-        if (dto.getStatus() != null && dto.getStatus() > -1) {
-            criteria.andStatusEqualTo(dto.getStatus());
-        }
-        if (CollectionUtil.isNotEmpty(dto.getStatusList())) {
-            criteria.andStatusIn(dto.getStatusList());
-        }
-        if (StringUtils.isNotEmpty(dto.getConstractParty())) {
-            criteria.andConstractPartyLike("%" + dto.getConstractParty() + "%");
-        }
-        // 开票日期
-        if (ObjectUtil.isNotNull(dto.getStartInvoiceDate())) {
-            criteria.andInvoiceDateGreaterThanOrEqualTo(dto.getStartInvoiceDate());
-        }
-        if (ObjectUtil.isNotNull(dto.getEndInvoiceDate())) {
-            criteria.andInvoiceDateLessThanOrEqualTo(dto.getEndInvoiceDate());
-        }
-        List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
-        BigDecimal totalAmount = BigDecimal.ZERO, notInvoicedAmount = BigDecimal.ZERO, invoicedAmount = BigDecimal.ZERO;
-        for (Invoice invoice : invoices) {
-            BigDecimal itotalAmount = invoice.getTotalAmount();
-            if (itotalAmount != null) {
-                totalAmount = totalAmount.add(itotalAmount);
-                if (invoice.getStatus().equals((byte) 1)) {
-                    notInvoicedAmount = notInvoicedAmount.add(itotalAmount);
-                } else if (invoice.getStatus().equals((byte) 2)) {
-                    invoicedAmount = invoicedAmount.add(itotalAmount);
-                }
-            }
-        }
-        invoiceStatisticVo.setTotalAmount(totalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-        invoiceStatisticVo.setInvoicedAmount(invoicedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-        invoiceStatisticVo.setNotInvoicedAmount(notInvoicedAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        Map<String, Object> objectMap = BeanUtil.beanToMap(dto);
+        BigDecimal sumInvoiceTotal = statisticsExtendMapper.sumInvoiceTotal(objectMap);
+        invoiceStatisticVo.setTotalAmount(sumInvoiceTotal);
         return invoiceStatisticVo;
     }
 

@@ -85,16 +85,16 @@
     <select id="reportPurchaseSummary" resultType="com.deepsoft.haolifa.model.dto.export.ExportPurchaseDTO">
         select
         po.total,
-        po1.registered,
-        bpp.payTotal ,
+        po2.registered,
+        po1.payTotal ,
         iv.returnTicketAmount,
-        po1.registered - bpp.payTotal unpay,
-        po1.registered - iv.returnTicketAmount unTicketAmount
+        po2.registered - bpp.payTotal unpay,
+        po2.registered - iv.returnTicketAmount unTicketAmount
         from (
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) total from purchase_order po <include refid="purchaseSql"/> ) po,
-        (select ROUND(IFNULL( sum(bpp.apply_amount), 0 ),2) payTotal FROM biz_pay_plan bpp   <include refid="bizPayPlanSql"/> ) bpp,
+        (select ROUND(IFNULL( sum(po.received_account), 0 ),2) payTotal FROM purchase_order po   <include refid="purchaseSql"/> ) po1,
         (select ROUND(IFNULL( sum(iv.total_amount), 0 ),2) returnTicketAmount from invoice iv<include refid="invoiceSql"/> ) iv,
-        (select ROUND(IFNULL( sum(po.total_price), 0 ),2) registered from purchase_order po <include refid="completePurchaseSql"/> ) po1
+        (select ROUND(IFNULL( sum(po.total_price), 0 ),2) registered from purchase_order po <include refid="completePurchaseSql"/> ) po2
         )
     </select>
 
@@ -107,9 +107,9 @@
 
     <select id="selectPaid" resultType="java.math.BigDecimal">
         SELECT
-        ifnull(sum(apply_amount),0) total_amount
-        FROM biz_pay_plan bpp
-        <include refid="bizPayPlanSql"/>
+        ROUND(IFNULL( sum(po.received_account), 0 ),2) total_amount
+        FROM purchase_order po
+        <include refid="purchaseSql"/>
     </select>
 
 
