@@ -197,8 +197,8 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
             payUserDTO.setDepartName(Objects.isNull(sysDepartment) ? "" : sysDepartment.getDeptName());
 
             payUserDTO.setParentId(Objects.isNull(payUser.getParentId()) ? "" : String.valueOf(payUser.getParentId()));
-            payUserDTO.setPostId(Objects.isNull(payUser.getPostId()) ? "" : String.valueOf(payUser.getPostId()));
-            payUserDTO.setSuperiorId(Objects.isNull(payUser.getSuperiorId()) ? "" : String.valueOf(payUser.getSuperiorId()));
+            payUserDTO.setPostId(payUser.getPostId());
+            payUserDTO.setSuperiorId(payUser.getSuperiorId());
             list.add(payUserDTO);
         });
         PageDTO<PayUserDTO> pageDTO = new PageDTO<>();

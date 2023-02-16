@@ -80,7 +80,7 @@ public class PayUserDTO extends BaseCondition {
     @ApiModelProperty(value = "绩效工资")
     private BigDecimal meritPay;
     @ApiModelProperty(value = "岗位id")
-    private String postId;
+    private Integer postId;
     @ApiModelProperty(value = "岗位名称")
     private String postName;
     @ApiModelProperty(value = "部门id")
@@ -90,7 +90,7 @@ public class PayUserDTO extends BaseCondition {
     @ApiModelProperty(value = "人员类型")
     private String userType;
     @ApiModelProperty(value = "上级ID")
-    private String superiorId;
+    private Integer superiorId;
     @ApiModelProperty(value = "上级名称")
     private String superiorName;
     @ApiModelProperty(value = "工资卡号")
