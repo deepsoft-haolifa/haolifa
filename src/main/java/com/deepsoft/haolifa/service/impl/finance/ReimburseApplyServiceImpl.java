@@ -138,7 +138,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 校验当月项目预算
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
         //  当月未维护
-        if (ObjectUtil.isNull(bizProjectBudget)) {
+        if (ObjectUtil.isNull(bizProjectBudget) && totalAmount.doubleValue()>0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
         }
         // 金额不足
