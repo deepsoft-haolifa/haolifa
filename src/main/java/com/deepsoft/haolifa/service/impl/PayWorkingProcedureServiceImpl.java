@@ -273,6 +273,8 @@ public class PayWorkingProcedureServiceImpl extends BaseService implements PayWo
         if (StringUtils.isNotBlank(workType)) {
             payWorkingProcedure.setWorkType(workType);
         }
+        payWorkingProcedure.setPageNum(0);
+        payWorkingProcedure.setPageSize(Integer.MAX_VALUE);
         List<PayWorkingProcedure> payWorkingProcedures = payWorkingProcedureMapper.selectList(payWorkingProcedure);
         for (PayWorkingProcedure workingProcedure : payWorkingProcedures) {
             // copy 工序人员表
