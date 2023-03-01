@@ -59,7 +59,7 @@
             <if test="type!=null">
                 and iv.type=#{type}
             </if>
-            <if test="status!=null and status>0">
+            <if test="status!=null and status > -1">
                 and iv.status=#{status}
             </if>
             <if test="statusList!=null and statusList.size>0">
@@ -78,6 +78,9 @@
                 and iv.order_no like CONCAT('%',#{orderNo},'%')
             </if>
             <if test="demandName != null and demandName != ''">
+                and iv.invoice_company like CONCAT('%',#{demandName},'%')
+            </if>
+            <if test="constractParty != null and constractParty != ''">
                 and iv.invoice_company like CONCAT('%',#{demandName},'%')
             </if>
         </where>
