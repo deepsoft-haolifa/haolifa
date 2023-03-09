@@ -92,7 +92,7 @@
         po2.registered - iv.returnTicketAmount unTicketAmount
         from (
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) total from purchase_order po <include refid="purchaseSql"/> ) po,
-        (select ROUND(IFNULL( sum(po.received_account), 0 ),2) payTotal FROM purchase_order po   <include refid="purchaseSql"/> ) po1,
+        (select ROUND(IFNULL( sum(po.paid_account), 0 ),2) payTotal FROM purchase_order po   <include refid="purchaseSql"/> ) po1,
         (select ROUND(IFNULL( sum(iv.total_amount), 0 ),2) returnTicketAmount from invoice iv<include refid="invoiceSql"/> ) iv,
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) registered from purchase_order po <include refid="completePurchaseSql"/> ) po2
         )
