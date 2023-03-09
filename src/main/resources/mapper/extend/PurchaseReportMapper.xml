@@ -88,7 +88,7 @@
         po2.registered,
         po1.payTotal ,
         iv.returnTicketAmount,
-        po2.registered - bpp.payTotal unpay,
+        po2.registered - po1.payTotal unpay,
         po2.registered - iv.returnTicketAmount unTicketAmount
         from (
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) total from purchase_order po <include refid="purchaseSql"/> ) po,
@@ -162,8 +162,11 @@
             <if test="endDate!=null and endDate != ''">
                 and iv.invoice_date&lt;=#{endDate}
             </if>
+            <if test="supplierName!=null and supplierName != ''">
+                and iv.invoice_company =#{supplierName}
+            </if>
             <if test="purchaseOrderNo != null and purchaseOrderNo != ''">
-                and iv.order_no like CONCAT('%',#{purchaseOrderNo},'%')
+                and iv.order_no =#{purchaseOrderNo}
             </if>
         </where>
     </sql>
@@ -177,10 +180,10 @@
                 and po.create_time&lt;=#{endDate}
             </if>
             <if test="supplierName!=null and supplierName != ''">
-                and po.supplier_name like CONCAT('%',#{supplierName},'%')
+                and po.supplier_name =#{supplierName}
             </if>
             <if test="purchaseOrderNo!=null and purchaseOrderNo != ''">
-                and po.purchase_order_no like CONCAT('%',#{purchaseOrderNo},'%')
+                and po.purchase_order_no =#{purchaseOrderNo}
             </if>
         </where>
     </sql>
