@@ -106,7 +106,7 @@ public class BankBillServiceImpl implements BankBillService {
             bizBankBill.setAccount(bizBankBill.getPayAccount());
 
             //
-            if (ObjectUtil.isNotNull(model.getProjectCode()) && ObjectUtil.isNotNull(model.getSubject())){
+            if (ObjectUtil.isNotEmpty(model.getProjectCode()) && ObjectUtil.isNotEmpty(model.getSubject())){
                 ResultBean<Object> PARAM_ERROR = billHelper.decreact(model.getProjectCode(),model.getDeptId(),model.getSubject(),
                     model.getRemark(),model.getSerialNo(), bizBankBill.getPayment());
                 if (PARAM_ERROR != null) {
