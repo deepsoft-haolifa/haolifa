@@ -115,8 +115,8 @@
     <select id="reportCollectOrderSummary" resultType="com.deepsoft.haolifa.model.dto.export.TotalAmountDTO">
         SELECT
         ifnull(sum(op.total_price),0) totalSaleAmount,
-        ifnull(sum(bbc.amount),0) totalCollectAmount,
-        ifnull(sum(op.total_price),0) - ifnull(sum(bbc.amount),0) totalOwedAmount
+        ifnull(sum(op.received_account),0) totalCollectAmount,
+        ifnull(sum(op.total_price),0) - ifnull(sum(op.received_account),0) totalOwedAmount
         FROM
         order_product op
         LEFT JOIN biz_bill_contract bbc ON bbc.order_no = op.order_no

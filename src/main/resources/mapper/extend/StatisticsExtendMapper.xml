@@ -81,7 +81,7 @@
                 and iv.invoice_company like CONCAT('%',#{demandName},'%')
             </if>
             <if test="constractParty != null and constractParty != ''">
-                and iv.invoice_company like CONCAT('%',#{demandName},'%')
+                and iv.invoice_company like CONCAT('%',#{constractParty},'%')
             </if>
         </where>
     </sql>

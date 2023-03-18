@@ -11,6 +11,7 @@ public class Constant {
     public static final String YZ_PSBC = "中国邮政储蓄银行股份有限公司侯马市呈王路支行";
     public static final String METHOD_POST = "POST";
     public static final String METHOD_GET = "GET";
+    public static final Integer EXPORT_MAX_SIZE = 20000;
 
     public interface SerialNumberPrefix {
         String INSPECT_NO_PREFIX_BJ = "BJ";

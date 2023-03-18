@@ -93,7 +93,7 @@
         from (
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) total from purchase_order po <include refid="purchaseSql"/> ) po,
         (select ROUND(IFNULL( sum(po.paid_account), 0 ),2) payTotal FROM purchase_order po   <include refid="purchaseSql"/> ) po1,
-        (select ROUND(IFNULL( sum(iv.total_amount), 0 ),2) returnTicketAmount from invoice iv<include refid="invoiceSql"/> ) iv,
+        (select ROUND(IFNULL( sum(iv.total_amount), 0 ),2) returnTicketAmount from invoice iv left join purchase_order po ON iv.order_no = po.purchase_order_no <include refid="purchaseSql"/> and iv.type = 2 AND iv.STATUS IN ( 2 ) ) iv,
         (select ROUND(IFNULL( sum(po.total_price), 0 ),2) registered from purchase_order po <include refid="completePurchaseSql"/> ) po2
         )
     </select>
@@ -122,7 +122,7 @@
                 and po.create_time&lt;=#{endDate}
             </if>
             <if test="supplierName!=null and supplierName != ''">
-                and po.supplier_name =#{supplierName}
+                and po.supplier_name  like CONCAT('%',#{supplierName},'%')
             </if>
         </where>
     </sql>
@@ -136,7 +136,7 @@
                 and po.create_time&lt;=#{endDate}
             </if>
             <if test="supplierName!=null and supplierName != ''">
-                and po.supplier_name =#{supplierName}
+                and po.supplier_name  like CONCAT('%',#{supplierName},'%')
             </if>
         </where>
     </sql>
@@ -180,7 +180,7 @@
                 and po.create_time&lt;=#{endDate}
             </if>
             <if test="supplierName!=null and supplierName != ''">
-                and po.supplier_name =#{supplierName}
+                and po.supplier_name like CONCAT('%',#{supplierName},'%')
             </if>
             <if test="purchaseOrderNo!=null and purchaseOrderNo != ''">
                 and po.purchase_order_no =#{purchaseOrderNo}
