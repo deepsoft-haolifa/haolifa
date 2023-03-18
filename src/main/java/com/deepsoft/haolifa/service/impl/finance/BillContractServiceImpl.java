@@ -267,9 +267,12 @@ public class BillContractServiceImpl implements BillContractService {
 
         CustomUser customUser = sysUserService.selectLoginUser();
 
+        BigDecimal old = BigDecimal.ZERO;
+
         BizBillContract bizBillContract = new BizBillContract();
         if (billContract.getId() != null) {
             bizBillContract = bizBillContractMapper.selectByPrimaryKey(billContract.getId());
+            old = bizBillContract.getAmount();
         }
         bizBillContract.setBillId(billContract.getBillId());
         bizBillContract.setBillType(billContract.getBillType());
@@ -279,15 +282,11 @@ public class BillContractServiceImpl implements BillContractService {
         bizBillContract.setOrderId(billContract.getOrderId());
         bizBillContract.setOrderNo(billContract.getOrderNo());
 
-        BigDecimal old = BigDecimal.ZERO;
         if (billContract.getId() == null) {
             bizBillContract.setCreateTime(new Date());
             bizBillContract.setCreateUser(customUser.getId());
             bizBillContractMapper.insertSelective(bizBillContract);
         } else {
-            BizBillContract selectByPrimaryKey = bizBillContractMapper.selectByPrimaryKey(bizBillContract.getId());
-            old = selectByPrimaryKey.getAmount();
-
             bizBillContract.setUpdateTime(new Date());
             bizBillContract.setUpdateUser(customUser.getId());
             bizBillContract.setId(bizBillContract.getId());

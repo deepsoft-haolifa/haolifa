@@ -2,9 +2,8 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.BizBill;
 import com.deepsoft.haolifa.model.domain.BizBillExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface BizBillMapper {
     int countByExample(BizBillExample example);

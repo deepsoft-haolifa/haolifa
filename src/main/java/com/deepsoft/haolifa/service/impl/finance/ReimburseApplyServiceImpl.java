@@ -138,7 +138,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 校验当月项目预算
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
         //  当月未维护
-        if (ObjectUtil.isNull(bizProjectBudget)) {
+        if (ObjectUtil.isNull(bizProjectBudget) && totalAmount.doubleValue()>0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
         }
         // 金额不足
@@ -508,7 +508,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         //借款人名称
         if (StringUtils.isNotEmpty(model.getReimburseUser())) {
             SysUserExample sysUserExample = new SysUserExample();
-            sysUserExample.createCriteria().andUsernameLike("%" + model.getReimburseUser() + "%");
+            sysUserExample.createCriteria().andRealNameLike("%" + model.getReimburseUser() + "%");
             List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
             List<Integer> userIdList = sysUsers.stream()
                 .map(SysUser::getId)

@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
@@ -18,6 +19,7 @@ import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillUpDTO;
 import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.OtherBillService;
+import com.deepsoft.haolifa.service.impl.finance.helper.BillHelper;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -27,6 +29,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +43,8 @@ public class OtherBillServiceImpl implements OtherBillService {
     private BizOtherBillMapper bizOtherBillMapper;
     @Autowired
     private SysUserService sysUserService;
+    @Resource
+    private BillHelper billHelper;
 
     @Override
     public ResultBean save(BizOtherBillAddDTO model) {
@@ -68,6 +73,15 @@ public class OtherBillServiceImpl implements OtherBillService {
             }
             billOther.setCompany(billOther.getPayCompany());
             billOther.setAccount(billOther.getPayAccount());
+            //
+            if (ObjectUtil.isNotNull(model.getProjectCode()) && ObjectUtil.isNotNull(model.getSubject())){
+                ResultBean<Object> PARAM_ERROR = billHelper.decreact(model.getProjectCode(),model.getDeptId(),model.getSubject(),
+                    model.getRemark(),model.getSerialNo(), model.getPayment());
+                if (PARAM_ERROR != null) {
+                    return PARAM_ERROR;
+                }
+            }
+
         }
         String companyQuery = billOther.getCompany();
         String accountQuery = billOther.getAccount();

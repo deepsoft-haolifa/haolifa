@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.InvoiceMapper;
@@ -69,12 +70,32 @@ public class InvoiceServiceImpl extends BaseService implements InvoiceService {
             }
             invoice.setConstractParty(model.getInvoiceCompany());
         } else {
+            // 2
             // 判断是否存在此采购订单
             PurchaseOrderExample example = new PurchaseOrderExample();
             example.or().andPurchaseOrderNoEqualTo(model.getOrderNo());
             List<PurchaseOrder> orders = purchaseOrderMapper.selectByExample(example);
             if (CollectionUtil.isEmpty(orders)) {
                 throw new BaseException("单号找不到对应的采购订单");
+            }
+            PurchaseOrder purchaseOrder = orders.get(0);
+
+            InvoiceExample invoiceExample = new InvoiceExample();
+            InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
+            if (StringUtils.isNotEmpty(model.getOrderNo())) {
+                criteria.andOrderNoEqualTo(model.getOrderNo() );
+            }
+            List<Invoice> invoiceList = invoiceMapper.selectByExample(invoiceExample);
+
+            BigDecimal totalAmount = invoiceList.stream()
+                .filter(
+                    in -> invoice.getId() != null && Objects.equals(invoice.getId(), in.getId()))
+                .map(Invoice::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .add(invoice.getTotalAmount());
+
+            if (totalAmount.compareTo(purchaseOrder.getTotalPrice())>0){
+                throw new BaseException("总开票金额不能大于采购订单金额！");
             }
             invoice.setConstractParty(model.getInvoiceIssuing());
         }

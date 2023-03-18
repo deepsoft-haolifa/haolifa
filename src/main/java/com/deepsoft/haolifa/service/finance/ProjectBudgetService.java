@@ -6,6 +6,8 @@ import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.*;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface ProjectBudgetService {
     ResultBean save(ProjectBudgetAddDTO model);
 
@@ -20,6 +22,7 @@ public interface ProjectBudgetService {
 
     ResultBean<PageDTO<ProjectBudgetRSDTO>> getCurUserProjectBudgetList(ProjectBudgetRQDTO assetsRQDTO);
 
+    ResultBean<List<ProjectBudgetRSDTO>> getCurProjectBudgetList(ProjectBudgetRQBillDTO model);
 
     BizProjectBudget queryCurMonthBudget(ProjectBudgetQueryBO queryBO);
 

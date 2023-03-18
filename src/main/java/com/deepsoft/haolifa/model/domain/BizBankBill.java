@@ -44,6 +44,10 @@ public class BizBankBill {
 
     private String remark;
 
+    private String projectCode;
+
+    private Integer subject;
+
     private String delFlag;
 
     private String contractStatus;
@@ -58,7 +62,7 @@ public class BizBankBill {
 
     private Date updateTime;
 
-    public BizBankBill(Integer id, String company, String account, String serialNo, Date operateDate, String certificateNumber, String payWay, String payAccount, String payCompany, String payCompanyId, String collectCompany, BigDecimal preMonthMoney, BigDecimal collectionMoney, String collectionType, BigDecimal payment, String paymentType, BigDecimal balance, String type, Integer deptId, String remark, String delFlag, String contractStatus, Integer contractUser, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizBankBill(Integer id, String company, String account, String serialNo, Date operateDate, String certificateNumber, String payWay, String payAccount, String payCompany, String payCompanyId, String collectCompany, BigDecimal preMonthMoney, BigDecimal collectionMoney, String collectionType, BigDecimal payment, String paymentType, BigDecimal balance, String type, Integer deptId, String remark, String projectCode, Integer subject, String delFlag, String contractStatus, Integer contractUser, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.company = company;
         this.account = account;
@@ -79,6 +83,8 @@ public class BizBankBill {
         this.type = type;
         this.deptId = deptId;
         this.remark = remark;
+        this.projectCode = projectCode;
+        this.subject = subject;
         this.delFlag = delFlag;
         this.contractStatus = contractStatus;
         this.contractUser = contractUser;
@@ -250,6 +256,22 @@ public class BizBankBill {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode == null ? null : projectCode.trim();
+    }
+
+    public Integer getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Integer subject) {
+        this.subject = subject;
     }
 
     public String getDelFlag() {

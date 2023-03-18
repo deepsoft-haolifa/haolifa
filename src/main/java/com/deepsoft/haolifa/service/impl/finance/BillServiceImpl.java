@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
@@ -14,6 +15,7 @@ import com.deepsoft.haolifa.model.dto.finance.bill.BizBillUpDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
+import com.deepsoft.haolifa.service.impl.finance.helper.BillHelper;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -24,6 +26,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -45,6 +48,8 @@ public class BillServiceImpl implements BillService {
     private SysUserService sysUserService;
     @Autowired
     private SubjectBalanceService subjectBalanceService;
+    @Resource
+    private BillHelper billHelper;
 
     @Override
     public ResultBean save(BizBillAddDTO model) {
@@ -78,6 +83,16 @@ public class BillServiceImpl implements BillService {
                 throw new BaseException("现金余额不足以付款");
             }
             bizBill.setBalance(subtract);
+
+            //
+            if (ObjectUtil.isNotNull(model.getProjectCode()) && ObjectUtil.isNotNull(model.getSubject())){
+                ResultBean<Object> PARAM_ERROR = billHelper.decreact(model.getProjectCode(),Integer.parseInt(model.getDeptId()),model.getSubject(),
+                    model.getRemark(),model.getCertificateNumber(), model.getPayment());
+                if (PARAM_ERROR != null) {
+                    return PARAM_ERROR;
+                }
+            }
+
         }
         // 设置余额 end
 
