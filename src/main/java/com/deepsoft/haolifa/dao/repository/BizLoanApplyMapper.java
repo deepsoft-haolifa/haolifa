@@ -2,6 +2,9 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.BizLoanApply;
 import com.deepsoft.haolifa.model.domain.BizLoanApplyExample;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplySumRSDTO;
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +30,9 @@ public interface BizLoanApplyMapper {
     int updateByPrimaryKeySelective(BizLoanApply record);
 
     int updateByPrimaryKey(BizLoanApply record);
+
+    LoanApplySumRSDTO listSummary(@Param("query")LoanApplyRQDTO model);
+
+
+
 }

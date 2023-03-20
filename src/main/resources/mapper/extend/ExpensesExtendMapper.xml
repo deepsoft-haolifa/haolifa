@@ -94,8 +94,36 @@
     </select>
     <select id="listSummary" resultType="java.math.BigDecimal">
         select ifnull(sum(total_amount),0) totalAmount from expenses
-        <include refid="commonCondition"></include>
-        <include refid="expenseCondition"></include>
+        <where>
+            is_delete=0
+            <if test="classifyName != null and classifyName!=''">
+                and expenses_classify  like concat('%',#{classifyName},'%')
+            </if>
+            <if test="secondClassifyName != null and secondClassifyName!=''">
+                and second_classify  like concat('%',#{secondClassifyName},'%')
+            </if>
+            <if test="department!=null and department!=''">
+                and department like concat('%',#{department},'%')
+            </if>
+            <if test="voucherNo != null and voucherNo!=''">
+                and voucher_no like concat('%',#{voucherNo},'%')
+            </if>
+            <if test="dataYear!=null and dataYear!=''">
+                and data_year=#{dataYear}
+            </if>
+            <if test="dataMonth!=null and dataMonth!=''">
+                and data_month=#{dataMonth}
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and date_str>=#{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and date_str&lt;=#{endDate}
+            </if>
+            <if test="commitUser != null and commitUser!=''">
+                and commit_user like concat('%',#{commitUser},'%')
+            </if>
+        </where>
     </select>
     <select id="bankBalance" resultType="java.math.BigDecimal">
         select ifnull(balance,0) from biz_bank_bill order by id desc limit 1

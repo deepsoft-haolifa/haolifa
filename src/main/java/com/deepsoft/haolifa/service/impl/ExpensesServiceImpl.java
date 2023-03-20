@@ -129,11 +129,11 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
         if (StringUtils.isNotEmpty(expensesDTO.getVoucherNo())) {
             criteria.andVoucherNoLike("%" + expensesDTO.getVoucherNo() + "%");
         }
-        if (StrUtil.isNotEmpty(expensesDTO.getYear())) {
-            criteria.andDataYearEqualTo(expensesDTO.getYear());
+        if (StrUtil.isNotEmpty(expensesDTO.getDataYear())) {
+            criteria.andDataYearEqualTo(expensesDTO.getDataYear());
         }
-        if (StrUtil.isNotEmpty(expensesDTO.getMonth())) {
-            criteria.andDataMonthEqualTo(expensesDTO.getMonth());
+        if (StrUtil.isNotEmpty(expensesDTO.getDataMonth())) {
+            criteria.andDataMonthEqualTo(expensesDTO.getDataMonth());
         }
         if (StrUtil.isNotEmpty(expensesDTO.getStartDate())) {
             criteria.andDateStrGreaterThanOrEqualTo(expensesDTO.getStartDate());

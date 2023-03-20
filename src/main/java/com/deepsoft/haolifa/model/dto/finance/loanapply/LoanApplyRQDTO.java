@@ -2,6 +2,7 @@ package com.deepsoft.haolifa.model.dto.finance.loanapply;
 
 import com.deepsoft.haolifa.model.dto.PageParam;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,5 +33,21 @@ public class LoanApplyRQDTO extends PageParam {
 
     @ApiModelProperty(value = "付款状态（1未付款 2付款中 3付款完成）")
     private String payStatus;
+
+
+    @ApiModelProperty(value = "是否可查全部",hidden = true)
+    private Boolean lookAll;
+
+    @ApiModelProperty(value = "借款部门id list ）",hidden = true)
+    private List<Integer> deptIdList;
+    @ApiModelProperty(value = "借款人id list ）",hidden = true)
+    private List<Integer> userIdList;
+
+    @ApiModelProperty(value = "状态 list ）",hidden = true)
+    private List<String> applyStatusList;
+
+
+    @ApiModelProperty(value = "户名(2022-03-20 新增)")
+    private String accountName;
 
 }

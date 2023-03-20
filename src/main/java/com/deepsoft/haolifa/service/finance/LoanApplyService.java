@@ -50,6 +50,8 @@ public interface LoanApplyService {
      */
     ResultBean<PageDTO<LoanApplyRSDTO>> getList(LoanApplyRQDTO model);
 
+    LoanApplySumRSDTO listSummary(LoanApplyRQDTO model);
+
     public ResultBean<List<LoanApplyRSDTO>> getLoanApplyList(LoanApplyRQDTO model);
 
     public int auditReplaceMaterial(String item_id, LoanApplyStatusEnum auditResult);
@@ -62,4 +64,5 @@ public interface LoanApplyService {
     public ResultBean<Integer> repaymentAmount(Integer loanId, BigDecimal offsetAmount);
 
     public ResultBean<Integer> fallbackRepaymentAmount(Integer loanId, BigDecimal offsetAmount);
+
 }

@@ -453,6 +453,11 @@ public class PayPlanServiceImpl implements PayPlanService {
         return ResultBean.success(pageDTO);
     }
 
+    @Override
+    public BigDecimal listSummary(BizPayPlanRQDTO payPlanDTO) {
+        return  bizPayPlanMapper.listSummary(payPlanDTO);
+    }
+
     private List<String> convertBoolingTypeList(BizPayPlanRSDTO payApply) {
         List<String> asList = new ArrayList<>();
         if (StringUtils.isNotEmpty(payApply.getBookingType())) {
@@ -517,12 +522,6 @@ public class PayPlanServiceImpl implements PayPlanService {
             criteria.andPaymentTypeEqualTo(model.getPaymentType());
         }
 
-        // 付款类型 ==
-        if (StringUtils.isNotEmpty(model.getPaymentType())) {
-            criteria.andPaymentTypeEqualTo(model.getPaymentType());
-        }
-
-
         //付款状态
         if (StringUtils.isNotEmpty(model.getStatus())) {
             criteria.andStatusEqualTo(model.getStatus());
@@ -555,6 +554,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
     }
+
 
     @Override
     public ResultBean<List<BookingTypeRSDTO>> getAllPayWayList() {

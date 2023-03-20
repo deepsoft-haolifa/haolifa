@@ -26,8 +26,16 @@ public class ExpensesConditionDTO extends ReportBaseDTO{
     private List<String> secondClassifyNameList;
     @ApiModelProperty(value = "排除的二级分类名称")
     private List<String> excludeSecondClassifyNameList;
-    @ApiModelProperty("报销人")
+    @ApiModelProperty("报销人（2023-03-20新增）")
     private String commitUser;
+
+    @ApiModelProperty("年份（2023-03-20新增）")
+    private String dataYear;
+
+    @ApiModelProperty("月份（2023-03-20新增）")
+    private String dataMonth;
+
+
     @ApiModelProperty("凭证号")
     private String voucherNo;
     @ApiModelProperty("部门名称")

@@ -2,6 +2,8 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.BizPayPlan;
 import com.deepsoft.haolifa.model.domain.BizPayPlanExample;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanRQDTO;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRQDTO;
@@ -33,5 +35,6 @@ public interface BizPayPlanMapper {
 
     // sql
     List<BizPayPlan> selectListGroupBy(@Param("query") BizPayPlanSummaryRQDTO query);
+    BigDecimal listSummary(@Param("query") BizPayPlanRQDTO payPlanDTO);
 
 }
