@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.List;
 
@@ -64,7 +66,7 @@ public class ReportExtendController {
 
     @ApiOperation("按照需方统计展示--用于销售报表-导出")
     @GetMapping("/report-sale-demand-list-export")
-    public void reportSaleDemandListExport(@RequestBody ReportOrderConditionDTO dto, HttpServletResponse response) {
+    public void reportSaleDemandListExport(ReportOrderConditionDTO dto, HttpServletResponse response) {
         dto.setPageSize(EXPORT_MAX_SIZE);
         PageDTO<DemandSaleAmountRespDTO> demandSaleAmountRespDTOPageDTO = reportExtendService.reportSaleByDemandList(dto);
         List<DemandSaleAmountRespDTO> rows = demandSaleAmountRespDTOPageDTO.getList();
@@ -79,14 +81,19 @@ public class ReportExtendController {
         writer.addHeaderAlias("oweMoneyAmount", "欠款金额");
         writer.addHeaderAlias("oweTicketAmount", "欠票金额");
 
-         // 默认的，未添加alias的属性也会写出，如果想只写出加了别名的字段，可以调用此方法排除之
+        // 默认的，未添加alias的属性也会写出，如果想只写出加了别名的字段，可以调用此方法排除之
         writer.setOnlyAlias(true);
 
 
         writer.write(rows, true);
-
+        String fileName = "exportDefault";
+        try {
+            fileName = URLEncoder.encode("销售报表-需方统计", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        response.setHeader("Content-Disposition","attachment;filename=销售报表-需方统计.xlsx");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
         OutputStream out = null;
         try {
             out = response.getOutputStream();
@@ -128,4 +135,48 @@ public class ReportExtendController {
     public ResultBean<ExportPurchaseDTO> reportPurchaseSummary(@RequestBody ReportPurchaseConditionDTO dto) {
         return ResultBean.success(reportExtendService.reportPurchaseSummary(dto));
     }
+
+    @ApiOperation("采购统计列表--用于采购报表-导出")
+    @GetMapping("/report-purchase-list-export")
+    public void reportPurchaseListExport(ReportPurchaseConditionDTO dto, HttpServletResponse response) {
+        dto.setPageSize(EXPORT_MAX_SIZE);
+        PageDTO<ExportPurchaseDTO> exportPurchaseDTOPageDTO = reportExtendService.reportPurchaseList(dto);
+        List<ExportPurchaseDTO> rows = exportPurchaseDTOPageDTO.getList();
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        //自定义标题别名
+        writer.addHeaderAlias("supplierName", "供应商名称");
+        writer.addHeaderAlias("createTime", "日期");
+        writer.addHeaderAlias("purchaseOrderNo", "合同编号");
+        writer.addHeaderAlias("totalCount", "数量");
+        writer.addHeaderAlias("total", "合同金额");
+        writer.addHeaderAlias("registered", "入帐金额");
+        writer.addHeaderAlias("payTotal", "付款金额");
+        writer.addHeaderAlias("unpay", "欠款金额");
+        writer.addHeaderAlias("returnTicketAmount", "回票金额");
+        writer.addHeaderAlias("unTicketAmount", "上账未开票金额");
+
+        // 默认的，未添加alias的属性也会写出，如果想只写出加了别名的字段，可以调用此方法排除之
+        writer.setOnlyAlias(true);
+
+
+        writer.write(rows, true);
+        String fileName = "exportDefault";
+        try {
+            fileName = URLEncoder.encode("采购报表-采购列表.", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        writer.flush(out, true);
+        writer.close();
+        IoUtil.close(out);
+    }
+
 }
