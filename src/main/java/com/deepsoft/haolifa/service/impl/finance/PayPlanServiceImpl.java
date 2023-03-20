@@ -265,7 +265,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         // 费用管理
         ExpensesDTO expensesDTO = new ExpensesDTO();
         expensesDTO.setExpensesClassify(FinanceConstant.cai_liao_f_cn);
-        expensesDTO.setSecondClassify("其他");
+        expensesDTO.setSecondClassify("原材料");
         expensesDTO.setVoucherNo(bizPayPlan.getApplyNo());
         expensesDTO.setTotalAmount(bizPayPlan.getApplyAmount());
         SysUser sysUser = sysUserService.getSysUser(bizPayPlan.getCreateUser());
