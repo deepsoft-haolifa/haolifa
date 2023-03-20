@@ -91,7 +91,7 @@
         <!--<javaControllerGenerator targetPackage="com.deepsoft.haolifa.controller" targetProject="src/main/java">-->
 
         <!--</javaControllerGenerator>-->
-        <table tableName="biz_loan_apply" domainObjectName="BizLoanApply">
+        <table tableName="biz_reimburse_travel_detail" domainObjectName="BizReimburseTravelDetail">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 <!--        <table tableName="auto_control_entrust" domainObjectName="AutoControlEntrust">-->

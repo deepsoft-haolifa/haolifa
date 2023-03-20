@@ -24,7 +24,7 @@ public class BizReimburseTravelDetail {
 
     private BigDecimal vehicleAmount;
 
-    private Integer travelDays;
+    private Double travelDays;
 
     private BigDecimal travelSubsidyAmount;
 
@@ -50,7 +50,7 @@ public class BizReimburseTravelDetail {
 
     private Date updateTime;
 
-    public BizReimburseTravelDetail(Integer id, Integer reimburseId, String serialNo, Date depTime, String depAddress, Date arrTime, String arrAddress, Integer vehicle, Integer vehicleDocNum, BigDecimal vehicleAmount, Integer travelDays, BigDecimal travelSubsidyAmount, Integer projectType, Integer projectDocNum, BigDecimal projectAmount, String type, String payStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseTravelDetail(Integer id, Integer reimburseId, String serialNo, Date depTime, String depAddress, Date arrTime, String arrAddress, Integer vehicle, Integer vehicleDocNum, BigDecimal vehicleAmount, Double travelDays, BigDecimal travelSubsidyAmount, Integer projectType, Integer projectDocNum, BigDecimal projectAmount, String type, String payStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.reimburseId = reimburseId;
         this.serialNo = serialNo;
@@ -160,11 +160,11 @@ public class BizReimburseTravelDetail {
         this.vehicleAmount = vehicleAmount;
     }
 
-    public Integer getTravelDays() {
+    public Double getTravelDays() {
         return travelDays;
     }
 
-    public void setTravelDays(Integer travelDays) {
+    public void setTravelDays(Double travelDays) {
         this.travelDays = travelDays;
     }
 

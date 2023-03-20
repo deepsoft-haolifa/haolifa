@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl.finance.helper;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.dao.repository.BizBankBillMapper;
 import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
@@ -60,6 +61,12 @@ public class BillHelper {
 
     public ResultBean<Object> decreact(String projectCode, Integer deptId, Integer subjectId, String remark, String serialNo,
                                        BigDecimal payment) {
+
+        if (StringUtils.isEmpty(projectCode)|| ObjectUtil.isEmpty(deptId)||ObjectUtil.isEmpty(subjectId)){
+            return null;
+        }
+
+
         // -- 扣减项目预算
         ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
         queryBO.setCode(projectCode);
