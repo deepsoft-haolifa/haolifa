@@ -46,6 +46,8 @@ public class BizReimburseApply {
 
     private Integer loanId;
 
+    private String loanIdStr;
+
     private String applyStatus;
 
     private String projectCode;
@@ -64,7 +66,7 @@ public class BizReimburseApply {
 
     private Date updateTime;
 
-    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payType, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String reimburseUserNo, String travelUserName, BigDecimal offsetAmount, Integer loanId, String applyStatus, String projectCode, String fileUrl, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
+    public BizReimburseApply(Integer id, String serialNo, String type, String reimburseType, Date reimburseDate, String accountName, String cardNumber, String bankOfDeposit, Integer deptId, BigDecimal amount, String payType, String payCompany, String payCompanyId, String payAccount, Date payTime, String payStatus, Integer reimburseUser, String reimburseUserNo, String travelUserName, BigDecimal offsetAmount, Integer loanId, String loanIdStr, String applyStatus, String projectCode, String fileUrl, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.serialNo = serialNo;
         this.type = type;
@@ -86,6 +88,7 @@ public class BizReimburseApply {
         this.travelUserName = travelUserName;
         this.offsetAmount = offsetAmount;
         this.loanId = loanId;
+        this.loanIdStr = loanIdStr;
         this.applyStatus = applyStatus;
         this.projectCode = projectCode;
         this.fileUrl = fileUrl;
@@ -269,6 +272,14 @@ public class BizReimburseApply {
         this.loanId = loanId;
     }
 
+    public String getLoanIdStr() {
+        return loanIdStr;
+    }
+
+    public void setLoanIdStr(String loanIdStr) {
+        this.loanIdStr = loanIdStr == null ? null : loanIdStr.trim();
+    }
+
     public String getApplyStatus() {
         return applyStatus;
     }
@@ -290,7 +301,7 @@ public class BizReimburseApply {
     }
 
     public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
+        this.fileUrl = fileUrl;
     }
 
     public String getRemark() {

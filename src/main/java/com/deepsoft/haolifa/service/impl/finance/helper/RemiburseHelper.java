@@ -88,9 +88,9 @@ public class RemiburseHelper {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销方式必传");
         }
         if (StringUtils.equalsIgnoreCase("2", model.getReimburseType())) {
-            if (model.getLoanId() == null) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "请选择冲抵借款");
-            }
+//            if (model.getLoanId() == null) {
+//                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "请选择冲抵借款");
+//            }
             if (model.getOffsetAmount() == null || model.getOffsetAmount().compareTo(BigDecimal.ZERO) <= 0) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "冲抵金额不可为空");
             }
@@ -211,6 +211,11 @@ public class RemiburseHelper {
             fileUrl = JSON.toJSONString(model.getFileUrlList());
         }
         reimburseApply.setFileUrl(fileUrl);
+
+        String loanIdStr = model.getLoanIdList().stream()
+            .map(i -> i + "")
+            .collect(Collectors.joining(","));
+        reimburseApply.setLoanIdStr(loanIdStr);
         return reimburseApply;
     }
 

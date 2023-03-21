@@ -1,6 +1,7 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -44,6 +45,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,7 +61,12 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     private BizReimburseApplyMapper bizReimburseApplyMapper;
     @Resource
     private SysUserService sysUserService;
-
+    @Resource
+    private BizBillMapper bizBillMapper;
+    @Resource
+    private BizBankBillMapper bizBankBillMapper;
+    @Resource
+    private BizOtherBillMapper bizOtherBillMapper;
     @Lazy
     @Resource
     private FlowInstanceService flowInstanceService;
@@ -119,14 +126,29 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         // 如果是借款冲抵 需要减去冲抵金额
         if (StringUtils.equalsIgnoreCase("2", model.getReimburseType())) {
-            //
-            BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(model.getLoanId());
-            // 已经还款金额
-            BigDecimal paymentAmount = bizLoanApply.getPaymentAmount() == null ? BigDecimal.ZERO : bizLoanApply.getPaymentAmount();
-            BigDecimal addAmount = model.getOffsetAmount().add(paymentAmount);
 
-            if (addAmount.compareTo(bizLoanApply.getAmount()) > 0) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
+            BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
+            BizLoanApplyExample.Criteria loanApplyExampleCriteria = loanApplyExample.createCriteria();
+            loanApplyExampleCriteria.andIdIn(model.getLoanIdList());
+//            loanApplyExampleCriteria.andPaymentAmountGreaterThan(BigDecimal.ZERO);
+//            loanApplyExampleCriteria.andPayStatusEqualTo("3");
+
+            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(loanApplyExample);
+
+            // 总借款
+            BigDecimal totalLoanAmount = bizLoanApplyList.stream()
+                .map(BizLoanApply::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            // 总还款
+            BigDecimal totalPaymentAmount = bizLoanApplyList.stream()
+                .map(b -> b.getPaymentAmount() == null ? BigDecimal.ZERO : b.getPaymentAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            // 总欠款
+            BigDecimal totalOwingAmount = totalLoanAmount.subtract(totalPaymentAmount);
+            if (model.getOffsetAmount().compareTo(totalOwingAmount) > 0) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于总欠款金额");
             }
             totalAmount = totalAmount.subtract(model.getOffsetAmount());
         }
@@ -138,7 +160,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 校验当月项目预算
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
         //  当月未维护
-        if (ObjectUtil.isNull(bizProjectBudget) && totalAmount.doubleValue()>0) {
+        if (ObjectUtil.isNull(bizProjectBudget) && totalAmount.doubleValue() > 0) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
         }
         // 金额不足
@@ -722,10 +744,38 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         // 如果是借款冲抵
         if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getReimburseType())) {
-            ResultBean<Integer> integerResultBean = loanApplyService.repaymentAmount(bizReimburseApplyS.getLoanId(), bizReimburseApplyS.getOffsetAmount());
-            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, integerResultBean.getCode())) {
-                log.error("报销支付：", integerResultBean.getMessage());
-                throw new BaseException(integerResultBean.getMessage());
+            BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
+            BizLoanApplyExample.Criteria loanApplyExampleCriteria = loanApplyExample.createCriteria();
+            List<Integer> loanIdList = Arrays.stream(bizReimburseApplyS.getLoanIdStr().split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+            loanApplyExampleCriteria.andIdIn(loanIdList);
+//            loanApplyExampleCriteria.andPaymentAmountGreaterThan(BigDecimal.ZERO);
+//            loanApplyExampleCriteria.andPayStatusEqualTo("3");
+
+            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(loanApplyExample).stream()
+                .sorted(Comparator.comparing(l -> l.getAmount().subtract(l.getPaymentAmount())))
+                .collect(Collectors.toList());
+
+            BigDecimal offsetAmount = bizReimburseApplyS.getOffsetAmount();
+            for (int i = 0; i < bizLoanApplyList.size(); i++) {
+                BizLoanApply bizLoanApply = bizLoanApplyList.get(i);
+                BigDecimal amount = bizLoanApply.getAmount();
+                BigDecimal paymentAmount = bizLoanApply.getPaymentAmount();
+                BigDecimal owingAmount = amount.subtract(paymentAmount);
+                Pair<Integer, BigDecimal> pair = null;
+                if (offsetAmount.compareTo(owingAmount) <= 0) {
+                    offsetAmount = BigDecimal.ZERO;
+                    pair = new Pair<>(bizLoanApply.getId(), owingAmount);
+                } else {
+                    offsetAmount = offsetAmount.subtract(owingAmount);
+                    pair = new Pair<>(bizLoanApply.getId(), owingAmount);
+                }
+                ResultBean<Integer> integerResultBean = loanApplyService.repaymentAmount(pair.getKey(), pair.getValue());
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, integerResultBean.getCode())) {
+                    log.error("报销支付：", integerResultBean.getMessage());
+                    throw new BaseException(integerResultBean.getMessage());
+                }
             }
         }
 
@@ -800,18 +850,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     }
 
 
-    @Autowired
-    private BizBillMapper bizBillMapper;
-
-
-    @Autowired
-    private BizBankBillMapper bizBankBillMapper;
-
-
-    @Autowired
-    private BizOtherBillMapper bizOtherBillMapper;
-
-
     @Override
     public ResultBean<Integer> fallbackPayStatus(Integer id) {
         BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(id);
@@ -859,14 +897,14 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
             if (bizBillList.size() == 1) {
                 //  回退  扣减日记账金额
-                BizBillAddDTO bizBill = remiburseHelper.buildFallbackBizBillAddDTO(  sysUser, bizReimburseApplyS);
+                BizBillAddDTO bizBill = remiburseHelper.buildFallbackBizBillAddDTO(sysUser, bizReimburseApplyS);
                 ResultBean save = billService.save(bizBill);
                 if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
                     log.error("回退报销支付：", save.getMessage());
                     throw new BaseException(save.getMessage());
                 }
             } else if (bankBillList.size() == 1) {
-                BizBankBillAddDTO bizBankBill = remiburseHelper.buildFallbackBizBankBillAddDTO( bizReimburseApplyS);
+                BizBankBillAddDTO bizBankBill = remiburseHelper.buildFallbackBizBankBillAddDTO(bizReimburseApplyS);
                 ResultBean save = bankBillService.save(bizBankBill);
                 if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
                     log.error("回退报销支付：", save.getMessage());
@@ -928,8 +966,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         return ResultBean.success(update);
     }
-
-
 
 
     private BizOtherBillExample buildBizOtherBillExample(BizReimburseApply bizReimburseApplyS) {

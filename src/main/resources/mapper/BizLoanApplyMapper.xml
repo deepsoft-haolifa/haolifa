@@ -701,7 +701,7 @@
                 </foreach>
             </if>
             <if test="query.type == 1 and query.lookAll == false ">
-                and  po.create_user =  ${query.createUser}
+                and  po.create_user =  #{query.createUser}
             </if>
             <if test="query.type == 2">
                 and la.apply_status in (3,5)
@@ -719,13 +719,13 @@
                 </foreach>
             </if>
             <if test="query.payCompany != null and query.payCompany != '' ">
-                and   la.pay_company like concat('%',${query.payCompany},'%')
+                and   la.pay_company like concat('%',#{query.payCompany},'%')
             </if>
             <if test="query.accountName != null and query.accountName != '' ">
-                and   la.account_name like concat('%',${query.accountName},'%')
+                and   la.account_name like concat('%',#{query.accountName},'%')
             </if>
             <if test="query.payStatus != null and query.payStatus != '' ">
-                and  la.pay_status =  ${query.payStatus}
+                and  la.pay_status =  #{query.payStatus}
             </if>
             and la.del_flag = 0
         </where>
