@@ -114,13 +114,20 @@
 
     <select id="reportCollectOrderSummary" resultType="com.deepsoft.haolifa.model.dto.export.TotalAmountDTO">
         SELECT
-        ifnull(sum(op.total_price),0) totalSaleAmount,
-        ifnull(sum(op.received_account),0) totalCollectAmount,
-        ifnull(sum(op.total_price),0) - ifnull(sum(op.received_account),0) totalOwedAmount
+            ifnull( sum( op.total_price ), 0 ) totalSaleAmount,
+            ifnull( sum( bbctmp.amount ), 0 ) totalCollectAmount,
+            ifnull(sum(op.total_price),0) - ifnull(sum(op.received_account),0) totalOwedAmount
         FROM
-        order_product op
-        LEFT JOIN biz_bill_contract bbc ON bbc.order_no = op.order_no
-        <include refid="collectSql"/>
+            order_product op
+        JOIN (
+            SELECT
+            sum( bbc.amount ) amount, bbc.order_no
+            FROM
+            biz_bill_contract bbc
+            left join order_product op on op.order_no=bbc.order_no
+            <include refid="collectSql"/>
+            GROUP BY bbc.order_no
+        ) bbctmp ON op.order_no = bbctmp.order_no
     </select>
     <sql id="saleCollectionSql">
         <where>
@@ -374,7 +381,7 @@
                 and bbc.create_time&lt;=#{endDate}
             </if>
             <if test="orderNo != null and orderNo != ''">
-                and op.order_no like CONCAT('%',#{orderNo},'%')
+                and bbc.order_no like CONCAT('%',#{orderNo},'%')
             </if>
             <if test="demandName != null and demandName != ''">
                 and op.demand_name like CONCAT('%',#{demandName},'%')
