@@ -75,9 +75,7 @@ public class RemiburseHelper {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR);
         }
 
-        if (StringUtils.isEmpty(model.getProjectCode())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "项目编号");
-        }
+
         if (StringUtils.isEmpty(model.getType())) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "报销类型必传");
         }

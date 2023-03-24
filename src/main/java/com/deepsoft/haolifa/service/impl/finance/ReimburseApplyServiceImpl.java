@@ -133,7 +133,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 //            loanApplyExampleCriteria.andPaymentAmountGreaterThan(BigDecimal.ZERO);
 //            loanApplyExampleCriteria.andPayStatusEqualTo("3");
 
-            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(loanApplyExample);
+            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(
+                loanApplyExample);
 
             // 总借款
             BigDecimal totalLoanAmount = bizLoanApplyList.stream()
@@ -148,29 +149,38 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             // 总欠款
             BigDecimal totalOwingAmount = totalLoanAmount.subtract(totalPaymentAmount);
             if (model.getOffsetAmount().compareTo(totalOwingAmount) > 0) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于总欠款金额");
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,
+                    "总冲抵金额不能大于总欠款金额");
             }
             totalAmount = totalAmount.subtract(model.getOffsetAmount());
         }
 
-        ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
-        queryBO.setCode(model.getProjectCode());
-        queryBO.setDeptId(sysUser.getDepartId());
-        queryBO.setDate(new Date());
-        // 校验当月项目预算
-        BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
-        //  当月未维护
-        if (ObjectUtil.isNull(bizProjectBudget) && totalAmount.doubleValue() > 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
-        }
-        // 金额不足
-        if (bizProjectBudget.getBalanceQuota().compareTo(totalAmount) < 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
+        // 只有报销金额大于0 才校验项目
+        if (totalAmount.doubleValue() > 0) {
+            if (StringUtils.isEmpty(model.getProjectCode())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "项目编号");
+            }
+            ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+            queryBO.setCode(model.getProjectCode());
+            queryBO.setDeptId(sysUser.getDepartId());
+            queryBO.setDate(new Date());
+            // 校验当月项目预算
+            BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
+            //  当月未维护
+            if (ObjectUtil.isNull(bizProjectBudget)) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算未维护");
+            }
+            // 金额不足
+            if (bizProjectBudget.getBalanceQuota().compareTo(totalAmount) < 0) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,
+                    "当月项目预算金额不足");
+            }
         }
 
         // 1 添加主数据
         String ser = "FP" + DateUtils.dateTimeNow() + RandomStringUtils.randomNumeric(3);
-        BizReimburseApply reimburseApply = remiburseHelper.buildBizReimburseApply(model, customUser, sysUser, totalAmount, ser);
+        BizReimburseApply reimburseApply = remiburseHelper.buildBizReimburseApply(model, customUser,
+            sysUser, totalAmount, ser);
         int insertId = bizReimburseApplyMapper.insertSelective(reimburseApply);
 
         // 2 根据类型添加子数据 校验
@@ -179,7 +189,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             case travle: {
                 if (CollectionUtil.isNotEmpty(model.getReimburseTravelDetailAddDTOList())) {
                     for (ReimburseTravelDetailAddDTO reimburseTravelDetailAddDTO : model.getReimburseTravelDetailAddDTOList()) {
-                        BizReimburseTravelDetail record = remiburseHelper.buildBizReimburseTravelDetail(customUser, ser, reimburseApply, reimburseTravelDetailAddDTO);
+                        BizReimburseTravelDetail record = remiburseHelper.buildBizReimburseTravelDetail(
+                            customUser, ser, reimburseApply, reimburseTravelDetailAddDTO);
                         int i = bizReimburseTravelDetailMapper.insertSelective(record);
                     }
                 }
@@ -188,7 +199,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             case cost: {
                 if (CollectionUtil.isNotEmpty(model.getReimburseCostDetailAddDTOList())) {
                     for (ReimburseCostDetailAddDTO reimburseCostDetailAddDTO : model.getReimburseCostDetailAddDTOList()) {
-                        BizReimburseCostDetail record = remiburseHelper.buildBizReimburseCostDetail(customUser, ser, reimburseApply, reimburseCostDetailAddDTO);
+                        BizReimburseCostDetail record = remiburseHelper.buildBizReimburseCostDetail(
+                            customUser, ser, reimburseApply, reimburseCostDetailAddDTO);
                         int i = bizReimburseCostDetailMapper.insertSelective(record);
                     }
                 }
@@ -213,11 +225,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         billBank.setUpdateUser(sysUserService.selectLoginUser().getId());
         int update = bizReimburseApplyMapper.updateByPrimaryKeySelective(billBank);
 
-
         if (StringUtils.isNotEmpty(reimburseApply.getProjectCode())) {
             remiburseHelper.backProjectAmount(reimburseApply);
         }
-
 
         return ResultBean.success(update);
     }
@@ -227,12 +237,14 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         BizReimburseApply reimburseApply = new BizReimburseApply();
         BeanUtils.copyProperties(model, reimburseApply);
-        BizReimburseApply selectByPrimaryKey = bizReimburseApplyMapper.selectByPrimaryKey(model.getId());
+        BizReimburseApply selectByPrimaryKey = bizReimburseApplyMapper.selectByPrimaryKey(
+            model.getId());
 
-        if (StringUtils.equalsIgnoreCase(ReimburseApplyStatusEnum.APPROVAL_FAILED.getCode(), selectByPrimaryKey.getApplyStatus())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "审批拒绝状态不允许修改，请删除后重新提交！");
+        if (StringUtils.equalsIgnoreCase(ReimburseApplyStatusEnum.APPROVAL_FAILED.getCode(),
+            selectByPrimaryKey.getApplyStatus())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,
+                "审批拒绝状态不允许修改，请删除后重新提交！");
         }
-
 
         // 1 作废
         {
@@ -240,7 +252,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 remiburseHelper.backProjectAmount(selectByPrimaryKey);
             }
 
-            ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(selectByPrimaryKey.getType());
+            ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(
+                selectByPrimaryKey.getType());
             switch (reimburseTypeEnum) {
                 case travle: {
                     BizReimburseTravelDetailExample example = new BizReimburseTravelDetailExample();
@@ -258,7 +271,6 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 }
             }
         }
-
 
         // 2 新增
         CustomUser customUser = sysUserService.selectLoginUser();
@@ -282,17 +294,18 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
         }
 
-
         // 如果是借款冲抵 需要减去冲抵金额
         if (StringUtils.equalsIgnoreCase("2", model.getReimburseType())) {
             //
             BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(model.getLoanId());
             // 已经还款金额
-            BigDecimal paymentAmount = bizLoanApply.getPaymentAmount() == null ? BigDecimal.ZERO : bizLoanApply.getPaymentAmount();
+            BigDecimal paymentAmount = bizLoanApply.getPaymentAmount() == null ? BigDecimal.ZERO
+                : bizLoanApply.getPaymentAmount();
             BigDecimal addAmount = model.getOffsetAmount().add(paymentAmount);
 
             if (addAmount.compareTo(bizLoanApply.getAmount()) > 0) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "总冲抵金额不能大于借款金额");
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,
+                    "总冲抵金额不能大于借款金额");
             }
             totalAmount = totalAmount.subtract(model.getOffsetAmount());
         }
@@ -308,7 +321,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             case travle: {
                 if (CollectionUtil.isNotEmpty(model.getReimburseTravelDetailAddDTOList())) {
                     for (ReimburseTravelDetailUpDTO reimburseTravelDetailAddDTO : model.getReimburseTravelDetailAddDTOList()) {
-                        BizReimburseTravelDetail record = remiburseHelper.buildBizReimburseTravelDetail(customUser, selectByPrimaryKey.getSerialNo(), selectByPrimaryKey, reimburseTravelDetailAddDTO);
+                        BizReimburseTravelDetail record = remiburseHelper.buildBizReimburseTravelDetail(
+                            customUser, selectByPrimaryKey.getSerialNo(), selectByPrimaryKey,
+                            reimburseTravelDetailAddDTO);
                         int i = bizReimburseTravelDetailMapper.insertSelective(record);
                     }
                 }
@@ -317,7 +332,9 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             case cost: {
                 if (CollectionUtil.isNotEmpty(model.getReimburseCostDetailAddDTOList())) {
                     for (ReimburseCostDetailUpDTO reimburseCostDetailAddDTO : model.getReimburseCostDetailAddDTOList()) {
-                        BizReimburseCostDetail record = remiburseHelper.buildBizReimburseCostDetail(customUser, selectByPrimaryKey.getSerialNo(), selectByPrimaryKey, reimburseCostDetailAddDTO);
+                        BizReimburseCostDetail record = remiburseHelper.buildBizReimburseCostDetail(
+                            customUser, selectByPrimaryKey.getSerialNo(), selectByPrimaryKey,
+                            reimburseCostDetailAddDTO);
                         int i = bizReimburseCostDetailMapper.insertSelective(record);
                     }
                 }
@@ -344,23 +361,27 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     public ResultBean<ReimburseApplyDetailDTO> getInfo(Integer id) {
         BizReimburseApply reimburseApply = bizReimburseApplyMapper.selectByPrimaryKey(id);
 
-        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
-        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(
+            new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream()
+            .collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
 
         // 查询系统用户
         SysUserExample sysUserExample = new SysUserExample();
         sysUserExample.createCriteria().andIdEqualTo(reimburseApply.getReimburseUser());
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
-        Map<Integer, SysUser> finalSysUserMap = sysUsers.stream().collect(Collectors.toMap(SysUser::getId, Function.identity()));
-
+        Map<Integer, SysUser> finalSysUserMap = sysUsers.stream()
+            .collect(Collectors.toMap(SysUser::getId, Function.identity()));
 
         // 查询部门预算
         BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
         BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
         criteria.andDeptIdEqualTo(reimburseApply.getDeptId());
-        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(
+            bizCostBudgetExample);
         Map<Integer, String> costBudgetSubjectsMap = costBudgetSubjectsList.stream()
-            .collect(Collectors.toMap(BizCostBudgetSubjects::getSubjectsId, BizCostBudgetSubjects::getName));
+            .collect(Collectors.toMap(BizCostBudgetSubjects::getSubjectsId,
+                BizCostBudgetSubjects::getName));
 
         // 查询当前余额
         Map<String, BigDecimal> subjectsBalanceAll = subjectBalanceService.getSubjectsBalanceAll();
@@ -376,17 +397,22 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (sysUser != null) {
             reimburseApplyRSDTO.setReimburseUserName(sysUser.getRealName());
         }
-        ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(reimburseApply.getApplyStatus());
+        ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(
+            reimburseApply.getApplyStatus());
 
         reimburseApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
             ReimburseApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
 
-        ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(reimburseApply.getPayStatus());
-        reimburseApplyRSDTO.setPayStatusCN(payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+        ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(
+            reimburseApply.getPayStatus());
+        reimburseApplyRSDTO.setPayStatusCN(
+            payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc()
+                : payStatusEnum.getDesc());
 
-        ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
-        reimburseApplyRSDTO.setTypeCN(reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
-
+        ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(
+            reimburseApply.getType());
+        reimburseApplyRSDTO.setTypeCN(reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc()
+            : reimburseTypeEnum.getDesc());
 
         // 支付类型 1 对公 2 对私
         String payTypeCN = "未知";
@@ -402,58 +428,82 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         if (StringUtils.equalsIgnoreCase(reimburseApply.getReimburseType(), "1")) {
             reimburseTypeCN = "普通报销";
         } else if (StringUtils.equalsIgnoreCase(reimburseApply.getReimburseType(), "2")) {
-            BizLoanApply bizLoanApply = bizLoanApplyMapper.selectByPrimaryKey(reimburseApply.getLoanId());
-            reimburseApplyRSDTO.setLoanAmount(bizLoanApply.getAmount());
+            List<Integer> loanIdList = Arrays.stream(reimburseApply.getLoanIdStr().split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+            BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
+            BizLoanApplyExample.Criteria loanApplyExampleCriteria = loanApplyExample.createCriteria();
+            loanApplyExampleCriteria.andIdIn(loanIdList);
+            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(
+                loanApplyExample);
+            String loanAmount = bizLoanApplyList.stream()
+                .map(l -> l.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString())
+                .collect(Collectors.joining(","));
+            reimburseApplyRSDTO.setLoanAmount(loanAmount);
             reimburseTypeCN = "借款冲抵";
         }
         reimburseApplyRSDTO.setReimburseTypeCN(reimburseTypeCN);
 
         // 差旅
-        if (StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(), ReimburseTypeEnum.travle.getCode())) {
+        if (StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(),
+            ReimburseTypeEnum.travle.getCode())) {
             BizReimburseTravelDetailExample bizReimburseTravelDetailExample = new BizReimburseTravelDetailExample();
             bizReimburseTravelDetailExample.createCriteria().andReimburseIdEqualTo(id);
             List<BizReimburseTravelDetail> reimburseTravelDetailList =
                 bizReimburseTravelDetailMapper.selectByExample(bizReimburseTravelDetailExample);
 
-            Map<String, String> vehicle_type_map = sysDictService.getSysDictByTypeCode(DictEnum.VEHICLE_TYPE.getCode()).stream()
+            Map<String, String> vehicle_type_map = sysDictService.getSysDictByTypeCode(
+                    DictEnum.VEHICLE_TYPE.getCode()).stream()
                 .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
 
-            Map<String, String> project_type_map = sysDictService.getSysDictByTypeCode(DictEnum.PROJECT_TYPE.getCode()).stream()
+            Map<String, String> project_type_map = sysDictService.getSysDictByTypeCode(
+                    DictEnum.PROJECT_TYPE.getCode()).stream()
                 .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
 
             List<ReimburseTravelDetailRSDTO> reimburseTravelDetailRSDTOList = reimburseTravelDetailList.stream()
                 .map(reimburseTravelDetail -> {
                     ReimburseTravelDetailRSDTO reimburseTravelDetailRSDTO = new ReimburseTravelDetailRSDTO();
                     BeanUtils.copyProperties(reimburseTravelDetail, reimburseTravelDetailRSDTO);
-                    reimburseTravelDetailRSDTO.setVehicleCN(vehicle_type_map.getOrDefault(reimburseTravelDetail.getVehicle() + "", ""));
+                    reimburseTravelDetailRSDTO.setVehicleCN(
+                        vehicle_type_map.getOrDefault(reimburseTravelDetail.getVehicle() + "", ""));
 
-                    reimburseTravelDetailRSDTO.setProjectTypeCN(project_type_map.getOrDefault(reimburseTravelDetail.getProjectType() + "", ""));
+                    reimburseTravelDetailRSDTO.setProjectTypeCN(
+                        project_type_map.getOrDefault(reimburseTravelDetail.getProjectType() + "",
+                            ""));
                     return reimburseTravelDetailRSDTO;
                 })
                 .collect(Collectors.toList());
             reimburseApplyRSDTO.setReimburseTravelDetailRSDTOList(reimburseTravelDetailRSDTOList);
             // 费用
-        } else if (StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(), ReimburseTypeEnum.cost.getCode())) {
-            Map<String, String> subjects_type_map = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+        } else if (StringUtils.equalsIgnoreCase(reimburseTypeEnum.getCode(),
+            ReimburseTypeEnum.cost.getCode())) {
+            Map<String, String> subjects_type_map = sysDictService.getSysDictByTypeCode(
+                    DictEnum.SUBJECTS_TYPE.getCode()).stream()
                 .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
-
 
             BizReimburseCostDetailExample bizReimburseCostDetailExample = new BizReimburseCostDetailExample();
             bizReimburseCostDetailExample.createCriteria().andReimburseIdEqualTo(id);
-            List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(bizReimburseCostDetailExample);
+            List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(
+                bizReimburseCostDetailExample);
             List<ReimburseCostDetailRSDTO> reimburseCostDetailRSDTOList = reimburseCostDetailList.stream()
                 .map(reimburseCostDetail -> {
                     ReimburseCostDetailRSDTO reimburseCostDetailRSDTO = new ReimburseCostDetailRSDTO();
                     BeanUtils.copyProperties(reimburseCostDetail, reimburseCostDetailRSDTO);
-                    String subjectsMapOrDefault = costBudgetSubjectsMap.getOrDefault(reimburseCostDetail.getSubject(), "");
+                    String subjectsMapOrDefault = costBudgetSubjectsMap.getOrDefault(
+                        reimburseCostDetail.getSubject(), "");
                     reimburseCostDetailRSDTO.setSubjectCN(subjectsMapOrDefault);
 
-                    BizSubjects bizSubjects = bizSubjectsMapper.selectByPrimaryKey(reimburseCostDetail.getSubject());
+                    BizSubjects bizSubjects = bizSubjectsMapper.selectByPrimaryKey(
+                        reimburseCostDetail.getSubject());
 
-                    reimburseCostDetailRSDTO.setSubjectsType(bizSubjects != null ? bizSubjects.getType() : "");
-                    reimburseCostDetailRSDTO.setSubjectsTypeName(bizSubjects != null ? subjects_type_map.get(bizSubjects.getType()) : "");
+                    reimburseCostDetailRSDTO.setSubjectsType(
+                        bizSubjects != null ? bizSubjects.getType() : "");
+                    reimburseCostDetailRSDTO.setSubjectsTypeName(
+                        bizSubjects != null ? subjects_type_map.get(bizSubjects.getType()) : "");
 
-                    BigDecimal balanceAmount = subjectsBalanceAll.getOrDefault(reimburseApply.getDeptId() + "_" + reimburseCostDetail.getSubject(), BigDecimal.ZERO);
+                    BigDecimal balanceAmount = subjectsBalanceAll.getOrDefault(
+                        reimburseApply.getDeptId() + "_" + reimburseCostDetail.getSubject(),
+                        BigDecimal.ZERO);
                     reimburseCostDetailRSDTO.setBalanceAmount(balanceAmount);
                     return reimburseCostDetailRSDTO;
                 })
@@ -462,12 +512,14 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         }
 
         if (StringUtils.isNotEmpty(reimburseApplyRSDTO.getProjectCode())) {
-            BizProjectBudget projectBudget = bizProjectBudgetMapper.getProjectBudgetByCode(reimburseApplyRSDTO.getProjectCode());
+            BizProjectBudget projectBudget = bizProjectBudgetMapper.getProjectBudgetByCode(
+                reimburseApplyRSDTO.getProjectCode());
             reimburseApplyRSDTO.setProjectCodeName(projectBudget.getName());
         }
 
         if (StringUtils.isNotEmpty(reimburseApply.getFileUrl())) {
-            reimburseApplyRSDTO.setFileUrlList(JSON.parseArray(reimburseApply.getFileUrl(), FileUrlDTO.class));
+            reimburseApplyRSDTO.setFileUrlList(
+                JSON.parseArray(reimburseApply.getFileUrl(), FileUrlDTO.class));
         } else {
             reimburseApplyRSDTO.setFileUrlList(new ArrayList<>());
         }
@@ -489,20 +541,25 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         // 查询当前用户的角色
         CustomUser customUser = sysUserService.selectLoginUser();
-        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities()
+            .stream()
             .map(a -> (CustomGrantedAuthority) a)
             .collect(Collectors.toList());
 
         //当前角色是否为出纳
         boolean lookAll = customGrantedAuthorityList.stream()
             .anyMatch(grantedAuthority -> {
-                return StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ADMIN.getCode()) ||
-                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode()) ||
-                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CWGLZXFZR.getCode()) ||
-                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode()) ||
-                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode());
+                return StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
+                    RoleEnum.ROLE_ADMIN.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
+                        RoleEnum.ROLE_ZJL.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
+                        RoleEnum.ROLE_CWGLZXFZR.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
+                        RoleEnum.ROLE_ZGKJ.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
+                        RoleEnum.ROLE_CN.getCode());
             });
-
 
         // 借款审批列表
         if (StringUtils.equalsIgnoreCase("1", model.getMyself()) && !lookAll) {
@@ -516,14 +573,15 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             criteria.andTypeEqualTo(model.getType());
         }
 
-
         //借款部门名称
         if (StringUtils.isNotEmpty(model.getDeptName())) {
             SysDepartmentExample departmentExample = new SysDepartmentExample();
             departmentExample.createCriteria().andDeptNameLike("%" + model.getDeptName() + "%");
-            List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
+            List<SysDepartment> sysDepartments = departmentMapper.selectByExample(
+                departmentExample);
             if (CollectionUtil.isNotEmpty(sysDepartments)) {
-                List<Integer> integerList = sysDepartments.stream().map(SysDepartment::getId).collect(Collectors.toList());
+                List<Integer> integerList = sysDepartments.stream().map(SysDepartment::getId)
+                    .collect(Collectors.toList());
                 criteria.andDeptIdIn(integerList);
             }
         }
@@ -553,9 +611,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         PageDTO<ReimburseApplyRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
 
-        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
-        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
-
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(
+            new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream()
+            .collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
 
         List<Integer> reimburseUserIdList = pageData.getResult().stream()
             .map(BizReimburseApply::getReimburseUser)
@@ -569,11 +628,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         Map<Integer, SysUser> sysUserMap = sysUserList.stream()
             .collect(Collectors.toMap(SysUser::getId, Function.identity(), (a, b) -> a));
 
-
         //当前角色是否为出纳
         boolean iscn = customGrantedAuthorityList.stream()
-            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
-
+            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
+                RoleEnum.ROLE_CN.getCode()));
 
         List<String> projectCodeList = pageData.getResult().stream()
             .map(l -> {
@@ -587,8 +645,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             BizProjectBudgetExample.Criteria criteriaBizProjectBudgetExample = bizProjectBudgetExample.createCriteria();
             criteriaBizProjectBudgetExample.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
             criteriaBizProjectBudgetExample.andCodeIn(projectCodeList);
-            projectCodeMap = bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample).stream()
-                .collect(Collectors.toMap(BizProjectBudget::getCode, BizProjectBudget::getName, (a, b) -> a));
+            projectCodeMap = bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample)
+                .stream()
+                .collect(Collectors.toMap(BizProjectBudget::getCode, BizProjectBudget::getName,
+                    (a, b) -> a));
         }
 
         Map<String, String> finalProjectCodeMap = projectCodeMap;
@@ -597,16 +657,24 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 ReimburseApplyRSDTO reimburseApplyRSDTO = new ReimburseApplyRSDTO();
                 BeanUtils.copyProperties(reimburseApply, reimburseApplyRSDTO);
 
-                ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(reimburseApply.getApplyStatus());
+                ReimburseApplyStatusEnum applyStatusEnum = ReimburseApplyStatusEnum.valueOfCode(
+                    reimburseApply.getApplyStatus());
 
                 reimburseApplyRSDTO.setApplyStatusCN(applyStatusEnum == null ?
-                    ReimburseApplyStatusEnum.PENDING_APPROVAL.getDesc() : applyStatusEnum.getDesc());
+                    ReimburseApplyStatusEnum.PENDING_APPROVAL.getDesc()
+                    : applyStatusEnum.getDesc());
 
-                ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(reimburseApply.getPayStatus());
-                reimburseApplyRSDTO.setPayStatusCN(payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc() : payStatusEnum.getDesc());
+                ReimbursePayStatusEnum payStatusEnum = ReimbursePayStatusEnum.valueOfCode(
+                    reimburseApply.getPayStatus());
+                reimburseApplyRSDTO.setPayStatusCN(
+                    payStatusEnum == null ? ReimbursePayStatusEnum.un_pay.getDesc()
+                        : payStatusEnum.getDesc());
 
-                ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(reimburseApply.getType());
-                reimburseApplyRSDTO.setTypeCN(reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc() : reimburseTypeEnum.getDesc());
+                ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(
+                    reimburseApply.getType());
+                reimburseApplyRSDTO.setTypeCN(
+                    reimburseTypeEnum == null ? ReimburseTypeEnum.travle.getDesc()
+                        : reimburseTypeEnum.getDesc());
 
                 // 报销方式	1普通报销 2借款冲抵
                 String reimburseTypeCN = "";
@@ -618,27 +686,34 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 reimburseApplyRSDTO.setReimburseTypeCN(reimburseTypeCN);
 
                 SysDepartment sysDepartment = sysDepartmentMap.get(reimburseApplyRSDTO.getDeptId());
-                reimburseApplyRSDTO.setDeptName(sysDepartment == null ? "" : sysDepartment.getDeptName());
+                reimburseApplyRSDTO.setDeptName(
+                    sysDepartment == null ? "" : sysDepartment.getDeptName());
 
                 SysUser sysUser = sysUserMap.get(reimburseApply.getReimburseUser());
-                reimburseApplyRSDTO.setReimburseUserName(sysUser == null ? "" : sysUser.getRealName());
+                reimburseApplyRSDTO.setReimburseUserName(
+                    sysUser == null ? "" : sysUser.getRealName());
 
                 // 角色 == 出纳 && 支付状态 == 0（未付款）&& 确认状态 == 1（出纳付款）
                 boolean canPay = iscn
-                    && StringUtils.equalsIgnoreCase(reimburseApply.getApplyStatus(), ReimburseApplyStatusEnum.IN_PAYMENT.getCode())
+                    && StringUtils.equalsIgnoreCase(reimburseApply.getApplyStatus(),
+                    ReimburseApplyStatusEnum.IN_PAYMENT.getCode())
                     && (
-                    StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.un_pay.getCode())
-                        || StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(), ReimbursePayStatusEnum.partial_pay.getCode())
+                    StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(),
+                        ReimbursePayStatusEnum.un_pay.getCode())
+                        || StringUtils.equalsIgnoreCase(reimburseApply.getPayStatus(),
+                        ReimbursePayStatusEnum.partial_pay.getCode())
                 );
                 // canPay = true;
                 reimburseApplyRSDTO.setCanPay(canPay);
 
                 if (StringUtils.isNotEmpty(reimburseApply.getFileUrl())) {
-                    reimburseApplyRSDTO.setFileUrlList(JSON.parseArray(reimburseApply.getFileUrl(), FileUrlDTO.class));
+                    reimburseApplyRSDTO.setFileUrlList(
+                        JSON.parseArray(reimburseApply.getFileUrl(), FileUrlDTO.class));
                 } else {
                     reimburseApplyRSDTO.setFileUrlList(new ArrayList<>());
                 }
-                reimburseApplyRSDTO.setProjectCodeName(finalProjectCodeMap.getOrDefault(reimburseApplyRSDTO.getProjectCode(), ""));
+                reimburseApplyRSDTO.setProjectCodeName(
+                    finalProjectCodeMap.getOrDefault(reimburseApplyRSDTO.getProjectCode(), ""));
                 return reimburseApplyRSDTO;
             })
             .collect(Collectors.toList());
@@ -652,7 +727,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         BizReimburseApplyExample.Criteria criteria = reimburseApplyExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
         criteria.andSerialNoEqualTo(item_id);
-        List<BizReimburseApply> bizLoanApplies = bizReimburseApplyMapper.selectByExample(reimburseApplyExample);
+        List<BizReimburseApply> bizLoanApplies = bizReimburseApplyMapper.selectByExample(
+            reimburseApplyExample);
 
         BizReimburseApply reimburseApply = bizLoanApplies.get(0);
         if (reimburseApply == null) {
@@ -668,7 +744,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         int update = bizReimburseApplyMapper.updateByPrimaryKeySelective(reimburseApplyUp);
 
         // 审核拒绝 回退金额
-        if (ReimburseApplyStatusEnum.APPROVAL_FAILED.getCode().equalsIgnoreCase(auditResult.getCode())) {
+        if (ReimburseApplyStatusEnum.APPROVAL_FAILED.getCode()
+            .equalsIgnoreCase(auditResult.getCode())) {
             if (StringUtils.isNotEmpty(reimburseApply.getProjectCode())) {
                 remiburseHelper.backProjectAmount(reimburseApply);
             }
@@ -687,23 +764,25 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         reimburseApply.setUpdateTime(new Date());
         bizReimburseApplyMapper.updateByPrimaryKeySelective(reimburseApply);
 
-
-        ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
-        queryBO.setCode(reimburseApply.getProjectCode());
-        queryBO.setDeptId(reimburseApply.getDeptId());
-        queryBO.setDate(reimburseApply.getCreateTime());
-        // 校验当月项目预算
-        BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
-        // 金额不足
-        if (bizProjectBudget.getBalanceQuota().compareTo(reimburseApply.getAmount()) < 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
+        if (reimburseApply.getAmount().doubleValue() > 0) {
+            ProjectBudgetQueryBO queryBO = new ProjectBudgetQueryBO();
+            queryBO.setCode(reimburseApply.getProjectCode());
+            queryBO.setDeptId(reimburseApply.getDeptId());
+            queryBO.setDate(reimburseApply.getCreateTime());
+            // 校验当月项目预算
+            BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
+            // 金额不足
+            if (bizProjectBudget.getBalanceQuota().compareTo(reimburseApply.getAmount()) < 0) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,
+                    "当月项目预算金额不足");
+            }
+            // 扣减预算 todo 扣减日志
+            ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
+            budgetUpDTO.setId(bizProjectBudget.getId());
+            budgetUpDTO.setBalanceQuota(
+                bizProjectBudget.getBalanceQuota().subtract(reimburseApply.getAmount()));
+            projectBudgetService.decrement(budgetUpDTO);
         }
-        // 扣减预算 todo 扣减日志
-        ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
-        budgetUpDTO.setId(bizProjectBudget.getId());
-        budgetUpDTO.setBalanceQuota(bizProjectBudget.getBalanceQuota().subtract(reimburseApply.getAmount()));
-        projectBudgetService.decrement(budgetUpDTO);
-
         // 添加申请流程
         FlowInstanceDTO flowInstanceDTO = remiburseHelper.buildFlowInstanceDTO(reimburseApply);
         flowInstanceService.create(flowInstanceDTO);
@@ -717,11 +796,14 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
      */
     @Override
     public ResultBean<Integer> pay(ReimburseApplyPayDTO payDTO) {
-        BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(payDTO.getId());
+        BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(
+            payDTO.getId());
         // 幂等校验 有些状态不能付款
-        LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(bizReimburseApplyS.getPayStatus());
+        LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(
+            bizReimburseApplyS.getPayStatus());
         if (LoanrPayStatusEnum.all_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态已付款");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,
+                statusEnum.getDesc() + "该笔状态已付款");
         }
 
         SysUser sysUser = sysUserService.getSysUser(bizReimburseApplyS.getReimburseUser());
@@ -729,7 +811,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 费用报销详情
         BizReimburseCostDetailExample bizReimburseCostDetailExample = new BizReimburseCostDetailExample();
         bizReimburseCostDetailExample.createCriteria().andReimburseIdEqualTo(payDTO.getId());
-        List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(bizReimburseCostDetailExample);
+        List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(
+            bizReimburseCostDetailExample);
 
         // 差旅报销详情
         //        BizReimburseTravelDetailExample bizReimburseTravelDetailExample = new BizReimburseTravelDetailExample();
@@ -753,7 +836,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 //            loanApplyExampleCriteria.andPaymentAmountGreaterThan(BigDecimal.ZERO);
 //            loanApplyExampleCriteria.andPayStatusEqualTo("3");
 
-            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(loanApplyExample).stream()
+            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(
+                    loanApplyExample).stream()
                 .sorted(Comparator.comparing(l -> l.getAmount().subtract(l.getPaymentAmount())))
                 .collect(Collectors.toList());
 
@@ -771,8 +855,10 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                     offsetAmount = offsetAmount.subtract(owingAmount);
                     pair = new Pair<>(bizLoanApply.getId(), owingAmount);
                 }
-                ResultBean<Integer> integerResultBean = loanApplyService.repaymentAmount(pair.getKey(), pair.getValue());
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, integerResultBean.getCode())) {
+                ResultBean<Integer> integerResultBean = loanApplyService.repaymentAmount(
+                    pair.getKey(), pair.getValue());
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    integerResultBean.getCode())) {
                     log.error("报销支付：", integerResultBean.getMessage());
                     throw new BaseException(integerResultBean.getMessage());
                 }
@@ -784,32 +870,40 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             // 支出记账（1現金 2銀行 3 其他貨幣）
             if (StringUtils.equalsIgnoreCase("1", payDTO.getBillNature())) {
                 //   扣减日记账金额
-                BizBillAddDTO bizBill = remiburseHelper.buildBizBillAddDTO(payDTO, applySAmount, sysUser, bizReimburseApplyS);
+                BizBillAddDTO bizBill = remiburseHelper.buildBizBillAddDTO(payDTO, applySAmount,
+                    sysUser, bizReimburseApplyS);
                 ResultBean save = billService.save(bizBill);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    save.getCode())) {
                     log.error("报销支付：", save.getMessage());
                     throw new BaseException(save.getMessage());
                 }
             } else if (StringUtils.equalsIgnoreCase("2", payDTO.getBillNature())) {
-                BizBankBillAddDTO bizBankBill = remiburseHelper.buildBizBankBillAddDTO(payDTO, applySAmount, bizReimburseApplyS);
+                BizBankBillAddDTO bizBankBill = remiburseHelper.buildBizBankBillAddDTO(payDTO,
+                    applySAmount, bizReimburseApplyS);
                 ResultBean save = bankBillService.save(bizBankBill);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    save.getCode())) {
                     log.error("报销支付：", save.getMessage());
                     throw new BaseException(save.getMessage());
                 }
             } else if (StringUtils.equalsIgnoreCase("3", payDTO.getBillNature())) {
-                BizOtherBillAddDTO otherBillAddDTO = remiburseHelper.buildBizOtherBillAddDTO(payDTO, bizReimburseApplyS);
+                BizOtherBillAddDTO otherBillAddDTO = remiburseHelper.buildBizOtherBillAddDTO(payDTO,
+                    bizReimburseApplyS);
                 ResultBean save = otherBillService.save(otherBillAddDTO);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    save.getCode())) {
                     log.error("报销支付：", save.getMessage());
                     throw new BaseException(save.getMessage());
                 }
             }
         } else {
             // 增加-银行日记账
-            BizBankBillAddDTO bizBankBillAddDTO = remiburseHelper.buildBizBankBillAddDTO(bizReimburseApplyS, sysUser, payDTO);
+            BizBankBillAddDTO bizBankBillAddDTO = remiburseHelper.buildBizBankBillAddDTO(
+                bizReimburseApplyS, sysUser, payDTO);
             ResultBean save = bankBillService.save(bizBankBillAddDTO);
-            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                save.getCode())) {
                 log.error("报销支付：", save.getMessage());
                 throw new BaseException(save.getMessage());
             }
@@ -818,25 +912,30 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 扣款科目余额
         if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getType())) {
             reimburseCostDetailList.forEach(reimburseCostDetail -> {
-                BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, reimburseCostDetail);
+                BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(
+                    bizReimburseApplyS, reimburseCostDetail);
                 ResultBean resultBean = subjectBalanceService.decreaseAmount(bizSubjects);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    resultBean.getCode())) {
                     log.error("报销支付：", resultBean.getMessage());
                     throw new BaseException(resultBean.getMessage());
                 }
             });
         } else {
             //reimburse_user
-            BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, totalAmount);
+            BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(
+                bizReimburseApplyS, totalAmount);
             ResultBean resultBean = subjectBalanceService.decreaseAmount(bizSubjects);
-            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                resultBean.getCode())) {
                 log.error("报销支付：", resultBean.getMessage());
                 throw new BaseException(resultBean.getMessage());
             }
         }
 
         // 财务管理->费用管理
-        ExpensesDTO expensesDTO = remiburseHelper.buildExpensesDTO(bizReimburseApplyS, totalAmount, reimburseCostDetailList);
+        ExpensesDTO expensesDTO = remiburseHelper.buildExpensesDTO(bizReimburseApplyS, totalAmount,
+            reimburseCostDetailList);
         ResultBean save = expensesService.save(expensesDTO);
         if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
             log.error("报销支付：", save.getMessage());
@@ -844,7 +943,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         }
 
         // update pay_status
-        Integer update = bizReimburseApplyMapper.updateByPrimaryKeySelective(remiburseHelper.buildBizReimburseApply(payDTO));
+        Integer update = bizReimburseApplyMapper.updateByPrimaryKeySelective(
+            remiburseHelper.buildBizReimburseApply(payDTO));
 
         return ResultBean.success(update);
     }
@@ -854,9 +954,11 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
     public ResultBean<Integer> fallbackPayStatus(Integer id) {
         BizReimburseApply bizReimburseApplyS = bizReimburseApplyMapper.selectByPrimaryKey(id);
         // 幂等校验
-        LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(bizReimburseApplyS.getPayStatus());
+        LoanrPayStatusEnum statusEnum = LoanrPayStatusEnum.valueOfCode(
+            bizReimburseApplyS.getPayStatus());
         if (LoanrPayStatusEnum.un_pay.getCode().equalsIgnoreCase(statusEnum.getCode())) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, statusEnum.getDesc() + "该笔状态未付款");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,
+                statusEnum.getDesc() + "该笔状态未付款");
         }
 
         SysUser sysUser = sysUserService.getSysUser(bizReimburseApplyS.getReimburseUser());
@@ -864,13 +966,15 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 费用报销详情
         BizReimburseCostDetailExample bizReimburseCostDetailExample = new BizReimburseCostDetailExample();
         bizReimburseCostDetailExample.createCriteria().andReimburseIdEqualTo(id);
-        List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(bizReimburseCostDetailExample);
-
+        List<BizReimburseCostDetail> reimburseCostDetailList = bizReimburseCostDetailMapper.selectByExample(
+            bizReimburseCostDetailExample);
 
         // 如果是借款冲抵
         if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getReimburseType())) {
-            ResultBean<Integer> integerResultBean = loanApplyService.fallbackRepaymentAmount(bizReimburseApplyS.getLoanId(), bizReimburseApplyS.getOffsetAmount());
-            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, integerResultBean.getCode())) {
+            ResultBean<Integer> integerResultBean = loanApplyService.fallbackRepaymentAmount(
+                bizReimburseApplyS.getLoanId(), bizReimburseApplyS.getOffsetAmount());
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                integerResultBean.getCode())) {
                 log.error("回退 报销支付：", integerResultBean.getMessage());
                 throw new BaseException(integerResultBean.getMessage());
             }
@@ -889,7 +993,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
             // 其他貨幣
             BizOtherBillExample bizOtherBillExample = buildBizOtherBillExample(bizReimburseApplyS);
-            List<BizOtherBill> otherBillList = bizOtherBillMapper.selectByExample(bizOtherBillExample);
+            List<BizOtherBill> otherBillList = bizOtherBillMapper.selectByExample(
+                bizOtherBillExample);
 
             if (bizBillList.size() + bankBillList.size() + otherBillList.size() != 1) {
                 throw new BaseException("");
@@ -897,23 +1002,29 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
             if (bizBillList.size() == 1) {
                 //  回退  扣减日记账金额
-                BizBillAddDTO bizBill = remiburseHelper.buildFallbackBizBillAddDTO(sysUser, bizReimburseApplyS);
+                BizBillAddDTO bizBill = remiburseHelper.buildFallbackBizBillAddDTO(sysUser,
+                    bizReimburseApplyS);
                 ResultBean save = billService.save(bizBill);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    save.getCode())) {
                     log.error("回退报销支付：", save.getMessage());
                     throw new BaseException(save.getMessage());
                 }
             } else if (bankBillList.size() == 1) {
-                BizBankBillAddDTO bizBankBill = remiburseHelper.buildFallbackBizBankBillAddDTO(bizReimburseApplyS);
+                BizBankBillAddDTO bizBankBill = remiburseHelper.buildFallbackBizBankBillAddDTO(
+                    bizReimburseApplyS);
                 ResultBean save = bankBillService.save(bizBankBill);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    save.getCode())) {
                     log.error("回退报销支付：", save.getMessage());
                     throw new BaseException(save.getMessage());
                 }
             } else if (otherBillList.size() == 1) {
-                BizOtherBillAddDTO otherBillAddDTO = remiburseHelper.buildFallbackBizOtherBillAddDTO(bizReimburseApplyS);
+                BizOtherBillAddDTO otherBillAddDTO = remiburseHelper.buildFallbackBizOtherBillAddDTO(
+                    bizReimburseApplyS);
                 ResultBean save = otherBillService.save(otherBillAddDTO);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    save.getCode())) {
                     log.error("回退报销支付：", save.getMessage());
                     throw new BaseException(save.getMessage());
                 }
@@ -921,9 +1032,11 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
 
         } else {
             // 增加-银行日记账
-            BizBankBillAddDTO bizBankBillAddDTO = remiburseHelper.buildFallbackBizBankBillAddDTO(bizReimburseApplyS, sysUser);
+            BizBankBillAddDTO bizBankBillAddDTO = remiburseHelper.buildFallbackBizBankBillAddDTO(
+                bizReimburseApplyS, sysUser);
             ResultBean save = bankBillService.save(bizBankBillAddDTO);
-            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                save.getCode())) {
                 log.error("回退报销支付：", save.getMessage());
                 throw new BaseException(save.getMessage());
             }
@@ -932,25 +1045,30 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         // 扣款科目余额
         if (StringUtils.equalsIgnoreCase("2", bizReimburseApplyS.getType())) {
             reimburseCostDetailList.forEach(reimburseCostDetail -> {
-                BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, reimburseCostDetail);
+                BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(
+                    bizReimburseApplyS, reimburseCostDetail);
                 ResultBean resultBean = subjectBalanceService.increaseAmount(bizSubjects);
-                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+                if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                    resultBean.getCode())) {
                     log.error("回退报销支付：", resultBean.getMessage());
                     throw new BaseException(resultBean.getMessage());
                 }
             });
         } else {
             //reimburse_user
-            BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(bizReimburseApplyS, bizReimburseApplyS.getAmount());
+            BizSubjectsBalanceUpDTO bizSubjects = remiburseHelper.buildBizSubjectsBalanceUpDTO(
+                bizReimburseApplyS, bizReimburseApplyS.getAmount());
             ResultBean resultBean = subjectBalanceService.increaseAmount(bizSubjects);
-            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, resultBean.getCode())) {
+            if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
+                resultBean.getCode())) {
                 log.error("回退报销支付：", resultBean.getMessage());
                 throw new BaseException(resultBean.getMessage());
             }
         }
 
         // 财务管理->费用管理
-        ExpensesDTO expensesDTO = remiburseHelper.buildExpensesDTO(bizReimburseApplyS, bizReimburseApplyS.getAmount().negate(), reimburseCostDetailList);
+        ExpensesDTO expensesDTO = remiburseHelper.buildExpensesDTO(bizReimburseApplyS,
+            bizReimburseApplyS.getAmount().negate(), reimburseCostDetailList);
         ResultBean save = expensesService.save(expensesDTO);
         if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, save.getCode())) {
             log.error("回退报销支付：", save.getMessage());
@@ -958,11 +1076,13 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         }
 
         // 回退项目预算
-        if (StringUtils.isNotEmpty(bizReimburseApplyS.getProjectCode())) {
+        if (StringUtils.isNotEmpty(bizReimburseApplyS.getProjectCode())
+            && bizReimburseApplyS.getAmount().doubleValue() > 0) {
             remiburseHelper.backProjectAmount(bizReimburseApplyS);
         }
         // update pay_status
-        Integer update = bizReimburseApplyMapper.updateByPrimaryKeySelective(remiburseHelper.buildFallbackBizReimburseApply(bizReimburseApplyS));
+        Integer update = bizReimburseApplyMapper.updateByPrimaryKeySelective(
+            remiburseHelper.buildFallbackBizReimburseApply(bizReimburseApplyS));
 
         return ResultBean.success(update);
     }
@@ -1004,7 +1124,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         return bizBankBillExample;
     }
 
-    private BizBillExample buildBizBillExample(BizReimburseApply bizReimburseApplyS, SysUser sysUser) {
+    private BizBillExample buildBizBillExample(BizReimburseApply bizReimburseApplyS,
+        SysUser sysUser) {
         BizBillExample bizBillExample = new BizBillExample();
         BizBillExample.Criteria criteria = bizBillExample.createCriteria();
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);

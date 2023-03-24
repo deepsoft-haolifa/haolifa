@@ -46,9 +46,9 @@ public class PayPlanController {
         return payPlanService.delete(id);
     }
 
-    @ApiOperation("更新节点")
+    @ApiOperation("付款")
     @PostMapping("/updatePayPlan")
-    public ResultBean updatePayPlan(@RequestBody BizPayPlanPayDTO payPlan) {
+    public ResultBean pay(@RequestBody BizPayPlanPayDTO payPlan) {
         return payPlanService.pay(payPlan);
     }
 

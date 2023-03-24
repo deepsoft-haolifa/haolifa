@@ -18,6 +18,9 @@ public class BizPayPlanPayLogDTO {
     @ApiModelProperty(value = "支付方式")
     private String payWay;
 
+    @ApiModelProperty(value = "付款账户")
+    private String payAccount;
+
     @ApiModelProperty(value = "记账方式")
     private String bookingType;
 
