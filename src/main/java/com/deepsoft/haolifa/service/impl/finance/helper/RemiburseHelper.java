@@ -18,6 +18,8 @@ import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAddDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAmountDTO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyAmountDTO.ReimburseCostDetailAmountDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyPayDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.cost.ReimburseCostDetailAddDTO;
@@ -240,6 +242,39 @@ public class RemiburseHelper {
                 if (CollectionUtil.isNotEmpty(model.getReimburseCostDetailAddDTOList())) {
                     totalAmount = model.getReimburseCostDetailAddDTOList().stream()
                         .map(ReimburseCostDetailAddDTO::getAmount)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                }
+                break;
+            }
+        }
+
+
+        return totalAmount;
+    }
+
+    public BigDecimal getTotalAmount(ReimburseApplyAmountDTO model) {
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        ReimburseTypeEnum reimburseTypeEnum = ReimburseTypeEnum.valueOfCode(model.getType());
+        switch (reimburseTypeEnum) {
+            case travle: {
+                if (CollectionUtil.isNotEmpty(model.getReimburseTravelDetailAddDTOList())) {
+                    totalAmount = model.getReimburseTravelDetailAddDTOList()
+                        .stream()
+                        .map(o -> {
+                            BigDecimal projectAmount = o.getProjectAmount();
+                            BigDecimal travelSubsidyAmount = o.getTravelSubsidyAmount().multiply(BigDecimal.valueOf(o.getTravelDays()));
+                            BigDecimal vehicleAmount = o.getVehicleAmount();
+                            BigDecimal add = projectAmount.add(travelSubsidyAmount).add(vehicleAmount);
+                            return add;
+                        })
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                }
+                break;
+            }
+            case cost: {
+                if (CollectionUtil.isNotEmpty(model.getReimburseCostDetailAddDTOList())) {
+                    totalAmount = model.getReimburseCostDetailAddDTOList().stream()
+                        .map(ReimburseCostDetailAmountDTO::getAmount)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
                 }
                 break;

@@ -212,6 +212,18 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
         return ResultBean.success(insertId);
     }
 
+
+    @Override
+    public ResultBean<BigDecimal> calculateAmount(ReimburseApplyAmountDTO model) {
+        // 报销详情里的总金额
+        BigDecimal totalAmount = remiburseHelper.getTotalAmount(model);
+        // 如果是借款冲抵 需要减去冲抵金额
+        if (StringUtils.equalsIgnoreCase("2", model.getReimburseType())) {
+            totalAmount = totalAmount.subtract(model.getOffsetAmount());
+        }
+        return ResultBean.success(totalAmount);
+    }
+
     @Override
     public ResultBean delete(Integer id) {
         //int delete = bizReimburseApplyMapper.deleteByPrimaryKey(id);
