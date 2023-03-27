@@ -706,8 +706,9 @@
             resultType="com.deepsoft.haolifa.model.domain.PurchaseOrder"
             parameterType="com.deepsoft.haolifa.model.dto.PurchaseOrderRQParam"
             >
-        select po.*,i.total_amount as invoiceAccount from purchase_order po
-         left join invoice i on  po.purchase_order_no = i.order_no
+        select po.*,
+        ifnull((SELECT  SUM(i.total_amount)  FROM invoice i  WHERE po.purchase_order_no = i.order_no),0) AS invoiceAccount
+        from purchase_order po
         <where>
             <if test="query.orderNo != null and query.orderNo != '' ">
                 and po.purchase_order_no = #{query.orderNo}
@@ -722,69 +723,47 @@
                 and po.order_type = #{query.orderType}
             </if>
             and po.paid_account  <![CDATA[ <> ]]> po.total_price
---             and i.total_amount  <![CDATA[ <> ]]> 0
---             and i.total_amount  <![CDATA[ <> ]]> po.paid_account
         </where>
         order by po.create_time desc
     </select>
 
 
     <select id="selectProcurementSummary" resultType="com.deepsoft.haolifa.model.dto.finance.sum.ProcurementSummaryRSDTO">
-        select c.supplierName,
-        c.supplierId,
-        c.contractAmount,
-        c.entryAmount,
-        c.paidAmount,
-        c.invoicedAmount,
-        -- 入账欠款(入账额-已付款)
-        round(c.entryAmount - c.paidAmount, 2) entryOweAmount,
-        -- 回票欠款(回票额-已付款）
-        round(0 - c.paidAmount, 2) needInvoiceAmount,
-        -- 入账欠票（入账额-已开票）
-        round(c.entryAmount - c.invoicedAmount, 2) entryOweInvoiceAmount
-        from (
-        select po.supplier_name as supplierName,
-        po.supplier_no as supplierId,
+        SELECT
+        po.supplier_name AS supplierName,
+        po.supplier_no AS supplierId,
         -- 合同额
-        ifnull(sum(po.total_price), 0) as contractAmount,
+        ifnull( sum( po.total_price ), 0 ) AS contractAmount,
         -- 入账额
-        ifnull(sum(oi.unit_price * ih.qualified_number), 0) as entryAmount,
+        ifnull(
+        (SELECT  sum(oi.unit_price * ih.qualified_number)  FROM  purchase_order_item oi   INNER JOIN inspect_history ih ON oi.purchase_order_no = ih.purchase_no
+            WHERE
+            oi.material_graph_no = ih.material_graph_no
+            AND ih.STATUS = 2
+            AND po.purchase_order_no = oi.purchase_order_no)
+        ,0) AS entryAmount,
         -- 已付货款
-        ifnull(sum(po.paid_account), 0) as paidAmount,
+        ifnull( sum( po.paid_account ), 0 ) AS paidAmount,
         -- 已开发票
-        ifnull(sum(i.total_amount), 0) as invoicedAmount
-        FROM purchase_order po
-        LEFT JOIN invoice i ON po.purchase_order_no = i.order_no
-        LEFT JOIN purchase_order_item oi ON po.purchase_order_no = oi.purchase_order_no
-        LEFT JOIN inspect_history ih ON po.purchase_order_no = ih.purchase_no and oi.material_graph_no = ih.material_graph_no and ih.status = 2
-            <where>
-                <if test="query.supplierName != null and query.supplierName != ''">
-                    AND po.supplier_name like concat('%',#{query.supplierName},'%')
-                </if>
-                <if test="query.startTime != null and query.startTime != ''"><!-- 开始时间检索 -->
-                    AND date_format(po.create_time,'%y%m%d') &gt;= date_format(#{query.startTime},'%y%m%d')
-                </if>
-                <if test="query.endTime != null and query.endTime != ''"><!-- 结束时间检索 -->
-                    AND date_format(po.create_time,'%y%m%d') &lt;= date_format(#{query.endTime},'%y%m%d')
-                </if>
-            </where>
-            group by po.supplier_no
-            order by po.create_time desc
-        ) c
+        ifnull((SELECT  SUM(i.total_amount)  FROM invoice i  WHERE po.purchase_order_no = i.order_no),0) AS invoicedAmount
+        FROM
+        purchase_order po
+       <where>
+            <if test="query.supplierName != null and query.supplierName != ''">
+                AND po.supplier_name like concat('%',#{query.supplierName},'%')
+            </if>
+            <if test="query.startTime != null and query.startTime != ''"><!-- 开始时间检索 -->
+                AND date_format(po.create_time,'%y%m%d') &gt;= date_format(#{query.startTime},'%y%m%d')
+            </if>
+            <if test="query.endTime != null and query.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(po.create_time,'%y%m%d') &lt;= date_format(#{query.endTime},'%y%m%d')
+            </if>
+        </where>
+        group by po.supplier_no
+        order by po.create_time desc
     </select>
 
     <select id="selectSaleContractSummary" resultType="com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRSDTO">
-        select
-        c.customerName,
-        c.customerId,
-        c.contractAmount,
-        c.collectedAmount,
-        c.deliveryAmount,
-        round(c.deliveryAmount - c.collectedAmount,2) deliveryNeedCollectAmount,
-        round(c.invoicedAmount - c.collectedAmount,2) invoiceNeedCollectAmount,
-        round(c.deliveryAmount - c.invoicedAmount,2) needInvoiceAmount,
-        c.invoicedAmount
-        from (
         select
         q.demand_name as customerName,
         '' as customerId,
@@ -795,8 +774,8 @@
         -- 已收款
         ifnull(sum(q.received_account),0) collectedAmount,
         -- 已开发票
-        ifnull(sum(i.total_amount),0) invoicedAmount
-        from order_product q  left join invoice i on  q.order_no = i.order_no
+        ifnull((SELECT  SUM(i.total_amount)  FROM invoice i  WHERE q.order_no = i.order_no),0) AS invoicedAmount
+        from order_product q
         <where>
             <if test="query.customerName != null and query.customerName != ''">
                 AND q.demand_name like concat('%',#{query.customerName},'%')
@@ -810,7 +789,6 @@
         </where>
         group by q.demand_name
         order by q.create_time desc
-        ) c
     </select>
 
 </mapper>
