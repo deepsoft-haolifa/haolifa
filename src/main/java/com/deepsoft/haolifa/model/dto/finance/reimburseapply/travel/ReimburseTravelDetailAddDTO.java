@@ -26,7 +26,7 @@ public class ReimburseTravelDetailAddDTO {
     @ApiModelProperty(value = "交通金额")
     private BigDecimal vehicleAmount;
     @ApiModelProperty(value = "出差天数")
-    private Integer travelDays;
+    private Double travelDays;
     @ApiModelProperty(value = "出差补贴金额")
     private BigDecimal travelSubsidyAmount;
     @ApiModelProperty(value = "项目")

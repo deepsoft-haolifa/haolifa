@@ -269,6 +269,9 @@ public class BizLoanApply {
     }
 
     public BigDecimal getPaymentAmount() {
+        if (paymentAmount == null){
+            return BigDecimal.ZERO;
+        }
         return paymentAmount;
     }
 

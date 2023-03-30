@@ -259,10 +259,10 @@ public class AssetsServiceImpl implements AssetsService {
         criteria.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
 
         if (StringUtils.isNotEmpty(model.getName())) {
-            criteria.andNameEqualTo("%" + model.getName() + "%");
+            criteria.andNameLike("%" + model.getName() + "%");
         }
         if (StringUtils.isNotEmpty(model.getBh())) {
-            criteria.andBhEqualTo("%" + model.getBh() + "%");
+            criteria.andBhLike("%" + model.getBh() + "%");
         }
         if (StringUtils.isNotEmpty(model.getType())) {
             criteria.andTypeEqualTo(model.getType());
@@ -271,7 +271,7 @@ public class AssetsServiceImpl implements AssetsService {
             criteria.andDeptIdEqualTo(model.getDeptId());
         }
         if (StringUtils.isNotEmpty(model.getUserName())) {
-            criteria.andUserNameEqualTo("%" + model.getUserName() + "%");
+            criteria.andUserNameLike("%" + model.getUserName() + "%");
         }
         if (StringUtils.isNotEmpty(model.getAddType())) {
             criteria.andAddTypeEqualTo(model.getAddType());

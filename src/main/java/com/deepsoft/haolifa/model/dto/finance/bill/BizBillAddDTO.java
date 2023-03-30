@@ -67,4 +67,11 @@ public class BizBillAddDTO {
     @ApiModelProperty(value = "状态（0正常 1停用）")
     private String status;
 
+
+    @ApiModelProperty(value = "项目编号")
+    private String projectCode;
+
+    @ApiModelProperty(value = "科目ID")
+    private Integer subject;
+
 }

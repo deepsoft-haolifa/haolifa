@@ -3,6 +3,7 @@ package com.deepsoft.haolifa.controller.finance;
 
 import cn.hutool.core.convert.Convert;
 import com.deepsoft.haolifa.model.dto.ResultBean;
+import com.deepsoft.haolifa.model.dto.expenses.ExpensesConditionDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.costbudget.subjects.CostBudgetSubjectsTypeRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
@@ -10,6 +11,7 @@ import com.deepsoft.haolifa.service.finance.CostBudgetService;
 import com.deepsoft.haolifa.service.finance.PayPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +46,9 @@ public class PayPlanController {
         return payPlanService.delete(id);
     }
 
-    @ApiOperation("更新节点")
+    @ApiOperation("付款")
     @PostMapping("/updatePayPlan")
-    public ResultBean updatePayPlan(@RequestBody BizPayPlanPayDTO payPlan) {
+    public ResultBean pay(@RequestBody BizPayPlanPayDTO payPlan) {
         return payPlanService.pay(payPlan);
     }
 
@@ -54,6 +56,11 @@ public class PayPlanController {
     @PostMapping("/getPayPlanList")
     public ResultBean<BizPayPlanRSDTO> getPayPlanList(@RequestBody BizPayPlanRQDTO payPlanDTO) {
         return payPlanService.getList(payPlanDTO);
+    }
+    @ApiOperation("查询付款计划费用汇总(2023-03-20修改)")
+    @PostMapping("/list-summary")
+    public ResultBean<BigDecimal> listSummary(@RequestBody BizPayPlanRQDTO payPlanDTO) {
+        return ResultBean.success(payPlanService.listSummary(payPlanDTO));
     }
 
 

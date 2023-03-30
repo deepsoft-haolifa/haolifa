@@ -1796,6 +1796,136 @@ public class BizBillExample {
             return (Criteria) this;
         }
 
+        public Criteria andProjectCodeIsNull() {
+            addCriterion("project_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeIsNotNull() {
+            addCriterion("project_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeEqualTo(String value) {
+            addCriterion("project_code =", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotEqualTo(String value) {
+            addCriterion("project_code <>", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeGreaterThan(String value) {
+            addCriterion("project_code >", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("project_code >=", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeLessThan(String value) {
+            addCriterion("project_code <", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeLessThanOrEqualTo(String value) {
+            addCriterion("project_code <=", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeLike(String value) {
+            addCriterion("project_code like", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotLike(String value) {
+            addCriterion("project_code not like", value, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeIn(List<String> values) {
+            addCriterion("project_code in", values, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotIn(List<String> values) {
+            addCriterion("project_code not in", values, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeBetween(String value1, String value2) {
+            addCriterion("project_code between", value1, value2, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectCodeNotBetween(String value1, String value2) {
+            addCriterion("project_code not between", value1, value2, "projectCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIsNull() {
+            addCriterion("subject is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIsNotNull() {
+            addCriterion("subject is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectEqualTo(Integer value) {
+            addCriterion("subject =", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectNotEqualTo(Integer value) {
+            addCriterion("subject <>", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectGreaterThan(Integer value) {
+            addCriterion("subject >", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectGreaterThanOrEqualTo(Integer value) {
+            addCriterion("subject >=", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectLessThan(Integer value) {
+            addCriterion("subject <", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectLessThanOrEqualTo(Integer value) {
+            addCriterion("subject <=", value, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIn(List<Integer> values) {
+            addCriterion("subject in", values, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectNotIn(List<Integer> values) {
+            addCriterion("subject not in", values, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectBetween(Integer value1, Integer value2) {
+            addCriterion("subject between", value1, value2, "subject");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectNotBetween(Integer value1, Integer value2) {
+            addCriterion("subject not between", value1, value2, "subject");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

@@ -30,6 +30,7 @@ import com.deepsoft.haolifa.model.vo.PurchaseAmountStatisticVo;
 import com.deepsoft.haolifa.service.StatisticsService;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -90,47 +91,13 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public InvoiceStatisticVo totalInvoice(Byte type, InvoiceListDTO dto) {
         InvoiceStatisticVo invoiceStatisticVo = new InvoiceStatisticVo();
-//        InvoiceExample invoiceExample = new InvoiceExample();
-//        InvoiceExample.Criteria criteria = invoiceExample.createCriteria();
-//        criteria.andIsDeleteEqualTo(CommonEnum.Consts.NO.code);
-//        if (dto.getType() != null && dto.getType() > 0) {
-//            criteria.andTypeEqualTo(dto.getType().byteValue());
-//        }
-//
-//        if (StringUtils.isNotEmpty(dto.getOrderNo())) {
-//            criteria.andOrderNoLike("%" + dto.getOrderNo() + "%");
-//        }
-//        if (dto.getStatus() != null && dto.getStatus() > -1) {
-//            criteria.andStatusEqualTo(dto.getStatus());
-//        }
-//        if (CollectionUtil.isNotEmpty(dto.getStatusList())) {
-//            criteria.andStatusIn(dto.getStatusList());
-//        }
-//        if (StringUtils.isNotEmpty(dto.getConstractParty())) {
-//            criteria.andConstractPartyLike("%" + dto.getConstractParty() + "%");
-//        }
-//        // 开票日期
-//        if (ObjectUtil.isNotNull(dto.getStartInvoiceDate())) {
-//            criteria.andInvoiceDateGreaterThanOrEqualTo(dto.getStartInvoiceDate());
-//        }
-//        if (ObjectUtil.isNotNull(dto.getEndInvoiceDate())) {
-//            criteria.andInvoiceDateLessThanOrEqualTo(dto.getEndInvoiceDate());
-//        }
-//        List<Invoice> invoices = statisticsExtendMapper.sumInvoice(invoiceExample);
-//        BigDecimal totalAmount = BigDecimal.ZERO, notInvoicedAmount = BigDecimal.ZERO, invoicedAmount = BigDecimal.ZERO;
-//        for (Invoice invoice : invoices) {
-//            BigDecimal itotalAmount = invoice.getTotalAmount();
-//            if (itotalAmount != null) {
-//                totalAmount = totalAmount.add(itotalAmount);
-//                if (invoice.getStatus().equals((byte) 1)) {
-//                    notInvoicedAmount = notInvoicedAmount.add(itotalAmount);
-//                } else if (invoice.getStatus().equals((byte) 2)) {
-//                    invoicedAmount = invoicedAmount.add(itotalAmount);
-//                }
-//            }
-//        }
+        Map<String, Object> objectMap = new HashMap<>();
+        if (type == 1){
+            objectMap =  BeanUtil.beanToMap(dto);
+        }else {
+            objectMap.put("status",dto.getStatus());
+        }
 
-        Map<String, Object> objectMap = BeanUtil.beanToMap(dto);
         BigDecimal sumInvoiceTotal = statisticsExtendMapper.sumInvoiceTotal(objectMap);
         invoiceStatisticVo.setTotalAmount(sumInvoiceTotal);
         return invoiceStatisticVo;

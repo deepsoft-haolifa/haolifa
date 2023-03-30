@@ -14,6 +14,7 @@ import com.deepsoft.haolifa.service.impl.finance.helper.RemiburseCLPrint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.math.BigDecimal;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -44,6 +45,13 @@ public class ReimburseApplyController {
     @Transactional(rollbackFor = Exception.class)
     public ResultBean save(@RequestBody ReimburseApplyAddDTO model) {
         return reimburseApplyService.save(model);
+
+    }
+    @ApiOperation("计算金额-添加之前调用")
+    @PostMapping("/calculateAmount")
+    @Transactional(rollbackFor = Exception.class)
+    public ResultBean<BigDecimal> calculateAmount(@RequestBody ReimburseApplyAmountDTO model) {
+        return reimburseApplyService.calculateAmount(model);
 
     }
 

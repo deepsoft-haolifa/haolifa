@@ -746,52 +746,52 @@ public class BizReimburseTravelDetailExample {
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysEqualTo(Integer value) {
+        public Criteria andTravelDaysEqualTo(Double value) {
             addCriterion("travel_days =", value, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysNotEqualTo(Integer value) {
+        public Criteria andTravelDaysNotEqualTo(Double value) {
             addCriterion("travel_days <>", value, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysGreaterThan(Integer value) {
+        public Criteria andTravelDaysGreaterThan(Double value) {
             addCriterion("travel_days >", value, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysGreaterThanOrEqualTo(Integer value) {
+        public Criteria andTravelDaysGreaterThanOrEqualTo(Double value) {
             addCriterion("travel_days >=", value, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysLessThan(Integer value) {
+        public Criteria andTravelDaysLessThan(Double value) {
             addCriterion("travel_days <", value, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysLessThanOrEqualTo(Integer value) {
+        public Criteria andTravelDaysLessThanOrEqualTo(Double value) {
             addCriterion("travel_days <=", value, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysIn(List<Integer> values) {
+        public Criteria andTravelDaysIn(List<Double> values) {
             addCriterion("travel_days in", values, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysNotIn(List<Integer> values) {
+        public Criteria andTravelDaysNotIn(List<Double> values) {
             addCriterion("travel_days not in", values, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysBetween(Integer value1, Integer value2) {
+        public Criteria andTravelDaysBetween(Double value1, Double value2) {
             addCriterion("travel_days between", value1, value2, "travelDays");
             return (Criteria) this;
         }
 
-        public Criteria andTravelDaysNotBetween(Integer value1, Integer value2) {
+        public Criteria andTravelDaysNotBetween(Double value1, Double value2) {
             addCriterion("travel_days not between", value1, value2, "travelDays");
             return (Criteria) this;
         }

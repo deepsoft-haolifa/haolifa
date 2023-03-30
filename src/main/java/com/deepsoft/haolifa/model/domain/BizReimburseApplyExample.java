@@ -1496,6 +1496,76 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
+        public Criteria andLoanIdStrIsNull() {
+            addCriterion("loan_id_str is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrIsNotNull() {
+            addCriterion("loan_id_str is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrEqualTo(String value) {
+            addCriterion("loan_id_str =", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrNotEqualTo(String value) {
+            addCriterion("loan_id_str <>", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrGreaterThan(String value) {
+            addCriterion("loan_id_str >", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrGreaterThanOrEqualTo(String value) {
+            addCriterion("loan_id_str >=", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrLessThan(String value) {
+            addCriterion("loan_id_str <", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrLessThanOrEqualTo(String value) {
+            addCriterion("loan_id_str <=", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrLike(String value) {
+            addCriterion("loan_id_str like", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrNotLike(String value) {
+            addCriterion("loan_id_str not like", value, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrIn(List<String> values) {
+            addCriterion("loan_id_str in", values, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrNotIn(List<String> values) {
+            addCriterion("loan_id_str not in", values, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrBetween(String value1, String value2) {
+            addCriterion("loan_id_str between", value1, value2, "loanIdStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoanIdStrNotBetween(String value1, String value2) {
+            addCriterion("loan_id_str not between", value1, value2, "loanIdStr");
+            return (Criteria) this;
+        }
+
         public Criteria andApplyStatusIsNull() {
             addCriterion("apply_status is null");
             return (Criteria) this;
@@ -1646,62 +1716,52 @@ public class BizReimburseApplyExample {
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlEqualTo(String value) {
+        public Criteria andFileUrlEqualTo(Object value) {
             addCriterion("file_url =", value, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlNotEqualTo(String value) {
+        public Criteria andFileUrlNotEqualTo(Object value) {
             addCriterion("file_url <>", value, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlGreaterThan(String value) {
+        public Criteria andFileUrlGreaterThan(Object value) {
             addCriterion("file_url >", value, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlGreaterThanOrEqualTo(String value) {
+        public Criteria andFileUrlGreaterThanOrEqualTo(Object value) {
             addCriterion("file_url >=", value, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlLessThan(String value) {
+        public Criteria andFileUrlLessThan(Object value) {
             addCriterion("file_url <", value, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlLessThanOrEqualTo(String value) {
+        public Criteria andFileUrlLessThanOrEqualTo(Object value) {
             addCriterion("file_url <=", value, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlLike(String value) {
-            addCriterion("file_url like", value, "fileUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileUrlNotLike(String value) {
-            addCriterion("file_url not like", value, "fileUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andFileUrlIn(List<String> values) {
+        public Criteria andFileUrlIn(List<Object> values) {
             addCriterion("file_url in", values, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlNotIn(List<String> values) {
+        public Criteria andFileUrlNotIn(List<Object> values) {
             addCriterion("file_url not in", values, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlBetween(String value1, String value2) {
+        public Criteria andFileUrlBetween(Object value1, Object value2) {
             addCriterion("file_url between", value1, value2, "fileUrl");
             return (Criteria) this;
         }
 
-        public Criteria andFileUrlNotBetween(String value1, String value2) {
+        public Criteria andFileUrlNotBetween(Object value1, Object value2) {
             addCriterion("file_url not between", value1, value2, "fileUrl");
             return (Criteria) this;
         }

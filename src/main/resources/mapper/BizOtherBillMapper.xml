@@ -23,6 +23,8 @@
       <arg column="type" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="dept_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="project_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="subject" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR" />
       <arg column="contract_status" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="contract_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
@@ -93,8 +95,9 @@
   <sql id="Base_Column_List">
     id, company, account, serial_no, operate_date, certificate_number, pay_way, pay_account,
     pay_company, pay_company_id, collect_company, pre_month_money, collection_money,
-    collection_type, payment, payment_type, balance, type, dept_id, remark, del_flag,
-    contract_status, contract_user, create_user, create_time, update_user, update_time
+    collection_type, payment, payment_type, balance, type, dept_id, remark, project_code,
+    subject, del_flag, contract_status, contract_user, create_user, create_time, update_user,
+    update_time
   </sql>
   <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizOtherBillExample" resultMap="BaseResultMap">
     select
@@ -136,18 +139,20 @@
       collect_company, pre_month_money, collection_money,
       collection_type, payment, payment_type,
       balance, type, dept_id,
-      remark, del_flag, contract_status,
-      contract_user, create_user, create_time,
-      update_user, update_time)
+      remark, project_code, subject,
+      del_flag, contract_status, contract_user,
+      create_user, create_time, update_user,
+      update_time)
     values (#{company,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{serialNo,jdbcType=VARCHAR},
       #{operateDate,jdbcType=TIMESTAMP}, #{certificateNumber,jdbcType=VARCHAR}, #{payWay,jdbcType=VARCHAR},
       #{payAccount,jdbcType=VARCHAR}, #{payCompany,jdbcType=VARCHAR}, #{payCompanyId,jdbcType=VARCHAR},
       #{collectCompany,jdbcType=VARCHAR}, #{preMonthMoney,jdbcType=DECIMAL}, #{collectionMoney,jdbcType=DECIMAL},
       #{collectionType,jdbcType=VARCHAR}, #{payment,jdbcType=DECIMAL}, #{paymentType,jdbcType=VARCHAR},
       #{balance,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER},
-      #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, #{contractStatus,jdbcType=VARCHAR},
-      #{contractUser,jdbcType=INTEGER}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+      #{remark,jdbcType=VARCHAR}, #{projectCode,jdbcType=VARCHAR}, #{subject,jdbcType=INTEGER},
+      #{delFlag,jdbcType=CHAR}, #{contractStatus,jdbcType=VARCHAR}, #{contractUser,jdbcType=INTEGER},
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizOtherBill">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -211,6 +216,12 @@
       </if>
       <if test="remark != null">
         remark,
+      </if>
+      <if test="projectCode != null">
+        project_code,
+      </if>
+      <if test="subject != null">
+        subject,
       </if>
       <if test="delFlag != null">
         del_flag,
@@ -291,6 +302,12 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCode != null">
+        #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=INTEGER},
       </if>
       <if test="delFlag != null">
         #{delFlag,jdbcType=CHAR},
@@ -384,6 +401,12 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
+      <if test="record.projectCode != null">
+        project_code = #{record.projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subject != null">
+        subject = #{record.subject,jdbcType=INTEGER},
+      </if>
       <if test="record.delFlag != null">
         del_flag = #{record.delFlag,jdbcType=CHAR},
       </if>
@@ -432,6 +455,8 @@
       type = #{record.type,jdbcType=VARCHAR},
       dept_id = #{record.deptId,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
+      project_code = #{record.projectCode,jdbcType=VARCHAR},
+      subject = #{record.subject,jdbcType=INTEGER},
       del_flag = #{record.delFlag,jdbcType=CHAR},
       contract_status = #{record.contractStatus,jdbcType=VARCHAR},
       contract_user = #{record.contractUser,jdbcType=INTEGER},
@@ -503,6 +528,12 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="projectCode != null">
+        project_code = #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=INTEGER},
+      </if>
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=CHAR},
       </if>
@@ -548,6 +579,8 @@
       type = #{type,jdbcType=VARCHAR},
       dept_id = #{deptId,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
+      project_code = #{projectCode,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=INTEGER},
       del_flag = #{delFlag,jdbcType=CHAR},
       contract_status = #{contractStatus,jdbcType=VARCHAR},
       contract_user = #{contractUser,jdbcType=INTEGER},
@@ -577,7 +610,7 @@
         select * from biz_other_bill
         <where>
             and  account in
-            <foreach item="account" collection="list" open="(" separator="," close=")">
+            <foreach close=")" collection="list" item="account" open="(" separator=",">
                 #{account}
             </foreach>
             and del_flag = 0

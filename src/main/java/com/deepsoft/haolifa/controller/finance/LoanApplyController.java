@@ -15,6 +15,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.UserPipLineDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.*;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyDetailDTO;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.LoanApplyService;
@@ -25,6 +26,7 @@ import com.deepsoft.haolifa.service.impl.finance.helper.RemiburseCLPrint;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.math.BigDecimal;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +94,13 @@ public class LoanApplyController {
     public ResultBean<PageDTO<LoanApplyRSDTO>> getBankBillList(@RequestBody LoanApplyRQDTO model) {
         return loanApplyService.getList(model);
     }
+
+    @ApiOperation("查询借款费用汇总(2023-03-20修改)")
+    @PostMapping("/list-summary")
+    public ResultBean<LoanApplySumRSDTO> listSummary(@RequestBody LoanApplyRQDTO model) {
+        return ResultBean.success(loanApplyService.listSummary(model));
+    }
+
 
 
     @ApiOperation("获取我的借款申請列表-不分页")

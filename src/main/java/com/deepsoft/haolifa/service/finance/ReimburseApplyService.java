@@ -8,6 +8,7 @@ import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.reimburseapply.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ReimburseApplyService {
@@ -19,6 +20,7 @@ public interface ReimburseApplyService {
      */
     ResultBean save(ReimburseApplyAddDTO model);
 
+    ResultBean<BigDecimal> calculateAmount(ReimburseApplyAmountDTO model);
 
     /**
      * 删除

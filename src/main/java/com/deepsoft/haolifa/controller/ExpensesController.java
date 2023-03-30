@@ -50,13 +50,13 @@ public class ExpensesController {
     }
 
 
-    @ApiOperation("查询费用记录列表(2021-12-hd)")
+    @ApiOperation("查询费用记录列表(2023-03-20修改)")
     @PostMapping("list")
     public ResultBean<PageDTO<Expenses>> getList( @RequestBody ExpensesConditionDTO expensesDTO) {
         return expensesService.getList(expensesDTO);
     }
 
-    @ApiOperation("查询费用汇总(2021-12-hd)")
+    @ApiOperation("查询费用汇总(2023-03-20修改)")
     @PostMapping("list-summary")
     public ResultBean<BigDecimal> listSummary(@RequestBody ExpensesConditionDTO expensesDTO) {
         return ResultBean.success(expensesService.listSummary(expensesDTO));

@@ -297,7 +297,9 @@ public class LoanApplyServiceImpl implements LoanApplyService {
 
         // 1 待审批 2 审批中 3 付款中 4 审批不通过
         if (StringUtils.isNotEmpty(model.getApplyStatus())) {
-            criteria.andApplyStatusIn(Arrays.asList(model.getApplyStatus().split(",").clone()));
+            List<String> statusList = Arrays.asList(model.getApplyStatus().split(",").clone());
+            model.setApplyStatusList(statusList);
+            criteria.andApplyStatusIn(statusList);
         }
 
         // 借款审批列表 todo 是否只展示自己申请的记录
@@ -329,7 +331,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         //借款人名称
         if (StringUtils.isNotEmpty(model.getLoanUserName())) {
             SysUserExample sysUserExample = new SysUserExample();
-            sysUserExample.createCriteria().andUsernameLike("%" + model.getLoanUserName() + "%");
+            sysUserExample.createCriteria().andRealNameLike("%" + model.getLoanUserName() + "%");
             List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
             List<Integer> idList = sysUsers.stream()
                 .map(SysUser::getId)
@@ -342,6 +344,9 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         //付款单位
         if (StringUtils.isNotEmpty(model.getPayCompany())) {
             criteria.andPayCompanyLike("%" + model.getPayCompany() + "%");
+        }
+        if (StringUtils.isNotEmpty(model.getAccountName())) {
+            criteria.andAccountNameLike("%" + model.getAccountName() + "%");
         }
         //付款状态（1未付款 2付款中 3付款完成
         if (StringUtils.isNotEmpty(model.getPayStatus())) {
@@ -378,9 +383,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         Map<Integer, SysUser> finalSysUserMap = sysUserMap;
 
         List<String> projectCodeList = pageData.getResult().stream()
-            .map(l -> {
-                return l.getProjectCode();
-            })
+            .map(BizLoanApply::getProjectCode)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
         Map<String, String> projectCodeMap = new HashMap<>();
@@ -410,6 +413,51 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         return ResultBean.success(pageDTO);
     }
 
+
+    @Override
+    public LoanApplySumRSDTO listSummary(LoanApplyRQDTO model) {
+
+        // 查询当前用户的角色
+        CustomUser customUser = sysUserService.selectLoginUser();
+        List<CustomGrantedAuthority> customGrantedAuthorityList = customUser.getAuthorities().stream()
+            .map(a -> (CustomGrantedAuthority) a)
+            .collect(Collectors.toList());
+
+        //当前角色是否为出纳
+        boolean lookAll = customGrantedAuthorityList.stream()
+            .anyMatch(grantedAuthority -> {
+                return StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ADMIN.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CWGLZXFZR.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode());
+            });
+        model.setLookAll(lookAll);
+
+        //借款部门名称
+        if (StringUtils.isNotEmpty(model.getDeptName())) {
+            SysDepartmentExample departmentExample = new SysDepartmentExample();
+            departmentExample.createCriteria().andDeptNameLike("%" + model.getDeptName() + "%");
+            List<SysDepartment> sysDepartments = departmentMapper.selectByExample(departmentExample);
+            if (CollectionUtil.isNotEmpty(sysDepartments)) {
+                List<Integer> integerList = sysDepartments.stream().map(SysDepartment::getId).collect(Collectors.toList());
+                model.setDeptIdList(integerList);
+            }
+        }
+        //借款人名称
+        if (StringUtils.isNotEmpty(model.getLoanUserName())) {
+            SysUserExample sysUserExample = new SysUserExample();
+            sysUserExample.createCriteria().andRealNameLike("%" + model.getLoanUserName() + "%");
+            List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+            List<Integer> idList = sysUsers.stream()
+                .map(SysUser::getId)
+                .collect(Collectors.toList());
+            model.setUserIdList(idList);
+        }
+
+
+        return bizLoanApplyMapper.listSummary(model);
+    }
 
     @Override
     public ResultBean<List<LoanApplyRSDTO>> getLoanApplyList(LoanApplyRQDTO model) {

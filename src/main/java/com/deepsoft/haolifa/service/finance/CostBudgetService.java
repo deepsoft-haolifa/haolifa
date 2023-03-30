@@ -43,7 +43,10 @@ public interface CostBudgetService {
 
     ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurUserSubjectsTypeList();
 
+    ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurDeptIdSubjectsTypeList(CostBudgetSubjectsRQBillDTO costBudgetSubjectsRQBillDTO);
+
     ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList( String subjectType);
+
 
 
     /***
@@ -63,4 +66,7 @@ public interface CostBudgetService {
     BizSubjectsBalance getSubjectsBudgetByUserId(Integer userId,Integer subjectId, String subjectName);
 
     ResultBean<CostBudgetSubjectsRSDTO> getCurUserClfSubjectsBudget();
+
+
+
 }

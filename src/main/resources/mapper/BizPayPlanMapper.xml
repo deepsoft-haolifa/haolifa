@@ -560,6 +560,8 @@
         <result column="apply_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" property="applyAmount"/>
         <result column="entry_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" property="entryPrice"/>
     </resultMap>
+
+
     <select id="selectListGroupBy" parameterType="com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanSummaryRQDTO"
             resultMap="selectListGroupByResultMap">
         select
@@ -584,4 +586,41 @@
         GROUP BY po.supplier_name,po.demander
         order by sum(pp.apply_amount) desc
     </select>
+
+
+    <select id="listSummary" parameterType="com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanRQDTO"
+        resultType="java.math.BigDecimal">
+        select ifnull(sum(po.apply_amount),0) totalAmount from biz_pay_plan po
+        <where>
+            <if test="query.applyNo != null and query.applyNo != '' ">
+               and  po.apply_no =  #{query.applyNo}
+            </if>
+            <if test="query.applyDateStart !=null and query.applyDateStart !=''">
+                and po.apply_date_start>=#{query.applyDateStart}
+            </if>
+            <if test="query.applyDateEnd !=null and query.applyDateEnd !=''">
+                and po.apply_date_end&lt;=#{query.applyDateEnd}
+            </if>
+            <if test="query.contractNo != null and query.contractNo != '' ">
+               and  po.contract_no =  #{query.contractNo}
+            </if>
+            <if test="query.applyCollectionCompany != null and query.applyCollectionCompany != '' ">
+                po.apply_collection_company like concat('%',#{query.applyCollectionCompany},'%')
+            </if>
+            <if test="query.paymentType != null and query.paymentType != '' ">
+                and  po.payment_type =  #{query.paymentType}
+            </if>
+            <if test="query.status != null and query.status != '' ">
+                and  po.status =  #{query.status}
+            </if>
+
+            <if test="query.dataStatus != null and query.dataStatus != '' ">
+                and  po.data_status =  #{query.dataStatus}
+            </if>
+            and po.apply_status in ("3", "5")
+            and po.del_flag = 0
+        </where>
+    </select>
+
+
 </mapper>

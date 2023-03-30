@@ -13,6 +13,7 @@ import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
+import com.deepsoft.haolifa.model.dto.finance.payplan.BizPayPlanPayDTO.PayWayDTO;
 import com.deepsoft.haolifa.model.dto.finance.payplanlog.BizPayPlanPayLogDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
@@ -265,7 +266,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         // 费用管理
         ExpensesDTO expensesDTO = new ExpensesDTO();
         expensesDTO.setExpensesClassify(FinanceConstant.cai_liao_f_cn);
-        expensesDTO.setSecondClassify("其他");
+        expensesDTO.setSecondClassify("原材料");
         expensesDTO.setVoucherNo(bizPayPlan.getApplyNo());
         expensesDTO.setTotalAmount(bizPayPlan.getApplyAmount());
         SysUser sysUser = sysUserService.getSysUser(bizPayPlan.getCreateUser());
@@ -286,7 +287,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         // 付款
         otherBillAddDTO.setType("2");
         otherBillAddDTO.setCompany(bizPayPlan.getPayCompany());
-        otherBillAddDTO.setAccount(bizPayPlan.getPayAccount());
+        otherBillAddDTO.setAccount(payWayDTO.getPayAccount());
         otherBillAddDTO.setCertificateNumber(bizPayPlan.getApplyNo());
         otherBillAddDTO.setOperateDate(bizPayPlan.getPayDate());
         otherBillAddDTO.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
@@ -295,7 +296,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         otherBillAddDTO.setDeptId(bizPayPlan.getDeptId());
         otherBillAddDTO.setRemark("付款计划："+bizPayPlan.getRemark()+"  付款："+payWayDTO.getAmount());
         otherBillAddDTO.setPayCompany(bizPayPlan.getPayCompany());
-        otherBillAddDTO.setPayAccount(bizPayPlan.getPayAccount());
+        otherBillAddDTO.setPayAccount(payWayDTO.getPayAccount());
         otherBillAddDTO.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
         return otherBillAddDTO;
     }
@@ -305,7 +306,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         // 付款
         bizBankBill.setType("2");
         bizBankBill.setCompany(bizPayPlan.getPayCompany());
-        bizBankBill.setAccount(bizPayPlan.getPayAccount());
+        bizBankBill.setAccount(payWayDTO.getPayAccount());
         bizBankBill.setCertificateNumber(bizPayPlan.getApplyNo());
         bizBankBill.setOperateDate(bizPayPlan.getPayDate());
         bizBankBill.setPayWay(PayWayEnum.valueOfCode(payWayDTO.getCode()).getDesc());
@@ -314,7 +315,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         bizBankBill.setDeptId(bizPayPlan.getDeptId());
         bizBankBill.setRemark("付款计划："+bizPayPlan.getRemark()+"  付款："+payWayDTO.getAmount());
         bizBankBill.setPayCompany(bizPayPlan.getPayCompany());
-        bizBankBill.setPayAccount(bizPayPlan.getPayAccount());
+        bizBankBill.setPayAccount(payWayDTO.getPayAccount());
         bizBankBill.setCollectCompany(bizPayPlan.getApplyCollectionCompany());
         return bizBankBill;
     }
@@ -339,6 +340,11 @@ public class PayPlanServiceImpl implements PayPlanService {
         BizPayPlan record = new BizPayPlan();
         BeanUtils.copyProperties(planPayDTO, record);
 
+        String payAccount = planPayDTO.getPayWayList().stream()
+            .map(PayWayDTO::getPayAccount)
+            .distinct()
+            .collect(Collectors.joining(","));
+        record.setPayAccount(payAccount);
         record.setStatus("2");
         //  添加付款方式日志表
         record.setPayWay(JSON.toJSONString(planPayDTO.getPayWayList()));
@@ -363,6 +369,8 @@ public class PayPlanServiceImpl implements PayPlanService {
         payPlanPayLog.setContractNo(purchaseOrder.getPurchaseOrderNo());
         payPlanPayLog.setCreateTime(new Date());
         payPlanPayLog.setCreateUser(customUser.getId());
+        // 支付账户
+        payPlanPayLog.setPayAccount(payWayDTO.getPayAccount());
         return payPlanPayLog;
     }
 
@@ -453,6 +461,11 @@ public class PayPlanServiceImpl implements PayPlanService {
         return ResultBean.success(pageDTO);
     }
 
+    @Override
+    public BigDecimal listSummary(BizPayPlanRQDTO payPlanDTO) {
+        return  bizPayPlanMapper.listSummary(payPlanDTO);
+    }
+
     private List<String> convertBoolingTypeList(BizPayPlanRSDTO payApply) {
         List<String> asList = new ArrayList<>();
         if (StringUtils.isNotEmpty(payApply.getBookingType())) {
@@ -472,6 +485,7 @@ public class PayPlanServiceImpl implements PayPlanService {
                 .map(bizPayPlanPayLog -> {
                     BizPayPlanPayLogDTO payPlanPayLogDTO = new BizPayPlanPayLogDTO();
                     BeanUtils.copyProperties(bizPayPlanPayLog, payPlanPayLogDTO);
+                    payPlanPayLogDTO.setPayAccount(bizPayPlanPayLog.getPayAccount());
                     payPlanPayLogDTO.setPayWay(PayWayEnum.valueOfCode(payPlanPayLogDTO.getPayWay()).getDesc());
                     payPlanPayLogDTO.setBookingType(BookingTypeEnum.valueOfCode(payPlanPayLogDTO.getBookingType()).getDesc());
                     return payPlanPayLogDTO;
@@ -510,18 +524,12 @@ public class PayPlanServiceImpl implements PayPlanService {
 
         //收款单位：like
         if (StringUtils.isNotEmpty(model.getApplyCollectionCompany())) {
-            criteria.andApplyCollectionCompanyLike(model.getApplyCollectionCompany());
+            criteria.andApplyCollectionCompanyLike("%" + model.getApplyCollectionCompany()+"%" );
         }
         //付款单位：like
         if (StringUtils.isNotEmpty(model.getPaymentType())) {
             criteria.andPaymentTypeEqualTo(model.getPaymentType());
         }
-
-        // 付款类型 ==
-        if (StringUtils.isNotEmpty(model.getPaymentType())) {
-            criteria.andPaymentTypeEqualTo(model.getPaymentType());
-        }
-
 
         //付款状态
         if (StringUtils.isNotEmpty(model.getStatus())) {
@@ -555,6 +563,7 @@ public class PayPlanServiceImpl implements PayPlanService {
         pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
     }
+
 
     @Override
     public ResultBean<List<BookingTypeRSDTO>> getAllPayWayList() {

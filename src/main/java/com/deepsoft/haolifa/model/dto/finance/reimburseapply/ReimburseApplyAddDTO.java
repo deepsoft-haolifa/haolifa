@@ -44,6 +44,9 @@ public class ReimburseApplyAddDTO {
     @ApiModelProperty(value = "2借款冲抵 必传 借款ID")
     private Integer loanId;
 
+    @ApiModelProperty(value = "2借款冲抵 必传 借款loanIdList 2023-03-21新增")
+    private List<Integer> loanIdList;
+
     @ApiModelProperty(value = "2借款冲抵 必传 冲抵金额/不得大于借款金额")
     private BigDecimal offsetAmount;
 

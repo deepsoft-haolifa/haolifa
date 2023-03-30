@@ -5,6 +5,7 @@ import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.payplan.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface PayPlanService {
@@ -59,10 +60,13 @@ public interface PayPlanService {
      */
     ResultBean<PageDTO<BizPayPlanSummaryRSDTO>> getPayPlanSummaryList(BizPayPlanSummaryRQDTO  model);
 
+    BigDecimal listSummary(BizPayPlanRQDTO payPlanDTO);
+
     ResultBean<List<BookingTypeRSDTO>> getAllPayWayList();
 
     /**
      * 付款计划（确认）
      */
     ResultBean updateDateStatus(List<Integer> ids);
+
 }

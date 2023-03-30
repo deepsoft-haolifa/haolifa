@@ -1,52 +1,52 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.deepsoft.haolifa.dao.repository.BizReimburseTravelDetailMapper" >
-  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail" >
-    <constructor >
-      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="reimburse_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="serial_no" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="dep_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="dep_address" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="arr_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="arr_address" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="vehicle" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="vehicle_doc_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="vehicle_amount" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="travel_days" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="travel_subsidy_amount" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="project_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="project_doc_num" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="project_amount" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
-      <arg column="type" jdbcType="CHAR" javaType="java.lang.String" />
-      <arg column="pay_status" jdbcType="CHAR" javaType="java.lang.String" />
-      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="del_flag" jdbcType="CHAR" javaType="java.lang.String" />
-      <arg column="create_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_user" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deepsoft.haolifa.dao.repository.BizReimburseTravelDetailMapper">
+  <resultMap id="BaseResultMap" type="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="reimburse_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="serial_no" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="dep_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="dep_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="arr_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="arr_address" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="vehicle" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="vehicle_doc_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="vehicle_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="travel_days" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="travel_subsidy_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="project_type" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="project_doc_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="project_amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="type" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="pay_status" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="del_flag" javaType="java.lang.String" jdbcType="CHAR" />
+      <arg column="create_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_user" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
     </constructor>
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -57,25 +57,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -86,289 +86,289 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
-    id, reimburse_id, serial_no, dep_time, dep_address, arr_time, arr_address, vehicle, 
-    vehicle_doc_num, vehicle_amount, travel_days, travel_subsidy_amount, project_type, 
-    project_doc_num, project_amount, type, pay_status, remark, del_flag, create_user, 
+  <sql id="Base_Column_List">
+    id, reimburse_id, serial_no, dep_time, dep_address, arr_time, arr_address, vehicle,
+    vehicle_doc_num, vehicle_amount, travel_days, travel_subsidy_amount, project_type,
+    project_doc_num, project_amount, type, pay_status, remark, del_flag, create_user,
     create_time, update_user, update_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetailExample" >
+  <select id="selectByExample" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetailExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from biz_reimburse_travel_detail
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
     <include refid="Base_Column_List" />
     from biz_reimburse_travel_detail
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from biz_reimburse_travel_detail
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetailExample" >
+  <delete id="deleteByExample" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetailExample">
     delete from biz_reimburse_travel_detail
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+  <insert id="insert" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into biz_reimburse_travel_detail (reimburse_id, serial_no, dep_time, 
-      dep_address, arr_time, arr_address, 
-      vehicle, vehicle_doc_num, vehicle_amount, 
-      travel_days, travel_subsidy_amount, project_type, 
-      project_doc_num, project_amount, type, 
-      pay_status, remark, del_flag, 
-      create_user, create_time, update_user, 
+    insert into biz_reimburse_travel_detail (reimburse_id, serial_no, dep_time,
+      dep_address, arr_time, arr_address,
+      vehicle, vehicle_doc_num, vehicle_amount,
+      travel_days, travel_subsidy_amount, project_type,
+      project_doc_num, project_amount, type,
+      pay_status, remark, del_flag,
+      create_user, create_time, update_user,
       update_time)
-    values (#{reimburseId,jdbcType=INTEGER}, #{serialNo,jdbcType=VARCHAR}, #{depTime,jdbcType=TIMESTAMP}, 
-      #{depAddress,jdbcType=VARCHAR}, #{arrTime,jdbcType=TIMESTAMP}, #{arrAddress,jdbcType=VARCHAR}, 
-      #{vehicle,jdbcType=INTEGER}, #{vehicleDocNum,jdbcType=INTEGER}, #{vehicleAmount,jdbcType=DECIMAL}, 
-      #{travelDays,jdbcType=INTEGER}, #{travelSubsidyAmount,jdbcType=DECIMAL}, #{projectType,jdbcType=INTEGER}, 
-      #{projectDocNum,jdbcType=INTEGER}, #{projectAmount,jdbcType=DECIMAL}, #{type,jdbcType=CHAR}, 
-      #{payStatus,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, 
-      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+    values (#{reimburseId,jdbcType=INTEGER}, #{serialNo,jdbcType=VARCHAR}, #{depTime,jdbcType=TIMESTAMP},
+      #{depAddress,jdbcType=VARCHAR}, #{arrTime,jdbcType=TIMESTAMP}, #{arrAddress,jdbcType=VARCHAR},
+      #{vehicle,jdbcType=INTEGER}, #{vehicleDocNum,jdbcType=INTEGER}, #{vehicleAmount,jdbcType=DECIMAL},
+      #{travelDays,jdbcType=DOUBLE}, #{travelSubsidyAmount,jdbcType=DECIMAL}, #{projectType,jdbcType=INTEGER},
+      #{projectDocNum,jdbcType=INTEGER}, #{projectAmount,jdbcType=DECIMAL}, #{type,jdbcType=CHAR},
+      #{payStatus,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR},
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+  <insert id="insertSelective" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into biz_reimburse_travel_detail
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="reimburseId != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="reimburseId != null">
         reimburse_id,
       </if>
-      <if test="serialNo != null" >
+      <if test="serialNo != null">
         serial_no,
       </if>
-      <if test="depTime != null" >
+      <if test="depTime != null">
         dep_time,
       </if>
-      <if test="depAddress != null" >
+      <if test="depAddress != null">
         dep_address,
       </if>
-      <if test="arrTime != null" >
+      <if test="arrTime != null">
         arr_time,
       </if>
-      <if test="arrAddress != null" >
+      <if test="arrAddress != null">
         arr_address,
       </if>
-      <if test="vehicle != null" >
+      <if test="vehicle != null">
         vehicle,
       </if>
-      <if test="vehicleDocNum != null" >
+      <if test="vehicleDocNum != null">
         vehicle_doc_num,
       </if>
-      <if test="vehicleAmount != null" >
+      <if test="vehicleAmount != null">
         vehicle_amount,
       </if>
-      <if test="travelDays != null" >
+      <if test="travelDays != null">
         travel_days,
       </if>
-      <if test="travelSubsidyAmount != null" >
+      <if test="travelSubsidyAmount != null">
         travel_subsidy_amount,
       </if>
-      <if test="projectType != null" >
+      <if test="projectType != null">
         project_type,
       </if>
-      <if test="projectDocNum != null" >
+      <if test="projectDocNum != null">
         project_doc_num,
       </if>
-      <if test="projectAmount != null" >
+      <if test="projectAmount != null">
         project_amount,
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type,
       </if>
-      <if test="payStatus != null" >
+      <if test="payStatus != null">
         pay_status,
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark,
       </if>
-      <if test="delFlag != null" >
+      <if test="delFlag != null">
         del_flag,
       </if>
-      <if test="createUser != null" >
+      <if test="createUser != null">
         create_user,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
-      <if test="updateUser != null" >
+      <if test="updateUser != null">
         update_user,
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         update_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="reimburseId != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="reimburseId != null">
         #{reimburseId,jdbcType=INTEGER},
       </if>
-      <if test="serialNo != null" >
+      <if test="serialNo != null">
         #{serialNo,jdbcType=VARCHAR},
       </if>
-      <if test="depTime != null" >
+      <if test="depTime != null">
         #{depTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="depAddress != null" >
+      <if test="depAddress != null">
         #{depAddress,jdbcType=VARCHAR},
       </if>
-      <if test="arrTime != null" >
+      <if test="arrTime != null">
         #{arrTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="arrAddress != null" >
+      <if test="arrAddress != null">
         #{arrAddress,jdbcType=VARCHAR},
       </if>
-      <if test="vehicle != null" >
+      <if test="vehicle != null">
         #{vehicle,jdbcType=INTEGER},
       </if>
-      <if test="vehicleDocNum != null" >
+      <if test="vehicleDocNum != null">
         #{vehicleDocNum,jdbcType=INTEGER},
       </if>
-      <if test="vehicleAmount != null" >
+      <if test="vehicleAmount != null">
         #{vehicleAmount,jdbcType=DECIMAL},
       </if>
-      <if test="travelDays != null" >
-        #{travelDays,jdbcType=INTEGER},
+      <if test="travelDays != null">
+        #{travelDays,jdbcType=DOUBLE},
       </if>
-      <if test="travelSubsidyAmount != null" >
+      <if test="travelSubsidyAmount != null">
         #{travelSubsidyAmount,jdbcType=DECIMAL},
       </if>
-      <if test="projectType != null" >
+      <if test="projectType != null">
         #{projectType,jdbcType=INTEGER},
       </if>
-      <if test="projectDocNum != null" >
+      <if test="projectDocNum != null">
         #{projectDocNum,jdbcType=INTEGER},
       </if>
-      <if test="projectAmount != null" >
+      <if test="projectAmount != null">
         #{projectAmount,jdbcType=DECIMAL},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         #{type,jdbcType=CHAR},
       </if>
-      <if test="payStatus != null" >
+      <if test="payStatus != null">
         #{payStatus,jdbcType=CHAR},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="delFlag != null" >
+      <if test="delFlag != null">
         #{delFlag,jdbcType=CHAR},
       </if>
-      <if test="createUser != null" >
+      <if test="createUser != null">
         #{createUser,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateUser != null" >
+      <if test="updateUser != null">
         #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetailExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetailExample" resultType="java.lang.Integer">
     select count(*) from biz_reimburse_travel_detail
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update biz_reimburse_travel_detail
-    <set >
-      <if test="record.id != null" >
+    <set>
+      <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.reimburseId != null" >
+      <if test="record.reimburseId != null">
         reimburse_id = #{record.reimburseId,jdbcType=INTEGER},
       </if>
-      <if test="record.serialNo != null" >
+      <if test="record.serialNo != null">
         serial_no = #{record.serialNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.depTime != null" >
+      <if test="record.depTime != null">
         dep_time = #{record.depTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.depAddress != null" >
+      <if test="record.depAddress != null">
         dep_address = #{record.depAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.arrTime != null" >
+      <if test="record.arrTime != null">
         arr_time = #{record.arrTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.arrAddress != null" >
+      <if test="record.arrAddress != null">
         arr_address = #{record.arrAddress,jdbcType=VARCHAR},
       </if>
-      <if test="record.vehicle != null" >
+      <if test="record.vehicle != null">
         vehicle = #{record.vehicle,jdbcType=INTEGER},
       </if>
-      <if test="record.vehicleDocNum != null" >
+      <if test="record.vehicleDocNum != null">
         vehicle_doc_num = #{record.vehicleDocNum,jdbcType=INTEGER},
       </if>
-      <if test="record.vehicleAmount != null" >
+      <if test="record.vehicleAmount != null">
         vehicle_amount = #{record.vehicleAmount,jdbcType=DECIMAL},
       </if>
-      <if test="record.travelDays != null" >
-        travel_days = #{record.travelDays,jdbcType=INTEGER},
+      <if test="record.travelDays != null">
+        travel_days = #{record.travelDays,jdbcType=DOUBLE},
       </if>
-      <if test="record.travelSubsidyAmount != null" >
+      <if test="record.travelSubsidyAmount != null">
         travel_subsidy_amount = #{record.travelSubsidyAmount,jdbcType=DECIMAL},
       </if>
-      <if test="record.projectType != null" >
+      <if test="record.projectType != null">
         project_type = #{record.projectType,jdbcType=INTEGER},
       </if>
-      <if test="record.projectDocNum != null" >
+      <if test="record.projectDocNum != null">
         project_doc_num = #{record.projectDocNum,jdbcType=INTEGER},
       </if>
-      <if test="record.projectAmount != null" >
+      <if test="record.projectAmount != null">
         project_amount = #{record.projectAmount,jdbcType=DECIMAL},
       </if>
-      <if test="record.type != null" >
+      <if test="record.type != null">
         type = #{record.type,jdbcType=CHAR},
       </if>
-      <if test="record.payStatus != null" >
+      <if test="record.payStatus != null">
         pay_status = #{record.payStatus,jdbcType=CHAR},
       </if>
-      <if test="record.remark != null" >
+      <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.delFlag != null" >
+      <if test="record.delFlag != null">
         del_flag = #{record.delFlag,jdbcType=CHAR},
       </if>
-      <if test="record.createUser != null" >
+      <if test="record.createUser != null">
         create_user = #{record.createUser,jdbcType=INTEGER},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateUser != null" >
+      <if test="record.updateUser != null">
         update_user = #{record.updateUser,jdbcType=INTEGER},
       </if>
-      <if test="record.updateTime != null" >
+      <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update biz_reimburse_travel_detail
     set id = #{record.id,jdbcType=INTEGER},
       reimburse_id = #{record.reimburseId,jdbcType=INTEGER},
@@ -380,7 +380,7 @@
       vehicle = #{record.vehicle,jdbcType=INTEGER},
       vehicle_doc_num = #{record.vehicleDocNum,jdbcType=INTEGER},
       vehicle_amount = #{record.vehicleAmount,jdbcType=DECIMAL},
-      travel_days = #{record.travelDays,jdbcType=INTEGER},
+      travel_days = #{record.travelDays,jdbcType=DOUBLE},
       travel_subsidy_amount = #{record.travelSubsidyAmount,jdbcType=DECIMAL},
       project_type = #{record.projectType,jdbcType=INTEGER},
       project_doc_num = #{record.projectDocNum,jdbcType=INTEGER},
@@ -393,83 +393,83 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_user = #{record.updateUser,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail">
     update biz_reimburse_travel_detail
-    <set >
-      <if test="reimburseId != null" >
+    <set>
+      <if test="reimburseId != null">
         reimburse_id = #{reimburseId,jdbcType=INTEGER},
       </if>
-      <if test="serialNo != null" >
+      <if test="serialNo != null">
         serial_no = #{serialNo,jdbcType=VARCHAR},
       </if>
-      <if test="depTime != null" >
+      <if test="depTime != null">
         dep_time = #{depTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="depAddress != null" >
+      <if test="depAddress != null">
         dep_address = #{depAddress,jdbcType=VARCHAR},
       </if>
-      <if test="arrTime != null" >
+      <if test="arrTime != null">
         arr_time = #{arrTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="arrAddress != null" >
+      <if test="arrAddress != null">
         arr_address = #{arrAddress,jdbcType=VARCHAR},
       </if>
-      <if test="vehicle != null" >
+      <if test="vehicle != null">
         vehicle = #{vehicle,jdbcType=INTEGER},
       </if>
-      <if test="vehicleDocNum != null" >
+      <if test="vehicleDocNum != null">
         vehicle_doc_num = #{vehicleDocNum,jdbcType=INTEGER},
       </if>
-      <if test="vehicleAmount != null" >
+      <if test="vehicleAmount != null">
         vehicle_amount = #{vehicleAmount,jdbcType=DECIMAL},
       </if>
-      <if test="travelDays != null" >
-        travel_days = #{travelDays,jdbcType=INTEGER},
+      <if test="travelDays != null">
+        travel_days = #{travelDays,jdbcType=DOUBLE},
       </if>
-      <if test="travelSubsidyAmount != null" >
+      <if test="travelSubsidyAmount != null">
         travel_subsidy_amount = #{travelSubsidyAmount,jdbcType=DECIMAL},
       </if>
-      <if test="projectType != null" >
+      <if test="projectType != null">
         project_type = #{projectType,jdbcType=INTEGER},
       </if>
-      <if test="projectDocNum != null" >
+      <if test="projectDocNum != null">
         project_doc_num = #{projectDocNum,jdbcType=INTEGER},
       </if>
-      <if test="projectAmount != null" >
+      <if test="projectAmount != null">
         project_amount = #{projectAmount,jdbcType=DECIMAL},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type = #{type,jdbcType=CHAR},
       </if>
-      <if test="payStatus != null" >
+      <if test="payStatus != null">
         pay_status = #{payStatus,jdbcType=CHAR},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="delFlag != null" >
+      <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=CHAR},
       </if>
-      <if test="createUser != null" >
+      <if test="createUser != null">
         create_user = #{createUser,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateUser != null" >
+      <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null" >
+      <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail" >
+  <update id="updateByPrimaryKey" parameterType="com.deepsoft.haolifa.model.domain.BizReimburseTravelDetail">
     update biz_reimburse_travel_detail
     set reimburse_id = #{reimburseId,jdbcType=INTEGER},
       serial_no = #{serialNo,jdbcType=VARCHAR},
@@ -480,7 +480,7 @@
       vehicle = #{vehicle,jdbcType=INTEGER},
       vehicle_doc_num = #{vehicleDocNum,jdbcType=INTEGER},
       vehicle_amount = #{vehicleAmount,jdbcType=DECIMAL},
-      travel_days = #{travelDays,jdbcType=INTEGER},
+      travel_days = #{travelDays,jdbcType=DOUBLE},
       travel_subsidy_amount = #{travelSubsidyAmount,jdbcType=DECIMAL},
       project_type = #{projectType,jdbcType=INTEGER},
       project_doc_num = #{projectDocNum,jdbcType=INTEGER},
@@ -495,4 +495,5 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>
