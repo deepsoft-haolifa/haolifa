@@ -73,45 +73,7 @@ public class BillContractServiceImpl implements BillContractService {
 
         PageDTO<ContractBillRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
-
-
-        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
-        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream()
-            .collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
-
-        //  只显示 已付金额 < 合同金额
-        List<ContractBillRSDTO> rsDTOList = pageData.getResult().stream()
-            .map(orderProduct -> {
-                ContractBillRSDTO rsdto = new ContractBillRSDTO();
-                BeanUtils.copyProperties(orderProduct, rsdto);
-
-                String contractStatusCN = "";
-                if (StringUtils.equalsIgnoreCase("0", rsdto.getContractStatus())) {
-                    contractStatusCN = "未完成";
-                } else if (StringUtils.equalsIgnoreCase("1", rsdto.getContractStatus())) {
-                    contractStatusCN = "完成";
-                }
-
-                rsdto.setContractStatusCN(contractStatusCN);
-                SysDepartment sysDepartment = sysDepartmentMap.get(rsdto.getDeptId());
-                rsdto.setDeptName(sysDepartment.getDeptName());
-
-                // 2. 查询该合同已经分解的金额
-                BizBillContractExample bizBillContractExample = buildBizBillContractExample(Long.valueOf(orderProduct.getId()), new Byte(orderProduct.getBillType()),
-                    null, null, new Byte("1"));
-                List<BizBillContract> bizBillContractList = bizBillContractMapper.selectByExample(bizBillContractExample);
-                BigDecimal splitAmount = bizBillContractList.stream()
-                    .map(BizBillContract::getAmount)
-                    .reduce(BigDecimal::add)
-                    .orElse(BigDecimal.ZERO);
-
-                rsdto.setDecomposeAmount(splitAmount);
-                rsdto.setSurplusAmount(rsdto.getCollectionMoney().subtract(splitAmount));
-                return rsdto;
-            })
-            .collect(Collectors.toList());
-
-        pageDTO.setList(rsDTOList);
+        pageDTO.setList(pageData.getResult());
         return ResultBean.success(pageDTO);
     }
 

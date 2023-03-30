@@ -155,8 +155,8 @@ public class ExpensesServiceImpl extends BaseService implements ExpensesService 
     }
 
     @Override
-    public BigDecimal listSummary(ExpensesConditionDTO expensesDTO) {
-        return expensesExtendMapper.listSummary(expensesDTO);
+    public BigDecimal listSummaryForPage(ExpensesConditionDTO expensesDTO) {
+        return expensesExtendMapper.listSummaryForPage(expensesDTO);
     }
 
     @Override

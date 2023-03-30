@@ -18,7 +18,7 @@ public interface ExpensesService {
   ResultBean update(ExpensesDTO model);
 
   ResultBean getList(ExpensesConditionDTO expensesDTO);
-  BigDecimal listSummary(ExpensesConditionDTO expensesDTO);
+  BigDecimal listSummaryForPage(ExpensesConditionDTO expensesDTO);
 
   ResultBean classify(Integer pId);
 

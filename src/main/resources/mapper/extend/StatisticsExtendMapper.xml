@@ -28,7 +28,9 @@
         </if>
     </select>
     <select id="sumPurchaseTotal" resultType="com.deepsoft.haolifa.model.vo.PurchaseAmountStatisticVo">
-        SELECT ROUND(ifnull(sum(total_price),0),2) as totalPrice,ROUND(ifnull(sum(paid_account),0),2) as paidAccount
+        SELECT
+            ROUND(ifnull(sum(total_price),0),2) as totalPrice,
+            ROUND(ifnull(sum(paid_account),0),2) as paidAccount
         FROM `purchase_order` op
         where 1=1
         <if test="orderNo != null and orderNo !=''">
