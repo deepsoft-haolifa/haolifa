@@ -27,8 +27,8 @@ public class BizPayPlanPayDTO {
     @ApiModelProperty(value = "付款单位")
     private String payCompany;
 
-    @ApiModelProperty(value = "付款账号 字典PAY_ACCOUNT")
-    private String payAccount;
+//    @ApiModelProperty(value = "付款账号 字典PAY_ACCOUNT")
+//    private String payAccount;
 
     @ApiModelProperty(value = "付款方式; 字典PAY_WAY")
     private List<PayWayDTO> payWayList;
@@ -47,6 +47,9 @@ public class BizPayPlanPayDTO {
 
     @Data
     public static class PayWayDTO {
+
+        @ApiModelProperty(value = "付款账号 字典PAY_ACCOUNT")
+        private String payAccount;
 
         @ApiModelProperty(value = "记账方式")
         private String bookingType;

@@ -16,9 +16,13 @@ public class BizPayPlanPayLog {
 
     private String payWay;
 
+    private String payAccount;
+
     private Date payDate;
 
     private String bookingType;
+
+    private String applyStatus;
 
     private String remark;
 
@@ -32,24 +36,23 @@ public class BizPayPlanPayLog {
 
     private Date updateTime;
 
-    private String applyStatus;
-
-    public BizPayPlanPayLog(Integer id, Long payPlanId, String contractId, String contractNo, BigDecimal applyAmount, String payWay, Date payDate, String bookingType, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime, String applyStatus) {
+    public BizPayPlanPayLog(Integer id, Long payPlanId, String contractId, String contractNo, BigDecimal applyAmount, String payWay, String payAccount, Date payDate, String bookingType, String applyStatus, String remark, String delFlag, Integer createUser, Date createTime, Integer updateUser, Date updateTime) {
         this.id = id;
         this.payPlanId = payPlanId;
         this.contractId = contractId;
         this.contractNo = contractNo;
         this.applyAmount = applyAmount;
         this.payWay = payWay;
+        this.payAccount = payAccount;
         this.payDate = payDate;
         this.bookingType = bookingType;
+        this.applyStatus = applyStatus;
         this.remark = remark;
         this.delFlag = delFlag;
         this.createUser = createUser;
         this.createTime = createTime;
         this.updateUser = updateUser;
         this.updateTime = updateTime;
-        this.applyStatus = applyStatus;
     }
 
     public BizPayPlanPayLog() {
@@ -104,6 +107,14 @@ public class BizPayPlanPayLog {
         this.payWay = payWay == null ? null : payWay.trim();
     }
 
+    public String getPayAccount() {
+        return payAccount;
+    }
+
+    public void setPayAccount(String payAccount) {
+        this.payAccount = payAccount == null ? null : payAccount.trim();
+    }
+
     public Date getPayDate() {
         return payDate;
     }
@@ -118,6 +129,14 @@ public class BizPayPlanPayLog {
 
     public void setBookingType(String bookingType) {
         this.bookingType = bookingType == null ? null : bookingType.trim();
+    }
+
+    public String getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus == null ? null : applyStatus.trim();
     }
 
     public String getRemark() {
@@ -166,13 +185,5 @@ public class BizPayPlanPayLog {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public String getApplyStatus() {
-        return applyStatus;
-    }
-
-    public void setApplyStatus(String applyStatus) {
-        this.applyStatus = applyStatus == null ? null : applyStatus.trim();
     }
 }

@@ -621,48 +621,126 @@
         <result column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" property="updateTime" />
     </resultMap>
 
-    <select id="getBillContractList" parameterType="com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO" resultMap="getBillContractListResultMap">
+    <sql id="biz_bill_contract_sql_01">
+        ifnull ((select  sum(amount)   from biz_bill_contract bbc where bbc.bill_id = bb.id and bbc.bill_type = '2' and bbc.audit_status = 1),0)
+    </sql>
 
+
+    <sql id="biz_bill_contract_sql_02">
+        ifnull ((select  sum(amount)   from biz_bill_contract bbc where bbc.bill_id = ob.id and bbc.bill_type = '3' and bbc.audit_status = 1),0)
+    </sql>
+
+
+    <sql id="bank_id">
+        select
+        '2' as billType,
+        bb.id as id,
+        bb.company as company,
+        bb.account as account,
+        bb.serial_no as serialNo,
+        bb.operate_date as operateDate,
+        bb.certificate_number as certificateNumber,
+        bb.pay_way as payWay,
+        bb.pay_account as payAccount,
+        bb.pay_company as payCompany,
+        bb.collect_company as collectCompany,
+        bb.collection_Money as collectionMoney,
+        bb.collection_Type as collectionType,
+        bb.payment as payment,
+        bb.pre_month_money as preMonthMoney,
+        bb.balance as balance,
+        bb.payment_type as paymentType,
+        bb.type as type,
+        bb.dept_Id as deptId,
+        ( SELECT dept_name FROM sys_department WHERE id = bb.dept_Id ) deptName,
+        bb.remark as remark,
+        bb.contract_status as contractStatus,
+        (case when bb.contract_status = '0' then '未完成' else '完成' end) as contractStatusCN,
+        <include refid="biz_bill_contract_sql_01"></include> as decomposeAmount ,
+        bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include> as surplusAmount
+        from biz_bank_bill bb
+        where 1=1
+        and bb.del_flag = 0
+        and bb.type = 1
+        and bb.collection_type = 2
+        and (bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include>) > 0
+    </sql>
+
+    <sql id="other_id">
+        select
+        '3' as billType,
+        ob.id as id,
+        ob.company as company,
+        ob.account as account,
+        ob.serial_no as serialNo,
+        ob.operate_date as operateDate,
+        ob.certificate_number as certificateNumber,
+        ob.pay_way as payWay,
+        ob.pay_account as payAccount,
+        ob.pay_company as payCompany,
+        ob.collect_company as collectCompany,
+        ob.collection_Money as collectionMoney,
+        ob.collection_Type as collectionType,
+        ob.payment as payment,
+        ob.pre_month_money as preMonthMoney,
+        ob.balance as balance,
+        ob.payment_type as paymentType,
+        ob.type as type,
+        ob.dept_Id as deptId,
+        ( SELECT dept_name FROM sys_department WHERE id = ob.dept_Id ) deptName,
+        ob.remark as remark,
+        ob.contract_status as contractStatus,
+        (case when ob.contract_status = '0' then '未完成' else '完成' end) as contractStatusCN,
+        <include refid="biz_bill_contract_sql_02"></include> as decomposeAmount ,
+        ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include> as surplusAmount
+        from biz_other_bill ob
+        where 1=1
+        and ob.del_flag = 0
+        and ob.type = 1
+        and ob.collection_type = 2
+        and (ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include>) > 0
+    </sql>
+
+
+    <select id="getBillContractList" parameterType="com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO"
+        resultType="com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO">
         select al.* from (
-        select '2' as bill_type, bb.* from biz_bank_bill bb
+        <include refid="bank_id"></include>
         UNION all
-        select '3' as bill_type,ob.* from biz_other_bill ob
+        <include refid="other_id"></include>
         ) al
         <where>
             <if test="billType != null and billType != 0 ">
-                and al.bill_type = #{billType}
+                and al.billType = #{billType}
             </if>
 
             <if test="operateDateStart != null and operateDateStart != '' ">
-                and al.operate_date &gt;= #{operateDateStart}
+                and al.operateDate &gt;= #{operateDateStart}
             </if>
 
             <if test="operateDateEnd != null and operateDateEnd != '' ">
-                and al.operate_date &lt;=  #{operateDateEnd}
+                and al.operateDate &lt;=  #{operateDateEnd}
             </if>
 
             <if test="certificateNumber != null and certificateNumber != '' ">
-                and al.certificate_number like CONCAT('%',#{certificateNumber},'%')
+                and al.certificateNumber like CONCAT('%',#{certificateNumber},'%')
             </if>
 
             <if test="payAccount != null and payAccount != '' ">
-                and al.pay_account like CONCAT('%',#{payAccount},'%')
+                and al.payAccount like CONCAT('%',#{payAccount},'%')
             </if>
 
             <if test="collectCompany != null and collectCompany != '' ">
-                and al.collect_company like CONCAT('%',#{collectCompany},'%')
+                and al.collectCompany like CONCAT('%',#{collectCompany},'%')
             </if>
             <if test="payCompany != null and payCompany != '' ">
-                and al.pay_company like CONCAT('%',#{payCompany},'%')
+                and al.payCompany like CONCAT('%',#{payCompany},'%')
             </if>
             <if test="paymentType != null and paymentType != '' ">
-                and al.payment_type = #{paymentType}
+                and al.paymentType = #{paymentType}
             </if>
-            and al.del_flag = 0
-            and al.type = 1
-            and al.collection_type = 2
         </where>
-        order by al.operate_date desc
+        order by al.operateDate desc
     </select>
 
     <select id="getBillContractById" resultMap="getBillContractListResultMap">

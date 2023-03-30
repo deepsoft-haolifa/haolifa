@@ -59,7 +59,7 @@ public class ReimburseApplyDetailDTO {
     private Integer loanId;
 
     @ApiModelProperty(value = "借款金额")
-    private BigDecimal loanAmount;
+    private String loanAmount;
 
     @ApiModelProperty(value = "借款冲抵")
     private BigDecimal offsetAmount;
