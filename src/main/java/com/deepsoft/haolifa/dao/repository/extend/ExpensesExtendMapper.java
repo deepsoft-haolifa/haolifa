@@ -26,6 +26,7 @@ public interface ExpensesExtendMapper {
     List<ExpensesReport> getMonthByDepartment(String department);
     List<ExpensesReport> expenseTotalByMonth(ExpensesConditionDTO expensesConditionDTO);
     BigDecimal listSummary(ExpensesConditionDTO expensesDTO);
+    BigDecimal listSummaryForPage(ExpensesConditionDTO expensesDTO);
 
 
     // 银行日记账的余额

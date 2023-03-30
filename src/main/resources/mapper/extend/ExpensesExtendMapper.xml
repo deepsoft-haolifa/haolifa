@@ -94,6 +94,13 @@
     </select>
     <select id="listSummary" resultType="java.math.BigDecimal">
         select ifnull(sum(total_amount),0) totalAmount from expenses
+        <include refid="commonCondition"></include>
+        <include refid="expenseCondition"></include>
+    </select>
+
+
+    <select id="listSummaryForPage" resultType="java.math.BigDecimal">
+        select ifnull(sum(total_amount),0) totalAmount from expenses
         <where>
             is_delete=0
             <if test="classifyName != null and classifyName!=''">
