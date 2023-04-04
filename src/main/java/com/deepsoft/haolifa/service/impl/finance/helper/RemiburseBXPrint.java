@@ -192,8 +192,7 @@ public class RemiburseBXPrint {
         table.addCell(pdfPCell);
 
         // 普通报销 + 借款冲抵100元 摘要
-
-        if (reimburseApplyDetailDTO.getLoanId()!=null){
+        if  (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getReimburseType(), "2")) {
             String s = "普通报销借款冲抵"+reimburseApplyDetailDTO.getOffsetAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()
                 +"元"+reimburseApplyDetailDTO.getRemark();
             table.addCell(ItextpdfUtil.getPdfPCell("" + s, font, 0, 5));
