@@ -645,9 +645,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 RoleEnum.ROLE_CN.getCode()));
 
         List<String> projectCodeList = pageData.getResult().stream()
-            .map(l -> {
-                return l.getProjectCode();
-            })
+            .map(BizReimburseApply::getProjectCode)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
         Map<String, String> projectCodeMap = new HashMap<>();

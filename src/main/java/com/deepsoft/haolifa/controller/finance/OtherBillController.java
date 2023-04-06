@@ -2,9 +2,11 @@ package com.deepsoft.haolifa.controller.finance;
 
 
 import com.deepsoft.haolifa.model.domain.BizOtherBill;
+import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.otherbill.BizOtherBillUpDTO;
 import com.deepsoft.haolifa.service.finance.OtherBillService;
 import io.swagger.annotations.Api;
@@ -43,7 +45,7 @@ public class OtherBillController {
 
     @ApiOperation("获取节点列表")
     @PostMapping("/getOtherBillList")
-    public ResultBean getOtherBillList(@RequestBody BizOtherBillDTO otherBillDTO) {
+    public ResultBean<PageDTO<BizOtherBillRSDTO>> getOtherBillList(@RequestBody BizOtherBillDTO otherBillDTO) {
         return otherBillService.getList(otherBillDTO);
     }
 

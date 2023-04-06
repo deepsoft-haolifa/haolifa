@@ -1,10 +1,13 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.BizBankBillMapper;
+import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
 import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.enums.DictEnum;
@@ -12,6 +15,7 @@ import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
@@ -30,6 +34,8 @@ import com.deepsoft.haolifa.service.impl.finance.helper.FinanceConstant;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import java.util.HashMap;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -61,11 +67,16 @@ public class BankBillServiceImpl implements BankBillService {
     private SysDictService sysDictService;
 
     @Resource
+    private BizSubjectsMapper bizSubjectsMapper;
+
+    @Resource
     private SysDepartmentMapper departmentMapper;
     @Resource
     private DepartmentService departmentService;
     @Resource
     private BillHelper billHelper;
+    @Resource
+    private BizProjectBudgetMapper bizProjectBudgetMapper;
 
     @Override
     public ResultBean save(BizBankBillAddDTO model) {
@@ -165,7 +176,6 @@ public class BankBillServiceImpl implements BankBillService {
         return ResultBean.success(insertId);
     }
 
-
     @Override
     public ResultBean savePreMonthMoney() {
 
@@ -251,7 +261,7 @@ public class BankBillServiceImpl implements BankBillService {
     }
 
     @Override
-    public ResultBean getList(BizBankBillDTO model) {
+    public ResultBean<PageDTO<BizBankBillRSDTO>> getList(BizBankBillDTO model) {
         if (model.getPageNum() == null || model.getPageNum() == 0) {
             model.setPageNum(1);
         }
@@ -302,9 +312,52 @@ public class BankBillServiceImpl implements BankBillService {
             .doSelectPage(() -> {
                 bizBankBillMapper.selectByExample(bizBankBillExample);
             });
-        PageDTO<BizBankBill> pageDTO = new PageDTO<>();
+        PageDTO<BizBankBillRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(pageData, pageDTO);
-        pageDTO.setList(pageData.getResult());
+
+
+
+        List<String> projectCodeList = pageData.getResult().stream()
+            .map(BizBankBill::getProjectCode)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+        Map<String, String> projectCodeMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(projectCodeList)) {
+            BizProjectBudgetExample bizProjectBudgetExample = new BizProjectBudgetExample();
+            BizProjectBudgetExample.Criteria criteriaBizProjectBudgetExample = bizProjectBudgetExample.createCriteria();
+            criteriaBizProjectBudgetExample.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+            criteriaBizProjectBudgetExample.andCodeIn(projectCodeList);
+            projectCodeMap = bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample)
+                .stream()
+                .collect(Collectors.toMap(BizProjectBudget::getCode, BizProjectBudget::getName,
+                    (a, b) -> a));
+        }
+
+        Map<String, String> finalProjectCodeMap = projectCodeMap;
+
+
+        Map<String, String> subjects_type_map = sysDictService.getSysDictByTypeCode(
+                DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+        List<BizBankBillRSDTO> bizBankBillRSDTOList = pageData.getResult().stream()
+            .map(bizBankBill -> {
+                BizBankBillRSDTO billRSDTO = new BizBankBillRSDTO();
+                BeanUtil.copyProperties(bizBankBill, billRSDTO);
+
+                BizSubjects bizSubjects = bizSubjectsMapper.selectByPrimaryKey(
+                    bizBankBill.getSubject());
+
+                billRSDTO.setSubjectType(bizSubjects != null ? bizSubjects.getType() : "");
+                billRSDTO.setSubjectTypeName(bizSubjects != null ? subjects_type_map.get(bizSubjects.getType()) : "");
+
+                billRSDTO.setProjectCodeName(
+                    finalProjectCodeMap.getOrDefault(bizBankBill.getProjectCode(), ""));
+
+                return billRSDTO;
+            })
+            .collect(Collectors.toList());
+        pageDTO.setList(bizBankBillRSDTOList);
         return ResultBean.success(pageDTO);
     }
 
