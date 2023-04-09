@@ -1,17 +1,22 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.constant.Constant;
 import com.deepsoft.haolifa.dao.repository.BizBillMapper;
+import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
+import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
+import com.deepsoft.haolifa.enums.DictEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillAddDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillRSDTO;
 import com.deepsoft.haolifa.model.dto.finance.bill.BizBillUpDTO;
+import com.deepsoft.haolifa.service.SysDictService;
 import com.deepsoft.haolifa.service.SysUserService;
 import com.deepsoft.haolifa.service.finance.BillService;
 import com.deepsoft.haolifa.service.finance.SubjectBalanceService;
@@ -19,6 +24,7 @@ import com.deepsoft.haolifa.service.impl.finance.helper.BillHelper;
 import com.deepsoft.haolifa.util.DateUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,17 +45,23 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class BillServiceImpl implements BillService {
-    @Autowired
+    @Resource
     private SysDepartmentMapper departmentMapper;
 
-    @Autowired
+    @Resource
     private BizBillMapper bizBillMapper;
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
-    @Autowired
+    @Resource
     private SubjectBalanceService subjectBalanceService;
     @Resource
     private BillHelper billHelper;
+    @Resource
+    private BizProjectBudgetMapper bizProjectBudgetMapper;
+    @Resource
+    private SysDictService sysDictService;
+    @Resource
+    private BizSubjectsMapper bizSubjectsMapper;
 
     @Override
     public ResultBean save(BizBillAddDTO model) {
@@ -138,27 +150,6 @@ public class BillServiceImpl implements BillService {
         int insertId = bizBillMapper.insertSelective(bizBill);
         return ResultBean.success(insertId);
     }
-
-//    @Override
-//    public Double getPreMonthAmount(Integer type, String payCompany, String payAccount) {
-//        BizBillAmount bizBillAmount = new BizBillAmount();
-//        bizBillAmount.setType(type);
-//        LocalDateTime now = LocalDateTime.now();
-//        bizBillAmount.setYear(String.valueOf(now.getYear()));
-//        bizBillAmount.setMonth(String.valueOf(now.getMonthValue()));
-//        if (StringUtils.isNotEmpty(payCompany)) {
-//            bizBillAmount.setCompany(payCompany);
-//        }
-//        if (StringUtils.isNotEmpty(payCompany)) {
-//            bizBillAmount.setAccount(payAccount);
-//        }
-//
-//        List<BizBillAmount> bizBillAmountList = bizBillAmountMapper.selectBizBillAmountList(bizBillAmount);
-//        if (org.springframework.util.CollectionUtils.isEmpty(bizBillAmountList)) {
-//            return 0D;
-//        }
-//        return bizBillAmountList.get(0).getNextAmount();
-//    }
 
     @Override
     public ResultBean delete(Integer id) {
@@ -267,6 +258,30 @@ public class BillServiceImpl implements BillService {
         }
 
 
+        List<String> projectCodeList = pageData.getResult().stream()
+            .map(BizBill::getProjectCode)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+        Map<String, String> projectCodeMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(projectCodeList)) {
+            BizProjectBudgetExample bizProjectBudgetExample = new BizProjectBudgetExample();
+            BizProjectBudgetExample.Criteria criteriaBizProjectBudgetExample = bizProjectBudgetExample.createCriteria();
+            criteriaBizProjectBudgetExample.andDelFlagEqualTo(CommonEnum.DelFlagEnum.YES.code);
+            criteriaBizProjectBudgetExample.andCodeIn(projectCodeList);
+            projectCodeMap = bizProjectBudgetMapper.selectByExample(bizProjectBudgetExample)
+                .stream()
+                .collect(Collectors.toMap(BizProjectBudget::getCode, BizProjectBudget::getName,
+                    (a, b) -> a));
+        }
+
+        Map<String, String> finalProjectCodeMap = projectCodeMap;
+
+
+        Map<String, String> subjects_type_map = sysDictService.getSysDictByTypeCode(
+                DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+
         Map<Integer, DepartmentDTO> finalDepartmentMap = departmentMap;
         List<BizBillRSDTO> bizBillDTOS = pageData.getResult().stream()
             .map(bizBill -> {
@@ -276,6 +291,16 @@ public class BillServiceImpl implements BillService {
                 bizBillDTO.setPaymentCompany(bizBill.getString2());
                 DepartmentDTO departmentDTO = finalDepartmentMap.get(StringUtils.isNotEmpty(bizBill.getDeptId()) ? Integer.parseInt(bizBill.getDeptId()) : -1);
                 bizBillDTO.setDepartmentDTO(departmentDTO);
+
+                BizSubjects bizSubjects = bizSubjectsMapper.selectByPrimaryKey(
+                    bizBill.getSubject());
+
+                bizBillDTO.setSubjectType(bizSubjects != null ? bizSubjects.getType() : "");
+                bizBillDTO.setSubjectTypeName(bizSubjects != null ? subjects_type_map.get(bizSubjects.getType()) : "");
+
+                bizBillDTO.setProjectCodeName(
+                    finalProjectCodeMap.getOrDefault(bizBill.getProjectCode(), ""));
+
                 return bizBillDTO;
             })
             .collect(Collectors.toList());

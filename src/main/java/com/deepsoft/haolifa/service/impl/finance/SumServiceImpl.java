@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.service.impl.finance;
 
+import com.deepsoft.haolifa.dao.repository.OrderProductMapper;
 import com.deepsoft.haolifa.dao.repository.PurchaseOrderMapper;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +23,12 @@ import java.util.stream.Collectors;
 public class SumServiceImpl implements SumService {
 
 
-    @Autowired
+    @Resource
     private PurchaseOrderMapper purchaseOrderMapper;
+
+
+    @Resource
+    private OrderProductMapper orderProductMapper;
 
 
     @Override
@@ -70,7 +76,7 @@ public class SumServiceImpl implements SumService {
         }
 
         Page<SaleSummaryRSDTO> purchaseOrderList = PageHelper.startPage(model.getPageNum(), model.getPageSize())
-            .doSelectPage(() -> purchaseOrderMapper.selectSaleContractSummary(model));
+            .doSelectPage(() -> orderProductMapper.selectSaleContractSummary(model));
         List<SaleSummaryRSDTO> purchaseOrderRSDTOList = purchaseOrderList.getResult().stream()
             .map(purchaseOrder -> {
                 SaleSummaryRSDTO purchaseOrderRSDTO = new SaleSummaryRSDTO();

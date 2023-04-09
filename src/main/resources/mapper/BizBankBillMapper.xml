@@ -659,11 +659,15 @@
         <include refid="biz_bill_contract_sql_01"></include> as decomposeAmount ,
         bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include> as surplusAmount
         from biz_bank_bill bb
-        where 1=1
-        and bb.del_flag = 0
-        and bb.type = 1
-        and bb.collection_type = 2
-        and (bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include>) > 0
+        <where>
+            and bb.del_flag = 0
+            and bb.type = 1
+            and bb.collection_type = 2
+            <if test="contractStatus != null and contractStatus == 2 ">
+                and bb.contract_status = #{contractStatus}
+                and  (bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include>) = 0
+            </if>
+        </where>
     </sql>
 
     <sql id="other_id">
@@ -690,15 +694,19 @@
         ( SELECT dept_name FROM sys_department WHERE id = ob.dept_Id ) deptName,
         ob.remark as remark,
         ob.contract_status as contractStatus,
-        (case when ob.contract_status = '0' then '未完成' else '完成' end) as contractStatusCN,
+        (case when ob.contract_status = '2' then '完成' else '未完成' end) as contractStatusCN,
         <include refid="biz_bill_contract_sql_02"></include> as decomposeAmount ,
         ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include> as surplusAmount
         from biz_other_bill ob
-        where 1=1
-        and ob.del_flag = 0
-        and ob.type = 1
-        and ob.collection_type = 2
-        and (ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include>) > 0
+        <where>
+            and ob.del_flag = 0
+            and ob.type = 1
+            and ob.collection_type = 2
+            <if test="contractStatus != null and contractStatus == 2 ">
+                and ob.contract_status = #{contractStatus}
+                and  (ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include>) = 0
+            </if>
+        </where>
     </sql>
 
 

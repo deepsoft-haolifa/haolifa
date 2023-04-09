@@ -191,7 +191,7 @@ public class RemiburseCLPrint {
         table.addCell(pdfPCell);
 
         // 普通报销 + 借款冲抵100元 摘要
-        if (reimburseApplyDetailDTO.getLoanId()!=null){
+        if  (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getReimburseType(), "2")) {
             String s = "差旅报销借款冲抵"+reimburseApplyDetailDTO.getOffsetAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()
                 +"元"+reimburseApplyDetailDTO.getRemark();
             table.addCell(ItextpdfUtil.getPdfPCell("" + s, font, 0, 32));
@@ -290,8 +290,14 @@ public class RemiburseCLPrint {
         table.addCell(ItextpdfUtil.getCell("预约报销总金额（大写）", font, 9));
 
         String montrayUnit = "";
-        if (reimburseApplyDetailDTO.getAmount()!=null){
-             montrayUnit = BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount());
+        String amontStr = "";
+        if (reimburseApplyDetailDTO.getAmount() != null) {
+            BigDecimal amont = reimburseApplyDetailDTO.getAmount();
+            if (reimburseApplyDetailDTO.getOffsetAmount() != null) {
+                amont = amont.add(reimburseApplyDetailDTO.getOffsetAmount());
+            }
+            montrayUnit = BigDecimalUtils.number2CNMontrayUnit(amont);
+            amontStr = amont.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
         }
 
 
@@ -302,12 +308,8 @@ public class RemiburseCLPrint {
         pdfPCellD.setColspan(18);
         table.addCell(pdfPCellD);
 
-        String montrayUnit2 = "";
-        if (reimburseApplyDetailDTO.getAmount()!=null){
-            montrayUnit2 = reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-        }
 
-        Paragraph elements = new Paragraph("¥" + montrayUnit2, font);
+        Paragraph elements = new Paragraph("¥" + amontStr, font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -316,9 +318,20 @@ public class RemiburseCLPrint {
     }
 
     private static void h5(PdfPTable table, Font font) {
+
+        ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
+
         table.addCell(ItextpdfUtil.getCell("实际报销总金额（大写）", font, 9));
 
-        Paragraph elementsD = new Paragraph(" ", font);
+        String montrayUnit = "";
+        String amontStr = "";
+        if (reimburseApplyDetailDTO.getAmount() != null) {
+            BigDecimal amont = reimburseApplyDetailDTO.getAmount();
+            montrayUnit = BigDecimalUtils.number2CNMontrayUnit(amont);
+            amontStr = amont.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        }
+
+        Paragraph elementsD = new Paragraph(" "+ montrayUnit, font);
         PdfPCell pdfPCellD = new PdfPCell(elementsD);
         pdfPCellD.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCellD.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -326,7 +339,7 @@ public class RemiburseCLPrint {
         table.addCell(pdfPCellD);
 
 
-        Paragraph elements = new Paragraph(" ", font);
+        Paragraph elements = new Paragraph("¥" + amontStr, font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);

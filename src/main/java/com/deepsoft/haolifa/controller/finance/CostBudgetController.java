@@ -100,10 +100,19 @@ public class CostBudgetController {
         return costBudgetService.getCurUserSubjectsTypeList();
     }
 
+
+
     @ApiOperation("获取当前部门的科目类别节点列表-（日记账付款专用-必须传选择的部门）")
     @PostMapping("/subjects/getCurDeptIdSubjectsTypeList")
     public ResultBean<List<CostBudgetSubjectsTypeRSDTO>> getCurDeptIdSubjectsTypeList(@RequestBody CostBudgetSubjectsRQBillDTO costBudgetSubjectsRQBillDTO) {
         return costBudgetService.getCurDeptIdSubjectsTypeList(costBudgetSubjectsRQBillDTO);
+    }
+
+
+    @ApiOperation("获取当前用户科目预算节点列表-（日记账付款专用-必须传选择的部门）")
+    @GetMapping("/subjects/getCurDeptSubjectsBudgetList/{subjectType}/{departId}")
+    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurDeptSubjectsBudgetList(@PathVariable("subjectType") String subjectType,@PathVariable("departId") Integer departId) {
+        return costBudgetService.getCurDeptSubjectsBudgetList(subjectType,departId);
     }
 
 

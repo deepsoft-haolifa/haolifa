@@ -10,6 +10,7 @@ import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
 import com.deepsoft.haolifa.model.dto.order.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderProductService {
@@ -102,6 +103,8 @@ public interface OrderProductService {
      * 获取 订单列表
      */
     public ResultBean<PageDTO<ReceivableOrderRSDTO>> receivableOrderList(ReceivableOrderRQDTO model);
+
+    ResultBean<BigDecimal> receivableOrderListSummary(ReceivableOrderRQDTO model);
 
     /**
      * 核料（将前端提交过来的零件，进行核料）
@@ -213,7 +216,6 @@ public interface OrderProductService {
      * @param id
      */
     int delTechnicalDetailed(int id);
-
 
 
 }

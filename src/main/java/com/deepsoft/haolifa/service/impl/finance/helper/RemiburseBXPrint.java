@@ -178,8 +178,8 @@ public class RemiburseBXPrint {
 //        table.addCell(ItextpdfUtil.getPdfPCell("", font, 0, 4));
 
         String format = "    年  月  日";
-        if(reimburseApplyDetailDTO.getReimburseDate()!=null){
-             format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
+        if (reimburseApplyDetailDTO.getReimburseDate() != null) {
+            format = DateUtil.format(reimburseApplyDetailDTO.getReimburseDate(), "yyyy年MM月dd日");
         }
         Paragraph elements3 = new Paragraph(format, font);
         PdfPCell pdfPCell = new PdfPCell(elements3);
@@ -192,10 +192,9 @@ public class RemiburseBXPrint {
         table.addCell(pdfPCell);
 
         // 普通报销 + 借款冲抵100元 摘要
-
-        if (reimburseApplyDetailDTO.getLoanId()!=null){
-            String s = "普通报销借款冲抵"+reimburseApplyDetailDTO.getOffsetAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()
-                +"元"+reimburseApplyDetailDTO.getRemark();
+        if (StringUtils.equalsIgnoreCase(reimburseApplyDetailDTO.getReimburseType(), "2")) {
+            String s = "普通报销借款冲抵" + reimburseApplyDetailDTO.getOffsetAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString()
+                + "元" + reimburseApplyDetailDTO.getRemark();
             table.addCell(ItextpdfUtil.getPdfPCell("" + s, font, 0, 5));
         }
 
@@ -236,16 +235,21 @@ public class RemiburseBXPrint {
     private static void h4(PdfPTable table, Font font) {
         ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
 
-        String montrayUnit ="";
-        String string = "";
-        if(reimburseApplyDetailDTO.getAmount()!=null){
-             montrayUnit = BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount());
-            string=reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        String montrayUnit = "";
+        String amontStr = "";
+        if (reimburseApplyDetailDTO.getAmount() != null) {
+            BigDecimal amont = reimburseApplyDetailDTO.getAmount();
+            if (reimburseApplyDetailDTO.getOffsetAmount() != null) {
+                amont = amont.add(reimburseApplyDetailDTO.getOffsetAmount());
+            }
+            montrayUnit = BigDecimalUtils.number2CNMontrayUnit(amont);
+            amontStr = amont.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
         }
 
         table.addCell(ItextpdfUtil.getCell("预约报销总金额（大写）", font));
-        table.addCell(ItextpdfUtil.getCell(" "+ montrayUnit, font));
-        Paragraph elements = new Paragraph("¥" + string, font);
+        table.addCell(ItextpdfUtil.getCell(" " + montrayUnit, font));
+
+        Paragraph elements = new Paragraph("¥" + amontStr, font);
         PdfPCell pdfPCell = new PdfPCell(elements);
         pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -254,14 +258,23 @@ public class RemiburseBXPrint {
     }
 
     private static void h5(PdfPTable table, Font font) {
+        ReimburseApplyDetailDTO reimburseApplyDetailDTO = threadLocal.get();
+
+        String montrayUnit = "";
+        String amontStr = "";
+        if (reimburseApplyDetailDTO.getAmount() != null) {
+            montrayUnit = BigDecimalUtils.number2CNMontrayUnit(reimburseApplyDetailDTO.getAmount());
+            amontStr = reimburseApplyDetailDTO.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        }
         table.addCell(ItextpdfUtil.getCell("实际报销总金额（大写）", font));
-        table.addCell(ItextpdfUtil.getCell("", font));
-        Paragraph elements2 = new Paragraph("", font);
-        PdfPCell pdfPCell2 = new PdfPCell(elements2);
-        pdfPCell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        pdfPCell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        pdfPCell2.setColspan(3);
-        table.addCell(pdfPCell2);
+        table.addCell(ItextpdfUtil.getCell(" " + montrayUnit, font));
+
+        Paragraph elements = new Paragraph("¥" + amontStr, font);
+        PdfPCell pdfPCell = new PdfPCell(elements);
+        pdfPCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        pdfPCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        pdfPCell.setColspan(3);
+        table.addCell(pdfPCell);
     }
 
     public static void h6(Font font, PdfPTable table) {
