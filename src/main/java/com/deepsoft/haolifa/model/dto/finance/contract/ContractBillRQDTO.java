@@ -38,4 +38,7 @@ public class ContractBillRQDTO extends PageParam {
     @ApiModelProperty(value = "查询条件-付款类别")
     private String paymentType;
 
+    @ApiModelProperty(value = "查询条件-分解状态 0 未完成 2 已完成")
+    private Integer contractStatus;
+
 }

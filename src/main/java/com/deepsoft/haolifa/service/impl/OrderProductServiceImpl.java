@@ -1056,29 +1056,8 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
 
     @Override
     public ResultBean<PageDTO<ReceivableOrderRSDTO>> receivableOrderList(ReceivableOrderRQDTO model) {
-        OrderProductExample example = new OrderProductExample();
-        OrderProductExample.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(model.getOrderNo())) {
-            criteria.andOrderNoLike("%" + model.getOrderNo() + "%");
-        }
-        if (model.getOrderStatus() != null && model.getOrderStatus() > -1) {
-            criteria.andOrderStatusEqualTo(model.getOrderStatus());
-        }
-        if (StringUtils.isNotBlank(model.getDemandName())) {
-            criteria.andDemandNameLike("%" + model.getDemandName() + "%");
-        }
-        if (model.getContractSignDate() != null) {
-            Date contractSignDate = model.getContractSignDate();
-            String dateString = DateFormatterUtils.formatterDateString(DateFormatterUtils.TWO_FORMATTERPATTERN, contractSignDate);
-            criteria.andContractSignDateEqualTo(dateString);
-        }
-        if (model.getSupplyAgentName() != null) {
-            criteria.andSupplyAgentNameEqualTo(model.getSupplyAgentName());
-        }
-
-        example.setOrderByClause("id desc");
-        Page<OrderProduct> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
-            .doSelectPage(() -> orderProductMapper.selectByExample(example));
+        Page<ReceivableOrderRSDTO> materials = PageHelper.startPage(model.getPageNum(), model.getPageSize())
+            .doSelectPage(() -> orderProductMapper.receivableOrderList(model));
 
         PageDTO<ReceivableOrderRSDTO> pageDTO = new PageDTO<>();
         BeanUtils.copyProperties(materials, pageDTO);
@@ -1089,11 +1068,15 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
                 return rsdto;
             })
             .collect(Collectors.toList());
-
         pageDTO.setList(rsDTOList);
         return ResultBean.success(pageDTO);
     }
 
+    @Override
+    public ResultBean<BigDecimal> receivableOrderListSummary(ReceivableOrderRQDTO model) {
+        BigDecimal a = orderProductMapper.receivableOrderListSummary(model);
+        return ResultBean.success(a);
+    }
 
     // region #核料这一步的相关流程操作
     @Override

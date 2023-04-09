@@ -2,9 +2,15 @@ package com.deepsoft.haolifa.dao.repository;
 
 import com.deepsoft.haolifa.model.domain.OrderProduct;
 import com.deepsoft.haolifa.model.domain.OrderProductExample;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRQDTO;
+import com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRSDTO;
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderProductMapper {
@@ -32,4 +38,13 @@ public interface OrderProductMapper {
 
 
     List<OrderProduct> selectByMap(@Param("query") Map<String,Object> query);
+
+
+
+    List<SaleSummaryRSDTO> selectSaleContractSummary(@Param("query") SaleSummaryRQDTO query);
+
+
+    List<ReceivableOrderRSDTO> receivableOrderList(@Param("query") ReceivableOrderRQDTO query);
+
+    BigDecimal receivableOrderListSummary(@Param("query") ReceivableOrderRQDTO model);
 }
