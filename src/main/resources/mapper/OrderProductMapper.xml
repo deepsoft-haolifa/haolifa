@@ -971,7 +971,7 @@
         -- 合同额
         ifnull(sum(q.total_price),0) contractAmount,
         -- 发货金额（发货数量*销售单价）
-        ifnull(sum(select sum(abs(quantity * price)) as a from entry_out_store_record eosr where 1=1 and eosr.order_no = q.order_no  and eosr.operation_type =1 and eosr.type = 1),0) deliveryAmount,
+        ifnull((select sum(abs(quantity * price)) as aa from entry_out_store_record eosr where  eosr.order_no = q.order_no  and eosr.operation_type =1 and eosr.type = 1),0) deliveryAmount,
         -- 已收款
         ifnull(sum(q.received_account),0) collectedAmount,
         -- 已开发票
@@ -994,6 +994,9 @@
 
 
     <select id="receivableOrderList" resultType="com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO">
+
+        select * from (
+
         select
         q.id,
         -- 订单编号
@@ -1010,7 +1013,7 @@
         -- 合同额
         ifnull(q.total_price, 0 ) contractAmount,
         -- 发货金额（发货数量*销售单价）
-        ifnull( (select sum(abs(quantity * price)) as a from entry_out_store_record eosr where 1=1 and eosr.order_no = q.order_no  and eosr.operation_type =1 and eosr.type = 1), 0 ) deliveryAmount,
+        ifnull( (select sum(abs(quantity * price)) as a from entry_out_store_record eosr where eosr.order_no = q.order_no  and eosr.operation_type =1 and eosr.type = 1), 0 ) deliveryAmount,
         -- 已收款金额
         ifnull( q.received_account, 0 ) receivedAccount,
         -- 已开票金额
@@ -1032,8 +1035,11 @@
             <if test="query.endTime != null and query.endTime != ''"><!-- 结束时间检索 -->
                 AND date_format(q.create_time,'%y%m%d') &lt;= date_format(#{query.endTime},'%y%m%d')
             </if>
-            and ifnull(( SELECT SUM( i.total_amount ) FROM invoice i WHERE q.order_no = i.order_no ), 0 )  &gt; 0
         </where>
+
+        ) aa
+        where aa.invoicedAmount  &gt; 0
+
     </select>
 
 
