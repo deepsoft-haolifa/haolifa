@@ -1011,7 +1011,7 @@
         -- 已发货数
         q.delivered_number,
         -- 合同额
-        ifnull(q.total_price, 0 ) contractAmount,
+        ifnull(q.total_price, 0 ) totalPrice,
         -- 发货金额（发货数量*销售单价）
         ifnull( (select sum(abs(quantity * price)) as a from entry_out_store_record eosr where eosr.order_no = q.order_no  and eosr.operation_type =1 and eosr.type = 1), 0 ) deliveryAmount,
         -- 已收款金额

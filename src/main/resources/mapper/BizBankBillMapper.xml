@@ -655,7 +655,7 @@
         ( SELECT dept_name FROM sys_department WHERE id = bb.dept_Id ) deptName,
         bb.remark as remark,
         bb.contract_status as contractStatus,
-        (case when bb.contract_status = '0' then '未完成' else '完成' end) as contractStatusCN,
+        (case when bb.contract_status = '2' then '完成' else '未完成' end) as contractStatusCN,
         <include refid="biz_bill_contract_sql_01"></include> as decomposeAmount ,
         bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include> as surplusAmount
         from biz_bank_bill bb
