@@ -91,13 +91,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public InvoiceStatisticVo totalInvoice(Byte type, InvoiceListDTO dto) {
         InvoiceStatisticVo invoiceStatisticVo = new InvoiceStatisticVo();
-        Map<String, Object> objectMap = new HashMap<>();
-        if (type == 1){
-            objectMap =  BeanUtil.beanToMap(dto);
-        }else {
-            objectMap.put("status",dto.getStatus());
-        }
-
+        Map<String, Object> objectMap = BeanUtil.beanToMap(dto);
         BigDecimal sumInvoiceTotal = statisticsExtendMapper.sumInvoiceTotal(objectMap);
         invoiceStatisticVo.setTotalAmount(sumInvoiceTotal);
         return invoiceStatisticVo;
