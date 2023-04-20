@@ -77,6 +77,8 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
     private PayWorkAttendanceMapper payWorkAttendanceMapper;
     @Resource
     private SysDepartmentMapper sysDepartmentMapper;
+    @Resource
+    private PayWorkingProcedureMapper payWorkingProcedureMapper;
 
     @Override
     public ResultBean pageInfo(PayWagesDTO model) {
@@ -270,8 +272,11 @@ public class PayWagesServiceImpl extends BaseService implements PayWagesService 
                     }
                     // 订单号
                     String orderId = procedure.getOrderId();
+                    // 查询工序对应的车间名称
+                    Integer procedureId = procedure.getProcedureId();
+                    PayWorkingProcedure payWorkingProcedure = payWorkingProcedureMapper.selectByPrimaryKey(procedureId);
                     // 车间名称  部门名称
-                    String workshopName = sysDepartment.getDeptName();
+                    String workshopName = payWorkingProcedure.getWorkshopName();
                     if (CommonEnum.WorkShopTypeEnum.PRODUCT.name.equals(workshopName)) {
                         OrderProductAssociate orderProductAssociate = orderProductAssociateMapper.selectByPrimaryKey(procedure.getProductId());
                         PayCalculateDTO proInspectRecord = buildPayCalculateDTO(orderId, orderProductAssociate.getProductNo(), startTime, endTime);
