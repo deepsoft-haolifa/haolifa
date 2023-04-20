@@ -962,4 +962,109 @@
         order by id desc
     </select>
 
+
+
+    <select id="selectSaleContractSummary" resultType="com.deepsoft.haolifa.model.dto.finance.sum.SaleSummaryRSDTO">
+        select
+        q.demand_name as customerName,
+        '' as customerId,
+        -- 合同额
+        ifnull(sum(q.total_price),0) contractAmount,
+        -- 发货金额（发货数量*销售单价）
+        ifnull((select sum(abs(quantity * price)) as aa from entry_out_store_record eosr where  eosr.order_no = q.order_no  and eosr.operation_type =1 and eosr.type = 1),0) deliveryAmount,
+        -- 已收款
+        ifnull(sum(q.received_account),0) collectedAmount,
+        -- 已开发票
+        ifnull((SELECT  SUM(i.total_amount)  FROM invoice i  WHERE q.order_no = i.order_no),0) AS invoicedAmount
+        from order_product q
+        <where>
+            <if test="query.customerName != null and query.customerName != ''">
+                AND q.demand_name like concat('%',#{query.customerName},'%')
+            </if>
+            <if test="query.startTime != null and query.startTime != ''"><!-- 开始时间检索 -->
+                AND date_format(q.create_time,'%y%m%d') &gt;= date_format(#{query.startTime},'%y%m%d')
+            </if>
+            <if test="query.endTime != null and query.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(q.create_time,'%y%m%d') &lt;= date_format(#{query.endTime},'%y%m%d')
+            </if>
+        </where>
+        group by q.demand_name
+        order by q.create_time desc
+    </select>
+
+
+    <select id="receivableOrderList" resultType="com.deepsoft.haolifa.model.dto.finance.receivable.ReceivableOrderRSDTO">
+
+        select * from (
+
+        select
+        q.id,
+        -- 订单编号
+        q.order_contract_no,
+        q.order_no,
+        -- 客户名称
+        q.demand_name,
+        -- 签订日期
+        q.contract_sign_date,
+        -- 销售总量
+        q.total_count,
+        -- 已发货数
+        q.delivered_number,
+        -- 合同额
+        ifnull(q.total_price, 0 ) totalPrice,
+        -- 发货金额（发货数量*销售单价）
+        ifnull( (select sum(abs(quantity * price)) as a from entry_out_store_record eosr where eosr.order_no = q.order_no  and eosr.operation_type =1 and eosr.type = 1), 0 ) deliveryAmount,
+        -- 已收款金额
+        ifnull( q.received_account, 0 ) receivedAccount,
+        -- 已开票金额
+        ifnull(( SELECT SUM( i.total_amount ) FROM invoice i WHERE q.order_no = i.order_no ), 0 ) AS invoicedAmount,
+        -- 应收款金额
+        ifnull(( SELECT SUM( i.total_amount ) FROM invoice i WHERE q.order_no = i.order_no ), 0 ) - ifnull( q.received_account, 0 ) AS receivableAmount
+        FROM
+        order_product q
+        <where>
+            <if test="query.orderNo != null and query.orderNo != ''">
+                AND q.order_no = #{query.orderNo}
+            </if>
+            <if test="query.demandName != null and query.demandName != ''">
+                AND q.demand_name like concat('%',#{query.demandName},'%')
+            </if>
+            <if test="query.startTime != null and query.startTime != ''"><!-- 开始时间检索 -->
+                AND date_format(q.create_time,'%y%m%d') &gt;= date_format(#{query.startTime},'%y%m%d')
+            </if>
+            <if test="query.endTime != null and query.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(q.create_time,'%y%m%d') &lt;= date_format(#{query.endTime},'%y%m%d')
+            </if>
+        </where>
+
+        ) aa
+        where aa.invoicedAmount  &gt; 0
+
+    </select>
+
+
+    <select id="receivableOrderListSummary" resultType="java.math.BigDecimal">
+        select
+        -- 应收款金额
+        SUM( ifnull(( SELECT SUM( i.total_amount ) FROM invoice i WHERE q.order_no = i.order_no ), 0 ) - ifnull( q.received_account, 0 ) )AS receivableAmount
+        FROM
+        order_product q
+        <where>
+            <if test="query.orderNo != null and query.orderNo != ''">
+                AND q.order_no = #{query.orderNo}
+            </if>
+            <if test="query.demandName != null and query.demandName != ''">
+                AND q.demand_name like concat('%',#{query.demandName},'%')
+            </if>
+            <if test="query.startTime != null and query.startTime != ''"><!-- 开始时间检索 -->
+                AND date_format(q.create_time,'%y%m%d') &gt;= date_format(#{query.startTime},'%y%m%d')
+            </if>
+            <if test="query.endTime != null and query.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(q.create_time,'%y%m%d') &lt;= date_format(#{query.endTime},'%y%m%d')
+            </if>
+            and ifnull(( SELECT SUM( i.total_amount ) FROM invoice i WHERE q.order_no = i.order_no ), 0 )  &gt; 0
+        </where>
+    </select>
+
+
 </mapper>

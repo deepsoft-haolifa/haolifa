@@ -610,6 +610,46 @@ public class CostBudgetServiceImpl implements CostBudgetService {
 
 
     @Override
+    public ResultBean<List<CostBudgetSubjectsRSDTO>> getCurDeptSubjectsBudgetList(String subjectType,Integer departId) {
+
+        // 查询部门预算
+        BizCostBudgetSubjectsExample bizCostBudgetExample = new BizCostBudgetSubjectsExample();
+        BizCostBudgetSubjectsExample.Criteria criteria = bizCostBudgetExample.createCriteria();
+        criteria.andDeptIdEqualTo(departId);
+        criteria.andSubjectsTypeEqualTo(subjectType);
+        List<BizCostBudgetSubjects> costBudgetSubjectsList = bizCostBudgetSubjectsMapper.selectByExample(bizCostBudgetExample);
+
+        List<SysDepartment> sysDepartments = departmentMapper.selectByExample(new SysDepartmentExample());
+        Map<Integer, SysDepartment> sysDepartmentMap = sysDepartments.stream().collect(Collectors.toMap(SysDepartment::getId, Function.identity()));
+
+
+        Map<String, String> dictMap = sysDictService.getSysDictByTypeCode(DictEnum.SUBJECTS_TYPE.getCode()).stream()
+            .collect(Collectors.toMap(SysDict::getCode, SysDict::getName, (a, b) -> a));
+
+
+        BizSubjectsBalanceExample bizSubjectsBalanceExample = new BizSubjectsBalanceExample();
+        List<BizSubjectsBalance> bizSubjectsBalanceList = subjectsBalanceMapper.selectByExample(bizSubjectsBalanceExample);
+
+        Map<String, BigDecimal> bigDecimalMap = bizSubjectsBalanceList.stream()
+            .map(bizSubjectsBalance -> {
+                String k = bizSubjectsBalance.getDeptId() + "_" + bizSubjectsBalance.getSubjectsId();
+                return new Pair<>(k, bizSubjectsBalance.getBalanceAmount());
+            })
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue, (a, b) -> a));
+
+        List<CostBudgetSubjectsRSDTO> costBudgetSubjectsRSDTOList = costBudgetSubjectsList.stream()
+            .map(bizCostBudgetSubjects -> {
+                return buildCostBudgetSubjectsRSDTO(sysDepartmentMap, dictMap, bigDecimalMap, bizCostBudgetSubjects);
+            })
+            .collect(Collectors.toList());
+
+
+        return ResultBean.success(costBudgetSubjectsRSDTOList);
+    }
+
+
+
+    @Override
     public BizSubjectsBalance getCurUserSubjectsBudget(Integer subjectId, String subjectName) {
         CustomUser customUser = sysUserService.selectLoginUser();
         SysUser sysUser = sysUserService.getSysUser(customUser.getId());

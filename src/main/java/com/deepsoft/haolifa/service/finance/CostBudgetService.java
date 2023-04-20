@@ -47,6 +47,8 @@ public interface CostBudgetService {
 
     ResultBean<List<CostBudgetSubjectsRSDTO>> getCurUserSubjectsBudgetList( String subjectType);
 
+    ResultBean<List<CostBudgetSubjectsRSDTO>> getCurDeptSubjectsBudgetList( String subjectType,Integer departId);
+
 
 
     /***

@@ -446,8 +446,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             BizLoanApplyExample loanApplyExample = new BizLoanApplyExample();
             BizLoanApplyExample.Criteria loanApplyExampleCriteria = loanApplyExample.createCriteria();
             loanApplyExampleCriteria.andIdIn(loanIdList);
-            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(
-                loanApplyExample);
+            List<BizLoanApply> bizLoanApplyList = bizLoanApplyMapper.selectByExample(loanApplyExample);
             String loanAmount = bizLoanApplyList.stream()
                 .map(l -> l.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP).toString())
                 .collect(Collectors.joining(","));
@@ -646,9 +645,7 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 RoleEnum.ROLE_CN.getCode()));
 
         List<String> projectCodeList = pageData.getResult().stream()
-            .map(l -> {
-                return l.getProjectCode();
-            })
+            .map(BizReimburseApply::getProjectCode)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
         Map<String, String> projectCodeMap = new HashMap<>();

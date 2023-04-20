@@ -42,6 +42,4 @@ public interface PurchaseOrderMapper {
 
     List<ProcurementSummaryRSDTO>  selectProcurementSummary(@Param("query") SummaryRQDTO query);
 
-    List<SaleSummaryRSDTO> selectSaleContractSummary(@Param("query") SaleSummaryRQDTO query);
-
 }

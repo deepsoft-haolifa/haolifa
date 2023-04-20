@@ -90,4 +90,18 @@ public class BizBillRSDTO {
     private String string9;
 
     private String string10;
+
+
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCode;
+    @ApiModelProperty(value = "项目编号 三期新增字段")
+    private String projectCodeName;
+
+    @ApiModelProperty(value = "科目(一级科目)")
+    private String subjectType;
+    @ApiModelProperty(value = "科目(一级科目)")
+    private String subjectTypeName;
+
+    @ApiModelProperty(value = "科目(费用预算表中的科目ID)")
+    private Integer subject;
 }
