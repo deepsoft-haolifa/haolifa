@@ -655,7 +655,7 @@
         ( SELECT dept_name FROM sys_department WHERE id = bb.dept_Id ) deptName,
         bb.remark as remark,
         bb.contract_status as contractStatus,
-        (case when bb.contract_status = '2' then '完成' else '未完成' end) as contractStatusCN,
+        (case when (bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include>) = 0 then '完成' else '未完成' end) as contractStatusCN,
         <include refid="biz_bill_contract_sql_01"></include> as decomposeAmount ,
         bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include> as surplusAmount
         from biz_bank_bill bb
@@ -663,10 +663,14 @@
             and bb.del_flag = 0
             and bb.type = 1
             and bb.collection_type = 2
-            <if test="contractStatus != null and contractStatus == 2 ">
-                and bb.contract_status = #{contractStatus}
-                and  (bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include>) = 0
-            </if>
+            <choose>
+                <when test="contractStatus != null and contractStatus == 0 ">
+                    and  (bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include>) &gt; 0
+                </when>
+                <when test="contractStatus != null and contractStatus == 2 ">
+                    and  (bb.collection_Money - <include refid="biz_bill_contract_sql_01"></include>) = 0
+                </when>
+            </choose>
         </where>
     </sql>
 
@@ -694,7 +698,7 @@
         ( SELECT dept_name FROM sys_department WHERE id = ob.dept_Id ) deptName,
         ob.remark as remark,
         ob.contract_status as contractStatus,
-        (case when ob.contract_status = '2' then '完成' else '未完成' end) as contractStatusCN,
+        (case when (ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include>) = 0 then '完成' else '未完成' end) as contractStatusCN,
         <include refid="biz_bill_contract_sql_02"></include> as decomposeAmount ,
         ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include> as surplusAmount
         from biz_other_bill ob
@@ -702,10 +706,16 @@
             and ob.del_flag = 0
             and ob.type = 1
             and ob.collection_type = 2
-            <if test="contractStatus != null and contractStatus == 2 ">
-                and ob.contract_status = #{contractStatus}
-                and  (ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include>) = 0
-            </if>
+            <choose>
+                <when test="contractStatus != null and contractStatus == 0 ">
+--                     and  ( ob.contract_status = 0  or  ob.contract_status is null )
+                    and  (ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include>) &gt; 0
+                </when>
+                <when test="contractStatus != null and contractStatus == 2 ">
+--                     and ob.contract_status = 2
+                    and  (ob.collection_Money - <include refid="biz_bill_contract_sql_02"></include>) = 0
+                </when>
+            </choose>
         </where>
     </sql>
 
