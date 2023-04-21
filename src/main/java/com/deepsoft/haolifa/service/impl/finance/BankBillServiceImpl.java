@@ -84,6 +84,11 @@ public class BankBillServiceImpl implements BankBillService {
         if (model.getDeptId() == null) {
             return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"部门必填");
         }
+        if (StringUtils.isEmpty(model.getSerialNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"序号必填");
+        }
+
+
         BizBankBill bizBankBill = new BizBankBill();
         BeanUtils.copyProperties(model, bizBankBill);
 
@@ -106,6 +111,25 @@ public class BankBillServiceImpl implements BankBillService {
             }
             // 付款
         } else if (bizBankBill.getType().equals("2")) {
+
+            if (StringUtils.isEmpty(model.getProjectCode())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"项目编号必填");
+            }
+            if (ObjectUtil.isEmpty(model.getOperateDate())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"日期必填");
+            }
+            if (StringUtils.isEmpty(model.getCollectCompany())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款单位必填");
+            }
+            if (StringUtils.isEmpty(model.getPayWay())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款方式必填");
+            }
+            if (StringUtils.isEmpty(model.getPayAccount())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款账户必填");
+            }
+            if (ObjectUtil.isEmpty(model.getSubject())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"科目必填");
+            }
             if (StringUtils.isEmpty(model.getPaymentType())) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款类别必填");
             }

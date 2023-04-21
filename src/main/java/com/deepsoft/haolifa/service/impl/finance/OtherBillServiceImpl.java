@@ -70,7 +70,10 @@ public class OtherBillServiceImpl implements OtherBillService {
     public ResultBean save(BizOtherBillAddDTO model) {
         log.info("OtherBillService saveInfo start|{}", JSONObject.toJSON(model));
         if (model.getDeptId() == null) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "部门必填");
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"部门必填");
+        }
+        if (StringUtils.isEmpty(model.getSerialNo())) {
+            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"序号必填");
         }
         BizOtherBill billOther = new BizOtherBill();
         BeanUtils.copyProperties(model, billOther);
@@ -124,6 +127,31 @@ public class OtherBillServiceImpl implements OtherBillService {
             BigDecimal add = collectionMoney.add(lastBalance);
             billOther.setBalance(add);
         } else if (billOther.getType().equals("2")) {
+            if (StringUtils.isEmpty(model.getProjectCode())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"项目编号必填");
+            }
+            if (ObjectUtil.isEmpty(model.getOperateDate())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"日期必填");
+            }
+            if (StringUtils.isEmpty(model.getCollectCompany())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款单位必填");
+            }
+            if (StringUtils.isEmpty(model.getPayWay())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款方式必填");
+            }
+            if (StringUtils.isEmpty(model.getPayAccount())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款账户必填");
+            }
+            if (ObjectUtil.isEmpty(model.getSubject())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"科目必填");
+            }
+            if (StringUtils.isEmpty(model.getPaymentType())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款类别必填");
+            }
+            if (null == model.getPayment()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款必填");
+            }
+
             // 付款 , 上次余额 - 本次付款
             BigDecimal payment = billOther.getPayment();
             BigDecimal subtract = lastBalance.subtract(payment);
