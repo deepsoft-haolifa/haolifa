@@ -1,7 +1,9 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.BizBill;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -12,6 +14,7 @@ import com.deepsoft.haolifa.model.dto.finance.bill.BizBillUpDTO;
 import com.deepsoft.haolifa.service.finance.BillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +32,11 @@ public class BillController {
     @ApiOperation("添加节点")
     @PostMapping("/save")
     public ResultBean save(@RequestBody BizBillAddDTO model) {
+        if (StringUtils.isNotEmpty(model.getPaymentType())) {
+            if (ObjectUtil.isEmpty(model.getSubject())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "科目必填");
+            }
+        }
         return billService.save(model);
     }
 

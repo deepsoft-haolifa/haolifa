@@ -1,6 +1,8 @@
 package com.deepsoft.haolifa.controller.finance;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
@@ -11,6 +13,7 @@ import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,32 @@ public class BankBillController {
     @ApiOperation("添加节点")
     @PostMapping("/save")
     public ResultBean save(@RequestBody BizBankBillAddDTO model) {
+        if (model.getType().equals("2")) {
+            if (StringUtils.isEmpty(model.getProjectCode())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"项目编号必填");
+            }
+            if (ObjectUtil.isEmpty(model.getOperateDate())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"日期必填");
+            }
+            if (StringUtils.isEmpty(model.getCollectCompany())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"收款单位必填");
+            }
+            if (StringUtils.isEmpty(model.getPayWay())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款方式必填");
+            }
+            if (StringUtils.isEmpty(model.getPayAccount())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款账户必填");
+            }
+            if (ObjectUtil.isEmpty(model.getSubject())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"科目必填");
+            }
+            if (StringUtils.isEmpty(model.getPaymentType())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款类别必填");
+            }
+            if (null == model.getPayment()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款必填");
+            }
+        }
         return bankBillService.save(model);
     }
 

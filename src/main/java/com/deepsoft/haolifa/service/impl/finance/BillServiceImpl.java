@@ -92,12 +92,6 @@ public class BillServiceImpl implements BillService {
             BigDecimal add = collectionMoney.add(lastBalance);
             bizBill.setBalance(add);
         } else if (StringUtils.isNotEmpty(bizBill.getPaymentType())) {
-            if (ObjectUtil.isEmpty(model.getSubject())) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"科目必填");
-            }
-//            if (StringUtils.isEmpty(model.getPaymentType())) {
-//                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款类别必填");
-//            }
             if (null == model.getPayment()) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款必填");
             }
