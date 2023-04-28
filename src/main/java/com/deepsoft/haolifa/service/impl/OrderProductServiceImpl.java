@@ -1122,6 +1122,10 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         productNo = productNo.replaceAll(" ", "");// 去掉空格
         int lastIndexOf = productNo.lastIndexOf("-");
         int indexOf = productNo.indexOf("-");
+        // 2023.04.28 为了兼容产品编号不带规格的产品，之前是：D97A1X3P-16Q-DN80 兼容例如：D97A1X3P-16Q
+        if (indexOf == lastIndexOf) {
+            lastIndexOf = productNo.length();
+        }
         String fati = "", fatiyali = "", faban = "", fazuo = "";
         String fatiGroup = productNo.substring(indexOf + 1, lastIndexOf);
         int fatiGroupLength = fatiGroup.length();
