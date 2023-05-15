@@ -6,10 +6,7 @@ import com.deepsoft.haolifa.constant.CommonEnum;
 import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.*;
 import com.deepsoft.haolifa.service.finance.BankBillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +24,22 @@ public class BankBillController {
     @Autowired
     private BankBillService bankBillService;
 
+
+    @ApiOperation("转账")
+    @PostMapping("/transfer")
+    public ResultBean transfer(@RequestBody BizBankBillTransferDTO model) {
+
+            if (ObjectUtil.isEmpty(model.getSourceAccount())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"来源账户必填");
+            }
+            if (StringUtils.isEmpty(model.getTargetAccount())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"目标账户必填");
+            }
+            if (null == model.getPayment()) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款必填");
+            }
+        return bankBillService.transfer(model);
+    }
 
     @ApiOperation("添加节点")
     @PostMapping("/save")

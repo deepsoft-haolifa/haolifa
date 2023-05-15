@@ -11,16 +11,16 @@ import com.deepsoft.haolifa.dao.repository.BizProjectBudgetMapper;
 import com.deepsoft.haolifa.dao.repository.BizSubjectsMapper;
 import com.deepsoft.haolifa.dao.repository.SysDepartmentMapper;
 import com.deepsoft.haolifa.enums.DictEnum;
+import com.deepsoft.haolifa.enums.PayWayEnum;
 import com.deepsoft.haolifa.model.domain.*;
 import com.deepsoft.haolifa.model.dto.*;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.*;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRSDTO;
+import com.deepsoft.haolifa.model.dto.finance.loanapply.LoanApplyPayDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetDecDTO;
 import com.deepsoft.haolifa.model.dto.finance.projectbudget.ProjectBudgetQueryBO;
+import com.deepsoft.haolifa.model.dto.finance.reimburseapply.ReimburseApplyPayDTO;
 import com.deepsoft.haolifa.model.dto.finance.subjectsbalance.BizSubjectsBalanceUpDTO;
 import com.deepsoft.haolifa.service.DepartmentService;
 import com.deepsoft.haolifa.service.ExpensesService;
@@ -371,5 +371,70 @@ public class BankBillServiceImpl implements BankBillService {
         return ResultBean.success(pageDTO);
     }
 
+    @Override
+    public ResultBean transfer(BizBankBillTransferDTO model) {
+        // 扣减
+        BizBankBillAddDTO bizBankBillPay = buildBizBankBillAddPay(model);
+        ResultBean savePay = save(bizBankBillPay);
+        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, savePay.getCode())) {
+            log.error("司内转账支付：",savePay.getMessage());
+            throw new BaseException(savePay.getMessage());
+        }
+
+        // 增加
+        BizBankBillAddDTO bizBankBillCollection = buildBizBankBillAddCollection(model);
+        ResultBean saveCollection = save(bizBankBillCollection);
+        if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code, saveCollection.getCode())) {
+            log.error("司内转账支付：",saveCollection.getMessage());
+            throw new BaseException(saveCollection.getMessage());
+        }
+        return ResultBean.success(1);
+    }
+    public BizBankBillAddDTO buildBizBankBillAddPay(BizBankBillTransferDTO model) {
+        BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
+        // 付款
+        bizBankBill.setType("2");
+        bizBankBill.setCompany(Constant.company);
+        bizBankBill.setCertificateNumber("");
+        bizBankBill.setOperateDate(new Date());
+        bizBankBill.setDeptId(1);
+        bizBankBill.setPayWay(PayWayEnum.remittance_pay.getDesc());
+        bizBankBill.setPaymentType(PayWayEnum.remittance_pay.getDesc());
+        bizBankBill.setPayment(model.getPayment());
+        bizBankBill.setRemark("司内转账-付款 "+model.getPayment());
+        bizBankBill.setPayCompany(Constant.company);
+        bizBankBill.setPayAccount(model.getSourceAccount());
+        bizBankBill.setCollectCompany(Constant.company);
+        return bizBankBill;
+    }
+
+    public BizBankBillAddDTO buildBizBankBillAddCollection(BizBankBillTransferDTO model) {
+        BizBankBillAddDTO bizBankBill = new BizBankBillAddDTO();
+        // 收款
+        bizBankBill.setType("1");
+        bizBankBill.setCompany(Constant.company);
+        bizBankBill.setAccount(model.getTargetAccount());
+        bizBankBill.setDeptId(1);
+        bizBankBill.setCertificateNumber("");
+        bizBankBill.setOperateDate(new Date());
+        bizBankBill.setPayWay(PayWayEnum.remittance_pay.getDesc());
+        bizBankBill.setPaymentType(PayWayEnum.remittance_pay.getDesc());
+        // 负数的绝对值
+        bizBankBill.setCollectionMoney(model.getPayment());
+        bizBankBill.setRemark("司内转账-收款 "+model.getPayment());
+        bizBankBill.setPayCompany(Constant.company);
+        bizBankBill.setPayAccount(model.getTargetAccount());
+        bizBankBill.setCollectCompany(Constant.company);
+        // 1	费用
+        //2	货款
+        //3	借款
+        //4	其他
+        //1	费用
+        //2	货款
+        //3	借款
+        //4	其他
+        bizBankBill.setCollectionType("4");
+        return bizBankBill;
+    }
 
 }

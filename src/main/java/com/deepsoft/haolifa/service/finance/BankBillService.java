@@ -3,10 +3,7 @@ package com.deepsoft.haolifa.service.finance;
 import com.deepsoft.haolifa.model.domain.BizBankBill;
 import com.deepsoft.haolifa.model.dto.PageDTO;
 import com.deepsoft.haolifa.model.dto.ResultBean;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillAddDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillRSDTO;
-import com.deepsoft.haolifa.model.dto.finance.bankbill.BizBankBillUpDTO;
+import com.deepsoft.haolifa.model.dto.finance.bankbill.*;
 import com.deepsoft.haolifa.model.dto.finance.contract.ContractBillRQDTO;
 
 public interface BankBillService {
@@ -52,4 +49,5 @@ public interface BankBillService {
     ResultBean<PageDTO<BizBankBillRSDTO>> getList(BizBankBillDTO model);
 
 
+    ResultBean transfer(BizBankBillTransferDTO model);
 }
