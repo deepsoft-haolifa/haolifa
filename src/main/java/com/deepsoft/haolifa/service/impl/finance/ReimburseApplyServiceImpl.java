@@ -851,19 +851,23 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                 .collect(Collectors.toList());
 
             BigDecimal offsetAmount = bizReimburseApplyS.getOffsetAmount();
+
             for (int i = 0; i < bizLoanApplyList.size(); i++) {
                 BizLoanApply bizLoanApply = bizLoanApplyList.get(i);
                 BigDecimal amount = bizLoanApply.getAmount();
                 BigDecimal paymentAmount = bizLoanApply.getPaymentAmount();
                 BigDecimal owingAmount = amount.subtract(paymentAmount);
                 Pair<Integer, BigDecimal> pair = null;
-                if (offsetAmount.compareTo(owingAmount) <= 0) {
+                if (offsetAmount.compareTo(BigDecimal.ZERO) == 0){
+                    break;
+                }else if (offsetAmount.compareTo(owingAmount) <= 0) {
+                    pair = new Pair<>(bizLoanApply.getId(), offsetAmount);
                     offsetAmount = BigDecimal.ZERO;
-                    pair = new Pair<>(bizLoanApply.getId(), owingAmount);
                 } else {
                     offsetAmount = offsetAmount.subtract(owingAmount);
                     pair = new Pair<>(bizLoanApply.getId(), owingAmount);
                 }
+
                 ResultBean<Integer> integerResultBean = loanApplyService.repaymentAmount(
                     pair.getKey(), pair.getValue());
                 if (!StringUtils.equalsIgnoreCase(CommonEnum.ResponseEnum.SUCCESS.code,
@@ -956,6 +960,45 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
             remiburseHelper.buildBizReimburseApply(payDTO));
 
         return ResultBean.success(update);
+    }
+
+
+    public static void main(String[] args) {
+        List<BizLoanApply> bizLoanApplyList = new ArrayList<>();
+        BizLoanApply bizLoanApply01 = new BizLoanApply();
+        bizLoanApply01.setAmount(new BigDecimal(10));
+        bizLoanApply01.setPaymentAmount(new BigDecimal(4));
+        bizLoanApplyList.add(bizLoanApply01);
+          BizLoanApply bizLoanApply02 = new BizLoanApply();
+        bizLoanApply02.setAmount(new BigDecimal(100));
+        bizLoanApply02.setPaymentAmount(new BigDecimal(0));
+        bizLoanApplyList.add(bizLoanApply02);
+          BizLoanApply bizLoanApply03 = new BizLoanApply();
+        bizLoanApply03.setAmount(new BigDecimal(100));
+        bizLoanApply03.setPaymentAmount(new BigDecimal(0));
+        bizLoanApplyList.add(bizLoanApply03);
+
+
+        BigDecimal offsetAmount = new BigDecimal(100);
+        for (int i = 0; i < bizLoanApplyList.size(); i++) {
+            BizLoanApply bizLoanApply = bizLoanApplyList.get(i);
+            BigDecimal amount = bizLoanApply.getAmount();
+            BigDecimal paymentAmount = bizLoanApply.getPaymentAmount();
+            BigDecimal owingAmount = amount.subtract(paymentAmount);
+            Pair<Integer, BigDecimal> pair = null;
+            if (offsetAmount.compareTo(BigDecimal.ZERO) == 0){
+                break;
+            }else if (offsetAmount.compareTo(owingAmount) <= 0) {
+                pair = new Pair<>(bizLoanApply.getId(), offsetAmount);
+                offsetAmount = BigDecimal.ZERO;
+            } else {
+                offsetAmount = offsetAmount.subtract(owingAmount);
+                pair = new Pair<>(bizLoanApply.getId(), owingAmount);
+            }
+
+            System.out.println(""+pair.getKey()+"=="+ pair.getValue());
+        }
+
     }
 
 

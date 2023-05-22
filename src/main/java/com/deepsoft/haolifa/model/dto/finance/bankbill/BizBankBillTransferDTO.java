@@ -20,6 +20,10 @@ public class BizBankBillTransferDTO {
     @ApiModelProperty(value = "目标账户")
     private String targetAccount;
 
+    // （1現金 2銀行 3 其他貨幣）
+    @ApiModelProperty(value = "转出方式 1 现金、2 电汇、3 其它货币")
+    private String transferType;
+
     @ApiModelProperty(value = "转账金额")
     private BigDecimal payment;
 

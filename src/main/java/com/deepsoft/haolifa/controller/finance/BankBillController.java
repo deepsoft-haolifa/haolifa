@@ -32,8 +32,13 @@ public class BankBillController {
             if (ObjectUtil.isEmpty(model.getSourceAccount())) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"来源账户必填");
             }
-            if (StringUtils.isEmpty(model.getTargetAccount())) {
-                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"目标账户必填");
+            if (StringUtils.equals("2",model.getTransferType())||StringUtils.equals("3",model.getTransferType())){
+                if (StringUtils.isEmpty(model.getTargetAccount())) {
+                    return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"目标账户必填");
+                }
+            }
+            if (StringUtils.isEmpty(model.getTransferType())) {
+                return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"转出方式必填");
             }
             if (null == model.getPayment()) {
                 return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR,"付款必填");

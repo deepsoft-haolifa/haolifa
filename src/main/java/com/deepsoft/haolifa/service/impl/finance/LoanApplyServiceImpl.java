@@ -491,9 +491,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
         Map<Integer, SysUser> finalSysUserMap = sysUserMap;
 
         List<String> projectCodeList = bizLoanApplyList.stream()
-            .map(l -> {
-                return l.getProjectCode();
-            })
+            .map(BizLoanApply::getProjectCode)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
         Map<String, String> projectCodeMap = new HashMap<>();
