@@ -49,5 +49,7 @@ public class LoanApplyRQDTO extends PageParam {
 
     @ApiModelProperty(value = "户名(2022-03-20 新增)")
     private String accountName;
+    @ApiModelProperty(value = "创建人")
+    private Integer createUser;
 
 }

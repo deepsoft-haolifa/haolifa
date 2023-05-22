@@ -454,7 +454,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
                 .collect(Collectors.toList());
             model.setUserIdList(idList);
         }
-
+        model.setCreateUser(customUser.getId());
 
         return bizLoanApplyMapper.listSummary(model);
     }
