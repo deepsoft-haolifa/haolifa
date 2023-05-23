@@ -169,7 +169,7 @@ public class OrderProductServiceImpl extends BaseService implements OrderProduct
         XSSFRow row6 = sheet.createRow(6);
         XSSFCell cell6 = row6.createCell(0);
         cell6.setCellStyle(cellStyleCommon);
-        cell6.setCellValue("为保障买卖双方的合法权益，根据《合同法》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。");
+        cell6.setCellValue("为保障买卖双方的合法权益，根据《中华人民共和国民法典》及有关法律规定，买卖双方经友好协商，一致同意按下列条款签订本合同。");
 
         // 第八行
         XSSFRow row7 = sheet.createRow(7);

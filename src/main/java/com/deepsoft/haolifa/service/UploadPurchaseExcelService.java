@@ -136,7 +136,7 @@ public class UploadPurchaseExcelService {
     cell30Style.setVerticalAlignment(VerticalAlignment.CENTER);
     cell30Style.setAlignment(HorizontalAlignment.LEFT);
 //    cell30Style.setIndention((short)2);
-    cell_30.setCellValue("    为保障供需双方的合法权益,根据《中华人民共和国合同法》及相关法律规定,经友好协商,双方一致同意依下列条款签订本合同。");
+    cell_30.setCellValue("    为保障供需双方的合法权益,根据《中华人民共和国民法典》及相关法律规定,经友好协商,双方一致同意依下列条款签订本合同。");
     cell_30.setCellStyle(cell30Style);
     // 一、供货内容
     XSSFRow row_5 = sheet.createRow(++rowIdx);
