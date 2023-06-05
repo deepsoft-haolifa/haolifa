@@ -59,11 +59,11 @@ public class BillHelper {
     @Resource
     private BizSubjectsMapper bizSubjectsMapper;
 
-    public ResultBean<Object> decreact(String projectCode, Integer deptId, Integer subjectId, String remark, String serialNo,
+    public void decreact(String projectCode, Integer deptId, Integer subjectId, String remark, String serialNo,
                                        BigDecimal payment) {
 
         if (StringUtils.isEmpty(projectCode)|| ObjectUtil.isEmpty(deptId)||ObjectUtil.isEmpty(subjectId)){
-            return null;
+            throw new BaseException("projectCode deptId subjectId 参数不能为空");
         }
 
 
@@ -76,7 +76,7 @@ public class BillHelper {
         BizProjectBudget bizProjectBudget = projectBudgetService.queryCurMonthBudget(queryBO);
         // 金额不足
         if (bizProjectBudget.getBalanceQuota().compareTo(payment) < 0) {
-            return ResultBean.error(CommonEnum.ResponseEnum.PARAM_ERROR, "当月项目预算金额不足");
+            throw new BaseException("当月项目预算金额不足");
         }
         // 扣减预算
         ProjectBudgetDecDTO budgetUpDTO = new ProjectBudgetDecDTO();
@@ -122,7 +122,6 @@ public class BillHelper {
             log.error("报销支付：", save.getMessage());
             throw new BaseException(save.getMessage());
         }
-        return null;
     }
 
 

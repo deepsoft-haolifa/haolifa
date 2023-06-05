@@ -120,7 +120,7 @@ public class PayPlanServiceImpl implements PayPlanService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional()
     public ResultBean pay(BizPayPlanPayDTO planPayDTO) {
 
 

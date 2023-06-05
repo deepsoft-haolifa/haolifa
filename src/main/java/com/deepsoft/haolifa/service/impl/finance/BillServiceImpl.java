@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -64,6 +65,7 @@ public class BillServiceImpl implements BillService {
     private BizSubjectsMapper bizSubjectsMapper;
 
     @Override
+    @Transactional
     public ResultBean save(BizBillAddDTO model) {
         log.info("BizBill saveInfo start|{}", JSONObject.toJSON(model));
         if (StringUtils.isAnyBlank()) {
@@ -106,11 +108,8 @@ public class BillServiceImpl implements BillService {
 
             //
             if (ObjectUtil.isNotNull(model.getProjectCode()) && ObjectUtil.isNotNull(model.getSubject())){
-                ResultBean<Object> PARAM_ERROR = billHelper.decreact(model.getProjectCode(),Integer.parseInt(model.getDeptId()),model.getSubject(),
+                billHelper.decreact(model.getProjectCode(),Integer.parseInt(model.getDeptId()),model.getSubject(),
                     model.getRemark(),model.getCertificateNumber(), model.getPayment());
-                if (PARAM_ERROR != null) {
-                    return PARAM_ERROR;
-                }
             }
 
         }

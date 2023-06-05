@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -73,6 +74,7 @@ public class BankBillServiceImpl implements BankBillService {
     private OtherBillService otherBillService;
 
     @Override
+    @Transactional
     public ResultBean save(BizBankBillAddDTO model) {
         log.info("BankBillService saveInfo start|{}", JSONObject.toJSON(model));
         if (model.getDeptId() == null) {
@@ -122,11 +124,8 @@ public class BankBillServiceImpl implements BankBillService {
 
             //
             if (ObjectUtil.isNotEmpty(model.getProjectCode()) && ObjectUtil.isNotEmpty(model.getSubject())) {
-                ResultBean<Object> PARAM_ERROR = billHelper.decreact(model.getProjectCode(), model.getDeptId(), model.getSubject(),
+                 billHelper.decreact(model.getProjectCode(), model.getDeptId(), model.getSubject(),
                     model.getRemark(), model.getSerialNo(), bizBankBill.getPayment());
-                if (PARAM_ERROR != null) {
-                    return PARAM_ERROR;
-                }
             }
 
         }
@@ -181,6 +180,7 @@ public class BankBillServiceImpl implements BankBillService {
     }
 
     @Override
+    @Transactional
     public ResultBean savePreMonthMoney() {
 
         BizBankBill bizBankBill = new BizBankBill();
@@ -220,6 +220,7 @@ public class BankBillServiceImpl implements BankBillService {
     }
 
     @Override
+    @Transactional
     public ResultBean delete(Integer id) {
         //int delete = bizBankBillMapper.deleteByPrimaryKey(id);
 
@@ -233,6 +234,7 @@ public class BankBillServiceImpl implements BankBillService {
     }
 
     @Override
+    @Transactional
     public ResultBean update(BizBankBillUpDTO billBank) {
 
         BizBankBill bizBankBill = new BizBankBill();
@@ -365,6 +367,7 @@ public class BankBillServiceImpl implements BankBillService {
     }
 
     @Override
+    @Transactional
     public ResultBean transfer(BizBankBillTransferDTO model) {
         // 扣减
         BizBankBillAddDTO bizBankBillPay = buildBizBankBillAddPay(model);

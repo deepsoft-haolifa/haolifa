@@ -46,6 +46,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -67,6 +68,7 @@ public class OtherBillServiceImpl implements OtherBillService {
     private SysDepartmentMapper departmentMapper;
 
     @Override
+    @Transactional
     public ResultBean save(BizOtherBillAddDTO model) {
         log.info("OtherBillService saveInfo start|{}", JSONObject.toJSON(model));
         if (model.getDeptId() == null) {
@@ -94,14 +96,11 @@ public class OtherBillServiceImpl implements OtherBillService {
             billOther.setCompany(billOther.getPayCompany());
             billOther.setAccount(billOther.getPayAccount());
             //
-            if (ObjectUtil.isNotNull(model.getProjectCode()) && ObjectUtil.isNotNull(
+            if (StringUtils.isNotEmpty(model.getProjectCode()) && ObjectUtil.isNotNull(
                 model.getSubject())) {
-                ResultBean<Object> PARAM_ERROR = billHelper.decreact(model.getProjectCode(),
+                 billHelper.decreact(model.getProjectCode(),
                     model.getDeptId(), model.getSubject(),
                     model.getRemark(), model.getSerialNo(), model.getPayment());
-                if (PARAM_ERROR != null) {
-                    return PARAM_ERROR;
-                }
             }
 
         }

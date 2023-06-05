@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -599,6 +600,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
     }
 
     @Override
+    @Transactional
     public ResultBean pay(LoanApplyPayDTO loanApplyPayDTO) {
         BizLoanApply selectByPrimaryKey = bizLoanApplyMapper.selectByPrimaryKey(loanApplyPayDTO.getId());
 

@@ -49,5 +49,6 @@ public interface BankBillService {
     ResultBean<PageDTO<BizBankBillRSDTO>> getList(BizBankBillDTO model);
 
 
+
     ResultBean transfer(BizBankBillTransferDTO model);
 }
