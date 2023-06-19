@@ -87,11 +87,13 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     }
 
     @Override
-    public ResultBean save(PayAssessmentScoreDTO model) {
+    public ResultBean save(PayAssessmentScoreDTO model) throws Exception {
         PayAssessmentScore payTeam = new PayAssessmentScore();
+        if (Objects.isNull(model.getScore())) {
+            throw new Exception("分数不能为空，请填写！");
+        }
         // 正整数取反 为负数
-        PayAssessmentQuota payAssessmentQuota = payAssessmentQuotaMapper.selectByPrimaryKey(model.getAssessmentId());
-        int absScore = abs(payAssessmentQuota.getScore());
+        int absScore = abs(model.getScore());
         BeanUtils.copyProperties(model, payTeam);
         LocalDate localDate = LocalDate.now();
         int year = localDate.getYear();
@@ -110,7 +112,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
         List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(example);
         Integer scoreId = null;
         if (CollectionUtils.isEmpty(payAssessmentScores)) {
-            int score = TOTAL_SCORE - payAssessmentQuota.getScore();
+            int score = TOTAL_SCORE - model.getScore();
             payTeam.setScoreTime(new Date());
             payTeam.setCreateUser(getLoginUserName());
             payTeam.setUpdateUser(getLoginUserName());
@@ -124,7 +126,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
         } else {
             PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
             scoreId = payAssessmentScore.getId();
-            int i = payAssessmentScore.getScore() - payAssessmentQuota.getScore();
+            int i = payAssessmentScore.getScore() - model.getScore();
             if (i < 0) {
                 i = 0;
             }

@@ -35,7 +35,7 @@ public class PayAssessmentScoreController {
 
     @ApiOperation("保存")
     @PostMapping(value = "/save")
-    public ResultBean save(@RequestBody PayAssessmentScoreDTO model) {
+    public ResultBean save(@RequestBody PayAssessmentScoreDTO model) throws Exception {
         return payAssessmentScoreService.save(model);
     }
 
