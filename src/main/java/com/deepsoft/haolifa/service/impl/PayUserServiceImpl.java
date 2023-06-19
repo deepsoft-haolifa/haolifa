@@ -404,9 +404,10 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         PayUserExample.Criteria criteria = example.createCriteria();
 
         // 获取当前登录人的岗位ID作为人员列表的直属上级ID。
-        CustomUser customUser = sysUserService.selectLoginUser();
-        if (Objects.nonNull(customUser) && Objects.nonNull(customUser.getId())) {
-            List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(customUser.getId());
+//        CustomUser customUser = sysUserService.selectLoginUser();
+        int id = 35;
+//        if (Objects.nonNull(customUser) && Objects.nonNull(customUser.getId())) {
+            List<RoleDTO> rolesByUserId = roleService.getRolesByUserId(id);
 //            if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
 //                .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
 //                Set<Integer> postList = new HashSet<>();
@@ -418,10 +419,10 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         // 当前人员的 下级
             if (!rolesByUserId.stream().map(RoleDTO::getRoleName)
                 .collect(Collectors.toList()).contains("ROLE_ADMIN")) {
-                SysUser sysUser = sysUserService.getSysUser(customUser.getId());
+                SysUser sysUser = sysUserService.getSysUser(id);
                 criteria.andSuperiorIdEqualTo(sysUser.getPostId());
             }
-        }
+//        }
         if (StringUtils.isNotBlank(model.getPostName())) {
             PayProductionWorkshopExample payProductionWorkshopExample = new PayProductionWorkshopExample();
             payProductionWorkshopExample.createCriteria().andPostNameEqualTo(model.getPostName());
@@ -498,7 +499,7 @@ public class PayUserServiceImpl extends BaseService implements PayUserService {
         if (Objects.nonNull(model.getTeamId())) {
             criteria.andTeamIdEqualTo(model.getTeamId());
         }
-        if (Objects.nonNull(model.getPostId())) {
+        if (StringUtils.isNotBlank(model.getPostId())) {
             criteria.andPostIdEqualTo(Integer.valueOf(model.getPostId()));
         }
         if (StringUtils.isNotEmpty(model.getStartCreateTime())) {
