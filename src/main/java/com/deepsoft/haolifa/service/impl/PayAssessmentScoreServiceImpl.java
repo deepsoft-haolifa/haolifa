@@ -90,7 +90,8 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
     public ResultBean save(PayAssessmentScoreDTO model) {
         PayAssessmentScore payTeam = new PayAssessmentScore();
         // 正整数取反 为负数
-        int absScore = abs(model.getScore());
+        PayAssessmentQuota payAssessmentQuota = payAssessmentQuotaMapper.selectByPrimaryKey(model.getAssessmentId());
+        int absScore = abs(payAssessmentQuota.getScore());
         BeanUtils.copyProperties(model, payTeam);
         LocalDate localDate = LocalDate.now();
         int year = localDate.getYear();
@@ -109,7 +110,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
         List<PayAssessmentScore> payAssessmentScores = payAssessmentScoreMapper.selectByExample(example);
         Integer scoreId = null;
         if (CollectionUtils.isEmpty(payAssessmentScores)) {
-            int score = TOTAL_SCORE - model.getScore();
+            int score = TOTAL_SCORE - payAssessmentQuota.getScore();
             payTeam.setScoreTime(new Date());
             payTeam.setCreateUser(getLoginUserName());
             payTeam.setUpdateUser(getLoginUserName());
@@ -123,7 +124,7 @@ public class PayAssessmentScoreServiceImpl extends BaseService implements PayAss
         } else {
             PayAssessmentScore payAssessmentScore = payAssessmentScores.get(0);
             scoreId = payAssessmentScore.getId();
-            int i = payAssessmentScore.getScore() - model.getScore();
+            int i = payAssessmentScore.getScore() - payAssessmentQuota.getScore();
             if (i < 0) {
                 i = 0;
             }
