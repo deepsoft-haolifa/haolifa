@@ -402,7 +402,9 @@ public class PayPlanServiceImpl implements PayPlanService {
             .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode()));
         //当前角色是否主管会计
         boolean iszjkj = customGrantedAuthorityList.stream()
-            .anyMatch(grantedAuthority -> StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode()));
+            .anyMatch(grantedAuthority ->
+                StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode())
+            );
 
         // 构造查询条件
         BizPayPlanExample bizPayPlanExample = this.buildBizPayPlanExample(model);

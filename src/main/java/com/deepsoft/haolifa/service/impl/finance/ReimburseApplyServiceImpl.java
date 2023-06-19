@@ -569,6 +569,8 @@ public class ReimburseApplyServiceImpl implements ReimburseApplyService {
                     StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
                         RoleEnum.ROLE_ZGKJ.getCode()) ||
                     StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
+                        RoleEnum.ROLE_XSKJ.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(),
                         RoleEnum.ROLE_CN.getCode());
             });
 

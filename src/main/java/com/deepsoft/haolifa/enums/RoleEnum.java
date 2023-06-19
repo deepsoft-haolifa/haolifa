@@ -6,6 +6,8 @@ public enum RoleEnum {
     ROLE_ZJL("ROLE_ZJL", "总经理"),
     ROLE_ZGKJ("ROLE_ZGKJ", "主管会计"),
     ROLE_CWGLZXFZR("ROLE_CWGLZXFZR", "财务管理中心负责人"),
+    //    销售会计	ROLE_XSKJ
+    ROLE_XSKJ("ROLE_XSKJ", "销售会计"),
     ROLE_CN("ROLE_CN", "出纳");
 
     //总经理、财务经理、主管会计、出纳

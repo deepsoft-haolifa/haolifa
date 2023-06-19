@@ -293,6 +293,7 @@ public class LoanApplyServiceImpl implements LoanApplyService {
                     StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZJL.getCode()) ||
                     StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_ZGKJ.getCode()) ||
                     StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CWGLZXFZR.getCode()) ||
+                    StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_XSKJ.getCode()) ||
                     StringUtils.equalsIgnoreCase(grantedAuthority.getRole(), RoleEnum.ROLE_CN.getCode());
             });
 
