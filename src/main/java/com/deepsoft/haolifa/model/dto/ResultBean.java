@@ -70,5 +70,14 @@ public class ResultBean<T> implements Serializable {
         return new ResultBean<T>(result);
     }
 
+    public static <T> ResultBean<T> convertResult(T result) {
+        if (result instanceof Integer) {
+            return (Integer) result > 0 ? success(result) : error(CommonEnum.ResponseEnum.FAIL);
+        } else if (result instanceof Boolean) {
+            return (Boolean) result ? success(result) : error(CommonEnum.ResponseEnum.FAIL);
+        }
+        return success(result);
+    }
+
 
 }

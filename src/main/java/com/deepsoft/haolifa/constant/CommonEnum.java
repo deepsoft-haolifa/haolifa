@@ -810,4 +810,20 @@ public class CommonEnum {
             this.name = name;
         }
     }
+
+    /**
+     * 生产计划状态
+     */
+    public enum ProductionPlanStatus {
+        WAIT("wait", "待完成"),
+        PART("part", "部分完成"),
+        COMPLETED("completed", "已完成"),
+        ;
+        public final String code;
+        public final String name;
+        ProductionPlanStatus(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+    }
 }

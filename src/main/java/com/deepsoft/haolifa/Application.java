@@ -1,6 +1,5 @@
 package com.deepsoft.haolifa;
 
-import cn.hutool.core.io.resource.ClassPathResource;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
