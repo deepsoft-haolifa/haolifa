@@ -122,6 +122,13 @@ public class ProductionDailyPlanServiceImpl extends BaseService implements Produ
     private void getOrderInfo(ProductionDailyPlan model) {
         String orderNo = model.getOrderNo();
         OrderProductDTO orderProductInfo = orderProductService.getOrderProductInfo(orderNo);
+        if(Objects.isNull(orderProductInfo)){
+            throw new BaseException("订单号错误，查不到订单信息");
+        }
+        Byte orderStatus = orderProductInfo.getOrderStatus();
+        if (orderStatus != CommonEnum.OrderStatus.PRODUCTION_FINISH.code){
+            throw new BaseException("订单已完成，不能操作");
+        }
         model.setDeliveryDate(orderProductInfo.getDeliveryDate());
         model.setOrderNumber(orderProductInfo.getTotalCount());
     }

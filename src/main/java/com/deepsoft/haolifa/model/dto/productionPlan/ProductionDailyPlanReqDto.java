@@ -1,5 +1,6 @@
 package com.deepsoft.haolifa.model.dto.productionPlan;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -21,10 +22,14 @@ public class ProductionDailyPlanReqDto {
 
     @ApiModelProperty("计划日期")
     @NotNull(message = "计划日期")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Date planDate;
 
     @ApiModelProperty("计划完成日期")
     @NotNull(message = "计划完成日期")
+    @JsonFormat(pattern = "yyyy-MM-dd",  timezone="GMT+8")
     private Date planFinishDate;
 
+    @ApiModelProperty("备注")
+    private String remark;
 }
