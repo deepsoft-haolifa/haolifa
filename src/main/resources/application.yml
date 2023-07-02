@@ -27,12 +27,8 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 
-#配置日志存储路径
-log:
-  path: /data/log/haolifa
-
 project:
-   url: http://47.105.36.56
+   url: http://110.41.14.123
 
 my:
   security:

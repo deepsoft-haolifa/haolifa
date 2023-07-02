@@ -46,7 +46,7 @@
 //        DataSourceConfig dsc = new DataSourceConfig();
 //        dsc.setTypeConvert(new MySqlTypeConvert());
 //        dsc.setUrl(
-//            "jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&autoReconnect=true");
+//            "jdbc:mysql://110.41.14.123:3306/haolifa?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&autoReconnect=true");
 //        dsc.setDriverName("com.mysql.jdbc.Driver");
 //        dsc.setUsername("haolifa");
 //        dsc.setPassword("haolifa3306");

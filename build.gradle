@@ -42,7 +42,7 @@ dependencies {
     compile('org.springframework.session:spring-session-data-redis')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2')
-    runtime('mysql:mysql-connector-java')
+    runtime('mysql:mysql-connector-java:8.0.27')
     runtime('org.springframework.boot:spring-boot-devtools')
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
     compileOnly 'org.projectlombok:lombok:1.18.10'
@@ -128,7 +128,7 @@ ssh.settings {
 }
 remotes {
     deployServer {
-        host = '47.105.36.56'
+        host = '110.41.14.123'
         user = 'root'
         password = 'Haolifa123456'
     }
@@ -140,19 +140,19 @@ task jarDeploy {
             session(remotes.deployServer) {
                 println 'stop jar...'
                 executeScript '''#!/bin/sh
-								cd /data/jar/master/
+								cd /home/haolifa/
 								./init.sh stop
 							'''
                 println 'delete war'
                 executeScript '''#!/bin/sh
-								cd /data/jar/master/
+								cd /home/haolifa/
 								rm -rf haolifa.jar
 							'''
                 println 'copy jar...'
-                put from: buildDir.toString() + '/libs/haolifa.jar', into: '/data/jar/master/'
+                put from: buildDir.toString() + '/libs/haolifa.jar', into: 'cd /home/haolifa/'
                 println 'start jar...'
                 executeScript '''#!/bin/sh
-								cd /data/jar/master/
+								cd /home/haolifa
 							    ./init.sh start
 							'''
             }

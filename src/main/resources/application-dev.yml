@@ -1,20 +1,32 @@
 server:
-  port: 8087
+  port: 8080
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
-    username: haolifa
-    password: lZqDoJPuUb3Vp
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://110.41.14.123:3306/haolifa?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: mazBGZMoUnKcW
     hikari:
-      maximum-pool-size: 15
-      idle-timeout: 30000
-      auto-commit: true
-      max-lifetime: 1800000
-      connection-test-query: SELECT 1
+      # 最大连接池数量
+      maxPoolSize: 20
+      # 最小空闲线程数量
+      minIdle: 10
+      # 配置获取连接等待超时的时间
+      connectionTimeout: 30000
+      # 校验超时时间
+      validationTimeout: 5000
+      # 空闲连接存活最大时间，默认10分钟
+      idleTimeout: 600000
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+      maxLifetime: 1800000
+      # 连接测试query（配置检测连接是否有效）
+      connectionTestQuery: SELECT 1
+      # 多久检查一次连接的活性
+      keepaliveTime: 30000
   redis:
     database: 0
-    host: 47.105.36.56
+    host: 110.41.14.123
     port: 6379
     password: haolifa6379
     timeout: 10000ms

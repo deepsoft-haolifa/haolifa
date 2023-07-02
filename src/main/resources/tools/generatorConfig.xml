@@ -22,7 +22,7 @@
         <!--jdbc的数据库连接 -->
         <jdbcConnection
             driverClass="com.mysql.jdbc.Driver"
-            connectionURL="jdbc:mysql://47.105.36.56:3306/haolifa?useUnicode=true"
+            connectionURL="jdbc:mysql://110.41.14.123:3306/haolifa?useUnicode=true"
             userId="haolifa"
             password="lZqDoJPuUb3Vp">
         </jdbcConnection>
